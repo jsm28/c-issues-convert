@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #271</title>
+  </head>
+
+  <body bgcolor="#FFFFFF">
+    <h2 align="center">Defect Report #271</h2>
+    <a href="dr_270.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_272.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> UK C Panel<br>
+     <b>Submission Date:</b> 2001-09-07<br>
+     <b>Source:</b> Clive D.W. Feather &lt;clive@demon.net&gt;<br>
+     <b>Version:</b> 1.2 <!-- ! year-month-day hour:min:sec -->
+    <br>
+     <b>Date:</b> 2002-05-15<br>
+     <b>Subject:</b> lacuna in <tt><b>iswctype</b></tt> and
+    <tt><b>towctrans</b></tt></p>
+    <b>Problem</b> 
+
+    <p>Consider the calls:</p>
+<pre>
+<tt><b>   iswctype (c, wctype (property))
+    towctrans (c, wctrans (property))
+</b></tt>
+</pre>
+    where property is not valid in the current locale. The
+    <tt><b>wctype</b></tt> and <tt><b>wctrans</b></tt> functions
+    return zero, but the behaviour of <tt><b>iswctype</b></tt> and
+    <tt><b>towctrans</b></tt> is not specified. 
+
+    <p>I believe it would be useful - and considered natural - for
+    them to return 0 ("<tt><b>c</b></tt> does not have this
+    property") and <tt><b>c</b></tt> ("<tt><b>c</b></tt> is
+    unaffected by this mapping") respectively.</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Append to 7.25.2.2.1#4:</p>
+
+    <blockquote>
+      If <tt><b>desc</b></tt> is zero, the <tt><b>iswctype</b></tt>
+      function returns zero (false).
+    </blockquote>
+
+    <p>Append to 7.25.3.2.1#4:</p>
+
+    <blockquote>
+      If <tt><b>desc</b></tt> is zero, the
+      <tt><b>towctrans</b></tt> function returns the value of
+      <tt><b>wc</b></tt>.
+    </blockquote>
+    <hr>
+
+    <p><b>Committee Response</b></p>
+
+    <p>Since no behavior is specified when <tt><b>desc</b></tt> is
+    zero, for either <tt><b>iswctype()</b></tt> or
+    <tt><b>towctrans()</b></tt>, the behavior is undefined. We do
+    not believe it would be appropriate to add new requirements
+    here.</p>
+
+    <p><b>Committee Discussion</b></p>
+
+    <p>The Committee believes this should be considered for a
+    future revision of the Standard.</p>
+
+    <p><br>
+     <a href="dr_270.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_272.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

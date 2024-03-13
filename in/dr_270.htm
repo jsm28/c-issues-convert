@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #270</title>
+  </head>
+
+  <body bgcolor="#FFFFFF">
+    <h2 align="center">Defect Report #270</h2>
+    <a href="dr_269.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_271.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> UK C Panel<br>
+     <b>Submission Date:</b> 2001-09-07<br>
+     <b>Source:</b> Clive D.W. Feather &lt;clive@demon.net&gt;<br>
+     <b>Version:</b> 1.1 <!-- ! year-month-day hour:min:sec -->
+    <br>
+     <b>Date:</b> 2002-03-07<br>
+     <b>Subject:</b> <tt><b>wint_t</b></tt> is not the promoted
+    version of <tt><b>wchar_t</b></tt></p>
+    <b>Problem</b> 
+
+    <p>In the <tt><b>fprintf</b></tt> conversion specifier
+    <tt><b>"%lc"</b></tt>, the corresponding argument is of type
+    <tt><b>wint_t</b></tt>, but is then treated as if it contained
+    a <tt><b>wchar_t</b></tt> value. In 7.19.6.1#18, the last call
+    is:</p>
+<pre>
+<tt><b>  fprintf(stdout, "|%13lc|\n", wstr[5]);
+</b></tt>
+</pre>
+    This argument has the type <tt><b>wchar_t</b></tt>. 
+
+    <p>There is no requirement in the Standard that the default
+    argument promotions convert <tt><b>wchar_t</b></tt> to
+    <tt><b>wint_t</b></tt>. Therefore this example exhibits
+    undefined behaviour on some implementations. Nonetheless, the
+    code looks like it ought to work, and WG14 should consider
+    changing the definition of <tt><b>wint_t</b></tt> to force
+    it.</p>
+
+    <p>The current definition of <tt><b>wint_t</b></tt> is in
+    7.24.1#2:</p>
+
+    <blockquote>
+      <p><tt><b>wint_t</b></tt></p>
+
+      <p>which is an integer type unchanged by default argument
+      promotions that can hold any value corresponding to members
+      of the extended character set, as well as at least one value
+      that does not correspond to any member of the extended
+      character set (see <tt><b>WEOF</b></tt>
+      below);<sup>269)</sup> and</p>
+
+      <p><sup>269</sup><tt><b>wchar_t</b></tt> and
+      <tt><b>wint_t</b></tt> can be the same integer type.</p>
+    </blockquote>
+    Three possible solutions are: 
+
+    <ol>
+      <li>Fix the example.</li>
+
+      <li>Change the definition of <tt><b>wint_t</b></tt> to be the
+      promoted version of <tt><b>wchar_t</b></tt>.</li>
+
+      <li>Change the definition of <tt><b>%lc</b></tt> to take
+      promoted <tt><b>wchar_t</b></tt> rather than
+      <tt><b>wint_t</b></tt>.</li>
+    </ol>
+    <b>Suggested Technical Corrigendum 1</b> 
+
+    <p>Change the quoted line of 7.19.6.1#18 to:</p>
+
+    <blockquote>
+<pre>
+<tt><b>  fprintf(stdout, "|%13lc|\n", (wint_t) wstr[5]);
+</b></tt>
+</pre>
+    </blockquote>
+    <b>Suggested Technical Corrigendum 2</b> 
+
+    <p>Change the cited portion of 7.24.1#2 to:</p>
+
+    <blockquote>
+      <tt><b>wint_t</b></tt> which is the integer type resulting
+      when the default argument promotions are applied to the type
+      <tt><b>wchar_t</b></tt>;269) and
+    </blockquote>
+    <b>Suggested Technical Corrigendum 3</b> 
+
+    <p><i>[Italics are used to show the changed text.]</i></p>
+
+    <p>Change 7.19.6.1#7 and 7.24.2.1#7, l modifier, to:</p>
+
+    <blockquote>
+      <table summary="fprintf specifiers">
+        <tr>
+          <td valign="top" width="10%"><tt><b>l</b></tt> (ell)</td>
+
+          <td valign="top" width="90%">Specifies that a following
+          <tt><b>d</b></tt>, <tt><b>i</b></tt>, <tt><b>o</b></tt>,
+          <tt><b>u</b></tt>, <tt><b>x</b></tt>, or
+          <tt><b>X</b></tt> conversion specifier applies to a
+          <tt><b>long int</b></tt> or <tt><b>unsigned long
+          int</b></tt> argument; that a following <tt><b>n</b></tt>
+          conversion specifier applies to a pointer to a
+          <tt><b>long int</b></tt> argument; that a following
+          <tt><b>c</b></tt> conversion specifier applies to <i>an
+          argument whose type is that resulting when the default
+          argument conversions are applied to the type
+          <tt><b>wchar_t</b></tt></i>; that a following
+          <tt><b>s</b></tt> conversion specifier applies to a
+          pointer to a <tt><b>wchar_t</b></tt> argument; or has no
+          effect on a following <tt><b>a</b></tt>,
+          <tt><b>A</b></tt>, <tt><b>e</b></tt>, <tt><b>E</b></tt>,
+          <tt><b>f</b></tt>, <tt><b>F</b></tt>, <tt><b>g</b></tt>,
+          or <tt><b>G</b></tt> conversion specifier.</td>
+        </tr>
+      </table>
+    </blockquote>
+
+    <p>Change 7.19.6.1#8, <tt><b>c</b></tt> specifier, second
+    paragraph, to:</p>
+
+    <blockquote>
+      <p>If an <tt><b>l</b></tt> length modifier is present<i>, the
+      argument - whose type is that resulting when the default
+      argument conversions are applied to the type
+      <tt><b>wchar_t</b></tt></i> - is converted as if by an
+      <tt><b>ls</b></tt> conversion specification with no precision
+      and an argument that points to the initial element of a
+      two-element array of <tt><b>wchar_t</b></tt>, the first
+      element containing <i>the argument</i> to the
+      <tt><b>lc</b></tt> conversion specification and the second a
+      null wide character.</p>
+    </blockquote>
+
+    <p>Change 7.24.2.1#8, <tt><b>c</b></tt> specifier, second
+    paragraph, to:</p>
+
+    <blockquote>
+      <p>If an <tt><b>l</b></tt> length modifier is present, <i>the
+      argument</i> is converted to <tt><b>wchar_t</b></tt> and
+      written.</p>
+    </blockquote>
+    <hr>
+    <b>Technical Corrigendum</b> 
+
+    <p>Change the quoted line of 7.19.6.1#18 to:</p>
+<pre>
+<tt><b>  fprintf(stdout, "|%13lc|\n", (wint_t) wstr[5]);
+</b></tt>
+</pre>
+
+    <p><br>
+     <a href="dr_269.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_271.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

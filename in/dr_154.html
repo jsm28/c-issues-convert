@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #154</TITLE></HEAD>
+<BODY><H2>Defect Report #154</H2> 
+<B>Submission Date</B>: 16 Oct 95
+<BR>
+<B>Submittor</B>: BSI
+<BR>
+<B>Source</B>: Clive D.W. Feather
+<BR>
+<B>Question</B>
+<BR>
+<I>Submitted to BSI by Clive D.W. Feather clive@sco.com.</I>
+<BR>
+<I>In this Defect Report, identifiers lexically identical to those 
+declared in standard headers refer to the identifiers declared in  those
+standard headers, whether or not the header is explicitly mentioned.</I>
+<BR>
+<I>This Defect Report has been prepared with considerable help from 
+Mark Brader, Jutta Degener, Ronald Guilmette, and a person whose
+employment  conditions require anonymity. However, except where stated,
+opinions  expressed or implied should not be assumed to be those of any
+person  other than myself.</I>
+<BR> Defect Report UK 002: Consistency of implementation-defined values
+<BR> The restrictions that apply to "implementation-defined" entities 
+are not clear.
+<BR> What restrictions apply to implementation-defined entities? If the
+ value of an expression is implementation-defined, need the
+implementation  always produce the same result?
+<BR> For example, the value of the expressions <TT><B>7/-3</B></TT>
+and <TT><B>8/-3</B></TT>  must each be either <TT><B>3</B></TT> or
+<TT><B>2</B></TT>. Can an implementation make them  different (that
+is, use a different implementation-defined choice  for each), or must it
+make the same choice for all integral divisions  involving a negative
+quantity?
+<BR> As another example, can the number of significant characters and
+the  significance of case in an identifier with external linkage depend 
+on the identifier itself, or must it be the same for all possible 
+identifiers?
+<BR> Response
+<BR> "Implementation defined" means just that: an implementation  can
+define any behavior even though it may not be constant.<BR>
+<A HREF="dr_153.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_155.html">Next Defect Report</A></BODY></HTML>

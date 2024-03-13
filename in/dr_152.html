@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #152</TITLE></HEAD>
+<BODY><H2>Defect Report #152</H2> 
+<B>Submission Date</B>: 11 Jun 95
+<BR>
+<B>Submittor</B>: DIN
+<BR>
+<B>Source</B>: Jutta Degener
+<BR>
+<B>Question</B>
+<BR>
+<I>This Defect Report was prepared with considerable help from Mark 
+Brader, Clive Feather, Ronald Guilmette, and a person whose employment 
+conditions require anonymity.</I>
+<BR> DIN-003:
+<BR> Can <TT><B>longjmp</B></TT> be used to return from a signal
+handler invoked  other than through <TT><B>abort</B></TT> or <TT><B>raise</B></TT>?
+The descriptions of 
+<TT><B>signal</B></TT> and <TT><B>longjmp</B></TT> contradict each
+other.
+<BR> According to subclause 7.7.1.1 <B>The <TT>signal</TT> function</B>:
+<BR> If the signal occurs other than as the result of calling the 
+<TT><B>abort</B></TT> or <TT><B>raise</B></TT> function, the
+behavior is undefined if  the signal handler calls any function in the
+standard library other  than the <TT><B>signal</B></TT> function
+itself (with a first argument of the  signal number corresponding to the
+signal that caused the invocation  of the handler) or refers to any
+object with static storage duration  other than by assigning a value to
+a static storage duration variable  of type <TT><B>volatile
+sig_atomic_t</B></TT>.
+<BR> Since <TT><B>longjmp</B></TT> is a function, it cannot be
+called.
+<BR> But subclause 7.6.2.1 <B>The <TT>longjmp</TT> function</B>,
+broadly guarantees  the opposite:
+<BR> As it bypasses the usual function call and return mechanisms,  the
+<TT><B>longjmp</B></TT> function shall execute correctly in contexts
+of  interrupts, signals and any of their associated functions.
+<BR>
+<B>Suggested Technical Corrigendum:</B>
+<BR> If the intent is to allow calls to <TT><B>exit</B></TT> and <TT><B>
+longjmp</B></TT> from  signal handlers not invoked through calls to <TT><B>
+raise</B></TT> or <TT><B>abort</B></TT>,  replace in subclause
+7.6.2.1:
+<BR> ... other than the <TT><B>signal</B></TT> function itself ...
+<BR> by:
+<BR> ... other than <TT><B>longjmp</B></TT>, <TT><B>exit</B></TT>,
+or the <TT><B>signal</B></TT>  function itself ...
+<BR> Alternatively, if the intent is to disallow calls to <TT><B>longjmp</B></TT>
+ from signal handlers not invoked through calls to <TT><B>raise</B></TT>
+or <TT><B>abort</B></TT>,  replace in subclause 7.7.1.1:
+<BR> As it bypasses the usual function call and return mechanisms,  the
+<TT><B>longjmp</B></TT> function shall execute correctly in contexts
+of  interrupts, signals and any of their associated functions.  However,
+ if the <TT><B>longjmp</B></TT> function is invoked from a nested
+signal handler  (that is, from a function invoked as a result of a
+signal raised during  the handling of another signal), the behavior is
+undefined.
+<BR> by:
+<BR> If the <TT><B>longjmp</B></TT> function is invoked from a nested
+signal  handler (that is, from a function invoked as a result of a
+signal  raised during the handling of another signal), the behavior is
+undefined.
+<BR> Response
+<BR> The C Standard is clear enough as is. The <TT><B>longjmp</B></TT>
+function shall  execute correctly when called from a non-nested signal
+handler invoked  through calls to the <TT><B>raise</B></TT> or <TT><B>
+abort</B></TT> functions; if <TT><B>longjmp</B></TT>  is called from a
+signal handler invoked by other means, or from a  nested signal handler,
+the behavior is undefined.<BR>
+<A HREF="dr_151.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_153.html">Next Defect Report</A></BODY></HTML>

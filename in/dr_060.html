@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #060</TITLE></HEAD><BODY>
+<H2>Defect Report #060</H2>
+<B>Submission Date</B>: 19 Jul 93
+<BR>
+<B>Submittor</B>: Project Editor (P.J. Plauger)
+<BR>
+<B>Source</B>: Larry Jones
+<BR>
+<B>Question</B>
+<BR>
+When an array of <TT><B>char</B></TT> (or <TT><B>wchar_t</B></TT>) is initialized with 
+a string literal that contains fewer characters than the array, are 
+the remaining elements of the array initialized?
+<BR>
+Subclause 6.5.7 <B>Initialization</B>, page 72, only says (emphasis 
+mine):
+<BLOCKQUOTE>
+If there are fewer initializers in a <I>brace-enclosed list</I> 
+than there are members of an aggregate, the remainder of the aggregate 
+shall be initialized implicitly the same as objects that have static 
+storage duration.
+</BLOCKQUOTE>
+<B>Correction</B>
+<BR>
+<I><B>In subclause 6.5.7, page 72, the penultimate paragraph of Semantics 
+(before Examples), add after the comma:</B></I>
+<BR>
+or fewer characters in a string literal or wide string literal used 
+to initialize an array of known size, and elements of character or 
+<TT><B>wchar_t</B></TT> type
+<BR>
+<A HREF="dr_059.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_061.html">Next Defect Report</A>
+</BODY></HTML>

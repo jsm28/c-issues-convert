@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect Report #220</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #220</h2>
+    <a href="dr_219.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_221.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Clive Feather (UK)<br>
+     <b>Submission Date:</b> 2000-04-04<br>
+     <b>Source:</b><br>
+     <b>Reference Document:</b> N/A<br>
+     <b>Version:</b> 1.3<br>
+     <b>Date:</b> 2000-11-02 13:50:48<br>
+     <b>Subject:</b> Definition of "decimal integer"</p>
+
+    <p><b>Summary</b><br>
+     7.19.6.1[#4] reads in part:</p>
+
+    <blockquote>
+      <ul>
+        <li>An optional minimum field width. [...] The field width
+        takes the form of an asterisk <tt><b>*</b></tt> (described
+        later) or a decimal
+        integer<small><sup>.232)</sup></small></li>
+
+        <li>An optional precision [...] The precision takes the
+        form of a period <tt><b>.</b></tt> followed either by an
+        asterisk <tt><b>*</b></tt> (described later) or by an
+        optional decimal integer; [...]</li>
+      </ul>
+    </blockquote>
+    7.19.6.2 #3 reads in part: 
+
+    <blockquote>
+      <ul>
+        <li>An optional nonzero decimal integer that specifies the
+        maximum field width (in characters).</li>
+      </ul>
+    </blockquote>
+    7.24.2.1 and 7.24.2.2 have essentially the same wording. 
+
+    <p>The term "decimal integer" is defined neither in the
+    Standard nor in ISO 2382-1. Therefore it is not possible to
+    tell whether, in each case:</p>
+
+    <blockquote>
+      <ul>
+        <li>the value may be zero</li>
+
+        <li>a non-significant leading zero digit may be used</li>
+
+        <li>the value may be negative.</li>
+      </ul>
+    </blockquote>
+
+    <p><b>Suggested Technical Corrigendum</b><br>
+     Add a new paragraph to 7.1.1:</p>
+
+    <blockquote>
+      [#x] A <i>decimal integer</i> is a sequence of digits which
+      may begin with one or more zeros, but is nonetheless
+      interpreted as decimal, not octal.
+    </blockquote>
+
+    <p>Append to the first cited text in 7.19.6.1:</p>
+
+    <blockquote>
+      (A leading zero will be interpreted as a flag, not as part of
+      the width).
+    </blockquote>
+    <hr>
+
+    <p><b>Technical Corrigendum</b><br>
+     In 7.19.6.1P4, which reads in part:</p>
+
+    <blockquote>
+      <p>An optional minimum field width. [...] The field width
+      takes the form of an asterisk <tt><b>*</b></tt> (described
+      later) or a decimal integer.[232] An optional precision [...]
+      The precision takes the form of a period <tt><b>.</b></tt>
+      followed either by an asterisk <tt><b>*</b></tt> (described
+      later) or by an optional decimal integer; [...]</p>
+    </blockquote>
+    change "decimal integer" to "non-negative decimal integer". 
+
+    <p>In 7.19.6.2P3, which reads in part:</p>
+
+    <blockquote>
+      <p>An optional nonzero decimal integer that specifies the
+      maximum field width (in characters).</p>
+    </blockquote>
+    change "non-zero decimal integer" to "decimal integer greater
+    than zero". 
+
+    <p>In 7.24.2.1P4, make similar changes of "decimal integer" to
+    "non-negative decimal integer".</p>
+
+    <p>In 7.24.2.2P3, make similar changes of "non-zero decimal
+    integer" to "decimal integer greater than zero".</p>
+
+    <p><br>
+     <a href="dr_219.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_221.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #204</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #204</h2>
+    <a href="dr_203.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_205.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Raymond Mak (Canada C Working Group)<br>
+     <b>Submission Date:</b> 1999-09-15<br>
+     <b>Source:</b> Canada C Working Group<br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n893.htm">ISO/IEC
+    WG14 N893</a><br>
+     <b>Version:</b> 1.3<br>
+     <b>Date:</b> 2000-11-02 13:45:31<br>
+     <b>Subject:</b> <tt><b>size_t</b></tt> and
+    <tt><b>ptrdiff_t</b></tt> as a <tt><b>long long</b></tt>
+    type</p>
+
+    <p><b>Summary</b><br>
+     <tt><b>size_t</b></tt> and <tt><b>ptrdiff_t</b></tt> can now
+    be a <tt><b>long long</b></tt> type, which is not necessary for
+    hardwares that do not support 64-bit addressing. Implementors
+    should be encouraged to choose a type for these two that
+    minimizes compatibility problems to existing (32-bit) code.</p>
+
+    <p><b>Suggested Correction</b><br>
+     In 7.17 at the end of p2, add the following:</p>
+
+    <blockquote>
+      <b>Recommended Practice</b> 
+
+      <p>The <tt><b>long long</b></tt> type should be used only if
+      no other integer types can represent the value range required
+      by the implementation.</p>
+    </blockquote>
+    <hr>
+
+    <p><b>Technical Corrigendum</b><br>
+     Add to the end of 7.17:</p>
+
+    <blockquote>
+      <b>Recommended Practice</b> 
+
+      <p>[#4] The types used for <tt><b>size_t</b></tt> and
+      <tt><b>ptrdiff_t</b></tt> should not have an integer
+      conversion rank greater than that of <tt><b>signed
+      long</b></tt> unless the implementation supports objects
+      large enough to make this necessary.</p>
+    </blockquote>
+
+    <p><br>
+     <a href="dr_203.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_205.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

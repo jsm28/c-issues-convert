@@ -1,0 +1,185 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect Report #233</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #233</h2>
+    <a href="dr_232.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_234.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Project Editor (Larry Jones)<br>
+     <b>Submission Date:</b> 2000-04-24<br>
+     <b>Source:</b> Chris Torek<br>
+     <b>Reference Document:</b> N/A<br>
+     <b>Version:</b> 1.5<br>
+     <b>Date:</b> 2007-09-07<br>
+     <b>Subject:</b> <tt><b>%g</b></tt>, <tt><b>%G</b></tt>
+    precision specification</p>
+
+    <p><b>Summary</b><br>
+     7.19.6.1 (and similarly in 7.24.2.1):</p>
+
+    <blockquote>
+      <dl compact>
+        <dt><tt><b>g,G</b></tt></dt>
+
+        <dd>
+          A <tt><b>double</b></tt> argument representing a
+          floating-point number is converted in style
+          <tt><b>f</b></tt> or <tt><b>e</b></tt> (or in style
+          <tt><b>F</b></tt> or <tt><b>E</b></tt> in the case of a
+          <tt><b>G</b></tt> conversion specifier), with the
+          precision specifying the number of significant digits. If
+          the precision is zero, it is taken as 1. The style used
+          depends on the value converted; style <tt><b>e</b></tt>
+          (or <tt><b>E</b></tt>) is used only if the exponent
+          resulting from such a conversion is less than -4 or
+          greater than or equal to the precision. Trailing zeros
+          are removed from the fractional portion of the result
+          unless the <tt><b>#</b></tt> flag is specified; a
+          decimal-point character appears only if it is followed by
+          a digit. 
+
+          <p>A <tt><b>double</b></tt> argument representing an
+          infinity or NaN is converted in the style of an
+          <tt><b>f</b></tt> or <tt><b>F</b></tt> conversion
+          specifier.</p>
+        </dd>
+      </dl>
+    </blockquote>
+
+    <p>Assuming "significant digits" is being used in the
+    scientific-notation sense. This means that, for instance, the
+    number "12.34" has four significant digits. So does "0.1234",
+    and so does "0.001234". A value like "1.200" also has four
+    significant digits, counting trailing zeros, but not leading
+    zeros.</p>
+
+    <p>Now, <tt><b>%g</b></tt> normally suppresses trailing zeros
+    (as described above), so applying <tt><b>%.4g</b></tt> to the
+    value 1.2 produces not "1.200" but rather just "1.2". The
+    <tt><b>#</b></tt> modifier, however, stops the trailing-zero
+    suppression, and:</p>
+
+    <blockquote>
+      <tt><b>printf("%#.4g\n", 1.2);</b></tt>
+    </blockquote>
+    must produce "1.200", four significant digits. 
+
+    <p>The problem occurs when we go to print the value 0.0. No
+    matter how many digits we tack on the end, we still have no
+    significant digits. So what should:</p>
+
+    <blockquote>
+      <tt><b>printf("%#.4g\n", 0.0);</b></tt>
+    </blockquote>
+    print? "0.0000" has no significant digits. "0.0" has no
+    significant digits. "0.000000000000000000000000000000000000000"
+    still has no significant digits. Which of these, if any, is
+    correct output? Which of these is <em>desirable</em> output? 
+
+    <p>The only way this wording makes any sense is if "significant
+    digits" means something else entirely, but then what does it
+    mean?</p>
+    <hr>
+
+    <p><b>Committee Discussion</b> (for history only)</p>
+
+    <p>There seemed to be some uncertainty about whether (for the
+    <tt><b>%.4g</b></tt> example) the exponent would be
+    <tt><b>0</b></tt> or <tt><b>1</b></tt>. This could yield
+    different results.</p>
+
+    <p>Some Committee members wondered whether the exponent would
+    be <tt><b>1</b></tt> or <tt><b>0</b></tt> for ZERO. The bullet
+    describing <tt><b>e, E</b></tt> is clear on this though "If the
+    value is zero, the exponent is zero".</p>
+
+    <p>If there is no implementation representation of ZERO, but
+    rather a very small number. In this case, we generally thought
+    that this was a user problem, that they could not rely on a
+    true ZERO having a representation, in which case, they would
+    need to place their own checks for what approximations were
+    acceptable as ZERO and print a literal instead.</p>
+
+    <p>Some pathological cases were checked, and appeared to work
+    correctly.</p>
+
+    <p>NOTE: In discussion, the original bullets were:</p>
+
+    <ul>
+      <li>if X &lt; -4 or X &gt;= P, the conversion is with style e
+      (or E) and precision P - 1</li>
+
+      <li>otherwise the conversion is with style f (or F) and
+      precision P - ( X + 1 )</li>
+    </ul>
+    But these were changed to: 
+
+    <ul>
+      <li>if P &gt; X &gt;= -4, the conversion is with style f (or
+      F) and precision P - ( X + 1 )</li>
+
+      <li>otherwise the conversion is with style e (or E) and
+      precision P - 1</li>
+    </ul>
+
+    <p>During discussion, as it was considered to be the more pure
+    form.</p>
+    <hr>
+
+    <p><b>Technical Corrigendum</b><br>
+    </p>
+
+    <p>Change 7.19.6.1 paragraph 8 and 7.24.2.1 paragraph 8 to:</p>
+
+    <blockquote>
+      <dl compact>
+        <dt><tt><b>g,G</b></tt></dt>
+
+        <dd>
+          A <tt><b>double</b></tt> argument representing a
+          floating-point number is converted in style
+          <tt><b>f</b></tt> or <tt><b>e</b></tt> (or in style
+          <tt><b>F</b></tt> or <tt><b>E</b></tt> in the case of a
+          <tt><b>G</b></tt> conversion specifier), depending on the
+          value converted and the precision. Let <tt><b>P</b></tt>
+          equal the precision if non-zero, 6 if the precision is
+          omitted, or 1 if the precision is zero. Then, if a
+          conversion with style <tt><b>E</b></tt> would have an
+          exponent of <tt><b>X</b></tt>: 
+
+          <ul>
+            <li>if <tt><b>P &gt; X &gt;= -4</b></tt>, the
+            conversion is with style <tt><b>f</b></tt> (or
+            <tt><b>F</b></tt>) and precision <tt><b>P - (X +
+            1)</b></tt>.</li>
+
+            <li>otherwise the conversion is with style
+            <tt><b>e</b></tt> (or <tt><b>E</b></tt>) and precision
+            <tt><b>P - 1</b></tt>.</li>
+          </ul>
+        </dd>
+      </dl>
+
+      <blockquote>
+        Finally, unless the <tt><b>#</b></tt> flag is used, any
+        trailing zeroes are removed from the fractional portion of
+        the result and the decimal-point character is removed if
+        there is no fractional portion remaining.
+      </blockquote>
+    </blockquote>
+
+    <p><br>
+     <a href="dr_232.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_234.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

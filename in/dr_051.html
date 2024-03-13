@@ -1,0 +1,70 @@
+<HTML><HEAD><TITLE>Defect Report #051</TITLE></HEAD><BODY>
+<H2>Defect Report #051</H2>
+<B>Submission Date</B>: 08 Mar 93
+<BR>
+<B>Submittor</B>: Project Editor (P.J. Plauger)
+<BR>
+<B>Source</B>: Andrew R. Koenig
+<BR>
+<B>Question</B> 1
+<BR>
+I'll give you the short form first. I can haul out lots of related 
+material if it becomes necessary, but perhaps the bare question is 
+enough. Is the following program strictly conforming?
+<BR>
+<TT><B>#include &lt;stdlib.h><BR>
+<BR>
+struct A {<BR>
+	char x[1];<BR>
+	};<BR>
+<BR>
+main()<BR>
+	{<BR>
+	struct A *p = (struct A *) malloc(sizeof(struct A) + 100);<BR>
+	p->>x[5] = '?';		/*</B><I> This is the key line </I><B>*/<BR>
+	return 0;<BR>
+	}
+<BR></B></TT>
+If I remember correctly from reading the C Standard, pointer arithmetic 
+is illegal if it results in an address outside the object to which 
+the original pointer refers. The question here is essentially whether 
+the ``object'' is all the memory returned by <TT><B>malloc</B></TT> or 
+the single <TT><B>char</B></TT> denoted by <TT><B>p->>x[0]</B></TT>.
+<BR>
+I do not believe there is any language in the C Standard that clearly 
+answers this question. I understand that this particular programming 
+technique is quite common, but that is more likely to affect whether 
+a program is ``conforming'' than whether it is ``strictly 
+conforming.''
+<BR>
+<B>Response</B>
+<BR>
+Subclause 6.3.2.1 describes limitations on pointer arithmetic, in 
+connection with array subscripting. (See also subclause 6.3.6.) Basically, 
+it permits an implementation to tailor how it <I>represents pointers</I> 
+to the size of the objects they point at. Thus, the expression <TT><B>p->>x[5]</B></TT> 
+may fail to designate the expected byte, even though the <TT><B>malloc</B></TT> 
+call ensures that the byte is present. The idiom, while common, is 
+<I>not</I> strictly conforming.
+<BR>
+A safer idiom is:
+<BR>
+<TT><B>#include &lt;stdlib.h><BR>
+#define HUGE_ARR	10000	/*</B><I> largest desired array </I><B>*/<BR>
+<BR>
+struct A {<BR>
+	char x[HUGE_ARR];<BR>
+	};<BR>
+<BR>
+main()<BR>
+	{<BR>
+	struct A *p = (struct A *) malloc(sizeof(struct A)<BR>
+		- HUGE_ARR + 100);	/*</B><I> want x[100] this time </I><B>*/<BR>
+	p->>x[5] = '?';		/*</B><I> now strictly conforming </I><B>*/<BR>
+	return 0;<BR>
+	}
+</B></TT>
+<A HREF="dr_050.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_052.html">Next Defect Report</A>
+</BODY></HTML>

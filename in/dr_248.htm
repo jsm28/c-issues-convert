@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #248</title>
+  </head>
+
+  <body bgcolor="#FFFFFF">
+    <h2 align="center">Defect Report #248</h2>
+    <a href="dr_247.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_249.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> UK C Panel<br>
+     <b>Submission Date:</b> 2001-09-07<br>
+     <b>Source:</b> Clive D.W. Feather &lt;clive@demon.net&gt;<br>
+     <b>Version:</b> 1.1<br>
+     <b>Date:</b> 2002-03-06<br>
+     <b>Subject:</b> limits are required for optional types</p>
+    <b>Problem</b> 
+
+    <p>The types <tt><b>sig_atomic_t</b></tt> and
+    <tt><b>wchar_t</b></tt> are optional on freestanding
+    implementations, since they don't have to provide the relevant
+    headers. But the limits <tt><b>SIG_ATOMIC_MIN</b></tt>,
+    <tt><b>SIG_ATOMIC_MAX</b></tt>, <tt><b>WINT_MIN</b></tt>, and
+    <tt><b>WINT_MAX</b></tt> are in
+    <tt><b>&lt;stdint.h&gt;</b></tt>, which all implementations
+    must provide. So a freestanding implementation must provide
+    limits for types which it doesn't implement.</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Append to 7.18.3#2:</p>
+
+    <blockquote>
+      A freestanding implementation shall only define the symbols
+      corresponding to those typedef names it actually provides.
+    </blockquote>
+    <hr>
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>Append to 7.18.3#2:</p>
+
+    <blockquote>
+      An implementation shall define only the macros corresponding
+      to those typedef names it actually provides.
+    </blockquote>
+    Add a footnote to the last sentence of 7.18.3#2 to read: 
+
+    <blockquote>
+      A freestanding implementation need not provide all of these
+      types.
+    </blockquote>
+
+    <p><br>
+     <a href="dr_247.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_249.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

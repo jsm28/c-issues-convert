@@ -1,0 +1,1126 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #017</TITLE></HEAD>
+<BODY><H2>Defect Report #017</H2>
+<B>Submission Date</B>: 10 Dec 92
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: X3J11/90-056 (Derek M. Jones)
+<BR>
+<B>Question</B> 1
+<BR> New-line in preprocessor directives
+<BR> Subclause 5.1.1.2, page 5, line 37 says: ``Preprocessing
+directives  are executed and macro invocations are expanded.''
+<BR> Subclause 6.8, page 86, lines 2-5 say: ``A preprocessing directive
+ ... and is ended by the next new-line character.''
+<BR> Subclause 6.8.3, page 89, lines 38-39 say: ``Within the sequence 
+of preprocessing tokens ... new-line is considered a normal white-space 
+character.''
+<BR> These three statements are not sufficient to categorize the
+following:
+<BR>
+<TT><B>#define f(a,b) a+b<BR> #if f(1,<BR>      2)<BR> ...
+</B></TT><BR> It should be defined whether the preprocessing directive
+rule or macro  expansion wins, i.e. is this code fragment legal or
+illegal?
+<BR> In translation phase 4 ``preprocessing directives are executed 
+and macro invocations expanded.''
+<BR> Now do macro invocations get done first, followed by preprocessor 
+directives? Does the macro expander need to know that what it is
+expanding  forms a preprocessing directive?
+<BR> Subclause 6.8, page 86, lines 2-5 suggest that the preprocessor
+directive  is examined to look for the new-line character. But how is it
+examined?  Obviously phases 1-3 happen during this examination. So why
+shouldn't  part of phase 4?
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>Add to subclause 6.8, page 86, line 5, (Description):</B></I>
+<BR> A new-line character ends the preprocessing directive even if it
+occurs  within what would otherwise be an invocation of a function-like
+macro.
+<BR>
+<B>Question</B> 2
+<BR> Behavior if no function called <TT><B>main</B></TT> exists
+<BR> According to subclause 5.1.2.2.1, page 6, it is implicitly
+undefined  behavior if the executable does not contain a function called
+
+<TT><B>main</B></TT>.<BR> It ought to be explicitly undefined if no
+function called <TT><B>main</B></TT>  exists in the executable.
+<BR>
+<B>Response</B>
+<BR> You are correct that it is implicitly undefined behavior if the
+executable  does not contain a function called <TT><B>main</B></TT>.
+This was a conscious  decision of the Committee.
+<BR> There are many places in the C Standard that leave behavior
+implicitly  undefined. The Committee chose as a style for the C Standard
+not to  enumerate these places as explicitly undefined behavior. Rather,
+subclause  3.16, page 3, lines 12-16 explicitly allow for implicitly
+undefined  behavior and explicitly give implicitly undefined behavior
+equal status  with other forms of undefined behavior.
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>Add to subclause G.2, page 200:</B></I>
+<BR>  -  A program contains no function called <TT><B>main</B></TT>
+(5.1.2.2.1).
+<BR>
+<B>Question</B> 3
+<BR> Precedence of behaviors
+<BR> Refer to subclause 6.1.2.6, page 25, lines 9-10 and subclause 6.5,
+ page 57, lines 20-21. The constructs covered by these sentences
+overlap.  The latter is a constraint while the former is undefined
+behavior.  In the overlapping case who wins?
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>In subclause 5.1.1.3, page 6, lines 15-17, change:</B></I>
+<BR> A conforming implementation shall produce at least one diagnostic 
+message (identified in an implementation-defined manner) for every 
+translation unit that contains a violation of any syntax rule or
+constraint.
+<BR>
+<I><B>to:</B></I>
+<BR> A conforming implementation shall produce at least one diagnostic 
+message (identified in an implementation-defined manner) for every 
+translation unit that contains a violation of any syntax rule or
+constraint,  even if the behavior is also explicitly specified as
+undefined or  implementation-defined.
+<BR>
+<I><B>Add to subclause 5.1.1.3, page 6:</B></I>
+<BR>
+<B>Example</B>
+<BR> An implementation shall issue a diagnostic for the translation
+unit:
+<BR>
+<TT><B>char i;<BR> int i;
+</B><BR></TT> because in those cases where wording in this
+International Standard  describes the behavior for a construct as being
+both a constraint  error and resulting in undefined behavior, the
+constraint error shall  be diagnosed.
+<BR>
+<B>Question</B> 4
+<BR> Mapping of escape sequences
+<BR> Refer to subclause 6.1.3.4, page 29, line 12 and line 16. Are
+these  values the values in the source or execution character set?
+<BR> When subclause 6.1.3.4, page 29, line 24 says: ``The value of an 
+...,'' is this ``value'' the value in the source character  set of the
+escape sequence or the value of the mapped escape sequence?  I would
+have said that the ``value'' is the value in the execution  environment
+since in the source environment <TT><B>\x123</B></TT> is part of  a
+token.
+<BR> It might be argued that characters in the source character set do 
+not have values and thus no misinterpretation of ``value'' can  occur.
+Subclause 5.2.1, page 10, lines 25-26 refer to the value of  a character
+in the source basic character set.
+<BR>
+<B>Response</B>
+<BR> The values of octal or hexadecimal escape sequences are well
+defined  and not mapped. For instance, the value of the constant <TT><B>
+'\x12'</B></TT>  is always 18, while the value of the constant <TT><B>'\34'</B></TT>
+is always  28.
+<BR> The mapping described in subclause 6.1.3.4 on page 28, lines 35-39
+ only applies to members of the source character set, of which octal 
+and hexadecimal escape sequences clearly are not members.
+<BR>
+<B>Question</B> 5
+<BR> Example of value of character constants
+<BR> Refer to subclause 6.1.3.4, page 29, lines 24-25 and page 30,
+lines  9-10. Both of these statements cannot be true.
+<OL>
+<LI> If the constraint is violated, end of story. There is no
+implementation-defined  value.
+</LI>
+<LI> The implementation-defined behavior may be referring to the 
+mapping of the escape sequence to the basic character set, in which 
+case subclause 6.1.3.4, page 29, lines 24-25 should be changed to 
+mention that it will violate a constraint if the mapped value is outside
+ the range of representable values for the type <TT><B>unsigned char</B></TT>.
+</LI>
+</OL><B>Response</B>
+<BR> The values of octal or hexadecimal escape sequences are well
+defined  and not mapped. For instance, the value of the constant <TT><B>
+'\x123'</B></TT>  has the value 291.
+<BR> The mapping described in subclause 6.1.3.4 on page 28, lines 35-39
+ applies only to members of the source character set, of which octal 
+and hexadecimal escape sequences clearly are not members.
+<BR> The constraint in subclause 6.1.3.4 on page 29, lines 24-25 will
+be  violated only if the implementation uses characters of eight bits.
+<BR> The text of the example in subclause 6.1.3.4 on page 30, lines
+8-10  is slightly opaque, but the parenthesized comment is meant to be
+subject  to the words ``Even if eight bits are used ...'' The value is 
+implementation-defined only in that the implementation specifies how 
+many bits are used for characters and whether type <TT><B>char</B></TT>
+is signed  or not.
+<BR> This example could be worded a little more clearly to indicate
+what  is implementation-defined about the constant, and that it
+``violates  the above constraint'' only if eight bits are used for
+objects  that have type <TT><B>char</B></TT>, but we believe that this
+interpretation  is consistent with the intent of the Committee, and that
+a reasonable  reading of the standard supports this interpretation.
+<BR>
+<B>Question</B> 6
+<BR>
+<TT><B>register</B></TT> on aggregates
+<BR>
+<TT><B>void f(void)<BR> {<BR> register union{int i;} v;
+<BR>
+&amp;v      /* </B><I>Constraint error</I> <B>*/<BR> &(v.i);  /* </B><I>
+Constraint error or undefined?</I><B> */<BR> }
+</B></TT><BR> In subclause 6.3.3.2 on page 43, lines 37-38 in a
+constraint clause,  it says ``... and is not declared with the <TT><B>register</B></TT>
+storage-class  specifier.'' But in the above, the field <TT><B>i</B></TT>
+is not declared  with the <TT><B>register</B></TT> storage-class
+specifier.
+<BR> Footnote 58, on page 58, states that ``... the address of any part
+ of an object declared with storage-class specifier <TT><B>register</B></TT>
+ may not be computed ...'' Although the reference to this footnote  is
+in a constraints clause I think that it is still classed as undefined 
+behavior.
+<BR> Various people have tried to find clauses in the standard that tie
+ the storage class of an aggregate to its members. I would not use  the
+standard to show this point. Rather I would use simple logic to  show
+that if an object has a given storage class then any of its constituent 
+parts must have the same storage class. Also the use of storage classes 
+on members is syntactically illegal.
+<BR> The question is not whether such a construction is legal but the
+status  of its illegality. Is it a constraint error or undefined
+behavior?
+<BR> It might be argued that although <TT><B>register</B></TT> does
+not appear on  the field <TT><B>i</B></TT>, its presence is still
+felt. I would point out that  the standard does go to some pains to
+state that in the case of <TT><B>const  union{...}</B></TT> the <TT><B>
+const</B></TT> does apply to the fields. The fact that  there is no such
+wording for <TT><B>register</B></TT> implies that <TT><B>register</B></TT>
+ does not follow the <TT><B>const</B></TT> rule.
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>Add to subclause 6.5.1, page 58 (Semantics):</B></I>
+<BR> If an aggregate or union object is declared with a storage-class
+specifier  other than <TT><B>typedef</B></TT>, the properties
+resulting from the storage-class  specifier, except with respect to
+linkage, also apply to the members  of the object, and so on recursively
+for any aggregate or union member  objects.
+<BR>
+<B>Question</B> 7
+<BR> Scope and uniqueness of <TT><B>size_t</B></TT>
+<BR> Subclause 6.3.3.4 on page 45, lines 1-2 says: ``... and its type 
+(...) is <TT><B>size_t</B></TT> defined in the <TT><B>&lt;stddef.h></B></TT>
+header.''  This line could be read as either of the following:
+<OL>
+<LI> ``... and its type is <TT><B>size_t</B></TT> which happens to be
+defined  in <TT><B>stddef.h</B></TT>.''
+</LI>
+<LI> ``... and its type is the <TT><B>size_t</B></TT> defined in <TT><B>
+stddef.h</B></TT>.''
+</LI>
+</OL>(It was probably intended as a helpful piece of information only.) 
+So what does the compiler do?
+<BR> In (1) the compiler has to define a <TT><B>size_t</B></TT> in
+some outer scope.  This definition does not make <TT><B>size_t</B></TT>
+visible, but gives a type  to the return value of <TT><B>sizeof</B></TT>.
+Now if the programmer defines  a typedef making <TT><B>size_t</B></TT>
+synonymous with <TT><B>float</B></TT> (say) then  the compiler now has
+to use this new type. This interpretation does  not require the
+programmer to include <TT><B>&lt;stddef.h></B></TT> in order to  use
+<TT><B>sizeof</B></TT>.
+<BR> In (2) the compiler picks up the type <TT><B>size_t</B></TT>
+from <TT><B>&lt;stddef.h></B></TT>  (assuming that the user included
+this header). Should the compiler  give a diagnostic if this header was
+not included and <TT><B>sizeof</B></TT>  was used? A subsequent
+typedef for <TT><B>size_t</B></TT> does not affect the  type of the
+result of <TT><B>sizeof</B></TT>.
+<BR> These problems do not arise with <TT><B>int</B></TT>, et al.
+because they are  keywords. Thus ``<TT><B>typedef float int</B></TT>''
+would give a syntax  error and need not be considered semantically.
+<BR> According to subclause 6.3.3.4, page 45, <TT><B>sizeof</B></TT>
+has type <TT><B>size_t</B></TT>.  What happens if the type of <TT><B>size_t</B></TT>
+does not match what the compiler  thinks is the type of <TT><B>sizeof</B></TT>?
+<BR>
+<B>Response</B>
+<BR> The relevant citations are subclause 6.3.3.4
+<BLOCKQUOTE>The value of the result is implementation-defined, and its
+type  (an unsigned integral type) is <TT><B>size_t</B></TT> defined in
+the <TT><B>&lt;stddef.h></B></TT>  header.
+</BLOCKQUOTE> and subclause 7.1.6
+<BLOCKQUOTE>The types are ...
+<BR>
+<TT><B>size_t</B></TT>
+<BR> which is the unsigned integral type of the result of the <TT><B>sizeof</B></TT>
+ operator; ...
+</BLOCKQUOTE> These sections, both separately and together, define the
+relationship  between the result type of <TT><B>sizeof</B></TT> and
+the type <TT><B>size_t</B></TT>  defined in <TT><B>stddef.h</B></TT>.
+The result type of <TT><B>sizeof</B></TT> and the  type <TT><B>size_t</B></TT>
+defined in <TT><B>stddef.h</B></TT> are an unsigned integral  type,
+and <TT><B>size_t</B></TT> defined in <TT><B>&lt;stddef.h></B></TT>
+is identical to  the result type of <TT><B>sizeof</B></TT>. To
+restate, in a conforming implementation,  the result type of <TT><B>sizeof</B></TT>
+will be the same as the type of <TT><B>size_t</B></TT>  defined in
+<TT><B>&lt;stddef.h></B></TT>.
+<BR> Since these two types are the same, there need be no mechanism for
+ a compiler to discover the type of <TT><B>size_t</B></TT> defined in
+<TT><B>&lt;stddef.h></B></TT>.  A compiler's private knowledge of the
+result type of <TT><B>sizeof</B></TT>  is as good as <TT><B>stddef.h</B></TT>'s
+private knowledge of the type of 
+<TT><B>size_t</B></TT>.
+<BR> Note that the result of <TT><B>sizeof</B></TT> has the same type
+as not just  any <TT><B>size_t,</B></TT> but the <TT><B>size_t</B></TT>
+defined in <TT><B>&lt;stddef.h></B></TT>.
+<BR>
+<B>Question</B> 8
+<BR> Compatibility of pointer to <TT><B>void</B></TT> with storage
+class
+<BR> Refer to subclause 6.3.9, page 49, lines 24-25. Do these lines
+make  the following legal?
+<BR>
+<TT><B>register void *p;<BR> char *q;<BR> if (p==q)  /*</B><I> legal</I><B> */<BR>
+...
+</B></TT><BR> The wording on line 25, ``... version of <TT><B>void</B></TT>;
+or'' does  not talk about the ``<TT><B>void</B></TT> type.'' This
+sentence could  be taken as simply referring to the occurrence of a
+qualified or unqualified  occurrence of <TT><B>void</B></TT>.
+<BR> Should the wording on line 25 be changed to ``... version of the 
+type <TT><B>void</B></TT>; or'' and thus cause the storage class to be
+ignored,  or does the above example fall outside the scope of the
+constraint?
+<BR>
+<B>Response</B>
+<BR> The relevant citation is subclause 6.3.9:
+<BLOCKQUOTE>one operand is a pointer to an object or incomplete type 
+and the other is a pointer to a qualified or unqualified version of 
+<TT><B>void</B></TT>; or
+</BLOCKQUOTE> The Committee believes that the current wording of the
+standard is  clear, and it is not changed in meaning by changing
+``version of 
+<TT><B>void</B></TT>'' in the quoted section to ``version of the <TT><B>
+void</B></TT>  type.''
+<BR> The standard uses the word ``<TT><B>void</B></TT>'' in two
+contexts: the  keyword itself and the type that the keyword names. The
+context that  the word is used in adequately distinguishes between the
+two. In the  section quoted, which discusses type compatibility, a
+misreading of  ``<TT><B>void</B></TT>'' as meaning the keyword quickly
+results in nonsense.
+<BR> As to the qualification discussed in the quoted passage, it is
+type  qualification, defined in subclause 6.5.3. The standard only uses 
+the words ``qualified'' and ``unqualified'' when discussing  type
+qualification and never uses them when discussing storage classes. 
+Thus, storage classes have no place in the discussion of the quoted 
+passage.
+<BR>
+<B>Question</B> 9
+<BR> Syntax of assignment expression
+<BR> In subclause 6.3.16.1 on page 53, lines 31-32 there is a typo:
+``...  of the assignment expression ...'' should be ``... of the unary 
+expression ...''
+<BR> In subclause 6.3.16 on page 53, lines 3-5 we have
+<BR>
+<TT><I><B>assignment-expression:<BR>    ...<BR>         unary-expression 
+assignment-operator  assignment-expression</B></I>
+</TT><BR> Now the string ``<TT><B><I>assignment-expression</I></B></TT>''
+occurs twice.
+<BR> The use of ``assignment expression'' in subclause 6.3.16 on  page
+53, line 12 refers to the first occurrence (the one to the left  of the
+colon).
+<BR> We suggest changing the use of ``assignment expression'' in 
+subclause 6.3.16.1 on page 53, line 32 in order to prevent confusion. 
+The fact that any qualifier is kept actually makes more sense, since 
+this qualifier has to take part in any constraint checking.
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>Add to subclause 6.3.16.1, page 54, another Example:</B></I>
+<BR> In the fragment:
+<BR>
+<TT> <B>  char c;<BR>    int i;<BR>    long l;<BR>
+<BR>    l = ( c = i );</B>
+</TT><BR> the value of <TT><B>i</B></TT> is converted to the type of
+the assignment-expression 
+<TT><B>c = i</B></TT>, that is, <TT><B>char</B></TT> type. The value
+of the expression  enclosed in parenthesis is then converted to the type
+of the outer  assignment-expression, that is, <TT><B>long</B></TT>
+type.
+<BR>
+<B>Question</B> 10
+<BR> When is <TT><B>sizeof</B></TT> needed?
+<BR> Refer to subclause 6.5.2.3, page 62, lines 28-29. When is the size
+ of an incomplete structure needed? An interpreter may not need the 
+size until run time, while some strictly typed memory architecture  may
+not even allow pointers to structures of unknown size.
+<BR> In subclause 6.5.2.3, Footnote 63 starts off as an example. The
+last  sentence contains a ``shall.'' Does a violation of this ``shall'' 
+constitute undefined behavior?
+<BR> Even though an interpreter may not need the size of a structure
+until  run time its compiler still has to do some checking, i.e. an
+unexecuted  statement may contain <TT><B>sizeof</B></TT> an incomplete
+type; even though  the statement is unexecuted the constraint still has
+to be detected.
+<BR>
+<B>Response</B>
+<BR> Whether the language processor is an interpreter or a true
+compiler  does not affect the language rules about when the size of an
+object  is needed. Both a compiler and an interpreter must act as if the
+translation  phases in subclause 5.1.1.2 were followed. This is a
+requirement that  an implementation act as if the entire program is
+translated before  the program's execution.
+<BR> The ``shall'' in Footnote 63 in subclause 6.5.2.3 carries no 
+special meaning: this footnote, like all other footnotes in the
+standard,  is provided to emphasize the consequences of the rules in the
+standard.  The footnote is not part of the standard.
+<BR> The Committee believes that a careful reading of the standard
+shows  all of the places that the size of an object is needed, and that
+the  translation phases prevent those requirements from being relaxed by
+ an implementation.
+<BR>
+<B>Question</B> 11
+<BR> Clarification of incomplete <TT><B>struct</B></TT> declaration
+<BR> Referring to subclause 6.5.2.3, page 62:
+<BR>
+<TT><B>struct t;<BR> struct t; /*</B> <I>Is this undefined?</I><B>
+*/
+</B></TT><BR> People seem to think that the above is undefined.
+<BR> The problem arises because no rules exist for compatibility of
+incomplete  structures or unions.
+<BR>
+<B>Response</B>
+<BR> The proposed example is valid. Nothing in the standard prohibits
+it.
+<BR> The relevant citation is subclause 6.5.2.3 Semantics, paragraph 2:
+<BLOCKQUOTE>A declaration of the form
+<BR>
+<TT>    <B><I>struct-or-union</I>  identifier ;</B></TT>
+<BR> specifies a structure or union type and declares a tag, both 
+visible only within the scope in which the declaration occurs. It 
+specifies a new type distinct from any type with the same tag in an 
+enclosing scope (if any).
+</BLOCKQUOTE>
+<B>Question</B> 12
+<BR> Ambiguous parsing of typedefs in prototypes
+<BR> On page 67 in subclause 6.5.4.3, an ambiguity needs resolving in
+the  parsing of the following:
+<OL TYPE=a>
+<LI> <TT><B>int x(T (U));</B></TT>
+</LI>
+<LI> <TT><B>int x(T (U (int a, char b)));</B></TT>
+</LI>
+</OL>In (a) <TT><B>U</B></TT> is the type of the parameter to a
+function returning  type <TT><B>T</B></TT>. From subclause 6.5.4.3,
+page 68, line 2:
+<BLOCKQUOTE>In a parameter declaration, a single typedef name in
+parentheses  is taken to be an abstract declarator that specifies a
+function with  a single parameter, not as redundant parentheses around
+the identifier  for a declarator.
+</BLOCKQUOTE> Thus in the case of (b):
+<OL>
+<LI><TT><B>U</B></TT> could be a redundantly parenthesized name of a
+function  which takes a <TT><B><I>parameter-type-list</I></B></TT>
+and returns type <TT><B>T</B></TT>,  or
+</LI>
+<LI> <TT><B>U</B></TT> could be the type returned by a function which
+takes a 
+<TT><B><I>parameter-type-list</I></B></TT>, which in turn is the
+single parameter of a function returning type <TT><B>T</B></TT>.
+</LI>
+</OL><B>Response</B>
+<BR> See <A HREF="dr_009.html">Defect Report #009</A>, Question 1 for
+a clarifying correction in  this area.
+<BR>
+<B>Question</B> 13
+<BR> Compatibility of functions with <TT><B>register</B></TT> on
+parameters
+<BR> Reference subclause 6.5.4.3, page 67.
+<BR>
+<TT><B>f1(int);<BR> f1(register int a) /*</B><I> Is this function
+compatible with the above?</I> 
+<B>*/<BR> {<BR> }
+</B></TT><BR> Subclause 6.5.4.3, page 68, lines 5-7 were presumably
+intended to  make sure that the <TT><B>register</B></TT> storage class
+got kept in the case  of a definition so that the appropriate
+constraints applied, i.e.,  it is not allowed to take its address, etc.
+But the further implication  of the wording is that the occurrence of
+<TT><B>register</B></TT> lingers on  for other uses  -  but there are
+no other uses.
+<BR> Suggest a clarification on this point.
+<BR>
+<B>Response</B>
+<BR> The function is compatible. Storage class is not part of the type.
+<BR> The relevant citation, as given, is subclause 6.5.4.3, page 68,
+lines  5-7, but it does not imply any ``other uses.''
+<BR>
+<B>Question</B> 14
+<BR>
+<TT><B>const void</B></TT> type as a parameter
+<BR> Refer to subclause 6.5.4.3, page 67, line 37. <TT><B>f(const
+void)</B></TT>  should be explicitly undefined; also <TT><B>f(register
+void)</B></TT>, <TT><B>f(volatile  void)</B></TT>, and combinations
+thereof.
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>Add to subclause G.2, page 201:</B></I>
+<BR>  -  A storage-class specifier or type qualifier modifies the
+keyword 
+<TT><B>void</B></TT> as a function parameter type list (6.5.4.3).
+<BR>
+<B>Question</B> 15
+<BR> Ordering of conversion of arrays to pointers
+<BR> In subclause 6.5.4.3 on page 68, line 22 there is a sentence in
+parentheses.  Does the sentence refer to the whole paragraph or just the
+preceding  sentence?
+<BR>
+<TT><B>int f(int a[4]);<BR> int f(int a[5]);<BR> int f(int *a);
+</B></TT><OL>
+<LI> It refers to the whole paragraph. This makes all of the above 
+three declarations compatible.
+</LI>
+<LI> It does not refer to the whole paragraph. This makes all three 
+declarations incompatible.
+</LI>
+</OL><B>Response</B>
+<BR> Regarding page 68, line 22: There are <I>two</I> sentences in
+parentheses.  They apply to the entire paragraph. The declarations are
+all compatible.  (See <A HREF="dr_013.html">Defect Report #013, Question 1</A> for a clarifying
+correction in  this area.)
+<BR>
+<B>Question</B> 16
+<BR> Pointer to multidimensional array
+<BR> Given the declaration:
+<BR>
+<TT><B>char a[3][4], (*p)[4]=a[1];</B></TT>
+<BR> Does the behavior become undefined when:
+<OL>
+<LI> <TT><B>p</B></TT> no longer points within the slice of the
+array, or
+</LI>
+<LI> <TT><B>p</B></TT> no longer points within the object <TT><B>a</B></TT>?
+</LI>
+</OL>This case should be explicitly stated.
+<BR> Arguments for/against:
+<BR> The standard refers to a pointed-to object. There does not appear 
+to be any concept of a slice of an array being an independent object.
+<BR>
+<B>Response</B>
+<BR> For an array of arrays, the permitted pointer arithmetic in
+subclause  6.3.6, page 47, lines 12-40 is to be understood by
+interpreting the  use of the word ``object'' as denoting the specific
+object determined  directly by the pointer's type and value, <I>not</I>
+other objects  related to that one by contiguity. Therefore, if an
+expression exceeds  these permissions, the behavior is undefined. For
+example, the following  code has undefined behavior:
+<BR>
+<TT><B>int a[4][5];<BR>
+<BR> a[1][7] = 0;    /*</B><I> undefined </I><B>*/
+</B></TT><BR> Some conforming implementations may choose to diagnose an
+``array  bounds violation,'' while others may choose to interpret such
+attempted  accesses successfully with the ``obvious'' extended
+semantics.
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>Add to subclause G.2, page 201:</B></I>
+<BR>  - An array subscript is out of range, even if an object is
+apparently  accessible with the given subscript (as in the lvalue
+expression <TT><B>a[1][7]</B></TT>  given the declaration <TT><B>int
+a[4][5]</B></TT>) (6.3.6).
+<BR>
+<A NAME="Question17"><B>Question</B> 17</A>
+<BR> Initialization of unions with unnamed members
+<BR> Subclause 6.5.7 on page 71, line 39 says: ``All unnamed structure 
+or union members are ignored ...'' On page 72, lines 22-23, it  says:
+``... for the first member of the union.'' Subclause 6.5.2.1,  page 60,
+line 40 and Footnote 60 say that a field with no declarator  is a
+member.
+<BR>
+<TT><B>union {<BR>        int  :3;<BR>        float f;} u = {3.4};
+</B></TT><BR> Should page 72 be changed to refer to the first named
+member or is  the initialization of a union whose first member is
+unnamed illegal?
+<BR> It has been suggested that the situation described above is
+implicitly  undefined.
+<BR> I think that it is a straightforward ambiguity that needs
+resolution  one way or the other.
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>In subclause 6.5.7, page 71, line 39, change:</B></I>
+<BR> All unnamed structure or union members are ignored during
+initialization.
+<BR>
+<I><B>to:</B></I>
+<BR> Except where explicitly stated otherwise, for the purposes of this
+ subclause unnamed members of objects of structure and union type do 
+not participate in initialization. Unnamed members of structure objects 
+have indeterminate value even after initialization. A union object 
+containing only unnamed members has indeterminate value even after 
+initialization.
+<BR>
+<I><B>In subclause 6.5.7, page 72, line 11, change:</B></I>
+<BR> The initial value of the object is that of the expression.
+<BR>
+<I><B>to:</B></I>
+<BR> The initial value of the object, including unnamed members, is
+that  of the expression.
+<BR>
+<B>Question</B> 18
+<BR> Compatibility of functions with <TT><B>void</B></TT> and no
+prototype
+<BR>
+<TT><B>f2(void);<BR> f2(); /*</B><I> Is this function compatible
+with the one above?</I><B> */
+</B></TT><BR> Now subclause 6.5.4.3, page 68, line 1 says that the
+first declaration  of <TT><B>f2</B></TT> specifies that the function
+has no parameters.
+<BR> No rules are given in the subsequent paragraphs to say that a
+function  declaration with a parameter type list, with no parameters, is
+compatible  with a function declaration with an empty parameter list.
+<BR> If we treat the <TT><B>void</B></TT> as a single parameter then
+page 68, lines  14-18 would make the above two functions incompatible.
+<TT><B>void</B></TT>  is not compatible with any default promotions.
+subclause 6.5.4.3,  page 68, lines 18-22 cover the case for declaration
+and definition.
+<BR> Thus I think that in the above example the behavior is implicitly 
+undefined.
+<BR>
+<B>Response</B>
+<BR> Subclause 6.5.4.3, page 67, line 37 and page 68, line 1 state,
+``The  special case of <TT><B>void</B></TT> as the only item in the
+list specifies  that the function has no parameters.'' Therefore, in the
+case of 
+<TT><B>f2(void);</B></TT> there are <I>no</I> parameters just as
+there are none  for <TT><B>f2();</B></TT>. Since both functions have
+the same return type, these  declarations <I>are</I> compatible.
+<BR>
+<A NAME="Question 19"><B>Question</B> 19</A>
+<BR> Order of evaluation of macros
+<BR> Refer to subclause 6.8.3, page 89. In:
+<BR>
+<TT><B>#define f(a) a*g<BR> #define g(a) f(a)<BR> f(2)(9)
+</B></TT><BR> it should be defined whether this results in:
+<OL>
+<LI> <TT><B>2*f(9)</B></TT>
+<BR> or
+<BR>
+</LI>
+<LI> <TT><B>2*9*g</B></TT>
+</LI>
+</OL>X3J11 previously said, ``The behavior in this case could have been 
+specified, but the Committee has decided more than once not to do  so.
+[They] do not wish to promote this sort of macro replacement usage.''
+<BR> I interpret this as saying, in other words, ``If we don't define 
+the behavior nobody will use it.'' Does anybody think this position  is
+unusual?
+<BR> People seem to agree that the behavior is ambiguous in this case. 
+Should we specify this case as undefined behavior?
+<BR>
+<B>Response</B>
+<BR> If a fully expanded macro replacement list contains a
+function-like  macro name as its last preprocessing token, it is
+unspecified whether  this macro name may be subsequently replaced. If
+the behavior of the  program depends upon this unspecified behavior,
+then the behavior  is undefined.
+<BR> For example, given the definitions:
+<BR>
+<TT><B>#define f(a) a*g<BR> #define g(a) f(a)
+</B></TT><BR> the invocation:
+<BR>
+<TT><B>f(2)(9)</B></TT>
+<BR> results in undefined behavior. Among the possible behaviors are
+the  generation of the preprocessing tokens:
+<BR>
+<TT><B>2*f(9)</B></TT>
+<BR> and
+<BR>
+<TT><B>2*9*g</B></TT>
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>Add to subclause G.2, page 202:</B></I>
+<BR>  -  A fully expanded macro replacement list contains a
+function-like  macro name as its last preprocessing token (6.8.3).
+<BR>
+<B>Question</B> 20
+<BR> Scope of macro parameters
+<BR> Refer to subclause 6.8.3 on page 89, line 16; the scope of macro
+parameters  should be defined in the section on scope.
+<BR> The idea is to enable all references to the scope of names to be
+under  one heading. This is not really a significant issue.
+<BR>
+<B>Response</B>
+<BR> Subclause 6.1.2 on page 20, line 5, states ``Macro names and macro
+ parameters are not considered further here.'' This approach was 
+intentionally adopted to avoid explicitly having to mention exceptions 
+of using identifiers, for example in the sections on scope, linkage, 
+name spaces, and storage durations, none of which applies to macros. 
+The proposed change does <I>not</I> clarify the standard and may even 
+obscure it.
+<BR>
+<B>Question</B> 21
+<BR> Self references in translation phase 4
+<BR> The following queries arise because of the imprecise way in which 
+phase 4 interacts with itself. While processing a token within phase  4
+it is sometime necessary to get the following tokens from the input, 
+i.e. reading the arguments to a function-like macro. But when getting 
+these tokens it is not clear how many phases operate on them:
+<OL>
+<LI>Do the following tokens only get processed by phases 1-3?
+</LI>
+<LI>Do the following tokens get processed by phases 1-4?
+</LI>
+</OL>When an identifier declared as a function-like macro is
+encountered,  how hard should an implementation try to locate the
+opening/closing  parentheses?
+<BR> In:
+<BR>
+<TT><B>#define lparen (<BR> #define f_m(a) a<BR> f_m lparen "abc" )
+</B></TT><BR> should the object-like macro be expanded while searching
+for an opening  parenthesis? Or does the lack of a readily available
+left parenthesis  indicate that the macro should not be expanded?
+<BR> Subclause 6.8.3, on page 89, lines 34-35 says ``... followed by  a
+<TT><B>(</B></TT> as the next preprocessing token ...'' This sentence
+does  not help because in translation phase 4 all tokens are
+preprocessing  tokens. They don't get converted to ``real'' tokens until
+phase  7. Thus it cannot be argued that <TT><B>lparen</B></TT> is not
+correct in this  situation, because its result is a preprocessing token.
+<BR> In:
+<BR>
+<TT><B>#define i(x) 3<BR> #define a i(yz<BR> #define b )<BR> a b ) 
+ /*</B><I> goes to 3) or 3</I><B> */
+</B></TT><BR> does <TT><B>b</B></TT> get expanded to complete the
+call <TT><B>i(yz,</B></TT> or does  the parenthesis to its right get
+used?
+<BR>
+<B>Response</B>
+<BR> Concerning the first example:
+<BR>
+<TT><B>#define lparen (<BR> #define f_m(a) a<BR> f_m lparen "abc" )
+</B></TT><BR> According to subclause 5.1.1.2 <B>Translation phases</B>,
+page 5, lines  25-39, the translation phases 1-3 do not cause macros to
+be expanded.  Phase 4 does expand. To apply subclause 6.8.3 <B>Macro
+replacement</B>  page 89, lines 34-35 to the example: Since <TT><B>lparen</B></TT>
+is not <TT><B>(</B></TT>  in ``<TT><B>f_m lparen "abc" )</B></TT>,''
+this construct is not recognized  as a function-like macro invocation.
+Therefore the example expands  to
+<BR>
+<TT><B>f_m("abc")</B></TT>
+<BR> The same principle applies to the second example:
+<BR>
+<TT><B>#define i(x) 3<BR> #define a i(yz<BR> #define b )<BR> a b ) 
+     /*</B><I> expands via the following stages:</I><B> */<BR>
+<BR> i(yz b )    /*</B><I> ) delimits the argument list <B>before</B>
+b is expanded
+</I><B> */<BR> i([yz ) ])<BR> 3
+</B></TT><BR> This is how we interpret subclause 6.8.3, page 89, lines
+36-38: The  sequence of preprocessing tokens is terminated by the
+right-parenthesis  preprocessing token.
+<BR>
+<B>Question</B> 22
+<BR> Gluing during rescan
+<BR> Reference: subclause 6.8.3.3, page 90. Does the rescan of a macro 
+invocation also perform gluing?
+<BR>
+<TT><B>#define hash_hash # ## #<BR> #define mkstr(a) # a<BR> #define
+in_between(a) mkstr(a)<BR> #define join(c, d) in_between(c hash_hash d)<BR>
+
+</B></TT><BR>
+<TT><B>char p[2] = join(x, y);</B></TT>
+<BR> Is the above legal? Does <TT><B>join</B></TT> expand to <TT><B>"xy"</B></TT>
+or <TT><B>"x  ## y"</B></TT>?
+<BR> It all depends on the wording in subclause 6.8.3.3 on page 90,
+lines  39-40. Does the wording ``... before the replacement list is
+reexamined  ...'' mean before being reexamined for the first time only,
+or  before being reexamined on every rescan?
+<BR> This rather perverse macro expansion is only made possible because
+ the constraints on the use of <TT><B>#</B></TT> refer to
+function-like macros  only. If this constraint were extended to cover
+object-like macros  the whole question goes away.
+<BR> Dave Prosser says that the intent was to produce <TT><B>"x ## y"</B></TT>.
+My  reading is that the result should be <TT><B>"xy"</B></TT>. I
+cannot see any  rule that says a created <TT><B>##</B></TT> should not
+be processed appropriately.  The standard does say in subclause 6.8.3.3,
+page 90, line 40 ``...  each instance of a <TT><B>##</B></TT> ...''
+<BR> The reason I ask if the above is legal is that the order of
+evaluation  of <TT><B>#</B></TT> and <TT><B>##</B></TT> is not
+defined. Thus if <TT><B>#</B></TT> is performed  first the result is
+very different than if <TT><B>##</B></TT> goes first.
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>Add to subclause 6.8.3.3, page 90:</B></I>
+<BR>
+<B>Example</B>
+<BR>
+<TT><B>#define hash_hash # ## #<BR> #define mkstr(a) # a<BR> #define
+in_between(a) mkstr(a)<BR> #define join(c, d) in_between(c hash_hash d)
+<BR> char p[] = join(x, y); /*</B><I> equivalent to char p[] = "x ##
+y";</I><B>*/</B></TT>
+<BR> The expansion produces, at various stages:
+<BR>
+<TT><B>join(x, y)<BR> in_between(x hash_hash y)<BR> in_between(x ##
+y)<BR> mkstr(x ## y)<BR> "x ## y"
+</B></TT><BR> In other words, expanding <TT><B>hash_hash</B></TT>
+produces a new token, consisting  of two adjacent sharp signs, but this
+new token is not the catenation  operator.
+<BR>
+<B>Question</B> 23
+<BR> How long does blue paint persist?
+<BR> Consider the following code:
+<BR>
+<TT><B>#define a(x) b<BR> #define b(x) x<BR> a(a)(a)(a)
+</B></TT><BR> The macro replacement for <TT><B>a(a)</B></TT> results
+in <TT><B>b</B></TT>.
+<BR> First replacement buffer: <TT><B>b</B></TT>
+<BR> Remaining tokens: <TT><B>(a)(a)</B></TT>
+<BR> Inside the first replacement buffer, no further nested
+replacements  will recognize the macro name ``<TT><B>a</B></TT>.'' The
+name ``<TT><B>a</B></TT>''  is painted blue.
+<BR> The first replacement buffer is rescanned not by itself, but along
+ with the rest of the source program's tokens. ``<TT><B>b(a)</B></TT>''
+ also causes macro replacement and becomes ``<TT><B>a</B></TT>.''
+<BR> Second replacement buffer: <TT><B>a</B></TT>
+<BR> Remaining tokens: <TT><B>(a)</B></TT>
+<BR> The second replacement buffer is rescanned not by itself, but
+along  with the rest of the source program's tokens.
+<BR> The ``<TT><B>a</B></TT>'' in the second replacement buffer did
+not come  from the first replacement buffer. It came from three of the
+remaining  tokens which were in the source file following the first
+replacement  buffer. Is this ``<TT><B>a</B></TT>'' part of a nested
+replacement? Is  it still painted blue?
+<BR> Note that there are many ``paths'' that can be taken for a
+possible  macro name to travel from a preprocessing token (outside the
+replacement  buffer) to one that is inside the replacement buffer. When
+do they  stop getting painted blue? If either too early or too late,
+they cause  very surprising results.
+<BR> Given the amount of discussion involving macro expansion that uses
+ the concept of ``blue paint,'' why doesn't the standard tell  the
+reader about this idea?
+<BR> Everybody seems to agree that the above is undefined. Does anybody
+ have a set of words to make this and other cases explicitly undefined?
+<BR>
+<B>Response</B>
+<BR> The reference is to subclause 6.8.3.4, page 91.
+<BR>
+<TT><B>#define a(x) b<BR> #define b(x) x<BR> a(a)(a)(a)      /*</B><I>
+ may expand as follows:</I><B> */<BR> b(a)(a)<BR> a'(a)   <I>or</I> 
+     a(a)<BR> a(a)            <I>or</I>       b<BR> /*</B><I><B> a'</B>
+indicates the symbol a marked for non-replacement</I><B> */
+</B></TT><BR><BR> The Committee addressed this issue explicitly in
+previous deliberations  and decided to say nothing about the situation,
+understanding that  behavior in such cases would be undefined.
+<BR> The result, as with other examples, is intentionally left
+undefined.
+<BR>
+<B>Question</B> 24
+<BR> Improve English
+<BR> Just a tidy up. Change subclause 7.1.2, page 96, line 33 from ``if
+ the identifier'' to ``if an identifier.''
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>In subclause 7.1.2, page 96, lines 32-33, change:</B></I>
+<BR> However, if the identifier is declared or defined in more than one
+ header,
+<BR>
+<I><B>to:</B></I>
+<BR> However, if an identifier is declared or defined in more than one 
+header,
+<BR>
+<B>Question</B> 25
+<BR> ``Must'' in footnotes
+<BR> This change is not essential since footnotes have no status. But
+this  change would cut down the number of occurrences of ``shall'' 
+synonyms used where ``shall'' itself could have be used.
+<BR>
+<B>Response</B>
+<BR> The standard is clear enough as is.
+<BR>
+<B>Question</B> 26
+<BR> Implicit initialization of unions with unnamed members
+<BR> Are unnamed union members required to be initialized?
+<BR>
+<B>Response</B>
+<BR> See <A HREF="dr_017.html#Question17"> Defect Report #017, Question 17</A> for a clarifying correction in
+ this area.
+<BR>
+<A NAME="Question27">
+<B>Question</B> 27</A>
+<BR>
+<TT><B>g</B></TT> conversions
+<BR> Subclause 7.9.6.1 says on page 132, lines 42: ``For <TT><B>g</B></TT>
+and 
+<TT><B>G</B></TT> conversions, trailing zeros will <I>not</I> be
+removed ...,''  whereas on page 133, lines 37-38 it says: ``Trailing
+zeros are  removed ...''
+<BR> It has been suggested that the italics on page 132, lines 42 gives
+ this rule precedence. I don't mind which rule wins as long as the  text
+says so. Do we add text to describe the italics rule or change  the
+conflicting lines?
+<BR>
+<B>Response</B>
+<BR> In the collision between the description of the <TT><B>#</B></TT>
+flag and the 
+<TT><B>g</B></TT> and <TT><B>G</B></TT> conversion specifiers to
+<TT><B>fprintf,</B></TT> which  takes precedence?
+<BR> The <TT><B>#</B></TT> flag takes precedence. Subclause 7.9.6.1,
+page 132, line  1 says, ``Zero or more <I>flags</I> (in any order) ...
+modify the  meaning of the conversion specification.''
+<BR>
+<B>Question</B> 28
+<BR> Ordering of conditions on return
+<BR> In subclause 7.9.9.1, subclause 7.9.9.3, and subclause 7.9.9.4,
+the  words are ``returns ... and stores an implementation-defined
+positive  value in <TT><B>errno</B></TT>.'' This is a strange order of
+operations  -   shouldn't the wording be reversed?
+<BR>
+<B>Response</B>
+<BR> No. In subclause 7.9.9.1, subclause 7.9.9.3, and subclause
+7.9.9.4,  the words ``returns ... and stores an implementation-defined
+positive  value in <TT><B>errno</B></TT>'' do not imply any temporal
+ordering. There  are implementations that may perform these operations
+in either order  and they still meet the standard.
+<BR>
+<B>Question</B> 29
+<BR> Conversion failure and longest matches
+<BR> Consider <TT><B>1.2e+4</B></TT> with field width of 5. Is it
+input item <TT><B>1.2e+</B></TT>  that gives a conversion failure?
+What is the ordering between building  input items and converting them?
+Do they run in parallel, or sequential?
+<BR> Refer to subclause 7.9.6.2 <B>The <TT>fscanf</TT> function</B>,
+page 135,  lines 31-33 concerning the longest matching sequence, and
+subclause  7.9.6.2, page 137, lines 15-16 concerning a conflicting input
+character.
+<BR> For <TT><B>1.2e-x,</B></TT> is <TT><B>1.2</B></TT> or <TT><B>1.2e-</B></TT>
+read?
+<BR> The above questions all come about because of page 137, line 15:
+``If  conversion terminates ...'' In this context the use of the word 
+``conversion'' could be referring to the process of turning  a sequence
+of characters into numeric form. I believe what was intended  was ``If a
+conversion specifier terminates ...''
+<BR>
+<B>Response</B>
+<BR> The relevant citations are subclause 7.9.6.2, page 137, lines
+15-16:
+<BR> If conversion terminates on a conflicting input character, the 
+offending input character is left unread in the input stream.
+<BR> and subclause 7.9.6.2, page 135, lines 31-33:
+<BR> An input item is defined as the longest matching sequence of 
+input characters, unless that exceeds a specified field width, in  which
+case it is the initial subsequence of that length in the sequence.
+<BR> and subclause 7.9.6.2, page 135, lines 38-40:
+<BR> If the input item is not a matching sequence, the execution  of
+the directive fails: this condition is a matching failure.
+<BR> The ``conversion'' in the first quoted passage is the process  of
+both forming an input item and converting it as specified by the 
+conversion specifier.
+<BR> About your example: If the characters available for input are ``<TT>
+<B>1.2e+4</B></TT>''  and input is performed using a ``<TT><B>%5e</B></TT>,''
+then the input  item is ``<TT><B>1.2e+</B></TT>'' as defined by the
+second passage quoted  above. That input item is not a matching
+sequence, but only an initial  subsequence that fails to be a matching
+sequence in its own right.  Under the rules of the third quoted passage,
+this is a matching failure.
+<BR> Note that in this case, no characters were pushed back onto the
+input  stream. There was no ``conflicting input character'' that
+terminated  the field, and so the first quoted passage does not apply.
+<BR> See the Correction made in response to Defect Report #022,
+Question  1, for additional clarification.
+<BR>
+<B>Question</B> 30
+<BR> Successful call to <TT><B>ftell</B></TT> or <TT><B>fgetpos</B></TT>
+<BR> In subclause 7.9.9.2 on page 145, lines 39-40, ``... a value
+returned  by an earlier call to the <TT><B>ftell</B></TT> function
+...'' should actually  read ``... a value returned by an earlier
+successful call ...''  Similarly for subclause 7.9.9.3.
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>In subclause 7.9.9.2, page 145, lines 39-40, change:</B></I>
+<BR> a value returned by an earlier call to the <TT><B>ftell</B></TT>
+function
+<BR>
+<I><B>to:</B></I>
+<BR> a value returned by an earlier successful call to the <TT><B>ftell</B></TT>
+ function
+<BR>
+<I><B>In subclause 7.9.9.3, page 146, lines 10-11, change:</B></I>
+<BR> a value obtained from an earlier call to the <TT><B>fgetpos</B></TT>
+function
+<BR>
+<I><B>to:</B></I>
+<BR> a value obtained from an earlier successful call to the <TT><B>fgetpos</B></TT>
+ function
+<BR>
+<B>Question</B> 31
+<BR> Size in bytes
+<BR> References to the size of an object in other parts of the standard
+ specify that size is measured in bytes. The following lines do not 
+follow this convention: subclause 7.10.3.1 on page 154, lines 26-27  and
+subclause 7.10.3.3 on page 155, line 8.
+<BR>
+<B>Response</B>
+<BR> There are numerous places in the standard where ``size in bytes'' 
+is used, and numerous places where ``size'' alone is used. The 
+Committee does not feel that any of these places need fixing  -   the
+meaning is everywhere clear, especially since for <TT><B>sizeof</B></TT>
+ in subclause 6.3.3.4 size is specifically mentioned in terms of bytes.
+<BR>
+<B>Question</B> 32
+<BR>
+<TT><B>char</B></TT> parameters to <TT><B>strcmp</B></TT> and <TT><B>
+strncmp</B></TT>
+<BR> Refer to subclause 7.11.4, page 164. If <TT><B>char</B></TT> is
+signed then 
+<TT><B>char *</B></TT> cannot be interpreted as pointing to <TT><B>unsigned
+char</B></TT>.  The required cast may give undefined results. This
+applies to <TT><B>strcmp</B></TT>  and <TT><B>strncmp</B></TT>.
+<BR>
+<B>Response</B>
+<BR>
+<TT><B>strcmp</B></TT> can compare two <TT><B>char</B></TT> strings,
+even though the representation  of <TT><B>char</B></TT> may be signed,
+because subclause 7.11.4, page 164, line  7 says that the interpretation
+of bytes is done as if each byte were  accessed as an <TT><B>unsigned
+char</B></TT>. We believe the standard is clear.
+<BR>
+<B>Question</B> 33
+<BR> Different length strings
+<BR> Refer to subclause 7.11.4, page 164, lines 5-7. What about strings
+ of different length?
+<BR> Perhaps the fact that the terminating null character takes part in
+ the comparison ought to be mentioned.
+<BR>
+<B>Response</B>
+<BR> Subclause 7.1.1 on page 96, lines 4-5 says that a string includes 
+the terminating null character. Therefore this character takes part  in
+the comparison. The standard is clear.
+<BR>
+<B>Question</B> 34
+<BR> Calls to <TT><B>strtok</B></TT>
+<BR> In subclause 7.11.5.8 on page 167, line 36, ``... first call ...''
+ should read ``... all calls ...''
+<BR> I think that the current wording causes confusion. The first call 
+is the one that takes a non-<TT><B>NULL</B></TT> ``<TT><B>s1</B></TT>''
+parameter.  However, the discussion from line 36 onwards is describing
+the behavior  for all calls.
+<BR>
+<B>Response</B>
+<BR> The Committee felt that the suggested wording for the <TT><B>strtok</B></TT>
+ function description is not an improvement. The existing wording is 
+clear as written.
+<BR>
+<B>Question</B> 35
+<BR> When is a physical source line created?
+<BR> Is the output or input to translation phase 1 a physical source
+line?
+<BR>
+<B>Response</B>
+<BR> The use of the term ``physical source line'' occurs only in  the
+description of the phases of translation (subclause 5.1.1.2) and  the
+question of whether the input or output of phase 1 consists of  physical
+source lines does not matter.
+<BR>
+<B>Question</B> 36
+<BR> Qualifiers on function return type
+<BR> Refer to subclause 6.6.6.4, page 80, line 24-25: ``... whose
+return  type is <TT><B>void</B></TT>.''
+<BR> The behavior of a type qualifier on a function return is
+explicitly  undefined, according to subclause 6.5.3, page 64, lines
+24-25.
+<BR> This creates a loophole.
+<BR> An implementation that supports type qualifiers on function return
+ types is not required to flag the constraint given on page 80.
+<BR>
+<B>Response</B>
+<BR> A Constraint on subclause 6.7.1 says ``The return type of a
+function  shall be <TT><B>void</B></TT> or an object type other than
+array.''
+<BR>
+<B>Question</B> 37
+<BR> Function result type
+<BR> Refer to subclause 6.3.2.2, page 40, line 35. The result type of a
+ function call is not defined.
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>In subclause 6.3.2.2, page 40, line 35, change:</B></I>
+<BR> The value of the function call expression is specified in 6.6.6.4.
+<BR>
+<I><B>to:</B></I>
+<BR> If the expression that denotes the called function has type
+pointer  to function returning an object type, the function call
+expression  has the same type as that object type, and has the value
+determined  as specified in 6.6.6.4. Otherwise, the function call has
+type <TT><B>void</B></TT>.
+<BR>
+<B>Question</B> 38
+<BR> What is an iteration control structure or selection control
+structure?
+<BR> An ``iteration control structure,'' a term used in subclause 
+5.2.4.1 <B>Translation limits</B> on page 13, line 1, is not defined 
+by the standard.
+<BR> Is it:
+<OL>
+<LI>A <TT><B>for</B></TT> loop header excluding its body, e.g. <TT><B>
+for (;;)</B></TT>, 
+<BR>or
+</LI>
+<LI>A <TT><B>for</B></TT> loop header plus its body, e.g. <TT><B>for
+(;;) {}</B></TT>?
+</LI>
+</OL>Does it make a difference if the compound statement is a simple
+statement  without the braces?
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>In subclause 5.2.4.1, page 13, lines 1-2, change:</B></I>
+<BR>  -  15 nested levels of compound statements, iteration control
+structures,  and selection control structures
+<BR>
+<I><B>to:</B></I>
+<BR>  -  15 nested levels of compound statements, iteration statements,
+ and selection statements
+<BR>
+<A NAME="Question39"><B>Question</B> 39</A>
+<BR> Header name tokenization
+<BR> There is an inconsistency between subclause 6.1.7, page 33, line 8
+ and the description of the creation of header name preprocessing
+tokens.
+<BR> The ``shall'' on page 32, line 33 does not limit the creation  of
+header name preprocessing tokens to within <TT><B>#include</B></TT>
+directives.  It simply states that they would cause a constraint error
+in this  context.
+<BR> Subclause 6.1.7, page 33, line 8 should read {<TT><B>0x3</B></TT>}{<TT
+><B>&lt;1/a.h></B></TT>}{<TT><B>1e2</B></TT>},  or extra text needs
+to be added to subclause 6.1.7.
+<BR> I have not met anybody who expects <TT><B>if (a&lt;b || c>d)</B></TT>
+to parse  as {<TT><B>if</B></TT>} {<TT><B>(</B></TT>} {<TT><B>a</B></TT>}
+{<TT><B>&lt;b || c></B></TT>} {<TT><B>d</B></TT>} {<TT><B>)</B></TT>}.
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>Add to subclause 6.1, page 18 (Semantics):</B></I>
+<BR> A header name preprocessing token is only recognized within a <TT><B>
+#include</B></TT>  preprocessing directive, and within such a directive,
+a sequence of  characters that could be either a header name or a string
+literal  is recognized as the former.
+<BR>
+<I><B>Add to subclause 6.1.2, page 20 (Semantics):</B></I>
+<BR> When preprocessing tokens are converted to tokens during
+translation  phase 7, if a preprocessing token could be converted to
+either a keyword  or an identifier, it is converted to a keyword.
+<BR>
+<I><B>In subclause 6.1.7, page 32, lines 32-34, delete:</B></I>
+<BR>
+<B>Constraint</B>
+<BR> Header name preprocessing tokens shall only appear within a <TT><B>
+#include</B></TT>  preprocessing directive.
+<BR>
+<I><B>Add to subclause 6.1.7, page 32 (Semantics):</B></I>
+<BR> A header name preprocessing token is recognized only within a <TT><B>
+#include</B></TT>  preprocessing directive.
+<BR>
+<BR>
+<A HREF="dr_016.html">Previous Defect Report</A> 
+&lt; -  > <A HREF="dr_018.html">Next Defect Report</A>
+</BODY></HTML>

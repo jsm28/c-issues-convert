@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #126</TITLE></HEAD><BODY>
+<H2>Defect Report #126</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Ron Guilmette
+<BR>
+<B>Question</B>
+<BR>
+ANSI/ISO C Defect Report #rfg33:
+<BR>
+Subject: What does ``synonym'' mean with respect to typedef 
+names?
+<BR>
+Given the declarations:
+<BR>
+<TT><B>typedef int *IP;<BR>
+const IP object;
+</B></TT><BR>
+what is the type of <TT><B>object</B></TT>?
+<BR>
+Background:
+<BR>
+Subclause 6.5.6 says:
+<BLOCKQUOTE>
+A <TT><B>typedef</B></TT> declaration does not introduce a new type, 
+only a synonym for the type so specified.
+</BLOCKQUOTE>
+At least one person has wondered aloud about the true meaning of this 
+rule.
+<BR>
+Note that if the name <TT><B>IP</B></TT> in the above example is expanded as 
+if it were a mere macro, then the type of <TT><B>object</B></TT> would be <TT><B>(const 
+int *)</B></TT>. But essentially all existing implementations act as if 
+there were some sort of magical parsing precedence (or extra parenthesization) 
+which causes the <TT><B>IP</B></TT> (when used in the second line of the example 
+above) to be treated as a single type, to which the <TT><B>const</B></TT> qualifier 
+is applied (after the fact) thus resulting in <TT><B>object</B></TT> having 
+type <TT><B>(int * const)</B></TT> rather than <TT><B>(const int *)</B></TT>.
+<BR>
+While this treatment is well known to experienced implementors and 
+users, it appears that the C Standard doesn't really explain it very 
+well (or very precisely). I consider this to be a defect in the C 
+Standard, worthy of the Committee's attention.
+<BR>
+<B>Response</B>
+<BR>
+A <TT><B>typedef</B></TT> introduces a name for a type. This is not a macro,
+and the type must indeed be ``magically parenthesized.'' In
+<BR>
+<TT><B>
+typedef int *ip;<BR>
+ip x;<BR>
+const ip y;
+</B></TT><BR>
+the type of <TT><B>x</B></TT> is <I>pointer to</I> <TT><B>int</B></TT>,
+and the type of <TT><B>y</B></TT> is <TT><B>const</B></TT>
+<I>pointer to</I> <TT><B>int</B></TT>. This is exactly
+analogous to the fact that
+<BR>
+<TT><B>
+ip x1, x2;
+</B></TT><BR>
+declares both <TT><B>x1</B></TT> and <TT><B>x2</B></TT>
+as having the type <I>pointer to</I> <TT><B>int</B></TT>,
+and is not to be read as
+<BR>
+<TT><B>
+int *x1, x2;
+</B></TT><BR>
+<A HREF="dr_125.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_127.html">Next Defect Report</A>
+</BODY></HTML>

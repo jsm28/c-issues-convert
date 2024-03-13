@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #138</TITLE></HEAD><BODY>
+<H2>Defect Report #138</H2>
+<B>Submission Date</B>: 02 Jun 94
+<BR>
+<B>Submittor</B>: Project Editor (P.J. Plauger)
+<BR>
+<B>Source</B>: John Max Skaller
+<BR>
+<B>Question</B>
+<BR>
+Subclause 6.1.2.4 says:
+<BLOCKQUOTE>
+An object has a <I>storage duration</I> that determines its lifetime. 
+There are two storage durations: static and automatic.
+</BLOCKQUOTE>
+To me that clearly excludes heap objects. Is there a Defect Report 
+on that? If so which one? (I have responses to Defect Report #001 
+through Defect Report #059.) If not and something else in the Standard 
+fixes it, can you point out where?
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>In subclause 6.1.2.4, page 22, first paragraph, change:</B></I>
+<BR>
+There are two storage durations: static and automatic.
+<BR>
+<I><B>to:</B></I>
+<BR>
+There are three storage durations: static, automatic, and allocated. 
+Allocated storage is described in 7.10.3.
+<BR>
+<A HREF="dr_137.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_139.html">Next Defect Report</A>
+</BODY></HTML>

@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #124</TITLE></HEAD><BODY>
+<H2>Defect Report #124</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Ron Guilmette
+<BR>
+<B>Question</B>
+<BR>
+ANSI/ISO C Defect Report #rfg31:
+<BR>
+Subject: Casts to ``a void type'' versus casts to
+``the <TT><B>void</B></TT> type.''
+<BR>
+Must a conforming implementation issue a diagnostic for 
+the following code?
+<BR>
+<TT><B>void example ()<BR>
+	{<BR>
+	(const volatile void) 0;	/*</B><I> diagnostic required? </I><B>*/<BR>
+	}
+</B></TT><BR>
+Background:
+<BR>
+Subclause 6.3.4 (<B>Constraints</B>):
+<BLOCKQUOTE>
+Unless the type name specifies void type, the type name shall 
+specify qualified or unqualified scalar type and the operand shall 
+have scalar type.
+</BLOCKQUOTE>
+Note that this constraint is <I>not</I> specific about whether a qualified 
+void type is permitted in a cast or not; i.e. it should say either 
+``a void type'' or else say ``the <TT><B>void</B></TT> type.''
+<BR>
+A quick check of several existing implementations seems to indicate 
+that a majority of implementors have assumed that any void type (however 
+qualified) is acceptable in a cast. Therefore it would seem prudent 
+for the Committee to clarify the above quoted rule by changing ``void 
+type'' to ``a <TT><B>void</B></TT> type.''
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>In subclause 6.3.4, page 45, change the paragraph
+under Constraints:</B></I>
+<BR>
+Unless the type name specifies void type, the type name shall specify 
+qualified or unqualified scalar type and the operand shall have scalar 
+type.
+<BR>
+<I><B>to:</B></I>
+<BR>
+Unless the type name specifies a void type,
+the type name shall specify qualified or unqualified
+scalar type and the operand shall have scalar type.
+<BR>
+<A HREF="dr_123.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_125.html">Next Defect Report</A>
+</BODY></HTML>

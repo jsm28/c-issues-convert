@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #263</title>
+  </head>
+
+  <body bgcolor="#FFFFFF">
+    <h2 align="center">Defect Report #263</h2>
+    <a href="dr_262.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_264.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> UK C Panel<br>
+     <b>Submission Date:</b> 2001-09-07<br>
+     <b>Source:</b> Clive D.W. Feather &lt;clive@demon.net&gt;<br>
+     <b>Version:</b> 1.1<br>
+     <b>Date:</b> 2002-03-07<br>
+     <b>Subject:</b> all-zero bits representations</p>
+    <b>Problem</b> 
+
+    <p>Consider the code:</p>
+<pre>
+<tt><b>   int v [10];
+    memset (v, 0, sizeof v);
+</b></tt>
+</pre>
+
+    <p>Most programmers would expect this code to set all the
+    elements of <tt><b>v</b></tt> to zero. However, the code is
+    actually undefined: it is possible for <tt><b>int</b></tt> to
+    have a representation in which all-bits-zero is a trap
+    representation (for example, if there is an odd-parity bit in
+    the value).</p>
+
+    <p>Consider also:</p>
+<pre>
+<tt><b>   int *p;
+    p = calloc (n_members, sizeof (int));
+</b></tt>
+</pre>
+
+    <p>This problem applies to all integer types except for
+    <tt><b>unsigned char</b></tt>. I believe that the idiom is
+    well-enough known that it should be made a part of the
+    Standard.</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Append to 6.2.6.2#5:</p>
+
+    <blockquote>
+      For any integer type, the object representation where all the
+      bits are zero shall be a representation of the value zero in
+      that type.
+    </blockquote>
+    <hr>
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>Append to 6.2.6.2#5:</p>
+
+    <blockquote>
+      For any integer type, the object representation where all the
+      bits are zero shall be a representation of the value zero in
+      that type.
+    </blockquote>
+
+    <p><br>
+     <a href="dr_262.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_264.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

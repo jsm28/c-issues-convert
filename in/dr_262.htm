@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #262</title>
+  </head>
+
+  <body bgcolor="#FFFFFF">
+    <h2 align="center">Defect Report #262</h2>
+    <a href="dr_261.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_263.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> UK C Panel<br>
+     <b>Submission Date:</b> 2001-09-07<br>
+     <b>Source:</b> Clive D.W. Feather &lt;clive@demon.net&gt;<br>
+     <b>Version:</b> 1.1<br>
+     <b>Date:</b> 2002-03-07<br>
+     <b>Subject:</b> maximum size of bit fields.</p>
+    <b>Problem</b> 
+
+    <p>6.7.2.1#3 reads, in part:</p>
+
+    <blockquote>
+      <p>[#3] The expression that specifies the width of a
+      bit-field shall be an integer constant expression that has
+      nonnegative value that shall not exceed the number of bits in
+      an object of the type that is specified if the colon and
+      expression are omitted.</p>
+    </blockquote>
+
+    <p>Is "the number of bits of the type ..." the width or is it
+    the number of bits in the object representation ?</p>
+
+    <p>Since it might not be practical to make use of padding bits
+    in such an object, the former would be more sensible.</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Change the cited text to read:</p>
+
+    <blockquote>
+      [#3] The expression that specifies the width of a bit-field
+      shall be an integer constant expression that has nonnegative
+      value that shall not exceed <b>the width of an object</b> of
+      the type that is specified if the colon and expression are
+      omitted.
+    </blockquote>
+
+    <p>(bold type shows the changed words)</p>
+    <hr>
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>Change 6.7.2.1#3 to read:</p>
+
+    <blockquote>
+      The expression that specifies the width of a bit-field shall
+      be an integer constant expression that has nonnegative value
+      that shall not exceed the width of an object of the type that
+      is specified if the colon and expression are omitted.
+    </blockquote>
+
+    <p><br>
+     <a href="dr_261.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_263.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

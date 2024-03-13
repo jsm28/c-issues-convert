@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #173</TITLE></HEAD>
+<BODY><H2>Defect Report #173</H2> 
+<B>Submission Date</B>: 16 Oct 95
+<BR>
+<B>Submittor</B>: BSI
+<BR>
+<B>Source</B>: Clive D.W. Feather
+<BR>
+<B>Question</B>
+<BR>
+<I>Submitted to BSI by Clive D.W. Feather  clive@sco.com .</I>
+<BR>
+<I>In this Defect Report, identifiers lexically identical to those 
+declared in standard headers refer to the identifiers declared in  those
+standard headers, whether or not the header is explicitly mentioned.</I>
+<BR>
+<I>This Defect Report has been prepared with considerable help from 
+Mark Brader, Jutta Degener, Ronald Guilmette, and a person whose
+employment  conditions require anonymity. However, except where stated,
+opinions  expressed or implied should not be assumed to be those of any
+person  other than myself.</I>
+<BR> Defect Report UK 021: Line numbers
+<BR> The concept of <I>line number</I> is not clearly defined when a 
+token is split over more than one physical source line.
+<BR> Subclause 6.8.4 reads in part:
+<BR> The line number of the current source line is one greater than 
+the number of new-line characters read or introduced in translation 
+phase 1 (5.1.1.2) while processing the source file to the current 
+token.
+<BR> Subclause 6.8.8 reads in part:
+<BR>
+<TT><B>__LINE__</B></TT> - The line number of the current source line 
+(a decimal constant).
+<BR> Consider the program:
+<BR>
+<TT><B>#include  stdio.h <BR> #define LNER __LINE__</B><BR>
+<BR><B> /*</B> <I>The next statement is on physical source lines 6 to 8</I><B> */<BR>
+int east_coast = __\<BR> LINE\<BR> __;<BR> /*</B> <I>The next statement is
+on physical source lines 10 to 13</I> */<BR> int main_line = L\<BR> N\<BR>
+E\<BR> R;<BR><B>
+<BR> int main (void)<BR> {<BR>         printf ("%d %d\n", east_coast,
+main_line);<BR>         return 0;<BR> }</B>
+</TT><BR> In each of the two substitutions, it is unclear whether the
+line number  is the number of new-lines read to the <I>start of</I> the
+current  token, or to the <I>end of</I> the current token, or to a
+specified  point within the current token.
+<BR> What is the output of this program?
+<BR>
+<A HREF="dr_172.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_174.html">Next Defect Report</A></BODY></HTML>

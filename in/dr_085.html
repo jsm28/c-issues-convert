@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #085</TITLE></HEAD><BODY>
+<H2>Defect Report #085</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Clive Feather
+<BR>
+<B>Question</B>
+<BR>
+Item 22 - returning from <TT><B>main</B></TT>
+<BR>
+Consider the following program:
+<BR>
+<TT><B>#include &lt;stdlib.h><BR>
+#include &lt;stdio.h><BR>
+<BR>
+int *pi;<BR>
+<BR>
+void handler (void)<BR>
+	{<BR>
+	printf ("Value is %d\n", *pi);<BR>
+	}<BR>
+<BR>
+int main (void)<BR>
+	{<BR>
+	int i;<BR>
+<BR>
+	atexit (handler);<BR>
+	i = 42;<BR>
+	pi = &amp;i;<BR>
+	return 0;<BR>
+	}
+<BR></B></TT>
+Return from <TT><B>main</B></TT> is defined to be equivalent to calling <TT><B>exit</B></TT> 
+(subclause 5.1.2.2.3). If the <TT><B>return</B></TT> statement was replaced 
+by the equivalent call, the program would be strictly conforming. 
+Is it strictly conforming without this replacement?
+<BR>
+Note that if the answer is ``yes,'' special processing will 
+be required for return from <TT><B>main,</B></TT> which will depend on whether 
+the call being returned from is the initial call or a recursive one.
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>In subclause 5.1.2.2.3, page 7,
+add at the end of the first sentence the footnote:</B></I>
+<BR>
+In accordance with subclause 6.1.2.4,
+objects with automatic storage duration declared 
+in <TT><B>main</B></TT> will no longer have storage guaranteed to be reserved 
+in the former case even where they would in the latter.
+<BR>
+<A HREF="dr_084.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_086.html">Next Defect Report</A>
+</BODY></HTML>

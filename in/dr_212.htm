@@ -1,0 +1,272 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #212</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #212</h2>
+    <a href="dr_211.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_213.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Clive Feather (UK)<br>
+     <b>Submission Date:</b> 1999-10-20<br>
+     <b>Source:</b><br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n898.htm">ISO/IEC
+    WG14 N898</a><br>
+     <b>Version:</b> 1.3<br>
+     <b>Date:</b> 2001-09-18 15:35:55<br>
+     <b>Subject:</b> Binding of multibyte conversion state
+    objects</p>
+
+    <p><b>Summary</b><br>
+     At present an <tt><b>mbstate_t</b></tt> object can only ever
+    be used to make one conversion. This is not desirable, and
+    changes are proposed in this area.</p>
+
+    <p><b>Discussion</b><br>
+     Clause 7.24.6 paragraph 3 reads, in part:</p>
+
+    <blockquote>
+      If an <tt><b>mbstate_t</b></tt> object has been altered by
+      any of the functions described in this subclause, and is then
+      used with a different multibyte character sequence, or in the
+      other conversion direction, or with a different
+      <tt><b>LC_CTYPE</b></tt> category setting than on earlier
+      function calls, the behavior is undefined.
+    </blockquote>
+    Put another way, each <tt><b>mbstate_t</b></tt> object is
+    initially "unbound" (if it is initialized to zero) and then
+    becomes "bound" by any call to a function such as
+    <tt><b>mbrtowc</b></tt> or <tt><b>wcrtomb</b></tt>. When
+    "bound" it can only be used in the same direction with the same
+    string as originally bound, and only when the
+    <tt><b>LC_CTYPE</b></tt> category is that in effect when it was
+    bound. With ordinary <tt><b>mbstate_t</b></tt> objects this is
+    a annoyance; one implication is that a new object must be
+    created every single time a new string is to be converted (the
+    Standard does not provide any way to "unbind" the object). With
+    the <tt><b>mbstate_t</b></tt> object inside a
+    <tt><b>FILE</b></tt> structure it is even worse, because it
+    makes it impossible to (for example) write to a file, rewind
+    it, and then read the same file. Similarly, the internal
+    <tt><b>mbstate_t</b></tt> objects used when the
+    <tt><b>mbstate_t</b></tt> pointer argument is set to
+    <tt><b>NULL</b></tt> can be used for only one string in the
+    entire program ! 
+
+    <p>Users of <tt><b>mbstate_t</b></tt> objects (including those
+    in <tt><b>FILE</b></tt> structures) expect to be able to use
+    them for more than a single purpose.</p>
+
+    <p><b>Proposed solution</b><br>
+     The changes introduce the concept that an
+    <tt><b>mbstate_t</b></tt> object is either "unbound" or
+    "bound". When set to an all-zero value (which can be at
+    initialization or explicitly later on) it is unbound. As soon
+    as the object is used for a conversion it becomes bound to that
+    string, locale, and direction. Returning to the initial state
+    does not unbind the object (in other words, while all unbound
+    objects are in the initial state the converse is not
+    necessarily true).</p>
+
+    <p>The special cases of <tt><b>mbrtowc</b></tt> and
+    <tt><b>wcrtomb</b></tt> are defined to always result in an
+    unbound state. This both provides more consistent behaviour
+    (the special case resets everything to a known state) and also
+    allows the internal <tt><b>mbstate_t</b></tt> objects
+    associated with these functions to be unbound.</p>
+
+    <p>The <tt><b>mbstate_t</b></tt> object hidden in a file is
+    returned to the unbound state whenever end of file is reached
+    on input, and by any call to <tt><b>fseek</b></tt> (these
+    choices were made to correspond with the requirements of
+    7.19.5.3 paragraph 6 for changing I/O direction).</p>
+
+    <p>The internal <tt><b>mbstate_t</b></tt> objects associated
+    with the <tt><b>mbrlen</b></tt>, <tt><b>mbrtowc</b></tt>,
+    <tt><b>wcrtomb</b></tt>, <tt><b>mbsrtowcs</b></tt>, and
+    <tt><b>wcsrtombs</b></tt> functions can only be used with the
+    locale they initially bind to. Other changes deal with the
+    first three; a previously impossible case is used for the last
+    two to force the object to the unbound state.</p>
+
+    <p><b>Suggested Technical Corrigendum</b><br>
+     (<i>Changes concerning explicit</i> <tt><b>mbstate_t</b></tt>
+    <i>objects.</i>)<br>
+     Change 7.24.6 paragraph 3 to:</p>
+
+    <blockquote>
+      [#3] The initial conversion state corresponds, for a
+      conversion in either direction, to the beginning of a new
+      multibyte character in the initial shift state. An
+      <tt><b>mbstate_t</b></tt> object may be "unbound" or "bound".
+      A zero-valued <tt><b>mbstate_t</b></tt> object is (at least)
+      one way to describe an unbound object, and if an mbstate_t
+      object is assigned such a value it it becomes unbound. All
+      unbound <tt><b>mbstate_t</b></tt> objects are in the initial
+      conversion state (but the converse is not necessarily true). 
+
+      <p>[#3a] An unbound object can be used to initiate conversion
+      involving any multibyte character sequence, in any
+      <tt><b>LC_CTYPE</b></tt> category setting, in either
+      direction; once used for a conversion, it becomes bound to
+      that sequence, category setting, and direction. If a bound
+      <tt><b>mbstate_t</b></tt> object is used with a different
+      multibyte character sequence, a different
+      <tt><b>LC_CTYPE</b></tt> category setting, or in the other
+      conversion direction to that it is bound to, the behavior is
+      undefined.<sup>290</sup>)</p>
+    </blockquote>
+
+    <p>Append to footnote 290:</p>
+
+    <blockquote>
+      Furthermore, provided that the object is unbound, and thus in
+      the initial conversion state, it can then be used in
+      converting a new string, a new locale, or in the other
+      direction.
+    </blockquote>
+
+    <p>Change 7.24.6.3 paragraph 1 and 7.24.6.4 paragraph 1
+    from:</p>
+
+    <blockquote>
+      [...] which is initialized at program startup to the initial
+      conversion state. [...]
+    </blockquote>
+
+    <p>to:</p>
+
+    <blockquote>
+      [...] which is initialized at program startup to the unbound
+      state. [...]
+    </blockquote>
+
+    <p>Change 7.24.6.3.2 paragraph 2 to:</p>
+
+    <blockquote>
+      [#2] If s is a null pointer, the <tt><b>mbrtowc</b></tt>
+      function is equivalent to the call: 
+
+      <blockquote>
+        <p><tt><b>mbrtowc(NULL, "", 1, ps)</b></tt></p>
+      </blockquote>
+      except that the resulting state described is unbound even if
+      an encoding error occurred. 
+
+      <p>In this case, the values of the parameters
+      <tt><b>pwc</b></tt> and <tt><b>n</b></tt> are ignored.</p>
+    </blockquote>
+
+    <p>Change 7.24.6.3.3 paragraph 2 to:</p>
+
+    <blockquote>
+      <p>[#2] If s is a null pointer, the <tt><b>wcrtomb</b></tt>
+      function is equivalent to the call</p>
+
+      <blockquote>
+        <p><tt><b>wcrtomb(buf, L'\0',ps)</b></tt></p>
+      </blockquote>
+      where <tt><b>buf</b></tt> is an internal buffer except that
+      the resulting state described is always unbound even if an
+      encoding error occurred <sup>291a</sup>; the value of
+      <tt><b>wc</b></tt> is ignored. 
+
+      <p>291a) The effect is reliably to make <tt><b>*ps</b></tt>
+      unbound.</p>
+    </blockquote>
+
+    <p>Append to 7.24.6.4 paragraph 2:</p>
+
+    <blockquote>
+      As a special case, if <tt><b>src</b></tt> is a null pointer
+      then the normal behaviour of the function is ignored and
+      instead <tt><b>ps</b></tt> becomes unbound irrespective of
+      its previous state; an unspecified value is returned.
+    </blockquote>
+
+    <p>(<i>Changes associated with streams.</i>)<br>
+     Append to 7.19.2 paragraph 6:</p>
+
+    <blockquote>
+      If a wide character input function encounters end-of-file, or
+      after a successful call to the fseek function,
+      the<tt><b>mbstate_t</b></tt> object associated with the
+      stream is unbound.
+    </blockquote>
+
+    <p>Append to the last sentence of 7.19.9.2 paragraph 5:</p>
+
+    <blockquote>
+      and if the stream is wide-oriented the associated
+      <tt><b>mbstate_t</b></tt> object shall be unbound.
+    </blockquote>
+
+    <p>In 7.24.3.1 paragraph 2, change: to:</p>
+
+    <blockquote>
+      [...] If the stream is at end-of-file, the end-of-file
+      indicator for the stream is set, the
+      <tt><b>mbstate_t</b></tt> object associated with the stream
+      is unbound, and <tt><b>fgetwc</b></tt> returns
+      <tt><b>WEOF</b></tt>. [...]
+    </blockquote>
+    <hr>
+
+    <p><b>Committee Response</b></p>
+
+    <p>The consensus is that a programmer can put an
+    <tt><b>mbstate_t</b></tt> object in the initial conversion
+    state <em>for any sequence</em> by the assignment:</p>
+
+    <blockquote>
+      <tt><b>static mbstate_t init_state = {0};</b></tt><br>
+       <i>...</i><br>
+       <tt><b>mbstate_t mystate = init_state;</b></tt>
+    </blockquote>
+
+    <p>This technique is used and is believed it to be
+    portable.</p>
+
+    <p>There is concern about over specifying the behavior of
+    streams. The Committee believes that to say that the state
+    becomes unbound at EOF, would cause problems with a read/write
+    stream that later gets extended. The Committee could not find a
+    valid reason to hamstring the reader just because it reached an
+    interim EOF. Moreover, is is unlikely one can portably
+    <tt><b>fsetpos()</b></tt> in a wide stream except to the
+    beginning or to a point that was earlier memorized with an
+    <tt><b>fgetpos()</b></tt>. In either case, there is an obvious
+    state to restore. Old fashioned
+    <tt><b>seek()</b></tt>/<tt><b>tell()</b></tt> logic just
+    doesn't full fill the requirements for a wide stream.</p>
+
+    <p>The Committee believes that real implementations and real
+    applications do in fact support streams that do not begin in
+    the initial state, as well as streams that do not end in the
+    initial state.</p>
+
+    <p>It was also pointed out that even with the suggested text
+    that required a file to begin in the initial shift state, there
+    was no stated requirement that <tt><b>fopen</b></tt> initialize
+    the associated <tt><b>mbstate_t</b></tt> object to have the
+    initial shift state (which again, would break existing
+    implementations that support files that do not begin in the
+    initial shift state).</p>
+
+    <p>There is no consensus to make this change or any change
+    along this line.</p>
+
+    <p><br>
+     <a href="dr_211.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_213.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

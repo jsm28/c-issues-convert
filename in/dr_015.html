@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Repost #015</TITLE></HEAD>
+<BODY><H2>Defect Report #015</H2>  
+<B>Submission Date</B>: 10 Dec 92
+<BR> 
+<B>Submittor</B>: WG14
+<BR> 
+<B>Source</B>: X3J11/90-051 (Craig Blitz)
+<BR> 
+<B>Question</B> 1
+<BR>  This question concerns the promoted type of plain <TT><B>int</B></TT>
+bit-fields with length equal to the size of an object of type <TT><B>int</B></TT>.
+I am interested in implementations that have chosen not to regard the
+high-order bit as a sign bit.
+<BR>  The question is: What is the promoted type of such an object?
+<BR>  Subclause 6.5.2.1 states:
+<BLOCKQUOTE>  A bit-field shall have a type that is ... <TT><B>int</B></TT>,
+<TT><B>unsigned int</B></TT>, or <TT><B>signed int</B></TT>.
+</BLOCKQUOTE>  The intent of this, I believe, is that the type of a
+plain <TT><B>int</B></TT> bit-field is <TT><B>int</B></TT>.
+<BR>  Subclause 6.2.1.1 states:
+<BLOCKQUOTE>  A <TT><B>char</B></TT>, a <TT><B>short int</B></TT>,
+or an <TT><B>int</B></TT> b it-field, or their signed or unsigned
+varieties, ... may be used in an expression wherever an <TT><B>int</B></TT>
+or <TT><B>unsigned int</B></TT> may be used. If an <TT><B>int</B></TT>
+can represent all values of the original type, the value is converted to
+an <TT><B>int</B></TT>; otherwise it is converted to an <TT><B>unsigned
+int</ B></B></TT>...
+</BLOCKQUOTE><BLOCKQUOTE>  The integral promotions preserve value
+including sign.
+</BLOCKQUOTE>  Tracing this through, then, the type of any promoted
+plain <TT><B>int</B></TT> bit-field is <TT><B>int</B></TT>, since
+<TT><B>int</B></TT> can hold all the val ues of the original type,
+which is <TT><B>int</B></TT>. However, not all values of the
+bit-field, which may be regarded as non-negative, can be represented by
+an <TT><B>int</B></TT>. By value-preserving promotion rules, I would
+expect the type of the promoted bit-field to be <TT><B>unsigned int</B></TT>.
+<BR>  Can you clarify this?
+<BR> 
+<B>Response</B>
+<BR>  As described in subclause 6.2.1.1, bit-fields that are being
+treated as unsigned will promote according to the same rules as other
+unsigned types: if the width is less than <TT><B>int</B></TT>, and
+<TT><B>int</B></TT> ca n hold all the values, then the promotion is to
+<TT><B>int</B></TT>. Otherwise, promoti on is to <TT><B>unsigned int</B></TT>.
+
+<BR>
+<A HREF="dr_014.html">Previous Defect Report</A> 
+&lt; -  > <A HREF="dr_016.html">Next Defect Report</A></BODY></HTML>

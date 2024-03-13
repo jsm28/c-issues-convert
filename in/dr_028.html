@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #028</TITLE></HEAD><BODY>
+<H2>Defect Report #028</H2>
+
+<P><B>Submission Date</B>: 10 Dec 92 <BR>
+<B>Submittor</B>: WG14 <BR>
+<B>Source</B>: X3J11/91-009 (Randall Meyers) <BR>
+<B>Question</B> 1 <BR>
+Subclause 6.3, page 38, lines 18-27 state some very important rules governing
+how a strictly conforming program can access the value of an object. The
+basic theme of the rules is that an object's value may only be accessed
+through an lvalue of the appropriate type. These rules are required to
+permit C programs to be optimized. <BR>
+The rules depend on the ``declared type of the object.'' This seems to
+make the rules not apply if the object was not declared, which is the case
+for an object allocated using <B><TT>malloc()</TT></B>. <BR>
+Do the rules somehow apply to dynamically allocated objects? Is a compiler
+free to optimize the following function: <BR>
+<B><TT>void f(int *x, double *y)<BR>
+{<BR>
+*x = 0;<BR>
+*y = 3.14;<BR>
+*x = *x + 2;<BR>
+} <BR>
+</TT></B>into the equivalent function: <BR>
+<B><TT>void f(int *x, double *y)<BR>
+{<BR>
+*x = 0;<BR>
+*y = 3.14;<BR>
+*x = 2; /*</TT></B><TT><I> *x known to be zero</I><B> */<BR>
+}</B></TT> <BR>
+Or must an optimizer prove that pointers are not pointing at dynamically
+allocated storage before performing such optimizations? <BR>
+<B>Response</B> <BR>
+Case 1: unions <B><TT>f(&amp;u.i, &amp;u.d)</TT></B> <BR>
+Subclause 6.3.2.3, page 42, lines 5-6: </P>
+
+<BLOCKQUOTE>
+<P>... if a member of a union object is accessed after a value has been
+stored in a different member of the object, the behavior is implementation-defined.
+</P>
+</BLOCKQUOTE>
+
+<P>Therefore, an alias is not permitted and the optimization is allowed.
+<BR>
+Case 2: declared objects <B><TT>f((int *)&amp;d, &amp;d)</TT></B> <BR>
+Subclause 6.3, page 38, lines 18-27 list specific ways in which declared
+objects can be accessed. Therefore, an alias is not permitted and the optimization
+is allowed. <BR>
+Case 3: any other, including <B><TT>malloc</TT></B>ed objects <B><TT>f((int
+*)dp, dp)</TT></B> <BR>
+We must take recourse to intent. The intent is clear from the above two
+citations and from Footnote 36 on page 38: <BR>
+The intent of this list is to specify those circumstances in which an object
+may or may not be aliased. <BR>
+Therefore, this alias is not permitted and the optimization is allowed.
+<BR>
+In summary, yes, the rules do apply to dynamically allocated objects. <BR>
+</P>
+
+<A HREF="dr_027.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_029.html">Next Defect Report</A>
+</BODY></HTML>

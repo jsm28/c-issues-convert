@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #022</TITLE></HEAD><BODY>
+<H2>Defect Report #022</H2>
+<B>Submission Date</B>: 10 Dec 92 <BR>
+<B>Submittor</B>: WG14 <BR>
+<B>Source</B>: X3J11/91-002 (Fred Tydeman) <BR>
+<B>Question</B> 1 <BR>
+What is the result of: <B><TT>strtod(&quot;100ergs&quot;, &amp;ptr);</TT></B>?
+Is it 100.0 or is it 0.0? <BR>
+Subclause 7.10.1.4 <B>The <TT>strtod</TT> function</B> on page 150, lines
+36-38 says: ``The subject sequence is defined as the longest initial subsequence
+of the input string, starting with the first non-white-space character,
+that is of the expected form.'' In this case, the longest initial subsequence
+of the expected form is <B><TT>100</TT></B>, so <B><TT>100.0</TT></B> should
+be the return value. Also, since the entire string is in memory, <B><TT>strtod</TT></B>
+can scan it as many times as need be to find the longest valid initial
+subsequence. <BR>
+Subclause 7.9.6.2 <B>The <TT>fscanf</TT> function</B> on page 136, lines
+17-18 says: ``<B><TT>e</TT></B>,<B><TT>f</TT></B>,<B><TT>g</TT></B> Matches
+an optionally signed floating-point number, whose format is the same as
+expected for the subject string of the <B><TT>strtod</TT></B> function.''
+Later, page 138, lines 6, 16, and 25 show that <B><TT>100ergs</TT></B>
+fails to match <B><TT>%f</TT></B>. Those two show that <B><TT>100ergs</TT></B>
+is invalid to <B><TT>fscanf</TT></B> and therefore, invalid to <B><TT>strtod</TT></B>.
+Then, subclause 7.10.1.4, page 151, lines 11-12, ``If no conversion could
+be performed, zero is returned'' indicates for an error input, 0.0 should
+be returned. The reason this is invalid is spelled out in the rationale
+document, subclause 7.9.6.2 <B>The <TT>fscanf</TT> function</B>, page 85:
+``One-character pushback is sufficient for the implementation of <B><TT>fscanf</TT></B>.
+Given the invalid field <B><TT>-.x</TT></B>, the characters <B><TT>-.</TT></B>
+are not pushed back.'' And later, ``The conversions performed by <B><TT>fscanf</TT></B>
+are compatible with those performed by <B><TT>strtod</TT></B> and <B><TT>strtol</TT></B>.''
+<BR>
+So, do <B><TT>strtod</TT></B> and <B><TT>fscanf</TT></B> act alike and
+both accept and fail on the same inputs, by the one-character pushback
+scanning strategy, or do they use different scanning strategies and <B><TT>strtod</TT></B>
+accept more than <B><TT>fscanf</TT></B>? <BR>
+<B>Correction</B> <BR>
+<B><I>In subclause 7.9.6.2, page 135, lines 31-33, change:</I></B> <BR>
+An input item is defined as the longest matching sequence of input characters,
+unless that exceeds a specified field width, in which case it is the initial
+subsequence of that length in the sequence. <BR>
+<B><I>to:</I></B> <BR>
+An input item is defined as the longest sequence of input characters which
+does not exceed any specified field width and which is, or is a prefix
+of, a matching input sequence. <BR>
+<B><I>In subclause 7.9.6.2, page 137, delete:</I></B> <BR>
+If conversion terminates on a conflicting input character, the offending
+input character is left unread in the input stream. <BR>
+<B><I>Add to subclause 7.9.6.2, page 137:</I></B> <BR>
+If conversion terminates on a conflicting input character, the offending
+input character is left unread in the input stream.* [Footnote *: <B><TT>fscanf</TT></B>
+pushes back at most one input character onto the input stream. Therefore,
+some sequences that are acceptable to <B><TT>strtod</TT></B>, <B><TT>strtol</TT></B>,
+or <B><TT>strtoul</TT></B> are unacceptable to <B><TT>fscanf</TT></B>.]
+<BR>
+
+<A HREF="dr_021.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_023.html">Next Defect Report</A>
+</BODY></HTML>

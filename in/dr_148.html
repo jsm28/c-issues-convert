@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #148</TITLE></HEAD>
+<BODY><H2>Defect Report #148</H2> 
+<B>Submission Date</B>: 23 Feb 95
+<BR>
+<B>Submittor</B>: BSI
+<BR>
+<B>Source</B>: Clive D.W. Feather
+<BR>
+<B>Question</B>
+<BR>
+<I>Submitted to BSI by Clive D.W. Feather clive@sco.com.</I>
+<BR>
+<I>In this Defect Report, identifiers lexically identical to those 
+declared in standard headers refer to the identifiers declared in  those
+standard headers, whether or not the header is explicitly mentioned.</I>
+<BR>
+<I>This Defect Report has been prepared with considerable help from 
+Mark Brader, Jutta Degener, Ronald Guilmette, and a person whose
+employment  conditions require anonymity. However, except where stated,
+opinions  expressed or implied should not be assumed to be those of any
+person  other than myself.</I>
+<BR> Defect Report UK 032: Defining library functions
+<BR> Subclause 7.1.7 is unclear about when it is permitted to declare a
+ library function. Consider the following translation unit:
+<BR>
+<TT><B>#include &lt;math.h><BR> double (sin)(double);</B>
+</TT><BR> Subclause 7.1.7 states in part:
+<BR> Any function declared in a header may be additionally implemented 
+as a macro defined in the header, so a library function should not  be
+declared explicitly if its header is included.
+<BR> Since the wording uses the term "should", this does not appear to 
+actually be a requirement on programs, and the code appears to be 
+strictly conforming; in other words, the C Standard here simply uses 
+overly restrictive wording while trying to assist readers, and does  not
+actually forbid the above code.
+<BR> Is this interpretation correct?
+<BR> Note that code such as the above is useful if the <TT><B>#include</B></TT>
+is  conditionally compiled or is within a header not under the control 
+of the code's author.
+<BR>
+<B>Suggested Technical Corrigendum:</B>
+<BR> If the intent was to forbid such a declaration, then change the
+quoted  text to:
+<BR> A library function shall not be declared explicitly if its header 
+is included.
+<BR> If the intent was to allow the macros described in subclause 7.1.7
+ to be object-like macros (though other wording in 7.1.7 appears to 
+forbid this), then change the quoted text to:
+<BR> A library function must not be declared explicitly if its header 
+is included, unless any macro definition of the name has been removed 
+with <TT><B>#undef</B></TT>.
+<BR> If the intent was to allow the example declaration, then change
+the  quoted text to:
+<BR> Any function declared in a header may be additionally implemented 
+as a macro defined in the header, so one of the techniques below should 
+be used to ensure that any explicit declaration of a library function 
+is not affected by any such macro.
+<BR> Response
+<BR> The wording of the C Standard is as intended. The term "should" 
+is intended as guidance to the programmer as is the sentence following 
+the one cited in the C Standard.
+<BR>
+<A HREF="dr_147.html">Previous Defect Report</A> 
+&lt; - &gt; 
+<A HREF="dr_149.html"> Next Defect Report</A></BODY></HTML>

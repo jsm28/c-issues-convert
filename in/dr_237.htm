@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #237</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #237</h2>
+    <a href="dr_236.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_238.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> WG14 Convener (J. Benito)<br>
+     <b>Submission Date:</b>2001-04-25<br>
+     <b>Source:</b><br>
+     <b>Reference Document:</b> N/A<br>
+     <b>Version:</b> 1.2<br>
+     <b>Date:</b> 2003-10-23 00:12:00<br>
+     <b>Subject:</b> Declarations using
+    <tt><b>[static]</b></tt></p>
+
+    <p><b>Summary</b> Given the following declarations:</p>
+<pre>
+<tt><b>  void f(int n, int x[static n]);
+   void f(int n, int x[n]) {}
+</b></tt> 
+</pre>
+    An example at the end of 6.7.5.3 (p21) indicates that these
+    declarations are compatible, but it seems like there should
+    also be something about this in composite types. 
+
+    <ol>
+      <li>If some declarations include "static" and some don't,
+      what is the effect?</li>
+
+      <li>Does <tt><b>static</b></tt> only count if it is on the
+      definition?</li>
+
+      <li>Does it count if it is on the declaration visible for a
+      given call?</li>
+    </ol>
+    <hr>
+
+    <p><b>Committee Discussion</b></p>
+
+    <p>The Committee discussed adding a footnote to 6.7.5.3
+    paragraph 7 along the lines of item 1.</p>
+
+    <p><b>Committee Response</b></p>
+
+    <p>The Committee believe the specification about composite
+    types is clear enough; the composite type will be based on
+    "qualified pointer to <i>type</i>", and the
+    <tt><b>static</b></tt> keyword (and any size values) are not
+    used.</p>
+
+    <ol>
+      <li>The effect is as if all of the declarations had used
+      <tt><b>static</b></tt> and the largest size value used by any
+      of them. Each declaration imposes requirements on all calls
+      to the function in the program; the only way to meet all of
+      these requirements is to always provide pointers to as many
+      objects as the largest such value requires.</li>
+
+      <li>No.</li>
+
+      <li>Yes. Visibility is not relevant.</li>
+    </ol>
+
+    <p><br>
+     <a href="dr_236.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_238.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

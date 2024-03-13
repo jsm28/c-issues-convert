@@ -1,0 +1,253 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #294</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #294</h2>
+    <a href="dr_293.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_295.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Greg Davis, Green Hills Software<br>
+     <b>Submission Date:</b> 2003-08-14<br>
+     <b>Source:</b> INCITS<br>
+     <b>Reference Document:</b><br>
+     <b>Version:</b> 1.1<br>
+     <b>Date:</b> 2004-09-28<br>
+     <b>Subject:</b> Technical question on C99
+    <tt><b>restrict</b></tt> keyword</p>
+
+    <p><b>Summary</b></p>
+    I have a question on section 6.7.3.1 of the C99 spec. 
+
+    <p>Paragraph 4 is where this seems to get complicated.</p>
+
+    <p>Question 1)</p>
+
+    <blockquote>
+      "...Every other lvalue used to access the value of X shall
+      also have its address based on P".
+    </blockquote>
+
+    <p>Consider the following example:</p>
+<pre>
+        #include &lt;stdlib.h&gt;
+        char * restrict a, * restrict b;
+</pre>
+<pre>
+        void copy(char * restrict dest, char * restrict source)
+        {
+         int i;
+        for (i = 0; i &lt; 10; i++)
+            dest[i] = source[i];
+        }
+</pre>
+<pre>
+        int main()
+        {
+         a = calloc(10);
+         b = calloc(10);
+         copy(a, b);
+         return 0;
+        }
+</pre>
+
+    <p>Is this a legal program? If so, could you explain the
+    following? From the standpoint of <tt><b>main()</b></tt>, the
+    memory in <tt><b>a</b></tt> is modified through the call to
+    <tt><b>copy()</b></tt>. However, it seems to me that based on
+    the definition of <i>based on</i>, the writes that modify
+    <tt><b>*a</b></tt> are not <i>based on</i> the pointer
+    <tt><b>a</b></tt>, but instead they're based on
+    <tt><b>dest</b></tt>. Doesn't this violate the guarantee
+    above?</p>
+
+    <p>Question 2)</p>
+
+    <blockquote>
+      "Every access that modifies X shall be considered also to
+      modify P, for the purposes of this subclause." - Why is this
+      necessary?
+    </blockquote>
+
+    <p>Question 3)</p>
+
+    <blockquote>
+      The same question for the rules on the copying of
+      <tt><b>restrict</b></tt> pointers ("If P is assigned the
+      value of a pointer expression E that is based on another
+      restrict pointer object P2, associated with block B2, then
+      either the execution of B2 shall begin before the execution
+      of B, or the execution of B2 shall end prior to the
+      assignment."). Why is this necessary?
+    </blockquote>
+    <hr>
+
+    <p><b>Committee Response</b><br>
+    </p>
+
+    <p><b>Question 1)</b></p>
+
+    <p>Yes, the program conforms to all requirements in the
+    specification for the <tt><b>restrict</b></tt> qualifier
+    (though the call to function <tt><b>calloc</b></tt> should have
+    two arguments).</p>
+
+    <p>Some interpretation of this question is provided to clarify
+    the response. The response answers the interpretation.</p>
+
+    <p>The interpretation of this question is: I can see how the
+    rules are followed for the <tt><b>restrict</b></tt> qualifier
+    on <tt><b>dest</b></tt>, relative to the execution of function
+    <tt><b>copy</b></tt>, but I don't see how the rules are
+    followed for the restrict qualifier on <tt><b>a</b></tt>,
+    relative to the execution of <tt><b>main</b></tt>.</p>
+
+    <p>Here is a spelling out of all the requirements in the
+    specification of the <tt><b>restrict</b></tt> qualifier for
+    this example. The following identify definitions in the
+    specification of the <tt><b>restrict</b></tt> qualifier.</p>
+
+    <ul>
+      <li><tt><b>D</b></tt> is the declaration for the identifier
+      <tt><b>a</b></tt> and <tt><b>T</b></tt> is
+      <tt><b>char</b></tt></li>
+
+      <li><tt><b>P</b></tt> is the object designated by
+      <tt><b>a</b></tt></li>
+
+      <li><tt><b>B</b></tt> is the block of <tt><b>main</b></tt>,
+      whose execution includes the call to
+      <tt><b>copy()</b></tt></li>
+
+      <li><tt><b>L</b></tt> is the expression
+      <tt><b>dest[i]</b></tt>in <tt><b>copy()</b></tt><br>
+       <tt><b>&amp;L == dest+i</b></tt> which is based on
+      <tt><b>a</b></tt>, because <tt><b>dest</b></tt> gets its
+      value from <tt><b>a</b></tt> upon entry to
+      <tt><b>copy()</b></tt> &lt;-- Key point</li>
+
+      <li><tt><b>X</b></tt> is the object designated by
+      <tt><b>dest[i]</b></tt> (which is <tt><b>a[i]</b></tt>)</li>
+
+      <li><tt><b>X</b></tt> is modified during the execution of
+      <tt><b>main</b></tt></li>
+    </ul>
+    <br>
+     <br>
+     
+
+    <p>The requirements in the specification are then:</p>
+
+    <ul>
+      <li><tt><b>T</b></tt> is not const-qualified.<br>
+       This is true.</li>
+
+      <li>Every other lvalue used to access the value of
+      <tt><b>X</b></tt> ...<br>
+       Vacuously true, because there are no such other
+      lvalues.</li>
+
+      <li>Every access that modifies <tt><b>X</b></tt> shall be
+      considered also to modify <tt><b>P</b></tt>, for the purposes
+      of this subclause.<br>
+       Vacuous, because <tt><b>P</b></tt> itself (which is the
+      pointer object <tt><b>a</b></tt>) is not designated by means
+      of another restrict-qualified pointer.</li>
+
+      <li>If <tt><b>P</b></tt> is assigned the value of a pointer
+      expression <tt><b>E</b></tt> that is based on another
+      restricted pointer object <tt><b>P2</b></tt>, ...<br>
+       Vacuously true, because there are no such assignments.</li>
+    </ul>
+
+    <p>Contrary to what is implied in the question, an lvalue can
+    have its address based on more than one restricted pointer,
+    provided each is associated with a different (activation of a)
+    block. In the example, the address of lvalue
+    <tt><b>dest[i]</b></tt> in <tt><b>copy()</b></tt> is based not
+    only on <tt><b>dest</b></tt> but also on <tt><b>a</b></tt>
+    (because <tt><b>dest</b></tt> receives the value of
+    <tt><b>a</b></tt> when the call is made).</p>
+
+    <p>[Note that there would be undefined behavior if there were
+    also a reference to <tt><b>a[i]</b></tt> within the body of
+    <tt><b>copy()</b></tt>, because the address of that lvalue
+    would not be based on <tt><b>dest</b></tt>.]</p>
+
+    <p><b>Question 2)</b></p>
+
+    <p>This is necessary for the effectiveness of the
+    <tt><b>restrict</b></tt> qualifier for multiple levels of
+    indirection. Consider the example:</p>
+<pre>
+<tt> void reverse(char * restrict * restrict dest,
+               char * restrict * restrict source)
+  {
+   int i,j;
+   for (i = 0; i &lt; 10; i++)
+     for (j = 0; j &lt; 10; j++)
+      dest[i][j] = source[i][9-j];
+  }
+</tt>
+</pre>
+    <br>
+     <br>
+     
+
+    <p>Although the objects <tt><b>dest[i][j]</b></tt> are modified
+    by the assignment statements, the pointer objects
+    <tt><b>dest[i]</b></tt> are not. Without the clause quoted
+    above, the top-level <tt><b>restrict</b></tt> qualifiers in the
+    declarations of <tt><b>dest</b></tt> would have no effect, and
+    a call of the form <tt><b>reverse(x,x)</b></tt> would have
+    defined behavior if the elements of <tt><b>x</b></tt> point to
+    10 disjoint arrays of 10 chars. With the clause, the top-level
+    qualifiers have the same effect as if those pointer objects
+    were modified, so the iterated assignments are asserted to be
+    fully free of aliasing for the modified objects, and a call of
+    the form <tt><b>reverse(x,x)</b></tt> does have undefined
+    behavior.</p>
+
+    <p><b>Question 3)</b></p>
+
+    <p>This is necessary to allow a translator to assume that two
+    restricted pointers declared in the same scope cannot be used
+    to alias the same object. Consider an extreme example for file
+    scope pointers:</p>
+<pre>
+<tt>   char * restrict p;
+    char * restrict q;
+
+    void foo () { p = q; q = p; }
+</tt>
+</pre>
+    <br>
+     <br>
+     
+
+    <p>After the assignments in a call to <tt><b>foo()</b></tt>,
+    each of the two pointers is based on the other. Without the
+    rules quoted above, this would be allowed and would effectively
+    enable aliasing despite the qualifiers. This possibility would,
+    in turn, generally undermine the benefit of the
+    <tt><b>restrict</b></tt> qualifier, because a translator would
+    have to prove that there were no such assignments before taking
+    advantage of <tt><b>restrict</b></tt> qualifiers.</p>
+
+    <p>[The assignments that are allowed are necessary to allow
+    pointer values based on restricted pointers to be used in
+    argument and return expressions.]</p>
+
+    <p><br>
+     <a href="dr_293.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_295.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

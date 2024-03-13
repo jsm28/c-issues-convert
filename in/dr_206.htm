@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #206</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #206</h2>
+    <a href="dr_205.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_207.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Clive Feather (UK)<br>
+     <b>Submission Date:</b> 1999-09-13<br>
+     <b>Source:</b><br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n892.htm">ISO/IEC
+    WG14 N892</a><br>
+     <b>Version:</b> 1.4<br>
+     <b>Date:</b> 2001-09-18 14:47:00<br>
+     <b>Subject:</b> Default argument conversion of <tt><b>float
+    _Complex</b></tt></p>
+
+    <p><b>Summary</b><br>
+     For consistency with real floating types, the type
+    <tt><b>float _Complex</b></tt> should be promoted by the
+    default argument promotions to <tt><b>double
+    _Complex</b></tt>.</p>
+
+    <p><b>Suggested Technical Corrigendum</b><br>
+     Change 6.5.2.2p6 in part, from:</p>
+
+    <blockquote>
+      <p>and arguments that have type <tt><b>float</b></tt> are
+      promoted to <tt><b>double</b></tt>.</p>
+    </blockquote>
+
+    <p>to:</p>
+
+    <blockquote>
+      <p>and arguments that have a corresponding real type of
+      <tt><b>float</b></tt> are promoted, without change of type
+      domain, to a type whose corresponding real type is
+      <tt><b>double</b></tt>.</p>
+    </blockquote>
+    <hr>
+
+    <p><b>Committee Response</b><br>
+     This was intentional because real float promotion to double is
+    in Standard C purely for compatibility with K&amp;R. Since
+    complex is new, that compatibility is not an issue, and having
+    it behave like real float would introduce undesired overhead
+    (and be less like Fortran).</p>
+
+    <p>The following words were added the Rationale.</p>
+
+    <blockquote>
+      <tt><b>float _Complex</b></tt> is a new type with C99. It has
+      no need to preserve promotions needed by pre-ANSI-C. It does
+      not break existing code.
+    </blockquote>
+
+    <p><br>
+     <a href="dr_205.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_207.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #326</title>
+  </head>
+
+  <body>
+    <br>
+     
+
+    <h2 align="center">Defect Report #326</h2>
+    <a href="dr_325.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_327.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b>&nbsp;Stoughton (US)<br>
+     <b>Submission Date:</b>&nbsp;2006-03-28<br>
+     <!-- yyyy-mm-dd -->
+     <b>Source:</b>&nbsp;The Austin Group<br>
+     <b>Reference Document:</b>&nbsp; <a href=
+    "http://www.opengroup.org/austin/interps/protected/uploads/20/9920/AI-053.txt">
+    AI-053.txt</a>, <a href="dr_217.htm">DR 217</a><br>
+     <b>Version:</b>&nbsp;1.3<br>
+     <b>Date:</b>2007-09-06<br>
+     <b>Subject:</b>&nbsp;<code><b>asctime()</b></code></p>
+
+    <p><b>Summary:</b> <code><b>asctime() tm_year gt
+    9999</b></code></p>
+
+    <p>This is a potential defect forwarded from the Austin
+    Group.</p>
+
+    <p>If <code><b>asctime()</b></code> is called with a tm
+    structure whose <code><b>tm_year</b></code> field results in a
+    year &gt; 9999 (which is possible with 64-bit
+    <code><b>time_t</b></code>), the current specification of
+    <code><b>asctime()</b></code> would result in
+    <code><b>asctime()</b></code> to overrunning a 26-character
+    buffer; the specification says the
+    <code><b>sprintf()</b></code> format for printing the year is
+    "%d", and (eg) a 5-digit number would print 5 characters,
+    overrunning the buffer.</p>
+
+    <p>Similarly, since the user can create the input
+    <code><b>struct tm</b></code>, it is possible for the user to
+    set the fields of the <code><b>struct tm</b></code> to values
+    that are outside the normal bounds. In such a case, the
+    <code><b>sprintf()</b></code> format given in the
+    <code><b>asctime()</b></code> specification can result in a
+    buffer overrun. For example, if <code><b>tm_hour</b></code> is
+    <code><b>100</b></code>, the <code><b>sprintf()</b></code>
+    format <code><b>.2d</b></code> writes the string "100", which
+    could result in a buffer overrun. The specification should be
+    updated to state the algorithm can be used as long as the
+    values of the <code><b>tm</b></code> struct are restricted to
+    the normal bounds.</p>
+
+    <p><b>Suggested Technical Corrigendum</b><br>
+    </p>
+
+    <p>Change 7.23.3.1 para 2 from:</p>
+
+    <blockquote>
+      The asctime function converts the broken-down time in the
+      structure pointed to by <code><b>timeptr</b></code> into a
+      string in the form:
+    </blockquote>
+    To: 
+
+    <blockquote>
+      The <code><b>asctime()</b></code> function shall convert the
+      broken-down time in the structure pointed to by
+      <code><b>timeptr</b></code> into a string in the form,
+      provided the broken-down time in the fields of the structure
+      pointed to by <code><b>timeptr</b></code> contain values that
+      are within the normal ranges as defined in
+      <code><b>&lt;time.h&gt;</b></code>, and the calculated year
+      does not exceed four digits:
+    </blockquote>
+    (NB, see 7.23.1 para 4 for the specifications of the "normal
+    ranges"). 
+
+    <p>Also, add after the example code, and before the "Returns"
+    section, the following new paragraph:</p>
+
+    <blockquote>
+      Otherwise, if any of the fields of the <code><b>tm</b></code>
+      structure pointed to by <code><b>timeptr</b></code> contain
+      values that are outside the normal ranges, the behavior of
+      <code><b>asctime()</b></code> is undefined. If the calculated
+      year exceeds four digits, the behavior is undefined.
+    </blockquote>
+    <hr>
+    <!-- Entires below the line by WG14 only. -->
+
+    <p><b>Committee Discussion</b> (for history only)</p>
+
+    <p>The proposed resolution invalidates code that strictly
+    conforms to the C99 standard. Here is a contrived example
+    (though there are some examples that are not contrived):</p>
+<pre>
+   #include &lt;time.h&gt;
+   #include &lt;stdio.h&gt;
+
+   struct tm tm;
+
+   int
+   main (void)
+   {
+     tm.tm_wday = 0;
+     tm.tm_mon = 0;
+     tm.tm_mday = -99;
+     tm.tm_hour = 99;
+     tm.tm_min = 99;
+     tm.tm_sec = 99;
+     tm.tm_year = -999 - 1900;
+     printf ("%s\n", asctime (&amp;tm));
+     return 0;
+   }
+</pre>
+
+    <p>This code strictly conforms to C99, with well-defined
+    behavior, and some implementations prints "Sun Jan-99 99:99:99
+    -999". The proposed resolution places extra constraints on
+    asctime's arguments that would cause the above code to have
+    undefined behavior.</p>
+
+    <p>The original interpretation request considered by the Austin
+    Group contained an additional requirement, that the calculated
+    year should not precede the Epoch (the date and time associated
+    with <tt><b>(time_t)0)</b></tt>. This restriction was removed
+    in forwarding this to the C committee, since there is no C
+    equivalent concept. However, if the calculated year is less
+    than 1000, problems may occur, so perhaps the wording should
+    be:</p>
+
+    <blockquote>
+      If the calculated year is less than 1000 or greater than
+      9999, the behavior is undefined.
+    </blockquote>
+
+    <p><b>Note:</b> This appears to be a duplicate of <a href=
+    "dr_217.htm">DR 217</a>, which advises no consensus / no
+    change.</p>
+
+    <p>It was also pointed out that the Proposed Technical
+    Corrigendum does not fix all of the issues, such as if
+    <code><b>tm_mon=4</b></code> and
+    <code><b>tm_mday=31</b></code>, both valid numbers, but not a
+    valid date.</p>
+
+    <p><b>Technical Corrigendum</b><br>
+    </p>
+
+    <p>Add after the example code, and before the "Returns"
+    section, the following new paragraph:</p>
+
+    <blockquote>
+      If any of the fields of the <code><b>tm</b></code> structure
+      pointed to by <code><b>timeptr</b></code> contain values that
+      are outside the normal ranges*, the behavior of
+      <code><b>asctime()</b></code> is undefined. If the calculated
+      year exceeds four digits, or is less than the year 1000, the
+      behavior is undefined.
+    </blockquote>
+    Add footnote *: 
+
+    <blockquote>
+      See 7.23.1 para 4 for the specifications of the "normal
+      ranges".
+    </blockquote>
+    <a href="dr_325.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_327.htm">Next Defect Report</a>
+  </body>
+</html>
+

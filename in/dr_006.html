@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #006</TITLE></HEAD>
+<BODY><H2>Defect Report #006</H2>  
+<B>Submission Date</B>: 10 Dec 92  
+<BR><B>Submittor</B>: WG14
+<BR> 
+<B>Source</B>: X3J11/90-020 (Walter J. Murray)  
+<BR><B>Question</B> 1   It is unclear how the <TT><B>strtoul</B></TT>
+function behaves when presented with a subject sequence that begins with
+a minus sign. The <TT><B>strtoul</B></TT> function is described in
+subclause 7.10.1.6, which contains the following statements.
+<BLOCKQUOTE>If the
+subject sequence begins with a minus sign, the value resulting from the
+conversion is negated.
+<BR>If the correct value is outside the range of
+representable values,
+<TT><B>ULONG_MAX</B></TT> is returned, and the value of the macro <TT><B>
+ERANGE</B></TT> is stored in <TT><B>errno</B></TT>.
+</BLOCKQUOTE>
+Assume a
+typical 32-bit, two's-complement machine with the following limits.
+<BR> 
+<TT><B>LONG_MIN    -2147483648<BR> LONG_MAX         2147483647<BR>
+ULONG_MAX        4294967295
+<BR></B></TT> Assuming that the value of <TT><B>base</B></TT> is zero,
+how should <TT><B>strto ul</B></TT> behave (return value and possible
+setting of <TT><B>errno</B></TT>) when present ed with the following
+sequences?   Case 1: <TT><B>"-2147483647"</B></TT>   Case 2: <TT><B>"-2147483648"</B></TT>
+  Case 3: <TT><B>"-2147483649"</B></TT><BR>  
+<B>Response</B>  <BR> The relevant citations are the ones supplied by
+you from subclause 7.10.1.6:   If the subject sequence begins with a
+minus sign, the value resulting from the conversion is negated.   If the
+correct value is outside the range of representable values,
+<TT><B>ULONG_MAX</B></TT> is returned, and the value of the macro <TT><B>
+ERANGE</B></TT> is stored in <TT><B>errno</B></TT>.   The Committee
+believes that there is only one sensible interpretation of a subject
+sequence with a minus sign: If the subject sequence (neglecting the
+possible minus sign) is outside the range [0, <TT><B>ULONG_MAX</B></TT>],
+then the range error is reported. Otherwise, the value is negated(as an
+<TT><B>unsigned long int</B></TT>).   The answers to your numeric
+questions are:  
+<BR>Case 1: 2,147,483,649   
+<BR>Case 2: 2,147,483,648   
+<BR>Case 3: 2,147,483,647
+<BR>
+<A HREF="dr_005.html">Previous Defect Report</A> 
+&lt; -  > <A HREF="dr_007.html">Next Defect Report</A>
+</BODY></HTML>

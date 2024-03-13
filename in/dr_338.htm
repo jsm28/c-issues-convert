@@ -1,0 +1,209 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 13), see www.w3.org">
+
+  <title>Defect report #338</title>
+</head>
+
+<body>
+  <h2 align="center">Defect Report #338</h2><a href=
+  "dr_337.htm">Previous Defect Report</a> &lt; - &gt; <a href=
+  "dr_339.htm">Next Defect Report</a>
+
+  <p><br>
+  <b>Submitter:</b> Rich Peterson (US)<br>
+  <b>Submission Date:</b> 2007-03-09<br>
+  <!-- yyyy-mm-dd -->
+   <b>Source:</b> Rich Peterson &lt;Rich.Peterson@hp.com&gt;<br>
+  <b>Reference Document:</b> <a href=
+  "http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1124.pdf">WG14
+  N1124</a><br>
+  <b>Version:</b>1.4<br>
+  <b>Date:</b> 2008-09-12<br>
+  <b>Subject:</b> C99 seems to exclude <b>indeterminate value</b>
+  from being an uninitialized register</p>
+
+  <p><b>Summary</b></p>
+
+  <p>The following function has undefined behavior under C90, but
+  appears to be<br>
+  strictly conforming under C99:</p>
+  <pre>
+  int foo(void) {
+      unsigned char uc;
+      return uc + 1 &gt;= 0;
+  }
+</pre>
+
+  <p>If that is true, then a C99 compiler for a real-life
+  architecture like ia64<br>
+  that supports trap representations in hardware (via NaT values)
+  cannot in<br>
+  general just allocate <b>auto</b> variables to registers and
+  leave initialization<br>
+  to the source code as it would for most other architectures.
+  Instead it<br>
+  would either have to initialize the register or allocate the
+  variable to<br>
+  memory. This is because ia64 NaT values only exist in register
+  representations,<br>
+  not in memory representations.</p>
+
+  <p><b>Rationale</b></p>
+
+  <p>In C90, 3.16 defines <b>undefined behavior</b> as "behavior,
+  upon use of a<br>
+  non-portable or erroneous program construct, of erroneous data,
+  or of<br>
+  indeterminately valued objects, for which the standard imposes
+  no<br>
+  requirements...". And 6.5.7 says: "If an object that has
+  automatic storage<br>
+  duration is not initialized explicitly, its value is
+  indeterminate." So it<br>
+  directly follows that the above function has undefined behavior
+  under C90.</p>
+
+  <p>C99 then added a definition for <b>indeterminate value</b>
+  (3.17.2): "either an<br>
+  unspecified value or a trap representation". The first problem is
+  that the<br>
+  type unsigned char specifically is excluded from having any
+  trap<br>
+  representations. This would seem to render non-conforming a
+  NaT<br>
+  consumption fault when evaluating uc + 1 in the example
+  function.<br>
+  Furthermore, my reading of 6.2.6.2 "Integer types" is that in
+  order for<br>
+  any type to have trap representations, there must be padding bits
+  in the<br>
+  in-memory representation of the type. This is because there does
+  not<br>
+  appear to be any allowance for padding bits that are present only
+  in the<br>
+  register representation of a type, but not in memory.</p>
+
+  <p>Since ia64 NaT values clearly exhibit the properties intended
+  for C99<br>
+  trap representations, offering one of the few hardware
+  implementations<br>
+  of those properties, it seems most likely that either my reading
+  is<br>
+  faulty, or that the words do not correctly express the intent.
+  I<br>
+  believe the intent of excluding type <b>unsigned char</b> from
+  having trap<br>
+  representations was to allow it to be used to copy (via
+  memcpy)<br>
+  arbitrary memory, in the case that memory might contain trap<br>
+  representations for some types. I believe it was not the intent
+  to<br>
+  require translators to perform run-time initialization of
+  uninitialized<br>
+  auto objects of type <b>unsigned char</b> in order to suppress
+  hardware<br>
+  detection of programming faults. And I believe it certainly was
+  not the<br>
+  intent to require that all trap representations for any type
+  be<br>
+  representable in memory, forbidding register-only trap
+  representations<br>
+  like NaT values.</p>
+
+  <p>Unless someone can find text that supports register-only
+  trap<br>
+  representations, I think this deserves a TC.</p>
+
+  <p><br>
+  <b>Suggested Technical Corrigendum</b><br>
+  <i>Page 6, 3.17.2, change the definition of "indeterminate
+  value"</i></p>
+
+  <p><br>
+  Old:<br>
+  either an unspecified value or a trap representation</p>
+
+  <p><br>
+  New:<br>
+  either an unspecified value or a trap representation; or in<br>
+  the case of an object of automatic storage duration whose
+  address<br>
+  is never taken, a value that behaves as if it were a trap<br>
+  representation, even for types that have no trap
+  representations<br>
+  in memory (including type <b>unsigned char)</b><br></p>
+  <hr>
+  <!-- Entires below the line by WG14 only. -->
+
+  <p><b>Committee Discussion</b> (for history only)</p>
+
+  <h4>Spring 2007</h4>
+
+  <p>On some hardware (e.g. Itanium), an 8-bit value may have as
+  many as 257 different values (0-255 and a "Not a Thing" value).
+  However, c99 explicitly forbids such a value for an unsigned
+  char.</p>
+
+  <p>Page 6, 3.17.2, change the definition of <i>indeterminate
+  value</i> to:</p>
+
+  <blockquote>
+    either an unspecified value or a trap representation; or in the
+    case of an object of automatic storage duration whose address
+    is never taken, a value that behaves as if it were a trap
+    representation.
+  </blockquote><br>
+
+  <p>5.1.2.3 para 5 second bullet speaks to this also.</p>
+
+  <h4>Fall 2007</h4>
+
+  <p>See WG14 e-mail <i>SC22WG14.11380</i></p>
+
+  <p>While some agreed with the comments in this email others did
+  not.</p>
+
+  <h4>Spring 2008</h4>
+
+  <p>Regarding WG14 e-mail <i>SC22WG14.11380</i>, the observations
+  about trap representations are correct, and it is unfortunate
+  that the DR was written in a way that relied on trap
+  representation terminology and behavior. In fact, the problem and
+  solution are not really related to <i>trap representation</i> as
+  defined in the standard at all.</p>
+
+  <p>A better way to describe the issue might be to talk about use
+  of an uninitialized object that is eligible to have register
+  storage class (i.e. an object of automatic storage duration whose
+  address is never taken).</p>
+
+  <p>Also the original DR's suggested wording change was made in
+  the definition of <i>indeterminate value</i>. The reason for that
+  was to trigger undefined behavior, which would have worked in
+  C90, but in C99 the definition of undefined behavior was changed
+  such that it does not mention indeterminate value.</p>
+
+  <p><b>Change for C1X:</b></p>
+
+  <blockquote>
+    6.3.2.1 paragraph 2, add a sentence to the end:
+
+    <blockquote>
+      If the lvalue designates an object of automatic storage
+      duration that could have been declared with register storage
+      class (never had its address taken), and that object is
+      uninitialized (not declared with an initializer, and no
+      assignment to it has been performed prior to the use), the
+      behavior is undefined.
+    </blockquote>
+  </blockquote>
+
+  <p><br>
+  <a href="dr_337.htm">Previous Defect Report</a> &lt; - &gt;
+  <a href="dr_339.htm">Next Defect Report</a></p>
+</body>
+</html>

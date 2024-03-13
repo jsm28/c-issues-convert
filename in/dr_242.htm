@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #242</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #242</h2>
+    <a href="dr_241.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_243.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Fred Tydeman (US)<br>
+     <b>Submission Date:</b> 2001-02-25<br>
+     <b>Source:</b><br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n943.txt">ISO/IEC
+    WG14 N943</a><br>
+     <b>Version:</b> 1.1<br>
+     <b>Date:</b> 2001-10-16 11:56:00<br>
+     <b>Subject:</b> Make the base standard and Annex F consistent
+    for <tt><b>logb(0)</b></tt>.</p>
+
+    <p><b>Summary</b></p>
+
+    <blockquote>
+      <tt><b>logb(0)</b></tt> should be considered a pole error in
+      the base standard (it already is in Annex F).
+    </blockquote>
+
+    <p><b>Details</b></p>
+
+    <blockquote>
+      <tt><b>logb(0)</b></tt> is inconsistent between 7.12.6.11
+      (domain error) and Annex F (range error via divide-by-zero). 
+
+      <p><tt><b>logb(0)</b></tt> is effectively the same as
+      <tt><b>log(0)</b></tt>, <tt><b>log2(0)</b></tt>, or
+      <tt><b>log10(0)</b></tt>, all of which are a pole or
+      singularity error, which is a divide-by-zero exception to
+      Annex F and a range error to 7.12. But, <tt><b>logb</b></tt>
+      treats it as a domain error in 7.12.6.11.</p>
+    </blockquote>
+
+    <p><b>Suggested Technical Corrigendum</b><br>
+    </p>
+
+    <p>In 7.12.6.11 <tt><b>logb</b></tt>:</p>
+
+    <p>Change:</p>
+
+    <blockquote>
+      A domain error may occur if the argument is zero.
+    </blockquote>
+    to 
+
+    <blockquote>
+      A range error may occur if the argument is zero.
+    </blockquote>
+    <hr>
+
+    <p><b>Technical Corrigendum</b><br>
+    </p>
+
+    <p>In 7.12.6.11 <tt><b>logb</b></tt>:</p>
+
+    <p>Change:</p>
+
+    <blockquote>
+      A domain error may occur if the argument is zero.
+    </blockquote>
+    to 
+
+    <blockquote>
+      A domain error or range error may occur if the argument is
+      zero.
+    </blockquote>
+
+    <p><br>
+     <a href="dr_241.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_243.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

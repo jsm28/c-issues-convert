@@ -1,0 +1,297 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect Report #236</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #236</h2>
+    <a href="dr_235.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_237.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Raymond Mak<br>
+     <b>Submission Date:</b> 2000-10-18<br>
+     <b>Source:</b> NCITS J11<br>
+     <b>Reference Document:</b> N/A<br>
+     <b>Version:</b> 1.6<br>
+     <b>Date:</b> 2006-05-08<br>
+     <b>Subject:</b> The interpretation of type based aliasing rule
+    when applied to union objects or allocated objects.</p>
+
+    <p><b>Question</b><br>
+    </p>
+
+    <blockquote>
+      This concerns 6.5 paragraph 6 and 7. Consider the following
+      two pieces of code : 
+<pre>
+<b>Example 1</b>
+<tt><b>#define N ?</b> // <i>optimization opportunities if "qi" does not alias "qd"</i>
+   <b>void f(int *qi, double *qd) {
+        int i = *qi + 2;
+        *qd = 3.1;</b>       // <i>hoist this assignment to top of function???</i>
+     <b>*qd *= i;
+     return;
+   }
+   main() {
+      void *vp;
+      int *pi;
+      double *pd;
+      vp = malloc(N);
+      pi = vp;
+      *pi = 7;</b>    // <i>assignment to allocated space thru "p"</i>
+      <b>pd = vp;</b>    // <i>"pi" and "pd" are aliases</i>
+      <b>f(pi, pd);
+      free(vp);
+    }</b></tt>
+<b>Example 2</b>
+<tt>// <i>optimization opportunities if "qi" does not alias "qd"</i>
+    <b>void f(int *qi, double *qd) {
+      int i = *qi + 2;
+      *qd = 3.1;</b>       // <i>hoist this assignment to top of function???</i>
+      <b>*qd *= i;
+      return;
+   }
+   main() {
+     union tag {
+       int mi;
+       double md;
+     } u;
+     u.mi = 7;
+     f(&amp;u.mi, &amp;u.md);
+   }</b></tt>
+</pre>
+
+      <p>The two pieces of code are basically the same except that
+      one uses an union object and the other an allocated object.
+      The question is whether these are conforming programs.</p>
+
+      <p>At issue here is the pointers within the function
+      <tt><b>f</b></tt>. (This function can be in translation unit
+      of its own and have no knowledge about the union or the
+      allocated object.)</p>
+
+      <p>The spirit of the type-based aliasing rule is to help the
+      optimizer to compute aliasing relationship without knowledge
+      about the rest of the program. In this particular case, the
+      type-based aliasing rule is meant to allow the optimizer to
+      hoist the assignment <tt><b>*qd = 3.1</b></tt> to the top of
+      the function. But this transformation changes the
+      computation.</p>
+
+      <p>6.5 paragraph 6 allows example 1. It is not clear if 6.5
+      paragraph 7 allows example 2. The spirit of type-based
+      aliasing rule is violated.<br>
+      </p>
+
+      <p><b>Discussion:</b></p>
+
+      <p>In the second code example above.</p>
+
+      <p>Note that 6.5 paragraph 7 states:</p>
+
+      <blockquote>
+        "an aggregate or union type that includes one of the
+        aforementioned types among its members (including,
+        recursively, a member of a subaggregate or contained
+        union)."
+      </blockquote>
+
+      <p>Arguably this can be read such that the access through
+      <tt><b>u.mi</b></tt> in the above causes <tt><b>u.md</b></tt>
+      to become undefined. If it were the case that
+      <tt><b>u.mi</b></tt> was the <i>active</i> union member then
+      the assignment:</p>
+
+      <blockquote>
+        <tt><b>*qd = 3.1;</b></tt>
+      </blockquote>
+      is an error since the the store is done using an lvalue of
+      type <tt><b>double</b></tt> and the <i>active</i> member has
+      type <tt><b>int</b></tt>. However, an expression such as: 
+
+      <blockquote>
+        <tt><b>u.md = 3.14;</b></tt>
+      </blockquote>
+      is legitimate because the union object is used to modify one
+      of it's members and (in this case) changes the <i>active</i>
+      member. 
+
+      <p>Similarly:</p>
+
+      <blockquote>
+        <tt><b>pu-&gt;md = 1.1;</b></tt>
+      </blockquote>
+      changes the <i>active</i> member.<br>
+       
+
+      <p>Turning to the first code example above.</p>
+
+      <p>Here again the <i>active</i> effective type of the
+      allocated space starts out as type <tt><b>int</b></tt> and
+      the desired semantics are that the assignment:</p>
+
+      <blockquote>
+        <tt><b>*qd = 3.1;</b></tt>
+      </blockquote>
+      is an error because the expression <tt><b>*qd</b></tt> has
+      type <tt><b>double</b></tt>. 
+
+      <p>The <tt><b>char</b></tt> type should have special
+      privileges. Programs should be able to erase the active
+      effective type via:</p>
+
+      <blockquote>
+<pre>
+<tt><b>memset(vp, 0, sizeof(int));
+memset(&amp;u, 0, sizeof(union tag));</b></tt>
+</pre>
+      </blockquote>
+      or possible change the active effective type via: 
+
+      <blockquote>
+        <tt><b>memcpy(&amp;u, &amp;u2, sizeof(union tag)};</b></tt>
+      </blockquote>
+      or even: 
+
+      <blockquote>
+<pre>
+<tt><b>char *p1 = (char *) &amp;u;
+char *p2 = (char *) &amp;u2;
+for (int i = 0; i &lt; sizeof(union tag); i++) {
+   p1[i] = p2[i];
+}</b></tt>
+</pre>
+      </blockquote>
+
+      <p>That is, the <tt><b>char</b></tt> types have special alias
+      privileges that let them scribble on an object that already
+      has an effective type.<br>
+      </p>
+
+      <p><b>Suggested change:</b><br>
+      </p>
+
+      <p>(We offer the following as a starting point for further
+      discussion.)</p>
+
+      <p>To tackle the first code example, change 6.5 paragraph 6,
+      second sentence,</p>
+
+      <p>From:</p>
+
+      <blockquote>
+        If a value is stored into an object having no declared type
+        through an lvalue having a type that is not a character
+        type, then the type of the lvalue becomes the effective
+        type of the object for that access and for subsequent
+        accesses that do not modify the stored value.
+      </blockquote>
+      to: 
+
+      <blockquote>
+        If a value is stored into an object having no declared type
+        through an lvalue having a type that is not a character
+        type, then the type of the lvalue becomes the effective
+        type of the object for that access and for subsequent
+        accesses.
+      </blockquote>
+
+      <p>That is, the last phrase "that do not modify the stored
+      value" is removed.</p>
+
+      <p>To tackle the second code example, use the concept of the
+      effective type of an union object (i.e. use it to track the
+      active member). Either describe it in the rationale, or
+      formally introduce it in the standard.</p>
+
+      <p>Effective type of an union object.</p>
+
+      <blockquote>
+        The type of the last member accessed within an union object
+        is the effective type of the union object. For members with
+        types not compatible with the effective type of the union
+        object, the lvalue used for the store shall be the result
+        of member selection from the union.
+      </blockquote>
+
+      <p>Note that this forces the union declaration to be visible
+      in the translation unit.</p>
+
+      <p>If we add this to the standard, add it immediately before
+      6.5p7.</p>
+    </blockquote>
+    <hr>
+
+    <p><b>Committee Discussion</b></p>
+
+    <p><br>
+     Committee believes that Example 2 violates the aliasing rules
+    in 6.5 paragraph 7:</p>
+
+    <blockquote>
+      "an aggregate or union type that includes one of the
+      aforementioned types among its members (including,
+      recursively, a member of a subaggregate or contained union)."
+    </blockquote>
+    In order to not violate the rules, function f in example should
+    be written as: 
+<pre>
+<tt><b>   union tag {
+                int mi;
+                double md;
+        } u;
+        void f(int *qi, double *qd) {
+                int i = *qi + 2;
+                u.md = 3.1;   //</b> <i>union type must be used when changing effective type</i> <b>           
+                *qd *= i;
+        return;
+        }
+</b></tt>
+</pre>
+    Example 1 is still open. The committee does not think that the
+    suggested wording is acceptable. 
+
+    <p>More discussion is found in reflector message #9337, and in
+    the Curacao meeting minutes <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n973.txt">N973</a>
+    and in the Santa Cruz meeting minutes <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n987.txt">N987</a>.<br>
+
+     The current situation requires more consideration, but general
+    consensus seems to be;</p>
+
+    <ul>
+      <li>Limit the use of pointers to union members,</li>
+
+      <li>Consensus for the visible alias rule exists,</li>
+
+      <li>The requirement of global knowledge is problematic,</li>
+
+      <li>Common understanding is that the union declaration must
+      be visible in the translation unit.</li>
+    </ul>
+
+    <p><br>
+    </p>
+
+    <p><b>Committee Response</b></p>
+
+    <p>Both programs invoke undefined behavior, by calling function
+    <tt><b>f</b></tt> with pointers <tt><b>qi</b></tt> and
+    <tt><b>qd</b></tt> that have different types but designate the
+    same region of storage. The translator has every right to
+    rearrange accesses to <tt><b>*qi</b></tt> and
+    <tt><b>*qd</b></tt> by the usual aliasing rules.</p>
+    <br>
+     <a href="dr_235.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_237.htm">Next Defect Report</a><br>
+     <br>
+  </body>
+</html>
+

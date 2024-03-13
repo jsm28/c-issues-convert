@@ -1,0 +1,271 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect  Report  #003</TITLE></HEAD>
+<BODY><H2>Defect Report #003</H2>  
+<B>Submission Date</B>: 10 Dec 92  <BR>
+<B>Submittor</B>: WG14
+<BR> 
+<B>Source</B>: X3J11/90-011 (Terence David Carroll)<BR>  
+<B>Question</B> 1  <BR> Subclause 6.1.8: Preprocessing numbers   I
+note from the rationale document of November 1988, X3J11 Document Number
+88-151, that the following problem has been observed. I am surprised at
+the Committee's decision to allow such a loose description.   Under the
+grammar given for a <TT><B>pp-number</B></TT>
+<P><TT><B>0xEE+23     0x7E+macro      0x100E+value-macro</B></TT>
+</P> are preprocessing numbers and as such a conforming C compiler would
+be required to generate an error when it failed to successfully convert
+them to actual C language number tokens.   The solution is simply to
+restrict the inclusion of [<TT><B>eE</B></TT>][<TT><B>+-</B></TT>]
+within a <TT><I><B>pp-number</B></I></TT> to situations where the
+<TT><B>e</B></TT> or <TT><B>E</B></TT> is the first <TT><I><B>non-digit</B></I></TT>
+in the character sequence composin g the preprocessing number. This can
+be easily implemented in a variety of methods; the informal description
+above gives perhaps a better guide to efficient implementation than the
+following revised grammar:
+<BR> 
+<TT><B>pp-number:<BR>         pp-float<BR>         pp-number digit<BR>
+         pp-number .<BR>         pp-number non-digit  /*</B><I> A <B>non-digit</B>
+is a letter or underscore </I><B>*/<BR>
+<BR> pp-float:<BR>         pp-real<BR>         pp-real E sign        
+pp-real e sign<BR>
+<BR> pp-real:<BR>         digit<BR>         .<BR>         pp-real
+digit<BR>         pp-real .<BR>
+</B></TT>
+<P>It is unbelievable that a standards committee could so lose
+sight of its objective that it would, in full awareness, make simple
+expressions illegal.
+</P><P>To illustrate the absurdity of the rationale document's claim
+that the faulty grammar was felt to be easier to implement, why not
+adopt the following grammar for a <TT><I><B>pp-number</B></I></TT>
+and really make lif e simple; after all, who wants to have their
+preprocessor slowed down by checking whether the <TT><B>+</B></TT> or
+<TT><B>-</B></TT> was preceded by a n <TT><B>e</B></TT>or an <TT><B>
+E</B></TT>?
+</P><P><TT><B>pp-number:<BR>         digit<BR>         .<BR>      
+  pp-number digit<BR>         pp-number .<BR>         pp-number
+non-digit<BR>         pp-number sign
+<BR></B></TT></P><P><B>Response</B>
+<BR> The Committee reasserts that the grammar and/or semantics of
+preprocessing as they appear in the standard are as intended.   We are
+attaching a copy of the previous responses to this item from David F.
+Prosser. The Committee endorses the substance of these responees, which
+follow:   In response to your first suggested grammar: This grammar
+doesn't include all valid numeric constants and exclude other important
+tokens. For example, <TT><B>.</B></TT> is derivable. But let's assume
+that you intended something like<BR>  
+<TT><B>pp-number:<BR>         pp-float<BR>         digit<BR>       
+ pp-number digit<BR>         pp-number non-digit<BR>
+<BR> pp-float:<BR>         pp-real<BR>         pp-float E sign<BR>  
+      pp-float e sign<BR>         pp-float digit<BR>         pp-float
+.<BR>         pp-float non-digit<BR>
+<BR> pp-real:<BR>         digit<BR>         . digit<BR>        
+pp-real digit<BR>         pp-real .
+<BR></B></TT> This grammar is certainly more complicated than the
+one-level construction in the C Standard, and consequently harder to
+understand. That's a strike against it.   Another strike is that, while
+it does mimic the two major numeric categories, it still doesn't include
+all sequences covered by the existing grammar, save those that would
+otherwise be valid by the stricter tokenization rules. For example, <TT><B>
+0b0101e+17</B></TT> might be someone's future notion of a binary
+floating constant.   Finally, it suffers from a great deal of
+reduce/reduce conflicts, making the implementation and specification
+less likely to be understood and implemented as intended.   In response
+to your second suggested grammar: This could have been done. But the
+Committee chose a compromise at a different point  -  one that
+restricts the inappropriate gobbling of characters to <TT><B>+</B></TT>
+  and <TT><B>-</B></TT> immediately after <TT><B>E</B></TT> or <TT><B>
+e</B></TT>. This was all that was necessary to cover all valid numeric
+constants in as simple a grammar as was possible.   For more background,
+you'd need to know the state of the proposed standard a few years before
+this grammar was voted in. The Committee had stated its intent that
+``garbage'' character sequences that began like a numeric constant were
+to be tokenized as a single sequence. This was to prevent situations in
+which this ``garbage'' would be turned into valid C code through obscure
+macro replacements, among more minor reasons. This was, unfortunately,
+very poorly stated in the draft. As I recall, it was placed in the
+constraints for subclause 6.1. It was something like ``Each pair of
+adjacent tokens that are both keywords, identifiers, and/or constants
+must be separated by white space.'' [As ``improved'' for the May 1, 1986
+draft proposed standard, subclause 6.1 <B>Constraints</B> consisted of
+the single sentence: ``Each keyword, identifier, or constant shall be
+separated by some white space from any otherwise adjacent keyword,
+identifier, or constant.'']   As you can see, this constraint neither
+presented the intent of the Committee nor caused implementations to
+behave in any sort of consistent manner with respect to tokenization.  
+Finally a letter writer understood the issue well enough to suggest a
+grammar along the lines of the current subclause 6.1.8. It, contrary to
+your opening remarks on this topic, is <I>not</I> a ``loose
+description,'' and it finally stated in a precise way the intent of the
+tokenization rules.   The benefits of this construction were that all
+tokenization for all implementations would now be the same, no
+``garbage'' character sequences would be able to be converted to valid C
+code, skipped blocks of code could silently be scanned withou 
+generating needless and unnecessary tokenization errors, the
+preprocessing tokenization of numeric tokens would be greatly
+simplified, and room for future expansion of C's numeric tokens was
+reserved.   That's a lot of good. The down side was that certain
+sequences now would require some white space to cause them to be
+tokenized as the programmer intended. As noted in the rationale
+document, there are other parts in C that require white space for
+tokenization to be controlled, and this was found to be one more.  
+Since the ``mistokenization'' of such sequences must result in some
+diagnostic noise from the compiler, and since the fix is so mild, the
+Committee agreed that the proposed standard is still much better with
+this grammar than with any of the other suggestions.   Personally, I
+think that the biggest surprise ``win'' was the reservation of future
+numeric token ``name space.'' I would not be at all surprised to find
+binary constants (that begin with
+<TT><B>0b</B></TT>) in newer C implementations.<BR>
+<B>Question</B> 2 <BR>Subclause 6.8.3: Macro substitutions, tokenization,
+and white space   In general I think it is a good guiding principle that
+a C implementation should be able to be based around completely disjoint
+preprocessing and lexical scanning parses of the compiler. As such the
+rules on tokenizing need to be emphasized with the following paragraphs
+(possibly placed after paragraph 1 of subclause 6.8.3.1):
+<BLOCKQUOTE>All macro substitutions and expanded macro argument substitutions 
+will result in an additional space token being inserted before and after the
+replacement token sequence where such a space token is not already
+present and there is a corresponding preceding or subsequent token in
+the target token sequence.
+<BR>  The last token of every macro argument has
+no subsequent token at the time of its initial macro argument expansion,
+and similarly a macro parameter that is the last token of a replacement
+token list has no subsequent token at the time of that parameter's
+substitution. Similarly for first tokens and preceding tokens.  
+</BLOCKQUOTE>
+Naturally such a step can be treated as purely conceptual by a tokenized
+implementation with combined preprocessing and lexical analysis, except
+for the purposes of argument stringizing where the added spacing may be
+essential for unambiguous identification of the preprocessing tokens
+involved.   Such a statement is not a substantive change, as it is
+merely clarifying the tokenization rules, and given that Standard C has
+changed the definition of the preprocessor substantially from K&amp;R
+already (re macro argument expansion before substitution) such an
+additional explicit change from K&amp;R C should cause comparatively
+little difficulty except to those who had not appreciated just how
+different the preprocessing rules are already.   Examples which are
+clarified by this change are:
+<BR>
+<TT><B>#define    macro    +<BR>            +macro<BR>            macro+<BR>
+ #define    mac()    +<BR> #define    ro       +<BR>           
+mac()ro
+</B></TT><BR> all of which unambiguously result in lines with two <TT><B>+</B></TT>
+operator tokens, in strict accordance with the draft standard's
+tokenization rules, and not, as was formerly the case with traditional
+text oriented preprocessors, in single <TT><B>++</B></TT> operators.  
+<BR>Examples which are changed by this statement are:
+<BR> 
+<TT><B>#define    mac()         +<BR> #define    ro            +<BR>
+#define    str(s)        # s<BR> #define    eval(m,e)     m(e)<BR>    
+       eval( str, mac()ro )
+</B></TT><BR> which produces the string <TT><B>"+N+"</B></TT> and not the
+string <TT><B>"++"</ B></B></TT> as it would do with the draft's
+current wording.  
+<BR><B>Response</B><BR>
+The Committee reasserts that the grammar and/or
+semantics of preprocessing as they appear in the standard are as
+intended.   We are attaching a copy of the previous responses to this
+item from David F. Prosser. The Committee endorses the substance of
+these responses, which follow:   KR  never specified the macro
+replacement algorithm to the extent that any such conclusion is
+possible. The widest range of implementation choices were present in
+this area of the language. The eventual choice of a macro replacement
+algorithm was one that did not match any existing implementation, but
+one that tried to include the behavior of all major variants.   You
+agree that the C Standard is clear that once a token is recognized, it
+is never retokenized unless subjected to a <TT><B>#</B></TT> or <TT><B>
+##</B>
+</TT> operation. The behavior described is that which was chosen by the
+Committee. Your proposal would cause, as you note, certain created
+string literals to include white space not present in the original text.
+This runs counter to the <TT><B>#</B></TT> operator's goal of
+producing a string version of the spelling of the invocation arguments. 
+ The C Standard allows an implementation that uses a text-to-text
+separate preprocessing stage the option to use white space as necessary
+to separate tokens when it produces its output. However, this insertion
+of white space must not be visible to the program. The proposed extra
+white space would probably be a surprise to the programmer as well.
+Finally, this proposal would require those implementations that have a
+built-in preprocessing stage to add extra code to insert white space in
+special circumstances. This is counter to the goal of having both
+built-in and separate implementations be purely an implementation
+choice.  <BR>
+<A NAME="Question3"><B>Question</B> 3</A><BR>
+Subclause 6.8.3: Empty arguments to function-like
+macros   I would like to make a request for clarification and a request
+for a stronger statement of standardization. Given
+<BR> 
+<TT><B>#define macro( xx ) xx<BR>         macro()
+</B></TT><BR> is this a constraint violation of subclause 6.8.3 <B>Constraints</B>
+paragraph 4:
+<BLOCKQUOTE>   The number of arguments in an invocation of a
+function-like macro shall agree with the number of parameters in the
+macro definition, ...
+</BLOCKQUOTE>   or is this an undefined,
+implementation-dependent program  -  subclause 6.8.3, <B>Semantics</B>
+paragraph 5:
+<BLOCKQUOTE>   If (before argument substitution) any argument consists
+of no preprocessing tokens, the behavior is undefined.
+</BLOCKQUOTE>   In connection
+with the above I would request that the Committee make a much stronger
+statement as to whether empty arguments are to be treated as valid
+arguments or are to be treated as errors. They can have their uses, but
+if that is recognized then it should be standardized; if not, it should
+not be allowed.  <BR>
+<B>Response</B> <BR>
+If one takes the general case, empty arguments in
+invocations of function-like macros are easy to recognize:  <BR>
+<TT><B>#define f(a,b,c) <I>whatever</I><BR>
+<BR>         f(,,)</B>
+</TT><P>These empty arguments all have ``shadows'' that cause the
+sentence you reference in subclause 6.8.3 (page 90, lines 4-5) to be
+clearly in effect.
+</P><P>The only uncertain case is one in which an empty argument in an
+invocation of a one-parameter function-like macro mimics a ``no
+arguments'' invocation. (It should also be noted that the definition of
+a macro argument from clause 3 does not preclude an empty sequence.)  
+Thus the standard is clear that the behavior is undefined in the example
+from your request. If an implementation does not choose to allow empty
+arguments, a diagnostic will probably be emitted; otherwise, the
+invocation will most likely be replaced by a preprocessing token
+sequence in which the parameter is replaced with no tokens. But because
+the standard does not define this, other than as a common extension,
+there are no guarantees.<BR>
+<B>Question</B> 4<BR>
+Subclause 6.8.3: Preprocessor directives within
+actual macro arguments   It is a guiding principle that a macro function
+and an actual function should be invokable in as similar fashion as
+possible. In the latter case, it is not uncommon to find code with
+variations of arguments subject to conditional compilation. This should
+also compile correctly if an appropriate macro definition is made for
+the function.
+<BR>While conditional compilations within function arguments
+is not necessarily a programming style that I would condone, I feel that
+it is in the interests of the C programming community at large for such
+constructs to be well formed, even if forbidden, and as such make the
+following requests:   
+<BLOCKQUOTE>
+I would like the Committee to change subclause
+6.8.3 to state that
+<TT><B>#if</B></TT>, <TT><B>#ifdef</B></TT>, <TT><B>#ifndef</B></TT>,
+<TT><B>#el se</B></TT>, <TT><B>#elif</B></TT>, and <TT><B>#endif</B></TT>
+preprocessing directives are allowed within actual macro arguments (not
+necessarily cleanly nested).   Conversely, I would like <TT><B>#define</B></TT>
+and <TT><B>#undef</B></TT> to b e formally forbidden within macro
+invocations, as these can result in effects that are dependent on the
+particular implementation of the macro expansions.  
+</BLOCKQUOTE>
+<B>Response</B>
+<BR>The Committee reasserts that the grammar and/or
+semantics of preprocessing as they appear in the standard are as
+intended.   We are attaching a copy of the previous response to this
+item from David F. Prosser. The Committee endorses the substance of this
+response, which follows:   The equivalent of your proposal was rejected
+a couple of years ago. Certain Committee members felt that requiring all
+preprocessors to recognize these lines as directives was too much. Those
+that felt that these lines must be recognized were finally convinced
+that it was enough to allow implementations the right to behave in the
+more orthogonal manner. (Maybe they figure that the next version of the
+standard will have to require this sort of behavior, as all
+``reasonable'' implementations already will have it by then.) 
+<A HREF="dr_002.html">Previous Defect Report</A> - <A HREF="dr_004.html">Next Defect Report</A></BODY></HTML>

@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #297</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #297</h2>
+    <a href="dr_296.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_298.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Fred Tydeman (USA)<br>
+     <b>Submission Date:</b> 2003-11-29<br>
+     <b>Source:</b> WG 14<br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1045.htm">N1045</a><br>
+
+     <b>Version:</b> 1.1<br>
+     <b>Date:</b> 2004-09-28<br>
+     <b>Subject:</b> May <tt><b>FE_*</b></tt> floating-point
+    exception flags have bits in common?</p>
+
+    <p><b>Summary</b></p>
+
+    <p>May the floating-point exception flags of 7.6 Floating-point
+    environment <tt><b>&lt;fenv.h&gt;</b></tt>, paragraph 5, have
+    bits in common, e.g., the AND between two of the
+    <tt><b>FE_*</b></tt> macros be nonzero?</p>
+
+    <p><b>Details from C99+TC1</b></p>
+    Suppose that the floating-point exception flags of 7.6
+    Floating-point environment <tt><b>&lt;fenv.h&gt;</b></tt> are
+    defined as follows: <br>
+     
+<pre>
+<tt><b> #define FE_INVALID   0x8001
+  #define FE_DIVBYZERO 0x8002
+  #define FE_OVERFLOW  0x8004
+  #define FE_UNDERFLOW 0x8008
+  #define FE_INEXACT   0x8010
+</b></tt>
+</pre>
+
+    <p>That is, there is a bit in common to at least two of the
+    macros, in this case, it is common to all five macros. This is
+    allowed by the current C99 wording. That bit here could mean:
+    any floating-point exception is raised.</p>
+
+    <p>Clive Feather scanned through Annex B, and concluded that
+    this is really the only case of flags being allowed to have
+    common bits, which could be why we haven't spotted this
+    condition before now.</p>
+
+    <p>Does this cause any problems?</p>
+
+    <p>Yes. Consider the example code in 7.6.2.5:</p>
+<pre>
+<tt><b>if (set_excepts &amp; FE_INVALID) f();
+  if (set_excepts &amp; FE_OVERFLOW) g();
+</b></tt>
+</pre>
+
+    <p>Suppose that just <tt><b>FE_DIVBYZERO</b></tt> is raised,
+    e.g., set_excepts is 0x8002. Then, both of the above tests
+    would report true (which is wrong), and both
+    <tt><b>f()</b></tt> and <tt><b>g()</b></tt> would be
+    called.</p>
+
+    <p>I know of two solutions:</p>
+
+    <ol>
+      <li>
+        <p>Require that there be no bits in common to any of these
+        <tt><b>FE_*</b></tt> floating-point exception macros. One
+        way is to change the last sentence of paragraph 5 of 7.6 to
+        be:</p>
+
+        <blockquote>
+          The defined macros expand to integer constant expressions
+          with values such that bitwise ORs of all combinations of
+          the macros result in distinct values, and furthermore,
+          bitwise ANDs of all combinations of the macros result in
+          zero.
+        </blockquote>
+
+        <p>In addition, we could add a footnote to that sentance
+        along the lines of:</p>
+
+        <blockquote>
+          The macros should be distinct powers of two.
+        </blockquote>
+
+        <p>Possible problem: This could break existing
+        implementations. Anyone know of an implementation that
+        would break?</p>
+
+        <p>All feedback I have received says this is what we
+        "designed" and is the only sane solution; it is also what
+        people expect.</p>
+      </li>
+
+      <li>
+        <p>Add another macro, such as <tt><b>FE_EXP_MASK</b></tt>,
+        that is the OR of all these macros, but without any of the
+        bits in common. In this case, it would be 0x001f. If we
+        choose this solution, then we will need to redo the
+        examples that test the floating-point exception flags. For
+        example, in 7.6.2.5, the tests would become:</p>
+<pre>
+<tt><b>if (set_excepts &amp; FE_INVALID &amp; FE_EXP_MASK) f();
+  if (set_excepts &amp; FE_OVERFLOW &amp; FE_EXP_MASK) g();
+</b></tt>
+</pre>
+
+        <p>Possible problem: This would require existing user
+        programs to be recoded.</p>
+
+        <p>Many of us do not like this solution, and if it were
+        allowed, would be very bad news.</p>
+      </li>
+    </ol>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Change the last sentence of paragraph 5 of 7.6
+    Floating-point environment <tt><b>&lt;fenv.h&gt;</b></tt> to
+    be:</p>
+
+    <blockquote>
+      The defined macros expand to integer constant expressions
+      with values such that bitwise ORs of all combinations of the
+      macros result in distinct values, and furthermore, bitwise
+      ANDs of all combinations of the macros result in zero.
+    </blockquote>
+
+    <p>In addition, add a footnote to that sentance along the lines
+    of:</p>
+
+    <blockquote>
+      The macros should be distinct powers of two.
+    </blockquote>
+    <br>
+     <br>
+     
+    <hr>
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>Change the last sentence of paragraph 5 of 7.6
+    Floating-point environment <tt><b>&lt;fenv.h&gt;</b></tt> to
+    be:</p>
+
+    <blockquote>
+      The defined macros expand to integer constant expressions
+      with values such that bitwise ORs of all combinations of the
+      macros result in distinct values, and furthermore, bitwise
+      ANDs of all combinations of the macros result in zero.
+    </blockquote>
+
+    <p>In addition, add a footnote to that sentance along the lines
+    of:</p>
+
+    <blockquote>
+      The macros should be distinct powers of two.
+    </blockquote>
+    <br>
+     <br>
+     
+
+    <p><br>
+     <a href="dr_296.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_298.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

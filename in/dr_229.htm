@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect Report #229</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #229</h2>
+    <a href="dr_228.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_230.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Project Editor (Larry Jones)<br>
+     <b>Submission Date:</b> 2000-04-10<br>
+     <b>Source:</b><br>
+     <b>Reference Document:</b> N/A<br>
+     <b>Version:</b> 1.4<br>
+     <b>Date:</b> 2001-09-18 16:19:49<br>
+     <b>Subject:</b> <tt><b>localeconv() *_sep_by_space</b></tt>
+    table entries issues.</p>
+
+    <p><b>Summary</b><br>
+     The <tt><b>int_n_sep_by_space</b></tt> and
+    <tt><b>int_p_sep_by_space</b></tt> table entries in 7.11.1.1#10
+    are incorrect.</p>
+
+    <p>The <tt><b>n_sep_by_space</b></tt> entry for the Netherlands
+    should be a 2.</p>
+    <hr>
+
+    <p><b>Technical Corrigendum</b><br>
+     In 7.11.2.1 paragraph 9:</p>
+
+    <ul>
+      <li>remove the word "the" from the first sentence (to
+      indicate that the example is not definitive)</li>
+
+      <li>replace the names of the countries Finland, Italy,
+      Netherlands and Switzerland with Country1, Country2, Country3
+      and Country4 respectively.</li>
+    </ul>
+    <br>
+     In 7.11.2.1 paragraph 10: 
+
+    <ul>
+      <li>replace the word "are" with the words "could be" in the
+      first sentence</li>
+
+      <li>replace the names of the countries Finland, Italy,
+      Netherlands and Switzerland with Country1, Country2, Country3
+      and Country4 respectively</li>
+
+      <li>change the <tt><b>n_sep_by_space</b></tt> table entry for
+      Country3 from <tt><b>1</b></tt> to <tt><b>2</b></tt></li>
+
+      <li>change all the <tt><b>int_p_sep_by_space</b></tt> table
+      entries from <tt><b>0</b></tt> to <tt><b>1</b></tt></li>
+
+      <li>Change the <tt><b>int_n_sep_by_space</b></tt> table
+      entries for Country1 and Country3 from <tt><b>0</b></tt> to
+      <tt><b>2</b></tt> and for Country2 and Country3 from
+      <tt><b>0</b></tt> to <tt><b>1</b></tt>.</li>
+    </ul>
+
+    <p><br>
+     <a href="dr_228.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_230.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

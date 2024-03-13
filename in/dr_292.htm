@@ -1,0 +1,327 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #292</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #292</h2>
+    <a href="dr_291.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_293.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b>J. Benito (convener)<br>
+     <b>Submission Date:</b> 2003-09-18<br>
+     <b>Source:</b> Convener<br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1025.htm">ISO/IEC
+    WG14 N1025</a><br>
+     <b>Version:</b> 1.3<br>
+     <b>Date:</b> 2006-04-04<br>
+     <b>Subject:</b>Use of the word <i>variable</i>.</p>
+
+    <p><b>Summary</b></p>
+    Change the use of <i>variable</i> to <i>object</i> in those
+    instances where the Standard is referring to an object.<br>
+     <br>
+     
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p><i>EXAMPLE 2, 5.1.2.3</i>, change</p>
+
+    <blockquote>
+      the value of each variable to size <tt><b>int</b></tt>
+    </blockquote>
+    to 
+
+    <blockquote>
+      the value of each object to size <tt><b>int</b></tt>
+    </blockquote>
+    <br>
+     <br>
+     
+
+    <p><i>Footnote 41</i>, change</p>
+
+    <blockquote>
+      Thus, an automatic variable can be initialized to a trap
+      representation without causing undefined behavior, but the
+      value of the variable cannot be used until a proper value is
+      stored in it.
+    </blockquote>
+    to 
+
+    <blockquote>
+      Thus, an automatic object can be initialized to a trap
+      representation without causing undefined behavior, but the
+      value of the object cannot be used until a proper value is
+      stored in it.
+    </blockquote>
+    <br>
+     <br>
+     
+
+    <p><i>EXAMPLE 1, 6.5.16.1</i>, change</p>
+
+    <blockquote>
+      Therefore, for full portability, the variable
+      <tt><b>c</b></tt> should be declared as <tt><b>int</b></tt>.
+    </blockquote>
+    to 
+
+    <blockquote>
+      Therefore, for full portability, the object <tt><b>c</b></tt>
+      should be declared as <tt><b>int</b></tt>.
+    </blockquote>
+    <br>
+     <br>
+     
+
+    <p><i>EXAMPLE, 6.7.5.1</i>, change</p>
+
+    <blockquote>
+      EXAMPLE The following pair of declarations demonstrates the
+      difference between a ``variable pointer to a constant value''
+      and a ``constant pointer to a variable value''.
+    </blockquote>
+    to 
+
+    <blockquote>
+      EXAMPLE The following pair of declarations demonstrates the
+      difference between a ``object pointer to a constant value''
+      and a ``constant pointer to a object value''.
+    </blockquote>
+    <br>
+     <br>
+     
+
+    <p><i>6.8.5.3 #1</i>, change</p>
+
+    <blockquote>
+      If <i>clause-1</i> is a declaration, the scope of any
+      variables it declares is the remainder of the declaration and
+      the entire loop, including the other two expressions;
+    </blockquote>
+    to 
+
+    <blockquote>
+      If <i>clause-1</i> is a declaration, the scope of any objects
+      it declares is the remainder of the declaration and the
+      entire loop, including the other two expressions;
+    </blockquote>
+    <br>
+     <br>
+     
+
+    <p><i>Footnote 134</i>, change</p>
+
+    <blockquote>
+      Thus, <i>clause-1</i> specifies initialization for the loop,
+      possibly declaring one or more variables for use in the loop;
+    </blockquote>
+    to 
+
+    <blockquote>
+      Thus, <i>clause-1</i> specifies initialization for the loop,
+      possibly declaring one or more objects for use in the loop;
+    </blockquote>
+    <br>
+     <br>
+     
+
+    <p><i>Footnote 165</i>, change</p>
+
+    <blockquote>
+      For a variable <tt><b>z</b></tt> of complex type, <tt><b>z ==
+      creal(z) + cimag(z)*I</b></tt>.
+    </blockquote>
+    to 
+
+    <blockquote>
+      For the object <tt><b>z</b></tt> of complex type, <tt><b>z ==
+      creal(z) + cimag(z)*I</b></tt>.
+    </blockquote>
+    <br>
+     <br>
+     
+
+    <p><i>Footnote 166</i>, change</p>
+
+    <blockquote>
+      For a variable <tt><b>z</b></tt> of complex type, <tt><b>z ==
+      creal(z) + cimag(z)*I</b></tt>.
+    </blockquote>
+    to 
+
+    <blockquote>
+      For the object <tt><b>z</b></tt> of complex type, <tt><b>z ==
+      creal(z) + cimag(z)*I</b></tt>.
+    </blockquote>
+    <br>
+     <br>
+     
+
+    <p><i>7.6, #1,</i> change</p>
+
+    <blockquote>
+      A floating-point status flag is a system variable whose value
+      is set (but never cleared) when a floating-point exception is
+      raised,
+    </blockquote>
+    to 
+
+    <blockquote>
+      A floating-point status flag is a system object whose value
+      is set (but never cleared) when a floating-point exception is
+      raised,
+    </blockquote>
+    <br>
+     <br>
+     
+
+    <p><i>7.6, #1,</i> change</p>
+
+    <blockquote>
+      A floating-point control mode is a system variable whose
+      value may be set by the user to affect the subsequent
+      behavior of floating-point arithmetic.
+    </blockquote>
+    to 
+
+    <blockquote>
+      A floating-point control mode is a system object whose value
+      may be set by the user to affect the subsequent behavior of
+      floating-point arithmetic.
+    </blockquote>
+    <br>
+     <br>
+     
+
+    <p><i>F.8.1,</i> change</p>
+
+    <blockquote>
+      The flags and modes in the floating-point environment may be
+      regarded as global variables;
+    </blockquote>
+    to 
+
+    <blockquote>
+      The flags and modes in the floating-point environment may be
+      regarded as global objects;
+    </blockquote>
+    <br>
+     <br>
+     
+
+    <p><i>Footnote 308</i>, change</p>
+
+    <blockquote>
+      Use of <tt><b>float_t</b></tt> and <tt><b>double_t</b></tt>
+      variables increases the likelihood of translation-time
+      computation.
+    </blockquote>
+    to 
+
+    <blockquote>
+      Use of <tt><b>float_t</b></tt> and <tt><b>double_t</b></tt>
+      objects increases the likelihood of translation-time
+      computation.
+    </blockquote>
+    <br>
+     <br>
+     
+
+    <p>Annex I #2, bullet 11, change</p>
+
+    <blockquote>
+      or an enumeration variable that has the same type
+    </blockquote>
+    to 
+
+    <blockquote>
+      or an enumeration object that has the same type
+    </blockquote>
+    <br>
+     <br>
+     
+    <hr>
+
+    <p><b>Committee Discussion</b><br>
+    </p>
+
+    <ol>
+      <li>No change needed.</li>
+
+      <li>Sec 6.2.6.1 variable is common usage - no change
+      needed.</li>
+
+      <li>No change needed.</li>
+
+      <li>No change needed.</li>
+
+      <li>Change <i>variable</i> to <i>identifiers</i>.</li>
+
+      <li>No change needed.</li>
+
+      <li>No change needed.</li>
+
+      <li>No change needed.</li>
+
+      <li>No change needed.</li>
+
+      <li>No change needed.</li>
+
+      <li>No change needed.</li>
+
+      <li>No change needed.</li>
+
+      <li>No change needed.</li>
+
+      <li>Agree with suggested change.</li>
+    </ol>
+
+    <p><b>Technical Corrigendum</b><br>
+    </p>
+
+    <p><i>6.8.5.3 #1</i>, change</p>
+
+    <blockquote>
+      If clause-1 is a declaration, the scope of any variables it
+      declares is the remainder of the declaration and the entire
+      loop, including the other two expressions;
+    </blockquote>
+    to 
+
+    <blockquote>
+      If clause-1 is a declaration, the scope of any identifiers it
+      declares is the remainder of the declaration and the entire
+      loop, including the other two expressions;
+    </blockquote>
+    <br>
+     <br>
+     
+
+    <p>Annex I #2, bullet 11, change</p>
+
+    <blockquote>
+      or an enumeration variable that has the same type
+    </blockquote>
+    to 
+
+    <blockquote>
+      or an enumeration object that has the same type
+    </blockquote>
+    <br>
+     
+
+    <p><br>
+     <a href="dr_291.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_293.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

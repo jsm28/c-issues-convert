@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #084</TITLE></HEAD><BODY>
+<H2>Defect Report #084</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Clive Feather
+<BR>
+<B>Question</B>
+<BR>
+Item 21 - incomplete type in function declaration
+<BR>
+Consider the following declarations:
+<BR>
+<TT><B>struct tag;<BR>
+extern void (*f) (struct tag);</B></TT>
+<BR>
+At the point of the declaration of <TT><B>f</B></TT>, the type of the parameter 
+is incomplete. Now a parameter is an object (subclause 3.15) with 
+no linkage (subclause 6.1.2.2), but it is unclear whether this is 
+a declaration of the parameter. If it is, then the declaration of 
+<TT><B>f</B></TT> is forbidden by subclause 6.5. If it is not, then the declaration 
+is strictly conforming. Which is the case?
+<BR>
+If the type <TT><B>struct tag</B></TT> is completed before a call to <TT><B>f</B></TT>, 
+is the call strictly conforming? Alternatively, since the declaration 
+of <TT><B>f</B></TT> includes an incomplete type, is it possible to make a call to it at all?
+<BR>
+<B>Response</B>
+<BR>
+From subclause 6.5.2.3, the incomplete type specified by the tag may be used, 
+unless the size of the corresponding object is needed.
+<BR>
+In responding to Defect Reports, the Committee has discussed at
+length when the size of an object is actually required. The C
+Standard is inconclusive with regard to whether or not the size
+of the structure is needed in the example given, leaving the
+behavior undefined.
+<BR>
+The Committee should revisit this issue during the revision of the C Standard.
+<BR>
+<A HREF="dr_083.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_085.html">Next Defect Report</A>
+</BODY></HTML>

@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD html 4.0 transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+    <meta http-equiv="Content-Type" content=
+    "text/html; charset=iso-8859-1">
+    <meta name="GENERATOR" content=
+    "Mozilla/4.7 [en] (Win98; U) [Netscape]">
+
+    <title>Defect report #321</title>
+  </head>
+
+  <body>
+    <center>
+      <h2>Defect Report #321</h2>
+    </center>
+    <a href="dr_320.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_322.htm">Next Defect Report</a> <br>
+     &nbsp; 
+
+    <p><b>Submitter:</b> Nick Stoughton (US)<br>
+     <b>Submission Date:</b> 2005-04-26<br>
+     <b>Source:</b> Austin Group<br>
+     <b>Reference Documents:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/dr_279.htm">DR_279</a>,
+    <a href=
+    "http://www.opengroup.org/austin/aardvark/latest/xbdbug2.txt">Austin
+    Group Aardvark comment XBD ERN 53</a><br>
+     <b>Version:</b> 1.4<br>
+     <b>Date:</b> 2006-04-04<br>
+     <b>Subject:</b> Wide character code values for members of the
+    basic character set</p>
+
+    <p><b>Summary</b></p>
+
+    <p>Originally, Standard C required <tt><b>('x' ==
+    L'x')</b></tt> to hold true when <tt><b>x</b></tt> is a member
+    of the basic character set. This restricted the
+    implementation's choice of <tt><b>wchar_t</b></tt> encoding,
+    and the changes made in response to DR 279 removed this
+    restriction (published as change #58, on page 11 of TC2).
+    However, there is a vast body of existing application code that
+    relies on this formerly normative requirement for
+    portability.</p>
+
+    <p>DR 279 suggested methods to relax the restriction that would
+    make it easier for applications to continue to rely on the
+    relationship between basic characters and their wide character
+    equivalents. The POSIX community strongly urges WG14 to
+    reconsider the change introduced in ISO/IEC 9899:1999 Technical
+    Corrigendum 2 in response to DR 279.</p>
+
+    <p><b>Details</b></p>
+
+    <p>C99 7.17 paragraph 2 specified (before TC2) in part:</p>
+
+    <blockquote>
+      "... 
+
+      <p>&nbsp;&nbsp; <tt><b>wchar_t</b></tt></p>
+
+      <p>which is an integer type whose range of values can
+      represent distinct codes for all members of the largest
+      extended character set specified among the supported locales;
+      the null character shall have the code value zero and each
+      member of the basic character set shall have a code value
+      equal to its value when used as the lone character in an
+      integer character constant."</p>
+    </blockquote>
+
+    <p>TC2 altered this text, removing the phrase:</p>
+
+    <blockquote>
+      <p>" and each member of the basic character set shall have a
+      code value equal to its value when used as the lone character
+      in an integer character constant"</p>
+    </blockquote>
+
+    <p>In the committee discussion for TC2, an alternative approach
+    was proposed:</p>
+
+    <blockquote>
+      "... 
+
+      <p>&nbsp;&nbsp; <tt><b>wchar_t</b></tt></p>
+
+      <p>which is an integer type whose range of values can
+      represent distinct codes for all members of the largest
+      extended character set specified among the supported locales;
+      the null character shall have the code value zero. Each
+      member of the basic character set shall have a code value
+      equal to its value when used as the lone character in an
+      integer character constant if an implementation does not
+      define <tt><b>__STDC_BTOWC_NEQ_WCTOB__</b></tt>."</p>
+    </blockquote>
+
+    <p>The POSIX community, as represented by the Austin Group,
+    would have preferred this solution. Without any method to
+    determine if the restriction applies or not, all applications
+    would be required to make changes that may have performance and
+    efficiency impacts in order to maintain portability. The
+    ISO/IEC 9945:2004 POSIX standard contains words derived from
+    the ISO/IEC 9899:1999 standard:</p>
+
+    <blockquote>
+      <b>wchar_t</b><br>
+       
+
+      <p>Integer type whose range of values can represent distinct
+      wide-character codes for all members of the largest character
+      set specified among the locales supported by the compilation
+      environment: the null character has the code value 0 and each
+      member of the portable character set has a code value equal
+      to its value when used as the lone character in an integer
+      character constant.</p>
+    </blockquote>
+
+    <p>In order to align with TC2, the Austin Group is proposing to
+    change this to:</p>
+
+    <blockquote>
+      <b>wchar_t</b><br>
+       
+
+      <p>Integer type whose range of values can represent distinct
+      wide-character codes for all members of the largest character
+      set specified among the locales supported by the compilation
+      environment: the null character has the code value 0 and each
+      member of the portable character set has a code value equal
+      to its value when used as the lone character in an integer
+      character constant if an implementation does not define
+      <tt><b>__POSIX_BTOWC_NEQ_WCTOB__</b></tt>."</p>
+    </blockquote>
+
+    <p>However, the Austin Group also feels that such a change
+    would be beneficial to all C language users, and not just to
+    the POSIX community, and therefore respectfully suggests that
+    if a future revision or technical corrigendum to ISO/IEC 9899
+    were to be published, a similar change (using
+    <tt><b>__STDC_BTOWC_NEQ_WCTOB__</b></tt> as the macro name)
+    would help application developers understand when and where the
+    restriction applies.</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Suggestion 1 from DR279:</p>
+
+    <p>This change allows an implementation to deviate from the
+    last part of 7.17 paragraph 2 if the macro
+    <tt><b>__STDC_BTOWC_NEQ_WCTOB__</b></tt> is predefined. This
+    would not affect ASCII based systems, but would provide leeway
+    for EBCDIC systems to process Unicode using C.</p>
+
+    <p>Change the last part of 7.17 paragraph 2 as follows:</p>
+
+    <blockquote>
+      "... 
+
+      <p>&nbsp;&nbsp; <tt><b>wchar_t</b></tt></p>
+
+      <p>which is an integer type whose range of values can
+      represent distinct codes for all members of the largest
+      extended character set specified among the supported locales;
+      the null character shall have the code value zero. Each
+      member of the basic character set shall have a code value
+      equal to its value when used as the lone character in an
+      integer character constant if an implementation does not
+      define <tt><b>__STDC_BTOWC_NEQ_WCTOB__</b></tt>."</p>
+    </blockquote>
+
+    <p>A program that requires the wchar_t restriction can check
+    for the macro and cause the translator to put out a diagnostic
+    if the implementation does not support the restriction. This at
+    least would help diagnose porting problems.</p>
+    <br>
+     
+    <hr>
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>Change the last part of 7.17 paragraph 2 as follows:</p>
+
+    <blockquote>
+      <p>&nbsp;&nbsp; <tt><b>wchar_t</b></tt></p>
+
+      <p>which is an integer type whose range of values can
+      represent distinct codes for all members of the largest
+      extended character set specified among the supported locales;
+      the null character shall have the code value zero. Each
+      member of the basic character set shall have a code value
+      equal to its value when used as the lone character in an
+      integer character constant if an implementation does not
+      define <tt><b>__STDC_MB_MIGHT_NEQ_WC__</b></tt>.</p>
+    </blockquote>
+
+    <p><br>
+     <a href="dr_320.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_322.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

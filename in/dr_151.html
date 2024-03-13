@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #151</TITLE></HEAD>
+<BODY><H2>Defect Report #151</H2> 
+<B>Submission Date</B>: 11 Jun 95
+<BR>
+<B>Submittor</B>: DIN
+<BR>
+<B>Source</B>: Jutta Degener
+<BR>
+<B>Question</B>
+<BR>
+<I>This Defect Report was prompted by articles posted to comp.std.c  by
+Bakul Shah, Rex Jaeschke, and Soenke Behrens.</I>
+<BR> DIN-002:
+<BR> The C Standard's specification of what
+<BR>
+<TT>printf("%#.0o", 0);
+</TT><BR> outputs is ambiguous, and compiler vendors have indeed
+interpreted  it differently.
+<BR> For a zero integer value, the descriptions of the <TT><B>#</B></TT>
+flag and  the 0 precision in subclause 7.9.6.1 contradict each other.
+<BR> The <TT><B>#</B></TT> demands that the first digit be zero;
+<BR>
+<TT><B>#</B></TT> The result is to be converted to an "alternate
+form."  For <TT><B>o</B></TT> conversion, it increases the precision,
+if and only if  necessary, to force the first digit of the result to be
+a zero.
+<BR> But a precision of 0 demands that nothing at all be printed.
+<BR>
+<TT><B>o,u,x,X [...]</B></TT> The result of converting a zero value
+with  a precision of zero is no characters.
+<BR> In the hexadecimal case, the description of the <TT><B>#</B></TT>
+flag's effects  has been worded such that the conflict is avoided:
+<BR>
+<TT><B># [...]</B></TT> For <TT><B>x</B></TT> (or <TT><B>X</B></TT>)
+conversion, a nonzero  result will have <TT><B>0x</B></TT> (or <TT><B>
+0X</B></TT>) prefixed to it.
+<BR> If it was intended that the octal case, too, should print nothing,
+ this crucial "nonzero" should be introduced into its description  as
+well.
+<BR>
+<B>Suggested Technical Corrigendum:</B>
+<BR> In subclause 7.9.6.1, replace:
+<BR> For <TT><B>o</B></TT> conversion, it increases the precision, if
+and only  if necessary, to force the first digit of the result to be a
+zero.
+<BR> by:
+<BR> For <TT><B>o</B></TT> conversion, it increases the precision, if
+and only  if necessary, to force the first digit of a nonzero result to
+be a  zero.
+<BR> Response
+<BR> The C Standard is clear enough as is. The call
+<BR>
+<TT>printf("%#.0o", 0)
+</TT><BR> should print <TT><B>0</B></TT>.<BR>
+<A HREF="dr_150.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_152.html">Next Defect Report</A></BODY></HTML>

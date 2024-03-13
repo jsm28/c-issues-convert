@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #272</title>
+  </head>
+
+  <body bgcolor="#FFFFFF">
+    <h2 align="center">Defect Report #272</h2>
+    <a href="dr_271.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_273.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> UK C Panel<br>
+     <b>Submission Date:</b> 2001-09-07<br>
+     <b>Source:</b> Clive D.W. Feather &lt;clive@demon.net&gt;<br>
+     <b>Version:</b> 1.2 <!-- ! year-month-day hour:min:sec -->
+    <br>
+     <b>Date:</b> 2003-10-06<br>
+     <b>Subject:</b> type category</p>
+    <b>Problem</b> 
+
+    <p>The concept of "type category" is defined but is never used
+    in a useful way; it is also used inconsistently. The term and
+    its cognates appear in only six places:</p>
+
+    <table summary="6.2.5">
+      <tr>
+        <td>6.2.5#24:</td>
+
+        <td>defines the term;</td>
+      </tr>
+
+      <tr>
+        <td>6.2.5#25:</td>
+
+        <td>qualified and unqualified versions of types belong to
+        the same category;</td>
+      </tr>
+
+      <tr>
+        <td>6.2.5#27:</td>
+
+        <td>example: <tt><b>(float *)</b></tt> has category
+        "pointer";</td>
+      </tr>
+
+      <tr>
+        <td>6.2.5#28:</td>
+
+        <td>example: <tt><b>(struct tag (*[5])(float))</b></tt> has
+        category "array";</td>
+      </tr>
+
+      <tr>
+        <td>footnote 93:</td>
+
+        <td>"... removes any type qualifiers from the type category
+        of the expression"</td>
+      </tr>
+
+      <tr>
+        <td>footnote 137:</td>
+
+        <td>"The intent is that the type category in a function
+        definition cannot be inherited from a
+        <tt><b>typedef</b></tt>."</td>
+      </tr>
+    </table>
+
+    <p>Note how the use in footnote 93 conflicts with that in #25,
+    and that the use in footnote 137 remains less than clear.</p>
+
+    <p>Having an unnecessary term defined leaves the reader
+    confused to no benefit. The term should be removed and the
+    remaining wording changed.</p>
+
+    <p>Even if the other changes described here are foregone,
+    footnote 93 is in error and should be changed.</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Delete 6.2.5#24.</p>
+
+    <p>In 6.2.5#25, delete "belong to the same type category
+    and".</p>
+
+    <p>In 6.2.5#27, change "Its type category is pointer" to "It is
+    a pointer type".</p>
+
+    <p>In 6.2.5#28, change "Its type category is array" to "It is
+    an array type".</p>
+
+    <p>In footnote 93 change "which removes any type qualifiers
+    from the type category of the expression" to "which removes any
+    type qualifiers from the outermost component of the type of the
+    expression (for example, it removes <tt><b>const</b></tt> but
+    not <tt><b>volatile</b></tt> from the type <tt><b>int volatile
+    *const</b></tt>)".</p>
+
+    <p>In footnote 137 change the first part to:</p>
+
+    <blockquote>
+      The intent is that the fact that the identifier designates a
+      function is shown explicitly and cannot be inherited from a
+      <tt><b>typedef</b></tt>:
+    </blockquote>
+
+    <p>leaving the examples unchanged.</p>
+    <hr>
+
+    <p><b>Committee Discussion</b> (for history only)</p>
+
+    <p>The committee wishes to keep the term "type category" for
+    now, removing the term "type category" from the next revision
+    of the standard should be considered at that time. The text of
+    footnote 93 does use the term incorrectly, but the wording can
+    be changed to use the term correctly - and the parenthetical
+    example provided in the DR can also be incorporated to make the
+    intent even clearer.</p>
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>Change footnote 93.</p>
+
+    <blockquote>
+      "...which removes any type qualifiers that were applied to
+      the type category of the expression (for example, it removes
+      <tt><b>const</b></tt> but not <tt><b>volatile</b></tt> from
+      the type <tt><b>int volatile * const</b></tt>)."
+    </blockquote>
+
+    <p><br>
+     <a href="dr_271.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_273.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

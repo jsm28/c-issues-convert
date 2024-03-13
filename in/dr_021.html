@@ -1,0 +1,26 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #021</TITLE></HEAD><BODY>
+<H2>Defect Report #021</H2>
+<B>Submission Date</B>: 10 Dec 92 <BR>
+<B>Submittor</B>: WG14 <BR>
+<B>Source</B>: X3J11/91-001 (Fred Tydeman) <BR>
+<B>Question</B> 1 <BR>
+What is the result of: <B><TT>printf(&quot;%#.4o&quot;, 345);</TT></B>?
+Is it <B><TT>0531</TT></B> or is it <B><TT>00531</TT></B>? <BR>
+Subclause 7.9.6.1, on page 132, lines 37-38 says: ``For <B><TT>o</TT></B>
+conversion, it increases the precision to force the first digit of the
+result to be a zero.'' <BR>
+Is this a conditional or an unconditional increase in the precision if
+the most significant digit is not already a <B><TT>0</TT></B>? Which is
+the correct interpretation? <BR>
+<B>Correction</B> <BR>
+<B><I>In subclause 7.9.6.1, page 132, lines 37-38, change:</I></B> <BR>
+For <B><TT>o</TT></B> conversion, it increases the precision to force the
+first digit of the result to be a zero. <BR>
+<B><I>to:</I></B> <BR>
+For <B><TT>o</TT></B> conversion, it increases the precision, if and only
+if necessary, to force the first digit of the result to be a zero. <BR>
+<A HREF="dr_020.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_022.html">Next Defect Report</A>
+</BODY></HTML>

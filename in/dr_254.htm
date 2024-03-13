@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #254</title>
+  </head>
+
+  <body bgcolor="#FFFFFF">
+    <h2 align="center">Defect Report #254</h2>
+    <a href="dr_253.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_255.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> UK C Panel<br>
+     <b>Submission Date:</b> 2001-09-07<br>
+     <b>Source:</b> Clive D.W. Feather &lt;clive@demon.net&gt;<br>
+     <b>Version:</b> 1.1<br>
+     <b>Date:</b> 2002-03-06<br>
+     <b>Subject:</b> <tt><b>mbtowc</b></tt> and partial
+    characters</p>
+    <b>Problem</b> 
+
+    <p>If <tt><b>mbtowc()</b></tt> is given a partial character (or
+    an escape sequence that isn't a complete character), it returns
+    -1. However, is it supposed to remember the relevant state
+    information or should it ignore it ?</p>
+
+    <p>Consider an implementation where the character
+    <tt><b>'\xE'</b></tt> starts an alternate shift state and
+    <tt><b>'\xF'</b></tt> returns to the initial shift state. The
+    wide character encodings are:</p>
+
+    <table>
+      <tr>
+        <td width="40">&nbsp;</td>
+
+        <td>initial shift state:</td>
+
+        <td>'x' maps to ASCII codes</td>
+      </tr>
+
+      <tr>
+        <td>
+        </td>
+
+        <td>alternate shift state:</td>
+
+        <td>'x' maps to ASCII codes + 0x100</td>
+      </tr>
+    </table>
+
+    <p>Starting in the initial shift state,</p>
+<pre>
+<tt><b>   mbtowc (&amp;wc, "\xEZ", 2);</b></tt>
+</pre>
+
+    <p>should return 2 and set <tt><b>wc</b></tt> to 0x15A.
+    However, starting in the initial shift state, consider:</p>
+<pre>
+<tt><b>   mbtowc (&amp;wc1, "\xE", 1);
+    mbtowc (&amp;wc2, "Z",   1);</b></tt>
+</pre>
+
+    <p>I would expect that the first call returns -1, leaving
+    <tt><b>wc1</b></tt> unaltered, while the second returns 1 and
+    sets <tt><b>wc2</b></tt> to 0x5A. However, is it permitted for
+    the second to set <tt><b>wc2</b></tt> to 0x15A ? If so, how is
+    an application meant to use <tt><b>mbtowc</b></tt> ?</p>
+
+    <p>[The newer function <tt><b>mbrtowc</b></tt> does not have
+    this problem.]</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>The UK C Panel prefers to add a new return value for this
+    case. To do so, change the main part (see <i>the previous
+    DR</i>) of 7.20.7.2#3 to read:</p>
+
+    <blockquote>
+      <p>If <tt><b>s</b></tt> is a null pointer, the mbtowc
+      function returns a nonzero or zero value, if multibyte
+      character encodings, respectively, do or do not have
+      state-dependent encodings. If <tt><b>s</b></tt> is not a null
+      pointer, the <tt><b>mbtowc</b></tt> function returns the
+      first of the following that applies (given the current
+      conversion state):</p>
+
+      <table>
+        <tr>
+          <td valign="top" width="25%">0</td>
+
+          <td valign="top" width="75%">if <tt><b>s</b></tt> points
+          to the null character</td>
+        </tr>
+
+        <tr>
+          <td valign="top">between 1 and <tt><b>n</b></tt>
+          inclusive</td>
+
+          <td valign="top">if the next <tt><b>n</b></tt> or fewer
+          bytes complete a valid multibyte character (which is the
+          value stored); the value returned is the number of bytes
+          that complete the multibyte character. The value returned
+          will not be greater than that of the
+          <tt><b>MB_CUR_MAX</b></tt> macro.</td>
+        </tr>
+
+        <tr>
+          <td valign="top"><tt><b>(size_t)(-2)</b></tt></td>
+
+          <td valign="top">if the next <tt><b>n</b></tt> bytes
+          contribute to an incomplete (but potentially valid)
+          multibyte character, and all <tt><b>n</b></tt> bytes have
+          been processed (no value is stored).</td>
+        </tr>
+
+        <tr>
+          <td valign="top"><tt><b>(size_t)(-1)</b></tt></td>
+
+          <td valign="top">if an encoding error occurs, in which
+          case the next <tt><b>n</b></tt> or fewer bytes do not
+          contribute to a complete and valid multibyte character
+          (no value is stored); the value of the macro
+          <tt><b>EILSEQ</b></tt> is stored in
+          <tt><b>errno</b></tt>, and the conversion state is
+          unspecified.</td>
+        </tr>
+      </table>
+    </blockquote>
+
+    <p>(note that most of this wording comes from
+    <tt><b>mbrtowc</b></tt>) and delete #4.</p>
+
+    <p>If this option is unacceptable, then append to
+    7.20.7.2#2:</p>
+
+    <blockquote>
+      <p>If the next multibyte character is incomplete or invalid,
+      the shift state is unaffected and nothing is stored.</p>
+    </blockquote>
+    <hr>
+
+    <p><b>Committee Response</b></p>
+
+    <p>The Committee believe the behavior of this example is
+    unspecified. The <tt><b>mbrtowc()</b></tt> function provides a
+    superior migration path, so we are leaving this alone.</p>
+
+    <p><br>
+     <a href="dr_253.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_255.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #111</TITLE></HEAD><BODY>
+<H2>Defect Report #111</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Ron Guilmette
+<BR>
+<B>Question</B>
+<BR>
+ANSI/ISO C Defect report #rfg18:
+<BR>
+Subject: Conversion of pointer-to-qualified type values to type <TT><B>(void*)</B></TT> 
+values.
+<BR>
+Does the following code involve usage which requires a diagnostic 
+from a standard conforming implementation?
+<BR>
+<TT><B>const char *ccp;<BR>
+void *vp;<BR>
+ <BR>
+void test ()<BR>
+	{<BR>
+	vp = ccp;	/*</B><I> diagnostic required? </I><B>*/<BR>
+	}
+</B></TT><BR>
+With respect to this example, the following quotations are relevant.
+<BR>
+Subclause 6.2.2.3:
+<BLOCKQUOTE>
+A pointer to <TT><B>void</B></TT> may be converted
+to or from a pointer to any incomplete or object type.
+</BLOCKQUOTE>
+Subclause 6.3.16.1 (<B>Constraints</B>):
+<BLOCKQUOTE>
+One of the following shall hold:
+<BR>
+...
+<BR>
+- both operands are pointers to qualified or unqualified 
+versions of compatible types, and the type pointed to by the left 
+has all the qualifiers of the type pointed to by the right;
+<BR>
+- one operand is a pointer to an object or incomplete type 
+and the other is a pointer to a qualified or unqualified version of 
+<TT><B>void</B></TT>, and the type pointed to by the left has all the qualifiers 
+of the type pointed to by the right; ...
+</BLOCKQUOTE>
+The rule specified in subclause 6.2.2.3 (and quoted above) makes it 
+unclear whether a value of some pointer-to-qualified-object type may 
+be <I>first</I> implicitly converted to type <TT><B>(void*)</B></TT> and then 
+assigned to a type <TT><B>(void*)</B></TT> variable, or whether such implicit 
+conversion only takes place as an integral part of an otherwise valid 
+assignment operation.
+<BR>
+If the former interpretation of subclause 6.2.2.3 is correct, then 
+the above code example is valid, and no diagnostic is required. If,
+however, the latter interpretation is the correct one, then the code 
+example shown above fails to meet the constraints of subclause 6.3.16.1, 
+and (thus) a diagnostic is required.
+<BR>
+<B>Response</B>
+<BR>
+The constraint in subclause 6.3.16.1 takes precedence over subclause 
+6.2.2.3; therefore a diagnostic is required. Note that the above quote 
+from subclause 6.2.2.3 is incomplete and taken out of context.
+<BR>
+<A HREF="dr_110.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_112.html">Next Defect Report</A>
+</BODY></HTML>

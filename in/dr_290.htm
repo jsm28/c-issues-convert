@@ -1,0 +1,368 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #290</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #290</h2>
+    <a href="dr_289.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_291.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Fred Tydeman (USA)<br>
+     <b>Submission Date:</b> 2003-08-29<br>
+     <b>Source:</b> WG 14<br>
+     <b>Reference Document:</b><br>
+     <b>Version:</b> 1.2<br>
+     <b>Date:</b> 2003-03-06<br>
+     <b>Subject:</b> <tt><b>FLT_EVAL_METHOD</b></tt> and extra
+    precision and/or range</p>
+
+    <p><b>Summary</b></p>
+
+    <p><tt><b>FLT_EVAL_METHOD</b></tt> says that <i>all</i>
+    floating-point operations and operands are evaluated to a
+    format whose range and precision may be greater than required
+    by the type. This contradicts descriptions of assignment and
+    cast. It may contradict return. It may contradict argument
+    passing. It may contradict register variables.</p>
+
+    <p><b>Details from C99+TC1</b></p>
+
+    <p>5.2.4.2.2 Characteristics of floating types
+    &lt;float.h&gt;</p>
+
+    <blockquote>
+      7 The values of operations with floating operands and values
+      subject to the usual arithmetic conversions and of floating
+      constants are evaluated to a format whose range and precision
+      may be greater than required by the type. The use of
+      evaluation formats is characterized by the
+      implementation-defined value of
+      <tt><b>FLT_EVAL_METHOD</b></tt>:<sup>19)</sup><br>
+      <br>
+       
+
+      <p>-1 indeterminable;</p>
+
+      <p>0 evaluate all operations and constants just to the range
+      and precision of the type;</p>
+
+      <p>1 evaluate operations and constants of type float and
+      double to the range and precision of the double type,
+      evaluate long double operations and constants to the range
+      and precision of the long double type;</p>
+
+      <p>2 evaluate all operations and constants to the range and
+      precision of the long double type.</p>
+
+      <p>All other negative values for
+      <tt><b>FLT_EVAL_METHOD</b></tt> characterize
+      implementation-defined behavior.</p>
+
+      <p>19) The evaluation method determines evaluation formats of
+      expressions involving all floating types, not just real
+      types. For example, if <tt><b>FLT_EVAL_METHOD</b></tt> is
+      <tt><b>1</b></tt>, then the product of two <tt><b>float
+      _Complex</b></tt> operands is represented in the
+      <tt><b>double _Complex</b></tt> format, and its parts are
+      evaluated to <tt><b>double</b></tt>.</p>
+    </blockquote>
+    <br>
+     
+
+    <p>5.1.2.3 Program Execution</p>
+
+    <blockquote>
+      12 EXAMPLE 4 Implementations employing wide registers have to
+      take care to honor appropriate semantics. Values are
+      independent of whether they are represented in a register or
+      in memory. For example, an implicit spilling of a register is
+      not permitted to alter the value. Also, an explicit store and
+      load is required to round to the precision of the storage
+      type. In particular, casts and assignments are required to
+      perform their specified conversion. For the fragment
+    </blockquote>
+    <br>
+     
+<pre>
+                double d1, d2;
+                float f;
+                d1 = f = expression;
+                d2 = (float)expressions;
+</pre>
+
+    <blockquote>
+      the values assigned to <tt><b>d1</b></tt> and
+      <tt><b>d2</b></tt> are required to have been converted to
+      <tt><b>float</b></tt>.
+    </blockquote>
+    <br>
+     
+
+    <p>6.3 Conversions</p>
+
+    <blockquote>
+      1 Several operators convert operand values from one type to
+      another automatically. This subclause specifies the result
+      required from such an implicit conversion, as well as those
+      that result from a cast operation (an explicit conversion).
+      The list in 6.3.1.8 summarizes the conversions performed by
+      most ordinary operators; it is supplemented as required by
+      the discussion of each operator in 6.5.
+    </blockquote>
+    <br>
+     
+
+    <p>6.3.1.5 Real floating types</p>
+
+    <blockquote>
+      1 When a <tt><b>float</b></tt> is promoted to
+      <tt><b>double</b></tt> or <tt><b>long double</b></tt>, or a
+      <tt><b>double</b></tt> is promoted to <tt><b>long
+      double</b></tt>, its value is unchanged.<br>
+      <br>
+       
+
+      <p>2 When a <tt><b>double</b></tt> is demoted to
+      <tt><b>float</b></tt>, a <tt><b>long double</b></tt> is
+      demoted to <tt><b>double</b></tt> or <tt><b>float</b></tt>,
+      or a value being represented in greater precision and range
+      than required by its semantic type (see 6.3.1.8) is
+      explicitly converted to its semantic type, if the value being
+      converted can be represented exactly in the new type, it is
+      unchanged. If the value being converted is in the range of
+      values that can be represented but cannot be represented
+      exactly, the result is either the nearest higher or nearest
+      lower representable value, chosen in an
+      implementation-defined manner. If the value being converted
+      is outside the range of values that can be represented, the
+      behavior is undefined.</p>
+    </blockquote>
+    <br>
+     
+
+    <p>6.3.1.8 Usual Arithmetic Conversions</p>
+
+    <blockquote>
+      2 The values of floating operands and of the results of
+      floating expressions may be represented in greater precision
+      and range than that required by the type; the types are not
+      changed thereby.<sup>52)</sup>
+    </blockquote>
+    <br>
+     
+
+    <blockquote>
+      52) The cast and assignment operators are still required to
+      perform their specified conversions as described in 6.3.1.4
+      and 6.3.1.5.
+    </blockquote>
+    <br>
+     
+
+    <p>6.5.4 Cast operators</p>
+
+    <p>Semantics</p>
+
+    <blockquote>
+      4 Preceding an expression by a parenthesized type name
+      converts the value of the expression to the named type. This
+      construction is called a cast.<sup>85)</sup> A cast that
+      specifies no conversion has no effect on the type or value of
+      an expression.<sup>86)</sup>
+    </blockquote>
+    <br>
+     
+
+    <blockquote>
+      86) If the value of the expression is represented with
+      greater precision or range than required by the type named by
+      the cast (6.3.1.8), then the cast specifies a conversion even
+      if the type of the expression is the same as the named type.
+    </blockquote>
+    <br>
+     
+
+    <p>6.5.2.2 Function calls</p>
+
+    <p>Semantics</p>
+
+    <blockquote>
+      4 An argument may be an expression of any object type. In
+      preparing for the call to a function, the arguments are
+      evaluated, and each parameter is assigned the value of the
+      corresponding argument.<sup>78)</sup>
+    </blockquote>
+    <br>
+     
+
+    <p>6.9.1 Function definitions</p>
+
+    <p>Semantics</p>
+
+    <blockquote>
+      10 On entry to the function, the size expressions of each
+      variably modified parameter are evaluated and the value of
+      each argument expression is converted to the type of the
+      corresponding parameter as if by assignment. (Array
+      expressions and function designators as arguments were
+      converted to pointers before the call.)
+    </blockquote>
+    <br>
+     
+
+    <p>6.8.6.4 The return statement</p>
+
+    <p>Semantics</p>
+
+    <blockquote>
+      3 If a return statement with an expression is executed, the
+      value of the expression is returned to the caller as the
+      value of the function call expression. If the expression has
+      a type different from the return type of the function in
+      which it appears, the value is converted as if by assignment
+      to an object having the return type of the
+      function.<sup>136)</sup>
+    </blockquote>
+    <br>
+     
+
+    <blockquote>
+      136) The return statement is not an assignment. The overlap
+      restriction of subclause 6.5.16.1 does not apply to the case
+      of function return.
+    </blockquote>
+    <br>
+     
+
+    <p>6.7.1 Storage-class specifiers</p>
+
+    <p>Semantics</p>
+
+    <blockquote>
+      4 A declaration of an identifier for an object with
+      storage-class specifier register suggests that access to the
+      object be as fast as possible. The extent to which such
+      suggestions are effective is
+      implementation-defined.<sup>100)</sup>
+    </blockquote>
+    <br>
+     
+
+    <blockquote>
+      100) The implementation may treat any register declaration
+      simply as an auto declaration. However, whether or not
+      addressable storage is actually used, the address of any part
+      of an object declared with storage-class specifier register
+      cannot be computed, either explicitly (by use of the unary
+      &amp; operator as discussed in 6.5.3.2) or implicitly (by
+      converting an array name to a pointer as discussed in
+      6.3.2.1). Thus, the only operator that can be applied to an
+      array declared with storage-class specifier register is
+      <tt><b>sizeof</b></tt>.
+    </blockquote>
+    <br>
+     
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>In 5.2.4.2.2 Characteristics of floating types
+    &lt;float.h&gt;, change paragraph 7 to:</p>
+
+    <blockquote>
+      Except for assignment and cast (which remove all extra range
+      and precision), the values of operations with floating
+      operands and values subject to the usual arithmetic
+      conversions and of floating constants are evaluated to a
+      format whose range and precision may be greater than required
+      by the type. The use of evaluation formats is characterized
+      by the implementation-defined value of
+      <tt><b>FLT_EVAL_METHOD</b></tt>:<sup>19)</sup>
+    </blockquote>
+    <br>
+     
+
+    <p>In 6.8.6.4 The return statement, add to footnote 136:</p>
+
+    <blockquote>
+      The representation of floating-point values may have wider
+      range or precision and is determined by
+      <tt><b>FLT_EVAL_METHOD</b></tt>. A cast may be used to remove
+      this extra range and precision.
+    </blockquote>
+    <br>
+     
+
+    <p>In 5.1.2.3 Program Execution, paragraph 12, change the
+    second sentence to:</p>
+
+    <blockquote>
+      Implementation created intermediate values are independent of
+      whether they are represented in a register or in memory.
+    </blockquote>
+    <br>
+     
+
+    <p>In 6.7.1 Storage-class specifiers, add to paragraph 4:</p>
+
+    <blockquote>
+      A floating object with storage-class register may have
+      greater range or precision than an auto object of the same
+      type.
+    </blockquote>
+    <br>
+     
+    <hr>
+
+    <p><b>Committee Discussion</b><br>
+    </p>
+
+    <p>A floating object with storage-class
+    <tt><b>register</b></tt> shall not have greater range or
+    precision than an <tt><b>auto</b></tt> object of the same type.
+    The reason for this is the assignment operator. The only way a
+    register variable may be altered is via assignment; and
+    assignment removes all extra range and precision.</p>
+    <b>Technical Corrigendum</b> <br>
+     <br>
+     
+
+    <p>In 5.2.4.2.2 Characteristics of floating types
+    <tt><b>&lt;float.h&gt;</b></tt>, change paragraph 7 to:</p>
+
+    <blockquote>
+      Except for assignment and cast (which remove all extra range
+      and precision), the values of operations with floating
+      operands and values subject to the usual arithmetic
+      conversions and of floating constants are evaluated to a
+      format whose range and precision may be greater than required
+      by the type. The use of evaluation formats is characterized
+      by the implementation-defined value of
+      <tt><b>FLT_EVAL_METHOD</b></tt>:<sup>19)</sup>
+    </blockquote>
+    <br>
+     
+
+    <p>In 6.8.6.4 The return statement, add to footnote 136:</p>
+
+    <blockquote>
+      The representation of floating-point values may have wider
+      range or precision and is determined by
+      <tt><b>FLT_EVAL_METHOD</b></tt>. A cast may be used to remove
+      this extra range and precision.
+    </blockquote>
+    <br>
+     
+
+    <p><br>
+     <a href="dr_289.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_291.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

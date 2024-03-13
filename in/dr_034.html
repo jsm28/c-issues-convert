@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #034</TITLE></HEAD><BODY>
+<H2>Defect Report #034</H2>
+
+<P><B>Submission Date</B>: 10 Dec 92 <BR>
+<B>Submittor</B>: WG14 <BR>
+<B>Source</B>: X3J11/91-038 (Stephen D. Clamage) <BR>
+<B>Question</B> 1 <BR>
+In <I>The C Users Journal,</I> Vol. 8 No. 7, July 1990, P.J. Plauger gives
+the following example on page 10: <BR>
+<B><TT>extern int a[];<BR>
+int f() {<BR>
+extern int a[10];<BR>
+...<BR>
+}<BR>
+int sizea = sizeof a; /*</TT></B><TT><I> error</I><B> */ <BR>
+</B></TT>Mr. Plauger claims that the size information from the inner scope
+``evaporates'' when its scope ends, and the operand to the <B><TT>sizeof</TT></B>
+operator has an incomplete type. We cannot find unequivocal support for
+this claim in the standard. <BR>
+Subclause 6.1.2.2 says on page 21, lines 10-11: </P>
+
+<BLOCKQUOTE>
+<P>... each instance of a particular identifier with <I>external linkage</I>
+denotes the same object or function. </P>
+</BLOCKQUOTE>
+
+<P>Combining subclause 6.1.2.6 and subclause 6.5.4.2, we find that the
+two declarations for <B><TT>a</TT></B> are compatible and we may construct
+a composite type. The composite type is array of 10 <B><TT>int</TT></B>.
+<BR>
+Subclause 6.1.2.6 on page 25, lines 19-20, discusses the case of two declarations
+in the same scope, but does not discuss the case of two declarations for
+the same object in different scopes. <BR>
+But subclause 6.1.2.5 says on page 24, lines 8-9: </P>
+
+<BLOCKQUOTE>
+<P>An array type of unknown size is an incomplete type. It is completed,
+for an identifier of that type, by specifying the size in a later declaration
+(with internal or external linkage). </P>
+</BLOCKQUOTE>
+
+<P>The identifier <B><TT>a</TT></B> appears in two declarations, and denotes
+the same object. The second declaration completes the type for the identifier
+in the inner scope. The two identifiers denote the same object, so it would
+seem reasonable to say the type of that object is completed. <BR>
+Is the size information in the inner scope lost upon leaving the scope?
+<BR>
+<B>Response</B> <BR>
+Is the size information in the inner scope lost upon leaving the scope?
+<BR>
+Answer: Yes. <BR>
+See the correction in response to <A HREF="dr_011.html">Defect Report #011</A>. <BR>
+<B>Question</B> 2 <BR>
+If no size information is known in the outer scope, then consider the following
+example: <BR>
+<B><TT>extern int a[];<BR>
+int f() {<BR>
+extern int a[10];<BR>
+...<BR>
+}<BR>
+int g() {<BR>
+extern int a[20]; /*</TT></B><TT><I> error?</I><B> */<BR>
+...<BR>
+} <BR>
+</B></TT>Is this legal? If not, does it violate a constraint? <BR>
+<B>Response</B> <BR>
+The example exhibits undefined behavior. It does not violate a constraint.
+Subclause 6.1.2.2, page 21, lines 10-13 describe ``same object;'' subclause
+6.1.2.6, page 25, lines 9-10 require that ``All declarations that refer
+to the same object or function shall have compatible type; otherwise, the
+behavior is undefined.'' <BR>
+</P>
+
+<A HREF="dr_033.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_035.html">Next Defect Report</A>
+</BODY></HTML>

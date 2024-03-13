@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #123</TITLE></HEAD><BODY>
+<H2>Defect Report #123</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Ron Guilmette
+<BR>
+<B>Question</B>
+<BR>
+ANSI/ISO C Defect Report #rfg30:
+<BR>
+Subject: ``Type categories'' and qualified types.
+<BR>
+a) Is the following code strictly conforming?
+<BR>
+b) Must a conforming implementation correctly translate 
+the following code?
+<BR>
+<TT><B>enum E1 { enumerator1 = (const int) 9 };	/*</B><I> ? </I><B>*/<BR>
+enum E2 { enumerator2 = (volatile int) 9 };	/*</B><I> ? </I><B>*/
+</B></TT><BR>
+Background:
+<BR>
+Subclause 6.5.2.2 (<B>Constraints</B>):
+<BLOCKQUOTE>
+The expression that defines the value of an enumeration constant 
+shall be an integral constant expression that has a value representable 
+as an <TT><B>int</B></TT>.
+</BLOCKQUOTE>
+Subclause 6.4 (<B>Semantics</B>):
+<BLOCKQUOTE>
+Cast operators in an integral constant expression shall only 
+convert arithmetic types to integral types, ...
+</BLOCKQUOTE>
+Subclause 6.1.2.5:
+<BLOCKQUOTE>
+The type <TT><B>char</B></TT>, the signed and unsigned integer types, 
+and the enumerated types are collectively called <I>integral types.</I>
+</BLOCKQUOTE>
+Subclause 6.1.2.5:
+<BLOCKQUOTE>
+Any type so far mentioned mentioned
+is an unqualified type. Each <I>unqualified 
+type</I> has three corresponding <I>qualified versions</I> of its type:
+... The 
+qualified or unqualified versions of a type are distinct types that 
+belong to the same type category ...
+</BLOCKQUOTE>
+The problem is with the term ``type category.'' I have been 
+unable to find any actual definition of this term in the C Standard. 
+My assumption is that <I>integral types</I> constitute one such ``type 
+category,'' but it would be nice to have the Committee's assurances 
+about this. More specifically, I think that it would be advisable 
+to add a statement somewhat like the following one just after the 
+first paragraph in subclause 6.1.2.5:
+<BLOCKQUOTE>
+In addition to the partitioning of types into <I>object types, 
+function types,</I> and <I>incomplete types,</I> each type is also 
+said to belong to some <I>type category.</I> The <I>type categories</I> 
+are <I>integral types, floating types, pointer types, structure types, 
+union types, array types, void types,</I> and <I>function types.</I>
+</BLOCKQUOTE>
+<B>Response</B>
+<BR>
+a) Yes.
+<BR>
+b) Yes.
+<BR>
+As stated in subclause 6.5.3, ``The properties associated with
+qualified types are meaningful only for expressions that are
+lvalues.'' The definition of ``type category''
+is given in subclause 6.1.2.5, in the paragraph preceding your
+last citation.
+<BR>
+<A HREF="dr_122.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_124.html">Next Defect Report</A>
+</BODY></HTML>

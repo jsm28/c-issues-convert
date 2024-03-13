@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #284</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #284</h2>
+    <a href="dr_283.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_285.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Douglas Walls (US)<br>
+     <b>Submission Date:</b> 2003-02-11<br>
+     <b>Source:</b> J11<br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n995.htm">ISO/IEC
+    WG14 N995</a><br>
+     <b>Version:</b> 1.2<br>
+     <b>Date:</b> 2004-03-05<br>
+     <b>Subject:</b> Does &lt;math.h&gt; define
+    <tt><b>INT_MIN</b></tt> and <tt><b>INT_MAX</b></tt>?</p>
+
+    <p><b>Summary</b></p>
+
+    <p>&lt;math.h&gt; defines macros in terms of INT_MIN and
+    INT_MAX. &lt;math.h&gt; defines functions returning the value
+    of INT_MIN. It is unclear if inclusion of &lt;math.h&gt;
+    defines INT_MIN and INT_MAX or also includes
+    &lt;limits.h&gt;.</p>
+
+    <p><b>Details</b></p>
+
+    <p>The description of &lt;math.h&gt; in C99 (section 7.12) says
+    that the macros FP_ILOGB0 and FP_ILOGBNAN are defined in
+    &lt;math.h&gt; with values, respectively INT_MIN or -INT_MAX
+    and INT_MAX or INT_MIN, but never says that INT_MIN and INT_MAX
+    are defined in &lt;math.h&gt;.</p>
+
+    <p>The synopsis of 7.12.6.5 The ilogb function says:</p>
+<pre>
+        #include &lt;math.h&gt;
+        int ilogb(double x);
+        int ilogbf(float x);
+        int ilogbl(long double x);
+</pre>
+    The description of 7.12.6.5 The ilogb functions says "if x is
+    infinite they compute the value INT_MAX;". 
+
+    <p>Does this mean that &lt;math.h&gt; includes
+    &lt;limits.h&gt;?</p>
+
+    <p>Does this mean that &lt;math.h&gt; defines INT_MIN and
+    INT_MAX?</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+    <hr>
+
+    <p><b>Committee Response</b></p>
+    No Standard library header includes another Standard library
+    header. The header <tt><b>&lt;math.h&gt;</b></tt> does not
+    define <tt><b>INT_MIN</b></tt> or <tt><b>INT_MAX</b></tt>. A
+    program that wants to check the return value for equality with
+    one of these macros must include
+    <tt><b>&lt;limits.h&gt;</b></tt>. 
+
+    <p><br>
+     <a href="dr_283.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_285.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

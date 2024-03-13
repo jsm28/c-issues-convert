@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #125</TITLE></HEAD><BODY>
+<H2>Defect Report #125</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Ron Guilmette
+<BR>
+<B>Question</B>
+<BR>
+ANSI/ISO C Defect Report #rfg32:
+<BR>
+Subject: Using things declared as ``<TT><B>extern</B></TT>
+(qualified) <TT><B>void</B></TT>.''
+<BR>
+May a conforming implementation fail to correctly 
+translate a translation unit containing the following declarations?
+<BR>
+<TT><B>extern const void etext;<BR>
+const void *vp = &amp;etext;
+</B></TT><BR>
+Background:
+<BR>
+<A HREF="dr_012.html">Defect Report #012</A> discusses at length the issue of applying unary 
+<TT><B>&</B></TT> to an expression whose type is some void type. The conclusion 
+of that discussion seem to be that although unary <TT><B>&</B></TT> <I>may 
+not</I> be applied to an expression having <I>the</I>
+<TT><B>void</B></TT> type (because 
+such expressions are not lvalues) it <I>is</I> permissible to apply 
+unary <TT><B>&</B></TT> to an expression whose type is some qualified version 
+of <TT><B>void</B></TT>. The text of the interpretation
+for <A HREF="dr_012.html">Defect Report #012</A> even goes so far 
+as to actively recommend the practice of declaring things to be <TT><B>extern</B></TT> 
+and to have some qualified void type (so that the address may then 
+be taken).
+<BR>
+The question raised herein is a different one. Tom Pennello has pointed 
+out the following rule from the second <B>Semantics</B> paragraph of subclause 
+6.7:
+<BLOCKQUOTE>
+If an identifier declared with external linkage is used in an 
+expression (other than as part of the operand of a <TT><B>sizeof</B></TT> operator), 
+somewhere in the entire program there shall be exactly one external 
+definition for the identifier; ...
+</BLOCKQUOTE>
+Thus, as Tom has noted, applying unary <TT><B>&</B></TT> to an entity declared 
+to be both <TT><B>extern</B></TT>
+and of some qualified void type is a ``use'' 
+of that entity which would necessarily force you to supply a definition 
+of that entity, somewhere in the program. But as Tom has further noted, 
+there is simply no way to accomplish that (in a strictly conforming 
+program) because of the following rule (given in subclause 6.5):
+<BLOCKQUOTE>
+All declarations ... that refer to the same object or function shall 
+specify compatible types.
+</BLOCKQUOTE>
+Thus, if you either define or fail to define <TT><B>etext</B></TT>, it would 
+appear that the behavior is undefined. Is this a correct interpretation?
+<BR>
+(Footnote: It would appear that a strictly conforming program may 
+contain a mere declaration of an <TT><B>extern</B></TT>
+entity whose type is any qualified 
+or unqualified void type, but that any use of such an entity within 
+an expression, other than within a <TT><B>sizeof</B></TT> expression, renders 
+the program not strictly conforming.)
+<BR>
+<B>Response</B>
+<BR>
+Applying <TT><B>&</B></TT> to an identifier of type
+<TT><B>const void</B></TT>
+has undefined behavior.
+Thus an implementation can define any semantics it wishes.
+A strictly conforming program cannot contain such a construct.
+<BR>
+<A HREF="dr_124.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_126.html">Next Defect Report</A>
+</BODY></HTML>

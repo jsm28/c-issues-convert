@@ -1,0 +1,359 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #301</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #301</h2>
+    <a href="dr_300.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_302.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Fred Tydeman (USA)<br>
+     <b>Submission Date:</b> 2004-08-27<br>
+     <b>Source:</b> WG 14<br>
+     <b>Reference Document:</b><br>
+     <b>Version:</b> 1.1<br>
+     <b>Date:</b> 2006-03-05<br>
+     <b>Subject:</b> Meaning of FE_* macros in &lt;fenv.h&gt;</p>
+
+    <p><b>Summary</b></p>
+
+    <p>Exactly WHERE are the MEANINGS of any of the FE_* macros
+    defined in cases where &lt;fenv.h&gt; applies to an environment
+    that is not IEEE-754 (IEC 60559)?</p>
+
+    <p><b>Details</b></p>
+
+    <p>5.1.2.3p2 Program execution says:</p>
+
+    <blockquote>
+      Accessing a volatile object, modifying an object, modifying a
+      file, or calling a function that does any of those operations
+      are all side effects,<sup>11)</sup> which are changes in the
+      state of the execution environment. Evaluation of an
+      expression may produce side effects.
+    </blockquote>
+
+    <blockquote>
+      11) The IEC 60559 standard for binary floating-point
+      arithmetic requires certain user-accessible status flags and
+      control modes. Floating-point operations implicitly set the
+      status flags; modes affect result values of floating-point
+      operations. Implementations that support such floating-point
+      state are required to regard changes to it as side effects
+      see annex F for details. The floating-point environment
+      library &lt;fenv.h&gt; provides a programming facility for
+      indicating when these side effects matter, freeing the
+      implementations in other cases.
+    </blockquote>
+
+    <p>The above footnote is the closest I can find to a
+    requirement that there is any relationship between
+    floating-point operations, status flags, and modes. But, it is
+    a footnote, and only for IEC 60559.</p>
+
+    <p>5.2.4.2.2p6 Characteristics of floating types
+    &lt;float.h&gt; has:</p>
+
+    <blockquote>
+      The rounding mode for floating-point addition is
+      characterized by the implementation-defined value of
+      FLT_ROUNDS:<sup>18)</sup> 
+<pre>
+ -1 indeterminable
+  0 toward zero
+  1 to nearest
+  2 toward positive infinity
+  3 toward negative infinity
+</pre>
+      All other values for FLT_ROUNDS characterize
+      implementation-defined rounding behavior.
+    </blockquote>
+
+    <blockquote>
+      18) Evaluation of FLT_ROUNDS correctly reflects any
+      execution-time change of rounding mode through the function
+      fesetround in &lt;fenv.h&gt;.
+    </blockquote>
+
+    <p>The above mentions, but does not define, some rounding
+    modes.</p>
+
+    <p>7.6p5 Floating-point environment &lt;fenv.h&gt; has:</p>
+
+    <blockquote>
+      Each of the macros 
+<pre>
+   FE_DIVBYZERO
+   FE_INEXACT
+   FE_INVALID
+   FE_OVERFLOW
+   FE_UNDERFLOW
+</pre>
+      is defined if and only if the implementation supports the
+      floating-point exception by means of the functions in 7.6.2.
+      <sup>175)</sup> Additional implementation-defined
+      floating-point exceptions, with macro definitions beginning
+      with FE_ and an uppercase letter, may also be specified by
+      the implementation.
+    </blockquote>
+
+    <blockquote>
+      175) The implementation supports an exception if there are
+      circumstances where a call to at least one of the functions
+      in 7.6.2, using the macro as the appropriate argument, will
+      succeed. It is not necessary for all the functions to succeed
+      all the time.
+    </blockquote>
+
+    <p>The above mentions, but does not define, some floating-point
+    exceptions.</p>
+
+    <p>If an implementation defines a new floating-point exception,
+    FE_BLUEMOON, such that:</p>
+
+    <ul>
+      <li><b><tt>feraiseexcept(FE_BLUEMOON)</tt></b> succeeds,</li>
+
+      <li><b><tt>fetestexcept(FE_BLUEMOON)</tt></b> returns the
+      current status of that "exception",</li>
+
+      <li><b><tt>feclearexcept(FE_BLUEMOON)</tt></b> succeeds,</li>
+    </ul>
+    but FE_BLUEMOON is NOT tied to any floating-point operation, is
+    this valid "support"? <br>
+     <br>
+     
+
+    <p>7.6p7 Floating-point environment &lt;fenv.h&gt; has:</p>
+
+    <blockquote>
+      Each of the macros 
+<pre>
+   FE_DOWNWARD
+   FE_TONEAREST
+   FE_TOWARDZERO
+   FE_UPWARD
+</pre>
+      is defined if and only if the implementation supports getting
+      and setting the represented rounding direction by means of
+      the fegetround and fesetround functions. Additional
+      implementation-defined rounding directions, with macro
+      definitions beginning with FE_ and an uppercase letter, may
+      also be specified by the implementation. The defined macros
+      expand to integer constant expressions whose values are
+      distinct nonnegative values.<sup>176)</sup>
+    </blockquote>
+
+    <blockquote>
+      176) Even though the rounding direction macros may expand to
+      constants corresponding to the values of FLT_ROUNDS, they are
+      not required to do so.
+    </blockquote>
+
+    <p>The above mentions, but does not define, some rounding
+    modes.</p>
+
+    <p>F.8.1p1 Global transformations says:</p>
+
+    <blockquote>
+      Floating-point arithmetic operations and external function
+      calls may entail side effects which optimization shall honor,
+      at least where the state of the FENV_ACCESS pragma is "on".
+      The flags and modes in the floating-point environment may be
+      regarded as global variables; floating-point operations (+,
+      *, etc.) implicitly read the modes and write the flags.
+    </blockquote>
+
+    <p>The above is a clear description of how modes and flags
+    interact with operations, but it applies only to IEEE-754.</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>7.6 Floating-point environment &lt;fenv.h&gt;: Add to
+    paragraph 5:</p>
+
+    <blockquote>
+      <p>A necessary condition for an implementation to support a
+      given FE_* exception is that it implicitly occur as a side
+      effect of at least one floating-point operation. Just having
+      <b><tt>feraiseexcept()</tt></b>,
+      <b><tt>fetestexcept()</tt></b> and
+      <b><tt>feclearexcept()</tt></b> succeed for a given FE_*
+      exception is not sufficient.</p>
+
+      <p><b><tt>FE_INVALID</tt></b> should be a side-effect of:</p>
+
+      <ul>
+        <li>operations on signaling NaN or trap
+        representation,</li>
+
+        <li>adding infinities with different signs,</li>
+
+        <li>subtracting infinities with the same signs,</li>
+
+        <li>multipling zero by infinity,</li>
+
+        <li>dividing zero by zero and infinity by infinity,</li>
+
+        <li>remainder (x REM y), where x is infinite or y is
+        zero,</li>
+
+        <li>square root of a negative number (excluding -0.0),</li>
+
+        <li>converting a too large to represent floating value to
+        an integer [both signed and unsigned], e.g., int i =
+        INFINITY; unsigned int ui = -1.0;</li>
+
+        <li>comparison with a relational operator (&lt;, &lt;=,
+        &gt;=, &gt;) when (at least) one of the operands is a
+        NaN.</li>
+      </ul>
+      <br>
+      <br>
+       
+
+      <p><b><tt>FE_DIVBYZERO</tt></b> should be a side-effect of
+      dividing a non-zero finite number by zero, e.g., 1.0/0.0.
+      There should be no exception when dividing an infinity by
+      zero, nor when dividing a NaN by zero.</p>
+
+      <p>It is implementation defined as to whether FE_INVALID,
+      FE_DIVBYZERO, or no exception is raised for zero / zero.</p>
+
+      <p><b><tt>FE_OVERFLOW</tt></b> should be a side-effect of
+      producing a rounded floating-point result (assuming an
+      unbounded exponent range) larger in magnitude than the
+      largest finite number.</p>
+
+      <p><b><tt>FE_UNDERFLOW</tt></b> should be a side-effect of
+      producing a rounded floating-point result (assuming an
+      unbounded exponent range) smaller in magnitude than the
+      smallest non-zero finite number, or an inexact denormal
+      number smaller than the smallest non-zero normalized
+      number.</p>
+
+      <p><b><tt>FE_INEXACT</tt></b> should be a side-effect of
+      producing a rounded floating-point result that differs from
+      the mathematical (or infinitely precise) result.</p>
+    </blockquote>
+
+    <p>Also in 7.6, change footnote 175 from "The implementation
+    supports an exception if ..." to "The implementation supports
+    an exception if that exception happens as a side-effect of at
+    least one floating-point operation and if ..."</p>
+
+    <p>5.2.4.2.2 Characteristics of floating types &lt;float.h&gt;:
+    Add to paragraph 6:</p>
+
+    <blockquote>
+      See 7.6 Floating-point environment paragraph 7 for meaning of
+      these rounding modes.
+    </blockquote>
+
+    <p>7.6 Floating-point environment &lt;fenv.h&gt;: Add to
+    paragraph 7:</p>
+
+    <blockquote>
+      <p>A necessary condition for an implementation to support
+      these rounding control modes is that they can be set
+      explicitly and that they affect result values of
+      floating-point operations. Just having
+      <b><tt>fegetround()</tt></b> and <b><tt>fesetround()</tt></b>
+      succeed for a given FE_* rounding direction is not
+      sufficient.</p>
+
+      <p><b><tt>FE_TOWARDZERO</tt></b> means the result shall be
+      the format's value closest to and no greater in magnitude
+      than the infinitely precise result. For example, if rounding
+      to integer value in floating-point format, +3.7 rounds to
+      +3.0 and -3.7 rounds to -3.0.</p>
+
+      <p><b><tt>FE_UPWARD</tt></b> means the result shall be the
+      format's value closest to and no less than the infinitely
+      precise result. For example, if rounding to integer value in
+      floating-point format, +3.1 rounds to +4.0 and -3.7 rounds to
+      -3.0.</p>
+
+      <p><b><tt>FE_DOWNWARD</tt></b> means the result shall be the
+      format's value closest to and no greater than the infinitely
+      precise result. For example, if rounding to integer value in
+      floating-point format, +3.7 rounds to +3.0 and -3.1 rounds to
+      -4.0.</p>
+
+      <p><b><tt>FE_TONEAREST</tt></b> means the result shall be the
+      format's value closest to the infinitely precise result. It
+      is implementation defined as to what happens when the two
+      nearest representable values are equally near. For example,
+      if rounding to integer value in floating-point format, +3.1
+      rounds to +3.0 and +3.7 rounds to +4.0, and +3.5 rounds to
+      either +3.0 or +4.0.</p>
+    </blockquote>
+
+    <p>Add to J.3.6 Floating point:</p>
+
+    <blockquote>
+      -- to nearest rounding result when the two nearest
+      representable values are equally near.
+    </blockquote>
+
+    <blockquote>
+      -- whether FE_INVALID, FE_DIVBYZERO, or no exception is
+      raised for zero / zero.
+    </blockquote>
+
+    <p>Add 7.6 to the index entry for floating-point rounding
+    mode.</p>
+    <hr>
+
+    <p><b>Committee Discussion</b></p>
+
+    <p>Footnote 173 in 7.6 paragraph 1 also describes intent of
+    &lt;fenv.h&gt;. Footnote 180 in 7.6.2.3 paragraph 2 mentions
+    exceptions as raised by floating-point operations.</p>
+
+    <p>Some members would like FE_BLUEMOON to be a valid macro
+    (even though none of the basic floating-point operations would
+    raise it). Hence, they do not want to require the FE_* macros
+    to be side-effects of floating-point operations.</p>
+
+    <p>The current FE_* macros are unspecified as that was the best
+    compromise that could be agreed to by the various committee
+    members when C99 was being developed.</p>
+
+    <p>Not really a <i>defect</i>, but a <i>deficiency</i>.</p>
+
+    <p>Two Heads of Delegations would like LIA-1 added as a
+    normative reference by C99 as a way to define floating-point in
+    C.</p>
+
+    <p>Several members believe that nailing down floating-point
+    would be a good thing, but that the DR process is not the way
+    to do it. Perhaps an amendment (similar to how wide characters
+    were added to C90) should be done to C99 as a way to "clean up"
+    floating-point. Several members would like 2.0+3.0 being 5.0 to
+    be true.</p>
+
+    <p>Most of the proposed TC material should be added to the C
+    Rationale.</p>
+
+    <p>This material could be added to C99 as Recommended
+    Practice.</p>
+
+    <p><b>Committee Response</b></p>
+
+    <p>This is not really a <i>defect</i>, but an area which could
+    be addressed in a future revision of the C Standard.</p>
+    <br>
+     <a href="dr_300.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_302.htm">Next Defect Report</a> <br>
+     <br>
+  </body>
+</html>
+

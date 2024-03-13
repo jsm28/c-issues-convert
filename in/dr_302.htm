@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #302</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #302</h2>
+    <a href="dr_301.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_303.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Clark Nelson<br>
+     <b>Submission Date:</b> 2004-10-26<br>
+     <b>Source:</b> WG21<br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1068.htm">ISO/IEC
+    WG14 N1068</a><br>
+     <b>Version:</b> 1.1<br>
+     <b>Date:</b> 2006-03-05<br>
+     <b>Subject:</b> 6.10.2p5: Adding underscore to portable
+    include file name character set</p>
+
+    <p><b>Summary</b></p>
+
+    <p>In analyzing the differences in this paragraph between C99
+    and C++, I discovered that C89 admitted only letters in include
+    file names with guaranteed unique mappings. C99 later added
+    digits, while C++ independently added underscores. I personally
+    don't recall any discussion or rationale behind either
+    decision. It's clear that simply synchronizing C++ to C99 would
+    be a technical change, and could (from a pedantic perspective)
+    invalidate some existing code. The only way to synchronize the
+    two standards without invalidating any existing code would be
+    to allow underscores and digits in both standards. This may be
+    considered a good thing in any event.</p>
+
+    <p>Note that in my proposed change the terms of reference have
+    changed slightly. That's because, in the C++ standard, for good
+    or ill, the terms <var>letter</var> and <var>digit</var> aren't
+    defined in the (earlier) section describing the character set,
+    as they are in C99 (whereas in C89, the terms appeared there
+    without being definitions). In C++, <var>letter</var> is
+    defined in the (later) library section, and <var>digit</var> is
+    defined only as a non-terminal. It would of course be possible
+    to rearrange things in the C++ standard to more closely match
+    the C standard, but synchronizing things in this way would be
+    much easier. And again, using the non-terminal symbols in this
+    context may be considered an improvement in itself.</p>
+
+    <p><b>Suggested Technical Corrigendum</b><br>
+    </p>
+    Change 6.10.2p5: 
+
+    <blockquote>
+      <p>The implementation shall provide unique mappings for
+      sequences consisting of one or more <strike>letters or digits
+      (as defined in 5.2.1)</strike> <u><var>nondigits</var> or
+      <var>digits</var> (6.4.2.1)</u> followed by a period (.) and
+      a single <strike>letter</strike> <u><var>nondigit</var></u>.
+      The first character shall <strike>be a letter</strike> <u>not
+      be a <var>digit</var></u>. The implementation may ignore the
+      distinctions of alphabetical case and restrict the mapping to
+      eight significant characters before the period.</p>
+    </blockquote>
+    <hr>
+
+    <p><b>Technical Corrigendum</b></p>
+    Change 6.10.2p5: 
+
+    <blockquote>
+      <p>The implementation shall provide unique mappings for
+      sequences consisting of one or more <strike>letters or digits
+      (as defined in 5.2.1)</strike> <u><var>nondigits</var> or
+      <var>digits</var> (6.4.2.1)</u> followed by a period (.) and
+      a single <strike>letter</strike> <u><var>nondigit</var></u>.
+      The first character shall <strike>be a letter</strike> <u>not
+      be a <var>digit</var></u>. The implementation may ignore the
+      distinctions of alphabetical case and restrict the mapping to
+      eight significant characters before the period.</p>
+    </blockquote>
+
+    <p><br>
+     <a href="dr_301.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_303.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #080</TITLE></HEAD><BODY>
+<H2>Defect Report #080</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Clive Feather
+<BR>
+<B>Question</B>
+<BR>
+Item 17 - merging of string constants
+<BR>
+Consider the following code:
+<BR>
+<TT><B>char *s1 = "abcde" + 2;<BR>
+char *s2 = "cde";
+</B></TT><BR>
+Can the expression <TT><B>(s1 == s2)</B></TT> be non-zero? Is the answer different 
+if the first string literal is replaced by the two literals <TT><B>"ab" 
+"cde"</B></TT> (because then there are identical string literals)?
+<BR>
+<B>Response</B>
+<BR>
+When the last paragraph of subclause 6.1.4 refers to ``string
+literals'' it is referring to the static arrays created in
+translation phase 7 as specified in the previous paragraph. Although
+the current wording of the C Standard may imply that only
+completely identical arrays need not be distinct, this was not
+the Committee's intent.
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>In subclause 6.1.4, page 31, change the last paragraph of Semantics
+(before the Example) from:</B></I>
+<BR>
+Identical string literals of either form need not be distinct.
+If the program attempts to modify a string literal of either form,
+the behavior is undefined.
+<BR>
+<I><B>to:</B></I>
+<BR>
+These arrays need not be distinct provided their elements
+have the appropriate values. If the program attempts to modify
+such an array, the behavior is undefined.
+<BR>
+<A HREF="dr_079.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_081.html">Next Defect Report</A>
+</BODY></HTML>

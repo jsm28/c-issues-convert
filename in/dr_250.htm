@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #250</title>
+  </head>
+
+  <body bgcolor="#FFFFFF">
+    <h2 align="center">Defect Report #250</h2>
+    <a href="dr_249.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_251.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> UK C Panel<br>
+     <b>Submission Date:</b> 2001-09-07<br>
+     <b>Source:</b> Clive D.W. Feather &lt;clive@demon.net&gt;<br>
+     <b>Version:</b> 1.1<br>
+     <b>Date:</b> 2002-03-06<br>
+     <b>Subject:</b> non-directives within macro arguments</p>
+    <b>Problem</b> 
+
+    <p>Consider the code:</p>
+<pre>
+<tt><b>  #define nothing(x) //</b> <i>Nothing</i> <b>   /*</b> <i>Case 1</i> <b>*/
+    nothing (
+    #include &lt;stdio.h&gt;
+    )
+    /*</b> <i>Case 2</i> <b>*/
+    nothing (
+    #nonstandard
+    )
+</b></tt>
+</pre>
+
+    <p>6.10.3#11 reads in part:</p>
+
+    <blockquote>
+      <p>If there are sequences of preprocessing tokens within the
+      list of arguments that would otherwise act as preprocessing
+      directives, the behavior is undefined.</p>
+    </blockquote>
+
+    <p>This clearly covers case 1. However, it is not clear whether
+    or not case 2 is a preprocessing directive. It is a
+    "non-directive", but is that also a directive ? If case 2 is a
+    directive, it is undefined behaviour. If it is not, then case 2
+    is strictly-conforming and macro-expands to nothing.</p>
+
+    <p>Since non-directives are only valid as extensions, it might
+    be more sensible for them to behave as directives do and make
+    the behaviour undefined in this case.</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>In 6.10.3#11, change the last sentence to:</p>
+
+    <blockquote>
+      <p>If there are sequences of preprocessing tokens within the
+      list of arguments that would otherwise act as preprocessing
+      directives or as non-directives (that is, the first
+      pre-processing token on a line is a <tt><b>#)</b></tt>, the
+      behavior is undefined.</p>
+    </blockquote>
+    <hr>
+
+    <p><b>Committee Response</b></p>
+
+    <p>The Committee believes the Standard is correct
+    (preprocessing directive includes non-directive), therefore,
+    the anwser to the question on this is <i>yes</i>.</p>
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>In 6.10 #2, italicize the term "preprocessing
+    directive".</p>
+
+    <p>In 6.10.3 paragraph 11, last sentence. After "preprocessing
+    directives", add the following footnote.</p>
+
+    <blockquote>
+      Despite the name, a non-directive is a preprocessing
+      directive.
+    </blockquote>
+
+    <p><br>
+     <a href="dr_249.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_251.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

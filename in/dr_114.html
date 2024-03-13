@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #114</TITLE></HEAD><BODY>
+<H2>Defect Report #114</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Ron Guilmette
+<BR>
+<B>Question</B>
+<BR>
+ANSI/ISO C Defect Report #rfg21:
+<BR>
+Subject: Initialization of multi-dimensional <TT><B>char</B></TT> array objects.
+<BR>
+a) Does the following code involve usage which requires 
+a diagnostic from a conforming implementation?
+<BR>
+b) Does the following code involve usage which renders the 
+code itself not strictly conforming?
+<BR>
+<TT><B>char array2[2][5] = { "defghi" };	/*</B><I> ? </I><B>*/</B></TT>
+<BR>
+Background:
+<BR>
+Subclause 6.5.7 (<B>Constraints</B>):
+<BLOCKQUOTE>
+There shall be no more initializers in an initializer list than 
+there are objects to be initialized.
+</BLOCKQUOTE>
+Subclause 6.5.7:
+<BLOCKQUOTE>
+An array of character type may be initialized by a character 
+string literal, optionally enclosed in braces.
+</BLOCKQUOTE>
+Subclause 6.5.7 (examples):
+<BLOCKQUOTE>
+... It defines a three-dimensional array object; ...
+</BLOCKQUOTE>
+It appears that many existing compilers seem to feel the the code 
+example shown above violates the ``no more initializers'' constraint 
+(quoted above) which is given in subclause 6.5.7.
+<BR>
+Note however that the <I>entire</I> two-dimensional array object being 
+initialized consists of exactly 2*5 = 10 individual <TT><B>char</B></TT> objects, 
+whereas the initializer itself only consists of 7 individual <TT><B>char</B></TT> 
+values (if one counts the terminating null byte). Thus, it would appear 
+that these existing implementations are in fact <I>wrong</I> in rejecting 
+the above code, and that such usage is in fact strictly conforming.
+<BR>
+I ask the Committee to unambiguously either confirm or refute that 
+position.
+<BR>
+<B>Response</B>
+<BR>
+a) Yes, a diagnostic is required.
+<BR>
+b) Yes, this renders the program not strictly conforming.
+<BR>
+Note that initialization of an array of character type by a string
+literal is a special case, described in subclause 6.5.7.
+<BR>
+The phrases ``two-dimensional array'' and ``three-dimensional 
+array'' are merely used for convenience. The <B>Semantics</B> section 
+on array declarators (subclause 6.5.4.2) and the syntax specification 
+in the section on declarations (subclause 6.5.4) clearly show that 
+array types must be declared with one index. Thus, an array which 
+has two indices must be considered an ``array of array of type.''
+<BR>
+Since this is the case, the <B>Semantics</B> description for initializing 
+aggregates and subaggregates in subclause 6.5.7 applies. This description 
+states
+<BLOCKQUOTE>
+If the initializer of a subaggregate or the first member of 
+the contained union begins with a left brace, the initialiers enclosed 
+by that brace and its matching right brace initialize the members 
+of the subaggregate or the first member of the contained union.
+</BLOCKQUOTE>
+Thus, in the example, the string must be applied only to the first 
+element of the two-element array (which is an array of 5 characters). 
+Since the initializer contains 6 characters, it violates the constraint 
+of the same section which states:
+<BLOCKQUOTE>
+There shall be no more initializers in an initializer list than 
+there are objects to be initialized.
+</BLOCKQUOTE>
+<A HREF="dr_113.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_115.html">Next Defect Report</A>
+</BODY></HTML>

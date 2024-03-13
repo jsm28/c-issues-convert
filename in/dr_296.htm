@@ -1,0 +1,271 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #296</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #296</h2>
+    <a href="dr_295.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_297.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Fred Tydeman (USA)<br>
+     <b>Submission Date:</b> 2004-02-10<br>
+     <b>Source:</b> WG 14<br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1053.htm">N1053</a><br>
+
+     <b>Version:</b> 1.2<br>
+     <b>Date:</b> 2006-04-04<br>
+     <b>Subject:</b> Is <tt><b>exp(INFINITY)</b></tt> overflow? A
+    range error? A divide-by-zero exception?
+    <tt><b>INFINITY</b></tt> without any errors?</p>
+
+    <p><b>Summary</b></p>
+
+    <p>I believe that there are some words missing from 7.12.1
+    Treatment of error conditions. Currently, the words allow
+    <tt><b>exp(INFINITY)</b></tt> to be considered an overflow of
+    the divide-by-zero type. This is wrong. An infinite result from
+    infinite operands is not an error; it is an exact unexceptional
+    operation.</p>
+
+    <p><b>Details from C99+TC1</b></p>
+    Paragraph 4 in 7.12.1 Treatment of error conditions, currently
+    has: 
+
+    <blockquote>
+      A floating result overflows if the magnitude of the
+      mathematical result is finite but so large that the
+      mathematical result cannot be represented without
+      extraordinary roundoff error in an object of the specified
+      type. If a floating result overflows and default rounding is
+      in effect, or if the mathematical result is an exact infinity
+      (for example <tt><b>log(0.0)</b></tt>), then the function
+      returns the value of the macro <tt><b>HUGE_VAL</b></tt>,
+      <tt><b>HUGE_VALF</b></tt>, or ...; if the integer expression
+      <tt><b>math_errhandling &amp; MATH_ERREXCEPT</b></tt> is
+      nonzero, the "divide-by-zero" floating-point exception is
+      raised if the mathematical result is an exact infinity ...
+    </blockquote>
+    <br>
+     
+
+    <p>In addition, IEEE-754 has in 6.1 Infinity Arithmetic:</p>
+
+    <blockquote>
+      Arithmetic on INFINITY is always exact and therefor shall
+      signal no exceptions, except for the invalid operations
+      specified for INFINITY in 7.1.
+    </blockquote>
+    <br>
+     <br>
+     
+
+    <p>The invalid operations on INFINITY in IEEE-754 are: INF-INF,
+    0*INF, INF/INF, INF REM y, sqrt(-INF).</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Add ", from finite arguments," as indicated below to
+    paragraph 4 in 7.12.1 Treatment of error conditions.</p>
+
+    <blockquote>
+      A floating result overflows if the magnitude of the
+      mathematical result is finite but so large that the
+      mathematical result cannot be represented without
+      extraordinary roundoff error in an object of the specified
+      type. If a floating result overflows and default rounding is
+      in effect, or if the mathematical result is an exact
+      infinity, from finite arguments, (for example
+      <tt><b>log(0.0)</b></tt>), then the function returns the
+      value of the macro <tt><b>HUGE_VAL</b></tt>,
+      <tt><b>HUGE_VALF</b></tt>, or ...
+    </blockquote>
+    <br>
+     
+
+    <p>In addition, add the following to the Rationale in
+    7.12.1:</p>
+
+    <blockquote>
+      Operations on INFINITY are either invalid or exact. Some
+      examples of invalid operations are: INF-INF, INF*0, INF/INF,
+      sqrt(-INF), cexp(r+I*INF). Some examples of exact operations,
+      which also are unexceptional, are INF+x, INF*x, INF/x,
+      sqrt(+INF), exp(INF).
+    </blockquote>
+    <br>
+     
+    <hr>
+
+    <p><b>Committee Discussion</b> (for history only)</p>
+
+    <p>The following table tries to list all math functions that
+    have an infinity for an input or an infinity for an output, as
+    specified by Annex F.</p>
+
+    <blockquote>
+      Inf -&gt; Inf 
+
+      <blockquote>
+        <code>acosh(+INF)<br>
+         asinh<br>
+         cosh<br>
+         sinh<br>
+         exp(+INF)<br>
+         exp2(+INF)<br>
+         expm1(+INF)<br>
+         frexp<br>
+         ldexp<br>
+         log(+INF)<br>
+         log10(+INF)<br>
+         log1p(+INF)<br>
+         log2(+INF)<br>
+         logb<br>
+         modf<br>
+         scalb<br>
+         cbrt<br>
+         fabs<br>
+         hypot<br>
+         pow(x,-INF), |x| &lt; 1<br>
+         pow(x,+INF), |x| &gt; 1<br>
+         pow(-INF,y), y &gt; 0<br>
+         pow(+INF,y), y &gt; 0<br>
+         sqrt(+INF)<br>
+         lgamma<br>
+         tgamma(+INF)<br>
+         ceil<br>
+         floor<br>
+         nearbyint<br>
+         rint<br>
+         round<br>
+         trunc<br>
+         copysign(INF,y), y is anything<br>
+         nextafter(INF,INF)<br>
+         nexttoward(INF,INF)<br>
+         fdim(INF,-INF)<br>
+         fmax(+INF,any)<br>
+         fmin(-INF,any)<br>
+         fma(INF,INF,INF), x*y has same sign of z<br>
+        </code>
+      </blockquote>
+      Inf -&gt; NaN + FE_INVALID 
+
+      <blockquote>
+        <code>acos<br>
+         asin<br>
+         cos<br>
+         sin<br>
+         tan<br>
+         acosh(-INF)<br>
+         atanh<br>
+         log(-INF)<br>
+         log10(-INF)<br>
+         log1p(-INF)<br>
+         log2(-INF)<br>
+         sqrt(-INF)<br>
+         tgamma(-INF)<br>
+         lrint<br>
+         llrint<br>
+         lround<br>
+         llround<br>
+         fmod(INF,any)<br>
+         remainder(INF,any)<br>
+         remquo(INF,any)<br>
+         fma(INF,INF,INF), x*y has opposite sign of z<br>
+         fma(0,INF,z), z not a NaN<br>
+         fma(x,INF,-INF), x has same sign as INF<br>
+        </code>
+      </blockquote>
+      Inf -&gt; finite 
+
+      <blockquote>
+        <code>atan<br>
+         atan2<br>
+         tanh<br>
+         exp(-INF)<br>
+         exp2(-INF)<br>
+         expm1(-INF)<br>
+         pow(0,+INF)<br>
+         pow(-1,INF)<br>
+         pow(+1,INF)<br>
+         pow(INF,0)<br>
+         pow(x,-INF), |x| &gt; 1<br>
+         pow(x,+INF), |x| &lt; 1<br>
+         pow(-INF,y), y &lt; 0<br>
+         pow(+INF,y), y &lt; 0<br>
+         erf<br>
+         erfc<br>
+         fmod(x,INF), x not infinite<br>
+         remainder(x,INF), x finite<br>
+         remquo(x,INF), x finite<br>
+         copysign(x,INF), x finite<br>
+         fdim(INF,INF)<br>
+         fmax(-INF,y), y finite<br>
+         fmin(+INF,y), y finite<br>
+        </code>
+      </blockquote>
+      finite -&gt; Inf + <code>FE_DIVBYZERO</code> 
+
+      <blockquote>
+        <code>atanh(+/-1)<br>
+         log(+/-0)<br>
+         log10(+/-0)<br>
+         log1p(-1)<br>
+         log2(+/-0)<br>
+         logb(+/-0)<br>
+         pow(0,y), y an odd integer &lt; 0<br>
+         pow(0,y), y &lt; 0 and not an odd integer [and finite]<br>
+         lgamma(x), x is negative integer or zero<br>
+         tgamma(+/-0)<br>
+        </code>
+      </blockquote>
+    </blockquote>
+    All functions that have an exact infinity result and have an
+    error, have finite arguments. 
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>Add ", from finite arguments," as indicated below to
+    paragraph 4 in 7.12.1 Treatment of error conditions.</p>
+
+    <blockquote>
+      A floating result overflows if the magnitude of the
+      mathematical result is finite but so large that the
+      mathematical result cannot be represented without
+      extraordinary roundoff error in an object of the specified
+      type. If a floating result overflows and default rounding is
+      in effect, or if the mathematical result is an exact
+      infinity, from finite arguments, (for example
+      <tt><b>log(0.0)</b></tt>), then the function returns the
+      value of the macro <tt><b>HUGE_VAL</b></tt>,
+      <tt><b>HUGE_VALF</b></tt>, or ...
+    </blockquote>
+    <br>
+     
+
+    <p><b>Rationale Change</b></p>
+
+    <p>Add the following to 7.12.1:</p>
+
+    <blockquote>
+      Operations on INFINITY are either invalid or exact. Some
+      examples of invalid operations are: INF-INF, INF*0, INF/INF,
+      sqrt(-INF), cexp(r+I*INF). Some examples of exact operations,
+      which also are unexceptional, are INF+x, INF*x, INF/x,
+      sqrt(+INF), exp(INF).
+    </blockquote>
+    <br>
+     <br>
+     <a href="dr_295.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_297.htm">Next Defect Report</a><br>
+     <br>
+  </body>
+</html>
+

@@ -1,0 +1,187 @@
+<HTML><HEAD><TITLE>Defect Report #042</TITLE></HEAD><BODY>
+<H2>Defect Report #042</H2>
+<B>Submission Date</B>: 10 Dec 92
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: X3J11/92-001 (Tom MacDonald)
+<BR>
+<B>Question</B> 1
+<BR>
+The description of <TT><B>memcpy</B></TT> in subclause 7.11.2.1 says:
+<BLOCKQUOTE>
+<TT><B>void *memcpy(void *s1, const void *s2, size_t n);</B></TT>
+<BR>
+The <TT><B>memcpy</B></TT> function copies <TT><B>n</B></TT> characters from the 
+object pointed to by <TT><B>s2</B></TT> to the object pointed to by <TT><B>s1</B></TT>. 
+If copying takes place between objects that overlap, the behavior 
+is undefined.
+</BLOCKQUOTE>
+The definition of the term <I>object</I> in subclause 3.14 is:
+<BLOCKQUOTE>
+<B>object</B> - A region of data storage in the execution 
+environment, the contents of which can represent values. Except for 
+bit-fields, objects are composed of contiguous sequences of one or 
+more bytes, the number, order, and encoding of which are either explicitly 
+specified or implementation-defined. When referenced, an object may 
+be interpreted as having a particular type...
+</BLOCKQUOTE>
+Are the objects in the description of <TT><B>memcpy</B></TT> the largest objects 
+into which the arguments can be construed as pointing?
+<BR>
+In particular, is the behavior of the call of <TT><B>memcpy</B></TT> in Example 
+1 defined:
+<BR>
+<TT><B>void f1(void) {<BR>
+	extern char a[2][N];<BR>
+	memcpy(a[1], a[0], N);<BR>
+	}
+</B></TT><BR>
+because the arguments point into the disjoint array objects, <TT><B>a[1]</B></TT> 
+and <TT><B>a[0]</B></TT>? Or is the behavior undefined because the arguments 
+both point into the same array object, <TT><B>a</B></TT>?
+<BR>
+<B>Response</B>
+<BR>
+From subclause 3.14, an object is ``a region of data storage ... 
+Except for bit-fields, objects are composed of contiguous sequences 
+of one or more bytes, the number, order, and encoding of which are 
+either explicitly specified or implementation-defined ...'' From 
+subclause 7.11.1, ``the header <TT><B>&lt;string.h></B></TT> declares one type 
+and several functions, and defines one macro useful for manipulating 
+arrays of character type and other objects treated as arrays of character 
+type.'' ``Various methods are used for determining the lengths 
+of the arrays...'' From subclause 7.11.2.1, description of <TT><B>memcpy</B></TT>, 
+``if copying takes place between objects that overlap, the behavior 
+is undefined.'' Therefore, the ``objects'' referred to by 
+subclause 7.11.2.1 are exactly the regions of data storage pointed 
+to by the pointers and dynamically determined to be of <TT><B>N</B></TT> bytes 
+in length (i.e. treated as an array of <TT><B>N</B></TT> elements of character 
+type).
+<OL TYPE=a>
+<LI> So, no, the objects are not ``the largest objects into which 
+the arguments can be construed as pointing.''
+<LI> In Example 1, the call to <TT><B>memcpy</B></TT> has defined behavior.
+<LI> The behavior is defined because the pointers point into different 
+(non-overlapping) objects.
+</OL>
+<B>Question</B> 2
+<BR>
+For the purposes of the description of <TT><B>memcpy</B></TT>, can a contiguous 
+sequence of elements within an array be regarded as an object in its 
+own right? If so, are the objects in the description of <TT><B>memcpy</B></TT> 
+the smallest contiguous sequences of bytes that can be construed as 
+the objects into which the arguments point?
+<BR>
+In Example 2:
+<BR>
+<TT><B>void f2(void) {<BR>
+	extern char b[2*N];<BR>
+	memcpy(b+N, b, N);<BR>
+	}
+</B></TT><BR>
+can each of the first and last half of array <TT><B>b</B></TT> be regarded as 
+an object in its own right, so that the behavior of the call of <TT><B>memcpy</B></TT> 
+is defined? (Although they are not declared as separate objects, each 
+half does seem to satisfy the definition of object quoted above.) 
+Or is the behavior undefined, since both arguments point into the 
+same array object <TT><B>b</B></TT>?
+<BR>
+In Example 3:
+<BR>
+<TT><B>void f3(void) {<BR>
+	void *p = malloc(2*N);	/*</B><I> Allocate an object.</I><B> */<BR>
+	{<BR>
+	char (*q)[N] = p;	/*</B><I> The object pointed to by p may<BR>
+							be interpreted as having type<BR>
+							(char [2][N]) when referenced<BR>
+							through q.</I><B> */<BR>
+	/*</B><I> ...</I><B> */<BR>
+	memcpy(q[1], q[0], N);<BR>
+	/* ... */<BR>
+	}<BR>
+	{<BR>
+	char *r = p;		/* </B><I>The object pointed to by p may<BR>
+							be interpreted as having type<BR>
+							(char [2*N]) when referenced<BR>
+							through r.</I><B> */<BR>
+	/*</B><I> ...</I><B> */<BR>
+	memcpy(r+N, r, N);<BR>
+	/*</B><I> ... </I><B>*/<BR>
+	}<BR>
+}
+</B></TT><BR>
+the types of the objects are inferred from the pointers, and the underlying 
+storage is dynamically allocated. Is the behavior of each call of 
+<TT><B>memcpy</B></TT> defined?
+<BR>
+Since the relationship between the values of the arguments presented 
+to <TT><B>memcpy</B></TT> is the same in all the above calls, it seems reasonable 
+to expect that either all these calls of <TT><B>memcpy</B></TT> give defined 
+behavior, or none do. But which is it?
+<BR>
+<B>Response</B>
+<OL TYPE=a>
+<LI> Yes, for <TT><B>memcpy</B></TT>, a contiguous sequence of elements within 
+an array can be regarded as an object in its own right.
+<LI> The objects are not the smallest contiguous sequence of bytes 
+that can be construed; they are exactly the regions of data storage 
+starting at the pointer and of <TT><B>N</B></TT> bytes in length.
+<LI> Yes, the non-overlapping halves of array <TT><B>b</B></TT> can be regarded 
+as objects in their own rights.
+<LI> The behavior (in Example 2) is defined.
+<LI> The definition of object is independent of the <I>method</I> 
+of storage allocation. The array length is determined by ``various 
+methods.'' So, yes, the behavior of each call of <TT><B>memcpy</B></TT> is 
+well-defined.
+<LI> All of the calls of <TT><B>memcpy</B></TT> (in Example 3) give defined 
+behavior.
+</OL>
+<B>Question</B> 3
+<BR>
+Similar questions arise for the other library string handling functions 
+that have undefined behavior when copying between overlapping objects. 
+These include <TT><B>strcpy</B></TT>, <TT><B>strncpy</B></TT>, <TT><B>strcat</B></TT>, <TT><B>strncat</B></TT>, 
+<TT><B>strxfrm</B></TT>, <TT><B>mbstowcs</B></TT>, <TT><B>wcstombs</B></TT>, <TT><B>strftime</B></TT>, <TT><B>vsprintf</B></TT>, 
+<TT><B>sscanf</B></TT>, and <TT><B>sprintf</B></TT>. For these functions, however, the 
+number of bytes referenced through each pointer depends, at least 
+in part, upon the values stored in the bytes.
+<BR>
+Consider a library function for which the number of bytes accessed 
+or modified is affected by the values of the bytes. Is the object 
+associated with each of its pointer arguments the smallest contiguous 
+sequence of bytes actually accessed or modified through that pointer?
+<BR>
+In Example 4:
+<BR>
+<TT><B>void f4(void) {<BR>
+	extern char b[2*N];<BR>
+	strcpy(b+N, b);<BR>
+	}
+</B></TT><BR>
+is the behavior defined if <TT><B>N >> strlen(b)</B></TT>?
+<BR>
+In Example 5:
+<BR>
+<TT><B>void f5(void) {<BR>
+	extern char c[2*N];<BR>
+	strcat(c+N, c);<BR>
+	}
+</B></TT><BR>
+is the behavior defined if both <TT><B>N >> strlen(c)</B></TT> and <TT><B>N >> strlen(c) 
++ strlen(c+N)</B></TT>?
+<BR>
+<B>Response</B>
+<BR>
+Length is determined by ``various methods.'' For strings in 
+which all elements are accessed, length is inferred by null-byte termination. 
+For <TT><B>mbstowcs</B></TT>, <TT><B>wcstombs</B></TT>, <TT><B>strftime</B></TT>, <TT><B>vsprintf</B></TT>, 
+<TT><B>sscanf</B></TT>, <TT><B>sprintf</B></TT> and all other similar functions, it was 
+the intent of the C Standard that the rules in subclause 7.11.1 be 
+applicable by extension (i.e., the objects and lengths are similarly 
+dynamically determined). The behavior (in Examples 4 and 5) is defined.
+<BR>
+<A HREF="dr_040.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_043.html">Next Defect Report</A>
+</BODY></HTML>

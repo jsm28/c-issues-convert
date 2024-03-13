@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #122</TITLE></HEAD><BODY>
+<H2>Defect Report #122</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Ron Guilmette
+<BR>
+<B>Question</B>
+<BR>
+ANSI/ISO C Defect Report #rfg29:
+<BR>
+Subject: Conversion/widening of bit-fields.
+<BR>
+Must the following program print <TT><B>1</B></TT> or <TT><B>0</B></TT>?
+<BR>
+<TT><B>#include &lt;stdio.h><BR>
+ <BR>
+struct S { unsigned bit:1; } object = { 1 };<BR>
+ <BR>
+int main ()<BR>
+	{<BR>
+	printf ("%d\n", ((object.bit - 2) &lt; 0));<BR>
+	return 0;<BR>
+	}
+</B></TT><BR>
+(At least one existing implementations prints <TT><B>1</B></TT>
+while another prints <TT><B>0</B></TT>.)
+<BR>
+Background:
+<BR>
+Subclause 6.2.1.1:
+<BLOCKQUOTE>
+A <TT><B>char</B></TT>, a <TT><B>short int</B></TT>, or an <TT><B>int</B></TT> bit-field, 
+or their signed or unsigned varieties, or an enumeration 
+type, may be used in an expression wherever an <TT><B>int</B></TT> or <TT><B>unsigned 
+int</B></TT> may be used. If an <TT><B>int</B></TT> can represent all values of the 
+original type, the value is converted to an <TT><B>int</B></TT>; otherwise it 
+is converted to an <TT><B>unsigned int</B></TT>.
+</BLOCKQUOTE>
+The key phrase here is ``the original type.''
+<BR>
+In effect, I am asking if the <I>type</I> of a bit-field is totally 
+independent from its <I>width</I> for the purposes of the above rule.
+<BR>
+If the answer to that question is ``yes,'' then the value of 
+<TT><B>object.bit</B></TT> must be considered to be an <TT><B>unsigned int</B></TT> (with 
+a value of <TT><B>1U</B></TT>). In that case, the value <TT><B>2</B></TT> used in the 
+above example must also be converted to type <TT><B>unsigned int</B></TT> and 
+then the subtraction should be carried out on the two <TT><B>unsigned 
+int</B></TT> values. The subtraction should then itself yield a value of 
+type <TT><B>unsigned int</B></TT> which is itself (by definition) >= 0, so it 
+would seem that the C Standard requires
+the above program to print <TT><B>0</B></TT>.
+<BR>
+Is that correct? If so, perhaps the wording of the above paragraph 
+needs to be improved so as to make the correct interpretation of 
+these rules more apparent to implementors.
+<BR>
+<B>Response</B>
+<BR>
+See <A HREF="dr_015.html">Defect Report #015</A>.
+``The original type'' applies to both width and signedness.
+<TT><B>object.bit</B></TT> promotes to <TT><B>int</B></TT>,
+and the program prints <TT><B>1</B></TT>.
+<BR>
+<A HREF="dr_121.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_123.html">Next Defect Report</A>
+</BODY></HTML>

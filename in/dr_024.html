@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #024</TITLE></HEAD><BODY>
+<H2>Defect Report #024</H2>
+
+<P><B>Submission Date</B>: 10 Dec 92 <BR>
+<B>Submittor</B>: WG14 <BR>
+<B>Source</B>: X3J11/91-004 (Fred Tydeman) <BR>
+<B>Question</B> 1 <BR>
+In subclause 7.10.1.4 <B>The <TT>strtod</TT> function</B> page 151, line
+5: What does ``<B><TT>&quot;C&quot;</TT></B> locale'' mean? <BR>
+<BR><OL TYPE=a>
+<LI> <B><TT>setlocale(LC_ALL,NULL) == &quot;C&quot;</TT></B> <BR>
+<LI> <B><TT>setlocale(LC_NUMERIC,NULL) == &quot;C&quot;</TT></B> <BR>
+<LI> <B><TT>&amp;&amp;</TT></B> 
+<LI> <B><TT>||</TT></B><BR>
+<LI> something else. 
+</OL>
+What does ``other than the <B><TT>&quot;C&quot;</TT></B> locale'' mean?
+<BR><OL TYPE=a>
+<LI> <B><TT>setlocale(LC_ALL,NULL) != &quot;C&quot;</TT></B> <BR>
+<LI> <B><TT>setlocale(LC_NUMERIC,NULL) != &quot;Ct</TT></B> <BR>
+<LI> <B><TT>&amp;&amp;</TT></B> <BR>
+<LI> <B><TT>||</TT></B> <BR>
+<LI> something else. </OL>
+Subclause 7.4.1 <B>Locale control</B>, page 107 may help answer the questions.
+<BR>
+<B>Response</B> <BR>
+Subclause 7.4.1.1, page 107, lines 11-17 describe what is affected by each
+locale portion. <BR>
+Is it the <B><TT>LC_NUMERIC</TT></B> locale category which affects the
+implementation-defined behavior of <B><TT>strtod</TT></B>, etc.? <BR>
+Answer: Yes. <BR>
+How can one guarantee that <B><TT>strtod</TT></B> functions are in the
+<B><TT>&quot;C&quot;</TT></B> locale? <BR>
+Answer: Execute <B><TT>setlocale(LC_NUMERIC, &quot;C&quot;)</TT></B> or
+execute <B><TT>setlocale(LC_ALL, &quot;C&quot;)</TT></B> . <BR>
+What is meant by ``other than the <B><TT>&quot;C&quot;</TT></B> locale?''
+That is, how can one ensure that <B><TT>strtod</TT></B> is not in the <B><TT>&quot;C&quot;</TT></B>
+locale? <BR>
+<BR>
+Answer: Successfully execute <B><TT>setlocale(LC_NUMERIC, str)</TT></B>
+or <B><TT>setlocale(LC_ALL, str)</TT></B> to some implementation-defined
+string <B><TT>str</TT></B> which specifies a locale that is different from
+the <B><TT>&quot;C&quot;</TT></B> locale. No universally portable method
+can be provided, because the functionality is implementation-defined. <BR>
+
+<A HREF="dr_023.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_025.html">Next Defect Report</A>
+</BODY></HTML>

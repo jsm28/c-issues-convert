@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #246</title>
+  </head>
+
+  <body bgcolor="#FFFFFF">
+    <h2 align="center">Defect Report #246</h2>
+    <a href="dr_245.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_247.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> UK C Panel<br>
+     <b>Submission Date:</b> 2001-09-07<br>
+     <b>Source:</b> Clive D.W. Feather &lt;clive@demon.net&gt;<br>
+     <b>Version:</b> 1.1<br>
+     <b>Date:</b> 2002-03-06<br>
+     <b>Subject:</b> completion of declarators</p>
+
+    <p><b>Problem</b></p>
+
+    <p>6.2.1#7 reads in part:</p>
+
+    <blockquote>
+      Any other identifier has scope that begins just after the
+      completion of its declarator.
+    </blockquote>
+
+    <p>However, nothing says when a declarator is completed. While
+    it seems obvious to experienced people that this means the
+    syntactic end of the declarator, the term "complete" has other
+    meanings when discussing declarations and objects, and
+    therefore it's a bad term to use.</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Change the quoted text to:</p>
+
+    <blockquote>
+      <p>Any other identifier has scope that begins just after the
+      end of the full declarator it appears in.</p>
+    </blockquote>
+    <hr>
+
+    <p><b>Committee Response</b></p>
+
+    <p>The suggested words don't appear to be an improvement; the
+    current phrasing is clear enough.</p>
+
+    <p><br>
+     <a href="dr_245.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_247.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

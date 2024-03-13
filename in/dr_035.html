@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #035</TITLE></HEAD><BODY>
+<H2>Defect Report #035</H2>
+
+<P><B>Submission Date</B>: 10 Dec 92 <BR>
+<B>Submittor</B>: WG14 <BR>
+<B>Source</B>: X3J11/91-039 (Derek M. Jones) <BR>
+<B>Question</B> 1 <BR>
+<B><TT>void f(a, b)<BR>
+int a(enum b {x, y});<BR>
+int b;<BR>
+{<BR>
+} <BR>
+</TT></B>Now this example is perverse because a prototype declaration is
+used to declare the parameter of an old-style function declaration. But
+anyway ... <BR>
+Is the declaration of the parameter <B><TT>a</TT></B> legal or a constraint
+error? <BR>
+Now <B><TT>a(...)</TT></B> is a declarator. <BR>
+Subclause 6.7.1 says on page 82, lines 7-8: </P>
+
+<BLOCKQUOTE>
+<P>... each declaration in the declaration list shall have at least one
+declarator, and those declarators shall declare only identifiers from the
+identifier list. </P>
+</BLOCKQUOTE>
+
+<P>The identifier list contains <B><TT>a</TT></B> and <B><TT>b</TT></B>.
+<BR>
+The declarator for parameter <B><TT>a</TT></B> declares the identifiers
+<B><TT>a</TT></B>, <B><TT>b</TT></B>, <B><TT>x</TT></B>, and <B><TT>y</TT></B>.
+<BR>
+<B><TT>b</TT></B> is in the identifier list, so that is okay. But <B><TT>x</TT></B>
+and <B><TT>y</TT></B> are not. Constraint error (methinks so)? <BR>
+See subclause 6.1.2, page 19 for a definition of an identifier. <BR>
+<B>Response</B> <BR>
+There is no constraint violation. The scopes of <B><TT>b</TT></B>, <B><TT>x</TT></B>,
+and <B><TT>y</TT></B> end at the right-parenthesis at the end of the <B><TT>enum</TT></B>,
+so there is no violation. It is difficult to <I>call</I> the function <B><TT>f</TT></B>,
+but there is no constraint violation. The phrase ``each declarator declares
+one identifier'' in subclause 6.5.4 refers to <B><TT>a</TT></B>, not to
+<B><TT>b</TT></B>, <B><TT>x</TT></B>, or <B><TT>y</TT></B>. <BR>
+As an example, in the conforming definition: <BR>
+<B><TT>void f(a, b)<BR>
+int a(enum b{x, y});<BR>
+int b;<BR>
+{<BR>
+} <BR>
+</TT></B>the scope of <B><TT>b</TT></B> (the enum tag), <B><TT>x</TT></B>,
+and <B><TT>y</TT></B> ends at the right-parenthesis at the end of the enum
+(prototype scope). <BR>
+<B>Question</B> 2 <BR>
+Also consider: <BR>
+<B><TT>void g(c)<BR>
+enum m{q, r} c;<BR>
+{<BR>
+} <BR>
+</TT></B>What is the scope of <B><TT>m</TT></B>, <B><TT>q</TT></B>, and
+<B><TT>r</TT></B>? <BR>
+Subclause 6.1.2.1 says on page 20, lines 28-29 ``... appears outside of
+any block or list of parameters, the identifier has <I>file scope,</I>
+...'' <BR>
+It says on page 20, lines 30-31 ``... appears inside a block or within
+the list of parameter declarations in a function definition, the identifier
+has <I>block scope,</I> ...'' <BR>
+Now the above three identifiers appear outside of any block or list of
+parameters but they are within the list of parameter declarations. <BR>
+Who wins? <BR>
+<B>Response</B> <BR>
+The scope of <B><TT>m</TT></B>, <B><TT>q</TT></B>, and <B><TT>r</TT></B>
+ends at the close-brace (block scope). The operative wording is the more
+specific statement on page 20, lines 30-31 ``... appears inside a block
+or within the list of parameter declarations in a function definition,
+the identifier has <I>block scope,</I> ...'' <BR>
+As an example, in the code fragment: <BR>
+<B><TT>void g(c)<BR>
+enum m{q, r} c;<BR>
+{<BR>
+} <BR>
+</TT></B>the scope of <B><TT>m</TT></B>,<B><TT> q</TT></B>, and <B><TT>r</TT></B>
+ends at the closing brace of the function definition (block scope). <BR>
+</P>
+<A HREF="dr_034.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_036.html">Next Defect Report</A>
+</BODY></HTML>

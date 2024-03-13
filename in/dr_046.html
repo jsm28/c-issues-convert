@@ -1,0 +1,37 @@
+<HTML><HEAD><TITLE>Defect Report #046</TITLE></HEAD><BODY>
+<H2>Defect Report #046</H2>
+<B>Submission Date</B>: 10 Dec 92
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: X3J11/92-041 (Neal Weidenhofer)
+<BR>
+<B>Question</B> 1
+<BR>
+In subclause 6.7.1, page 82, line 9, it says, ``An identifier declared 
+as a typedef name shall not be redeclared as a parameter.''
+<BR>
+The question I have is: Does that sentence stand by itself absolutely 
+or is it intended to be read in the context of the paragraph in which 
+it appears?
+<BR>
+The beginning of the paragraph says, ``If the declarator includes 
+an identifier list, ...'' Function declarators including a parameter 
+type list are dealt with in the preceding paragraph which says nothing 
+about typedef names.
+<BR>
+In other words, is the following valid Standard C?
+<BR>
+<TT><B>typedef int foo;<BR>
+int bar(int foo) {return foo; }
+</B></TT><BR>
+<B>Response</B>
+<BR>
+The sentence is a part of the paragraph in which it appears. An identifier 
+declared as a typedef name may be redeclared as a parameter in a parameter 
+type list. The example is strictly conforming.
+<BR>
+<A HREF="dr_045.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_047.html">Next Defect Report</A>
+</BODY></HTML>

@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect Report #215</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #215</h2>
+    <a href="dr_214.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_216.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Clive Feather (UK)<br>
+     <b>Submission Date:</b> 2000-04-04<br>
+     <b>Source:</b><br>
+     <b>Reference Document:</b> N/A<br>
+     <b>Version:</b> 1.3<br>
+     <b>Date:</b> 2001-09-18 15:48:36<br>
+     <b>Subject:</b> Equality operators</p>
+
+    <p><b>Summary</b><br>
+     When discussing the comparison operators, 6.5.8 says:</p>
+
+    <blockquote>
+      [#4] For the purposes of these operators, a pointer to an
+      object that is not an element of an array behaves the same as
+      a pointer to the first element of an array of length one with
+      the type of the object as its element type.
+    </blockquote>
+    Given that the restrictions on the arguments for pointer
+    comparison and pointer equality are very different, it would be
+    advisable to repeat this wording in 6.5.9. The only wording
+    that implies that this applies to equality operators is the bit
+    about "analogous" in 6.5.9#3. Since other restrictions (e.g.
+    that the pointers must be in the same array) do <em>not</em>
+    apply to equality operators, it is at best ambiguous whether
+    this text applies. Therefore for clarity it should be repeated.
+    
+    <hr>
+
+    <p><b>Technical Corrigendum</b><br>
+     Paragraph 4 from 6.5.8 should be duplicated in the Semantics
+    section of 6.5.9.</p>
+
+    <p><br>
+     <a href="dr_214.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_216.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

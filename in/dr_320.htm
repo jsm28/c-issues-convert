@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #320</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #320</h2>
+    <a href="dr_319.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_321.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b>&nbsp;Willem Wakker<br>
+     <b>Submission Date:</b>&nbsp;2005-05-02<br>
+     <b>Source:</b><br>
+     <b>Reference Document:</b> N/A<br>
+     <b>Version:</b>&nbsp;1.2<br>
+     <b>Date:</b>&nbsp;2006-04-04<br>
+     <b>Subject:</b>&nbsp;Scope of variably modified type.</p>
+
+    <p><b>Summary</b></p>
+
+    <p>The first sentence of 6.7.5.2p2 seems to suggest that
+    <b>any</b> ordinary identifier both block scope or function
+    prototype scope and no linkage <b>has</b> a variably modified
+    type. This is clearly wrong.</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+    Rewrite the first sentence of 6.7.5.2p2 to read: 
+
+    <blockquote>
+      An ordinary identifier (as defined in 6.2.3) that has a
+      variably modified type shall have either block scope or
+      function prototype scope, and no linkage.
+    </blockquote>
+    <br>
+     
+    <hr>
+
+    <p><b>Technical Corrigendum</b></p>
+    Change the first sentence of 6.7.5.2p2 to: 
+
+    <blockquote>
+      An ordinary identifier (as defined in 6.2.3) that has a
+      variably modified type shall have either block scope and no
+      linkage or function prototype scope.
+    </blockquote>
+
+    <p><a href="dr_319.htm">Previous Defect Report</a> &lt; - &gt;
+    <a href="dr_321.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

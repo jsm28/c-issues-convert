@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #166</TITLE></HEAD>
+<BODY><H2>Defect Report #166</H2> 
+<B>Submission Date</B>: 16 Oct 95
+<BR>
+<B>Submittor</B>: BSI
+<BR>
+<B>Source</B>: Clive D.W. Feather
+<BR>
+<B>Question</B>
+<BR>
+<I>Submitted to BSI by Clive D.W. Feather  clive@sco.com .</I>
+<BR>
+<I>In this Defect Report, identifiers lexically identical to those 
+declared in standard headers refer to the identifiers declared in  those
+standard headers, whether or not the header is explicitly mentioned.</I>
+<BR>
+<I>This Defect Report has been prepared with considerable help from 
+Mark Brader, Jutta Degener, Ronald Guilmette, and a person whose
+employment  conditions require anonymity. However, except where stated,
+opinions  expressed or implied should not be assumed to be those of any
+person  other than myself.</I>
+<BR> Defect Report UK 014: Meaning of lvalue
+<BR> Constraints that require something to be an lvalue place an
+unacceptable  burden on the implementation.
+<BR> Subclasue 6.2.2.1 states in part:
+<BR> An lvalue is an expression (with an object type or an incomplete 
+type other than <TT><B>void</B></TT>) that designates an object.<BR>
+Given the declaration
+<BR>
+<TT>int a[10], i;
+</TT><BR> the expression <TT><B>a[i]</B></TT> designates an object,
+and is thus an lvalue,  if and only if <TT><B>i</B></TT> has a value
+between 0 and 9 inclusive (see  <A HREF="dr_076.html">Defect Report #076</A> for further details).
+Now consider the Constraint  in subclause 6.3.3.2:
+<BR> The operand of the unary <TT><B>&</B></TT> operator shall be
+either a  function designator or an lvalue that designates an object ...
+<BR> This means that the expression <TT><B>&amp;a[i]</B></TT> is a
+constraint violation  whenever <TT><B>i</B></TT> has a value outside
+the range 0 to 9 inclusive, and  that therefore a diagnostic is
+required, at run-time!
+<BR> The defect is that the operand of the unary <TT><B>&</B></TT>
+operator does  not need to be an lvalue that designates an object, but
+rather an  lvalue which, if evaluated with its operands having suitable
+values,  could designate an object.
+<BR> There are probably other parts of the C Standard with the same
+problem,  such as subclauses 6.3.2.4, 6.3.3.1, and 6.3.16.
+<BR>
+<A HREF="dr_165.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_167.html">Next Defect Report</A></BODY></HTML>

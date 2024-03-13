@@ -1,0 +1,332 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #040</TITLE></HEAD><BODY>
+<H2>Defect Report #040</H2>
+
+<P><B>Submission Date</B>: 10 Dec 92 <BR>
+<B>Submittor</B>: WG14 <BR>
+<B>Source</B>: X3J11/91-062 (Derek M. Jones) <BR>
+<B>Question</B> 1 <BR>
+Composite type <BR>
+Rule for function parameter compatibility, subclause 6.7,1, page 82, lines
+24-25: <BR>
+<B><TT>void f(const int);<BR>
+void f(int a)<BR>
+{<BR>
+a = 4;<BR>
+} <BR>
+</TT></B>In the above case what is the composite type of <B><TT>f</TT></B>?
+The legality of the assignment to <B><TT>a</TT></B> depends on the answer.
+<BR>
+<B><TT>int f(int a[4]);<BR>
+int f(int a[5]); <BR>
+</TT></B>The parameters are compatible because they are converted to <I>pointer
+to</I> ..., but what is the composite type? <BR>
+<B>Response</B> <BR>
+<B><TT>void f(const int);<BR>
+void f(int a)<BR>
+{<BR>
+a = 4;<BR>
+} <BR>
+</TT></B>What is the composite type of <B><TT>f</TT></B>? <BR>
+Answer: <B><TT>void f(int)</TT></B>. <A HREF="dr_013.html">Defect
+Report #013, Question 1</A> describes the correct manner for constructing
+the composite type. <BR>
+Is the assignment valid? <BR>
+Answer: Yes. The type of a parameter is independent of the composite type
+of the function, so the assignment is valid (cf. subclause 6.7.1). <BR>
+Another example: <BR>
+<B><TT>int f(int a[4]);<BR>
+int f(int a[5]); <BR>
+</TT></B>The parameters are compatible because they are converted to <I>pointer
+to ...</I>, but what is the composite type? <BR>
+Answer: The response to the Defect Report mentioned above answers this
+question as well. <BR>
+<B>Question</B> 2 <BR>
+Is an implementation that fails to equal (or exceed) the value of an environmental
+limit conforming? Subclause 5.2.4 says that those in that subclause must
+be equalled in a conforming implementation. There is no such wording for
+the environmental limits in the Library (subclauses 7.9.2, 7.9.3, 7.9.4.4,
+7.9.6.1, 7.10.2.1). <BR>
+<B>Correction</B> <BR>
+<B><I>Add to subclause G.2, page 203:</I></B> <BR>
+- A call to a library function exceeds an <B>environmental limit</B> (7.9.2,
+7.9.3, 7.9.4.4, 7.9.6.1, 7.10.2.1). <BR>
+<B>Question</B> 3 <BR>
+Is an ``environmental constraint'' a constraint? <BR>
+In subclause 7.6.1.1, page 118, lines 22-30, we have a set of environmental
+constraints on where <B><TT>setjmp</TT></B> may occur. <BR>
+Does violating these rules require a constraint error to be flagged, or
+is it undefined behavior? <BR>
+Some examples: <BR>
+<B><TT>i = setjmp(a);<BR>
+if (setjmp(a) == i)<BR>
+... <BR>
+</TT>Response</B> <BR>
+Must an implementation diagnose violations of environmental constraints?
+<BR>
+Answer: Diagnostics are not required for constraint violations in clause
+7, since subclause 5.1.1.3 refers to a constraint as defined in clause
+3, which applies to language elements only. <BR>
+<B>Question</B> 4 <BR>
+For the fragment <BR>
+<B><TT>if (a**b||c++d)<BR>
+; <BR>
+</TT></B><A HREF="dr_017.html#Question39">Defect Report #017 Question 39</A>
+states that this is lexed as: <BR>
+<OL TYPE=a>
+<LI>
+{<B><TT>if</TT></B>} {<B><TT>(</TT></B>} {<B><TT>a</TT></B>} {<B><TT>&lt;&lt;</TT></B>}
+{<B><TT>b</TT></B>} {<B><TT>||</TT></B>} {<B><TT>c</TT></B>} {<B><TT>&gt;&gt;</TT></B>}
+{<B><TT>d</TT></B>} {<B><TT>)</TT></B>} <BR>
+not as: <BR>
+<LI>
+{<B><TT>if</TT></B>} {<B><TT>(</TT></B>} {<B><TT>a</TT></B>} {<B><TT>**b||c++</TT></B>}
+{<B><TT>d</TT></B>} {<B><TT>)</TT></B>} <BR>
+The rationale for this interpretation was that the constraint in subclause
+6.1.7, page 32, lines 33-34 disallowed a header name preprocessing token
+anywhere except within a <B><TT>#include</TT></B>. Since the header name
+preprocessing token could not exist it was not lexed as such. <BR>
+It was pointed out that the ``longest possible token'' rule was not influenced
+by rules elsewhere in the C Standard, i.e. <B><TT>i+++++j</TT></B> is lexed
+as: <BR>
+<LI>
+{<B><TT>i</TT></B>} {<B><TT>++</TT></B>} {<B><TT>++</TT></B>} {<B><TT>+</TT></B>}
+{<B><TT>j</TT></B>} <BR>
+not as: <BR>
+<LI>
+{<B><TT>i</TT></B>} {<B><TT>++</TT></B>} {<B><TT>+</TT></B>} {<B><TT>++</TT></B>}
+{<B><TT>j</TT></B>} 
+<BR>
+</OL>
+Now (c) is a constraint violation by subclause 6.3.2.4, page 42, lines
+38-39, the operand of the second <B><TT>++</TT></B> is not a modifiable
+lvalue. But this constraint does not require that the input be re-lexed
+to form the preprocessing tokens given in (d), which is conforming code.
+<BR>
+As the UK C Panel saw it, the first example should be lexed as given in
+(b) and a diagnostic issued. Having violated a constraint, we are now into
+undefined behavior. An implementation could define the behavior in this
+circumstance to be a re-lex of the input to produce the preprocessing tokens
+given in (a). <BR>
+As far as the user was concerned, they would get the expected behavior
+with the added value of a diagnostic being issued. <BR>
+All those present felt that the interpretation was incorrect and recommended
+that the UK ask the Committee to reconsider its decision. <BR>
+To summarize, there is no ambiguity in the C Standard and the original
+X3J11 interpretation is incorrect. <BR>
+<B>Response</B> <BR>
+Is a diagnostic required for an input such as <BR>
+<B><TT>if (a**b||c++d) <BR>
+</TT></B>because of a violation of the constraint specified in subclause
+6.1.7, page 32, lines 33-34? <BR>
+Answer: No. Our response to <A HREF="dr_017.html#Question39">Defect Report
+#017 Question 39</A> addresses this issue. <BR>
+<B>Question</B> 5 <BR>
+In the constraint for subclause 6.5.2, page 59, lines 2-4: What does the
+C Standard mean when it says ``set?'' <BR>
+Does it mean that the construct: <BR>
+<B><TT>int int i;</TT></B> <BR>
+violates a constraint? <BR>
+It has been suggested that this wording was left vague to allow such constructs
+as <B><TT>long long</TT></B> (which is supported by some compilers) to
+fall into the undefined behavior category. <BR>
+Would the Committee clarify the situation with regard to duplicate type
+specifiers? Do such constructs result in a constraint error or undefined
+behavior? <BR>
+The related case <B><TT>static static</TT></B> is explicitly ruled out
+by the constraints in the previous subclause. <BR>
+Additionally, <B><TT>volatile volatile</TT></B> is ruled out by the constraint
+in subclause 6.5.3. <BR>
+<B>Response</B> <BR>
+Example: <BR>
+<B><TT>int int i;</TT></B> <BR>
+Must this be diagnosed? <BR>
+Answer: Yes. It is allowed to rearrange the order of type specifiers within
+a set, but not to duplicate them (cf. subclause 6.5.2). Thus <B><TT>int
+int</TT></B> is a constraint violation. <BR>
+<B>Question</B> 6 <BR>
+The definition of the <B><TT>offsetof</TT></B> macro in subclause 7.1.6
+does not cover all its possible occurrences: <BR>
+<OL TYPE=a>
+<LI>
+There are no restrictions on the structure being a completed type. <BR>
+<B><TT>struct t1 {<BR>
+char c;<BR>
+short s;<BR>
+int i[offsetof(struct t1, s)];<BR>
+} <BR>
+</TT></B>When discussing the use of incomplete types, recourse usually
+has to be made to the rules relating to where an object of unknown size
+may appear. <BR>
+Would the Committee agree that there are not any rules prohibiting the
+above construction? <BR>
+<LI>
+In this structure we are asked to find the offset of a field that has not
+yet been encountered: <BR>
+<B><TT>struct t2 {<BR>
+char c;<BR>
+union {<BR>
+int i[offsetof(struct t2, s)];<BR>
+short s;<BR>
+} u;<BR>
+}; <BR>
+</TT></B>Would the Committee agree that there do not appear to be any rules
+that make this construct illegal? <BR>
+<LI>
+The following structure has infinitely many ``solutions:'' <BR>
+<B><TT>struct t3 {<BR>
+char a[offsetof(struct t3, i)];<BR>
+int i;<BR>
+} <BR>
+</TT></B>since <B><TT>char</TT></B> has size 1, any size of array will
+be the same as the <B><TT>offsetof</TT></B> the field <B><TT>i</TT></B>.
+<LI>
+The following structure has no ``solutions:'' <BR>
+<B><TT>struct t4 {<BR>
+int a[offsetof(struct t3, i)];<BR>
+int i;<BR>
+} <BR>
+int</TT></B> is always larger than 1. <BR></OL>
+<B>Response</B> <BR>
+<OL TYPE=a>
+<LI> Example: <BLOCKQUOTE>
+<B><TT>struct t1 {<BR>
+char c;<BR>
+short s;<BR>
+int i[offsetof(struct t1, s)];<BR>
+};</TT></B> </BLOCKQUOTE>
+This is <I>not</I> a valid use of the <B><TT>offsetof</TT></B> macro. The
+hypothetical <B><TT>static <I>type</I> t;</TT></B> declaration required
+for <B><TT>offsetof</TT></B> (cf. subclause 7.1.6) could not have validly
+appeared prior to the invocation of <B><TT>offsetof</TT></B> because the
+type <B><TT>struct t1</TT></B> is incomplete (cf. subclause 6.7.2); therefore
+the <B><TT>offsetof</TT></B> invocation is not strictly conforming. <BR>
+<LI> The answer is the same as (a) above. In addition, the members mentioned
+in these invocations are not in scope. <BR>
+<LI> The answer is the same as (a) above. In addition, the members mentioned
+in these invocations are not in scope. <BR>
+<LI> The answer is the same as (a) above. In addition, the members mentioned
+in these invocations are not in scope. <BR></OL>
+<B>Question</B> 7 <BR>
+<B><TT>sizeof</TT></B> various identifiers (subclause 7.1.6) <BR>
+a) <BR>
+<B><TT>void f(int c, char a[sizeof(c)]);</TT></B> <BR>
+b) <BR>
+<B><TT>int i;<BR>
+struct {<BR>
+int i;<BR>
+char a[sizeof(i)];<BR>
+}; <BR>
+</TT></B>Now the argument to <B><TT>sizeof</TT></B> must be an expression
+or a type. <BR>
+In (a) is <B><TT>c</TT></B> an expression? I think not because: <BR>
+expression -&gt; object -&gt; has storage in execution envrionment <BR>
+and <B><TT>c</TT></B> does not have storage allocated to it. So (a) violates
+a semantic ``shall'' and is undefined behavior. <BR>
+Now in (b) the field <B><TT>i</TT></B> is obviously not an expression.
+But is it visible? Like the outer <B><TT>i</TT></B>, it has file scope.
+However, it is in a different namespace. There are no rules for namespace
+resolution in the <B><TT>sizeof</TT></B> subclause. <BR>
+So is (b) legal or undefined behavior? <BR>
+<B>Response</B> <BR>
+<OL TYPE=a>
+<LI>
+Example: <BR>
+<B><TT>void f(int c, char a[sizeof(c)]);</TT></B> <BR>
+The reference to <B><TT>c</TT></B> is an expression because the previosly
+declared identifier designates a function parameter (cf. subclause 6.5.4.3),
+which is an object (subclause 3.15), thus meeting the requirement in subclause
+6.3.1. <BR>
+<LI> Another example: <BR>
+<B><TT>int i;<BR>
+struct {<BR>
+int i;<BR>
+char a[sizeof(i)];<BR>
+}; <BR>
+</TT></B>In C, this is okay. Subclause 6.1.2.3, <B>Name spaces of identifiers</B>,
+requires that <B><TT>i</TT></B> in the <B><TT>sizeof</TT></B> expression
+refers to the external <B><TT>i</TT></B>, not the member. <BR>
+<B>Question</B> 8 <BR>
+Refer to subclause 6.1.2.5, page 22, lines 32-36: <BR>
+<BR>
+<LI> <TT><B>char c = 7; /*</B><I> implementation defined behavior, since 7 need
+not<BR>
+be a member of the basic execution character set</I><B> */ <BR>
+</B></TT>
+<LI> <TT><B>c = 'a'; /*</B><I> ok</I><B> */<BR>
+c++; /*</B><I> implementation defined</I><B> */ <BR>
+</B></TT>c) <BR>
+<TT><B>c = '1'; /*</B><I> ok</I><B> */<BR>
+c++; /* </B><I>ok?</I><B> */ <BR>
+</B></TT>
+It has been suggested that the above constructs are not implementation
+defined. <BR>
+Subclause 6.1.3.4, page 29, lines 30-33: <BR>
+<LI> <TT><B>c = '\07'; /*</B><I> what is in the source/execution character set
+is<BR>
+given in subclause 5.2.1. Anything else is an extension.</I><B> */ <BR>
+</B></TT>e) <BR>
+<B><TT>c = '$'; <BR>
+</TT></B>It has been suggested that characters may be added to the basic
+source/execution character set without implementation defined behavior
+being invoked. (I guess my position on this item can be deduced from the
+text.) <BR>
+</OL>
+<B>Response</B> <BR>
+<OL TYPE=a>
+<LI>Subclause 6.1.2.5 says ``An object declared as type <B><TT>char</TT></B>
+is large enough to store any member of the basic execution character set...
+If other quantities are stored in a <B><TT>char</TT></B> object, the behavior
+is implementation-defined: the values are treated as either signed or nonnegative
+integers.'' Consider this example: <BR>
+<B><TT>char c = 7;</TT></B> <BR>
+The assignment <B><TT>c = 7</TT></B> is not implementation-defined because,
+from a reasonable reading of subclause 6.1.2.5, it is clear that the only
+implementation-defined behavior here is the signedness of the value of
+the <B><TT>char</TT></B> object. <BR>
+<LI> Another example: <BR>
+<B><TT>c = 'a';<BR>
+c++;</TT></B> <BR>
+The increment of <B><TT>c</TT></B> after assigning an <B><TT>'a'</TT></B>
+to it is defined by the implementation because the numeric encoding of
+<B><TT>'a'</TT></B> is defined by the implementation. If <B><TT>'a'</TT></B>
+were equal to <B><TT>CHAR_MAX</TT></B>, the increment could even cause
+an overflow (cf. subclause 5.2.1). <BR>
+<LI> Another example: <BR>
+<B><TT>c = '1';<BR>
+c++;</TT></B> <BR>
+The increment of <B><TT>c</TT></B> after assigning a <B><TT>'1'</TT></B>
+to it is not implementation-defined because the characters <B><TT>'0'</TT></B>
+through <B><TT>'9'</TT></B> are required to be a contiguous range (cf.
+subclause 5.2.1). Thus, the result is <B><TT>'2'</TT></B>. <BR>
+<LI> Another example: <BR>
+<B><TT>c = '\07';</TT></B> <BR>
+The value of the character constant <B><TT>'\07'</TT></B> is defined by
+the C Standard (cf. subclause 6.1.3.4, page 29, line 10-13). The implementation-defined
+behavior of some escape sequences, described on page 29, lines 30-33, is
+clarified in the example on page 30, lines 8-14. <BR>
+<LI>
+Another example: <BR>
+<B><TT>c = '$';</TT></B> <BR>
+If <B><TT>$</TT></B> is in the execution character set, the value of <B><TT>'$'</TT></B>
+is locale-specific and so must be defined by the implementation (cf. subclause
+5.2.1). </OL>
+<B>Question</B> 9 <BR>
+re: UK request for interpretation cai027 (
+<A HREF="dr_017.html#Question27">Defect Report #017 Question 27</A>)
+<BR>
+X3J11 refs: 90-056, 90-083 <BR>
+It has been pointed out, and the UK C panel agreed at its last meeting,
+that the request for interpretation was unnecessary. The C Standard was
+clear and unambiguous as is. <BR>
+To make matters worse, X3J11 appears to have given an interpretation that
+is the opposite of what the C Standard says. <BR>
+The UK would like to withrdaw this request for interpretation and ask the
+Committee to reconsider its position. <BR>
+<B>Response</B> <BR>
+We reaffirm the previous interpretation. <BR>
+
+<A HREF="dr_039.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_041.html">Next Defect Report</A>
+</BODY></HTML>

@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #023</TITLE></HEAD><BODY>
+<H2>Defect Report #023</H2>
+
+<B>Submission Date</B>: 10 Dec 92 <BR>
+<B>Submittor</B>: WG14 <BR>
+<B>Source</B>: X3J11/91-003 (Fred Tydeman) <BR>
+<B>Question</B> 1 <BR>
+Assuming that 99999 is larger than <B><TT>DBL_MAX_10_EXP</TT></B>, what
+is the result of: <BR>
+<B><TT>strtod(&quot;0.0e99999&quot;, &amp;ptr);</TT></B> <BR>
+Is it 0.0, <B><TT>HUGE_VAL</TT></B>, or undefined? <BR>
+Subclause 6.1.3.1 <B>Floating constants</B> on page 26, lines 30-32 says:
+``The significand part is interpreted as a decimal rational number; the
+digit sequence in the exponent part is interpreted as a decimal integer.
+The exponent indicates the power of 10 by which the significand part is
+to be scaled.'' In this case <B><TT>0.0e99999</TT></B> means 0.0 times
+10 to the power 99999, or 0.0x10<SUP>99999</SUP>, which has a scaled value
+of 0.0; therefore, return 0.0. <BR>
+Subclause 7.10.1.4 <B>The <TT>strtod</TT> function</B> on page 151, lines
+12-14 says: ``If the correct value is outside the range of representable
+values, plus or minus <B><TT>HUGE_VAL</TT></B> is returned (according to
+the sign of the value), and the value of the macro <B><TT>ERANGE</TT></B>
+is stored in <B><TT>errno</TT></B>.'' Since the exponent (99999 in this
+case) is larger than <B><TT>DBL_MAX_10_EXP</TT></B>, the value is outside
+the range of representable values (overflow). Therefore, return <B><TT>HUGE_VAL</TT></B>.
+<BR>
+Subclause 5.2.4.2.2 <B>Characteristics of floating types &lt;<TT>float.h&gt;</TT></B>,
+pages 14-16, describes the model that defines the floating-point types.
+The number <B><TT>0.0e99999</TT></B>, as written, is not part of that model
+(it cannot be represented since the exponent is larger than <I>e<SUB>max</SUB></I>).
+From subclause 6.2.1.4 <B>Floating types</B> page 35, lines 11-13, ``...
+if the value being converted is outside the range of values that can be
+represented, the behavior is undefined.'' Therefore, since this number,
+as written, has no representation, the behavior is undefined. <BR>
+<B>Response</B> <BR>
+According to our response to <A HREF="dr_025.html">Defect Report
+#025, Question 1</A>, the result of <B><TT>strtod(&quot;0.0e99999&quot;,
+&amp;ptr)</TT></B> is exactly representable, i.e., it lies within the range
+of representable values. Therefore, by subclause 7.10.1.4, <B>Returns</B>,
+the value zero shall be returned in this case, and <B><TT>errno</TT></B>
+shall not be set. (This means that implementations have to test for the
+special case of zero when creating floating-point representations from
+characters.) <BR>
+Note also that <B><TT>strtod(&quot;0.0e-99999&quot;, &amp;ptr)</TT></B>
+is not a case of underflow, so <B><TT>errno</TT></B> shall not be set to
+<B><TT>ERANGE</TT></B> in this case either. <BR>
+
+<A HREF="dr_022.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_024.html">Next Defect Report</A>
+</BODY></HTML>

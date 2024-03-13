@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #147</TITLE></HEAD>
+<BODY><H2>Defect Report #147</H2> 
+<B>Submission Date</B>: 23 Feb 95
+<BR>
+<B>Submittor</B>: BSI
+<BR>
+<B>Source</B>: Clive D.W. Feather
+<BR>
+<B>Question</B>
+<BR>
+<I>Submitted to BSI by Clive D.W. Feather clive@sco.com.</I>
+<BR>
+<I>In this Defect Report, identifiers lexically identical to those 
+declared in standard headers refer to the identifiers declared in  those
+standard headers, whether or not the header is explicitly mentioned.</I>
+<BR>
+<I>This Defect Report has been prepared with considerable help from 
+Mark Brader, Jutta Degener, Ronald Guilmette, and a person whose
+employment  conditions require anonymity. However, except where stated,
+opinions  expressed or implied should not be assumed to be those of any
+person  other than myself.</I>
+<BR> Defect Report UK 031: Sequence points in library functions
+<BR> There is no requirement for a sequence point to occur within a
+library  function, since it might not be written in C. Consider the
+following  code:
+<BR>
+<TT><B>#include &lt;string.h><BR> char s[10];<BR> /*</B><I> ...</I><B> */<BR>
+(strcpy)(s, "Testing") [0] = 'X';
+<BR></B></TT> Any function written in C must have a sequence point after
+the last  full expression evaluated (which will be the returned value if
+there  is one), so if <TT><B>strcpy</B></TT> were a C function, the
+assigning of <TT><B>'T'</B></TT>  to <TT><B>s[0]</B></TT> would be
+completed before the call returned.
+<BR> However, since library functions might not be written in C, they
+might  not have such a sequence point. If not, then the above statement
+is  in breach of the requirements of the second paragraph of subclause
+6.3.
+<BR>
+<B>Suggested Technical Corrigendum:</B>
+<BR> Add to the end of subclause 7.1.7:
+<BR> There is a sequence point immediately before a library function 
+returns.
+<BR> Add to the end of annex C:
+<BR>
+<BR>Immediately before a library function returns (7.1.7).
+<BR> Add a reference to 7.1.7 in the <B>Forward References</B> of
+5.1.2.3,  and in the relevant <B>Index</B> entry.
+<BR> Response
+<BR> We agree that the current wording does not make this clear. The
+next  revision of the C Standard will clarify that every function return
+ is a sequence point. The suggested changes will be used.<BR>
+<A HREF="dr_146.html">Previous Defect Report</A> 
+&lt; - &gt; 
+<A HREF="dr_148.html"> Next Defect Report</A></BODY></HTML>

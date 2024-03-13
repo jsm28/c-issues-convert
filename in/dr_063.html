@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #063</TITLE></HEAD><BODY>
+<H2>Defect Report #063</H2>
+<B>Submission Date</B>: 01 Dec 93
+<BR>
+<B>Submittor</B>: Project Editor (P.J. Plauger)
+<BR>
+<B>Source</B>: Thomas Plum
+<BR>
+<B>Question</B>
+<BR>
+[This is Defect Report #056, resubmitted for administrative reasons.]
+<BR>
+The following requirement is implied in several places, but not explicitly 
+stated. It should be explicitly affirmed, or alternative wording adopted.
+<BR>
+The representation of floating-point values (such as floating-point 
+constants, the results of floating-point expressions, and floating-point 
+values returned by library functions) shall be accurate to one unit 
+in the last position, as defined in the implementation's <TT><B>&lt;float.h></B></TT> 
+header.
+<BR>
+Discussion: The values in <TT><B>&lt;float.h></B></TT> aren't required to document 
+the underlying bitwise representations. If you want to know how many 
+bits, or bytes, a floating-point values occupies, use <TT><B>sizeof</B></TT>. 
+The <TT><B>&lt;float.h></B></TT> values document the mathematical properties of 
+the representation, the behaviors that the programmer can count upon 
+in analyzing algorithms.
+<BR>
+It is a quality-of-implementation question as to whether the implementation 
+delivers accurate bits throughout the bitwise representation, or alternatively, 
+delivers considerably less accuracy. The point being clarified is 
+that <TT><B>&lt;float.h></B></TT> documents the delivered precision, not the theoretically 
+possible precision.
+<BR>
+<B>Response</B>
+<BR>
+The C Standard imposes no requirement on the accuracy of floating-point 
+arithmetic.
+<BR>
+Further discussion:
+<BR>
+The C Standard speaks directly to the matter of floating-point accuracy 
+only in one or two areas. Subclause 6.2.1.4 <B>Floating types</B>, 
+page 35, says of conversions from one floating type to one with less 
+range and/or precision:
+<BLOCKQUOTE>
+If the value being converted is in the range of values that 
+can be represented but cannot be represented exactly, the result is 
+either the nearest higher or nearest lower value, chosen in an implementation-defined 
+manner.
+</BLOCKQUOTE>
+And in subclause 6.2.1.5 <B>Usual arithmetic conversions</B>, page 
+35:
+<BLOCKQUOTE>
+The values of floating operands and of the results of floating 
+expressions may be represented in greater precision and range than 
+that required by the type; the types are not changed thereby.
+</BLOCKQUOTE>
+Otherwise, arithmetic for both integer and floating types is defined 
+in terms of the usual terminology of mathematics. Nothing in the C 
+Standard suggests that floating arithmetic is excused from the conventional 
+rules of arithmetic.
+<BR>
+Nevertheless, it is commonplace for the functions declared in <TT><B>&lt;math.h></B></TT> 
+to deliver results less accurate than the underlying representation 
+can support. It is not uncommon even for simple arithmetic expressions 
+to do the same. And still, implementations document in <TT><B>&lt;float.h></B></TT> 
+properties of the underlying <I>representation,</I> not the effective 
+range and precision reliably delivered. The C community has typically 
+tolerated a certain laxity in this area.
+<BR>
+Probably the most useful response would be to amend the C Standard 
+by adding two requirements on implementations:
+<BR>
+<BR>Require that an implementation document the maximum errors it 
+permits in arithmetic operations and in evaluating math functions. 
+These should be expressed in terms of ``units in the least-significant 
+position'' (ULP) or ``lost bits of precision.''
+<BR>
+<BR>Establish an upper bound for these errors that all implementations 
+must adhere to.
+<BR>
+The state of the art, as the Committee understands it, is:
+<BR>
+<BR>correctly rounded results for arithmetic operations (no loss 
+of precision)
+<BR>
+<BR>1 ULP for functions such as <TT><B>sqrt</B></TT>, <TT><B>sin</B></TT>, and <TT><B>cos</B></TT> 
+(loss of 1 bit of precision)
+<BR>
+<BR>4-6 ULP (loss of 2-3 bits of precision) for other math functions. 
+<BR>
+<BR>
+ Since not all commercially viable machines and implementations 
+meet these exacting requirements, the C Standard should be somewhat 
+more liberal.
+<BR>
+The Committee would, however, suggest a requirement no more liberal 
+than a loss of 3 bits of precision, out of kindness to users. An implementation 
+with worse performance can always conform by providing a more conservative 
+version of <TT><B>&lt;float.h></B></TT>, even if that is not a desirable approach 
+in the general case.
+<BR>
+The Committee should revisit this issue during the revision of the 
+C Standard.
+<BR>
+<A HREF="dr_062.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_064.html">Next Defect Report</A>
+</BODY></HTML>

@@ -1,0 +1,270 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 13), see www.w3.org">
+
+  <style type="text/css">
+.deleted        { text-decoration: line-through;        color: orange; }
+  .inserted       { text-decoration: underline;           color: red; }
+  </style>
+
+  <title>Defect report #345</title>
+</head>
+
+<body>
+  <h2 align="center">Defect Report #345</h2><a href=
+  "dr_344.htm">Previous Defect Report</a> &lt; - &gt; <a href=
+  "dr_201.htm">Next Defect Report</a>
+
+  <p><br>
+  <b>Submitter:</b> Derek Jones (UK)<br>
+  <b>Submission Date:</b> 2007-04-23<br>
+  <b>Source:</b> Rob Arthan &lt;UK&gt;<br>
+  <b>Reference Document:</b> N/A<br>
+  <b>Version:</b> 1.3<br>
+  <b>Date:</b> 2008-09-12<br>
+  <b>Subject:</b> Where does parameter scope start?</p>
+
+  <p><b>Summary</b></p>
+
+  <p>1)</p>
+
+  <p>The wording in 6.2.1p7:</p>
+
+  <blockquote>
+    Any other identifier [except a struct/union tag or an
+    enumeration constant] has scope that begins just after the
+    completion of its declarator.
+  </blockquote>permits the use of <code>q</code> in the following
+  declaration of the parameter <code>r</code>.
+
+  <blockquote>
+    <pre>
+void f(
+     long double q,
+     char (**r)[10 * sizeof q])
+{ }
+</pre>
+  </blockquote>However, consider 6.9.1p9 (which was not in C90):
+
+  <blockquote>
+    Each parameter has automatic storage duration. Its identifier
+    is an lvalue, which is in effect declared at the head of the
+    compound statement that constitutes the function body ...
+  </blockquote>This does not appear to permit the use of
+  <code><b>q</b></code> in the declaration of the parameter
+  <code><b>r</b></code>.
+
+  <p>Does <code><b>q</b></code> have two points of declaration (one
+  at the end of its declarator and one at the head of the compound
+  statement)?</p>
+
+  <p>2)</p>
+
+  <p>Consider the situation when a function has a parameter with
+  the same name as the function, as in the following example:</p>
+
+  <blockquote>
+    <pre>
+#include&gt;stdio.h&lt;
+void f(
+     long double f,
+/* #1 */
+     char (**a)[10 * sizeof f])
+{
+/* #2 */
+         printf("%d\n", (int) sizeof **a);
+/* #3 */
+}
+int main(void)
+{
+         f(0, 0);
+         return 0;
+}
+/* #4 */
+</pre>
+  </blockquote>6.2.1p4 says:
+
+  <blockquote>
+    ... If an identifier designates two different entities in the
+    same name space, the scopes might overlap. If so, the scope of
+    one entity (the inner scope) will be a strict subset of the
+    scope of the other entity (the outer scope). Within the inner
+    scope, the identifier designates the entity declared in the
+    inner scope ...
+  </blockquote>The scope of the function <code><b>f</b></code>
+  starts at #2 and continues to the end of the file (#4). The scope
+  of the parameter <code><b>f</b></code> starts at #1 and continues
+  to the end of the definition of the function
+  <code><b>f</b></code> (#3). Neither of these scopes is a strict
+  subset of the other.
+
+  <p><b>Suggested Technical Corrigendum</b><br></p>
+
+  <p>1)</p>
+
+  <p>None proposed.</p>
+
+  <p>2)</p>
+
+  <p>One solution is to fix up the scope overlap wording in 6.2.1p4
+  and acknowledge that the function <code><b>f</b></code> in the
+  above example is not callable (although currently callable by
+  some compilers that have been tried).</p>
+
+  <p>The second sentence from 6.2.1p4 could be amended to read:</p>
+
+  <blockquote>
+    ... scopes might overlap. If so, the scope of one entity (the
+    inner scope) will end strictly before the scope of the other
+    entity (the outer scope). Within the inner scope, ...
+  </blockquote>So the example would be conformant and would print
+  out 10 times the size of a <code>long double</code>.<br>
+  <hr>
+
+  <p><b>Committee Discussion</b></p>
+
+  <h4>Spring 2007</h4>
+
+  <p>There was no consensus for question 2.</p>
+
+  <p>For question 1: The Committee believes that 6.9.1 paragraph 9
+  is a comment on the storage duration and does not override the
+  lexical scope described in 6.2.1 paragraph 7.</p>
+
+  <h4>Fall 2007</h4>
+
+  <p>General consensus is that the wording in the Standard is
+  basically not correct and needs to be reworked.</p>
+
+  <p>Also see comments in WG14 e-mail <i>SC22WG14.11380</i></p>
+
+  <h4>Spring 2008</h4>
+
+  <h4>Question 1</h4>
+
+  <p>C++ 3.3.2p2 has three sentences (words irrelevant to C are
+  deleted):</p>
+
+  <ol>
+    <li>The potential scope of a function parameter name or of a
+    function-local predefined variable in a function definition
+    begins at its point of declaration.</li>
+
+    <li>The potential scope of a parameter or of a function-local
+    predefined variable ends at the end of the outermost block of
+    the function definition.</li>
+
+    <li>A parameter name shall not be redeclared in the outermost
+    block of the function definition.</li>
+  </ol>
+
+  <p>For sentence 1, 6.2.1p7 already says:</p>
+
+  <blockquote>
+    <p>Any other identifier has scope that begins just after the
+    completion of its declarator.</p>
+  </blockquote>
+
+  <p>For sentence 2, 6.2.1p4 already says:</p>
+
+  <blockquote>
+    <p>If the declarator or type specifier that declares the
+    identifier appears inside a block or within the list of
+    parameter declarations in a function definition, the identifier
+    has <dfn>block scope</dfn>, which terminates at the end of the
+    associated block.</p>
+  </blockquote>
+
+  <p>For sentence 3, 6.7p3 already says:</p>
+
+  <blockquote>
+    <p>If an identifier has no linkage, there shall be no more than
+    one declaration of the identifier (in a declarator or type
+    specifier) with the same scope and in the same name space,
+    except for tags as specified in 6.7.2.3.</p>
+  </blockquote>
+
+  <p>And 6.2.1p6 says:</p>
+
+  <blockquote>
+    <p>Two identifiers have the <dfn>same scope</dfn> if and only
+    if their scopes terminate at the same point.</p>
+  </blockquote>
+
+  <p>So what the C++ standard says, and what the C standard needs
+  to say, about the scope of a parameter name is already covered in
+  the C standard, outside of 6.9.1p9. Therefore, I suggest
+  modifying 6.9.1p9 as indicated:</p>
+
+  <blockquote>
+    <p>Each parameter has automatic storage duration. Its
+    identifier is an lvalue<span class="deleted">, which is in
+    effect declared at the head of the compound statement that
+    constitutes the function body (and therefore cannot be
+    redeclared in the function body except in an enclosed
+    block)</span>. The layout of the storage for parameters is
+    unspecified.</p>
+  </blockquote>
+
+  <p>Additionally, if desired, add a footnote at the point of the
+  deletion:</p>
+
+  <blockquote>
+    <p class="inserted">A parameter identifier cannot be redeclared
+    in the function body except in an enclosed block.</p>
+  </blockquote>
+
+  <h4>Question 2</h4>
+
+  <p>The words "a strict subset" are technically incorrect, but
+  nothing really depends on them. Fixing them can be treated as an
+  editorial matter.</p>
+
+  <p>One possibility would be simply to qualify that statement with
+  "generally" or "usually". The submitter's suggested technical
+  corrigendum would also be technically correct. In 6.2.1p4:</p>
+
+  <blockquote>
+    <p>... If an identifier designates two different entities in
+    the same name space, the scopes might overlap. If so, the scope
+    of one entity (the <dfn>inner scope</dfn>) will <span class=
+    "deleted">be a strict subset of</span> <span class=
+    "inserted">end strictly before</span> the scope of the other
+    entity (the <dfn>outer scope</dfn>). Within the inner scope,
+    the identifier designates the entity declared in the inner
+    scope; the entity declared in the outer scope is
+    <dfn>hidden</dfn> (and not visible) within the inner scope.</p>
+  </blockquote>
+
+  <p><b>Change for C1X</b></p>
+
+  <p>Change 6.9.1 paragraph 9 to:</p>
+
+  <blockquote>
+    <p>Each parameter has automatic storage duration. Its
+    identifier is an lvalue,<sup>*</sup> the layout of the storage
+    for parameters is unspecified.</p><sup>*</sup>A parameter
+    identifier cannot be redeclared in the function body except in
+    an enclosed block.
+  </blockquote>
+
+  <p>Change 6.2.1 paragraph 4 to:</p>
+
+  <blockquote>
+    <p>... If an identifier designates two different entities in
+    the same name space, the scopes might overlap. If so, the scope
+    of one entity (the <i>inner scope</i>) will end strictly before
+    the scope of the other entity (the <i>outer scope</i>). Within
+    the inner scope, the identifier designates the entity declared
+    in the inner scope; the entity declared in the outer scope is
+    <i>hidden</i> (and not visible) within the inner scope.</p>
+  </blockquote>
+
+  <p><br>
+  <a href="dr_344.htm">Previous Defect Report</a> &lt; - &gt;
+  <a href="dr_201.htm">Next Defect Report</a></p>
+</body>
+</html>

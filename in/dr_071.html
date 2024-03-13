@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #071</TITLE></HEAD><BODY>
+<H2>Defect Report #071</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Clive Feather
+<BR>
+<B>Question</B>
+<BR>
+Item 8 - enumerated types
+<BR>
+The C Standard states (in effect) that an enumerated type is a set 
+of integer constant values (subclause 6.1.2.5). It also states that 
+an enumerated type must be compatible with an implementation-defined 
+integer type (subclause 6.5.2.2). Finally, the integral promotions 
+(subclause 6.2.1.1) convert an enumerated type to <TT><B>signed</B></TT> or 
+<TT><B>unsigned int</B></TT>. Consider:
+<BR>
+<TT><B>enum foo { foo_A = 0, foo_B = 1, foo_C = 8 };<BR>
+enum bar { bar_A = -10, bar_B = 10 };<BR>
+enum qux { qux_A = UCHAR_MAX * 4, qux_B };
+<BR></B></TT>
+<OL TYPE=a>
+<LI> If any value between zero and <TT><B>SCHAR_MAX</B></TT> (inclusive) is 
+assigned to a variable of type <TT><B>enum foo</B></TT>, and the value of the 
+variable is then converted to type <TT><B>int</B></TT> or <TT><B>unsigned int</B></TT>, 
+does the C Standard require the original value to result; or is the 
+implementation permitted or required to convert it to one of the three 
+values 0, 1, and 8; or is the result of the assignment undefined?
+<LI> Can a conforming implementation require all enumerated types 
+to be compatible with a single type?
+<LI> If the answer to (b) is ``yes,'' and assuming that the 
+value <TT><B>UCHAR_MAX * 4</B></TT> is less than <TT><B>SHRT_MAX</B></TT> is the declaration 
+of the type <TT><B>enum qux</B></TT> strictly conforming, or can a conforming 
+implementation require all enumerated types to be compatible with 
+a single type which is a character type?
+<LI> Can an implementation make the type that <TT><B>enum bar</B></TT> is compatible 
+with be an unsigned type, even though it uses an enumeration constant 
+not representable in that type?
+<LI> Can an implementation make the type that <TT><B>enum qux</B></TT> is compatible 
+with be either of <TT><B>signed char</B></TT> or <TT><B>unsigned char</B></TT>, even though 
+it uses an enumeration constant not representable in that type?
+<LI> If the answer to (d) or (e) is ``yes,'' what is the effect 
+of making one of the enumeration constants of an enumerated type outside 
+the range of the compatible type? What is the effect of assigning 
+the value of that constant to an object of the enumerated type?
+<LI> Can the type that an enumerated type is compatible with be <TT><B>signed</B></TT> 
+or <TT><B>unsigned long</B></TT>? If so, what are the effects of the integral 
+promotions on a value of that type?
+<LI> If an implementation is allowed to add other types to the list 
+of integer types (see items 4(b) and (c)), then can the type that 
+an enumerated type is compatible with be such a type?
+</Ol>
+<B>Response</B>
+<BR>
+a) Every enumerated type is compatible with some integer type (subclause 
+6.5.2.2). When conversion takes place between compatible types, values 
+are not altered (subclause 6.2). So for values between 0 and <TT><B>SCHAR_MAX</B></TT>, 
+the original value must result, because no matter what type is chosen, 
+the value can be expressed in that type.
+<BR>
+b) Yes it can.
+<BR>
+c-g) It is the intention of the C Standard that all the members of 
+the enumeration be representable in the enumerated type, and that 
+the compatible integer type be one which promotes to <TT><B>int</B></TT> or 
+<TT><B>unsigned int</B></TT>.
+<BR>
+h) An implementation is not allowed to add other types to the list. 
+(See reply to <A HREF="dr_067.html">Defect Report #067</A>.)
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>In subclause 6.5.2.2, page 61, second paragraph of Semantics, 
+change:</B></I>
+<BR>
+Each enumerated type shall be compatible with an integer type; the 
+choice of type is implementation-defined.
+<BR>
+<I><B>to:</B></I>
+<BR>
+Each enumerated type shall be compatible with an integer type. The 
+choice of type is implementation-defined, but shall be capable of 
+representing the values of all the members of the enumeration.
+<BR>
+<A HREF="dr_070.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_072.html">Next Defect Report</A>
+</BODY></HTML>

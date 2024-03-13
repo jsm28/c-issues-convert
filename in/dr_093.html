@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #093</TITLE></HEAD><BODY>
+<H2>Defect Report #093</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Clive Feather
+<BR>
+<B>Question</B>
+<BR>
+Item 30 - reservation of identifiers
+<BR>
+Can a conforming freestanding implementation reserve identifiers? 
+Subclause 5.1.2.1 states that only one identifier (the equivalent 
+of <TT><B>main</B></TT>) is reserved in a freestanding implementation. Subclause 
+7.1.3 states that certain identifiers are reserved, even when the 
+corresponding headers are not included. This is a direct contradiction.
+<BR>
+<B>Response</B>
+<BR>
+The Committee observes that conforming freestanding implementations
+tend to vary widely in the library facilities provided, and that the
+simple binary choice implied by the above text is really a continuum.
+It also notes that it is difficult to provide a C implementation
+with no reserved names (not even those beginning with two
+underscores). It is therefore felt to be unreasonable to restrict the
+names available to implementors of freestanding implementations
+compared with hosted implementations.
+<BR>
+The Committee notes that certain freestanding programs (such as
+UNIX kernels) have tended to use names such as <TT><B>exit</B></TT>,
+but agrees that existing practice dictates that the authors of such
+programs must already be prepared to change such names when using
+certain compilers.
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>In subclause 5.1.2.1, page 6, delete:</B></I>
+<BR>
+There are otherwise no reserved external identifiers.
+<BR>
+<A HREF="dr_092.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_094.html">Next Defect Report</A>
+</BODY></HTML>

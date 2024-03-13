@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 13), see www.w3.org">
+
+  <title>Defect report #334</title>
+</head>
+
+<body>
+  <h2 align="center">Defect Report #334</h2><a href=
+  "dr_333.htm">Previous Defect Report</a> &lt; - &gt; <a href=
+  "dr_335.htm">Next Defect Report</a>
+
+  <p><br>
+  <b>Submitter:</b> Fred Tydeman (USA)<br>
+  <b>Submission Date:</b> 2006-12-12<br>
+  <b>Source:</b> WG 14<br>
+  <b>Reference Document:</b> <a href=
+  "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1203.htm">ISO/IEC
+  WG14 N1203</a><br>
+  <b>Version:</b> 1.3<br>
+  <b>Date:</b> 2008-04-16<br>
+  <b>Subject:</b>Missing semantics of comparison macros</p>
+
+  <p><b>Summary</b></p>
+
+  <p>Section 7.12.14 Comparison macros (and subsections) are
+  missing <b>Semantics</b>. In particular, something along the
+  lines of: "The usual arithmetic conversions are performed on the
+  operands." This matters if the two operands are of different
+  type, e.g., <b>isless(4.f/3.f,4.L/3.L)</b>.</p>
+
+  <p>In addition, we might need to add something alone the lines
+  of: "The result of the ... operator is ..." to each of the
+  subsections. We should consider section 6.5.8 Relational
+  operators when we process this defect.</p>
+
+  <p>We should review the <b>Constraints</b> of 6.5.* and consider
+  adding something along the lines of: "Each of the operands shall
+  have real floating-type." to 7.12.14 as a constraint. The example
+  in 7.12.3.1 paragraph 4 which uses <b>sizeof</b> will not work
+  when <b>float</b> and <b>_Decimal32</b> are the same size; nor
+  for <b>double</b> and <b>_Decimal64</b> being the same size.</p>
+
+  <p><b>Suggested Technical Corrigendum</b></p>
+  <hr>
+
+  <p><b>Proposed Technical Corrigendum</b><br></p>
+
+  <p><b>Committee Discussion</b> (for history only)</p>
+
+  <h4>Spring 2007</h4>
+
+  <p>There seem to be consensus that the comparison functions are
+  under-specified.</p>
+
+  <p>The Standard currently says:</p>
+
+  <blockquote>
+    In the synopses in this subclause, real-floating indicates that
+    the argument shall be an expression of real floating type.
+  </blockquote>This is well defined, see 6.2.5 para 10. However,
+  several in attendance believe there should be explicit language
+  explaining whether or not the two arguments to a comparison macro
+  must be the same real-floating type or allowed to be different
+  real-floating type.
+
+  <h4>Fall 2007</h4>
+
+  <p>It as also asked for the following to be added to the
+  committee discussion:</p>
+
+  <blockquote>
+    IEEE-754 (and IEEE-754R) require that comparison operations
+    work in all supported formats, even if the operands' format
+    differ. C99+TC1+TC2, Annex F.3, printed page 445, first bullet
+    says that the comparison macros (along with the relational and
+    equality operators) are the IEC 60559 comparisons.
+  </blockquote>
+
+  <h4>Spring 2008</h4>
+
+  <p>This work could possibly fit into the <i>type
+  generic/overloading</i> project that needs to be completed for
+  C1X.</p>
+
+  <p><b>Committee Response</b></p>
+
+  <p>This issue will be addressed in a future revision of the C
+  standard. See WG 14 document N<b><small>xxx</small></b>.</p>
+
+  <p><br>
+  <a href="dr_333.htm">Previous Defect Report</a> &lt; - &gt;
+  <a href="dr_335.htm">Next Defect Report</a></p>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #175</TITLE></HEAD>
+<BODY><H2>Defect Report #175</H2> 
+<B>Submission Date</B>: 16 Oct 95
+<BR>
+<B>Submittor</B>: BSI
+<BR>
+<B>Source</B>: Clive D.W. Feather
+<BR>
+<B>Question</B>
+<BR>
+<I>Submitted to BSI by Clive D.W. Feather  clive@sco.com .</I>
+<BR>
+<I>In this Defect Report, identifiers lexically identical to those 
+declared in standard headers refer to the identifiers declared in  those
+standard headers, whether or not the header is explicitly mentioned.</I>
+<BR>
+<I>This Defect Report has been prepared with considerable help from 
+Mark Brader, Jutta Degener, Ronald Guilmette, and a person whose
+employment  conditions require anonymity. However, except where stated,
+opinions  expressed or implied should not be assumed to be those of any
+person  other than myself.</I>
+<BR> Defect Report UK 023: Correction to Technical Corrigendum 1
+<BR> An example added by TC1 is wrong.
+<BR> TC1 added the following example to subclause 7.9.6.2:
+<BR> In:
+<BR>
+<TT>  <B>#include  stdio.h <BR>         /*</B> <I>.....</I><B> */<BR>         int d1,
+d2, n1, n2, i;<BR> 	i = sscanf("123", "%d%n%n%d", &amp;d1, &amp;n1,
+&amp;n2, &amp;d2);</B>
+</TT><BR> the value 123 is assigned to <TT><B>d1</B></TT> and the
+value 3 to <TT><B>n1</B></TT>.  Because <TT><B>%n</B></TT> can never
+get an input failure the value of 3 is  also assigned to <TT><B>n2</B></TT>.
+The value of <TT><B>d2</B></TT> is not affected.  The value 3 is
+assigned to <TT><B>i</B></TT>.
+<BR> This should set <TT><B>i</B></TT> to 1, not 3, as <TT><B>%n</B></TT>
+does not affect the  returned assignment count.
+<BR>
+<B>Suggested Technical Corrigendum</B>
+<BR> In the example, change:
+<BR> The value 3 is assigned to <TT><B>i</B></TT>.
+<BR> to:
+<BR> The value 1 is assigned to <TT><B>i</B></TT>.
+<BR>
+<A HREF="dr_174.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_176.html">Next Defect Report</A></BODY></HTML>

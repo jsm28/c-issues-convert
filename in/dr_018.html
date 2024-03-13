@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #018</TITLE></HEAD><BODY>
+<H2>Defect Report #018</H2>
+
+<P><B>Submission Date</B>: 10 Dec 92 <BR>
+<B>Submittor</B>: WG14 <BR>
+<B>Source</B>: X3J11/90-066 (Yasushi Nakahara) <BR>
+<B>Question</B> 1 <BR>
+It is unclear how the <B><TT>fscanf</TT></B> function shall behave when
+executing directives that include ``ordinary multibyte characters,'' especially
+in the case of shift-encoded ordinary multibyte characters. <BR>
+The following statements are described in subclause 7.9.6.2 <B>The <TT>fscanf</TT>
+function</B> of the current standard: <BR>
+A directive that is an ordinary multibyte character is executed by reading
+the next characters of the stream. If one of the characters differs from
+one comprising the directive, the directive fails, and the differing and
+subsequent characters remain unread. <BR>
+Assume a typical shift-encoded directive: <B><TT>A\*</TT></B> in 7-bit
+representation. And consider two different encoding systems, Latin Alphabet
+No.1 - 8859/1 and German Standard DIN 66 003. The codes are, for example,
+<BR>
+<TT>A; <B>in 8859/1: SO 4/4 SI<BR>
+</B>A; <B>in DIN 66 003: ESC 2/8 4/11 5/11 ESC 2/8 4/2</B> <BR>
+where <B>SO</B></TT> is a Shift-Out code (0/15 = 0x0F) and <B>SI</B> corresponds
+to a Shift-In code (0/14). ``<B><TT>ESC 2/8 4/11</TT></B>'' is an escape
+sequence for the German Standard DIN 66 003, and ``<B><TT>ESC 2/8 4/2</TT></B>''
+is for ISO 646 USA Version (ASCII). <BR>
+Assuming that a subject sequence includes <B><TT>A;</TT></B>,
+<B><TT>O;</TT></B>, and <B><TT>U;</TT></B> with the following
+7-bit representations, <BR>
+<B><TT>in 8859/1: SO 4/4 5/6 5/12 SI<BR>
+in DIN 66 003: ESC 2/8 4/11 5/11 5/12 5/13 ESC 2/8 4/2</TT></B><TT> <BR>
+</TT>does the ``<B><TT>A;</TT></B>'' directive in the <B><TT>fscanf</TT></B>
+format string match the beginning part of the``<B><TT>A;O;U;</TT></B>''
+sequence? <BR>
+At what position of the target sequence shall the ``<B><TT>A;</TT></B>''
+directive fail? <BR>
+One interpretation of this is that because the current standard defined
+the behavior of the directive in the <B><TT>fscanf</TT></B> format based
+on the word ``character'' (byte), not using the term ``multibyte character,''
+the comparison shall be done on a byte-by-byte basis. One may conclude
+that the ``<B><TT>A;</TT></B>'' directive never matches the 
+``<B><TT>;'';O;U</TT></B>
+sequence in this case. <BR>
+Another interpretation may lead to an opposite conclusion, saying that
+the current standard's statements quoted above do not necessarily mean
+that such comparison shall be done on a byte-by-byte basis. Instead, it
+is read that the matching shall be done on a ``multibyte character by multibyte
+character basis'' or rather ``wide character by wide character basis.''
+Especially, a ``ghost'' sequence like ``<B><TT>ESC ...</TT></B>'' and <B><TT>SI<I>/</I>SO</TT></B>
+characters should not be regarded as independent ordinary multibyte characters
+in this case. <BR>
+Which is a correct interpretation of the current standard? <BR>
+These different interpretations are caused by the ambiguity of the descriptions
+in the current standard. Also, it should be pointed out that the major
+problem here is usage of the word ``character.'' The generic word ``character''
+and the specific word ``character(=byte)'' should be properly discriminated
+in the standard. <BR>
+<B>Response</B> <BR>
+Subclause 7.9.6.2 says, ``A directive that is an ordinary multibyte character
+is executed by reading the next <I>characters</I> ...'' [emphasis added].
+Consistently throughout the standard, plain ``characters'' refers to one-byte
+characters. (See subclause 3.5 for the definition of ``character.'') <BR>
+</P>
+<A HREF="dr_017.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_019.html">Next Defect Report</A>
+</BODY></HTML>

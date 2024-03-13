@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #094</TITLE></HEAD><BODY>
+<H2>Defect Report #094</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Ron Guilmette
+<BR>
+<B>Question</B>
+<BR>
+ANSI/ISO C Defect report #rfg1:
+<BR>
+There appears to be an inconsistency between the constraints on ``passing'' 
+values versus ``returning'' values. The constraints for function 
+calls clearly indicate that a diagnostic is required if any given 
+actual argument is passed (to a prototyped function) into a corresponding 
+formal parameter whose type is not assignment compatible with respect 
+to the type of the passed value. In the case of values returned by 
+a return statement however, there seems to be no such compatibility 
+constraint imposed upon the expression given
+in the <TT><B>return</B></TT> statement 
+and the corresponding (declared) function return type.
+<BR>
+A new constraint should be added to the C Standard like:
+<BLOCKQUOTE>
+If present, the expression given in a <TT><B>return</B></TT> statement 
+shall have a type such that its value may be assigned to an object 
+with the unqualified version of the return type of the containing 
+function.
+</BLOCKQUOTE>
+(This exactly mirrors the existing constraint on parameter matching 
+imposed upon calls to prototyped functions.)
+<BR>
+<B>Response</B>
+<BR>
+The constraint in the description of the <TT><B>return</B></TT> statement is 
+unneeded. Early on, the Committee decided that if a behavior was described 
+as being equivalent to another construct, all of the constraints of 
+that construct would apply. This ``chaining'' process means 
+that any violation of a constraint in any section referred to explicitly 
+or by the phrases ``equivalent behavior'' or ``as if'' 
+will generate a diagnostic.
+<BR>
+The <B>Semantics</B> section of the <TT><B>return</B></TT> statement (subclause 6.6.6.4) 
+states: ``If the expression has a type different from that of the 
+function in which it appears, it is converted as if it were assigned 
+to an object of that type.'' The constraints in the section on 
+simple assignment (subclause 6.3.16.1) are sufficient to assure assignment 
+compatibility of the two types.
+<BR>
+<A HREF="dr_093.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_095.html">Next Defect Report</A>
+</BODY></HTML>

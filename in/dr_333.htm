@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD html 4.0 transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+    <meta http-equiv="Content-Type" content=
+    "text/html; charset=iso-8859-1">
+    <meta name="GENERATOR" content=
+    "Mozilla/4.7 [en] (Win98; U) [Netscape]">
+
+    <title>Defect report #333</title>
+  </head>
+
+  <body>
+    <center>
+      <h2>Defect Report #333</h2>
+    </center>
+    <a href="dr_332.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_334.htm">Next Defect Report</a> <br>
+     &nbsp; 
+
+    <p><b>Submitter:</b> Nick Stoughton (US)<br>
+     <b>Submission Date:</b> 2006-10-24<br>
+     <b>Source:</b> Austin Group<br>
+     <b>Reference Documents:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/dr_321.htm">DR_321</a>,<br>
+
+     <b>Version:</b> 1.4<br>
+     <b>Date:</b> 2007-09-06<br>
+     <b>Subject:</b> Missing Predefined Macro Name</p>
+
+    <p><b>Summary</b></p>
+
+    <p>Defect report <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/dr_321.htm">DR_321</a>
+    introduced a new pre-defined macro name,
+    __STDC_MB_MIGHT_NEQ_WC__ that is conditionally defined by the
+    implementation. However, this new macro is not in the list of
+    macros that may be conditionally defined by the implementation
+    in 6.10.8, para 2.</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Add, in proper alphabetic order in the list in 6.10.8 para
+    2:</p>
+
+    <blockquote>
+      <tt><b>__STDC_MB_MIGHT_NEQ_WC__</b></tt> The integer constant
+      <tt>1</tt>, intended to indicate that there might be some
+      character <tt><i>x</i></tt> in the basic character set, such
+      that <tt>'<i>x</i>'</tt> need not be equal to
+      <tt>L'<i>x</i>'</tt>.
+    </blockquote>
+    <hr>
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>Add, in proper alphabetic order in the list in 6.10.8
+    paragraph 2:</p>
+
+    <blockquote>
+      <code><b>__STDC_MB_MIGHT_NEQ_WC__</b></code>&nbsp;The integer
+      constant <code><b>1</b></code>, intended to indicate that, in
+      the encoding for <code><b>wchar_t</b></code>, a member of the
+      basic character set need not have a code value equal to its
+      value when used as the lone character in an integer character
+      constant.
+    </blockquote>
+
+    <p><br>
+     <a href="dr_332.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_334.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

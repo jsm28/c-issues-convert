@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #273</title>
+  </head>
+
+  <body bgcolor="#FFFFFF">
+    <h2 align="center">Defect Report #273</h2>
+    <a href="dr_272.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_274.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> UK C Panel<br>
+     <b>Submission Date:</b> 2001-09-07<br>
+     <b>Source:</b> Clive D.W. Feather &lt;clive@demon.net&gt;<br>
+     <b>Version:</b> 1.1 <!-- ! year-month-day hour:min:sec -->
+    <br>
+     <b>Date:</b> 2002-03-07<br>
+     <b>Subject:</b> meaning of
+    <tt><b>__STDC_ISO_10646__</b></tt></p>
+    <b>Problem</b> 
+
+    <p>6.10.8 reads in part:</p>
+
+    <blockquote>
+      <dl>
+        <dt><tt><b>__STDC_ISO_10646__</b></tt></dt>
+
+        <dd>An integer constant of the form <tt><b>yyyymmL</b></tt>
+        (for example, <tt><b>199712L</b></tt>), intended to
+        indicate that values of type <tt><b>wchar_t</b></tt> are
+        the coded representations of the characters defined by
+        ISO/IEC 10646, along with all amendments and technical
+        corrigenda as of the specified year and month.</dd>
+      </dl>
+    </blockquote>
+
+    <p>Firstly, this wording is less than optimal, in that it could
+    be read as making an implementation non-conforming if
+    <tt><b>wchar_t</b></tt> has a value that does not correspond to
+    an ISO 10646 (Unicode) character. Since Unicode has gaps in the
+    encoding tables, this would mean that no implementation could
+    define this symbol.</p>
+
+    <p>Secondly, is this wording meant to put a lower bound on the
+    size of <tt><b>wchar_t</b></tt>, or does the
+    (<tt><b>wchar_t</b></tt> = = Unicode) mapping only apply to
+    those values that <tt><b>wchar_t</b></tt> can take. In other
+    words, if a given version of Unicode defines characters up to
+    U+12345, can <tt><b>WCHAR_MAX</b></tt> be less than
+    <tt><b>0x12345</b></tt> on a system that defines this symbol
+    ?</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Replace the cited text by:</p>
+
+    <blockquote>
+      <dl>
+        <dt><tt><b>__STDC_ISO_10646__</b></tt></dt>
+
+        <dd>An integer constant of the form <tt><b>yyyymmL</b></tt>
+        (for example, <tt><b>199712L</b></tt>). If this symbol is
+        defined, then every character in the "Unicode required
+        set", when stored in an object of type
+        <tt><b>wchar_t</b></tt>, has the same value as the short
+        identifier of that character.</dd>
+      </dl>
+    </blockquote>
+
+    <p>and then either:</p>
+
+    <blockquote>
+      <dl>
+        <dd>The "Unicode required set" consists of all the
+        characters that are defined by ISO/IEC 10646, along with
+        all amendments and technical corrigenda, as of the
+        specified year and month.</dd>
+      </dl>
+    </blockquote>
+
+    <p>if the intent is to put a minimum on the value of
+    <tt><b>WCHAR_MAX</b></tt>, or then:</p>
+
+    <blockquote>
+      <dl>
+        <dd>
+          The "Unicode required set" consists of all the characters
+          that: 
+
+          <ul>
+            <li>are defined by ISO/IEC 10646, along with all
+            amendments and technical corrigenda, as of the
+            specified year and month; and</li>
+
+            <li>have short identifiers that lie within the range of
+            values that can be represented by the type
+            <tt><b>wchar_t</b></tt>.</li>
+          </ul>
+        </dd>
+      </dl>
+    </blockquote>
+    <hr>
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>Replace the relevant part of 6.10.8 with:</p>
+
+    <blockquote>
+      <tt><b>__STDC_ISO_10646__</b></tt> 
+
+      <blockquote>
+        An integer constant of the form <tt><b>yyyymmL</b></tt>
+        (for example, <tt><b>199712L</b></tt>). If this symbol is
+        defined, then every character in the "Unicode required
+        set", when stored in an object of type
+        <tt><b>wchar_t</b></tt>, has the same value as the short
+        identifier of that character. The "Unicode required set"
+        consists of all the characters that are defined by ISO/IEC
+        10646, along with all amendments and technical corrigenda,
+        as of the specified year and month.
+      </blockquote>
+    </blockquote>
+
+    <p><br>
+     <a href="dr_272.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_274.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

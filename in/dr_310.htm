@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #310</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #310</h2>
+    <a href="dr_309.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_311.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:WG21</b><br>
+     <b>Submission Date:2004-10-26</b><br>
+     <b>Source:WG21</b><br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1068.htm">ISO/IEC
+    WG14 N1068</a><br>
+     <b>Version:</b> 1.2<br>
+     <b>Date:</b> 2006-03-05<br>
+     <b>Subject:</b> Add non-corner case example of trigraphs</p>
+
+    <p><b>Summary</b></p>
+
+    <p>The existing corner case example is a good one. For some
+    reason it was removed from C++, and I will propose that it be
+    restored. But in general there are very few cases where the
+    <strong>only</strong> example presented is a corner case. If
+    trigraphs make any sense at all, then perhaps it would make
+    sense to present a more realistic example (possibly even more
+    realistic than this example).</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Add new example paragraph before 5.2.1.1p2:</p>
+
+    <blockquote>
+      <p>EXAMPLE 1:</p>
+
+      <blockquote>
+<pre>
+??=define arraycheck(a,b) a??(b??) ??!??! b??(a??)
+</pre>
+      </blockquote>
+
+      <p>becomes</p>
+
+      <blockquote>
+<pre>
+#define arraycheck(a,b) a[b] || b[a]
+</pre>
+      </blockquote>
+    </blockquote>
+    <hr>
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>Add new example paragraph before 5.2.1.1p2:</p>
+
+    <blockquote>
+      <p>EXAMPLE 1:</p>
+
+      <blockquote>
+<pre>
+??=define arraycheck(a,b) a??(b??) ??!??! b??(a??)
+</pre>
+      </blockquote>
+
+      <p>becomes</p>
+
+      <blockquote>
+<pre>
+#define arraycheck(a,b) a[b] || b[a]
+</pre>
+      </blockquote>
+    </blockquote>
+
+    <p><br>
+     <a href="dr_309.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_311.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

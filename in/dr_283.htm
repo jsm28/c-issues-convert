@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #283</title>
+  </head>
+
+  <body bgcolor="#FFFFFF">
+    <h2 align="center">Defect Report #283</h2>
+    <a href="dr_282.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_284.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Clark Nelson<br>
+     <b>Submission Date:</b> 2002-09-18<br>
+     <b>Source:</b> J11<br>
+     <b>Version:</b> 1.2<br>
+     <b>Date:</b> 2004-09-28<br>
+     <b>Subject:</b> Accessing a non-current union member ("type
+    punning")</p>
+
+    <p><i>[This report isolates one of the points from <a href=
+    "dr_257.htm">DR257</a>.]</i></p>
+    <b>Problem</b> 
+
+    <p>In the paragraph corresponding to 6.5.2.3#5, C89 contained
+    this sentence:</p>
+
+    <blockquote>
+      With one exception, if a member of a union object is accessed
+      after a value has been stored in a different member of the
+      object, the behavior is implementation-defined.
+    </blockquote>
+    Associated with that sentence was this footnote: 
+
+    <blockquote>
+      The "byte orders" for scalar types are invisible to isolated
+      programs that do not indulge in type punning (for example, by
+      assigning to one member of a union and inspecting the storage
+      by accessing another member that is an appropriately sixed
+      array of character type), but must be accounted for when
+      conforming to externally imposed storage layouts.
+    </blockquote>
+    The only corresponding verbiage in C99 is 6.2.6.1#7: 
+
+    <blockquote>
+      When a value is stored in a member of an object of union
+      type, the bytes of the object representation that do not
+      correspond to that member but do correspond to other members
+      take unspecified values, but the value of the union object
+      shall not thereby become a trap representation.
+    </blockquote>
+    It is not perfectly clear that the C99 words have the same
+    implications as the C89 words. 
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p><i>[Essentially verbatim from <a href=
+    "dr_257.htm">DR257</a>]</i></p>
+
+    <p>Attach a new footnote 78a to the words "named member" in
+    6.5.2.3#3:</p>
+
+    <blockquote>
+      <p>78a If the member used to access the contents of a union
+      object is not the same as the member last used to store a
+      value in the object, the appropriate part of the object
+      representation of the value is reinterpreted as an object
+      representation in the new type as described in 6.2.6 (a
+      process sometimes called "type punning"). This might be a
+      trap representation.</p>
+    </blockquote>
+    <hr>
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>Attach a new footnote 78a to the words "named member" in
+    6.5.2.3#3:</p>
+
+    <blockquote>
+      <p>78a If the member used to access the contents of a union
+      object is not the same as the member last used to store a
+      value in the object, the appropriate part of the object
+      representation of the value is reinterpreted as an object
+      representation in the new type as described in 6.2.6 (a
+      process sometimes called "type punning"). This might be a
+      trap representation.</p>
+    </blockquote>
+      <p>
+       <a href="dr_282.htm">Previous Defect Report</a> &lt; - &gt;
+      <a href="dr_284.htm">Next Defect Report</a><br>
+      </p>
+  </body>
+</html>

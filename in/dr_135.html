@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #135</TITLE></HEAD><BODY>
+<H2>Defect Report #135</H2>
+<B>Submission Date</B>: 31 Jan 94
+<BR>
+<B>Submittor</B>: Project Editor (P.J. Plauger)
+<BR>
+<B>Source</B>: Per Bothner
+<BR>
+<B>Question</B>
+<BR>
+H.J. Lu points out that the SVR4 manual explicitly says that <TT><B>fwrite(ptr, 
+0, 1, stream)</B></TT> returns 0, not 1. I don't know what the SVID states.
+<BR>
+I think it is more mathematically consistent to return 1 in this case. 
+But in that case <TT><B>fread(ptr, 0, 1, stream)</B></TT> should also return 
+1, but ANSI explicitly states that it should return 0. I don't see 
+any reason why these should be different, so I think it is best to 
+follow existing practice.  I think the ANSI specification for <TT><B>fwrite</B></TT> 
+is a mistake; perhaps it should be fixed in the revision.
+<BR>
+<B>Response</B>
+<BR>
+There are no zero-length objects in C. Therefore, if the size argument 
+to <TT><B>fwrite</B></TT> is zero, it is outside the domain of the function 
+and (by subclause 7.1.7), the result is undefined. The C Standard 
+is not in conflict with the cited behavior of SVR4.
+<BR>
+<A HREF="dr_134.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_136.html">Next Defect Report</A>
+</BODY></HTML>

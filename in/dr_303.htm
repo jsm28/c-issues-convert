@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #303</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #303</h2>
+    <a href="dr_302.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_304.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> WG21<br>
+     <b>Submission Date:</b> 2004-10-26<br>
+     <b>Source:</b> WG21<br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1068.htm">ISO/IEC
+    WG14 N1068</a><br>
+     <b>Version:</b> 1.1<br>
+     <b>Date:</b> 2006-03-05<br>
+     <b>Subject:</b> 6.10p2: Breaking up the very long sentence
+    describing preprocessing directive</p>
+
+    <p><b>Summary</b></p>
+
+    <p>The sentence describing a preprocessing directive is
+    fearsomely long.</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Change 6.10p2:</p>
+
+    <blockquote>
+      <p>A preprocessing directive consists of a sequence of
+      preprocessing tokens <strike>that begins with</strike> <u>.
+      The first token in the sequence is</u> a <code>#</code>
+      preprocessing token that (at the start of translation phase
+      4) is either the first character in the source file
+      (optionally after white space containing no new-line
+      characters) or that follows white space containing at least
+      one new-line character<strike>, and is ended by the
+      next</strike> <u>. The last token in the sequence is the
+      first</u> new-line character <u>that follows the first token
+      in the sequence</u>.<sup>140)</sup> A new-line character ends
+      the preprocessing directive even if it occurs within what
+      would otherwise be an invocation of a function-like
+      macro.</p>
+    </blockquote>
+    <hr>
+
+    <p><b>Committee Response</b></p>
+
+    <p>TC2 (and specifically <a href="dr_250.htm">DR 250</a>)
+    changed that sentence into a definition.</p>
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>Change 6.10p2:</p>
+
+    <blockquote>
+      <p>A <dfn>preprocessing directive</dfn> consists of a
+      sequence of preprocessing tokens <strike>that begins
+      with</strike> <u>that satisfies the following constraints.
+      The first token in the sequence is</u> a <code>#</code>
+      preprocessing token that (at the start of translation phase
+      4) is either the first character in the source file
+      (optionally after white space containing no new-line
+      characters) or that follows white space containing at least
+      one new-line character<strike>, and is ended by the
+      next</strike> <u>. The last token in the sequence is the
+      first</u> new-line character <u>that follows the first token
+      in the sequence</u>.<sup>140)</sup> A new-line character ends
+      the preprocessing directive even if it occurs within what
+      would otherwise be an invocation of a function-like
+      macro.</p>
+    </blockquote>
+
+    <p><br>
+     <a href="dr_302.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_304.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

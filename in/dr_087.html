@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #087</TITLE></HEAD><BODY>
+<H2>Defect Report #087</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Clive Feather
+<BR>
+<B>Question</B>
+<BR>
+Item 24 - order of evaluation
+<BR>
+Consider the following program:
+<BR>
+<TT><B>int g;<BR>
+<BR>
+int main (void)<BR>
+	{<BR>
+	int x;<BR>
+<BR>
+	x = (10, g = 1, 20) + (30, g = 2, 40);	 /*</B><I> Line A </I><B>*/<BR>
+	x = (10, f (1), 20) + (30, f (2), 40);	 /*</B><I> Line B </I><B>*/<BR>
+	x = (g = 1) + (g = 2);			 /*</B><I> Line C </I><B>*/<BR>
+	return 0;<BR>
+	}<BR>
+<BR>
+int f (int i)<BR>
+	{<BR>
+	g = i;<BR>
+	return 0;<BR>
+	}
+<BR></B></TT>
+Subclause 6.3 makes the statement:
+<BLOCKQUOTE>
+Between the previous and the next sequence point an object shall 
+have its stored value modified at most once by the evaluation of an 
+expression.
+</BLOCKQUOTE>
+Consider line A. The full expression (the assignment to <TT><B>x</B></TT>) assigns 
+two values (1 and 2) to <TT><B>g</B></TT>. Each such assignment is surrounded 
+by sequence points. However, there is no sequence point between the 
+two operands of the addition, and therefore no defined order of evaluation 
+of the two inner assignments. There are a number of possible interpretations 
+of the C Standard that can be made.
+<BR><OL>
+<LI> Multiple threads of evaluation may take place at one time (or 
+equivalently, the evaluation of various parts of the expression may 
+be interleaved to any level of detail), provided that anything specified 
+to occur before a given sequence point actually takes place before 
+anything specified to occur after the same sequence point. (This is 
+equivalent to the ``collateral evaluation'' of Algol 68.)
+<P>
+In this interpretation, the expression is clearly undefined, because 
+the two assignments to <TT><B>g</B></TT> may take place simultaneously and interfere 
+destructively with one another. However, if this model is applied 
+to line B, it yields the same result (since the sequence points occur 
+at the same places). This means that, in effect, two function calls 
+can be taking place simultaneously, and, if they modify the same object, 
+the effect is undefined. This would surprise many users of the C Standard.
+</P>
+<LI> As (1), but assignments are atomic. This means that <TT><B>g</B></TT> 
+has the value 1 or 2, though it is unspecified which. When applied 
+to line C, this would also mean that <TT><B>x</B></TT> is specified to be assigned 
+the value 3. This seems counter to the quoted provision of subclause 6.3.
+<LI> Any expression which completely fills the interval between two 
+sequence points, and does not contain any embedded sequence points, 
+is an ``atomic sequence.'' The operations of any one atomic 
+sequence are carried out together, and cannot be interleaved with 
+any other atomic sequence. The order of the atomic sequences is unspecified, 
+except that if the ending sequence point of one atomic sequence is 
+the same as the starting point of another atomic sequence, they must 
+be executed in that order.
+<P>
+In line A, there are five atomic sequences:
+</P>
+(i) evaluate 10
+<BR>
+(ii) assign 1 to <TT><B>g</B></TT>
+<BR>
+(iii) evaluate 30
+<BR>
+(iv) assign 2 to <TT><B>g</B></TT>
+<BR>
+(v) evaluate 20 and 40, add, and assign to <TT><B>x</B></TT>
+<BR>
+(i) must come before (ii), (iii) must come before (iv), (v) must come 
+after (ii) and (iv).
+<BR>
+In line A this model has the same effect as (2), but it could differ 
+in more complex expressions.
+<LI> Multiple threads of execution can occur within an expression, 
+but all except one are suspended while a function is being executed 
+(this may, of course, spawn off new threads). This interpretation 
+could be viewed as supported by the wording in subclause 6.6: ``Except 
+as indicated, statements are executed in sequence.'' It would have 
+the effect of leaving line A undefined while line B is conforming (with 
+it being unspecified whether the latter assigns 1 or 2 to <TT><B>g</B></TT>).
+</OL>
+Which, if any, of these interpretations is correct? If none of them, 
+what is the correct interpretation to make?
+<BR>
+<B>Response</B>
+<BR>
+In line B, the expression does not exhibit undefined behavior,
+but because the order of evaluation of the operands of the addition
+operator is not specified and function calls do not overlap,
+it is unspecified whether <TT><B>g</B></TT>
+will attain the value 1 or 2. Lines C and A violate the quoted restriction
+from subclause 6.3, so the behavior is undefined.
+<BR>
+<A HREF="dr_086.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_088.html">Next Defect Report</A>
+</BODY></HTML>

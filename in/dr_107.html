@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #107</TITLE></HEAD><BODY>
+<H2>Defect Report #107</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Ron Guilmette
+<BR>
+<B>Question</B>
+<BR>
+ANSI/ISO C Defect report #rfg14:
+<BR>
+Subclause 7.2.1.1 (<B>Synopsis</B>) says:
+<BLOCKQUOTE>
+<TT><B>
+#include &lt;assert.h><BR>
+void assert(int expression);
+</B></TT></BLOCKQUOTE>
+This synopsis raises several related questions.
+<BR>
+a) May a strictly conforming program contain code which includes 
+an invocation of the <TT><B>assert</B></TT> macro for an expression whose type 
+is not directly convertible to type <TT><B>int</B></TT>? (See examples below.)
+<BR>
+b) Must a conforming implementation issue diagnostics for 
+any and all attempts to invoke the <TT><B>assert</B></TT> macro for an expression 
+having some type which is not directly convertible to type <TT><B>int</B></TT>?
+<BR>
+Examples:
+<BR>
+<TT><B>
+#include &lt;assert.h><BR>
+<BR>
+char *cp;<BR>
+void (*fp) ();<BR>
+struct S { int member; } obj;<BR>
+<BR>
+void example ()<BR>
+	{<BR>
+	assert (cp);	/*</B><I> conforming code?  diagnostic required? </I><B>*/<BR>
+	assert (fp);	/*</B><I> conforming code?  diagnostic required? </I><B>*/<BR>
+	assert (obj);	/*</B><I> conforming code?  diagnostic required? </I><B>*/<BR>
+	}
+</B></TT><BR>
+c) Must a conforming implementation convert the value yielded 
+by the expression given in an invocation of the assert macro to type 
+<TT><B>int</B></TT> before checking to see if it compares equal to zero?
+<BR>
+Example:
+<BR>
+<TT><B>#include &lt;assert.h><BR>
+<BR>
+void example ()<BR>
+	{<BR>
+	assert (0.1);	/*</B><I> must this casue an abort?  must it NOT? </I><B>*/<BR>
+	}
+</B></TT><BR>
+<B>Response</B>
+<BR>
+a) The definition of <TT><B>assert</B></TT> depends on the
+<TT><B>NDEBUG</B></TT> macro. The <B>Synopsis</B> provides information
+on how an implementation may use the parameter. If <TT><B>NDEBUG</B></TT>
+is defined as a macro, the parameter is not used and hence cannot
+cause undefined behavior. If <TT><B>NDEBUG</B></TT> is not defined as a
+macro, the implementation may rely on the parameter having type
+<TT><B>int</B></TT>. Passing a non-<TT><B>int</B></TT> argument in such
+a context will render the translation unit not strictly conforming.
+<BR>
+b) If <TT><B>NDEBUG</B></TT> is defined as a macro, the parameter is not used
+and no diagnostic should occur. Otherwise, a violation of this requirement
+results in undefined behavior, which does not require a diagnostic.
+<BR>
+c) No.
+<BR>
+<A HREF="dr_106.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_108.html">Next Defect Report</A>
+</BODY></HTML>

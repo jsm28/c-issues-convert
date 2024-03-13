@@ -1,0 +1,52 @@
+<HTML><HEAD><TITLE>Defect Report #058</TITLE></HEAD><BODY>
+<H2>Defect Report #058</H2>
+<B>Submission Date</B>: 07 Jun 93
+<BR>
+<B>Submittor</B>: Project Editor (P.J. Plauger)
+<BR>
+<B>Source</B>: Fred Tydeman
+<BR>
+<B>Question</B> 1
+<BR>
+What is the minimum value for the maximum number of digits in a number 
+that can be processed by the <TT><B>scanf</B></TT> family and the <TT><B>strtod</B></TT> 
+family?
+<BR><OL>
+<LI> 509
+<LI> 32767
+<LI> something else
+</OL>
+Parts of the the C Standard that may help answer the question follow. 
+Subclause 7.9.6.1<B>The <TT>fprintf</TT> function</B>, page 134, lines 16-18:
+<BLOCKQUOTE>
+<B>Environmental limit</B>. The minimum value for the maximum number of characters produced 
+by any single conversion shall be 509. 
+</BLOCKQUOTE>
+But, note, there is no such environmental limit for <TT><B>fscanf</B></TT>.
+<BR>
+Subclause 5.2.4.1 <B>Translation limits</B>, page 13, line 17:
+<BLOCKQUOTE>
+- 509 characters in a logical source line
+</BLOCKQUOTE>
+But, note, there is no execution limit. Subclause 5.2.4.1 <B>Translation 
+Limits</B>, page 13, line 19:
+<BLOCKQUOTE>
+- 32767 bytes in an object (in a hosted environment only)
+</BLOCKQUOTE>
+Consider the number 1.0 written as <TT><B>.00000...00001e32759</B></TT> that 
+is 32767 characters long (including terminator). There is only one 
+significant digit, the <TT><B>1</B></TT>. It can be stored in an array of 32767 
+characters, so it should be possible to pass this string to <TT><B>atof</B></TT>, 
+<TT><B>strtod</B></TT>, or <TT><B>sscanf</B></TT> and get the value 1.0. Correct?
+<BR>
+<B>Response</B>
+<BR>
+You are correct; the C Standard imposes no execution limit on the 
+maximum number of digits in the subject sequence of <TT><B>fscanf</B></TT> conversion 
+specifiers and the <TT><B>strto*</B></TT> functions, other than on the size 
+of objects.
+<BR>
+<A HREF="dr_057.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_059.html">Next Defect Report</A>
+</BODY></HTML>

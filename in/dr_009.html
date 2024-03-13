@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #009</TITLE></HEAD>
+<BODY><H2>Defect Report #009</H2>  
+<B>Submission Date</B>: 10 Dec 92
+<BR> 
+<B>Submittor</B>: WG14
+<BR> 
+<B>Source</B>: X3J11/90-023 (Bruce Blodgett)
+<BR> 
+<B>Question</B> 1
+<BR>  Use of typedef names in parameter declarations
+<BR>  A syntactic ambiguity exists in the draft proposed C standard for
+which there appears to be no semantic disambiguation. A sequence of
+examples should explain the ambiguity. This matter needs interpretation
+by the Committee.
+<BR>  For these examples, let <TT><B>T</B></TT> be declaration
+specifiers which contai n at least one type specifier, to satisfy the
+semantics from subclause 6.5.6:
+<BLOCKQUOTE>  If the identifier is redeclared in an inner scope ...,
+the type specifiers shall not be omitted in the inner declaration.
+</BLOCKQUOTE>  Let <TT><B>U</B></TT> be an identifier which is a
+typedef name at outer scope and which has not (yet) been redeclared at
+current scope. A caret indicates the position of each abstract
+declarator. Consider this declaration:
+<BR> 
+<TT><I><B>declaration-specifiers direct-declarator<B> (T^(U)); </B></B></I></TT>
+<BR>  Here <TT><B>U</B></TT> is the type of the single parameter to a
+function returni ng type <TT><B>T</B></TT>, due to a requirement from
+subclause 6.5.4.3:
+<BLOCKQUOTE>  In a parameter declaration, a single typedef name in
+parentheses is taken to be an abstract declarator that specifies a
+function with a single parameter, not as redundant parentheses around
+the identifier for a declarator.
+</BLOCKQUOTE>  Consider this declaration:<BR>  
+<TT><I><B>declaration-specifiers direct-declarator<BR>         <B>(T^(U^(parameter-type-list)));
+ </B></B></I></TT>
+<BR>  In this example, <TT><B>U</B></TT> could be the type returned
+by a function which takes <TT><B>parameter-type-list</B></TT>. This in
+turn would be the single parameter to a function returning type <TT><B>T</B></TT>.
+<BR>  Alternatively, <TT><B>U</B></TT> could be a redundantly
+parenthesized name of a function which takes <TT><B>parameter-type-list</B></TT>
+and returns type
+<TT><B>T</B></TT>.
+<BR>  Given the spirit of the requirement from subclause 6.5.4.3, the
+former interpretation seems to be that intended by the Committee. If so,
+the requirement may be changed to something similar to:
+<BLOCKQUOTE>  In a parameter declaration, a direct declarator which
+redeclares a typedef name shall not be redundantly parenthesized.
+</BLOCKQUOTE>  Of course, parentheses must not be disallowed entirely...
+[The original had more, but this will suffice.]
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>In subclause 6.5.4.3, page 68, lines 2-4, replace:</B></I>
+<BR>  In a parameter declaration, a single typedef name in parentheses
+is taken to be an abstract declarator that specifies a function with a
+single parameter, not as redundant parentheses around the identifier for
+a declarator.
+<BR> 
+<I><B>with:</B></I>
+<BR>  If, in a parameter declaration, an identifier can be treated as a
+typedef name or as a parameter name, it shall be taken as a typedef
+name.
+<BR>
+<A HREF="dr_008.html">Previous Defect Report</A> 
+&lt; -  > <A HREF="dr_010.html">Next Defect Report</A></BODY></HTML>

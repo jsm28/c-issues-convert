@@ -1,0 +1,269 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #205</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #205</h2>
+    <a href="dr_204.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_206.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Raymond Mak (Canada C Working Group)<br>
+     <b>Submission Date:</b> 1999-09-15<br>
+     <b>Source:</b> Canada C Working Group<br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n893.htm">ISO/IEC
+    WG14 N893</a><br>
+     <b>Version:</b> 1.4<br>
+     <b>Date:</b> 2001-09-18 14:27:29<br>
+     <b>Subject:</b> New keyword <tt><b>__at_least</b></tt></p>
+
+    <p><b>Summary</b><br>
+     6.7.5 introduces a new use of the <tt><b>static</b></tt>
+    keyword. A new keyword should be used instead.</p>
+
+    <p>This use of <tt><b>static</b></tt> can only occur in
+    function parameter declaration. If we examine the syntax
+    carefully, <tt><b>static assignment-expression</b></tt> taken
+    together inside <tt><b>[</b></tt> and <tt><b>]</b></tt> really
+    plays the role of a type qualifier qualifying a pointer. This
+    means the <tt><b>assignment-expression</b></tt> should only be
+    allowed to follow immediately after the keyword
+    <tt><b>static</b></tt> (when <tt><b>static</b></tt> is
+    present), with no other type qualifiers allowed in between.
+    Also, a new keyword should be used to make the meaning
+    clear.</p>
+
+    <p><b>Suggested Correction</b><br>
+     Use a new keyword, <tt><b>__at_least</b></tt>, in place of
+    <tt><b>static</b></tt>.</p>
+
+    <p>Change 6.4.1p1 to add a new keyword:
+    <tt><b>__at_least</b></tt></p>
+
+    <p>Change the syntax under 6.7.5 to (the two occurrences of
+    <tt><b>static</b></tt> to <tt><b>__at_least</b></tt>):</p>
+
+    <blockquote>
+      <i>direct_declarator</i> <tt><b>:</b></tt><i><br>
+       identifier<br>
+      </i> <tt><b>(</b></tt> <i>declarator</i>
+      <tt><b>)</b></tt><i><br>
+       direct-declarator</i> <tt><b>[</b></tt>
+      <i>type-qualifier-list<small><sub>opt</sub></small>
+      assignment-expression<small><sub>opt</sub></small></i>
+      <tt><b>]</b></tt><i><br>
+       direct-declarator</i> <tt><b>[ __at_least</b></tt>
+      <i>assignment-expression
+      type-qualifier-list<small><sub>opt</sub></small></i>
+      <tt><b>]</b></tt><i><br>
+       direct-declarator</i> <tt><b>[</b></tt>
+      <i>type-qualifier-list<small><sub>opt</sub></small></i>
+      <tt><b>__at_least</b></tt> <i>assignment-expression</i>
+      <tt><b>]</b></tt><br>
+       ... (the rest is the same as in the FDIS) ...
+    </blockquote>
+    Change 6.7.5.2p1 to (i.e. the two occurrences of
+    <tt><b>static</b></tt> to <tt><b>__at_least</b></tt>): 
+
+    <blockquote>
+      <p>[#1] In addition to optional type qualifiers and the
+      keyword <tt><b>__at_least</b></tt>, the <tt><b>[</b></tt> and
+      <tt><b>]</b></tt> may delimit an expression or
+      <tt><b>*</b></tt>. If they delimit an expression (which
+      specifies the size of an array), the expression shall have an
+      integer type. If the expression is a constant expression, it
+      shall have a value greater than zero. The element type shall
+      not be an incomplete or function type. The optional type
+      qualifiers and the keyword <tt><b>__at_least</b></tt> shall
+      appear only in a declaration of a function parameter with an
+      array type, and then only in the outermost array type
+      derivation.</p>
+    </blockquote>
+
+    <p>Change 6.7.5.2p3 to (i.e. the three occurrences of
+    <tt><b>static</b></tt> to <tt><b>__at_least</b></tt>, and bind
+    <tt><b>__at_least</b></tt> with <tt><b>assignment-expr</b></tt>
+    in the syntax):</p>
+
+    <blockquote>
+      <blockquote>
+        <tt><b>D[</b></tt>
+        <i>type-qualifier-list<small><sub>opt</sub></small>
+        assignment-expr<small><sub>opt</sub></small></i>
+        <tt><b>]<br>
+         D[ __at_least</b></tt> <i>assignment-expr
+        type-qualifier-list<small><sub>opt</sub></small></i>
+        <tt><b>]<br>
+         D[</b></tt> <i>type-qualifier-list</i>
+        <tt><b>__at_least</b></tt> <i>assignment-expr</i>
+        <tt><b>]<br>
+         D[</b></tt>
+        <i>type-qualifier-list<small><sub>opt</sub></small></i>
+        <tt><b>* ]</b></tt>
+      </blockquote>
+      and the type specified for <i>ident</i> in the declaration
+      "<tt><b>T D</b></tt>" is "<i>derived-declarator-type-list
+      T</i>", then the type specified for ident is
+      "<i>derived-declarator-type-list array of
+      T</i>".<sup>121)</sup> (See 6.7.5.3 for the meaning of the
+      optional type qualifiers and the keyword
+      <tt><b>__at_least</b></tt>.)
+    </blockquote>
+
+    <p>Change 6.7.5.3p7 to (i.e. <tt><b>static</b></tt> to
+    <tt><b>__at_least</b></tt>):</p>
+
+    <blockquote>
+      <p>[#7] A declaration of a parameter as "array of
+      <i>type</i>" shall be adjusted to "qualified pointer to
+      <i>type</i>", where the type qualifiers (if any) are those
+      specified within the <tt><b>[</b></tt> and <tt><b>]</b></tt>
+      of the array type derivation. If the keyword
+      <tt><b>__at_least</b></tt> ...</p>
+    </blockquote>
+
+    <p>Change 6.7.5.3p21 to (i.e. <tt><b>static</b></tt> to
+    <tt><b>__at_least</b></tt>):</p>
+
+    <blockquote>
+      <p>[#21] EXAMPLE 5 The following are all compatible function
+      prototype declarators.</p>
+<pre>
+<tt><b>       double maximum(int n, int m, double a[n][m]);
+        double maximum(int n, int m, double a[*][*]);
+        double maximum(int n, int m, double a[ ][*]);
+        double maximum(int n, int m, double a[ ][m]);
+  </b></tt> 
+</pre>
+      as are: 
+<pre>
+<tt><b>       void f(double (* restrict a)[5]);
+        void f(double a[restrict][5]);
+        void f(double a[restrict 3][5]);
+        void f(double a[restrict __at_least 3][5]);
+      </b></tt>  <i>...</i>
+   
+</pre>
+    </blockquote>
+
+    <p>Change A.1.2 to add keyword:</p>
+
+    <blockquote>
+      <p><tt><b>__at_least</b></tt></p>
+    </blockquote>
+
+    <p><b>Explanation of the change</b><br>
+     The new syntax groups '<tt><b>__at_least</b></tt>
+    <i>assignment-expression</i>' together. For example:</p>
+
+    <blockquote>
+      <tt><b>double a[restrict __at_least 3] /*</b></tt> <i>ok</i>
+      <tt><b>*/<br>
+       double a[__at_least 3 restrict] /*</b></tt> <i>ok</i>
+      <tt><b>*/<br>
+       double a[__at_least restrict 3] /*</b></tt><i>not ok</i>
+      <tt><b>*/</b></tt>
+    </blockquote>
+
+    <p>Conceptually, '<tt><b>__at_least</b></tt>
+    <i>assignment-expression</i>' is a type qualifier. Even though
+    we do not treat it as such in C9X, the potential is there for
+    future enhancement of the language. Therefore we should not
+    interfere with possible future changes in this respect. The
+    following example illustrates the point.</p>
+
+    <p>In a function parameter declaration, a parameter of "array
+    of <i>type</i>" is adjusted to "qualified pointer to
+    <i>type</i>". The type-qualifiers inside <tt><b>[</b></tt> and
+    <tt><b>]</b></tt> become the qualifier for the pointer. If
+    '<tt><b>__at_least</b></tt><i>assignment-expression</i>' is
+    also a type qualifier, this adjustment enables us to write:</p>
+
+    <blockquote>
+      <p><tt><b>int * __at_least(10) p;</b></tt></p>
+    </blockquote>
+
+    <p>which declares a pointer pointing to the first of a sequence
+    of 10 integers in memory. (The parentheses are used for
+    clarity.) The clumsy description in 6.7.5.3p7 become
+    unnecessary. Note that the current <tt><b>static</b></tt>
+    syntax prevents us from writing the equivalent pointer
+    declaration for an array parameter declaration.</p>
+
+    <p>This example is presented here only as an illustration of
+    what is possible in the future; it is not meant as a suggested
+    change for this DR. Nevertheless, it does show that allowing
+    other qualifiers appearing between <tt><b>static</b></tt> and
+    the <i>assignment-expression</i> is a conceptual error.</p>
+    <hr>
+
+    <p><b>Committee Discussion</b><br>
+     The committee has had several viewpoints on this controversial
+    item. These are ranked with the choice getting the most support
+    first, the last entry getting little or no support.</p>
+
+    <ol>
+      <li>Do nothing.</li>
+
+      <li>Remove this feature (the use of <strong>static</strong>
+      to mean a minimum array size).</li>
+
+      <li>Deprecate this feature (the use of
+      <strong>static</strong> to mean a minimum array size).</li>
+
+      <li>
+        In 6.7.5 Declarators (p. 114) and its subclauses,
+        deprecate: 
+
+        <blockquote>
+          <i>direct-declarator</i> <tt><b>[ static</b></tt>
+          <i>type-qualifier-list<small><sub>opt</sub></small>
+          assignment-expression</i> <tt><b>]</b></tt>
+        </blockquote>
+        and change: 
+
+        <blockquote>
+          <i>direct-declarator</i> <tt><b>[</b></tt>
+          <i>type-qualifier-list</i> <tt><b>static</b></tt>
+          <i>assignment-expression</i> <tt><b>]</b></tt>
+        </blockquote>
+        to: 
+
+        <blockquote>
+          <i>direct-declarator</i> <tt><b>[</b></tt>
+          <i>type-qualifier-list<small><sub>opt</sub></small></i>
+          <tt><b>static</b></tt> <i>assignment-expression</i>
+          <tt><b>]</b></tt>
+        </blockquote>
+      </li>
+
+      <li>Accept the suggestions of this DR.</li>
+    </ol>
+
+    <dl compact>
+      <dt><i><u>Note:</u></i></dt>
+
+      <dd>There was a unanimous vote that the feature is
+      <i>ugly</i>, and a good consensus that its incorporation into
+      the standard at the 11<sup>th</sup> hour was an unfortunate
+      decision.</dd>
+    </dl>
+    <hr>
+
+    <p><b>Committee Response</b><br>
+     There is no consensus to make this change or any change along
+    this line.</p>
+
+    <p><br>
+     <a href="dr_204.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_206.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

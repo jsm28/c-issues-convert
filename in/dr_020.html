@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #020</TITLE></HEAD><BODY>
+<H2>Defect Report #020</H2>
+<B>Submission Date</B>: 10 Dec 92 <BR>
+<B>Submittor</B>: WG14 <BR>
+<B>Source</B>: X3J11/91-006 (Bruce Lambert) <BR>
+<B>Question</B> 1 <BR>
+Is a compiler which allows the Relaxed Ref/Def linkage model to be considered
+a conforming compiler? That is, can a compiler that compiles the following
+code with no errors or warnings <BR>
+<B><TT><I>filea.c:<BR>
+</I>#include stdio.h&gt;<BR>
+void foo(void);<BR>
+int age;<BR>
+int main()<BR>
+{<BR>
+age = 24;<BR>
+printf(&quot;my age is %d.\n&quot;, age);<BR>
+foo();<BR>
+printf(&quot;my age is %d.\n&quot;, age);<BR>
+return 0;<BR>
+}<BR>
+<BR>
+<I>fileb.c:<BR>
+</I>#include &lt;stdio.h&gt;<BR>
+int age;<BR>
+void foo()<BR>
+{<BR>
+age = 25;<BR>
+printf(&quot;your age is %d.\n&quot;, age);<BR>
+} <BR>
+</TT></B>and which produces the following output <BR>
+<TT>my age is 24<BR>
+your age is 25<BR>
+my age is 25<BR>
+</TT>be called a standard-compliant compiler? <BR>
+<B>Response</B> <BR>
+Yes, a compiler that allows the Relaxed Ref/Def model can be standard conforming.
+(In this case, the model permits two tentative definitions for <B><TT>age</TT></B>
+in two translation units to resolve to a single definition at link time.)
+See subclause 6.7, page 81, lines 23-25. The code is conforming but not
+strictly conforming. The behavior is undefined. <BR>
+<A HREF="dr_019.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_021.html">Next Defect Report</A>
+</BODY></HTML>

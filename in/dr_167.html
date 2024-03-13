@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #167</TITLE></HEAD>
+<BODY><H2>Defect Report #167</H2> 
+<B>Submission Date</B>: 16 Oct 95
+<BR>
+<B>Submittor</B>: BSI
+<BR>
+<B>Source</B>: Clive D.W. Feather
+<BR>
+<B>Question</B>
+<BR>
+<I>Submitted to BSI by Clive D.W. Feather  clive@sco.com .</I>
+<BR>
+<I>In this Defect Report, identifiers lexically identical to those 
+declared in standard headers refer to the identifiers declared in  those
+standard headers, whether or not the header is explicitly mentioned.</I>
+<BR>
+<I>This Defect Report has been prepared with considerable help from 
+Mark Brader, Jutta Degener, Ronald Guilmette, and a person whose
+employment  conditions require anonymity. However, except where stated,
+opinions  expressed or implied should not be assumed to be those of any
+person  other than myself.</I>
+<BR> Defect Report UK 015: Consistency of the C Standard
+<BR> The change to the <TT><B>n</B></TT> conversion specifier in subclause 7.9.6.2  made by
+ TC1, <A HREF="dr_014.html#Question14"> Defect Report #014, Question 2</A>, should also be applied  to subclause 7.9.6.1. Change:
+<BR> No argument is converted.
+<BR> to:
+<BR> No argument is converted, but one is consumed.
+<BR> If the conversion specification with this conversion specifier is 
+not one of <TT><B>%n</B></TT>, <TT><B>%ln</B></TT>, or <TT><B>%hn</B></TT>,
+the behavior is undefined.
+<BR> In addition, an entry something like:
+<BR> A <TT><B>%n</B></TT> conversion specification for the <TT><B>fprintf</B></TT>
+or 
+<TT><B>fscanf</B></TT> functions is not one of <TT><B>%n</B></TT>,
+<TT><B>%ln</B></TT>, or <TT><B>%hn</B></TT>  (7.9.6.1, 7.9.6.2).
+<BR> should be added to Annex G.2.
+<BR>
+<A HREF="dr_166.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_168.html">Next Defect Report</A></BODY></HTML>

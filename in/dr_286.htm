@@ -1,0 +1,324 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #286</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #286</h2>
+    <a href="dr_285.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_287.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Fred Tydeman (USA)<br>
+     <b>Submission Date:</b> 2003-04-13<br>
+     <b>Source:</b> WG 14<br>
+     <b>Reference Document:</b><br>
+     <b>Version:</b> 1.1<br>
+     <b>Date:</b> 2004-09-28<br>
+     <b>Subject:</b> Correctly rounded and rounding
+    direction/mode</p>
+
+    <p><b>Summary</b></p>
+
+    <p>Three 'equivalent' phrases are used:</p>
+<pre>
+    effective rounding
+    current rounding
+    rounding mode characterized by the value of <b><tt>FLT_ROUNDS</tt></b>
+</pre>
+    when C99 should be using just one. 
+
+    <p>Six 'equivalent' phrases are used:</p>
+<pre>
+    rounding direction mode
+    rounding direction
+    rounding mode
+    directed-rounding control mode
+    directed rounding mode
+    rounding control mode
+</pre>
+    when C99 should be using just one. 
+
+    <p><b>Details</b></p>
+
+    <p>3.9 correctly rounded result: representation in the result
+    format that is nearest in value, subject to the effective
+    rounding mode, to what the result would be given unlimited
+    range and precision</p>
+
+    <p>5.2.4.2.2 Characteristics of floating types &lt;float.h&gt;:
+    Paragraph 6: The rounding mode for floating-point addition is
+    characterized by the implementation-defined value of
+    <b><tt>FLT_ROUNDS</tt></b>:18)</p>
+
+    <p>18) Evaluation of <b><tt>FLT_ROUNDS</tt></b> correctly
+    reflects any execution-time change of rounding mode through the
+    function <b><tt>fesetround</tt></b> in &lt;fenv.h&gt;.</p>
+
+    <p>7.6 Floating-point environment &lt;fenv.h&gt;:</p>
+
+    <p>Paragraph 1: The header &lt;fenv.h&gt; declares two types
+    and several macros and functions to provide access to the
+    floating-point environment. The floating-point environment
+    refers collectively to any floating-point status flags and
+    control modes supported by the implementation.173)</p>
+
+    <p>173) This header is designed to support the floating-point
+    exception status flags and directed-rounding control modes
+    required by IEC 60559, and other similar floating-point state
+    information.</p>
+
+    <p>Paragraph 7 Each of the macros: <b><tt>FE_DOWNWARD</tt></b>,
+    <b><tt>FE_TONEAREST</tt></b>, <b><tt>FE_TOWARDZERO</tt></b>,
+    <b><tt>FE_UPWARD</tt></b>; is defined if and only if the
+    implementation supports getting and setting the represented
+    rounding direction by means of the <b><tt>fegetround</tt></b>
+    and <b><tt>fesetround</tt></b> functions.</p>
+
+    <p>7.6.3 Rounding: Paragraph 1 The <b><tt>fegetround</tt></b>
+    and <b><tt>fesetround</tt></b> functions provide control of
+    rounding direction modes.</p>
+
+    <p>7.12.9.3 The <b><tt>nearbyint</tt></b> functions: Paragraph
+    2: The <b><tt>nearbyint</tt></b> functions round their argument
+    to an integer value in floating-point format, using the current
+    rounding direction and without raising the inexact
+    floating-point exception.</p>
+
+    <p>7.12.9.5 The <b><tt>lrint</tt></b> and
+    <b><tt>llrint</tt></b> functions: Paragraph 2: The
+    <b><tt>lrint</tt></b> and <b><tt>llrint</tt></b> functions
+    round their argument to the nearest integer value, rounding
+    according to the current rounding direction.</p>
+
+    <p>7.12.9.6 The <b><tt>round</tt></b> functions: Paragraph 2:
+    The <b><tt>round</tt></b> functions round their argument to the
+    nearest integer value in floating-point format, rounding
+    halfway cases away from zero, regardless of the current
+    rounding direction.</p>
+
+    <p>7.12.9.7 The <b><tt>lround</tt></b> and
+    <b><tt>llround</tt></b> functions: Paragraph 2: The
+    <b><tt>lround</tt></b> and <b><tt>llround</tt></b> functions
+    round their argument to the nearest integer value, rounding
+    halfway cases away from zero, regardless of the current
+    rounding direction.</p>
+
+    <p>Footnote 203) When y != 0, the remainder r = x REM y is
+    defined regardless of the rounding mode ...</p>
+
+    <p>7.12.13.1 The <b><tt>fma</tt></b> functions: Paragraph 2:
+    The <b><tt>fma</tt></b> functions compute (x*y)+z, rounded as
+    one ternary operation: they compute the value (as if) to
+    infinite precision and round once to the result format,
+    according to the rounding mode characterized by the value of
+    <b><tt>FLT_ROUNDS</tt></b>.</p>
+
+    <p>7.19.6.1 The <b><tt>fprintf</tt></b> function:</p>
+
+    <p>Paragraph 12: ... error should have a correct sign for the
+    current rounding direction.</p>
+
+    <p>Paragraph 13: ... error should have a correct sign for the
+    current rounding direction.</p>
+
+    <p>7.20.1.3 The <b><tt>strtod</tt></b>, <b><tt>strtof</tt></b>,
+    and <b><tt>strtold</tt></b> functions:</p>
+
+    <p>Paragraph 8: ... error should have a correct sign for the
+    current rounding direction.</p>
+
+    <p>Paragraph 9: ... according to the current rounding
+    direction, ... ... should have a correct sign for the current
+    rounding direction.</p>
+
+    <p>7.24.2.1 The <b><tt>fwprintf</tt></b> function:</p>
+
+    <p>Paragraph 12: ... error should have a correct sign for the
+    current rounding direction.</p>
+
+    <p>Paragraph 13: ... the error should have a correct sign for
+    the current rounding direction.</p>
+
+    <p>7.24.4.1.1 The <b><tt>wcstod</tt></b>,
+    <b><tt>wcstof</tt></b>, and <b><tt>wcstold</tt></b>
+    functions:</p>
+
+    <p>Paragraph 8: ... the error should have a correct sign for
+    the current rounding direction.</p>
+
+    <p>Paragraph 9: ... according to the current rounding
+    direction, with the extra stipulation that the error with
+    respect to D should have a correct sign for the current
+    rounding direction.</p>
+
+    <p>Annex F.3 Operators and functions: Paragraph 1: The
+    <b><tt>fegetround</tt></b> and <b><tt>fesetround</tt></b>
+    functions in &lt;fenv.h&gt; provide the facility to select
+    among the IEC 60559 directed rounding modes represented by the
+    rounding direction macros in &lt;fenv.h&gt;
+    (<b><tt>FE_TONEAREST</tt></b>, <b><tt>FE_UPWARD</tt></b>,
+    <b><tt>FE_DOWNWARD</tt></b>, <b><tt>FE_TOWARDZERO</tt></b>) and
+    the values 0, 1, 2, and 3 of <b><tt>FLT_ROUNDS</tt></b> are the
+    IEC 60559 directed rounding modes.</p>
+
+    <p>Annex F.5 Binary-decimal conversion:</p>
+
+    <p>Paragraph 2: Conversions involving IEC 60559 formats follow
+    all pertinent recommended practice. In particular, conversion
+    between any supported IEC 60559 format and decimal with
+    <b><tt>DECIMAL_DIG</tt></b> or fewer significant digits is
+    correctly rounded, which assures that conversion from the
+    widest supported IEC 60559 format to decimal with
+    <b><tt>DECIMAL_DIG</tt></b> digits and back is the identity
+    function.</p>
+
+    <p>Paragraph 3: 3 Functions such as <b><tt>strtod</tt></b> that
+    convert character sequences to floating types honor the
+    rounding direction. Hence, if the rounding direction might be
+    upward or downward, the implementation cannot convert a
+    minus-signed sequence by negating the converted unsigned
+    sequence.</p>
+
+    <p>Annex F.6 Contracted expressions: Paragraph 1: A contracted
+    expression treats infinities, NaNs, signed zeros, subnormals,
+    and the rounding directions in a manner consistent with the
+    basic arithmetic operations covered by IEC 60559.</p>
+
+    <p>Annex F.7 Floating-point environment: Paragraph 1: The
+    floating-point environment defined in &lt;fenv.h&gt; includes
+    the IEC 60559 floating-point exception status flags and
+    directed-rounding control modes.</p>
+
+    <p>Annex F.7.1 Environment management: Paragraph 1: IEC 60559
+    requires that floating-point operations implicitly raise
+    floating-point exception status flags, and that rounding
+    control modes can be set explicitly to affect result values of
+    floating-point operations.</p>
+
+    <p>Annex F.7.2 Translation: Paragraph 1: During translation the
+    IEC 60559 default modes are in effect: The rounding direction
+    mode is rounding to nearest.</p>
+
+    <p>Footnote 306) As floating constants are converted to
+    appropriate internal representations at translation time, their
+    conversion is subject to default rounding modes ...</p>
+
+    <p>Annex F.7.3 Execution: Paragraph 1: At program startup the
+    floating-point environment is initialized as prescribed by IEC
+    60559: All floating-point exception status flags are cleared.
+    The rounding direction mode is rounding to nearest.</p>
+
+    <p>Footnote 307) Where the state for the
+    <b><tt>FENV_ACCESS</tt></b> pragma is "on", results of inexact
+    expressions like 1.0/3.0 are affected by rounding modes set at
+    execution time, ...</p>
+
+    <p>Annex F.8.2 Expression transformations: has in several
+    places: default rounding direction.</p>
+
+    <p>Annex F.8.4 Constant arithmetic: Paragraph 1: ... changing
+    the rounding direction to downward ...</p>
+
+    <p>Footnote 311) 0-0 yields -0 instead of +0 just when the
+    rounding direction is downward.</p>
+
+    <p>Annex F.9 Mathematics &lt;math.h&gt;:</p>
+
+    <p>Paragraph 6: ... rounding direction, ...</p>
+
+    <p>Paragraph 10: Whether the functions honor the rounding
+    direction mode is implementation-defined.</p>
+
+    <p>Annex F.9.6.3 The <b><tt>nearbyint</tt></b> functions:
+    Paragraph 1: The <b><tt>nearbyint</tt></b> functions use IEC
+    60559 rounding according to the current rounding direction.</p>
+
+    <p>Annex F.9.6.5 The <b><tt>lrint</tt></b> and
+    <b><tt>llrint</tt></b> functions: Paragraph 1: The
+    <b><tt>lrint</tt></b> and <b><tt>llrint</tt></b> functions
+    provide floating-to-integer conversion as prescribed by IEC
+    60559. They round according to the current rounding
+    direction.</p>
+
+    <p>Annex F.9.6.7 The <b><tt>lround</tt></b> and
+    <b><tt>llround</tt></b> functions: Paragraph 1: The
+    <b><tt>lround</tt></b> and <b><tt>llround</tt></b> functions
+    differ from the <b><tt>lrint</tt></b> and
+    <b><tt>llrint</tt></b> functions with the default rounding
+    direction ...</p>
+
+    <p>Annex F.9.6.8 The <b><tt>trunc</tt></b> functions: Paragraph
+    1: The <b><tt>trunc</tt></b> functions use IEC 60559 rounding
+    toward zero (regardless of the current rounding direction).</p>
+
+    <p>Annex J.3.6 Floating point: Paragraph 1: Additional
+    floating-point exceptions, rounding modes, environments, and
+    classifications, and their macro names (7.6, 7.12).</p>
+
+    <p>Annex J.3.12 Library functions: Whether the functions in
+    &lt;math.h&gt; honor the rounding direction mode in an IEC
+    60559 conformant implementation (F.9).</p>
+
+    <p>Index:</p>
+
+    <p>correctly rounded result, 3.9</p>
+
+    <p>floating-point rounding mode, 5.2.4.2.2</p>
+
+    <p>rounding mode, floating point, 5.2.4.2.2</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Of the six 'equivalent' phrases that involve 'rounding',
+    'direction', 'control', and 'mode', pick one ('rounding mode'
+    is the submitter's choice) and change the others to it thruout
+    the C99 standard.</p>
+
+    <p>Change 3.9 'effective rounding mode' to 'current rounding
+    mode'.</p>
+
+    <p>Change 7.12.13.1 The <b><tt>fma</tt></b> functions: '... the
+    rounding mode characterized by the value of
+    <b><tt>FLT_ROUNDS</tt></b>' to '... the current rounding
+    mode'.</p>
+
+    <p>Change Annex F.5 Binary-decimal conversion: Paragraph 2:
+    'correctly rounded' to 'correctly rounded (which honors the
+    current rounding mode)'. Note: Once 'effective rounding mode'
+    is changed to 'current rounding mode', is this change really
+    needed (since correctly rounded implies honors the current
+    rounding mode)?</p>
+    <hr>
+
+    <p><b>Committee Discussion</b></p>
+    This needs to be passed by the original authors to see if there
+    is some rationale for the multiple terminology. No real
+    opposition to the Suggested Technical Corrigendum, the
+    Committee does not feel a need to rush this change. 
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>Change 3.9 'effective rounding mode' to 'current rounding
+    mode'.</p>
+
+    <p>Change 7.12.13.1 The <b><tt>fma</tt></b> functions: '... the
+    rounding mode characterized by the value of
+    <b><tt>FLT_ROUNDS</tt></b>' to '... the current rounding
+    mode'.</p>
+
+    <p>Change Annex F.5 Binary-decimal conversion: Paragraph 2:
+    'correctly rounded' to 'correctly rounded (which honors the
+    current rounding mode)'.</p>
+
+    <p><br>
+     <a href="dr_285.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_287.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

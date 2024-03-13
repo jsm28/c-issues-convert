@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #012</TITLE></HEAD><BODY>
+<H2>Defect Report #012</H2>
+ 
+<B>Submission Date</B>: 10 Dec 92
+<BR> 
+<B>Submittor</B>: WG14
+<BR> 
+<B>Source</B>: X3J11/90-046 (David F. Prosser)
+<BR> 
+<B>Question</B> 1
+<BR> 
+Bug in Standard C
+<BR> 
+I was asked a question about the validity of various expressions.
+Among the list there was the following:
+<BR> 
+<TT><B>void *p; &*p;</B></TT>
+<BR> 
+After doing a quick pass through the standard, I found nothing that
+disallowed such. Moreover, back in September 1987's meeting (I didn't
+just recall the date ... it took a while to find when it occurred),
+I distinctly remember a Committee discussion that involved the validity
+of the expression above. It was as a result of this discussion and
+vote that the draft was changed to allow the above.
+<BR> 
+Anyway, I wrote back that the expression was valid. This was eventually
+followed by a letter from Dennis [Ritchie] pointing out the mistake
+I made. As it turns out, the definition of lvalue makes at least the
+unary <TT><B>&</B></TT> part of the above a constraint violation. (As Bill [Plau
+ger] would say, ``I know what the standard was <I>supposed</I> to specify.'')
+<BR> 
+This would be just another, ``Oops, well I guess I can live with
+it'' surprise in the standard, except that it turns out that unary
+<TT><B>&</B></TT> of a <TT><B>void</B></TT> type is useful! What it provides is
+a construction that gives C a notion of an address symbol. You are familiar with
+the symbols that are created by the UNIX linker: <TT><B>etext</B></TT>, <TT><B>e
+data</B></TT>, and <TT><B>end</B></TT>, which designate special addresses within the <TT><B>a.o
+ut</B></TT>'s address space. Of these, the last is most useful (it gives the beginning
+of the dynamically allocated data space). However, the <I>type</I>
+for these symbols was always pretty fuzzy. But, consider a declaration
+of <TT><B>end</B></TT> as
+<BR> 
+<TT><B>extern void end;</B></TT>
+<BR> 
+What this gives is a name that only has an address - exactly what
+these symbols do, and nothing more. They can only be used in C as
+the operand of unary <TT><B>&</B></TT>, and the address must be converted to
+something else (say, <TT><B>char *</B></TT>) even to do address calculation,
+making the special nature of the symbol clearly evident.
+<BR> 
+What I'd like is a vote of the interpretations group that notes that
+the intent of the Committee was that ``<TT><B>void *p; &*p;</B></TT>''
+was supposed to be valid, even though a conforming implementation
+must diagnose the expression. This means that I can continue to suggest
+the ``<TT><B>extern void</B></TT>'' approach to address symbols in C.
+<BR> 
+P.S.: The following is my reply to Dennis's mail that pointed out
+the error with my original interpretation. The indented parts are
+from Dennis's mail.
+<BLOCKQUOTE> 
+I don't agree with Dave P's answer about ``<TT><B>void *vp; &*vp;</B></TT>.''
+There is not a constraint on <TT><B>*</B></TT>, but the subclause 6.3.3.2 semantics say, ``... if it [the operand of <TT><B>*</B></TT>] points to an object,
+the result is an lvalue designating the object.'' Does <TT><B>vp</B></TT>
+point to an object? An object is ``a region of data storage ...
+the contents of which can represent values'' (clause 3). Dicey
+at best.
+</BLOCKQUOTE> 
+I took some time looking into my records of the Committee's thoughts
+on this very issue. Back in '87, based on a proposal by Plauger, the
+Committee voted 27 to 3 that ``<TT><B>*(void *)</B></TT>'' was not to
+be an error. This was when the unary <TT><B>*</B></TT> constraint was simplified to the current form. Since <TT><B>void</B></TT> is a special instance of an incomplete object type, it can be thought of as pointing at an object
+whose size we do not know, but I agree that the argument is strained.
+I would still recommend that the compiler not produce a hard error
+in this situation.
+<BLOCKQUOTE> 
+Moreover, the operand of <TT><B>&</B></TT> must be an lvalue, and <TT><B>*vp</B>
+</TT>
+is certainly not an lvalue (subclause 6.2.2.1): ``An <I>lvalue</I>
+is an expression (with an object type or an incomplete type other
+than <TT><B>void</B></TT>) ...''
+</BLOCKQUOTE> 
+Oops. In this case, I completely agree with Dennis: the standard does
+say that unary <TT><B>&</B></TT> should not be applied to an expression with
+type <TT><B>void</B></TT> since such cannot be an lvalue. Unfortunately, this
+means that the standard is ``broken,'' at least according to
+the Committee's decisions. One of the major arguments presented as
+part of the September 1987 meeting for allowing ``<TT><B>*(void *)</B></TT>''
+was that it could then be immediately used as the operand of unary
+<TT><B>&</B></TT>!
+<BR> 
+Therefore, I can state that back in 1987, the Committee's intent was
+that the examples you gave were valid Standard C, but that the standard
+as written does not allow the second half of the construction for
+<TT><B>void</B></TT>! Nevertheless, I'd still suggest allowing the code to succe
+ssfully
+compile, with at most a warning.
+<BR> 
+<B>Response</B>
+<BR> 
+The relevant citations are subclause 6.3.3.2 (page 43, lines 36-38):
+<BLOCKQUOTE> 
+The operand of the unary <TT><B>&</B></TT> operator shall be either a
+function designator or an lvalue that designates an object that is
+not a bit-field and is not declared with the <TT><B>register</B></TT> 
+storage-class specifier.
+</BLOCKQUOTE> 
+and the one supplied by you from subclause 6.2.2.1 (page 36, lines
+3-4):
+<BLOCKQUOTE> 
+An <I>lvalue</I> is an expression (with an object type or an
+incomplete type other than <TT><B>void</B></TT>) that designates an object.
+</BLOCKQUOTE> 
+Given the following declaration:
+<BR> 
+<TT><B>void *p;</B></TT>
+<BR>
+the expression <TT><B>&*p</B></TT> is invalid. This is because <TT><B>*p</B></TT
+> is of type <TT><B>void</B></TT> and so is not an lvalue, as discussed in the quote
+from subclause 6.2.2.1 above. Therefore, as discussed in the quote
+from subclause 6.3.3.2 above, the operand of the <TT><B>&</B></TT> operator
+in the expression <TT><B>&*p</B></TT> is invalid because it is neither a function 
+designator nor an lvalue.
+<BR> 
+This is a constraint violation and the translator must issue a diagnostic
+message.
+<BR> 
+The desired effect can be obtained by using the declaration
+<BR> 
+<TT><B>extern const void end;</B></TT>
+<BR> 
+(where <TT><B>end</B></TT> denotes an object of unknown size) since <TT><B>const
+ 
+void</B></TT> type is not <TT><B>void</B></TT> type and thus <TT><B>&amp;end</B></TT>
+does not violate the constraint in subclause 6.3.3.2.
+<BR> 
+Footnote 6 (page 6), which is not part of the standard, provides a
+suggestion for implementors who may wish to assign a meaning to the
+above expression. It says ``(An implementation) may also successfully
+translate an invalid program.'' Therefore, as long as a diagnostic
+message is issued, a translator may assign a meaning to the expression
+<TT><B>&*p</B></TT> discussed above. Conforming programs shall not use this
+expression, however.
+<BR>
+<A HREF="dr_011.html">Previous Defect Report</A> 
+&lt; -  > <A HREF="dr_013.html">Next Defect Report</A></BODY></HTML>

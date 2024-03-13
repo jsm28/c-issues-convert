@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #332</title>
+    <meta http-equiv="Content-Type" content=
+    "text/html; charset=iso-8859-1">
+  </head>
+
+  <body>
+    <br>
+     
+
+    <h2 align="center">Defect Report #332</h2>
+    <a href="dr_331.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_333.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Gwyn (US)<br>
+     <b>Submission Date:</b> 2006-10-17<br>
+     <b>Source:</b> Douglas A. Gwyn &lt;gwyn@arl.army.mil&gt;<br>
+     <b>Version:</b> 1.1<br>
+     <b>Date:</b> 2007-09-06<br>
+     <b>Subject:</b> <code><b>gets</b></code> is generally
+    unsafe</p>
+
+    <p><b>Summary</b></p>
+
+    <p>The <code><b>gets</b></code> function's notorious
+    vulnerability to buffer overrun ought to be addressed.</p>
+
+    <p><b>Rationale</b></p>
+
+    <p>The <code><b>gets</b></code> function draws much criticism
+    due to its vulnerability to buffer overrun, which is inherent
+    in its legacy interface specification. Its very presence in the
+    Standard has been taken by many as evidence of WG14's
+    ineptitude or lack of concern for software reliability, despite
+    arguments to the contrary. The Committee may be more favorably
+    regarded within the programming community if it takes
+    reasonable steps to address this issue.</p>
+
+    <p>The recent publication of <i>TR 24731</i>, which specifies
+    an alternative function <code><b>gets_s</b></code> that could
+    be used instead of <code><b>gets</b></code>, does not satisfy
+    the critics who claim that the continuing existence of the
+    <code><b>gets</b></code> specification in the C standard
+    amounts to an endorsement of its unsafe use in new
+    programs.</p>
+
+    <p><b>Discussion</b></p>
+
+    <p>Consider this representative usage of
+    <code><b>gets</b></code>:</p>
+<pre>
+<tt>#include &lt;stdio.h&gt;
+static char line[BUFSIZ];     /* BUFSIZ is bigger than any normal text line */
+extern void process(char *);
+int main(void) {
+    while (gets(line))
+        process(line);        /* may invoke puts(line), etc. */
+    return 0;
+}
+</tt>   
+</pre>
+    This shows how <i>convenient</i> the <code><b>gets</b></code>
+    interface is. The well-known problem with this interface occurs
+    when the standard input stream contains a text line longer than
+    the allocated size of the buffer; because
+    <code><b>gets</b></code> has no way to know that size, it
+    blindly continues to store data beyond the end of the array,
+    with potentially devastating impact on program operation. The
+    infamous 1988 Morris Internet worm was merely the first of many
+    attacks that exploit this behavior to breach security in
+    network applications. 
+
+    <p>What might be done to improve the specification for
+    <code><b>gets</b></code> so that the safety of this
+    exceptionally convenient interface can be assured? (I do not
+    recommend removing it altogether!) It seems evident that the
+    only feasible change would be to impose a limit on the amount
+    of data transferred. Requiring the programmer to establish the
+    limit through some additional interface would sacrifice the
+    convenience. The alternative is to impose some constant limit,
+    in which case the remaining question is what would be a
+    suitable constant. That can be answered by examining existing
+    uses of <code><b>gets</b></code> to determine typical buffer
+    sizes. It appears that two usage patterns predominate: Using
+    the <code><b>BUFSIZ</b></code> macro which happens to be
+    conveniently at hand as a consequence of <code><b>#include
+    &lt;stdio.h&gt;</b></code>, or using some assumed text-line
+    length such as 80.</p>
+
+    <p>Restricting the amount of data transferred to only 80
+    characters may be too severe for many applications, and in any
+    case it would necessitate the introduction of a new limit macro
+    such as <code><b>LINE_MAX</b></code> to provide a convenient
+    way for programmers to declare suitable buffer arrays.
+    Therefore I recommend instead that the existing usage of
+    <code><b>BUFSIZ</b></code> be legitimatized, as follows.</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+    Add the following sentence to the <b>Description</b> in
+    subclause 7.19.7.7 (The <code><b>gets</b></code> function)],
+    between the two existing sentences: 
+
+    <blockquote>
+      At most <code><b>BUFSIZ-1</b></code> characters are copied to
+      the array; excessive characters are discarded.
+    </blockquote>
+    (The portion after the semicolon isn't strictly necessary, but
+    it adds clarity.) 
+
+    <p><b>Impact</b></p>
+
+    <p>The proposed change to the <code><b>gets</b></code>
+    specification would have the effect of preventing buffer
+    overruns in many existing applications. Overly long input lines
+    would be silently truncated (which is better than the
+    alternative of treating them as multiple lines).</p>
+
+    <p>Existing applications using small buffers would not be
+    automatically rescued by this change; however, there would be a
+    simple source-code fix (change the buffer size). New
+    applications would obtain safe behavior by using the known
+    limit for buffer allocation, exactly as in the above
+    example.</p>
+
+    <p>Adoption of such a change would demonstrate the committee's
+    willingness to improve specifications compatibly with the
+    existing standard, without resorting to unnecessarily drastic
+    measures.</p>
+    <hr>
+    <!-- Entries below the line by WG14 only. -->
+
+    <p><b>Committee Discussion</b> (for history only)</p>
+
+    <p align="left">The Committee thinks that the programming
+    community would be better served by flagging the
+    <code><b>gets()</b></code> function as deprecated.</p>
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>Add to subclause 7.26.9:</p>
+
+    <blockquote>
+      The <code><b>gets</b></code> function is obsolescent, and is
+      deprecated.
+    </blockquote>
+
+    <p>Add forward reference in 7.19.7.7 to 7.26.9</p>
+
+    <p><br>
+     <a href="dr_331.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_333.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

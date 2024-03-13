@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #141</TITLE></HEAD><BODY>
+<H2>Defect Report #141</H2>
+<B>Submission Date</B>: 10 Sep 94
+<BR>
+<B>Submittor</B>: Project Editor (P.J. Plauger)
+<BR>
+<B>Source</B>: Doug McIlroy
+<BR>
+<B>Question</B>
+<BR>
+What does <TT><B>EOF</B></TT> mean in <TT><B>&lt;stdio.h></B></TT>? Subclause 7.9.1 says 
+that it ``is returned by several functions to indicate <I>end-of-file,</I> 
+that is, no more input from a stream.''
+<BR>
+Taken at face value, the statement that there is no more input implies 
+that further reads from the stream will yield <TT><B>EOF</B></TT>. In many implementations 
+this is not true. It may be possible to read data from a stream on 
+which the end-of-file indicator is set. Just whether that happens 
+usually depends on what kind of file the stream is associated with. 
+In System V, for example, one will almost always get more data on 
+reading past <TT><B>EOF</B></TT> on a terminal, and almost never on a plain 
+file. This violates the principle of device-independent behavior.
+<BR>
+I believe the System V behavior is wrong. Whenever <TT><B>feof</B></TT> would 
+return nonzero, <TT><B>getc</B></TT> should return <TT><B>EOF</B></TT>.
+<BR>
+Some old code will break if <TT><B>EOF</B></TT> is made sticky as I suggest, 
+but surprisingly little. When we made it sticky in v10 UNIX, we had 
+to change exactly one dishonest program (sdb), which used ctl-D as 
+if it were a character without putting the terminal in raw mode. Not 
+one complaint arose from the change.
+<BR>
+On the other hand, almost every UNIX user has at one time or another 
+been surprised by a nonsticky <TT><B>EOF</B></TT>, manifested as a program needing 
+more than one <TT><B>EOT</B></TT> to stop it when <TT><B>stdin</B></TT> comes from a terminal. 
+That breeds the habit of typing extra <TT><B>EOT</B></TT> at balky programs. 
+The habit causes yet more trouble (hangup, for example), when things 
+are merely slow and not really balky. This indefinite-<TT><B>EOF</B></TT> problem 
+is not the fault of the programs, which should be able to count on 
+a uniform behavior of <TT><B>EOF</B></TT> across all files. It is a fundamental 
+mistake in the implementation of <TT><B>&lt;stdio.h></B></TT>.
+<BR>
+I urge the Committee to clarify <TT><B>EOF</B></TT>, and clarify it in the direction 
+of predictability.
+<BR>
+<B>Response</B>
+<BR>
+It was certainly the intent of the Committee that end-of-file should 
+indicate ``no more input from a stream,'' at least when returned 
+by functions such as <TT><B>fgetc</B></TT>. In particular, subclause 7.9.7.1 
+<B>The <TT>fgetc</TT> function</B> says, in part:
+<BR>
+If the stream is at end-of-file, the end-of-file indicator for 
+the stream is set and <TT><B>fgetc</B></TT> returns <TT><B>EOF</B></TT>.
+``Setting the end-of-file indicator'' implies that
+<I>that stream</I> is now considered to be ``at end-of-file.''
+<BR>
+For input from a stream
+to return other than <TT><B>EOF</B></TT> after once returning 
+<TT><B>EOF</B></TT> (with no intervening file-positioning operations
+or calls to <TT><B>clearerr</B></TT>)
+is non-conforming behavior, however widespread.
+<BR>
+<A HREF="dr_140.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_142.html">Next Defect Report</A>
+</BODY></HTML>

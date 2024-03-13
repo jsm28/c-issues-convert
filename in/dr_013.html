@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #013</TITLE></HEAD>
+<BODY><H2>Defect Report #013</H2>  
+<B>Submission Date</B>: 10 Dec 92
+<BR> 
+<B>Submittor</B>: WG14
+<BR> 
+<B>Source</B>: X3J11/90-047 (Sam Kendall)
+<BR> 
+<B>Question</B> 1
+<BR>  Compatible and composite function types
+<BR>  A fix to both problems Mr. Jones raises in X3J11 Document Number
+90-006 is: In subclause 6.5.4.3 on page 68, lines 23-25, change the two
+occurrences of ``its type for these comparisons'' to ``its type for
+compatibility comparisons, and for determining a composite type.'' This
+change makes the sentences pretty awkward, but I think they remain
+readable.
+<BR>  This change makes all three of Mr. Jones's declarations
+compatible:
+<BR> 
+<TT><B>int f(int a[4]);<BR> int f(int a[5]);<BR> int f(int *a);
+</B></TT><BR>  This should be the case; it is consistent with the base
+document's idea of ``rewriting'' the parameter type from array to
+pointer.
+<BR> 
+<B>Correction</B>
+<BR> 
+<I><B>In subclause 6.5.4.3, page 68, lines 22-25, change:</B></I>
+<BR>  (For each parameter declared with function or array type, its
+type for these comparisons is the one that results from conversion to a
+pointer type, as in 6.7.1. For each parameter declared with qualified
+type, its type for these comparisons is the unqualified version of its
+declared type.)
+<BR><I><B>to:</B></I>
+<BR>  (In the determination of type compatibility and of a composite
+type, each parameter declared with function or array type is taken as
+having the type that results from conversion to a pointer type, as in
+6.7.1, and each parameter declared with qualified type is taken as
+having the unqualified version of its declared type.)
+<BR><B>Question</B> 2
+<BR>  ``Compatible'' not defined for recursive types
+<BR>The term ``compatible'' is not completely defined. Consider the
+following two file-scope declarations in <I>separate</I> translation
+units:
+<BR><TT><B>extern struct a { struct a *p; } x;<BR> struct a { struct
+a *p; } x;
+<BR></B></TT>  Are these two declarations of <TT><B>x</B></TT>
+compatible? Obviously they should be, but subclause 6.1.2.6 does not say
+so.
+<BR>Because subclause 6.1.2.6 does not say how to terminate the
+recursion in testing for compatibility of two recursive types, either
+interpretation is possible. In other words, it is consistent with the
+rules in subclause 6.1.2.6 to decide that the two declarations are
+compatible; but it is also consistent to decide that they are
+incompatible.
+<BR>We can solve the problem roughly as follows: append the following
+draft sentence to the first paragraph of subclause 6.1.2.6 (page 25,
+line 8):
+<BLOCKQUOTE>  If two types declared in separate translation units admit
+the possibility of being either compatible or incompatible, the two
+types shall be compatible.<B>*</B> [Footnote *: This case occurs with
+recursive types.]
+</BLOCKQUOTE>This sentence is not satisfactory; perhaps another
+Committee member can state this rule better.
+<BR><B>Response</B>
+<BR>We agree that the C Standard can be read in a way that it
+``loops.'' Our intent, and we feel the only reasonable solution, is that
+the recursion stops and the two types are regarded as compatible.
+<BR> 
+<B>Question</B> 3
+<BR>  Composite type of <TT><B>enum</B></TT> vs. integer not defined
+<BR>  There is one case where two types are compatible, but their
+composite type is not defined. To fix this problem, in subclause 6.1.2.6
+insert after page 25, line 17:
+<BLOCKQUOTE>- If one type is an enumeration and the other is an integer
+type, the composite type is the enumeration.
+</BLOCKQUOTE>
+There may be other cases where ``compatible'' is not defined. I
+made a cursory search and did not find any.
+<BR> 
+<B>Response</B>
+<BR>  The issue is that in
+<BR> 
+<TT><B>enum {r,w,b} x;</B><BR></TT>
+<BR>  and
+<BR> 
+<TT><B><I>some-int-type</I> x;</B><BR></TT>
+<BR>  where <TT><B>some-int-type</B></TT> happens to be the type that
+by subclause 6.5.2.2, page 61, line 40 is compatible with the type of
+the <TT><B>enum</B></TT>, what is the resultant composite type?
+<BR>  Subclause 6.1.2.6 on page 25, lines 11-12 says ``<I>a</I> type
+that ... satisfies the following conditions'' (added emphasis on ``<I>a</I>'').
+The composite type of two compatible types is not necessarily unique. In
+this case both the <TT><B>enum</B></TT> type and the <TT><B>some-int-type</B></TT>
+satisfy the definition of ``composite'' type. This refutes the claim
+that the ``composite type is not defined;'' the point is that the
+standard does not guarantee a <I>unique</I> composite type.
+<BR>  As an example, in the following declarations:
+<BR> 
+<TT><B>enum {r, w, b} x;<BR> some_int_type x;
+<BR></B></TT> provided the enumeration type is compatible with the type
+of <TT><B>some_int_typ e</B></TT>, it is unspecified whether the
+composite type of <TT><B>x</B></TT> is the enumeration type or <TT><B>
+some_int_type</B></TT>.
+<BR> 
+<B>Question</B> 4
+<BR>  When a structure is incomplete
+<BR>  Reference subclause 6.5.2.3, page 62, lines 25-28:
+<BLOCKQUOTE>  If a type specifier of the form
+<BR> 
+<TT><B>struct-or-union  identifier</B></TT>
+<BR>occurs prior to the declaration that defines the content, the
+structure or union is an incomplete type.
+</BLOCKQUOTE>In the following example, neither the second nor the third
+occurrence of <TT><B>struct foo</B></TT> seem adequately covered by
+this sentence:
+<BR> 
+<TT><B>struct foo {<BR>         struct foo *p;<BR> } a[sizeof(struct foo)];<BR>
+</B></TT>In the second occurrence <TT><B>foo</B></TT> is incomplete,
+but since the occurr ence is within ``the declaration that defines the
+content,'' it cannot be said to be ``prior'' that declaration. In the
+third occurrence
+<TT><B>foo</B></TT> is complete, but again, the occurrence is within
+the declara tion.
+<BR>  To fix the problem, change the phrase ``prior to the
+declaration'' to ``prior to the end of the <TT><B>struct-declaration-list</B></TT>
+or
+<TT><B>enumerator-list</B></TT>.''
+<BR> 
+<B>Correction</B>
+<BR> 
+<I><B>In subclause 6.5.2.3, page 62, line 27, change:</B></I>
+<BR>  occurs prior to the declaration that defines the content
+<BR> 
+<I><B>to:</B></I>
+<BR>  occurs prior to the <TT><B>}</B></TT> following the <TT><B>struct-declaration-li
+st</B></TT> that defines the content
+<BR> 
+<B>Question</B> 5
+<BR>  Enumeration tag anomaly
+<BR>  Consider the following (bizarre) example:
+<BR> 
+<TT><B>enum strange1 {<BR>         a = sizeof (enum strange1)      /*
+</B><I>line [2]</I><B> */<BR> };<BR> enum strange2 {<BR>         b
+= sizeof (enum strange2 *)    /*</B><I> line [5]</I> <B>*/<BR> };
+</B><BR></TT>  The respective tags are visible on lines [2] and [5]
+(according to subclause 6.1.2.1, page 20, lines 39-40, but there is no
+rule in subclause 6.5.2.3, <B>Semantics</B> (page 62) that governs
+their meaning on lines [2] and [5]. Footnote 62 on page 62 seems to be
+written without taking this case into account.
+<BR>  The first declaration must be illegal. The second declaration
+should be illegal for simplicity.
+<BR>  Perhaps these declarations are already illegal, since no rule
+gives them a meaning. To clarify matters, I suggest in subclause 6.5.2.3
+appending to page 62, line 35:
+<BLOCKQUOTE>  A type specifier of the form
+<BR> 
+<TT><B>enum <I>identifier</I></B></TT>
+<BR>  shall not occur prior to the end of the <TT><B>enumerator-list</B></TT>
+that defines the content.
+</BLOCKQUOTE>  If this sentence is not appended, something like it should appear
+as a footnote.
+<BR> 
+<B>Correction</B>
+<BR> 
+<I><B>Add to subclause 6.5.2.3, page 63, another Example:</B></I>
+<BR>  An enumeration type is compatible with some integral type. An
+implementation may delay the choice of which integral type until all
+enumeration constants have been seen. Thus in:
+<BR> 
+<TT><B>enum f { c = sizeof(enum f) };</B></TT>
+<BR>  the behavior is undefined since the size of the respective
+enumeration type is not necessarily known when <TT><B>sizeof</B></TT>
+<BR>
+<A HREF="dr_012.html">Previous Defect Report</A> 
+&lt; -  > <A HREF="dr_014.html">Next Defect Report</A>
+</BODY></HTML>

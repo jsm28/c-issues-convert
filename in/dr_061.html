@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #061</TITLE></HEAD>
+<BODY>
+<H2>Defect Report #061</H2>
+<B>Submission Date</B>: 19 Aug 93
+<BR>
+<B>Submittor</B>: X3 Secretariat (USA)
+<BR>
+<B>Source</B>: Ed Bendickson
+<BR>
+<B>Question</B>
+<BR>
+I am requesting an interpretation of white space in the format string 
+of a scan statement. One of our customers is concerned about this 
+as it appears to conflict with some books on C. I am referring to 
+subclause 7.9.6.2, page 135, paragraph 3:
+<BLOCKQUOTE>
+A directive composed of white space character(s) is executed 
+by reading input up to the first non-white-space character (which 
+remains unread), or until no more characters can be read.
+</BLOCKQUOTE>
+Page 135, paragraph 7 says:
+<BLOCKQUOTE>
+If the length of the input item is zero, the execution of the 
+directive fails: this condition is a matching failure, unless an error 
+prevented input from the stream, in which case it is an input failure.
+</BLOCKQUOTE>
+My questions are:
+<BR><OL>
+<LI> Is white space in the format string a directive which must be 
+satisfied by white space in the input string?
+<LI> What are the correct answers to the following examples? Note 
+the white space in the format string.
+</OL>
+Example 1:
+<BR>
+<TT><B>inputString = "123ABCD";<BR>
+numAssigned = sscanf(inputString, "%lu %ls", &amp;ulongVal, junkchar);
+<BR></B></TT>
+Should the result be <TT><B>numAssigned</B></TT> equal to 1?
+<BR>
+Example 2:
+<BR>
+<TT><B>inputString = "123ABCD";<BR>
+numAssigned = sscanf(inputString, "%lu%ls", &amp;ulongVal, junkchar);
+<BR></B></TT>
+Should the result be <TT><B>numAssigned</B></TT> equal to 2?
+<BR>
+<B>Response</B>
+<BR>
+A directive composed of one or more white-space characters can successfully 
+match zero white-space characters in the input stream. The paragraphs 
+that intervene between your two quotations make clear that the second 
+paragraph applies only to a directive that is a conversion specification.
+<BR>
+Thus, both examples should assign 2 to <TT><B>numAssigned</B></TT>.
+<BR>
+<A HREF="dr_060.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_062.html">Next Defect Report</A>
+</BODY></HTML>

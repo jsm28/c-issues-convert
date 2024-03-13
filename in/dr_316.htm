@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #316</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #316</h2>
+    <a href="dr_315.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_317.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> UK C Panel<br>
+     <b>Submission Date:</b> 2005-03-04<br>
+     <b>Source:</b> Joseph Myers
+    &lt;joseph@codesourcery.com&gt;<br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1104.htm">ISO/IEC
+    WG14 N1104</a><br>
+     <b>Version:</b> 1.2<br>
+     <b>Date:</b> 2006-03-05<br>
+     <b>Subject:</b> Unprototyped function types</p>
+
+    <p><b>Summary</b></p>
+
+    <p>The rules for compatibility of function types in 6.7.5.3#15
+    do not define when a function type is "specified by a function
+    definition that contains a (possibly empty) identifier list",
+    and do not address compatibility between two types with that
+    property or what the composite type is in such cases.</p>
+
+    <p>As a first example, consider:</p>
+<pre>
+        void f(a)int a;{}
+        void g(a,b)int a,b;{}
+        void (*h)(int, int, int) = (0 ? f : g);
+</pre>
+
+    <p>What is the type of <code>(0 ? f : g)</code>? The types of
+    <code>f</code> and <code>g</code> are compatible. Does <code>(0
+    ? f : g)</code> have a type specified by a function definition?
+    Does <code>(0 ? f : f)</code>?</p>
+
+    <p>Question 1: Is the above translation unit valid?</p>
+
+    <p>Another example is:</p>
+<pre>
+        void f(a)int a;{}
+        void (*h)(int, int, int) = f;
+</pre>
+
+    <p>I believe the intent of the standard is that a type is
+    specified by a function definition <i>only</i> for the purposes
+    of checking compatibility of multiple declarations of the same
+    function; when as here the name of the function appears in an
+    expression, its type is determined by its return type and
+    contains no trace of the parameter types. However,
+    implementation interpretations vary.</p>
+
+    <p>Question 2: Is the above translation unit valid?</p>
+
+    <p>It may still be necessary for compatibility of multiple
+    unprototyped function types determined by function definitions
+    to be considered, if those definitions are in different
+    translation units and all but one are inline. (As an aside,
+    while the text of 6.7.4#6 assumes that there is only one
+    definition of a function in a translation unit, I can find
+    nothing prohibiting more if <code>inline</code> is used, though
+    the presumption would probably mean compile-time undefined
+    behavior if there were more than one in a translation unit,
+    with compatible types.) By way of example, consider the
+    following three translation units:</p>
+<pre>
+        // TU 1:
+        inline void f(a)int a;{}
+</pre>
+<pre>
+        // TU 2:
+        inline void f(a,b)int a,b;{}
+</pre>
+<pre>
+        // TU 3:
+        void f(a,b,c)int a,b,c;{}
+</pre>
+
+    <p>The function types seem to be compatible, so 6.2.7#2 does
+    not apply.</p>
+
+    <p>Question 3: Must a program containing these three
+    translation units, which never calls the function
+    <code>f</code>, be accepted?</p>
+
+    <p>The function <code>f</code> cannot be called above from TU 1
+    or TU 2 without undefined behavior, but could be called from TU
+    3, where the inline definitions in TU 1 and TU 2 cannot be used
+    for a call. (Though a program containing calls in TU 1 and TU 2
+    which are conditioned by <code>if (0)</code> would also seem to
+    be valid.) In the following case, the types are similar enough
+    that it would seem possible for calls to occur in all three
+    translation units without undefined behavior (by virtue of the
+    exceptions in 6.5.2.2#6):</p>
+<pre>
+        // TU 1:
+        inline void f(a,b)int a;unsigned b;{}
+        void g(void){f(0,0);}
+</pre>
+<pre>
+        // TU 2:
+        inline void f(a,b)unsigned a;int b;{}
+        void h(void){f(0,0);}
+</pre>
+<pre>
+        // TU 3:
+        void f(a,b)int a,b;{}
+        void i(void){f(0,0);}
+</pre>
+
+    <p>Question 4: Must a program containing these three
+    translation units be accepted?</p>
+
+    <p>It seems undesirable for such variation among the types of
+    functions with inline definitions to be permitted. This could
+    be fixed by defining compatibility of multiple unprototyped
+    function definitions to require compatibility of the parameter
+    types.</p>
+
+    <p><b>Suggested Technical Corrigendum</b><br>
+    </p>
+    <hr>
+
+    <p><b>Committee Discussion</b> (for history only)</p>
+    The Committee believe the answers to Q1 &amp; 2 are yes, and
+    that the Standard is unclear with respect to 3 &amp; 4.<br>
+     
+
+    <p><b>Committee Response</b></p>
+    Per the response provided in <a href="dr_255.htm">DR 255</a>: 
+
+    <blockquote>
+      "The Committee does not wish to further refine the behavior
+      of calls not in the scope of prototypes. In practice, this
+      will not be a problem, and the Committee does not wish to
+      define the behavior."
+    </blockquote>
+    We have no intention of <i>fixing</i> the old style rules.
+    However, the observations made in this document seem to be
+    generally correct. 
+
+    <p><br>
+     <a href="dr_315.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_317.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

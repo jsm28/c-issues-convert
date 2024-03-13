@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect Report #234</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #234</h2>
+    <a href="dr_233.htm">Previous Defect Report</a> &lt; - &gt;<a
+    href="dr_235.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> WG14 Convener (John Benito)<br>
+     <b>Submission Date:</b> 2000-09-26<br>
+     <b>Source:</b><br>
+     <b>Reference Document:</b> N/A<br>
+     <b>Version:</b> 1.5<br>
+     <b>Date:</b> 2001-01-22 03:22:43<br>
+     <b>Subject:</b> Miscellaneous Typos</p>
+
+    <p><b>Summary #1</b></p>
+
+    <p>In 6.10.3 Macro Replacement the text:<br>
+    </p>
+
+    <blockquote>
+      [#5] The identifier <tt><b>__VA_ARGS__</b></tt> shall occur
+      only in the replacement-list of a function-like macro that
+      uses the ellipsis notation in the arguments.
+    </blockquote>
+    The word "arguments" should be "parameters". 
+
+    <p><b>Summary #2</b><br>
+     In the Foreword under major changes, <tt><b>VA_COPY</b></tt>
+    should be <tt><b>va_copy</b></tt> .</p>
+
+    <p><b>Summary #3</b><br>
+     In 7.11.2.1, in the description of the <tt><b>lconv</b></tt>
+    members <tt><b>int_p_cs_precedes</b></tt>,
+    <tt><b>int_n_cs_precedes</b></tt>,
+    <tt><b>int_p_sep_by_space</b></tt>, and
+    <tt><b>int_n_sep_by_space</b></tt>, the reference to
+    <tt><b>int_currency_symbol</b></tt> should be
+    <tt><b>int_curr_symbol</b></tt>.</p>
+
+    <p><b>Summary #4</b><br>
+     In 7.19.6.14 The <tt><b>vsscanf</b></tt> function:</p>
+
+    <blockquote>
+      The <tt><b>vsscanf</b></tt> function returns the value of the
+      macro <tt><b>EOF</b></tt> if an input failure occurs before
+      any conversion. Otherwise, the <tt><b>vscanf</b></tt>
+      function ...
+    </blockquote>
+    The reference to <tt><b>vscanf</b></tt> should be
+    <tt><b>vsscanf</b></tt>. 
+
+    <p><b>Summary #5</b><br>
+     In 7.19.6.12 The <tt><b>vsnprintf</b></tt> function is
+    misspelled in the synopsis.</p>
+
+    <p><b>Summary #6</b><br>
+     In 7.4.1.12, paragraph #2, "as defined in 6.4.4.2" should be
+    "as defined in 6.4.4.1".</p>
+    <hr>
+
+    <p><b>Technical Corrigendum</b><br>
+     In the cited text in 6.10.3, change "arguments" to
+    "parameters"</p>
+
+    <p>In the Foreword, change <tt><b>VA_COPY</b></tt> to
+    <tt><b>va_copy</b></tt>.</p>
+
+    <p>In 7.11.2.1, change all occurrences of
+    <tt><b>int_currency_symbol</b></tt> to
+    <tt><b>int_curr_symbol</b></tt>. Also, append to paragraph
+    5:</p>
+
+    <blockquote>
+      For <tt><b>int_p_sep_by_space</b></tt> and
+      <tt><b>int_n_sep_by_space</b></tt>, the fourth character of
+      <tt><b>int_curr_symbol</b></tt> is used instead of a space.
+    </blockquote>
+
+    <p>In 7.19.6.14, change the reference from
+    <tt><b>vscanf</b></tt> to <tt><b>vsscanf</b></tt>.</p>
+
+    <p>In 7.19.6.12, change <tt><b>vsprintf</b></tt> to
+    <tt><b>vsnprintf</b></tt> in the synopsis.</p>
+
+    <p>In 7.4.1.12, change "(as defined in 6.4.4.2)" to "(as
+    defined in 6.4.4.1)".</p>
+
+    <p><br>
+     <a href="dr_233.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_235.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

@@ -1,0 +1,209 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect Report #221</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #221</h2>
+    <a href="dr_220.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_222.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Clive Feather (UK)<br>
+     <b>Submission Date:</b> 2000-04-04<br>
+     <b>Source:</b><br>
+     <b>Reference Document:</b> N/A<br>
+     <b>Version:</b> 1.3<br>
+     <b>Date:</b> 2001-09-18 16:01:16<br>
+     <b>Subject:</b> Lacuna in pointer arithmetic</p>
+
+    <p><b>Summary</b><br>
+     Consider the code extract:</p>
+
+    <blockquote>
+      <tt><b>int v [10]; int *p = (v + 9) + 1; int *q = v +
+      10;</b></tt>
+    </blockquote>
+
+    <p>The relevant part of 6.5.6 paragraph 8 reads:</p>
+
+    <blockquote>
+      If the pointer operand points to an element of an array
+      object, and the array is large enough, the result points to
+      an element offset from the original element such that the
+      difference of the subscripts of the resulting and original
+      array elements equals the integer expression. In other words,
+      if the expression <tt><b>P</b></tt> points to the <i>i</i>-th
+      element of an array object, the expressions
+      <tt><b>(P)+N</b></tt> (equivalently, <tt><b>N+(P)</b></tt>)
+      and <tt><b>(P)-N</b></tt> (where <tt><b>N</b></tt> has the
+      value n) point to, respectively, the <i>i</i>+<i>n</i>-th and
+      <i>i</i>-<i>n</i>-th elements of the array object, provided
+      they exist. Moreover, if the expression <tt><b>P</b></tt>
+      points to the last element of an array object, the expression
+      <tt><b>(P)+1</b></tt> points one past the last element of the
+      array object, and if the expression <tt><b>Q</b></tt> points
+      one past the last element of an array object, the expression
+      <tt><b>(Q)-1</b></tt> points to the last element of the array
+      object. If both the pointer operand and the result point to
+      elements of the same array object, or one past the last
+      element of the array object, the evaluation shall not produce
+      an overflow; otherwise, the behavior is undefined.
+    </blockquote>
+
+    <p>There is a problem with this wording in that it defines
+    arithmetic of pointers within the array object properly, but it
+    only defines arithmetic to "one past the end" when the pointer
+    was previously to the last object. In other words, the
+    initialization of <tt><b>p</b></tt> is correct because
+    <tt><b>(v + 9)</b></tt> points to the last element of an array,
+    but the initialization of <tt><b>q</b></tt> is not because the
+    "<i>i</i>+<i>n</i>-th" element does not exist.</p>
+
+    <p>This problem also makes common idioms like:</p>
+
+    <blockquote>
+      <tt><b>for (p = v; p &lt; v + 10; p++)</b></tt>
+    </blockquote>
+    undefined. 
+
+    <p>It is clear that these constructs are supposed to work, and
+    that the relevant wording just needs to be adjusted.</p>
+
+    <p><b>Suggested Technical Corrigendum</b><br>
+     Change the cited text to:</p>
+
+    <blockquote>
+      If the pointer operand points to an element of an array
+      object or to one past the last element of the array object,
+      and if the array is large enough, the result points to an
+      element, or to the location one past the last element, offset
+      from the original element such that the difference of the
+      subscripts of the resulting and original array elements
+      equals the integer expression. In other words, if the
+      expression <tt><b>P</b></tt> points to the <i>i</i>-th
+      element of an array object with <i>k</i> elements, or to one
+      past the last element (in which case <i>i</i> equals
+      <i>k</i>), then the expressions <tt><b>(P)+N</b></tt> and
+      <tt><b>N+(P)</b></tt>, (where <tt><b>N</b></tt> has the value
+      <i>n</i> which may be positive, zero, or negative) both point
+      to the <i>i</i>+<i>n</i>-th elements of the array object,
+      provided it exists, or if <i>i</i>+<i>n</i> equals <i>k</i>,
+      to one past the last element of the array object. If both the
+      pointer operand and the result point to elements of the same
+      array object, or one past the last element of the array
+      object (that is, both <i>i</i> and <i>i</i>+<i>n</i> lie
+      between <i>0</i> and <i>k</i> inclusive), the evaluation
+      shall not produce an overflow; otherwise, the behavior is
+      undefined.
+    </blockquote>
+
+    <p>Similarly, change the following text in paragraph 9:</p>
+
+    <blockquote>
+      In other words, if the expressions <tt><b>P</b></tt> and
+      <tt><b>Q</b></tt> point to, respectively, the <i>i</i>-th and
+      <i>j</i>- th elements of an array object, the expression
+      <tt><b>(P)-(Q)</b></tt> has the value <i>i</i>-<i>j</i>
+      provided the value fits in an object of type
+      <tt><b>ptrdiff_t</b></tt>. Moreover, if the expression
+      <tt><b>P</b></tt> points either to an element of an array
+      object or one past the last element of an array object, and
+      the expression <tt><b>Q</b></tt> points to the last element
+      of the same array object, the expression
+      <tt><b>((Q)+1)-(P)</b></tt> has the same value as
+      <tt><b>((Q)-(P))+1</b></tt> and as
+      <tt><b>-((P)-((Q)+1))</b></tt>, and has the value zero if the
+      expression <tt><b>P</b></tt> points one past the last element
+      of the array object, even though the expression
+      <tt><b>(Q)+1</b></tt> does not point to an element of the
+      array object.<small><sup>88)</sup></small>
+    </blockquote>
+    to: 
+
+    <blockquote>
+      In other words, if the expressions <tt><b>P</b></tt> and
+      <tt><b>Q</b></tt> point to, respectively, the <i>i</i>-th and
+      <i>j</i>-th elements of an array object with <i>k</i>
+      elements, or to one past the last element (in which case
+      <i>i</i> or <i>j</i>, or both, equals <i>k</i>), the
+      expression <tt><b>(P)-(Q)</b></tt> has the value
+      <i>i</i>-<i>j</i> provided the value fits in an object of
+      type <tt><b>ptrdiff_t</b></tt>.<small><sup>88)</sup></small>
+    </blockquote>
+    <hr>
+
+    <p><b>Committee Response</b><br>
+    </p>
+
+    <blockquote>
+      1. <tt><b>int v[10];<br>
+      </b></tt> 2. <tt><b>int *p = (v + 9) + 1;<br>
+      </b></tt> 3. <tt><b>int *q = v + 10;</b></tt>
+    </blockquote>
+
+    <p>Simply put, <tt><b>10 == 9+1</b></tt>. Based on the "as-if"
+    rule, there is no semantic distinction among any of the
+    following:</p>
+
+    <blockquote>
+      <tt><b>v+9+1<br>
+       (v+9)+1<br>
+       v+(9+1)<br>
+       v+10</b></tt>
+    </blockquote>
+    and that <tt><b>v+x</b></tt> is equivalent to
+    <tt><b>(v+x-1)+1</b></tt> and <tt><b>(v+x+1)-1</b></tt>,
+    assuming that <tt><b>x&gt;=1</b></tt> and
+    <tt><b>x&lt;=9</b></tt>. 
+
+    <p>Furthermore, the following wording from 6.5.6P8 confirms
+    this equivalence:</p>
+
+    <blockquote>
+      <p>"Moreover, if the expression <tt><b>P</b></tt> points to
+      the last element of an array object, the expression
+      <tt><b>(P)+1</b></tt> points one past the last element of the
+      array object, and if the expression <tt><b>Q</b></tt> points
+      one past the last element of an array object, the expression
+      <tt><b>(Q)-1</b></tt> points to the last element of the array
+      object."</p>
+    </blockquote>
+
+    <p>The first part of the sentence states that
+    <tt><b>(v+9)+1</b></tt> "points to one past the last element of
+    the array object".</p>
+
+    <p>The second part of the sentence states that
+    <tt><b>v+10</b></tt> "points to one past the last element of
+    the array object", which equates it to <tt><b>(v+9)+1</b></tt>
+    because it also "points to one past the last element of the
+    array object".</p>
+
+    <p>The third part of the sentence states that
+    <tt><b>v+10-1</b></tt> "points to the last element of the array
+    object" which is <tt><b>v+9</b></tt>.</p>
+
+    <p>Additionally, the expression <tt><b>(v+11)-2</b></tt> need
+    not be valid because constants might not be folded and the
+    expression <tt><b>(v+11)</b></tt> is invalid.</p>
+
+    <p>There are no surprising results in any of the above
+    conclusions, even if the above constants are replaced with
+    variables. The committee believes the current specification is
+    clear and is unlikely to be misinterpreted.</p>
+
+    <p>There is no consensus to make the requested changes or any
+    changes along these lines.</p>
+
+    <p><br>
+     <a href="dr_220.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_222.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

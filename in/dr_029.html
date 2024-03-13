@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #029</TITLE></HEAD><BODY>
+<H2>Defect Report #029</H2>
+
+<P><B>Submission Date</B>: 10 Dec 92 <BR>
+<B>Submittor</B>: WG14 <BR>
+<B>Source</B>: X3J11/91-016 (Sam Kendall) <BR>
+<B>Question</B> 1 <BR>
+Subclause 6.1.2.6 says: </P>
+
+<BLOCKQUOTE>
+<P>... two structure, union, or enumeration types declared in separate
+translation units are compatible if they have the same number of members,
+the same member names, and compatible member types; for two structures,
+the members shall be in the same order; for two structures or unions, the
+bit-fields shall have the same widths; for two enumerations, the members
+shall have the same values. </P>
+</BLOCKQUOTE>
+
+<P>I have one question and one clarification, both about compatibility
+between two <B><TT>struct</TT></B>/<B><TT>union</TT></B>/<B><TT>enum</TT></B>
+types declared in separate translation units. <BR>
+(1) Was it the Committee's intent that the two types must have the same
+tag (or both lack tags) to be compatible? As the standard is written, the
+following is legal: <BR>
+<B><TT><I>One Translation Unit</I>:<BR>
+struct foo { int i; } x; <BR>
+<I>Another Translation Unit</I>:<BR>
+extern struct bar { int i; } x; <BR>
+</TT></B>Recommendation: This seems like an accidental omission. To be
+compatible, the two types should have the same tag, or both lack tags.
+I would guess that such was the Committee's intent. <BR>
+(2) Clarification: The phrase ``two structure, union, or enumeration types''
+should be written ``two structure types, two union types, or two enumeration
+types.'' The current standard, interpreted literally, allows a structure
+and a union with identical member lists to be compatible, even though this
+is clearly not the intent of the Committee. <BR>
+<B><TT><I>One Translation Unit</I>:<BR>
+union foo { int i; } x;<BR>
+union bar { int i, j; } y; <BR>
+<I>Another Translation Unit</I>:<BR>
+extern struct foo { int i; } x;<BR>
+extern struct bar { int i, j; } y; <BR>
+</TT>Response</B> <BR>
+Subclause 6.1.2.6 says (by omission) that tags do not have to be the same
+for structure, union, or enumeration types to be compatible in separate
+translation units. Tags are used in succeeding declarations to ensure that
+they are of the same type. They are not used for type compatibility. <BR>
+Does ``two structure, union, and enumeration types'' mean ``two structure
+types, two union types, or two enumeration types?'' <BR>
+Answer: Yes. <BR>
+</P>
+
+<A HREF="dr_028.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_030.html">Next Defect Report</A>
+</BODY></HTML>

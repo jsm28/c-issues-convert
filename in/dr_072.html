@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #072</TITLE></HEAD><BODY>
+<H2>Defect Report #072</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Clive Feather
+<BR>
+<B>Question</B>
+<BR>
+Item 9 - definition of object
+<BR>
+Consider the following translation unit:
+<BR>
+<TT><B>#include &lt;stdlib.h><BR>
+<BR>
+typedef double T;<BR>
+struct hacked<BR>
+	{<BR>
+	int size;<BR>
+	T data [1];<BR>
+	};<BR>
+<BR>
+struct hacked *f (void);<BR>
+	{<BR>
+	T *pt;<BR>
+	struct hacked *a;<BR>
+	char *pc;<BR>
+<BR>
+	a = malloc (sizeof (struct hacked) + 20 * sizeof (T));<BR>
+	if (a == NULL)<BR>
+		return NULL;<BR>
+	a->size = 20;<BR>
+<BR>
+	/*</B><I> Method 1 </I><B>/*<BR>
+	a->data [8] = 42;					/*</B><I> Line A </I><B>/*<BR>
+<BR>
+	/*</B><I> Method 2 </I><B>/*<BR>
+	pt = a->data;<BR>
+	pt += 8;							/*</B><I> Line B </I><B>/*<BR>
+	*pt = 42;<BR>
+<BR>
+	/*</B><I> Method 3 </I><B>/*<BR>
+	pc = (char *) a;<BR>
+	pc += offsetof (struct hacked, data);<BR>
+	pt = (T *) pc;						/*</B><I> Line C </I><B>/*<BR>
+	pt += 8;							/*</B><I> Line D </I><B>/*<BR>
+	*pt = 6 * 9;<BR>
+	return a;<BR>
+	}
+</B></TT><BR>
+Now, <A HREF="dr_051.html"> Defect Report #051</A> has established that the assignment on line 
+A involves undefined behavior.
+<BR><OL TYPE=a>
+<LI> Is the addition on line B strictly conforming?
+<BR> If the answer to (a) is ``yes,'' are the three statements 
+forming ``method 2'' a valid way of implementing the <TT><B>struct 
+hacked</B></TT>?
+<LI> Is the cast of line C strictly conforming?
+<LI> Is the addition on line D strictly conforming?
+<LI> If the answer to (c) and (d) are ``yes,'' are the five 
+statements forming ``method 3'' a valid way of implementing 
+the <TT><B>struct hacked</B></TT>?
+<P>
+Now suppose that the definition of type <TT><B>T</B></TT> is changed to <TT><B>char</B></TT>. 
+This means that the last bullet in subclause 6.3 (``an object shall 
+have its stored value accessed only by ... a character type'') 
+now applies, and furthermore it means that the location accessed is 
+an integral multiple of <TT><B>sizeof(T)</B></TT> bytes from the start of the 
+<TT><B>malloc</B></TT>ed object, and so constitutes an element of that object 
+when viewed as an array of <TT><B>T</B></TT>.
+</P>
+<LI> Is the assignment on line A now strictly conforming?
+<LI> What are the answers to questions (a) to (e) with this change?
+</OL>
+<B>Response</B>
+<BR>
+a) <A HREF="dr_051.html">Defect Report #051</A> provides the rationale for why Line A results 
+in undefined behavior. The same rules also apply to the assignment 
+to <TT><B>pt</B></TT>; thus Line B results in undefined behavior
+<BR>
+b) Not applicable given the answer to question (a).
+<BR>
+c) Assignment causes the base address of the structure to be assigned 
+to <TT><B>pc</B></TT>. The response to <A HREF="dr_044.html">Defect Report #044, question 1</A>, states 
+that use of the <TT><B>offsetof</B></TT> macro does not result in undefined 
+behavior. The second line causes <TT><B>pc</B></TT> to point to member <TT><B>data</B></TT>. 
+Line C does not contain any construct that would result in the program 
+not being strictly conforming.
+<BR>
+d) Line D results in undefined behavior. See answer (a) for rationale.
+<BR>
+e) Not applicable given answers (c) and (d).
+<BR>
+f) Subclause 6.3 contains additional restrictions, not permissions.
+<BR>
+g) The answers to questions (a)-(e) are not affected if <TT><B>T</B></TT> has 
+<TT><B>char</B></TT> type.
+<BR>
+<A HREF="dr_071.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_073.html">Next Defect Report</A>
+</BODY></HTML>

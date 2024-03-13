@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #075</TITLE></HEAD><BODY>
+<H2>Defect Report #075</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Clive Feather
+<BR>
+<B>Question</B>
+<BR>
+Item 12 - alignment of allocated memory
+<BR>
+Is a piece of memory allocated by <TT><B>malloc</B></TT> required to be aligned 
+suitably for any type, or only for those types that will fit into 
+the space? For example, following the assignment:
+<BR>
+<TT><B>void *vp = malloc (1);</B></TT>
+<BR>
+is it required that <TT><B>(void *)(int *)vp</B></TT> compare equal to <TT><B>vp</B></TT> 
+(assuming that <TT><B>sizeof(int) > 1</B></TT>), or is it permissible for <TT><B>vp</B></TT> 
+to be a value not suitably aligned to point to an <TT><B>int</B></TT>?
+<BR>
+<B>Response</B>
+<BR>
+Subclause 7.10.3 requires allocated memory to be suitably aligned 
+for <I>any</I> type, so they must compare equal.
+<BR>
+<A HREF="dr_074.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_076.html">Next Defect Report</A>
+</BODY></HTML>

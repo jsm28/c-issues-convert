@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #078</TITLE></HEAD><BODY>
+<H2>Defect Report #078</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Clive Feather
+<BR>
+<B>Question</B>
+<BR>
+Item 15 - uniqueness of addresses
+<BR>
+Consider the following translation unit:
+<BR>
+<TT><B>#include &lt;string.h><BR>
+<BR>
+unsigned int f (unsigned int a)<BR>
+	{<BR>
+	unsigned int x, y;<BR>
+<BR>
+	x = a;<BR>
+	x = x * x + a;<BR>
+	if (x > 100)<BR>
+		return x;	/*</B><I> Returned value must be > 100 </I><B>*/<BR>
+	if (&amp;x == &amp;y)<BR>
+		return 0;<BR>
+	y = a + 1;<BR>
+	y = y * y + 17;<BR>
+	return y;		/*</B><I> Returned value must be > 0 </I><B>*/<BR>
+	}<BR>
+<BR>
+unsigned int g1 (void) { return 0; };<BR>
+unsigned int g2 (void) { return 0; };<BR>
+<BR>
+unsigned int g (void)<BR>
+	{<BR>
+	return g1 != g2;<BR>
+	}<BR>
+<BR>
+unsigned int h (void)<BR>
+	{<BR>
+	return memcpy != memmove;<BR>
+	}<BR>
+<BR>
+const int j1 = 1;<BR>
+const int j2 = 1;<BR>
+<BR>
+unsigned int j (void)<BR>
+	{<BR>
+	return &amp;j1 != &amp;j2;<BR>
+	}
+</B></TT><BR><OL TYPE=a>
+<LI> Can <TT><B>f</B></TT> ever return zero?
+An aggressive optimizer could notice 
+that <TT><B>x</B></TT> and <TT><B>y</B></TT> are never used at the same time,
+and assign them the same memory location. (The optimizer could be designed to conceal 
+the fact that <TT><B>x</B></TT> and <TT><B>y</B></TT> are sharing storage,
+for example by forcing the comparison to be unequal. Such an application of the
+``as if'' rule (subclause 5.1.2.3) would become increasingly difficult to implement in the 
+presence of operations such as writing out <TT><B>&amp;x</B></TT>
+to a file (using <TT><B>fwrite</B></TT>
+or the <TT><B>fprintf</B></TT> <TT><B>%p</B></TT> conversion specification)
+and then reading it back in later in the 
+same run of the program. However, this is irrelevant; the issue is 
+whether or not the implementation is required to conceal it in the 
+first place.)
+<LI> Can <TT><B>g</B></TT> ever return zero?
+A optimizer using an intermediate form 
+can easily determine that the two functions have identical effects.
+<LI> Can <TT><B>h</B></TT> ever return zero?
+The library function <TT><B>memmove</B></TT> (subclause 
+7.11.2.2) completely meets the requirements for
+<TT><B>memcpy</B></TT> (subclause 
+7.11.2.1) and so they could be implemented using the same code (even 
+if the answer to (b) is no, this could happen if the system library 
+is not implemented in C).
+<LI> Can <TT><B>j</B></TT> ever return zero?
+Since the two variables are constants, 
+code which uses <TT><B>j1</B></TT> instead of <TT><B>j2</B></TT>
+anywhere except in an address comparison cannot distinguish them.
+</OL>
+<B>Response</B>
+<BR>
+a) <TT><B>f</B></TT> can never return zero.
+There are three <TT><B>return</B></TT> statements:
+<BR>
+i) Will always return a value greater than 100.
+<BR>
+ii) <TT><B>x</B></TT> and <TT><B>y</B></TT> exist at different addresses.
+An optimizer may invoke the as-if rule to rearrange code provided it always achieves the 
+required effect.  (Subclause 6.1.2.2: ``Identifiers with <I>no linkage</I>
+denote unique entities.'')
+<BR>
+iii) Modulo arithmetic may wrap to produce zero.
+However, it is not possible to square any number,
+add 17 and get zero as the result.
+<BR>
+b) No, <TT><B>g</B></TT> cannot return zero.
+<BR>
+c) Yes, <TT><B>h</B></TT> can return zero.
+<BR>
+d) <TT><B>j</B></TT> can never return zero.
+Subclause 6.7.2 says, ``If the declaration of an identifier for an object
+has file scope and an initializer, the declaration is an external
+definition for the identifier.''
+Subclause 6.5 says, ``A declaration that also
+causes storage to be reserved
+for an object or function named by an identifier is a <I>definition.</I>''
+Taken together these two statements can be taken to imply that two
+file-scope definitions must refer to different objects.
+<BR>
+<A HREF="dr_077.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_079.html">Next Defect Report</A>
+</BODY></HTML>

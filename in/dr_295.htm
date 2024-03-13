@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect Report #295</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #295</h2>
+    <a href="dr_294.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_296.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Project Editor (Larry Jones)<br>
+     <b>Submission Date:</b> 2004-03-19<br>
+     <b>Source:</b> Neil Booth<br>
+     <b>Reference Document:</b> N/A<br>
+     <b>Version:</b> 1.1<br>
+     <b>Date:</b> 2004-09-28<br>
+     <b>Subject:</b> Incomplete types for function parameters</p>
+
+    <p><b>Summary</b><br>
+     The standard appears to be contradictory with respect to
+    whether a function parameter is permitted to have an incomplete
+    type in a prototype other than the function definition.</p>
+
+    <p>6.7.5.3p12 says:</p>
+
+    <blockquote>
+      If the function declarator is not part of a definition of
+      that function, parameters may have incomplete type....
+    </blockquote>
+    But 6.7p7 says: 
+
+    <blockquote>
+      If an identifier for an object is declared with no linkage,
+      the type for the object shall be complete by the end of its
+      declarator...; in the case of function arguments [n.b., that
+      should be <i>parameters</i>, not <i>arguments</i>] (including
+      in prototypes), it is the adjusted type (see 6.7.5.3) that is
+      required to be complete.
+    </blockquote>
+
+    <p>If the intent is to allow incomplete types, there do not
+    appear to be any constraints forbidding constructions like:</p>
+
+    <blockquote>
+      <tt>void func(void parm);</tt>
+    </blockquote>
+    <hr>
+
+    <p><b>Committee Discussion</b></p>
+
+    <p>The Committee agrees that &ldquo;function arguments&rdquo;
+    should be &ldquo;function parameters&rdquo;. The cited text
+    from 6.7p7 refers to the declarations of parameters in the
+    definition of that function; each parameter declares an object
+    whose adjusted type is required to be complete. Declarations of
+    parameters in prototypes which are not part of the definition
+    of that function are permitted to declare incomplete types.
+    Whenever that function is called, arguments are implicitly
+    converted to the types of the corresponding parameters; see
+    6.5.2.2p7. The requirements upon assignment require that the
+    types of the corresponding parameters are complete types, at
+    the point of calling the function. The constraint at 6.5.16p2
+    requires a modifiable lvalue for the left operand of
+    assignment, and according to 6.3.2.1p1, a modifiable lvalue
+    shall not have incomplete type.</p>
+
+    <p>The Committee agrees that there do not appear to be any
+    constraints forbidding constructions like</p>
+
+    <blockquote>
+      <tt><b>void func(void parm);</b></tt>
+    </blockquote>
+    nor are any semantics provided for this construction. 
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>Change 6.7p7</p>
+
+    <blockquote>
+      in the case of function arguments (including in prototypes)
+    </blockquote>
+    to: 
+
+    <blockquote>
+      in the case of function parameters (including in prototypes)
+    </blockquote>
+
+    <p><br>
+     <a href="dr_294.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_296.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

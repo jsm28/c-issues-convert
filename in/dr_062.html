@@ -1,0 +1,25 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #062</TITLE></HEAD><BODY>
+<H2>Defect Report #062</H2>
+<B>Submission Date</B>: 19 Aug 93
+<BR>
+<B>Submittor</B>: X3 Secretariat (USA)
+<BR>
+<B>Source</B>: David J. Hendricksen
+<BR>
+<B>Question</B>
+<BR>
+If the only way to effectuate the renaming of a file on a given system 
+is to copy the contents of the file, does an implementation conform 
+to the C Standard by always returning a failure from the <TT><B>rename</B></TT> 
+function? Footnote 113 would seem to imply this.
+<BR>
+<B>Response</B>
+<BR>
+Yes, subclause 7.9.4.2 permits the <TT><B>rename</B></TT> function to fail if 
+it must copy the file contents, among other reasons.
+<BR>
+<A HREF="dr_061.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_063.html">Next Defect Report</A>
+</BODY></HTML>

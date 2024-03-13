@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #269</title>
+  </head>
+
+  <body bgcolor="#FFFFFF">
+    <h2 align="center">Defect Report #269</h2>
+    <a href="dr_268.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_270.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> UK C Panel<br>
+     <b>Submission Date:</b> 2001-09-07<br>
+     <b>Source:</b> Clive D.W. Feather &lt;clive@demon.net&gt;<br>
+     <b>Version:</b> 1.2 <!-- ! year-month-day hour:min:sec -->
+    <br>
+     <b>Date:</b> 2002-05-15<br>
+     <b>Subject:</b> lacunae in exact-width integer types</p>
+    <b>Problem</b> 7.18.1.1 reads: 
+
+    <blockquote>
+      <p>[#1] The typedef name <tt><b>int</b><i>N</i><b>_t</b></tt>
+      designates a signed integer type with width <i>N</i>, no
+      padding bits, and a two's complement representation. Thus,
+      <tt><b>int8_t</b></tt> denotes a signed integer type with a
+      width of exactly 8 bits.</p>
+
+      <p>[#2] The typedef name
+      <tt><b>uint</b><i>N</i><b>_t</b></tt> designates an unsigned
+      integer type with width <i>N</i>. Thus,
+      <tt><b>uint24_t</b></tt> denotes an unsigned integer type
+      with a width of exactly 24 bits.</p>
+
+      <p>[#3] These types are optional. However, if an
+      implementation provides integer types with widths of 8, 16,
+      32, or 64 bits, it shall define the corresponding typedef
+      names.</p>
+    </blockquote>
+
+    <p>The requirements for no padding bits and two's complement
+    were added at a late stage, and the implications to the text
+    weren't fully thought through. In particular:</p>
+
+    <ul>
+      <li>the second sentence of #1 is inconsistent with the
+      first;</li>
+
+      <li>the unsigned types should also have the "no padding bits"
+      requirement (it can be derived from the requirement to
+      provide both or neither of these types and the requirement
+      that they have the same size, but it ought to be spelled
+      out);</li>
+
+      <li>the requirements in #3 aren't the same as those in #1, so
+      an implementation can't have 8 bit types <i>with</i> padding
+      bits or a sign-and-magnitude representation.</li>
+    </ul>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Change this section to read:</p>
+
+    <blockquote>
+      <p>[#1] The typedef name <tt><b>int</b><i>N</i><b>_t</b></tt>
+      designates a signed integer type with width <i>N</i>, no
+      padding bits, and a two's complement representation. Thus,
+      <tt><b>int8_t</b></tt> denotes a signed integer type with a
+      width of exactly 8 bits and those other properties.</p>
+
+      <p>[#2] The typedef name
+      <tt><b>uint</b><i>N</i><b>_t</b></tt> designates an unsigned
+      integer type with width <i>N</i> and no padding bits. Thus,
+      <tt><b>uint24_t</b></tt> denotes an unsigned integer type
+      with a width of exactly 24 bits and no padding bits.</p>
+
+      <p>[#3] These types are optional. However, if an
+      implementation provides integer types with widths of 8, 16,
+      32, or 64 bits, no padding bits, and (for the signed types)
+      that have a two's complement representation, it shall define
+      the corresponding typedef names.</p>
+    </blockquote>
+
+    <p>Or, alternatively:</p>
+
+    <blockquote>
+      <p>[#3] These types are optional. However, if an
+      implementation has a type with width 8, 16, 32, or 64 bits
+      that meet the above requirements, it shall define the
+      corresponding typedef names.</p>
+    </blockquote>
+    <hr>
+
+    <p><b>Committee Response</b></p>
+
+    <p>The first bullet point is false; while the second sentence
+    is not a complete specification, it does not contradict the
+    first sentence.</p>
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>Change 7.18.1.1#3 to read:</p>
+
+    <blockquote>
+      These types are optional. However, if an implementation
+      provides integer types with widths of 8, 16, 32, or 64 bits,
+      no padding bits, and (for the signed types) that have a two's
+      complement representation, it shall define the corresponding
+      typedef names.
+    </blockquote>
+
+    <p><b>Committee Discussion</b></p>
+
+    <p>The Committee believes that suggestion 2 (about unsigned
+    types) should be considered for a future revision of the
+    Standard.</p>
+
+    <p><br>
+     <a href="dr_268.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_270.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

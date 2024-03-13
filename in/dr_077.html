@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #077</TITLE></HEAD><BODY>
+<H2>Defect Report #077</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Clive Feather
+<BR>
+<B>Question</B>
+<BR>
+Item 14 - stability of addresses
+<BR>
+Is the address of an object constant throughout its lifetime? For 
+example, if a pointer to an object is written to a binary file using 
+<TT><B>fwrite</B></TT>, and then read back later during the same run of the 
+program using <TT><B>fread</B></TT>, is it guaranteed to compare equal to the 
+address of the original object taken again?
+<BR>
+<B>Response</B>
+<BR>
+The C Standard does not explicitly state that the address of an object
+remains constant throughout the life of the object. That this is the
+intent of the Committee can be inferred from the fact that an
+address constant is considered to be a constant expression. The
+framers of the C Standard considered that it was so obvious that
+addresses should remain constant that they neglected to craft words
+to that effect.
+<BR>
+The Committee should revisit this issue during the revision of the
+C Standard.
+<BR>
+<A HREF="dr_076.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_078.html">Next Defect Report</A>
+</BODY></HTML>

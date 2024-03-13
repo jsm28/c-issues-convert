@@ -1,0 +1,55 @@
+<HTML><HEAD><TITLE>Defect Report #054</TITLE></HEAD><BODY>
+<H2>Defect Report #054</H2>
+<B>Submission Date</B>: 01 Apr 93
+<BR>
+<B>Submittor</B>: Project Editor (P.J. Plauger)
+<BR>
+<B>Source</B>: Larry Jones
+<BR>
+<B>Question</B> 1
+<BR>
+Are the string handling functions defined in subclause 7.11 that have 
+an explicit length specification (<TT><B>memcpy</B></TT>, <TT><B>memmove</B></TT>, <TT><B>strncpy</B></TT>, 
+<TT><B>strncat</B></TT>, <TT><B>memcmp</B></TT>, <TT><B>strncmp</B></TT>, <TT><B>strxfrm</B></TT>, <TT><B>memchr</B></TT>, 
+and <TT><B>memset</B></TT>) well-defined when the length is specified as zero?
+<BR>
+Taking <TT><B>memcpy</B></TT> as an example, the description in subclause 7.11.2.1 
+states:
+<BLOCKQUOTE>
+The <TT><B>memcpy</B></TT> function copies <TT><B>n</B></TT> characters from the 
+object pointed to by <TT><B>s2</B></TT> into the object pointed to by <TT><B>s1</B></TT>. 
+If copying takes place between objects that overlap, the behavior 
+is undefined.
+</BLOCKQUOTE>
+The response to <A HREF="dr_042.html"> Defect Report #042 Question 1</A> indicates that:
+<BLOCKQUOTE>
+... the ``objects'' referred to by subclause 7.11.2.1 
+are exactly the regions of data storage pointed to by the pointers 
+and dynamically determined to be of <TT><B>N</B></TT> bytes in length (i.e. 
+treated as an array of <TT><B>N</B></TT> elements of character type).
+</BLOCKQUOTE>
+Since, by definition, objects consist of at least one byte, this would 
+imply that <TT><B>s1</B></TT> and <TT><B>s2</B></TT> are not pointing to objects when 
+<TT><B>N</B></TT> is zero and thus are outside the domain of the function leading 
+to undefined behavior.
+<BR>
+I do not recall whether this was the Committee's intent or not, but 
+it would seem that some clarification is in order.
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>Add to subclause 7.11.1, page 162:</B></I>
+<BR>
+Where an argument declared as <TT><B>size_t n</B></TT> specifies the length 
+of the array for a function, <TT><B>n</B></TT> can have the value zero on a 
+call to that function. Unless explicitly stated otherwise in the description 
+of a particular function in this subclause, pointer arguments on such 
+a call must still have valid values, as described in subclause 7.1.7. 
+On such a call, a function that locates a character finds no occurrence, 
+a function that compares two character sequences returns zero, and 
+a function that copies characters copies zero characters.
+<BR>
+<A HREF="dr_053.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_055.html">Next Defect Report</A>
+</BODY></HTML>

@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN"><html><head><title>Defect Report #108</title></head>
+<body>
+<h2>Defect Report #108</h2>
+<b>Submission Date</b>: 03 Dec 93
+<br>
+<b>Submittor</b>: WG14
+<br>
+<b>Source</b>: Ron Guilmette
+<br>
+<b>Question</b>
+<br>
+ANSI/ISO C Defect Report #rfg15:
+<br>
+Subclause 7.1.3 lists the set of reserved identifiers, but this 
+list does not include keywords (subclause 6.1.1).
+<br>
+Subclause 6.1.1 says (in a <b>Semantics</b> section):
+<blockquote>
+The above tokens (entirely in lower-case) are reserved (in translation 
+phases 7 and 8) for use as keywords, and shall not be used otherwise.
+</blockquote>
+Based upon the above named sections of the C Standard, I am forced 
+to conclude that the following code is strictly conforming. Is this 
+a correct conclusion?
+<br>
+<tt><b>#define double void<br>
+#include &lt;math.h&gt;<br>
+#undef double<br>
+<br>
+void example (double d1, double d2)<br>
+	{<br>
+	d1 = acos (d2);<br>
+	}
+</b></tt><br>
+My impression is that few (if any) existing implementations now accept 
+such code. I am therefore inclined to believe that the Committee's 
+true intentions were that <i>all</i> keywords (as listed in subclause 
+6.1.1) should be considered to be reserved identifiers, at least during 
+translation phase 4, and at least while processing <tt><b>#include</b></tt> 
+directives which name standard include files provided by the implementation 
+(as listed in subclause 7.1.2).
+<br>
+I believe that the proper way to address this problem would be to 
+add another stipulation (regarding reserved identifiers) to subclause 
+7.1.2.1. This additional stipulation might read as follows:
+<blockquote>
+If, during inclusion of any one of the standard headers listed 
+in the preceeding section (during translation phase 4) any one of 
+the keywords listed in subclause 6.1.1 is defined as a preprocessor 
+macro, the behavior is undefined.
+</blockquote>
+<b>Response</b>
+<br>
+This program's behavior is undefined because of the restriction on 
+inclusion of standard headers in subclause 7.1.2:
+<br>
+The program shall not have any macros with names lexically identical 
+to keywords currently defined prior to the inclusion.
+<br>
+The Committee's intention was indeed to otherwise allow macros to 
+mask keywords.
+<br>
+<a href="http://std.dkuug.dk/jtc1/sc22/wg14/www/docs/dr_107.html">Previous Defect Report</a>
+&lt; - &gt; 
+<a href="http://std.dkuug.dk/jtc1/sc22/wg14/www/docs/dr_109.html">Next Defect Report</a>
+</body></html>

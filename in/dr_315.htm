@@ -1,0 +1,280 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 1st December 2004), see www.w3.org">
+
+  <title>Defect report #315</title>
+</head>
+
+<body>
+  <h2 align="center">Defect Report #315</h2><a href=
+  "dr_314.htm">Previous Defect Report</a> &lt; - &gt; <a href=
+  "dr_316.htm">Next Defect Report</a>
+
+  <p><br>
+  <b>Submitter:</b> UK C Panel<br>
+  <b>Submission Date:</b> 2005-03-04<br>
+  <b>Source:</b> Joseph Myers &lt;joseph@codesourcery.com&gt;<br>
+  <b>Reference Document:</b> <a href=
+  "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1103.htm">ISO/IEC
+  WG14 N1103</a><br>
+  <b>Version:</b> 1.5<br>
+  <b>Date:</b> 2007-10-10<br>
+  <b>Subject:</b> Implementation-defined bit-field types</p>
+
+  <p><b>Summary</b></p>
+
+  <p>C99 6.7.2#2 lists the valid combinations of type specifiers.
+  6.7.2#5 says:</p>
+
+  <blockquote>
+    [#5] Each of the comma-separated sets designates the same type,
+    except that for bit-fields, it is implementation-defined
+    whether the specifier <code>int</code> designates the same type
+    as <code>signed int</code> or the same type as <code>unsigned
+    int</code>.
+  </blockquote>
+
+  <p>6.7.2.1#4 says:</p>
+
+  <blockquote>
+    [#4] A bit-field shall have a type that is a qualified or
+    unqualified version of <code>_Bool</code>, <code>signed
+    int</code>, <code>unsigned int</code>, or some other
+    implementation-defined type.
+  </blockquote>
+
+  <p>Some problems arise with use of an "other
+  implementation-defined type", a new addition in C99.</p>
+
+  <p>1. Suppose an implementation supports bit-fields of types
+  <code>char</code>, <code>short</code>, <code>long</code> and
+  <code>long long</code>. Bit-fields of type <code>int</code> may
+  be unsigned on that implementation. Must bit-fields of type
+  <code>char</code> nevertheless have the same signedness as
+  ordinary objects of type <code>char</code>, and similarly for
+  those of types <code>short</code> (or <code>short int</code>),
+  <code>long</code> (or <code>long int</code>), <code>long
+  long</code> (or <code>long long int</code>)? The practice in C++
+  is that all these are implementation-defined (except that C++
+  does not include <code>long long</code>); it seems an oversight
+  in the addition of implementation-defined bit-field types in C99
+  not to make such provision for <code>char</code>,
+  <code>short</code>, <code>long</code> and <code>long long</code>
+  bit-fields as is made for <code>int</code> bit-fields. (It might
+  still be appropriate to ensure, for example, that
+  <code>short</code> and <code>short int</code> have the same
+  signedness as bit-field types, although that might be unsigned
+  and so differ from the signedness of <code>signed short</code>
+  and <code>signed short int</code>.) Footnote 104, reiterating
+  that <code>int</code> as a bit-field type may be signed or
+  unsigned, would also need amendment.</p>
+
+  <p>2. Suppose an implementation has 32-bit <code>int</code> (with
+  no padding bits) and permits <code>unsigned long long</code> as
+  an implementation-defined bit-field type. Consider the code:</p>
+  <pre>
+  struct s { unsigned long long a : 37, b : 37; } x;
+  // ...
+  sizeof(x.a + x.b);
+</pre>
+
+  <p><code>x.a</code> and <code>x.b</code> have 37-bit unsigned
+  integer types, by 6.7.2.1#9. Such types have an integer
+  conversion rank greater than that of <code>int</code>, so are
+  unchanged by the integer promotions. (That all the bit-field
+  types have integer conversion ranks, and may need to be
+  documented by implementations as extended integer types, is a
+  consequence of the standard that may not be intended and may be
+  surprising to some, but it is a logical consequence of the text
+  of the standard.) Whether or not <code>x.a</code> and
+  <code>x.b</code> have the same 37-bit type, <code>(x.a +
+  x.b)</code> also has a 37-bit unsigned integer type. However,
+  <code>(x.a + x.b)</code> does not designate a bit-field member,
+  so it does not violate the constraints on <code>sizeof</code>.
+  But what should <code>sizeof(x.a + x.b)</code> evaluate to, when
+  <code>(x.a + x.b)</code> has such a bit-field type which does not
+  occupy an integer number of bytes? Must an implementation define
+  representations occupying an integer number of bytes (with some
+  padding bits) for all such types, although such representations
+  would have no use other than to define the result of
+  <code>sizeof</code>?</p>
+
+  <p>Changing the promotion rules for bit-fields wider than int to
+  avoid such expressions of bit-field type would create an odd
+  inconsistency in the type system about which types are promoted,
+  although it would be consistent with C++ where bit-fields have
+  narrow representation but are considered to have the declared
+  type rather than a special narrow type and would allow
+  implementations to support bit-fields wider than <code>int</code>
+  without needing special support for arithmetic on such types
+  (alternatively, it could be argued that if an implementor wishes
+  to support bit-fields wider than <code>int</code> it is up to
+  them to implement arithmetic on all bit-field types wider than
+  <code>int</code> as a consequence of their decision); changing
+  the C definition of bit-field types to follow the C++ one would
+  be more radical and probably not suitable for a TC. (C++ then has
+  a special rule so that <code>unsigned int</code> bit-fields
+  promote to <code>int</code> if narrower than <code>int</code>.)
+  The alternative is to be more explicit about the nature of
+  bit-field types and to define when an expression has such a type,
+  and to make the constraint on <code>sizeof</code> apply to
+  expressions with such types and not just to bit-fields
+  themselves.</p>
+
+  <p><b>Suggested Technical Corrigendum</b><br></p>
+  <hr>
+
+  <p><b>Committee Discussion</b> (for history only)</p>
+
+  <h4>Fall 2005 discussion</h4>
+
+  <p>This defect report has been move back to open, to liaison with
+  C++ - 2005-09-28</p>
+
+  <p>The Committee decision was to withdraw the answers to 2 and 3,
+  see 6.3.1.1;p2.</p>
+
+  <p><b>Question 1:</b> Must bit-fields of type
+  <tt><b>char</b></tt> nevertheless have the same signedness as
+  ordinary objects of type <tt><b>char</b></tt>, and similarly for
+  those of types <tt><b>short</b></tt> (or <tt><b>short
+  int</b></tt>), <tt><b>long</b></tt> (or <tt><b>long
+  int</b></tt>), <tt><b>long long</b></tt> (or <tt><b>long long
+  int</b></tt>)?</p>
+
+  <blockquote>
+    This is unspecified in the Standard - No.
+  </blockquote>
+
+  <p><b>Question 2:</b> But what should <tt><b>sizeof(int)</b></tt>
+  evaluate to, when <tt><b>(x.a + x.b)</b></tt> has such a
+  bit-field type which does not occupy an integer number of
+  bytes?</p>
+
+  <blockquote>
+    It must be something larger than <tt><b>int</b></tt>.
+  </blockquote>
+
+  <p><b>Question 3:</b> Must an implementation define
+  representations occupying an integer number of bytes (with some
+  padding bits) for all such types, although such representations
+  would have no use other than to define the result of sizeof?</p>
+
+  <blockquote>
+    Yes.
+  </blockquote>
+
+  <h4>Spring 2006 discussion</h4>
+
+  <p>Consider this relevant citation:</p>
+
+  <p>6.3.1.1 <b>Boolean, characters, and integers</b></p>
+
+  <p>2 The following may be used in an expression wherever an
+  <code><b>int</b></code> or <code><b>unsigned int</b></code> may
+  be used:</p>
+
+  <p>&mdash; An object or expression with an integer type whose
+  integer conversion rank is less than or equal to the rank of int
+  and unsigned int.</p>
+
+  <p>&mdash; A bit-field of type <code><b>_Bool</b></code>,
+  <code><b>int</b></code>, <code><b>signed int</b></code>, or
+  <code><b>unsigned int</b></code>.</p>If an int can represent all
+  values of the original type, the value is converted to an
+  <code><b>int</b></code>; otherwise, it is converted to an
+  <code><b>unsigned int</b></code>. These are called the integer
+  promotions.<sup>48)</sup> All other types are unchanged by the
+  integer promotions. 48) The integer promotions are applied only:
+  as part of the usual arithmetic conversions, to certain argument
+  expressions, to the operands of the unary <code><b>+</b></code>,
+  <code><b>-</b></code>, and <code><b>~</b></code> operators, and
+  to both operands of the shift operators, as specified by their
+  respective subclauses.
+
+  <p>This citation supports the committee's view that the type of a
+  bit-field does not include the width; if
+  <code><b>int:7</b></code> were a type that is different from
+  <code><b>int</b></code>, then these rules would not apply to any
+  bit-field type, an obviously incorrect conclusion.</p>
+
+  <p><b>Question 1:</b> Must bit-fields of type char nevertheless
+  have the same signedness as ordinary objects of type
+  <code><b>char</b></code>, and similarly for those of types
+  <code><b>short</b></code> (or <code><b>short int</b></code>),
+  <code><b>long</b></code> (or <code><b>long int</b></code>),
+  <code><b>long long</b></code> (or <code><b>long long
+  int</b></code>)?</p>
+
+  <blockquote>
+    These are all determined by the implementation-defined behavior
+    specified in 6.7.2.1#4.
+  </blockquote>
+
+  <p><b>Question 2:</b> But what should <code><b>sizeof(x.a +
+  x.b)</b></code> evaluate to, when <code><b>(x.a + x.b)</b></code>
+  has such a bit-field type which does not occupy an integer number
+  of bytes?</p>
+
+  <blockquote>
+    In the example presented above, the type is <code><b>unsigned
+    long long</b></code>, and it does occupy an integral number of
+    bytes. The expression evaluates to <code><b>sizeof(unsigned
+    long long)</b></code>.
+  </blockquote>
+
+  <table bgcolor="#E0E0E0" cellpadding="10">
+    <tr>
+      <td valign="top">Note:</td>
+
+      <td>This DR was marked to move into <i>Review</i> status
+      after the Spring 2006 meeting. However, the document voted on
+      at the Spring 2006 meeting had no <b>Proposed</b> text only
+      <b>Discussion</b> text. The Editor decided to leave the DR as
+      <i>Open</i> and allow the Committee to decide on the
+      <b>Proposed</b> text for this DR at the Fall 2006
+      meeting.</td>
+    </tr>
+  </table>
+
+  <h4>Fall 2006 discussion</h4>
+
+  <p><b>Question 1:</b> Must bit-fields of type
+  <code><b>char</b></code> nevertheless have the same signedness as
+  ordinary objects of the <code><b>char</b></code>, and similarly
+  for those of types <code><b>short</b></code> (or <code><b>short
+  int</b></code>), <code><b>long</b></code> (or <code><b>long
+  int</b></code>), <code><b>long long</b></code> (or <code><b>long
+  long int</b></code>)?</p>
+
+  <p>these would all be implementation-defined, determined by the
+  implementation-defined behavior specified in 6.7.2.1#4.</p>
+
+  <p><b>Question 2:</b> But what should <code><b>sizeof(x.a +
+  x.b)</b></code> evaluate to, when <code><b>(x.a +
+  x.b)</b></code>has such a bit-field type which does not occupy an
+  integer number of bytes?</p>
+
+  <p>In example presented above, this would be
+  implementation-defined, determined by the implementation-defined
+  behavior specified in 6.7.2.1#4.</p>
+
+  <p><b>Proposed Technical Corrigendum</b><br></p>
+
+  <p>Last sentence of paragraph 2 of 6.3.1.1, add the words <i>as
+  restricted by the width, for a bit-field</i> as follows:</p>
+
+  <blockquote>
+    If an <code><b>int</b></code> can represent all values of the
+    original type (as restricted by the width, for a bit-field),
+    the type is converted to an <code><b>int</b></code>;<br>
+    <br>
+    <a href="dr_314.htm">Previous Defect Report</a> &lt; - &gt;
+    <a href="dr_316.htm">Next Defect Report</a><br>
+    <br>
+  </blockquote>
+</body>
+</html>

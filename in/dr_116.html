@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #116</TITLE></HEAD><BODY>
+<H2>Defect Report #116</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Ron Guilmette
+<BR>
+<B>Question</B>
+<BR>
+ANSI/ISO C Defect Report #rfg23:
+<BR>
+Subject: Implicit unary <TT><B>&</B></TT> applied to register arrays.
+<BR>
+a) Does the following code involve usage which requires 
+a diagnostic from a conforming implementation?
+<BR>
+b) Does the following code involve usage which renders the 
+code itself not strictly conforming?
+<BR>
+<TT><B>void example ()<BR>
+	{<BR>
+	register int array[5] = 0;<BR>
+<BR>
+	array;     /*</B><I> ? </I><B>*/<BR>
+	array[3];  /*</B><I> ? </I><B>*/<BR>
+	array+3;   /*</B><I> ? </I><B>*/<BR>
+	}
+</B></TT><BR>
+Background:
+<BR>
+Subclause 6.5.1 (footnotes):
+<BLOCKQUOTE>
+The implementation may treat any <TT><B>register</B></TT>
+declaration simply as an <TT><B>auto</B></TT> declaration.
+However whether or not addressable storage is actually 
+used, the address of any part of an object declared with storage-class 
+specifier <TT><B>register</B></TT> may not be computed, either explicitly (by 
+use of the unary <TT><B>&</B></TT> operator as discussed in 6.3.3.2) or implicitly 
+(by converting an array name to a pointer as discussed in
+6.2.2.1). Thus the only operator that can be applied to an array 
+declared with storage-class specifier <TT><B>register</B></TT> is <TT><B>sizeof</B></TT>.
+</BLOCKQUOTE>
+This footnote, while offering guidance, doesn't really answer the 
+question of whether or not an implementation is required to issue 
+a diagnostic for the case where the address of a register array is 
+implicitly taken (as discussed in subclause 6.2.2.1). Nor does it 
+definitively answer the question of whether such code should be considerd 
+to be strictly conforming or not.
+<BR>
+(Reference: CIB #1, 
+<A HREF="dr_017.html#Question6">RFI #17, question #6</A>.)
+<BR>
+<B>Response</B>
+<BR>
+a) No, a diagnostic is not required.
+<BR>
+b) Yes, this renders the program not strictly 
+conforming.
+<BR>
+<A HREF="dr_115.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_117.html">Next Defect Report</A>
+</BODY></HTML>

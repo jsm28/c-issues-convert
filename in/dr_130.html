@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #130</TITLE></HEAD><BODY>
+<H2>Defect Report #130</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Sheng Yu
+<BR>
+<B>Question</B>
+<BR>
+Under subclause 7.9.2 <B>Streams</B>, page 125, lines 26-28:
+<BLOCKQUOTE>
+Data read in from a text stream will necessarily compare equal 
+to the data that were earlier written out to the stream only if: the 
+data consist only of printable characters and the control characters 
+horizontal tab and new-line; ...
+</BLOCKQUOTE>
+Writing on a text stream might not cause characters to be overwritten 
+exactly one for one, especially on fixed-length record based file 
+systems. If the file is not truncated beyond the point where the data 
+is written, there is no sure way to predict what will be read in after 
+writing in the middle of a text stream because the data might just 
+replace a character, a line, etc. Consider the following example:
+<BR>
+<TT><B>#include &lt;stdio.h><BR>
+#include &lt;string.h><BR>
+int buf[99];<BR>
+unsigned int len;<BR>
+int main()<BR>
+	{<BR>
+	FILE *f = fopen("test data", "w");<BR>
+	fwrite("abc\ndef\n", 8, 1, f);<BR>
+	fseek(f, 0, SEEK_SET);<BR>
+	fwrite("UWXYZ", 5, 1, f);<BR>
+	fseek(f, 0, SEEK_SET);<BR>
+	len = fread(buf, 1, 10, f);<BR>
+	if (len == 8 && !memcmp(buf, "UWXYZef\n"))<BR>
+		;	/*</B><I> Case 1: OK, acts like binary </I><B>*/<BR>
+	else if (len == 5 && !memcmp(buf, "UWXYZ", 5))<BR>
+		;	/*</B><I> Case 2: OK to truncate after write </I><B>*/<BR>
+	else if (len > 5 && !memcmp(buf, "UWXYZ", 5))<BR>
+		printf("len = %u, buf = %s\n", len, buf);<BR>
+			/*</B><I> Case 3: Is this nonstandard? </I><B>*/<BR>
+	else<BR>
+		printf("This is obviously nonstandard.\n");<BR>
+	}
+</B></TT><BR>
+Can a conforming implemetation translate the above program and produce 
+the following output (Case 3)?
+<BR>
+<TT><B>len = 9, buf = UWXYZdef
+</B></TT><BR>
+<B>Response</B>
+<BR>
+Yes, a conforming implementation may produce the ``Case 3'' 
+output. However, there may be cases in some conforming implementations 
+in addition to those shown in your example, so the printout ``obviously 
+nonstandard'' may be inappropriate.
+<BR>
+<A HREF="dr_129.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_131.html">Next Defect Report</A>
+</BODY></HTML>

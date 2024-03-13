@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #150</TITLE></HEAD>
+<BODY><H2>Defect Report #150</H2> 
+<B>Submission Date</B>: 11 Jun 95
+<BR>
+<B>Submittor</B>: DIN
+<BR>
+<B>Source</B>: Jutta Degener
+<BR>
+<B>Question</B>
+<BR>
+<I>This Defect Report was prepared with considerable help from Mark 
+Brader, Clive Feather, Ronald Guilmette, and a person whose employment 
+conditions require anonymity.</I>
+<BR> DIN-001:
+<BR> According to the current C Standard, programs containing
+<BR>
+<TT>char array[] = "Hello, World";
+<BR></TT> are not strictly conforming.
+<BR> A <B>Constraint</B> in subclause 6.5.7 <B>Initialization</B>,
+demands  that:
+<BR> All the expressions in an initializer for an object that has 
+static storage duration or in an initializer list for an object that 
+has aggregate or union type shall be constant expressions.
+<BR> Subclause 6.4 <B>Constant expressions</B>, defines various kinds
+of  constant expression. In its <B>Semantics</B> it states that a
+constant  expression in an initializer evaluates to one of the
+following:
+<BR> - an arithmetic constant expression<BR> - a null pointer
+constant,<BR> - an address constant, or<BR> - an address constant for
+an object type plus or minus an integral  constant expression.
+<BR> String literals are neither. A string literal used to initialize a
+ character array does not decay to a pointer to its first element, 
+according to Subclause 6.2.2.1:
+<BR> Except when it is the operand of the <TT><B>sizeof</B></TT>
+operator or  the unary <TT><B>&</B></TT> operator, or is a character
+string literal used  to initialize an array of character type, or is a
+wide string literal  used to initialize an array with element type
+compatible with <TT><B>wchar_t</B></TT>,  an lvalue that has type
+"array of <I>type</I>" is converted  to an expression that has type
+"pointer to <I>type</I>" that  points to the initial element of the
+array object and is not an lvalue.
+<BR> and hence is not an address constant.
+<BR>
+<B>Suggested Technical Corrigendum:</B>
+<BR> In subclause 6.5.7, change:
+<BR>All the expressions in an initializer for an object that has 
+static storage duration or in an initializer list for an object that 
+has aggregate or union type shall be constant expressions.
+<BR> to:
+<BR> All the expressions in an initializer for an object that has 
+static storage duration or in an initializer list for an object that 
+has aggregate or union type shall be constant expressions or string 
+literals.
+<BR> Suggested Future Change
+<BR> In subclause 6.5.7, change:
+<BR> All the expressions in an initializer for an object that has 
+static storage duration or in an initializer list for an object that 
+has aggregate or union type shall be constant expressions.
+<BR> to:
+<BR> All the expressions in an initializer for an object that has 
+static storage duration or in an initializer list for an object that 
+has aggregate or union type shall be constant expressions or string 
+literals.<BR>
+<A HREF="dr_149.html">Previous Defect Report</A> 
+&lt; - &gt; 
+<A HREF="dr_151.html"> Next Defect Report</A>
+</BODY></HTML>

@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #120</TITLE></HEAD><BODY>
+<H2>Defect Report #120</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Ron Guilmette
+<BR>
+<B>Question</B>
+<BR>
+ANSI/ISO C Defect Report #rfg27:
+<BR>
+Subject: Semantics of assignment to (and initialization of) bit-fields.
+<BR>
+a) Is the following program strictly conforming?
+<BR>
+b) Must a conforming implementation translate this code into 
+an executable program which prints <TT><B>3 3</B></TT>?
+<BR>
+<TT><B>#include &lt;stdio.h><BR>
+<BR>
+struct S { unsigned bit:1; };<BR>
+struct S object1 = { 3 };	/*</B><I> ? </I><B>*/<BR>
+struct S object2;<BR>
+<BR>
+int main ()<BR>
+	{<BR>
+	object2.bit = 3;	/*</B><I> ? </I><B>*/<BR>
+	printf ("%d %d\n", object1.bit, object2.bit);<BR>
+	return 0;<BR>
+	}
+</B></TT><BR>
+Background:
+<BR>
+Subclause 6.3.16.1 (<B>Semantics</B>):
+<BLOCKQUOTE>
+In <I>simple assignment</I> (<TT><B>=</B></TT>),
+the value of the right operand 
+is converted to the type of the assignment expression and replaces 
+the value stored in the object designated by the left operand.
+</BLOCKQUOTE>
+Subclause 6.2.1.2 (<B>Semantics</B>):
+<BLOCKQUOTE>
+When a value with integral type is converted to another integral 
+type, if the value can be represented by the new type, its value is 
+unchanged.
+</BLOCKQUOTE>
+Unless I'm mistaken, the type of the assignment expression:
+<BLOCKQUOTE>
+<TT><B>	object2.bit = 3; </B></TT></BLOCKQUOTE>
+in the above example is type <TT><B>unsigned int</B></TT>. Thus, according to 
+the rules quoted here, the value of <TT><B>3</B></TT> is converted to an <TT><B>unsigned 
+int</B></TT> type value (during this assignment statement) and it is otherwise 
+unchanged. Then, <I>that value</I> of 3 replaces the previous value 
+of <TT><B>object2.bit</B></TT>.
+<BR>
+I believe that the above examples illustrate the point that the C 
+Standard currently fails to adequately describe the semantics of assignments 
+to (and/or initializations of) bit-fields in cases where the value 
+being assigned will not actually fit into the bit-field object.
+<BR>
+In lieu of any description of the special semantics of assignments 
+to bitfields, it appears to be currently <I>necessary</I> for both 
+implementors and users to assume that the ``normal'' assignment 
+semantics apply, but as you can see from the above examples, such 
+assumptions lead to highly counterintuitive
+expectations (and to expectations 
+which fly in the face of actual current common practice).
+<BR>
+I believe that the Committee should rectify the current unfortunate 
+situation by adding to subclause 6.3.16.1 (or maybe to subclause 6.2.1.2) 
+some additional new verbage explicitly describing the special semantics 
+of assignments to bit-fields.
+<BR>
+<B>Response</B>
+<BR>
+Subclause 6.5.2.1 states ``A bit-field is interpreted as an integral
+type consisting of the specified number of bits.'' Thus the type of
+<TT><B>object1.bit</B></TT> and <TT><B>object2.bit</B></TT>
+can be informally described as
+<TT><B>unsigned int : 1</B></TT>.
+A larger integer is converted to this type according
+to the rules in subclause 6.2.1.2.
+Thus the value 3 is converted to the value 1.
+<BR>
+The program is strictly conforming.
+It prints <TT><B>1 1</B></TT>.
+<BR>
+<A HREF="dr_119.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_121.html">Next Defect Report</A>
+</BODY></HTML>

@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #073</TITLE></HEAD><BODY>
+<H2>Defect Report #073</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Clive Feather
+<BR>
+<B>Question</B>
+<BR>
+Item 10 - definition of object
+<BR>
+Consider the following translation unit:
+<BR>
+<TT><B>#include &lt;stdlib.h><BR>
+struct complex<BR>
+	{<BR>
+	double real [2];<BR>
+	double imag;<BR>
+	}<BR>
+#define D_PER_C (sizeof (struct complex) / sizeof (double))<BR>
+struct complex *f (double x)<BR>
+	{<BR>
+	struct complex *array = malloc(sizeof (struct complex) +<BR>
+		sizeof (double));<BR>
+	struct complex *pc;<BR>
+	double *pd;<BR>
+<BR>
+	if (array == NULL)<BR>
+		return NULL;<BR>
+	array [1].real [0] = x;				/*</B><I> Line A </I><B>/*<BR>
+	array [1].real [1] = x;				/*</B><I> Line B </I><B>/*<BR>
+	array [1].imag = x;					/*</B><I> Line C </I><B>/*<BR>
+	pc = array + 1;					/*</B><I> Line D </I><B>/*<BR>
+	pc = array + 2;					/*</B><I> Line E </I><B>/*<BR>
+	pd = &(array [1].real [0]);			/*</B><I> Line F </I><B>/*<BR>
+	pd = &(array [1].real [1]);			/*</B><I> Line G </I><B>/*<BR>
+	pd = &(array [1].imag);				/*</B><I> Line H </I><B>/*<BR>
+	pd = &(array [0].real [0]) + D_PER_C;		/*</B><I> Line I </I><B>/*<BR>
+	pd = &(array [0].real [1]) + D_PER_C;		/*</B><I> Line J </I><B>/*<BR>
+	pd = &(array [0].imag) + D_PER_C;		/*</B><I> Line K </I><B>/*<BR>
+	pd = &(array [0].real [0]) + D_PER_C * 2; 		/*</B><I> Line L </I><B>/*<BR>
+	pd = &(array [0].real [0]) + D_PER_C + 1; 		/*</B><I> Line M </I><B>/*<BR>
+	pd = &(array [0].real [0]) + D_PER_C + 2; 		/*</B><I> Line N </I><B>/*<BR>
+	return array;<BR>
+	}
+</B></TT><BR>
+Subscripting is strictly conforming if the array is ``large enough'' 
+(subclause 6.3.6). For each of the marked lines, is the assignment 
+strictly conforming?
+<BR>
+<B>Response</B>
+<BR>
+Lines A, B, C. The identifier <TT><B>array</B></TT> points to an object that 
+is not large enough to hold two <TT><B>struct complex</B></TT> objects. The 
+dot selection operator is at liberty to require the complete structure 
+denoted by its left hand side to be accessed. Such an access would 
+result in undefined behavior.
+<BR>
+Line D. If <TT><B>array</B></TT> is regarded as pointing to a single structure 
+then creating a pointer to one past the end of that object is permitted.
+<BR>
+Line E. If <TT><B>array</B></TT> is regarded as pointing to a single structure 
+then creating a pointer two past the end of that object is not permitted. 
+Since there is insufficient storage allocated to create a second <TT><B>struct 
+complex</B></TT> object, it is not permitted to point one past this partial 
+<TT><B>struct complex</B></TT> object.
+<BR>
+Lines F, G, H. Same analysis as Lines A, B, C.
+<BR>
+Lines I, J, K, L, M, N. All of these calculations will result in pointers 
+that point outside the original object (arrays or structures) and 
+result in undefined behavior.
+<BR>
+<A HREF="dr_072.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_074.html">Next Defect Report</A>
+</BODY></HTML>

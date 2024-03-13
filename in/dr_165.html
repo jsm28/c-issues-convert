@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #165</TITLE></HEAD>
+<BODY><H2>Defect Report #165</H2> 
+<B>Submission Date</B>: 16 Oct 95
+<BR>
+<B>Submittor</B>: BSI
+<BR>
+<B>Source</B>: Clive D.W. Feather
+<BR>
+<B>Question</B>
+<BR>
+<I>Submitted to BSI by Clive D.W. Feather  clive@sco.com .</I>
+<BR>
+<I>In this Defect Report, identifiers lexically identical to those 
+declared in standard headers refer to the identifiers declared in  those
+standard headers, whether or not the header is explicitly mentioned.</I>
+<BR>
+<I>This Defect Report has been prepared with considerable help from 
+Mark Brader, Jutta Degener, Ronald Guilmette, and a person whose
+employment  conditions require anonymity. However, except where stated,
+opinions  expressed or implied should not be assumed to be those of any
+person  other than myself.</I>
+<BR> Defect Report UK 013: Tags and incomplete types
+<BR> The wording of subclause 6.5.2.3 concerning tags is defective in a number of ways.
+<BR>
+<B>Part 1</B>
+<BR> The first paragraph states that:
+<BR> If this declaration of the tag is visible, a subsequent declaration  that uses the tag and that
+ omits the bracketed list specifies the  declared structure, union, or enumerated type.
+<BR> This neither handles the case of a type name (for example, in the 
+operand of the <TT><B>sizeof</B></TT> operator), nor does it make it
+clear whether  or not the rule applies within the braces of the first
+declaration  (the tag is in scope from the open brace).
+<BR> In other words, it fails to address either occurrence of <TT><B>struct  tag *</B></TT> in the 
+following code:
+<BR>
+<TT><B>  {<BR>         struct tag { int i [sizeof (struct tag *)]; };<BR>
+        int j [sizeof (struct tag *)];<BR> /* ... */<BR> 	}</B>
+</TT>
+<BR>
+<B>Part 2</B>
+<BR> The second paragraph does not adequately distinguish between type 
+specifiers which refer to an incomplete type and those which refer  to a
+type in an outer scope. For example, in the following code, it  fails to
+indicate whether or not all the uses of the tag refer to  the same type:
+<BR>
+<TT><B>struct tag;<BR> struct tag *p;<BR>         {<BR>         struct
+tag *q;<BR>         /*</B> <I>...</I><B> */<BR>         }<BR> 	struct tag { int
+member; };</B>
+</TT>
+<BR>
+<B>Part 3</B>
+<BR> The handling of enumerated types before their content is defined
+is  also unclear; this was covered to some extent in<A HREF="dr_013.html#Question5"> DR013Q5</A> and  subsequent  discussion on the WG14 mailing list.
+<BR> For example, what is the status of the following code:
+<BR>
+<TT><B>enum tag { e = sizeof (enum tag ******) };</B>
+</TT>
+<BR>or of:
+<BR>
+<TT>enum tag { e0, e1, e2, e3 };<BR>         {<BR>         enum tag2
+{ e4 = sizeof (enum tag); };<BR>         enum tag  { e5 = sizeof (enum
+tag); };<BR> 	}
+</TT>
+<BR> If an enumeration tag cannot be used before the end of the list
+defining its contents, a diagnostic ought to be required.
+<BR>
+<B>Part 4</B>
+<BR> If the same tag is used in a type specifier with a contents list
+twice  in the same scope, it is unclear whether or not a diagnostic is
+required.  It could be argued that, since this is forbidden by the
+semantics  in subclause 6.5.2.3, it is not excluded from the second
+constraint  of subclause 6.5, and so a diagnostic is required by that
+constraint.  However, this may be viewed as clutching at straws. An
+explicit constraint  should be added.
+<BR>
+<B>Suggested Technical Corrigendum</B>
+<BR> Rather than making piecemeal changes to address each issue
+separately,  the whole subclause should be rewritten. Footnote numbers
+have been  chosen to match the present footnotes.
+<BR>
+<B>Constraints</B>
+<BR> A specific type shall have its content defined at most once.
+<BR> A type specifier of the form
+<BR>
+<TT>          <B>enum identifier</B>
+</TT><BR> without an enumerator list shall only appear when the type it
+ specifies is complete.
+<BR>
+<B>Semantics</B>
+<BR> All declarations of structure, union, or enumerated types that 
+have the same scope and use the same tag declare the same type. The 
+type is incomplete [63] until the closing brace of the list defining 
+the content, and complete thereafter. [Footnote 63: An incomplete  type
+may only be used when the size of an object of that type is not 
+needed.]
+<BR> [Append the present wording, or see Defect Report CA-2-09 -
+submitted  independently - for alternative wording.]
+<BR> Two declarations of structure, union, or enumerated types which 
+are in different scopes or use different tags declare distinct types. 
+Each declaration of a structure, union, or enumerated type which does 
+not include a tag declares a distinct type.
+<BR> A type specifier of the form
+<BR>
+<TT> <B>         struct-or-union identifier    { struct-declaration-list }<BR>
+                                 opt or</B> <BR>
+</TT>
+<TT>          <B>enum identifier    { enumerator-list }<BR>              
+                  opt</B> <BR>
+</TT><BR> declares a structure, union, or enumerated type. The list
+defines  the <I>structure content, union content,</I> or <I>enumeration
+content.</I>  If an identifier is provided [64], the type specifier also
+declares  the identifier to be the tag of that type. [Footnote 64: If
+there  is no identifier, the type can, within the translation unit, only
+ be referred to by the declaration of which it is a part. Of course, 
+when the declaration is of a typedef name, subsequent declarations  can
+make use of that typedef name to declare objects having the specified 
+structure, union, or enumerated type.]
+<BR> A declaration of the form
+<BR>
+<TT>          <B>struct-or-union identifier ;</B>
+</TT><BR> specifies a structure or union type and declares the
+identifier  as the tag of that type [62]. [Footnote 62: A similar
+construction  with <TT><B>enum</B></TT> does not exist.]
+<BR> If a type specifier of the form
+<BR>
+<TT>          <B>struct-or-union identifier</B>
+</TT><BR> occurs other than as part of one of the above constructions, 
+and no other declaration of the identifier as a tag is visible, then  it
+declares a structure or union type which is incomplete at this  point,
+and declares the identifer as the tag of that type [62].
+<BR> If a type specifier of the form
+<BR>
+<TT>       <B>   struct-or-union identifier</B>
+</TT><BR> or
+<BR>
+<TT>          <B>enum identifier</B>
+</TT><BR> occurs other than as part of one of the above constructions, 
+and a declaration of the identifier as a tag is visible, then it
+specifies  the same type as that other declaration, and does not
+redeclare the  tag.
+<BR>
+<A HREF="dr_164.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_166.html">Next Defect Report</A></BODY></HTML>

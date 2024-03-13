@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect Report #235</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #235</h2>
+    <a href="dr_234.htm">Previous Defect Report</a> &lt; - &gt;<a
+    href="dr_236.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Sumitter:</b> AFNOR (Antoine Leca)<br>
+     <b>Submission Date:</b> 2000-10-18<br>
+     <b>Source:</b><br>
+     <b>Reference Document:</b> N/A<br>
+     <b>Version:</b> 1.2<br>
+     <b>Date:</b> 2002-03-03 01:30:00<br>
+     <b>Subject:</b> "<tt><b>C</b></tt>" locale collating behaviour
+    not defined<br>
+    </p>
+
+    <p><b>Summary</b></p>
+
+    <blockquote>
+      <p>Usually, the locale-specific behaviour for the library
+      functions is specified when it comes to the
+      "<tt><b>C</b></tt>" locale. A noteworthy and well-known
+      exception to that the set of <i>printing characters</i> is
+      <b>not</b> restricted. However, other points that may be seen
+      as overviews. In 7.21.4.3 (<b>strcoll</b>), 7.24.4.4.2
+      (<tt><b>wcscoll</b></tt>), 7.21.4.5 (<tt><b>strxfrm</b></tt>)
+      and 7.24.4.4.4 (<tt><b>wcsxfrm</b></tt>), no behaviour is
+      specified in the case of the "<tt><b>C</b></tt>" locale.</p>
+
+      <p>It is customary to default to respectively
+      <tt><b>strcmp</b></tt> for <tt><b>strcoll</b></tt>,
+      <tt><b>wcscmp</b></tt> for <tt><b>wcscoll</b></tt>, and the
+      identity function for the latter two, but this is not
+      presently required.</p>
+    </blockquote>
+
+    <p><b>Suggested responses</b></p>
+
+    <p>There are basically two choices:</p>
+
+    <blockquote>
+      <ul>
+        <li>left things as they are, since use of
+        <tt><b>strcoll</b></tt> and alii in the "<tt><b>C</b></tt>"
+        locale is not expected to be a noteworthy situation</li>
+
+        <li>correct the Standard along the customary way</li>
+      </ul>
+    </blockquote>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <blockquote>
+      <p>In 7.21.4.3, add a new sentence (or a new paragraph) under
+      <b>Description</b> which says:</p>
+
+      <blockquote>
+        In the "<tt><b>C</b></tt>" locale, this function operates
+        in the same way as <tt><b>strcmp</b></tt> does.
+      </blockquote>
+
+      <p>In 7.24.4.4.2, add a new sentence in paragraph 2 (or a new
+      paragraph) which says:</p>
+
+      <blockquote>
+        In the "<tt><b>C</b></tt>" locale, this function operates
+        in the same way as <tt><b>wcscmp</b></tt> does.
+      </blockquote>
+
+      <p>In 7.21.4.5, add a new sentence in paragraph 2 (or a new
+      paragraph) which says:</p>
+
+      <blockquote>
+        In the "<tt><b>C</b></tt>" locale, this function copies at
+        most <tt><b>n</b></tt> characters from the string pointed
+        by <tt><b>s2</b></tt> to <tt><b>s1</b></tt>.
+      </blockquote>
+
+      <p>In 7.24.4.4.4, add a new sentence in paragraph 2 (or a new
+      paragraph) which says:</p>
+
+      <blockquote>
+        In the "<tt><b>C</b></tt>" locale, this function copies at
+        most <tt><b>n</b></tt> wide characters from the string
+        pointed by <tt><b>s2</b></tt> to <tt><b>s1</b></tt>.
+      </blockquote>
+    </blockquote>
+    <hr>
+
+    <p><b>Committee Response</b></p>
+
+    <p>The committee decided to make no change. The standard does
+    not require that <tt><b>strcoll()</b></tt> and
+    <tt><b>strcmp()</b></tt> perform the same in the C locale.<br>
+    <br>
+     <a href="dr_234.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_236.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

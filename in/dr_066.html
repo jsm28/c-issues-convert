@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #066</TITLE></HEAD><BODY>
+<H2>Defect Report #066</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Clive Feather
+<BR>
+<B>Question</B>
+<BR>
+Item 3 - locales
+<BR>
+In a conforming implementation, can the value of any of the following 
+expressions (subclause 7.4.2.1) be a value other than 0 or 1? Can 
+the value of the first expression be 0?
+<BLOCKQUOTE>
+<TT><B>strlen(localeconv()->decimal_point)<BR>
+	strlen(localeconv()->thousands_sep)<BR>
+	strlen(localeconv()->mon_decimal_point)<BR>
+	strlen(localeconv()->mon_thousands_sep)
+</B></TT></BLOCKQUOTE>
+If the value can be greater than 1, can the string contain more than 
+one multibyte character? If so, can the string contain shift sequences? 
+If so, can the string end other than in the initial shift state?
+<BR>
+<B>Response</B>
+<BR>
+Of the four <TT><B>strlen</B></TT> calls, the first must return 1, the second 
+must return 0 or 1, and the other two must return 0 or more, in a 
+conforming implementation. There is a specific requirement for <TT><B>decimal_point</B></TT> 
+in the second paragraph of subclause 7.4.2.1 <B>Description</B>, and 
+in the individual descriptions ``character'' is intended to 
+imply 0 or 1 while ``string'' is meant to imply 0 or more.
+<BR>
+<A HREF="dr_065.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_067.html">Next Defect Report</A>
+</BODY></HTML>

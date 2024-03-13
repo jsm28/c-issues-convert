@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #064</TITLE></HEAD><BODY>
+<H2>Defect Report #064</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Clive Feather
+<BR>
+<B>Question</B>
+<BR>
+Item 1 - Null pointer constants
+<BR>
+Consider the following translation unit:
+<BR>
+<TT><B>char *f1 (int i, int *pi)<BR>
+	{<BR>
+	*pi = i;<BR>
+	return 0;<BR>
+	}<BR>
+<BR>
+char *f2 (int i, int *pi)<BR>
+	{<BR>
+	return (*pi = i, 0);<BR>
+	}
+<BR></B></TT>
+In <TT><B>f1</B></TT>, the <TT><B>0</B></TT> is a null pointer constant (subclause 6.2.2.3). 
+Since <TT><B>return</B></TT> acts as if by assignment (subclause 6.6.6.4) the 
+function is strictly conforming.
+<BR>
+In <TT><B>f2</B></TT>, the <TT><B>0</B></TT> is a null pointer constant. However, a constant 
+expression cannot contain a comma operator (subclause 6.4), and so 
+the expression being returned is not a null pointer constant per se. 
+Which of the following is the case?
+<BR><OL>
+<LI> The property of being a null pointer constant percolates upwards 
+through an expression, and the function <TT><B>f2</B></TT> is strictly conforming.
+<LI> The property of being a null pointer constant does not percolate 
+upwards, and the expression being notionally assigned in the <TT><B>return</B></TT> 
+statement, though of value zero, is not a null pointer constant but 
+only of type <TT><B>int</B></TT>, thus violating a constraint (subclause 6.3.16.1).
+</OL>
+<B>Response</B>
+<BR>
+Function <TT><B>f2</B></TT> is not strictly conforming, because it violates 
+a constraint for simple assignment (which applies to converting the 
+type of the <TT><B>return</B></TT> expression), because the <TT><B>return</B></TT> expression 
+is not a null pointer constant.
+<BR>
+<A HREF="dr_063.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_065.html">Next Defect Report</A>
+</BODY></HTML>

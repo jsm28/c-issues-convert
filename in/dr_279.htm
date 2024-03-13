@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD html 4.0 transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+    <meta http-equiv="Content-Type" content=
+    "text/html; charset=iso-8859-1">
+    <meta name="GENERATOR" content=
+    "Mozilla/4.7 [en] (Win98; U) [Netscape]">
+
+    <title>Defect report #279</title>
+  </head>
+
+  <body>
+    <center>
+      <h2>Defect Report #279</h2>
+    </center>
+    <a href="dr_278.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_280.htm">Next Defect Report</a> <br>
+     &nbsp; 
+
+    <p><b>Submitter:</b> Raymond Mak (US)<br>
+     <b>Submission Date:</b> 2001-10-18<br>
+     <b>Source:</b> J11<br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n956.htm">ISO/IEC
+    WG14 N956</a><br>
+     <b>Version:</b> 1.2<br>
+     <b>Date:</b> 2002-05-15<br>
+     <b>Subject:</b> Wide character code values for members of the
+    basic character set</p>
+
+    <p><b>Summary</b></p>
+
+    <p>Standard C requires <tt><b>('x' == L'x')</b></tt> to hold
+    true if <tt><b>x</b></tt> is a member of the basic character
+    set. This restricts the implementation's choice of
+    <tt><b>wchar_t</b></tt> encoding. The restriction makes it very
+    difficult, if not impossible, for EBCDIC based system to use
+    Unicode as the <tt><b>wchar_t</b></tt> encoding.</p>
+
+    <p>Note: For the purpose of this DR, we will call this
+    restriction the <i>wchar_t restriction</i>.</p>
+
+    <p><b>Details</b></p>
+
+    <p>C99 7.17 paragraph 2 specifies in part:</p>
+
+    <blockquote>
+      "... 
+
+      <p>&nbsp;&nbsp; <tt><b>wchar_t</b></tt></p>
+
+      <p>which is an integer type whose range of values can
+      represent distinct codes for all members of the largest
+      extended character set specified among the supported locales;
+      the null character shall have the code value zero and each
+      member of the basic character set shall have a code value
+      equal to its value when used as the lone character in an
+      integer character constant."</p>
+    </blockquote>
+
+    <p>Since the code value of the basic characters in UCS-2 and
+    UCS-4 are based on ASCII, EBCDIC systems cannot conform to the
+    last sentence of the above if the encoding of
+    <tt><b>wchar_t</b></tt> is UCS-2 or UCS-4. This makes it
+    unnecessarily difficult for EBCDIC systems to use Unicode with
+    the C language.</p>
+
+    <p>A program knows the type of characters (wide or normal) it
+    is processing. Therefore the appropriate character literal can
+    always be used in an expression. In situations where a program
+    does need to mix normal and wide character code values, the
+    <tt><b>btowc</b></tt> and <tt><b>wctob</b></tt> functions
+    should be used (7.24.6.1 and .2). Facilitating such mixing were
+    the original reason for imposing the wchar_t restriction in
+    C90. With the introduction of these two functions in Amendment
+    1, this restriction can be relaxed with little practical impact
+    to the programmer.<br>
+     &nbsp;</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Suggestion 1</p>
+
+    <p>This change allows an implementation to deviate from the
+    last part of 7.17 paragraph 2 if the macro
+    <tt><b>__STDC_BTOWC_NEQ_WCTOB__</b></tt> is predefined. This
+    would not affect ASCII based systems, but would provide leeway
+    for EBCDIC systems to process Unicode using C.</p>
+
+    <p>Change the last part of 7.17 paragraph 2 as follows:</p>
+
+    <blockquote>
+      "... 
+
+      <p>&nbsp;&nbsp; <tt><b>wchar_t</b></tt></p>
+
+      <p>which is an integer type whose range of values can
+      represent distinct codes for all members of the largest
+      extended character set specified among the supported locales;
+      the null character shall have the code value zero. Each
+      member of the basic character set shall have a code value
+      equal to its value when used as the lone character in an
+      integer character constant if an implementation does not
+      define <tt><b>__STDC_BTOWC_NEQ_WCTOB__</b></tt>."</p>
+    </blockquote>
+
+    <p>A program that requires the wchar_t restriction can check
+    for the macro and cause the translator to put out a diagnostic
+    if the implementation does not support the restriction. This at
+    least would help diagnose porting problems.</p>
+
+    <p>Suggestion 2</p>
+
+    <p>This change removes the restriction altogether.</p>
+
+    <p>Change the last part of 7.17 paragraph 2 as follows:</p>
+
+    <blockquote>
+      "... 
+
+      <p>&nbsp;&nbsp; <tt><b>wchar_t</b></tt></p>
+
+      <p>which is an integer type whose range of values can
+      represent distinct codes for all members of the largest
+      extended character set specified among the supported locales;
+      the null character shall have the code value zero."</p>
+    </blockquote>
+    Suggestion 3 
+
+    <p>This change reverses the meaning of the macro in suggestion
+    1 and combine with the text in suggestion 2. An implementation
+    can assert conformance to the wchar_t restriction by defining
+    the macro <tt><b>__STDC_BTOWC_EQ_WCTOB__</b></tt>.</p>
+
+    <p>Note: Despite what the macro name suggests,
+    <tt><b>btowc</b></tt> and <tt><b>wctob</b></tt> may not be the
+    same disregard of the mapping of the basic character set
+    because of <tt><b>EOF</b></tt>/<tt><b>WEOF</b></tt>.</p>
+
+    <p>Change the last part of 7.17 paragraph 2 as follows:</p>
+
+    <blockquote>
+      "... 
+
+      <p>&nbsp;&nbsp; <tt><b>wchar_t</b></tt></p>
+
+      <p>which is an integer type whose range of values can
+      represent distinct codesfor all members of the largest
+      extended character set specified among thesupported locales;
+      the null character shall have the code value zero."</p>
+    </blockquote>
+
+    <p>Add the following paragraph to 7.24.1 after #3.</p>
+
+    <blockquote>
+      "The macro <tt><b>__STDC_BTOWC_EQ_WCTOB__</b></tt> is defined
+      if the implementation intends to assert that for each member
+      of the basic character set the <tt><b>wchar_t</b></tt>
+      encoding has a code value equal to its value when used as the
+      lone character in an integer character constant."
+    </blockquote>
+    <br>
+     
+    <hr>
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>Change the last part of 7.17 paragraph 2 as follows:</p>
+
+    <blockquote>
+      "... 
+
+      <p>&nbsp;&nbsp; <tt><b>wchar_t</b></tt></p>
+
+      <p>which is an integer type whose range of values can
+      represent distinct codes for all members of the largest
+      extended character set specified among the supported locales;
+      the null character shall have the code value zero."</p>
+    </blockquote>
+
+    <p><br>
+     <a href="dr_278.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_280.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

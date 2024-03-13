@@ -1,0 +1,188 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #323</title>
+    <meta http-equiv="Content-Type" content=
+    "text/html; charset=iso-8859-1">
+    <meta content="MSHTML 6.00.2900.2873" name="GENERATOR">
+  </head>
+
+  <body>
+    <br>
+     
+
+    <h2 align="center">Defect Report #323</h2>
+    <a href="dr_322.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_324.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Josey (US)<br>
+     <b>Submission Date:</b> 2005-09-28<br>
+     <!-- yyyy-mm-dd --><b>Source:</b><br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1138.txt">N1138</a><br>
+
+     <b>Version:</b> 1.4<br>
+     <b>Date:</b> 2006-10-25<br>
+     <b>Subject:</b> Potential problems with TC2 #34, #35, and
+    #36</p>
+
+    <p><b>Summary:</b> The imaginary macro is missing in the
+    normative text.</p>
+
+    <p>I think there may be a problem here with C99 (as amended by
+    TC2). As far as I can see there is no longer any mention of the
+    imaginary macro in normative text, which means implementations
+    are not allowed to define it (because it is not reserved for
+    use by the implementation). Yet in Annex G it still recommends
+    (in informative text) that implementations which define
+    <code><b>__STDC_IEC_559_COMPLEX__</b></code> should define the
+    imaginary macro. It also recommends that these implementations
+    should define <code><b>I</b></code> "to be
+    <code><b>_Imaginary_I</b></code> (not
+    <code><b>_Complex_I</b></code> as stated in 7.3)". Yet
+    implementations that do so would not comply with the normative
+    text in 7.3 which requires I to be defined as
+    <code><b>_Complex_I</b></code>.</p>
+
+    <p>Assuming that the intention was to allow implementations to
+    follow the recommendations in Annex G, but by an oversight the
+    necessary normative text to allow them to do so was omitted
+    from TC2, perhaps in POSIX we should keep the current text but
+    mark some of it CX?</p>
+
+    <p><b>Suggested Technical Corrigendum</b><br>
+    </p>
+    <hr>
+    <!-- Entires below the line by WG14 only. -->
+
+    <p><b>Committee Discussion</b> (for history only)</p>
+
+    <h4>Fall 2005 discussion</h4>
+
+    <p>It was pointed out that implementing Annex G causes
+    nonconforming changes to the normative text in C99. Exact
+    instances were not given or known. The implications of NOT
+    allowing 'I' to expand to '_Imaginary_I' are not readily
+    clear.</p>
+
+    <h4>Spring 2006 discussion</h4>
+
+    <p>We did not fully realize the repercusions of the changes
+    that DR 207 would do (implementing Annex G and</p>
+
+    <ul>
+      <li>setting <b>I</b> to <b>_Imaginary_I</b>, as per G.6,
+      would contradict 7.3.1p3,</li>
+
+      <li>defining the <b>imaginary</b> macro would violate the
+      user's name space</li>
+    </ul>
+    make the implementation non-conforming; our intent was to allow
+    implementations to do Annex G and still conform) and agree that
+    (some of) the effects of DR 207 should be undone. There are
+    three possible levels of undo that could be done. <br>
+     <br>
+     
+
+    <ol>
+      <li>The smallest one is back out parts of DR 207 so that C99
+      allows Annex G implementators to define the <b>imaginary</b>
+      macro and have <b>I</b> to <b>_Imaginary_I</b> and still
+      conform.</li>
+
+      <li>The middle one is restore C99 back to the state before DR
+      207 was applied.</li>
+
+      <li>The hardest one is to re-process DR 207 and look at the
+      suggested alternate changes it has (and even other imaginary
+      issues identified).</li>
+    </ol>
+    <br>
+     
+
+    <p>Some members of the committee had hoped that imaginary would
+    be ignored and go away. However, at least one vendor has
+    shipped an implementation that supports imaginary and Annex G.
+    This vendor has indicated that it would not be hard to modify
+    its implementation so that it passes strict conformance with
+    one command line switch and offer a default implementation with
+    imaginary without that switch.</p>
+
+    <p>One problem with <b>I</b> being imaginary versus complex is
+    f(<b>I</b>) is either passed one double or two doubles.
+    However, this only matters to a few type generic math functions
+    and no user functions (since users have no means to define
+    their own type generic functions). One such type generic math
+    function is <b>cosh()</b>, i.e., <b>cosh(I*y)</b> is the real
+    <b>cos(y)</b> if <b>I</b> is imaginary, but is the complex
+    <b>cosh(z)</b> if <b>I</b> is complex.</p>
+
+    <p>It has been observed that the relational operators (&lt;,
+    &lt;=, &gt;=, &gt;) of 6.5.8 and comparison macros of 7.12.14
+    (isless, ...) should be allowed to be used with imaginary types
+    when both operands are imaginary; this was an oversite in the
+    original C99 specification.</p>
+
+    <p>The mimimal changes to restore back to C99 w.r.t. to DR 207
+    is restore paragraphs 3, 4, and 5 of 7.3.1 of C99; this is a
+    subset of the changes done by DR 207 in TC2.</p>
+
+    <p><b>Technical Corrigendum</b><br>
+    </p>
+
+    <p>In 7.3.1 of C99+TC1+TC2, replace paragraphs 3 and 4
+    with:</p>
+
+    <blockquote>
+      [#3] The macros 
+
+      <blockquote>
+        <tt><b>imaginary</b></tt>
+      </blockquote>
+      and 
+
+      <blockquote>
+        <tt><b>_Imaginary_I</b></tt>
+      </blockquote>
+      are defined if and only if the implementation supports
+      imaginary types;<small><sup>165</sup></small> if defined,
+      they expand to <tt><b>_Imaginary</b></tt> and a constant
+      expression of type <tt><b>const float _Imaginary</b></tt>
+      with the value of the imaginary unit.
+    </blockquote>
+
+    <blockquote>
+      [#4] The macro 
+
+      <blockquote>
+        <tt><b>I</b></tt>
+      </blockquote>
+      expands to <tt><b>_Imaginary_I</b></tt> or
+      <tt><b>_Complex_I</b></tt>. If <tt><b>_Imaginary_I</b></tt>
+      is not defined, <tt><b>I</b></tt> shall expand to
+      <tt><b>_Complex_I</b></tt>.
+    </blockquote>
+
+    <blockquote>
+      [#5] Notwithstanding the provisions of subclause 7.1.3, a
+      program may undefine and perhaps then redefine the macros
+      <tt><b>complex</b></tt>, <tt><b>imaginary</b></tt> and
+      <tt><b>I</b></tt>.
+    </blockquote>
+
+    <blockquote>
+      <small><sup>165</sup></small>A specification for imaginary
+      types is in informative annex G.
+    </blockquote>
+    <br>
+     <a href="dr_322.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_324.htm">Next Defect Report</a> <br>
+     <br>
+  </body>
+</html>
+

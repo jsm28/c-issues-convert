@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 TRANSITIONAL//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+    <meta http-equiv="Content-Type" content=
+    "text/html; charset=iso-8859-1">
+
+    <title>Defect report #282</title>
+  </head>
+
+  <body>
+    <center>
+      <h2>Defect Report #282</h2>
+    </center>
+    <a href="dr_281.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_283.htm">Next Defect Report</a> <br>
+     &nbsp; 
+
+    <p><b>Submitter:</b> Douglas Walls (US)<br>
+     <b>Submission Date:</b> 2002-06-11<br>
+     <b>Source:</b> J11<br>
+     <b>Version:</b> 1.4<br>
+     <b>Date:</b> 2004-03-06<br>
+     <b>Subject:</b> flexible array members &amp; struct
+    padding<br>
+     <b>Summary</b><br>
+     &nbsp;</p>
+
+    <p>6.7.2.1 Structure and union specifiers, paragraphs 15 and 16
+    require that any padding for<br>
+     alignment of a structure containing a flexible array member
+    must preceed the flexible<br>
+     array member.&nbsp; This contradicts existing
+    implementations.&nbsp; We do not believe this was the intent of
+    the C99 specification.</p>
+
+    <p><b>Details</b></p>
+
+    <p>If a struct contains a flexible array member and also
+    requires padding for alignment, then the current C99
+    specification requires the implementation to put this padding
+    <b>before</b> the flexible array member.&nbsp; However,
+    existing implementations, including at least GNU C, Compaq C,
+    and Sun C, put the padding <b>after</b> the flexible array
+    member.</p>
+
+    <p>The layout used by existing implementations can be more
+    efficient. Furthermore, requiring these existing
+    implementations to change their layout would break binary
+    backwards compatibility with previous versions.</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Change the wording such that it is implementation defined as
+    to whether the padding is before or after the flexible array
+    member. &nbsp;</p>
+    <hr>
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>In 6.7.2.1 paragraph 16, replace the second and third
+    sentences ("With two ... 106)" with the following text:.</p>
+
+    <blockquote>
+      In most situations, the flexible array member is ignored. In
+      particular, the size of the structure is as if the flexible
+      array member were omitted except that it may have more
+      trailing padding than the omission would imply.
+    </blockquote>
+
+    <blockquote>
+      replace "Second" with "However" at the start of the following
+      sentence, and delete footnote 106.
+    </blockquote>
+
+    <blockquote>
+      Replace the examples (paragraphs 17 to 20) with:
+    </blockquote>
+
+    <blockquote>
+      <p>[#17] EXAMPLE After the declaration:</p>
+<pre>
+            <tt><b>struct s { int n; double d[]; };</b></tt>
+</pre>
+      the structure <tt><b>struct s</b></tt> has a flexible array
+      member <tt><b>d</b></tt>. A typical way to use this is: 
+<pre>
+           <tt><b>int m = /*</b> <i>some value</i> <b>*/;
+            struct s *p = malloc (sizeof (struct s) + sizeof (double [m]));</b></tt>
+</pre>
+      and assuming that the call to <tt><b>malloc</b></tt>
+      succeeds, the object pointed to by <tt><b>p</b></tt> behaves,
+      for most purposes, as if <tt><b>p</b></tt> had been declared
+      as: 
+<pre>
+            <tt><b>struct { int n; double d[m]; } *s1;</b></tt>
+</pre>
+      (there are circumstances in which this equivalence is broken;
+      in particular, the offsets of member <tt><b>d</b></tt> might
+      not be the same).
+    </blockquote>
+
+    <blockquote>
+      <p>[#18] Following the above declaration:</p>
+<pre>
+            <tt><b>struct s t1 = { 0 };           //</b> <i>valid</i></tt>
+            <tt><b>struct s t2 = { 1, { 4.2 }};   //</b> <i>invalid</i></tt>
+            <tt><b>t1.n = 4;                      //</b> <i>valid</i></tt>
+            <tt><b>t1.d[0] = 4.2;                 //</b> <i>might be undefined behavior</i></tt>
+</pre>
+      The initialization of <tt><b>t2</b></tt> is invalid (and
+      violates a constraint) because <tt><b>struct s</b></tt> is
+      treated as if it does not contain member <tt><b>d</b></tt>.
+      The assigment to <tt><b>t1.d[0]</b></tt> is probably
+      undefined behaviour, but it is possible that 
+<pre>
+            <tt><b>sizeof (struct s) &gt;= offsetof (struct s, d) + sizeof (double)</b></tt>
+</pre>
+      in which case the assignment would be legitimate.
+      Nevertheless it cannot appear in strictly conforming code.
+    </blockquote>
+
+    <blockquote>
+      <p>[#19] After the further declaration:</p>
+<pre>
+            <tt><b>struct ss { int n; };</b></tt>
+</pre>
+      the expressions: 
+<pre>
+            <tt><b>sizeof (struct s) &gt;= sizeof (struct ss)
+            sizeof (struct s) &gt;= offsetof (struct s, d)</b></tt>
+</pre>
+      are always equal to 1.
+    </blockquote>
+
+    <blockquote>
+      [#20] If <tt><b>sizeof (double)</b></tt> is 8, then after the
+      following code is executed: 
+<pre>
+            <tt><b>struct s *s1;
+            struct s *s2;
+            s1 = malloc(sizeof (struct s) + 64);
+            s2 = malloc(sizeof (struct s) + 46);</b></tt>
+</pre>
+      and assuming that the calls to malloc succeed, the objects
+      pointed to by <tt><b>s1</b></tt> and <tt><b>s2</b></tt>
+      behave, for most purposes, as if the identifiers had been
+      declared as: 
+<pre>
+            <tt><b>struct { int n; double d[8]; } *s1;
+            struct { int n; double d[5]; } *s2;</b></tt>
+</pre>
+    </blockquote>
+
+    <blockquote>
+      [#21] Following the further successful assignments: 
+<pre>
+            <tt><b>s1 = malloc(sizeof (struct s) + 10);
+            s2 = malloc(sizeof (struct s) +  6);</b></tt>
+</pre>
+      they then behave as if the declarations were: 
+<pre>
+            <tt><b>struct { int n; double d[1]; } *s1, *s2;</b></tt>
+</pre>
+      and: 
+<pre>
+            <tt><b>double *dp;</b></tt>
+            <tt><b>dp = &amp;(s1-&gt;d[0]);       //</b> <i>valid</i></tt>
+            <tt><b>*dp = 42;               //</b> <i>valid</i></tt>
+            <tt><b>dp = &amp;(s2-&gt;d[0]);       //</b> <i>valid</i></tt>
+            <tt><b>*dp = 42;               //</b> <i>undefined behavior</i></tt>
+</pre>
+    </blockquote>
+
+    <blockquote>
+      [#22] The assignment: 
+<pre>
+            <tt><b>*s1 = *s2;</b></tt>
+</pre>
+      only copies the member <tt><b>n</b></tt>; if any of the array
+      elements are within the first <tt><b>sizeof (struct
+      s)</b></tt> bytes of the structure, these might be copied or
+      simply overwritten with indeterminate values.
+    </blockquote>
+    <br>
+     <a href="dr_281.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_283.htm">Next Defect Report</a>
+  </body>
+</html>
+

@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #118</TITLE></HEAD><BODY>
+<H2>Defect Report #118</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Ron Guilmette
+<BR>
+<B>Question</B>
+<BR>
+ANSI/ISO C Defect Report #rfg25:
+<BR>
+Subject: Completion point for enumerated types.
+<BR>
+Are diagnostics required for the following code examples?
+<BR>
+<TT><B>enum E1 { enumerator1 = sizeof (enum E1) };<BR>
+enum E2 { enumerator2 = sizeof (enum E2 *) };
+</B></TT><BR>
+(Just read on! This <I>isn't</I> just the same old question again!)
+<BR>
+Background:
+<BR>
+Subclause 6.3.3.4 (<B>Constraints</B>):
+<BLOCKQUOTE>
+The <TT><B>sizeof</B></TT> operator shall not be applied to an expression 
+that has function type or an incomplete type, to the parenthesized 
+name of such a type, ...
+</BLOCKQUOTE>
+Subclause 6.5.2.1 (<B>Semantics</B>):
+<BLOCKQUOTE>
+The [structure or union] type
+is incomplete until after the <TT><B>}</B></TT> 
+that terminates the list [of member declarations].''
+</BLOCKQUOTE>
+(Bracketed portions added for clarity.)
+<BR>
+CIB #1, RFI #13, response to question #5:
+<BLOCKQUOTE>
+For the example:
+<BLOCKQUOTE>
+<TT><B>enum e { a = sizeof(enum e) };
+</B></TT></BLOCKQUOTE>
+the relevant citations are subclause 6.1.2.1 starting on page 
+21, line 39, indicating that the scope of the first <TT><B>e</B></TT> begins 
+at the <TT><B>{</B></TT>, and subclause 6.5.2.2, page 62, line 20, which attributes 
+meaning to a later <TT><B>enum e</B></TT> <I>only if</I> this use appears in 
+a <I>subsequent</I> declaration. By subsequent, we mean ``after 
+the <TT><B>}</B></TT>.'' Because in this case, the second <TT><B>enum e</B></TT> is 
+not in a subsequent declaration, and no other wording in the C Standard 
+addresses the meaning, the C Standard has left this example in the 
+category of undefined behavior.
+</BLOCKQUOTE>
+Please note that the above response to RFI #13, question #5 has totally 
+failed to solve the <I>real</I> problem with the current wording of 
+the C Standard.
+<BR>
+The <I>real</I> problem is that (unlike the case for structure and union 
+type definitions) nothing in the C Standard presently indicates where 
+(or whether) an enumerated type becomes ``completed.''
+<BR>
+This is a very serious flaw in the current C Standard. Given that 
+the C Standard currently contains no statement(s) which specify where 
+(or whether) an enumerated type becomes a ``completed'' type, any 
+and all programs which use <I>any</I> enumerated type in <I>any</I> context 
+requiring a completed type are, by definition, <I>not</I> strictly 
+conforming. (This will come as quite a shock to a number of C 
+programmers!)
+<BR>
+I feel that the Committee must resolve this serious problem as soon 
+as possible. The only plausible way to do that is to add a statement 
+to subclause 6.5.2.2 which will specify the point at which an enum 
+type become a ``completed'' type.
+<BR>
+Using the statement currently given in subclause 6.5.2.1 (relating 
+to struct and union types) as a guide, it would appear that subclause 
+6.5.2.2 should be amended to include the following new semantic rule:
+<BLOCKQUOTE>
+The enum type is incomplete until after the <TT><B>}</B></TT> that terminates 
+the list of enumerators.
+</BLOCKQUOTE>
+Some such addition is obviously necessary in order to render enum 
+types usable as complete types within strictly conforming 
+programs.
+<BR>
+Note however that such a clarification would have the additional (beneficial?) 
+side effect of rendering the following declaration subject to a mandatory 
+diagnostic (due to the violation of the constraints for the operand 
+of the <TT><B>sizeof</B></TT> operator):
+<BR>
+<TT><B>enum E1 { enumerator1 = sizeof (enum E1) };
+</B></TT><BR>
+Even after such a clarification however, the status of:
+<BR>
+<TT><B>enum E2 { enumerator2 = sizeof (enum E2 *) };
+</B></TT><BR>
+is still questionable at best, and the proper interpretation for such 
+a case should, I believe, still be drawn from the response given to 
+<A HREF="dr_013.html#Question5">RFI #13, question #5</A>; 
+i.e., such examples should be viewed as involving undefined behavior.
+<BR>
+<B>Response</B>
+<BR>
+No, diagnostics are not required. The following Correction clarifies
+the intent. Note than an implementation <I>may</I> complete the
+type <I>before</I> the <TT><B>}</B></TT>.
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>In subclause 6.5.2.2, page 61, append to Semantics:</B></I>
+<BR>
+The enumerated type is complete at the <TT><B>}</B></TT> that terminates
+the list of enumerator declarations.
+<BR>
+<A HREF="dr_117.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_119.html">Next Defect Report</A>
+</BODY></HTML>

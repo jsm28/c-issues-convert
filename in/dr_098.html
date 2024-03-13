@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #098</TITLE></HEAD><BODY>
+<H2>Defect Report #098</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Ron Guilmette
+<BR>
+<B>Question</B>
+<BR>
+ANSI/ISO C Defect report #rfg5:
+<BR>
+Subclause 6.3.3.4 provides the following constraint:
+<BLOCKQUOTE>
+The <TT><B>sizeof</B></TT> operator shall not be applied to an expression 
+that has function type or an incomplete type...
+</BLOCKQUOTE>
+The logical implication of this constraint is that neither function 
+types nor incomplete types have ``sizes'' per se, at least not 
+as far as the C Standard is concerned.
+<BR>
+I have noted however that neither subclause 6.3.2.4 <B>Posfix increment 
+and decrement operators</B> nor subclause 6.3.3.1 <B>Prefix increment 
+and decrement operators</B> contain any constraints which would prohibit 
+the incrementing or decrementing of pointers to function types or 
+pointers to incomplete types.
+<BR>
+I believe that this logical inconsistency needs to be addressed (and 
+rectified) in the C Standard. It seems that the most appropriate way 
+to do this is to add the following additional constraint to subclause 
+6.3.2.4:
+<BLOCKQUOTE>
+The operand of the postfix increment or decrement operator shall 
+not have a type which is a pointer to incomplete type or a pointer 
+to function type.
+</BLOCKQUOTE>
+Likewise, the following new constraint should be added to subclause 
+6.3.3.1:
+<BLOCKQUOTE>
+The operand of the prefix increment or decrement operator shall 
+not have a type which is a pointer to incomplete type or a pointer 
+to function type.
+</BLOCKQUOTE>
+<B>Response</B>
+<BR>
+The explicit constraint on pre/post increment/decrement operators 
+(subclauses 6.3.2.4 and 6.3.3.1) is not required. Early on, the Committee 
+decided that if a behavior was described as being equivalent to another 
+construct, all of the constraints of that construct would apply. This 
+``chaining'' process means that any violation of a constraint 
+in any section referred to explicitly or by the phrases ``equivalent 
+behavior'' or ``as if'' will generate a diagnostic.
+<BR>
+Both subclauses 6.3.2.4 and 6.3.3.1 state in their respective
+<B>Semantics</B>
+sections, ``See the discussions of additive operators and compound 
+assignment for information on constraints, types, [side effects,] and 
+conversions and the effects of operations on pointers.''
+<BR>
+The <B>Semantics</B> section of subclause 6.3.16.2 states,
+``A <I>compound assignment</I> of the form
+<TT><B>E1 <I>op</I>= E2</B></TT> differs from the simple assignment 
+expression <TT><B>E1 = E1 <I>op</I> (E2)</B></TT> only in that
+the lvalue <TT><B>E1</B></TT> 
+is evaluated only once.''
+<BR>
+This makes the pre/post increment/decrement equivalent to adding or 
+subtracting 1 to/from an object. Looking at subclause 6.3.6 for the 
+constraints on additive operators, in each case which refers to pointer 
+operands, the C Standard uses the phrase
+``pointer to an object type.''  Since incomplete types
+and function types are not object types,
+their use as operands of these operators is precluded.
+<BR>
+<A HREF="dr_097.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_099.html">Next Defect Report</A>
+</BODY></HTML>

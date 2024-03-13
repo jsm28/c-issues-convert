@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #211</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #211</h2>
+    <a href="dr_210.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_212.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Fred Tydeman (US)<br>
+     <b>Submission Date:</b> 1999-10-20<br>
+     <b>Source:</b> NCITS J11<br>
+     <b>Reference Document:</b> N/A<br>
+     <b>Version:</b> 1.4<br>
+     <b>Date:</b> 2001-09-18 14:47:22<br>
+     <b>Subject:</b> Accuracy of decimal string to/from "binary"
+    (non-decimal) floating-point conversions</p>
+
+    <p><b>Summary</b><br>
+     What is the accuracy of decimal string to/from "binary"
+    (non-decimal) floating-point conversions?</p>
+
+    <p>What is the accuracy of hexadecimal string to/from "decimal"
+    (non-power-of-2) floating-point conversions?</p>
+
+    <p>In the following, the phrase "decimal to binary" shall cover
+    any pair of bases that are not both a power of the same number.
+    It also shall cover both the string to internal floating-point
+    and internal floating-point to string conversions.</p>
+
+    <p>There are two basic cases to consider at run-time:</p>
+
+    <ul>
+      <li>decimal string to internal binary (<tt><b>scanf</b></tt>
+      family, <tt><b>strtod</b></tt> family)</li>
+
+      <li>internal binary to decimal string (<tt><b>printf</b></tt>
+      family)</li>
+    </ul>
+
+    <p>For each of those basic cases, there are two generic
+    sub-cases: base 10 to base 2 and base 2 to base 10.</p>
+
+    <p><b>Background</b><br>
+     7.19.6.1 The <tt><b>fprintf</b></tt> function:</p>
+
+    <blockquote>
+      Paragraph 8 on "<tt><b>f,F</b></tt>" and
+      "<tt><b>e,E</b></tt>" conversion specifiers says: The value
+      is rounded to the appropriate number of digits. 
+
+      <p>Does that mean round to nearest, round by truncating,
+      round by add 0.5 and truncate, round as per the current
+      rounding direction, or something else? Must the rounding used
+      for <tt><b>f,F</b></tt> match the rounding used for
+      <tt><b>e,E</b></tt>? Since there is no explicit allowance for
+      multiple values (as there is in 6.4.4.2 Floating constants),
+      must the value produced be as if the infinitely precise value
+      were rounded (and the rounding produce an error less than or
+      equal to 0.5 units in the last place (ulp) for nearest and
+      less than 1.0 ulp otherwise)?</p>
+
+      <p>For round to nearest, IEEE-754 (IEC-60559) requires that
+      the maximum error be 0.5 ulp for a large subset of its values
+      and 0.97 ulp for all values. For the other roundings, the
+      maximum error allowed by IEEE-754 is 1.47 ulp. The fourth
+      committee draft (1999-09-30) of ISO/IEC 10967-2 (LIA-2)
+      appears to require the maximum error be in the range 0.5 to
+      0.75 ulp. These bounds appear to apply to both directions of
+      conversions.</p>
+    </blockquote>
+
+    <p>7.19.6.2 The <tt><b>fscanf</b></tt> function:</p>
+
+    <blockquote>
+      Paragraph 10 discusses conversion. Paragraph 12 on
+      "<tt><b>a,e,f,g</b></tt>" conversion specifiers discusses
+      format. Neither discuss accuracy of the decimal to binary
+      conversion, e.g., it is not specified. 
+
+      <p>What is the accuracy of floating-point string to internal
+      representation conversions? Is it the same as translation
+      time? Is it the same as <tt><b>strtod</b></tt>? Is it
+      undefined behavior if the value is not exactly representable?
+      Is it round to nearest? Is it affected by the current
+      rounding mode, e.g., correctly rounded?</p>
+    </blockquote>
+
+    <p>7.20.1.3 The <tt><b>strtod</b></tt> ... functions:</p>
+
+    <blockquote>
+      What is the required accuracy of <tt><b>strtod</b></tt>
+      family functions? It appears to be either not specified or
+      the same as 6.4.4.2. It appears to depend upon what paragraph
+      4 "interpreted as a floating constant according to the rules
+      of 6.4.4.2" means.
+    </blockquote>
+
+    <p><b>Suggested Changes</b><br>
+     Changes to 7.19.6.1 The <tt><b>fprintf</b></tt> function:</p>
+
+    <p>Add near paragraph 11 before Recommended practice:</p>
+
+    <blockquote>
+      The roundings used by %<tt><b>f</b></tt>, %<tt><b>F</b></tt>,
+      %<tt><b>e</b></tt>, and %<tt><b>E</b></tt> shall be the same
+      and shall have an accuracy of better than 1 ulp in round to
+      nearest and better than 2 ulp in other roundings.
+    </blockquote>
+
+    <p>Changes to 7.19.6.2 The <tt><b>fscanf</b></tt> function:</p>
+
+    <p>In paragraph 12, "<tt><b>a,e,f,g</b></tt>" conversion
+    specifier, add the sentence:</p>
+
+    <blockquote>
+      The accuracy of this conversion shall be no worse than that
+      of <tt><b>strtold</b></tt> for the same subject.
+    </blockquote>
+
+    <p>Change 7.20.1.3 The <tt><b>strtod</b></tt> ...
+    functions:</p>
+
+    <p>In paragraph 4, change "rules of 6.4.4.2" to "rules of
+    6.4.4.2 (including accuracy requirements)"</p>
+
+    <p>Add a third recommended practice paragraph:</p>
+
+    <blockquote>
+      Conversions done by <tt><b>strtod</b></tt> family functions
+      and <tt><b>fscanf</b></tt> family functions of the same valid
+      floating-point subject string shall produce the same value.
+    </blockquote>
+
+    <p>An alternative (not liked by this author) to all of the
+    above is to add to 5.2.4.2.2 Characteristics of floating types
+    &lt;<tt><b>float.h</b></tt>&gt; in paragraph 4 before "and": ",
+    binary-decimal conversions(footnote),".</p>
+
+    <blockquote>
+      footnote: binary-decimal covers both string to internal
+      representations and internal to string representations, and
+      covers any pair of bases.
+    </blockquote>
+    <hr>
+
+    <p><b>Committee Discussion</b><br>
+     5.2.4.2.2 paragraph 4 (which covers the accuracy of
+    <tt><b>+</b></tt>, <tt><b>-</b></tt>, <tt><b>*</b></tt>,
+    <tt><b>/</b></tt>, and math library functions) does not cover
+    decimal &lt;--&gt; binary conversions. Therefore, the rest of
+    5.2.4.2.2 covers these conversions (F.P. characteristics must
+    meet the minimum-maximum requirements for the
+    &lt;<tt><b>float.h</b></tt>&gt; parameters (even though the
+    exact model need not be followed)). That appears to require
+    that the actual representation be able to express &gt;=
+    <tt><b>FLT</b></tt>/<tt><b>DBL</b></tt>/<tt><b>LDBL_DIG</b></tt>
+    digits precise to the last of those digits (for decimal to
+    binary conversions) and &gt;= <tt><b>DECIMAL_DIG</b></tt>
+    digits (for binary to decimal conversions).</p>
+
+    <p>6.3.1.5 para. 1 implies that the different widths of F.P.
+    types must have similar representations differing only in
+    number of bits in exponent, mantissa, and padding.</p>
+
+    <p>In 7.19.6.1 <tt><b>f,F</b></tt> format, the value is rounded
+    to the appropriate number of digits, which indicates that the
+    displayed value differs from the "numerical" value only with
+    regard to that rounding. (Of course, <em>all</em> the
+    <tt><b>fprintf</b></tt> conversions of numeric values to
+    display form are on the assumption that what is displayed is
+    the same value as the numeric value, but in
+    human-comprehensible form and subject to specified rounding
+    etc.)</p>
+
+    <p>7.20.1.3 says that the numeric string is interpreted as a
+    value according to the rules in 6.4.4.2 for floating
+    constants.</p>
+
+    <p>Details of rounding are not specified, although certain
+    modes are described in 5.2.4.2.2.</p>
+
+    <p>The latitude allowed for inexactness by the standard applies
+    only to precision of representation and to rounding mode.<br>
+    </p>
+    <hr>
+
+    <p><b>Technical Corrigendum</b><br>
+     Change 5.2.4.2.2 paragraph #4 to:</p>
+
+    <blockquote>
+      The accuracy of the floating-point operations (
+      <tt><b>+</b></tt>, <tt><b>-</b></tt>, <tt><b>*</b></tt>,
+      <tt><b>/</b></tt>) and of the library functions in
+      &lt;<tt><b>math.h</b></tt>&gt; and
+      &lt;<tt><b>complex.h</b></tt>&gt; that return floating-point
+      results is implementation defined, as is the accuracy of the
+      conversion between floating-point internal representations
+      and string representations performed by the libray routine in
+      &lt;<tt><b>stdio.h</b></tt>&gt;,
+      &lt;<tt><b>stdlib.h</b></tt>&gt; and
+      &lt;<tt><b>wchar.h</b></tt>&gt;. The implementation may state
+      that the accuracy is unknown.
+    </blockquote>
+
+    <p><br>
+     <a href="dr_210.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_212.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

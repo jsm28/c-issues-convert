@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #299</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #299</h2>
+    <a href="dr_298.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_300.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Fred Tydeman (USA)<br>
+     <b>Submission Date:</b> 2004-08-13<br>
+     <b>Source:</b> WG 14<br>
+     <b>Reference Document:</b><br>
+    <b>Version:</b> 1.2<br>
+     <b>Date:</b> 2006-04-04<br>
+     <b>Subject:</b>&nbsp;Is <b><tt>cabs()</tt></b> a type-generic
+    macro?</p>
+
+    <p><b>Summary</b></p>
+
+    <p>The standard is not clear as to which type-generic macro(s)
+    should be used to compute the absolute value of real, complex,
+    and imaginary types.</p>
+
+    <p><b>Details</b></p>
+
+    <p>Here are two viewpoints.</p>
+
+    <p>1) <b><tt>cabs()</tt></b> is not a type-generic macro.
+    Instead <b><tt>fabs()</tt></b> covers <b><tt>fabsf()</tt></b>,
+    <b><tt>fabs()</tt></b>, <b><tt>fabsl()</tt></b>,
+    <b><tt>cabsf()</tt></b>, <b><tt>cabs()</tt></b>, and
+    <b><tt>cabsl()</tt></b>.</p>
+
+    <p>If this viewpoint is correct, then 7.22p2 may need to be
+    updated along the lines of "except <b><tt>modf</tt></b> and
+    <b><tt>cabs</tt></b>". Also, in 7.22p7 (3rd line from end),
+    <b><tt>cabs(fc)</tt></b> should be changed to
+    <b><tt>fabs(fc)</tt></b>.</p>
+
+    <p>2) <b><tt>cabs()</tt></b> is a type-generic macro (but only
+    for complex arguments). That is <b><tt>cabs()</tt></b> covers
+    <b><tt>cabsf()</tt></b>, <b><tt>cabs()</tt></b>, and
+    <b><tt>cabsl()</tt></b>. In addition, <b><tt>fabs()</tt></b>
+    covers <b><tt>fabsf()</tt></b>, <b><tt>fabs()</tt></b>,
+    <b><tt>fabsl()</tt></b>, <b><tt>cabsf()</tt></b>,
+    <b><tt>cabs()</tt></b>, and <b><tt>cabsl()</tt></b>.</p>
+
+    <p>If this viewpoint is correct, then 7.22p6 needs to be
+    updated with <b><tt>cabs</tt></b>. Also, B.21 needs to have
+    <b><tt>cabs</tt></b> added to it.</p>
+
+    <p>It seems clear that <b><tt>cabs()</tt></b> is not a
+    type-generic macro.</p>
+
+    <p>In addition, it is not clear what <b><tt>modf</tt></b> is in
+    7.22p5.</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>7.22p5 Add ", except <b><tt>modf</tt></b>" after
+    "<b><tt>&lt;math.h&gt;</tt></b>"</p>
+
+    <p>7.22p7 (3rd line from end), <b><tt>cabs(fc)</tt></b> should
+    be changed to <b><tt>fabs(fc)</tt></b>.</p>
+    <hr>
+
+    <p><b>Committee Discussion</b></p>
+
+    <p>7.22p2 says that every function in
+    <b><tt>&lt;math.h&gt;</tt></b> and
+    <b><tt>&lt;complex.h&gt;</tt></b> without an <b><tt>l</tt></b>
+    or <b><tt>f</tt></b> suffix has a corresponding type-generic
+    macro. Except <b><tt>modf</tt></b>.</p>
+
+    <p>However, 7.22p2 says nothing about what the macro is
+    <i>called</i>.</p>
+
+    <p>7.22p4 says that if there is a function F() in
+    <b><tt>&lt;math.h&gt;</tt></b> and a corresponding function
+    cF() in <b><tt>&lt;complex.h&gt;</tt></b>, then the TG-macro
+    for both F() and cF() is called "F". In addition, the TG-macro
+    for both <b><tt>fabs()</tt></b> and <b><tt>cabs()</tt></b> is
+    called "<b><tt>fabs</tt></b>".</p>
+
+    <p>7.22p5 and 7.22p6 say that for all remaining functions that
+    have TG-macros, the macro has the same name as the
+    function.</p>
+
+    <p>However, none of 7.22p4 to 7.22p6 say which functions have
+    TG-macros.</p>
+
+    <p>Adding "except <b><tt>cabs</tt></b>" to 7.22p2 would
+    directly contradict 7.22p4, because it says that there is
+    <i>no</i> TG-macro corresponding to <b><tt>cabs</tt></b> (and,
+    therefore, <b><tt>fabs</tt></b>).</p>
+
+    <p>If there's a defect in the wording, it's that 7.22p5 should
+    say "except modf" after "<b><tt>&lt;math.h&gt;</tt></b>". Or
+    all of 7.22p4 to 7.22p6 should have something like "Where a
+    function has a corresponding type-generic macro" inserted in
+    them. But we don't even believe that is necessary.</p>
+
+    <p>To get the absolute value of a <b><tt>float complex</tt></b>
+    using a type-generic macro, use <b><tt>fabs</tt></b>.
+    Therefore, 7.22p7 (3rd line from end) needs to change
+    <b><tt>cabs(fc)</tt></b> to <b><tt>fabs(fc)</tt></b>.</p>
+
+    <p>As G.7p1 correctly shows, to take the absolute value of an
+    imaginary type, use <b><tt>fabs</tt></b>.</p>
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>7.22p5 Add ", except <b><tt>modf</tt></b>" after
+    "<b><tt>&lt;math.h&gt;</tt></b>"</p>
+
+    <p>7.22p7 (3rd line from end), <b><tt>cabs(fc)</tt></b> should
+    be changed to <b><tt>fabs(fc)</tt></b>.</p>
+
+    <p><br>
+     <a href="dr_298.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_300.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #065</TITLE></HEAD><BODY>
+<H2>Defect Report #065</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Clive Feather
+<BR>
+<B>Question</B>
+<BR>
+Item 2 - locales
+<BR>
+Consider the program:
+<BR>
+<TT><B>#include &lt;stdio.h><BR>
+#include &lt;stdlib.h><BR>
+#include &lt;locale.h><BR>
+<BR>
+int main (void)<BR>
+	{<BR>
+	int i;<BR>
+	char *loc [] = { "English", "En_UK", "Loglan", "" };<BR>
+<BR>
+	for (i = 0; ; i++)<BR>
+		if (setlocale (LC_ALL, loc [i]) != NULL)<BR>
+			{<BR>
+			/*</B><I><BR>
+			 *  We must eventually get here,<BR>
+			 *  because setlocale("") can't yield NULL.<BR>
+			 </I><B>/*<BR>
+			printf ("Decimal point = '%s'\n",<BR>
+			localeconv ()->decimal_point);<BR>
+			exit (0);<BR>
+			}<BR>
+	}
+<BR></B></TT>
+The valid locales are implementation-defined (subclause 7.4.1.1). 
+Nevertheless, the output produced depends only on the locale, not 
+any other implementation-defined behavior. Is the program strictly 
+conforming?
+<BR>
+<B>Response</B>
+<BR>
+The Committee affirms that the intent of this wording is that a program 
+such as that above, whose output varies only according to the locale 
+selected and does not rely on the presence of a specific locale other 
+than the <TT><B>"C"</B></TT> locale or that selected by <TT><B>""</B></TT>, was always 
+intended to be strictly conforming. Nevertheless, it is agreed that 
+the cited extract from subclause 7.4.1.1 could be read strictly as 
+making such programs depend on implementation-defined behavior.
+<BR>
+The Committee reaffirms that programs that depend on the identity 
+of the available locales, as opposed to their contents, are not strictly 
+conforming.
+<BR>
+The Committee believes that the first occurrence of the term ``implementation 
+defined'' in subclause 7.4.1.1 was intended in the sense of ``implementation-documented.'' 
+However, the Committee is reluctant to introduce a new term, with 
+possibly new conformance requirements, in a Technical Corrigendum. 
+The Committee notes that the term ``locale-specific,'' while 
+making the sentence read somewhat awkwardly, carries the necessary 
+requirements (the implementation must document the relevant details).
+<BR>
+The Committee decided that, though the question only addresses one 
+issue to do with locales, the above discussion applies to all instances 
+where the behavior of an implementation depends on the locale.  For 
+this reason, the Committee decided to address all such issues at this 
+time.
+<BR>
+The Committee should revisit this issue during the revision of the 
+C Standard.
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>In subclause 5.2.1.2, page 11, change the third bullet item:</B></I>
+<BR>
+wherein each sequence of multibyte characters begins in an <I>initial 
+shift state</I> and enters other implementation-defined <I>shift states</I>
+<BR>
+<I><B>to:</B></I>
+<BR>
+wherein each sequence of multibyte characters begins in an <I>initial 
+shift state</I> and enters other locale-specific <I>shift states</I>
+<BR>
+<I><B>In subclause 7.3, page 102, second paragraph, change:</B></I>
+<BR>
+Those functions that have implementation-defined aspects only when 
+not in the <TT><B>"C"</B></TT> locale are noted below.
+<BR>
+The term <I>printing character</I> refers to a member of an implementation-defined 
+set of characters, each of which occupies one printing position on 
+a display device; the term <I>control character</I> refers to a member 
+of an implementation-defined set of characters that are not printing 
+characters.
+<BR>
+<I><B>to:</B></I>
+<BR>
+Those functions that have locale-specific aspects only when not in 
+the <TT><B>"C"</B></TT> locale are noted below.
+<BR>
+The term <I>printing character</I> refers to a member of a locale-specific 
+set of characters, each of which occupies one printing position on 
+a display device; the term <I>control character</I> refers to a member 
+of a locale-specific set of characters that are not printing characters.
+<BR>
+<I><B>In subclause 7.3.1.2, page 102, subclause 7.3.1.6, page 103, subclause 
+7.3.1.9, page 104, and subclause 7.3.1.10, page 104, change:</B></I>
+<BR>
+is one of an implementation-defined set of characters
+<BR>
+<I><B>to:</B></I>
+<BR>
+is one of a locale-specific set of characters
+<BR>
+<I><B>In subclause 7.4.1.1, page 107, second paragraph of Description, change:</B></I>
+<BR>
+a value of <TT><B>""</B></TT> for <TT><B>locale</B></TT> specifies the implementation-defined 
+native environment.
+<BR>
+<I><B>to:</B></I>
+<BR>
+a value of <TT><B>""</B></TT> for <TT><B>locale</B></TT> specifies the locale-specific 
+native environment.
+<BR>
+<I><B>In subclause 7.10.1.4, page 151, subclause 7.10.1.5, page 152, 
+and 7.10.1.6, page 152, change:</B></I>
+<BR>
+In other than the <TT><B>"C"</B></TT> locale, additional implementation-defined 
+subject sequence forms may be accepted.
+<BR>
+<I><B>to:</B></I>
+<BR>
+In other than the <TT><B>"C"</B></TT> locale, additional locale-specific subject 
+sequence forms may be accepted.
+<BR>
+<I><B>Change Footnote 131, page 159, from:</B></I>
+<BR>
+If the implementation employs special bytes to change the shift state, 
+these bytes do not produce separate wide character codes, but are 
+grouped with an adjacent multibyte character.
+<BR>
+<I><B>to:</B></I>
+<BR>
+If the locale employs special bytes to change the shift state, these 
+bytes do not produce separate wide character codes, but are grouped 
+with an adjacent multibyte character.
+<BR>
+<I><B>In subclause 7.11.6.2, page 168, change:</B></I>
+<BR>
+The <TT><B>strerror</B></TT> function returns a pointer to the string, the contents 
+of which are implementation-defined.
+<BR>
+<I><B>to:</B></I>
+<BR>
+The <TT><B>strerror</B></TT> function returns a pointer to the string, the contents 
+of which are locale-specific.
+<BR>
+<I><B>In Annex G, pages 204-207, move the following bullet items under 
+subclause G.3 to subclause G.4:</B></I>
+<BLOCKQUOTE>
+G.3.4, page 204, item 2 (``The shift states used for the 
+encoding ...'')
+<BR>
+<BR>G.3.14, page 206, item 3 (``The sets of characters tested 
+for ...'')
+<BR>
+<BR>G.3.14, page 207, item 33 (``The contents of the error message 
+strings ...'')
+</BLOCKQUOTE>
+<I><B>In Annex G.4 page 207, Locale-specific behavior, change:</B></I>
+<BR>
+The following characteristics of a hosted environment are locale-specific:
+<BR>
+<I><B>to:</B></I>
+<BR>
+The following characteristics of a hosted environment are locale-specific 
+and must be documented by the implementation:
+<BR>
+<A HREF="dr_064.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_066.html">Next Defect Report</A>
+</BODY></HTML>

@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 1st December 2004), see www.w3.org">
+
+  <title>Defect report #344</title>
+</head>
+
+<body>
+  <br>
+
+  <h2 align="center">Defect Report #344</h2><a href=
+  "dr_343.htm">Previous Defect Report</a> &lt; - &gt; <a href=
+  "dr_345.htm">Next Defect Report</a>
+
+  <p><br>
+  <b>Submitter:</b> Clark Nelson<br>
+  <b>Submission Date:</b> 2007-04-23<br>
+  <!-- yyyy-mm-dd -->
+   <b>Source:</b> WG21<br>
+  <b>Reference Document:</b> N/A<br>
+  <b>Version:</b> 1.2<br>
+  <b>Date:</b> 2007-07-21<br>
+  <b>Subject:</b> Casts in preprocessor conditional expressions</p>
+
+  <p><b>Summary</b></p>
+
+  <p>6.10.1 paragraph 1 states:</p>
+
+  <blockquote>
+    The expression that controls conditional inclusion shall be an
+    integral constant expression except that: it shall not contain
+    a cast; ...
+  </blockquote>
+
+  <p>The prohibition of casts is vacuous, as pointed out in the
+  footnote in that paragraph:</p>
+
+  <blockquote>
+    Because the controlling constant expression is evaluated during
+    translation phase 4, all identifiers either are or are not
+    macro names &mdash; there simply are no keywords, enumeration
+    constants, and so on.
+  </blockquote>
+
+  <p>As a result, there can be no casts, which require either
+  keywords or identifiers that resolve to types in order to be
+  recognized as casts.</p>
+
+  <p>The prohibition of casts is also misleading: the presence of a
+  "shall not" in a "Constraints" paragraph suggests that an
+  implementation is required to diagnose this condition. However,
+  in an example like this:</p>
+
+  <blockquote>
+    <pre>
+#if (int)+0
+</pre>
+  </blockquote>
+
+  <p>There is a construct which appears to be a cast, but is not,
+  and is syntactically and semantically valid.</p>
+
+  <p>&nbsp;</p>
+
+  <p><b>Suggested Technical Corrigendum</b><br></p>
+
+  <p>Change 6.10.1p1:</p>
+
+  <blockquote>
+    The expression that controls conditional inclusion shall be an
+    integer constant expression except that: <del>it shall not
+    contain a cast;</del> identifiers (including those lexically
+    identical to keywords) are interpreted as described
+    below;<sup>141)</sup> and it may contain unary operator
+    expressions of the form
+  </blockquote>
+  <hr>
+  <!-- Entires below the line by WG14 only. -->
+
+  <p><b>Technical Corrigendum</b></p>
+
+  <p>Change 6.10.1p1:</p>
+
+  <blockquote>
+    The expression that controls conditional inclusion shall be an
+    integer constant expression except that: <del>it shall not
+    contain a cast;</del> identifiers (including those lexically
+    identical to keywords) are interpreted as described
+    below;<sup>141)</sup> and it may contain unary operator
+    expressions of the form
+  </blockquote>
+
+  <p><br>
+  <a href="dr_343.htm">Previous Defect Report</a> &lt; - &gt;
+  <a href="dr_345.htm">Next Defect Report</a></p>
+</body>
+</html>

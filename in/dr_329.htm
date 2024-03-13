@@ -1,0 +1,439 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 13), see www.w3.org">
+
+  <title>Defect report #329</title>
+</head>
+
+<body>
+  <br>
+
+  <h2 align="center">Defect Report #329</h2><a href=
+  "dr_328.htm">Previous Defect Report</a> &lt; - &gt; <a href=
+  "dr_330.htm">Next Defect Report</a>
+
+  <p><br>
+  <b>Submitter:</b>J11<br>
+  <b>Submission Date:</b>2006-07-07<br>
+  <!-- yyyy-mm-dd -->
+   <b>Source:</b>Fred J. Tydeman<br>
+  <b>Reference Document:</b> <a href=
+  "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1181.htm">N1181</a><br>
+
+  <b>Version:</b> 1.4<br>
+  <b>Date:</b> 2008-09-12<br>
+  <b>Subject:</b>Math functions and directed rounding</p>
+
+  <p><b>Summary:</b></p><b>Consider:</b> <code>remainder(
+  DBL_MIN*(1.0+2.0*DBL_EPSILON), DBL_MIN*(1.0+DBL_EPSILON) )</code>
+
+  <p>The result is <code>DBL_MIN*DBL_EPSILON</code>, a subnormal
+  number. But, if the implementation does not support subnormal
+  numbers, such as IBM S/360 hex floating-point, then it is either
+  zero or <code>DBL_MIN</code>, depending upon the current rounding
+  direction mode. Hence, the sentence "Thus, the remainder is
+  always exact." in footnote 204 in C99+TC1+TC2 (<a href=
+  "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1124.pdf">N1124</a>)
+  is wrong. This problem also applies to <code>remquo</code> and
+  <code>fmod</code>.</p>
+
+  <p>After finding that flaw, I looked at the other math functions
+  and their relationship to directed rounding. That search found
+  several areas where things could be improved and one area
+  (<code>nextafter</code>) that took an informal request for
+  interpretation to the IEEE-754 committee to find the answer.</p>
+
+  <p>7.12.6.4 The <code>frexp</code> functions should be updated
+  along the lines of:</p>
+
+  <blockquote>
+    When the radix of the argument is a power of 2, the returned
+    value is exact and is independent of the current rounding
+    direction mode.
+  </blockquote>
+
+  <p>7.12.6.5 The <code>ilogb</code> functions should be updated
+  along the lines of:</p>
+
+  <blockquote>
+    When the returned value is representable in the range of the
+    return type, the returned value is exact and is independent of
+    the current rounding direction mode.
+  </blockquote>
+
+  <p>7.12.6.11 The <code>logb</code> functions should be updated
+  along the lines of:</p>
+
+  <blockquote>
+    The returned value is exact and is independent of the current
+    rounding direction mode.
+  </blockquote>
+
+  <p>7.12.6.12 The <code>modf</code> functions should be updated
+  along the lines of:</p>
+
+  <blockquote>
+    The returned values are exact and are independent of the
+    current rounding direction mode.
+  </blockquote>
+
+  <p>7.12.7.2 The <code>fabs</code> functions should be updated
+  along the lines of:</p>
+
+  <blockquote>
+    The returned value is exact and is independent of the current
+    rounding direction mode.
+  </blockquote>
+
+  <p>7.12.9.1 The <code>ceil</code> functions should be updated
+  along the lines of:</p>
+
+  <blockquote>
+    The returned value is exact and is independent of the current
+    rounding direction mode.
+  </blockquote>
+
+  <p>7.12.9.2 The <code>floor</code> functions should be updated
+  along the lines of:</p>
+
+  <blockquote>
+    The returned value is exact and is independent of the current
+    rounding direction mode.
+  </blockquote>
+
+  <p>7.12.9.8 The <code>trunc</code> functions should be updated
+  along the lines of:</p>
+
+  <blockquote>
+    The returned value is exact and is independent of the current
+    rounding direction mode.
+  </blockquote>
+
+  <p>7.12.10.1 The <code>fmod</code> functions should be updated
+  along the lines of:</p>
+
+  <blockquote>
+    When subnormal results are supported, the returned value is
+    exact and is independent of the current rounding direction
+    mode.
+  </blockquote>
+
+  <p>7.12.10.2 The <code>remainder</code> functions should be
+  updated along the lines of:</p>
+
+  <blockquote>
+    When subnormal results are supported, the returned value is
+    exact and is independent of the current rounding direction
+    mode.
+  </blockquote>
+
+  <p>7.12.10.3 The <code>remquo</code> functions should be updated
+  along the lines of:</p>
+
+  <blockquote>
+    When subnormal results are supported, the returned value is
+    exact and is independent of the current rounding direction
+    mode.
+  </blockquote>
+
+  <p>7.12.11.1 The <code>copysign</code> functions should be
+  updated along the lines of:</p>
+
+  <blockquote>
+    The returned value is exact and is independent of the current
+    rounding direction mode.
+  </blockquote>
+
+  <p>7.12.11.2 The <code>nan</code> functions should be updated
+  along the lines of:</p>
+
+  <blockquote>
+    The returned value is exact and is independent of the current
+    rounding direction mode.
+  </blockquote>
+
+  <p>7.12.11.3 The <code>nextafter</code> functions should be
+  updated along the lines of:</p>
+
+  <blockquote>
+    Even though underflow or overflow may happen, the returned
+    value is independent of the current rounding direction mode.
+  </blockquote>
+
+  <p>7.12.11.4 The <code>nexttoward</code> functions should be
+  updated along the lines of:</p>
+
+  <blockquote>
+    Even though underflow or overflow may happen, the returned
+    value is independent of the current rounding direction mode.
+  </blockquote>
+
+  <p>7.12.12.2 The <code>fmax</code> functions should be updated
+  along the lines of:</p>
+
+  <blockquote>
+    The returned value is exact and is independent of the current
+    rounding direction mode.
+  </blockquote>
+
+  <p>7.12.12.3 The <code>fmin</code> functions should be updated
+  along the lines of:</p>
+
+  <blockquote>
+    The returned value is exact and is independent of the current
+    rounding direction mode.
+  </blockquote>
+
+  <p>F.9.4.5 The <code>sqrt</code> functions could be updated along
+  the lines of:</p>
+
+  <blockquote>
+    The returned value is dependent on the current rounding
+    direction mode.
+  </blockquote>
+
+  <p>Consider adding the following to section 7.12.1 (or make it
+  its own section) of the Rationale.</p>
+
+  <blockquote>
+    There are several functions that are independent of the current
+    rounding direction. Some are documented as such:
+    <code>round</code>, <code>lround</code>, <code>llround</code>,
+    <code>remainder</code> (when subnormal results are supported),
+    <code>remquo</code> (when subnormal results are supported),
+    <code>nextafter</code> (as per IEEE-754), and
+    <code>nexttoward</code> (as per C99 and
+    <code>nextafter</code>). Note, even though
+    <code>nextafter</code> and <code>nexttoward</code> can raise
+    underflow+inexact and overflow+inexact, they are not affected
+    by the rounding direction.
+  </blockquote>
+
+  <blockquote>
+    Some are independent because they are exact: <code>frexp</code>
+    (when radix is power of 2), <code>logb</code>,
+    <code>modf</code>, <code>ilogb</code>, <code>fabs</code>,
+    <code>ceil</code>, <code>floor</code>, <code>trunc</code>,
+    <code>fmod</code> (when subnormal results are supported),
+    <code>copysign</code>, <code>nan</code>, <code>fmax</code>, and
+    <code>fmin</code>.
+  </blockquote>
+
+  <blockquote>
+    There are several functions that are dependent on the current
+    rounding direction: <code>sqrt</code> (as per IEEE-754),
+    <code>nearbyint</code>, <code>rint</code>, <code>lrint</code>,
+    <code>llrint</code>, and <code>fma</code>.
+  </blockquote>
+
+  <blockquote>
+    There are many functions (it is implementation defined as to
+    which ones) that may honor the current rounding direction.
+    First are functions that are inexact for most arguments:
+    <code>acos</code>, <code>asin</code>, <code>atan</code>,
+    <code>atan2</code>, <code>cos</code>, <code>sin</code>,
+    <code>tan</code>, <code>acosh</code>, <code>asinh</code>
+    ,<code>atanh</code>, <code>cosh</code>, <code>sinh</code>,
+    <code>tanh</code>, <code>exp</code>, <code>exp2</code>,
+    <code>expm1</code>, <code>frexp</code> (when radix is not a
+    power of 2), <code>ldexp</code> (when radix is not 2),
+    <code>log</code>, <code>log10</code>, <code>log1p</code>,
+    <code>log2</code>, <code>hypot</code>, <code>pow</code>,
+    <code>cbrt</code>, <code>erf</code>, <code>erfc</code>,
+    <code>tgamma</code>, <code>lgamma</code>, and
+    <code>fdim</code>.
+  </blockquote>
+
+  <blockquote>
+    Second are functions that are exact for most arguments (but are
+    inexact when they overflow or underflow): <code>ldexp</code>
+    (when radix is 2), <code>scalbn</code>, <code>scalbln</code>,
+    <code>fmod</code> (when subnormal results are not supported),
+    <code>remainder</code> (when subnormal results are not
+    supported), and <code>remquo</code> (when subnormal results are
+    not supported).
+  </blockquote>
+  <hr>
+  <!-- Entires below the line by WG14 only. -->
+
+  <p><b>Committee Discussion</b></p>
+
+  <p>These look like new requirements on the math functions (they
+  are not). They might break an existing implementation (possible).
+  Therefore, only add these to annex F.</p>
+
+  <p>The above material for the rationale, which should be used,
+  should merge the last two paragraphs.</p>
+
+  <h4>Fall 2007</h4>
+
+  <p>It was noted that there is no rounding requirements for some
+  of the cases mentioned</p>
+
+  <h4>Spring 2008</h4>
+
+  <p>We believe that the proposed TC is correct, and nobody has
+  found any additional rounding requirements.</p>
+
+  <p><b>Technical Corrigendum</b></p>
+
+  <p>In section 7.12.10.2, remove the sentence "Thus, the remainder
+  is always exact." in footnote 204 in C99+TC1+TC2.</p>
+
+  <p>F.9.3.4 The <code>frexp</code> functions add the following
+  sentence:</p>
+
+  <blockquote>
+    When the radix of the argument is a power of 2, the returned
+    value is exact and is independent of the current rounding
+    direction mode.
+  </blockquote>
+
+  <p>F.9.3.5 The <code>ilogb</code> functions, add the following
+  sentence:</p>
+
+  <blockquote>
+    When the returned value is representable in the range of the
+    return type, the returned value is exact and is independent of
+    the current rounding direction mode.
+  </blockquote>
+
+  <p>F.9.3.11 The <code>logb</code> functions, add the following
+  sentence:</p>
+
+  <blockquote>
+    The returned value is exact and is independent of the current
+    rounding direction mode.
+  </blockquote>
+
+  <p>F.9.3.12 The <code>modf</code> functions, add the following
+  sentence:</p>
+
+  <blockquote>
+    The returned values are exact and are independent of the
+    current rounding direction mode.
+  </blockquote>
+
+  <p>F.9.4.2 The <code>fabs</code> functions, add the following
+  sentence:</p>
+
+  <blockquote>
+    The returned value is exact and is independent of the current
+    rounding direction mode.
+  </blockquote>
+
+  <p>F.9.4.5 The <code>sqrt</code> functions, add the following
+  sentence:</p>
+
+  <blockquote>
+    The returned value is dependent on the current rounding
+    direction mode.
+  </blockquote>
+
+  <p>F.9.6.1 The <code>ceil</code> functions, add the following
+  sentence:</p>
+
+  <blockquote>
+    The returned value is exact and is independent of the current
+    rounding direction mode.
+  </blockquote>
+
+  <p>F.9.6.2 The <code>floor</code> functions, add the following
+  sentence:</p>
+
+  <blockquote>
+    The returned value is exact and is independent of the current
+    rounding direction mode.
+  </blockquote>
+
+  <p>F.9.6.8 The <code>trunc</code> functions, add the following
+  sentence:</p>
+
+  <blockquote>
+    The returned value is exact and is independent of the current
+    rounding direction mode.
+  </blockquote>
+
+  <p>F.9.7.1 The <code>fmod</code> functions, add the following
+  sentence:</p>
+
+  <blockquote>
+    When subnormal results are supported, the returned value is
+    exact and is independent of the current rounding direction
+    mode.
+  </blockquote>
+
+  <p>F.9.7.2 The <code>remainder</code> functions, add the
+  following sentence:</p>
+
+  <blockquote>
+    When subnormal results are supported, the returned value is
+    exact and is independent of the current rounding direction
+    mode.
+  </blockquote>
+
+  <p>F.9.7.3 The <code>remquo</code> functions, add the following
+  sentence:</p>
+
+  <blockquote>
+    When subnormal results are supported, the returned value is
+    exact and is independent of the current rounding direction
+    mode.
+  </blockquote>
+
+  <p>F.9.8.1 The <code>copysign</code> functions, add the following
+  sentence:</p>
+
+  <blockquote>
+    The returned value is exact and is independent of the current
+    rounding direction mode.
+  </blockquote>
+
+  <p>F.9.8.2 The <code>nan</code> functions, add the following
+  sentence:</p>
+
+  <blockquote>
+    The returned value is exact and is independent of the current
+    rounding direction mode.
+  </blockquote>
+
+  <p>F.9.8.3 The <code>nextafter</code> functions, add the
+  following sentence:</p>
+
+  <blockquote>
+    Even though underflow or overflow can occur, the returned value
+    is independent of the current rounding direction mode.
+  </blockquote>
+
+  <p>F.9.8.4 The <code>nexttoward</code> functions, add the
+  following sentence:</p>
+
+  <blockquote>
+    Even though underflow or overflow can occur, the returned value
+    is independent of the current rounding direction mode.
+  </blockquote>
+
+  <p>F.9.9.2 The <code>fmax</code> functions, add the following
+  sentence:</p>
+
+  <blockquote>
+    The returned value is exact and is independent of the current
+    rounding direction mode.
+  </blockquote>
+
+  <p>F.9.9.3 The <code>fmin</code> functions, add the following
+  sentence:</p>
+
+  <blockquote>
+    The returned value is exact and is independent of the current
+    rounding direction mode.
+  </blockquote>
+
+  <p><br>
+  <a href="dr_328.htm">Previous Defect Report</a> &lt; - &gt;
+  <a href="dr_330.htm">Next Defect Report</a></p>
+</body>
+</html>

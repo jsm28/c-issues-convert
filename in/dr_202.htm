@@ -1,0 +1,356 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #202</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #202</h2>
+    <a href="dr_201.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_203.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Clive Feather (UK)<br>
+     <b>Submission Date:</b> 1999-07-06<br>
+     <b>Source:</b><br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n883.htm">ISO/IEC
+    WG14 N883</a><br>
+     <b>Version:</b> 1.4<br>
+     <b>Date:</b> 20001-01-22 03:06:02<br>
+     <b>Subject:</b> Change return type of certain
+    <tt><b>&lt;fenv.h&gt;</b></tt> functions</p>
+
+    <p><b>Summary</b><br>
+     Change the return type of various functions in 7.6.2 from
+    <tt><b>void</b></tt> to <tt><b>int</b></tt> so that they can
+    fail.</p>
+
+    <p><b>Urgency</b><br>
+     These functions are new in C99. Once the function prototypes
+    have been published it will not be practical to change them.
+    The only solution will be to produce new parallel functions
+    with a return value; because of the way these functions are
+    defined, this will involve significantly more change than just
+    that.</p>
+
+    <p><b>Rationale</b><br>
+     The functions in question are to do with the floating-point
+    exception and environment flags. The former will do as an
+    example.</p>
+
+    <p>The wording of the FDIS assumes that either:</p>
+
+    <ul>
+      <li>the implementation has full control over the flags,
+      or</li>
+
+      <li>the implementation has no control over the flags.</li>
+    </ul>
+    In the first case it defines various <tt><b>FE_</b></tt> macros
+    such as <tt><b>FE_DIVBYZERO</b></tt> for the flags. The
+    Standard then assumes that it is always possible to set or
+    clear the flag or to raise the exception. In the second case
+    the macros are not defined and so there are no valid argument
+    values for the functions (other than zero). 
+
+    <p>However, there are implementations that can do some things
+    with the flags but not others. For example, it may be possible
+    to raise exceptions but not to clear flags. This case is not
+    allowed in the present draft.</p>
+
+    <p>The two alternative proposed changes are:</p>
+
+    <blockquote>
+      <ol type="1">
+        <li>Change the return types of the functions to
+        <tt><b>int</b></tt>. For now the functions always return
+        zero (success) but a later Amendment can alter this. This
+        is the minimum to "future-proof".</li>
+
+        <li>Change the definitions properly to allow them to fail.
+        This is more complex but solves the problem once and for
+        all.</li>
+      </ol>
+    </blockquote>
+    Option 2 contains an extra item to
+    make<tt><b>fesetround</b></tt> more consistent with the other
+    changes. This change may be omitted if it will increase
+    consensus. 
+
+    <p><b>Proposed solutions</b><br>
+     <b>Option A</b> - placeholder change</p>
+
+    <p>For each of the following functions:</p>
+
+    <blockquote>
+      <tt><b>feclearexcept<br>
+       fegetexceptflag<br>
+       feraiseexcept<br>
+       fesetexceptflag<br>
+       fegetenv<br>
+       fesetenv<br>
+       feupdateenv</b></tt>
+    </blockquote>
+    change the return type to <tt><b>int</b></tt> and add the
+    following: 
+
+    <blockquote>
+      <b>Returns</b> 
+
+      <p>This function always returns zero. [*]</p>
+
+      <p>[*] This may change in a future revision of this Standard,
+      in which case a zero return will mean success and a non-zero
+      return will mean failure of some kind.</p>
+    </blockquote>
+
+    <p>Add to the Future Directions clause:</p>
+
+    <blockquote>
+      The fact that various functions in 7.6.2 and 7.6.4 always
+      return zero is an obsolescent feature.
+    </blockquote>
+
+    <p><b>Option B</b> - full change</p>
+
+    <p>In 7.6 paragraph 5, attach a footnote to the wording:</p>
+
+    <blockquote>
+      if and only if the implementation supports the floating-point
+      exception by means of the functions in 7.6.2.
+    </blockquote>
+    where the footnote is: 
+
+    <blockquote>
+      [*] The implementation supports an exception if there are
+      circumstances where a call to at least one of the functions
+      in 7.6.2, using the macro as the appropriate argument, will
+      succeed. It is not necessary for all the functions to succeed
+      all the time.
+    </blockquote>
+
+    <p>For each of the following functions:</p>
+
+    <blockquote>
+      <tt><b>feclearexcept<br>
+       fegetexceptflag<br>
+       feraiseexcept<br>
+       fesetexceptflag<br>
+       fegetenv<br>
+       fesetenv<br>
+       feupdateenv</b></tt>
+    </blockquote>
+    make changes equivalent to the following (which shows the
+    wording changes for 7.6.2.1). 
+
+    <p>In paragraph 2, replace "clears" with "attempt to
+    clear".</p>
+
+    <p>Add a new heading and paragraph 3:</p>
+
+    <blockquote>
+      <b>Returns</b> 
+
+      <p>[3] The <tt><b>feclearexcept</b></tt> function returns
+      zero if the excepts argument is zero or if all the specified
+      exceptions were successfully cleared. Otherwise it returns a
+      nonzero value.</p>
+    </blockquote>
+
+    <p>Optional additional change: replace 7.6.3.2p3 by:</p>
+
+    <blockquote>
+      [3] The <tt><b>fesetround</b></tt> function returns zero if
+      and only if the requested rounding direction was established.
+    </blockquote>
+    <hr>
+
+    <p><b>Technical Corrigendum</b><br>
+     In 7.6 paragraph 5, attach a footnote to the wording:</p>
+
+    <blockquote>
+      if and only if the implementation supports the floating-point
+      exception by means of the functions in 7.6.2.
+    </blockquote>
+    where the footnote is: 
+
+    <blockquote>
+      [*] The implementation supports an exception if there are
+      circumstances where a call to at least one of the functions
+      in 7.6.2, using the macro as the appropriate argument, will
+      succeed. It is not necessary for all the functions to succeed
+      all the time.
+    </blockquote>
+
+    <p>In 7.6.2.1 paragraph 1, change the result type from
+    <tt><b>void</b></tt> to <tt><b>int</b></tt>.</p>
+
+    <p>In 7.6.2.1 paragraph 2, replace "clears" with "attempts to
+    clear".</p>
+
+    <p>In 7.6.2.1 add a new heading and paragraph 3:</p>
+
+    <blockquote>
+      <b>Returns</b> 
+
+      <p>[#3] The <tt><b>feclearexcept</b></tt> function returns
+      zero if the excepts argument is zero or if all the specified
+      exceptions were successfully cleared. Otherwise it returns a
+      nonzero value.</p>
+    </blockquote>
+
+    <p>In 7.6.2.2 paragraph 1, change the result type from
+    <tt><b>void</b></tt> to <tt><b>int</b></tt>.</p>
+
+    <p>In 7.6.2.2 paragraph 2, replace "stores" with "attempts to
+    store".</p>
+
+    <p>In 7.6.2.2 add a new heading and paragraph 3:</p>
+
+    <blockquote>
+      <b>Returns</b> 
+
+      <p>[#3] The <tt><b>fegetexceptflag</b></tt> function returns
+      zero if the representation was successfully stored. Otherwise
+      it returns a nonzero value.</p>
+    </blockquote>
+
+    <p>In 7.6.2.3 paragraph 1, change the result type from
+    <tt><b>void</b></tt> to <tt><b>int</b></tt>.</p>
+
+    <p>In 7.6.2.3 paragraph 2, replace "raises" with "attempts to
+    raise".</p>
+
+    <p>In 7.6.2.3 add a new heading and paragraph 3:</p>
+
+    <blockquote>
+      <b>Returns</b> 
+
+      <p>[#3] The <tt><b>feraiseexcept</b></tt> function returns
+      zero if the excepts argument is zero or if all the specified
+      exceptions were successfully raised. Otherwise it returns a
+      nonzero value.</p>
+    </blockquote>
+
+    <p>In 7.6.2.4 paragraph 1, change the result type from
+    <tt><b>void</b></tt> to <tt><b>int</b></tt>.</p>
+
+    <p>In 7.6.2.4 paragraph 2, replace "sets" with "attempts to
+    set".</p>
+
+    <p>In 7.6.2.4 add a new heading and paragraph 3:</p>
+
+    <blockquote>
+      <b>Returns</b> 
+
+      <p>[#3] The <tt><b>fesetexceptflag</b></tt> function returns
+      zero if the excepts argument is zero or if all the specified
+      flags were successfully set to the appropriate state.
+      Otherwise it returns a nonzero value.</p>
+    </blockquote>
+
+    <p>In 7.6.3.2 replace paragraph 3 by:</p>
+
+    <blockquote>
+      [#3] The <tt><b>fesetround</b></tt> function returns zero if
+      and only if the requested rounding direction was established.
+    </blockquote>
+
+    <p>In 7.6.4.1 paragraph 1, change the result type from
+    <tt><b>void</b></tt> to <tt><b>int</b></tt>.</p>
+
+    <p>In 7.6.4.1 paragraph 2, replace "stores" with "attempts to
+    store".</p>
+
+    <p>In 7.6.4.1 add a new heading and paragraph 3:</p>
+
+    <blockquote>
+      <b>Returns</b> 
+
+      <p>[#3] The <tt><b>fegetenv</b></tt> function returns zero if
+      representation was successfully stored. Otherwise it returns
+      a nonzero value.</p>
+    </blockquote>
+
+    <p>In 7.6.4.3 paragraph 1, change the result type from
+    <tt><b>void</b></tt> to <tt><b>int</b></tt>.</p>
+
+    <p>In 7.6.4.3 paragraph 2, replace "establishes" with "attempts
+    to establish".</p>
+
+    <p>In 7.6.4.3 add a new heading and paragraph 3:</p>
+
+    <blockquote>
+      <b>Returns</b> 
+
+      <p>[#3] The <tt><b>fesetenv</b></tt> function returns zero if
+      the environment was successfully established. Otherwise it
+      returns a nonzero value.</p>
+    </blockquote>
+
+    <p>In 7.6.4.4 paragraph 1, change the result type from
+    <tt><b>void</b></tt> to <tt><b>int</b></tt>.</p>
+
+    <p>In 7.6.4.4 paragraph 2, replace "saves" with "attempts to
+    save", replace "installs" by "install", and replace "raises" by
+    "raise".</p>
+
+    <p>In 7.6.4.4 add a new heading and paragraph 3:</p>
+
+    <blockquote>
+      <b>Returns</b> 
+
+      <p>[#3] The <tt><b>feupdateenv</b></tt> function returns zero
+      if all the actions were successfully carried out. Otherwise
+      it returns a nonzero value.</p>
+    </blockquote>
+
+    <p>In 7.6.4.4 change to existing paragraph 3, also renumbering
+    it as 4:</p>
+
+    <blockquote>
+      [#3] EXAMPLE Hide spurious underflow floating-point
+      exceptions:
+    </blockquote>
+<pre>
+<tt><b>       #include &lt;fenv.h&gt;
+         double f(double x)
+         {
+             #pragma STDC FENV_ACCESS ON
+             double result;
+             fenv_t save_env;
+             if (feholdexcept(&amp;save_env))
+                 return /*</b></tt> <i>indication of an environmental problem</i><tt><b>*/;
+             //</b></tt> <i>compute result</i><tt><b>           if (/*</b></tt> <i>test spurious underflow</i><tt><b>*/)
+                 if (feclearexcept(FE_UNDERFLOW))
+                     return /*</b></tt> <i>indication of an environmental problem</i> <tt><b>*/;
+             if (feupdateenv(&amp;save_env))
+                 return /*</b></tt> <i>indication of an environmental problem</i><tt><b>*/;
+             return result;
+         }</b></tt>
+</pre>
+
+    <p>In Annex B change the return types for the following to
+    <tt><b>int</b></tt>.</p>
+
+    <blockquote>
+      <tt><b>feclearexcept<br>
+       fegetexceptflag<br>
+       feraiseexcept<br>
+       fesetexceptflag<br>
+       fegetenv<br>
+       fesetenv<br>
+       feupdateenv</b></tt>
+    </blockquote>
+
+    <p><br>
+     <a href="dr_201.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_203.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

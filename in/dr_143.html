@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #143</TITLE></HEAD>
+<BODY><H2>Defect Report #143</H2> 
+<B>Submission Date</B>: 23 Feb 95
+<BR>
+<B>Submittor</B>: BSI
+<BR>
+<B>Source</B>: Clive D.W. Feather
+<BR>
+<B>Question</B>
+<BR>
+<I>Submitted to BSI by Clive D.W. Feather clive@sco.com.</I>
+<BR>
+<I>In this Defect Report, identifiers lexically identical to those 
+declared in standard headers refer to the identifiers declared in  those
+standard headers, whether or not the header is explicitly mentioned.</I>
+<BR>
+<I>This Defect Report has been prepared with considerable help from 
+Mark Brader, Jutta Degener, Ronald Guilmette, and a person whose
+employment  conditions require anonymity. However, except where stated,
+opinions  expressed or implied should not be assumed to be those of any
+person  other than myself.</I>
+<BR> Defect Report UK 027: fopen modes
+<BR>
+<I>[BSI characterize this issue as minor.]</I>
+<BR> The definition of file opening modes is self-contradictory.
+<BR> Subclause 7.9.5.3 reads in part:
+<BLOCKQUOTE> The argument mode points to a string beginning with one of the 
+following sequences:
+</BLOCKQUOTE> and then lists all of <TT><B>r</B></TT>, <TT><B>r+</B></TT>,
+<TT><B>rb</B></TT>, and <TT><B>rb+</B></TT> or 
+<TT><B>r+b</B></TT>, with different meanings. Obviously, it is
+possible for  a string to begin with up to three of these
+simultaneously, and thus  the quoted text is contradictory.
+<BR> Also, the wording is confusing since it can easily be misread as
+"beginning  with exactly one of the following sequences," which would
+prohibit  those of the specified modes that are longer than one
+character.
+<BR>
+<B>Suggested Technical Corrigendum:</B>
+<BR> Change the quoted text to:
+<BLOCKQUOTE> The mode is determined by the longest match of the following 
+sequences to the initial characters of the string pointed to by the 
+argument <TT><B>mode</B></TT>; at least the initial character shall
+match.
+</BLOCKQUOTE> Suggested Future Change
+<BR> The current C Standard has correct meaning, but the wording could 
+be clearer. We suggest the following change for the revised C Standard:
+<BLOCKQUOTE> The argument <TT><B>mode</B></TT> points to a string. The mode
+is determined  by the string's longest initial match to the following
+sequences;  at least the initial character shall match:
+</BLOCKQUOTE>
+<A HREF="dr_142.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_144.html">Next Defect Report</A>
+</BODY></HTML>

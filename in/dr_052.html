@@ -1,0 +1,59 @@
+<HTML><HEAD><TITLE>Defect Report #052</TITLE></HEAD><BODY>
+<H2>Defect Report #052</H2>
+<B>Submission Date</B>: 21 Mar 93
+<BR>
+<B>Submittor</B>: Project Editor (P.J. Plauger)
+<BR>
+<B>Source</B>: Paul Edwards
+<BR>
+<B>Question</B> 1
+<BR>
+In subclause 7.12.2.3, page 172, the example is not strictly conforming. 
+The <TT><B>mktime</B></TT> return is compared against <TT><B>-1</B></TT> instead of <TT><B>(time_t)-1</B></TT>, 
+which could cause a problem with a strictly conforming implementation.
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>In subclause 7.12.2.3, page 172, line 16, change:</B></I>
+<BLOCKQUOTE>
+<TT><B>if (mktime(&time_str) == -1)
+</B></TT></BLOCKQUOTE>
+<I><B>to:</B></I>
+<BLOCKQUOTE>
+<TT><B>if (mktime(&time_str) == (time_t)-1)
+</B></TT></BLOCKQUOTE>
+<B>Question</B> 2
+<BR>
+Index entry for <TT><B>static</B></TT> lists subclause 3.1.2.2 instead of subclause 
+6.1.2.2.
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>In the index, page 217, change:</B></I>
+<BR>
+<TT><B>static</B></TT> storage-class specifier, 3.1.2.2, 6.1.2.4, <B>6.5.1</B>, 
+6.7
+<BR>
+<I><B>to:</B></I>
+<BR>
+<TT><B>static</B></TT> storage-class specifier, 6.1.2.2, 6.1.2.4, <B>6.5.1</B>, 
+6.7
+<BR>
+<B>Question</B> 3
+<BR>
+Footnote 1, page 1, says that the C Standard comes with a Rationale; 
+it doesn't.
+<BR>
+<B>Response</B>
+<BR>
+The footnote actually states, in part, ``It is accompanied by a 
+Rationale document that explains ...'' And indeed, the C Standard 
+was accompanied by such a document throughout its approval process. 
+ISO, unfortunately, has elected not to distribute the Rationale with 
+the C Standard. ``Accompanied by'' does not promise ``comes 
+with'' when you buy the C Standard.
+<BR>
+<A HREF="dr_051.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_053.html">Next Defect Report</A>
+</BODY></HTML>

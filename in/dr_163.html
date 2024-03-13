@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #163</TITLE></HEAD>
+<BODY><H2>Defect Report #163</H2> 
+<B>Submission Date</B>: 16 Oct 95
+<BR>
+<B>Submittor</B>: BSI
+<BR>
+<B>Source</B>: Clive D.W. Feather
+<BR>
+<B>Question</B>
+<BR>
+<I>Submitted to BSI by Clive D.W. Feather  clive@sco.com .</I>
+<BR>
+<I>In this Defect Report, identifiers lexically identical to those 
+declared in standard headers refer to the identifiers declared in  those
+standard headers, whether or not the header is explicitly mentioned.</I>
+<BR>
+<I>This Defect Report has been prepared with considerable help from 
+Mark Brader, Jutta Degener, Ronald Guilmette, and a person whose
+employment  conditions require anonymity. However, except where stated,
+opinions  expressed or implied should not be assumed to be those of any
+person  other than myself.</I>
+<BR> Defect Report UK 011: Undeclared identifiers
+<BR> The C Standard is not clear on whether the use of an undeclared
+identifier  as a primary expression requires a diagnostic message.
+<BR> Subclause 6.3.1 states that:
+<BR> An identifier is a primary expression, provided it has been 
+declared as designating an object (in which case it is an lvalue)  or a
+function (in which case it is a function designator).
+<BR> It has been suggested that if no declaration of some identifier is
+ visible in the current scope when that identifier appears in an
+expression,  the identifier is not a primary expression, and therefore
+the syntax  of subclause 6.3.1 is violated (in other words, there is no
+valid  parse for the expression). This would thus require a diagnostic
+for  an undeclared identifier.
+<BR> Is this interpretation correct? If yes, then it needs to be made
+clear  that this does not prevent a previously undeclared function from
+being  called by a strictly conforming program (see 6.3.2.2).
+<BR> If not, does an undeclared identifier require a diagnostic, and if
+ so, why? If not, is this a deliberate policy, or is it a defect that 
+needs correction?
+<BR> Response
+<BR> Identifiers that designate objects must be declared and be visible
+ before they can be primary expressions (subclause 6.1.2.1, <I>An 
+identifier is visible (i.e., can be used) ...</I>). A reasonable  person
+could interpret that if no declaration of some identifier is  visible,
+the identifier cannot be a primary expression. This affects  undeclared
+identifiers that are intended to be used as implicitly  declared
+functions. The Committee's intent is that the C Standard  be read in the
+following order:
+<BR> 1.  <B>6.3.1  Primary expressions</B>
+<BR>   <B>Syntax</B>
+<BR>
+<TT>          primary-expression:<BR>                        
+identifier<BR>
+</TT><BR> 2.  <B>6.3.2.2  Function calls</B>
+<BR>
+<B>Semantics</B>
+<BR> If the expression that precedes the parenthesized argument list 
+in a function call consists solely of an identifier, and if no
+declaration  is visible for this identifier, the identifier is
+implicitly declared exactly as if, in the innermost block containing the
+function call,  the declaration
+<BR>
+<TT><B>extern int identifier();</B></TT>
+<BR> appeared.
+<BR> 3.  6.3.1  <B>Primary expressions</B>
+<BR>
+<B>Semantics</B>
+<BR> An identifier is a primary expression, provided it has been 
+declared as designating ... a function (...).
+<BR> However, a reasonable person may not interpret the current wording
+ as having that meaning (i.e., it might not be read in that order). 
+This needs to be clarified in the next revision of the C Standard.<BR>
+<BR>
+<B>Response</B>
+<BR>
+Identifiers must be declared and visible before they can be
+primary expressions (Subclause 6.1.2.1, "An identifier is
+visible (i.e., can be used) ...").  If no declaration of
+some identifier is visible, the identifier cannot be a
+primary expression, and a diagnostic is required for a
+violation of the syntax rule.
+<BR>
+Note that a declaration of an identifier might be visible due to
+the identifier being implicitly declared (Subclause 6.3.2.2).
+This should be clarified in the Standard.
+<BR><BR>
+<B>Future Change</B>
+<BR>
+In Subclause 6.3.1, first paragraph in "Semantics"
+<BR>
+Change
+<BLOCKQUOTE>
+"An identifier is a primary expression, provided is has been declared
+as designating an object (in which case it is an lvalue) or a function
+(in which case it is a function designator)."
+</BLOCKQUOTE>
+To
+<BLOCKQUOTE>
+"An identifier is a primary expression, provided is has been declared
+as designating an object (in which case it is an lvalue) or implicitly<B>*</B>
+or explicitly declared as designating a function (in which case it is a
+function designator)."
+<BR>
+The<B> *</B> above references the new footnote:
+</BLOCKQUOTE>
+"See 6.3.2.2."
+<BR><A HREF="dr_162.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_164.html">Next Defect Report</A></BODY></HTML>

@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #115</TITLE></HEAD><BODY>
+<H2>Defect Report #115</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Ron Guilmette
+<BR>
+<B>Question</B>
+<BR>
+ANSI/ISO C Defect Report #rfg22:
+<BR>
+Subject: Member declarators as declarators.
+<BR>
+a) Does the following code involve usage which requires a 
+diagnostic from a conforming implementation?
+<BR>
+b) Does the following code involve usage which renders the 
+code itself not strictly conforming?
+<BR>
+<TT><B>
+struct { int mbr; };   /*</B><I> ? </I><B>*/<BR>
+union  { int mbr; };   /*</B><I> ? </I><B>*/
+</B></TT><BR>
+Background:
+<BR>
+Subclause 6.5 (<B>Constraints</B>):
+<BLOCKQUOTE>
+A declaration shall declare at least a declarator, a tag, or 
+the members of an enumeration.
+</BLOCKQUOTE>
+It is not entirely clear what it means to ``declare'' a declarator. 
+Neither is it clear whether or not a declarator for a member should 
+be considered to satisfy the constraint quoted above. (Many existing 
+implementations behave as if member declarators <I>do not</I> satisfy 
+the constraint.)
+<BR>
+<B>Response</B>
+<BR>
+The Committee agrees that the quoted constraint can be read either 
+way. Hence, a diagnostic is not required, but a program that uses
+such a form has undefined behavior.
+In the case of an aggregate, the intent was to require a tag or 
+declarator for the aggregate itself. Thus, it is not unreasonable to 
+issue a diagnostic for the given example. However, since the 
+constraint can be read either way, an implementation could actually 
+compile such a case though it is marginally useful at best.
+<BR>
+<A HREF="dr_114.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_116.html">Next Defect Report</A>
+</BODY></HTML>

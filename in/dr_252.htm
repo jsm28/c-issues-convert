@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #252</title>
+  </head>
+
+  <body bgcolor="#FFFFFF">
+    <h2 align="center">Defect Report #252</h2>
+    <a href="dr_251.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_253.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> UK C Panel<br>
+     <b>Submission Date:</b> 2001-09-07<br>
+     <b>Source:</b> Clive D.W. Feather &lt;clive@demon.net&gt;<br>
+     <b>Version:</b> 1.1<br>
+     <b>Date:</b> 2002-03-06<br>
+     <b>Subject:</b> incomplete argument types when calling
+    non-prototyped functions</p>
+    <b>Problem</b> 
+
+    <p>Consider the code:</p>
+<pre>
+<tt><b>   void jim ();
+    void sheila (void);
+    //</b> <i>...</i> <b>  sheila (jim ());   /*</b> <i>Line A</i> <b>*/
+    jim (sheila ());   /*</b> <i>Line B</i> <b>*/
+</b></tt>
+</pre>
+
+    <p>Line A violates the constraint of 6.5.2.2#2, that requires
+    the argument to have a type that can be assigned to the
+    parameter type. But line B doesn't because that constraint only
+    applies to prototyped functions. 6.5.2.2#4 reads in part:</p>
+
+    <blockquote>
+      <p>[#4] An argument may be an expression of any object
+      type.</p>
+    </blockquote>
+
+    <p>but this is not a constraint. Should it not be ? After all,
+    the compiler has to know the type of the argument in order to
+    compile the function call, so it can check at that point that
+    the argument has a complete object type.</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Add a new paragraph #1a following 6.5.2.2#1:</p>
+
+    <blockquote>
+      <p>[#1a] Each argument shall have a type which is a completed
+      object type.</p>
+    </blockquote>
+    <hr>
+
+    <p><b>Committee Response</b></p>
+
+    <blockquote>
+      This should not be a constraint.
+    </blockquote>
+
+    <p><br>
+     <a href="dr_251.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_253.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

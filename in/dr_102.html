@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #102</TITLE></HEAD><BODY>
+<H2>Defect Report #102</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Ron Guilmette
+<BR>
+<B>Question</B>
+<BR>
+ANSI/ISO C Defect report #rfg9:
+<BR>
+Subclause 6.5 <B>Constraints</B> says:
+<BR>
+If an identifier has no linkage, there shall be no more than 
+one declaration of the identifier (in a declarator or type specifier) 
+with the same scope and in the same name space, except for tags as 
+specified in 6.5.2.3.
+<BR>
+Subclause 6.5.2.3, <B>Semantics</B> section says:
+<BR>
+Subsequent declarations [of a tag] in the same scope shall omit 
+the bracketed list.
+<BR>
+Given that one of the above two rules appears in a <B>Constraints</B> section, 
+while the other appears in a <B>Semantics</B> section, it is ambiguous 
+whether or not diagnostics are strictly required in the following 
+cases (in which more than one defining declaration of each tag appears 
+within a single scope):
+<BR>
+<TT><B>void example ()<BR>
+	{<BR>
+	struct S { int member; };<BR>
+	struct S { int member; };  /*</B><I> diagnostic required? </I><B>*/<BR>
+<BR>
+	union U { int member; };<BR>
+	union U { int member; };   /*</B><I> diagnostic required? </I><B>*/<BR>
+<BR>
+	enum E { member };<BR>
+	enum E { member };         /*</B><I> diagnostic required? </I><B>*/<BR>
+	}
+</B></TT><BR>
+<B>Response</B>
+<BR>
+A diagnostic is required for the <TT><B>struct</B></TT>,
+<TT><B>union</B></TT>, and <TT><B>enum</B></TT> redeclarations 
+indicated in the question. Subclause 6.5 indicates that there must 
+be a diagnostic ``except for tags as specified in 6.5.2.3.'' 
+In subclause 6.5.2.3, the specified exception is for subsequent declarations 
+that omit the bracketed list.
+<BR>
+See also the response to <A HREF="dr_017.html#Question3">Defect Report #017, Question 3</A>.
+<BR>
+<A HREF="dr_101.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_103.html">Next Defect Report</A>
+</BODY></HTML>

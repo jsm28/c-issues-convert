@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #201</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #201</h2>
+    <a href="dr_345.htm">Last Defect Report</a> &lt; - &gt; <a
+    href="dr_202.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Clive Feather (UK)<br>
+     <b>Submission Date:</b> 1999-07-06<br>
+     <b>Source:</b><br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n883.htm">ISO/IEC
+    WG14 N883</a><br>
+     <b>Version:</b> 1.9<br>
+     <b>Date:</b> 2007-09-06<br>
+     <b>Subject:</b> Integer types longer than
+    <tt><b>long</b></tt></p>
+
+    <p><b>Summary</b><br>
+     Require that <tt><b>size_t</b></tt> be no wider than
+    <tt><b>unsigned long</b></tt> and <tt><b>ptrdiff_t</b></tt> be
+    no wider than <tt><b>signed long</b></tt>.</p>
+
+    <p><b>Urgency</b><br>
+     If this change is not made now, there will be a window of
+    opportunity - of at least two years - when implementations can
+    make <tt><b>size_t</b></tt> be wider than <tt><b>unsigned
+    long</b></tt>. By the time any future Amendment is ready it
+    will be impractical to re-impose the restriction. If the change
+    <b>is</b> made now, it can always be relaxed if it becomes
+    necessary.</p>
+
+    <p><b>Rationale</b><br>
+     Various types in the Standard are defined as integer types.
+    Two of these <tt><b>size_t</b></tt> and
+    <tt><b>ptrdiff_t</b></tt> - are frequently manipulated and on
+    many implementations need to hold values of the same order as
+    <tt><b>[un]signed long</b></tt>. In C89 there are various
+    programming idioms that involve these types but also need a
+    standard integer type. For example:</p>
+
+    <blockquote>
+      <tt><b>printf ("%lu", (unsigned long) sizeof X);</b></tt>
+    </blockquote>
+    or: 
+
+    <blockquote>
+      <tt><b>int *P1, *P2;</b></tt><br>
+       <tt><b>... /*</b></tt> <i>make P1 and P2 point into the same
+      array</i><tt><b>*/</b></tt><br>
+       <tt><b>malloc (sizeof (int) * labs (P1 - P2));</b></tt>
+    </blockquote>
+    If these types are allowed to become wider than long, these
+    idioms will stop working. More importantly, this might not
+    happen when the code is compiled but rather when large values
+    first get used by a previously working program. This is clearly
+    a Quiet Change. 
+
+    <p>There do not appear to be any implementations which would be
+    affected by this proposal, and it eliminates the vast majority
+    of potential problems with these two types. While there are
+    other types that theoretically meet these criteria, such as
+    <tt><b>sig_atomic_t</b></tt>, in practice they are unlikely to
+    be larger than long and no action is needed. There are also
+    types in POSIX and other standards, such as
+    <tt><b>off_t</b></tt>, which are similarly affected, but they
+    are outside the scope of C9X; the recommended practice section
+    would assist them.</p>
+
+    <p><b>Suggested Technical Corrigendum</b><br>
+     Append a new paragraph to 7.18.3:</p>
+
+    <blockquote>
+      The value of <tt><b>SIZE_MAX</b></tt> shall be no greater
+      than that of <tt><b>ULONG_MAX</b></tt>. The absolute values
+      of <tt><b>PTRDIFF_MIN</b></tt> and
+      <tt><b>PTRDIFF_MAX</b></tt> shall be no greater than those of
+      <tt><b>LONG_MIN</b></tt> and<tt><b>LONG_MAX</b></tt>
+      respectively.
+    </blockquote>
+    or change the first part of 7.17 paragraph 2 to: 
+
+    <blockquote>
+      [#2] The types are <tt><b>ptrdiff_t</b></tt> which is the
+      signed integer type of the result of subtracting two pointers
+      (the width of <tt><b>ptrdiff_t</b></tt> shall be no greater
+      than that of <tt><b>signed long</b></tt>); 
+
+      <blockquote>
+        <tt><b>size_t</b></tt>
+      </blockquote>
+      which is the unsigned integer type of the result of the
+      <tt><b>sizeof</b></tt> operator (the width of
+      <tt><b>size_t</b></tt> shall be no greater than that of
+      unsigned long); or both (the changes are equivalent in
+      effect).
+    </blockquote>
+
+    <p>Possibly also add the following paragraph somewhere (perhaps
+    in 6.3.1.3):</p>
+
+    <blockquote>
+      Recommended practice 
+
+      <p>Implementations should provide a mode which will warn of
+      conversions (including those involving an explicit cast)
+      where:</p>
+
+      <ul>
+        <li>the original value was taken from an object whose type
+        is derived from a typedef defined in a header provided by
+        the implementation;</li>
+
+        <li>that type has a conversion rank greater than that of
+        signed long;</li>
+
+        <li>the result type has a conversion rank equal to that of
+        signed long.</li>
+      </ul>
+      (Headers provided by the implementation are not limited to
+      those defined by this Standard, but explicitly excludes
+      &lt;<tt><b>stdint.h&gt;</b></tt>.)
+    </blockquote>
+    <hr>
+
+    <p><b>Committee Response</b><br>
+     There is no consensus to make this change or any change along
+    this line.</p>
+
+    <p><br>
+     <a href="dr_345.htm">Last Defect Report</a> &lt; - &gt; <a
+    href="dr_202.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

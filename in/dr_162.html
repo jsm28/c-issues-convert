@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #162</TITLE></HEAD>
+<BODY><H2>Defect Report #162 </H2> 
+<B>Submission Date</B>: 16 Oct 95
+<BR>
+<B>Submittor</B>: BSI
+<BR>
+<B>Source</B>: Clive D.W. Feather
+<BR>
+<B>Question</B>
+<BR>
+<I>Submitted to BSI by Clive D.W. Feather  clive@sco.com .</I>
+<BR>
+<I>In this Defect Report, identifiers lexically identical to those declared in standard headers refer to
+  the identifiers declared in  those standard headers, whether or not the header is explicitly mentioned.</I>
+<BR>
+<I>This Defect Report has been prepared with considerable help from 
+Mark Brader, Jutta Degener, Ronald Guilmette, and a person whose
+employment  conditions require anonymity. However, except where stated,
+opinions  expressed or implied should not be assumed to be those of any
+person  other than myself.</I>
+<BR> Defect Report UK 010: <TT><B>gmtime</B></TT> and <TT><B>localtime</B></TT>
+<BR> The C Standard's description of the static objects used by <TT><B>
+ time.h </B></TT>  functions is misleading.
+<BR> Subclause 7.12.3 reads in part:
+<BR> these functions return values in one of two static objects:  a
+broken-down time structure and an array of <TT><B>char</B></TT>.
+Execution  of any of the functions may overwrite the information
+returned in  either of these objects by any of the other functions.
+<BR> Does this mean that, for example, <TT><B>localtime</B></TT> and<B></B>
+<TT><B>gmtime</B></TT>  must share a single broken-down time
+structure, and so the value returned  from <TT><B>gmtime</B></TT>, if
+not a null pointer, must equal the value returned  from <TT><B>localtime</B></TT>
+(and this value cannot change during execution  of the program)?
+<BR> The wording <I>the other functions</I> also implies that a call 
+to <TT><B>gmtime</B></TT> can overwrite a previous call to <TT><B>localtime</B></TT>,
+ but not a previous call to <TT><B>gmtime</B></TT>. This is clearly ridiculous.
+<BR>
+<B>Suggested Technical Corrigendum</B>
+<BR> In subclause 7.12.3, change:
+<BR> these functions return values in one of two static objects:  a
+broken-down time structure and an array of <TT><B>char</B></TT>.
+Execution  of any of the functions may overwrite the information
+returned in  either of these objects by any of the other functions.
+<BR> to:
+<BR> these functions each return a pointer to an object of static 
+storage duration after assigning a value to it. Execution of any of 
+these functions may overwrite the information returned in any of these 
+objects by a previous call to any of these functions.<BR>
+<B>Future Change</B><BR>
+In subclause 7.12.3, change:
+<BLOCKQUOTE>Except for the <TT><B>strftime</B></TT> function, these functions return
+values in one of two static objects: a broken-down time structure and an array of <TT><B>char</B></TT>.
+Execution of any of the functions may overwrite the information returned in either of
+these objects by any of the other functions.</BLOCKQUOTE>
+to:
+<BLOCKQUOTE>Except for the <TT><B>strftime</B></TT> function, these functions each
+return a pointer to one of two types of static objects:  a broken-down time 
+structure or an array of <TT><B>char</B></TT>.  Execution of any of the functions that return a pointer to one of these object types may overwrite the information in any object of the same
+type pointed to by the value retruned from any previous call to any of them.
+</BLOCKQUOTE>
+<A HREF="dr_161.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_163.html">Next Defect Report</A></BODY></HTML>

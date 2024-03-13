@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #170</TITLE></HEAD>
+<BODY><H2>Defect Report #170</H2> 
+<B>Submission Date</B>: 16 Oct 95
+<BR>
+<B>Submittor</B>: BSI
+<BR>
+<B>Source</B>: Clive D.W. Feather
+<BR>
+<B>Question</B>
+<BR>
+<I>Submitted to BSI by Clive D.W. Feather  clive@sco.com .</I>
+<BR>
+<I>In this Defect Report, identifiers lexically identical to those 
+declared in standard headers refer to the identifiers declared in  those
+standard headers, whether or not the header is explicitly mentioned.</I>
+<BR>
+<I>This Defect Report has been prepared with considerable help from 
+Mark Brader, Jutta Degener, Ronald Guilmette, and a person whose
+employment  conditions require anonymity. However, except where stated,
+opinions  expressed or implied should not be assumed to be those of any
+person  other than myself.</I>
+<BR> Defect Report UK 018: Operators and punctuators
+<BR> The description of operators and punctuators is confusing, and the
+ constraints are contradictory.
+<BR> Subclause 6.1.5 Constraints reads:
+<BR> The operators <TT><B>[ ]</B></TT>, <TT><B>( )</B></TT>, and
+<TT><B>? :</B></TT> shall occur  in pairs, possibly separated by
+expressions. The operators <TT><B>#</B></TT>  and <TT><B>##</B></TT>
+shall occur in macro-defining preprocessing directives  only.
+<BR> Subclause 6.1.6 Constraints reads:
+<BR> The punctuators <TT><B>[ ]</B></TT>, <TT><B>( )</B></TT>, and
+<TT><B>{ }</B></TT> shall occur (after  translation phase 4) in pairs,
+possibly separated by expressions,  declarations, or statements. The
+punctuator <TT><B>#</B></TT> shall occur in  preprocessing directives
+only.
+<BR> Consider the code:
+<BR>
+<TT><B>#define STR(x)  #x<BR> STR ({)    /*</B><I> Line A</I> <B>*/<BR> STR (:)    /*</B>
+<I>Line B</I> <B>*/<BR> STR ([)    /*</B><I> Line C</I><B> */<BR> STR (#)    /*</B><I> Line D</I><B> */</B>
+</TT><BR> Line A appears to be strictly conforming, since the first
+sentence  of the constraint of subclause 6.1.6 does not apply during
+translation  phase 4. Line B violates the constraint of subclause 6.1.5.
+The interpretation  of line C depends on whether the <TT><B>[</B></TT>
+is an operator or a punctuator!
+<BR> Line D violates both constraints, but again which one depends on
+whether  it is an operator or a punctuator, something which is not made
+clear  in the C Standard.
+<BR> Assuming that the intent was for line B to be strictly conforming,
+ and that <I>(after translation phase 4)</I> was inadvertently omitted 
+from subclause 6.1.5, the first sentence of each of these Constraints 
+is nugatory, as any program that violates these constraints also
+violates  a syntax rule elsewhere in clause 6. The remaining sentences
+would  be better expressed as part of subclause 6.8. It is also arguable
+ that the concepts of operator and punctuator are better merged at  the
+syntactic level, and separated out only at the semantic level.
+<BR>
+<B>Suggested Technical Corrigendum</B>
+<BR> Delete the Constraints of subclauses 6.1.5 and 6.1.6. Add the
+following  constraint to 6.8:
+<BR> A <TT><B>#</B></TT> preprocessing token shall only occur within
+a replacement-list  or when permitted by the syntax rules of this
+subclause. A <TT><B>##</B></TT>  preprocessing token shall only occur
+within a replacement-list.
+<BR> Add to the end of the Constraints of subclause 6.1, just before
+the  full stop:
+<BR> , and shall not be <TT><B>#</B></TT> or <TT><B>##</B></TT>
+<BR>
+<B>Alternative Suggested Technical Corrigendum</B>
+<BR> In subclause 6.1 syntax, delete both occurences of <I>operator</I>
+ and replace the second occurence of <I>punctuator</I> by <I>pp-punctuator.</I>
+<BR> Delete subclauses 6.1.5 and 6.1.6, and replace them by the
+following:
+<BR>
+<B>6.1.5 Punctuators</B>
+<BR>
+<B>Syntax:</B>
+<BR>
+<TT>  pp-punctuator:<BR>                 punctuator<BR>              
+  pp-only-punctuator<BR>         pp-only-punctuator: one of<BR>       
+         # ## defined<BR>         punctuator:<BR>                 [ ]
+( ) { } . - <BR>                 ++ -- & * + - ~ ! sizeof<BR>         
+       / %            =  = == != ^ | && ||<BR>                 ? : , :
+; ...<BR>                 = *= /= %= += -=   =   = &= ^= |=
+</TT><BR>
+<B>Semantics:</B>
+<BR> A punctuator is a symbol that has independent syntactic and 
+semantic significance. Depending on context, some punctuators may 
+specify an operation to be performed (an <I>evaluation</I>) that yields
+ a value, or yields a designator, or produces a side-effect, or a
+combination  thereof; in that context, the punctuator is known as an <I>operator.</I>
+ An <I>operand</I> is an entity on which an operator acts.
+<BR> Add the following constraint to 6.8:
+<BR> A <TT><B>#</B></TT> preprocessing token shall only occur within
+a replacement-list  or when permitted by the syntax rules of this
+subclause. A <TT><B>##</B></TT>  preprocessing token shall only occur
+within a replacement-list.
+<BR> Response
+<BR> This is a work in progress item.
+<BR> General feeling is that this should be cleaned up for C9X along
+the  lines of C++ pp-punctuator grammar.
+<BR> Suggested response is to add words to subclause 6.1.5 along the
+lines, 
+<I>shall occur in pairs within expressions...</I><BR>
+<A HREF="dr_169.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_171.html">Next Defect Report</A></BODY></HTML>

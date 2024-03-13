@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect Report #219</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #219</h2>
+    <a href="dr_218.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_220.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Clive Feather (UK)<br>
+     <b>Submission Date:</b> 2000-04-04<br>
+     <b>Source:</b><br>
+     <b>Reference Document:</b> N/A<br>
+     <b>Version:</b> 1.4<br>
+     <b>Date:</b> 2006-04-04<br>
+     <b>Subject:</b> Effective types</p>
+
+    <p><b>Summary</b><br>
+     6.5 reads:</p>
+
+    <blockquote>
+      [#6] [...] If a value is copied into an object having no
+      declared type using <tt><b>memcpy</b></tt> or
+      <tt><b>memmove</b></tt>, or is copied as an array of
+      character type, then the effective type of the modified
+      object for that access and for subsequent accesses that do
+      not modify the value is the effective type of the object from
+      which the value is copied, if it has one. For all other
+      accesses to an object having no declared type, the effective
+      type of the object is simply the type of the lvalue used for
+      the access.
+    </blockquote>
+
+    <p>Now consider the code extract:<br>
+    </p>
+<pre>
+<tt><b> struct s { char c; int i; long l; double d; } s = { 1, 2, 3, 4 };
+     size_t len1 = sizeof (int);
+     size_t len2 = offsetof (s, d) - offsetof (s, i));
+     void *p1 = malloc (len1); assert (p1);
+     void *p2 = malloc (len2); assert (p2);
+     memcpy (p1, (char *)&amp;s + offsetof (s, i), len1);
+     memcpy (p2, (char *)&amp;s + offsetof (s, i), len2);</b></tt>
+</pre>
+    <br>
+     What are the effective types of <tt><b>p1</b></tt> and
+    <tt><b>p2</b></tt> ? The cited text would imply that they are
+    both <tt><b>struct s</b></tt>, even though this is patently
+    nonsense. <br>
+     <br>
+     
+    <hr>
+
+    <p><b>Committee Discussion</b><br>
+     Consider:</p>
+
+    <blockquote>
+      1. <tt><b>struct s { char c; int i; long l; double d; } s = {
+      1, 2, 3, 4 };<br>
+      </b></tt> 2. <tt><b>size_t len1 = sizeof (int);<br>
+      </b></tt> 3. <tt><b>size_t len2 = offsetof (s, d) - offsetof
+      (s, i));<br>
+      </b></tt> 4. <tt><b>void *p1 = malloc (len1); assert
+      (p1);<br>
+      </b></tt> 5. <tt><b>void *p2 = malloc (len2); assert
+      (p2);<br>
+      </b></tt> 6. <tt><b>memcpy (p1, (char *)&amp;s + offsetof (s,
+      i), len1);<br>
+      </b></tt> 7. <tt><b>memcpy (p2, (char *)&amp;s + offsetof (s,
+      i), len2);</b></tt>
+    </blockquote>
+
+    <p>In lines 6 and 7, the type of the source object in the
+    <tt><b>memcpy</b></tt> is an array of <tt><b>char</b></tt>
+    because the dereference of <tt><b>(char *)&amp;s + ...</b></tt>
+    is a <tt><b>char</b></tt>. This is inferred by:</p>
+
+    <blockquote>
+      - "<tt><b>(</b></tt><i>some_type</i><tt><b>*)x</b></tt>" has
+      the type "pointer to <i>some_type</i>"<br>
+       - the dereference of "pointer to <i>some_type</i>" has the
+      type "<i>some_type</i>"
+    </blockquote>
+
+    <p>In other words, "<tt><b>(char *)&amp;s + offsetof
+    (s,i)</b></tt>" has type "pointer to <tt><b>char</b></tt>" and
+    its dereference has type "<tt><b>char</b></tt>", i.e., the type
+    of the source object. In the following examples:</p>
+
+    <blockquote>
+      8. <tt><b>memcpy (p1, &amp;s.i, len1);<br>
+      </b></tt> 9. <tt><b>memcpy (p1, (char *) &amp;s.i, len1);<br>
+      </b></tt> 10. <tt><b>memcpy (p1, (float *) &amp;s.i,
+      len1);</b></tt>
+    </blockquote>
+    the source types are, respectively, array of
+    <tt><b>int</b></tt>, <tt><b>char</b></tt>, and
+    <tt><b>float</b></tt>. 
+
+    <p>In lines 6 and 7, the effective type of the source arguments
+    to <tt><b>memcpy</b></tt> is an array of <tt><b>char</b></tt>,
+    based on the following sentence from 6.5P6:</p>
+
+    <blockquote>
+      "For all other accesses to an object having no declared type,
+      the effective type of the object is simply the type of the
+      lvalue used for the access."
+    </blockquote>
+
+    <p>Based on the following sentence again from 6.5P6:</p>
+
+    <blockquote>
+      "If a value is copied into an object having no declared type
+      using <tt><b>memcpy</b></tt> or <tt><b>memmove</b></tt>, or
+      is copied as an array of character type, then the effective
+      type of the modified object for that access and for
+      subsequent accesses that do not modify the value is the
+      effective type of the object from which the value is copied,
+      if it has one."
+    </blockquote>
+
+    <p>The object being copied into has no declared type (because
+    it was an allocated object), thus "the effective type of the
+    modified object for that access ... is the effective type of
+    the object from which the value is copied ...". The object from
+    which it was copied is array of <tt><b>char</b></tt>. The
+    effective type for <tt><b>p1</b></tt> and <tt><b>p2</b></tt> in
+    lines 6 and 7 is: array of <tt><b>char</b></tt>.</p>
+
+    <p><b>Committee Response</b></p>
+
+    <p>The effective types of <tt><b>*p1</b></tt> and
+    <tt><b>*p2</b></tt> are not <tt><b>struct S</b></tt> because
+    not all of the bytes of <tt><b>struct S</b></tt> are
+    copied.</p>
+
+    <p>However, the memcpy calls do copy pieces of
+    <tt><b>s</b></tt>. Those pieces contain objects with declared
+    types.</p>
+
+    <p><tt><b>memcpy (p1, (char *)&amp;s + offsetof (s, i),
+    len1);</b></tt> copies all of the bytes of <tt><b>s.i</b></tt>
+    to an alignment suitable for an object of type int. The
+    effective type of the resulting copy can be treated as having
+    effective type <tt><b>int</b></tt>.</p>
+    <tt><b>memcpy (p2, (char *)&amp;s + offsetof (s, i),
+    len2);</b></tt> copies all of the bytes of <tt><b>s.i</b></tt>
+    and <tt><b>s.l</b></tt>. The memcpy also might copy bytes
+    corresponding to padding before and after <tt><b>s.l</b></tt>. 
+
+    <p>The <tt><b>int</b></tt> object from <tt><b>s.i</b></tt> is
+    copied to an alignment suitable for an object of type
+    <tt><b>int</b></tt>. The object starting at <tt><b>*p2</b></tt>
+    extending for <tt><b>sizeof (int)</b></tt> bytes can be treated
+    as having effective type <tt><b>int</b></tt>.</p>
+
+    <p>Because of alignment requirements and padding rules that
+    vary from implementation to implementation, the long object
+    from <tt><b>s.l</b></tt> might or might not be copied to an
+    alignment suitable for an object of type long. If it is aligned
+    properly, the object starting at <tt><b>*((char *) p2 +
+    (offsetof (s, l) - offsetof (s, i)))</b></tt> extending for
+    <tt><b>sizeof (long)</b></tt> bytes can be treated as having
+    effective type long.</p>
+
+    <p>The objects resulting from the calls to memcpy may also be
+    accessed by other types (primarily given by Subclause 6.5
+    paragraph 7).</p>
+
+    <p><br>
+     <a href="dr_218.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_220.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

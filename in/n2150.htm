@@ -1,0 +1,297 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<style type="text/css">
+.open  { text-decoration: none; font-size: larger;     color: red;  }
+.review { text-decoration: none; font-size: larger;     color: purple; }
+.closed { text-decoration: none; font-size: larger;     color: blue; }
+.future { text-decoration: none; font-size: larger;     color: orange; }
+.published { text-decoration: none; font-size: larger;  color: green; }
+</style>
+<title><a id="top">Defect Report Summary for CSCR</a></title>
+</head>
+<body>
+<h3 align="center">Defect Report Summary for CSCR<br>Version 1.6</h3><b>Date:</b> April 2017
+<table cellspacing="6" summary="Defect Report Summary for CSCR">
+<thead>
+<tr style="background-color:Cornsilk">
+<th>Defect</th>
+<th align="center" style="width:450px">Summary</th>
+<th>Date</th>
+<th>Status</th>
+</tr>
+</thead>
+
+<tbody>
+<tr >
+<td><a href="#dr_1">DR 1</a></td>
+<td style="width:400px">error in 5.21 example</td>
+<td>10/2016</td>
+<td><span class="published">Published</span></td>
+</tr>
+<tr  style="background-color:AliceBlue">
+<td><a href="#dr_2">DR 2</a></td>
+<td style="width:400px">Missing formatted input/output functions in Rule 5.40</td>
+<td>04/2017</td>
+<td><span class="closed">Closed</span></td>
+</tr>
+</table>
+<hr style="border: 3px double #939;">
+<!-- DRNUM --><p align="center"> <a id=dr_1><b><u>DR 1</u></b></a><br></p>
+<!-- LINKAGE --> <p align="center"> <a href="#dr_1">DR 1</a> Prev &lt;&mdash; Published &mdash;&gt; Next <a href="#dr_1">DR 1</a>, or summary at <a href="#top"> top </a></p><br><p>
+  <b>Submission Date:</b> 2014-03-11<br>
+  <!-- yyyy-mm-dd -->
+   <b>Source:</b> WG14<br>
+  <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1801.htm">N1801</a><br>
+  <b>Subject:</b> error in 5.21 example</p>
+
+  <p><b>Summary</b></p>
+<P>
+The (cut-down) requirement for rule 5.21 is:
+</P><P><i>
+A call to a standard memory allocation function is presumed to be intended for type T * when it appears in any of the following contexts
+<ul type="square">
+<li>in the right operand of an assignment to an object of type T *, or</li>
+<li>...</li>
+ </ul>
+A call to a standard memory allocation function taking a size integer argument n and presumed to be intended for  type T *  shall be
+diagnosed when  n < sizeof(T).
+</i><BR><BR>
+{malloc is identified as a standard memory allocation function}
+</P>
+
+<P> The example for 5.21 is:
+<code><BR><pre>
+wchar_t *f1(void) {
+    const wchar_t *p = L"Hello, World!";
+    const size_t n = sizeof(p) * (wcslen(p) + 1);
+    wchar_t *q = (wchar_t *)malloc(n); // diagnostic required
+    /* ... */
+    return q;
+}
+</pre></code>
+<P>
+Why is a diagnostic required on the malloc statement?   On my machine
+</P>
+<ul type="square">
+  <li>T is wchar_t</li>
+  <li>sizeof(p) == 4</li>
+  <li>wcslen(p) == 13</li>
+  <li>n == 56</li>
+  <li>sizeof(wchar_t) == 2</li>
+ </ul>
+<P>
+56 is not less than 2, so no diagnostic is required.
+</P>
+<P>
+Indeed, the only values of  n  that would require a diagnostic are 0 and 1.
+</P>
+<P>
+I think the original intent was to make q smaller than 28 (the space required for 14 wide characters), then copy p to q (buffer overrun),
+but this rule doesn’t actually address that and the copy isn’t included in the example. That is, I think the original example was to be
+of the form:
+<code><BR><pre>
+wchar_t *f2(void) {
+    const wchar_t *p = L"Hello, World!";
+    const size_t n =  /*sizeof(p) * */ (wcslen(p) + 1); /* NB  n == 14  */
+    wchar_t *q = (wchar_t *)malloc(n);
+    wcscpy(q, p);
+    return q;
+   }
+</pre></code>
+
+This does have an issue - buffer overrun, but still doesn’t violate 5.21 as currently stated (14 is still >= 2).
+I think the reason 5.21 got changed was either:
+<ul type="square">
+  <li>buffer overrun is addressed elsewhere - though I cannot see where that is:
+      <ul type="circle">
+  <li> Annex C maps CWEs with Buffer Overrun to 5.22 – but that only talks about constructing an invalid pointer by pointer arithmetic or indexing – neither of which apply here
+  </li><li> wcscpy may be regarded as a restricted sink, with a requirement that the size of the first parameter array >= the size of the second, so 5.46 could apply – except that 5.46 only applies to tainted data. The data in this example isn’t tainted
+  </li>
+ </ul>
+  </li>
+  <li>
+ It was recognised that it’s too difficult to carry the information around that lets you check what use is made of a buffer at an arbitrary point later in the program. The problem in the f2 example is on the line after the allocation, but in general it could be anywhere in the program
+ </li>
+ </ul>
+
+
+<P><B>Suggested Technical Corrigendum</B></P>
+<P>
+Either 5.21 needs a different example, such as :
+<code><BR><pre>
+struct S1 { int x, y, z;};   /*  sizeof(S1)  is 12  */
+
+struct S1 *copyS1(const struct S1 s) {
+    struct S1 *q = (struct S1 *)malloc(8); /*  Diagnostic required */
+    *q = s;
+    return q;
+   }
+</pre></code><BR>
+or the rule needs to be changed to reflect that the allocated memory is in effect an array of size  n/sizeof(T),
+and that it shouldn’t be indexed beyond that size (including by copy functions such as wcscpy etc. - this caveat may also need to be added to 5.22)
+</P>
+<P>I'd favour changing the example</P>
+
+<hr>
+
+<p>Apr 2014 meeting</p>
+
+  <p><b>Committee Discussion</b></p>
+  <blockquote>
+  The words in 5.21 were revised but the example wasn't.  A revised example was approved as a Proposed Technical Corregendum.  A new paper was solicited to capture the issue raised by the changed example.
+  </blockquote>
+
+<p>Oct 1014 meeting</p>
+
+  <p><b>Committee Discussion</b></p>
+  <blockquote>
+  A new paper
+  <a href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1860.htm"> N1860</a>
+  proposing a new rule was submitted and discussed, and it was determined that since the original example illustrated an issue, that we could consider this a defect after all.
+  <p>
+  The following Proposed Technical Corrigendum corrects the existing example to match the 5.21 rule, and adds a new clause and example to capture the intent of the original 5.21 example.
+  <p>
+  The existing example has an explanation, and the words approved do not, and the following have been suggested.
+<blockquote>
+EXAMPLE 1 In this noncompliant example, a diagnostic is required because <tt>n</tt> is <tt>sizeof(p)</tt>, which is smaller than <tt>sizeof(struct S1)</tt>, so N is 0
+<p>
+EXAMPLE 2 In this noncompliant example, a diagnostic is required because <tt>n</tt> is 14 and <tt>sizeof(wchar_t)</tt> is 2, making N equal 7. <tt>q</tt> is therefore treated as an array of 7 elements, but <tt>wcscpy</tt> attempts to copy <tt>p</tt>, an array with 14 elements, into it.
+</blockquote>
+ </blockquote>
+
+  <p><b>Proposed Technical Corrigendum</b>
+  <br><p>
+
+In rule 5.21, Rule section, replace
+<blockquote>
+A call to a standard memory allocation function taking a size integer argument <tt>n</tt> and presumed to be intended for type <tt>T *</tt> shall be diagnosed when <tt>n &lt; sizeof(T)</tt>.
+</blockquote>
+with
+<blockquote>
+A call to a standard memory allocation function taking a size integer argument <tt>n</tt> and presumed to be intended for type <tt>T *</tt> shall be regarded as an array of <tt>N</tt> elements, where <tt>N = n / sizeof(T)</tt>.
+<p>
+Any allocation where <tt>N == 0</tt> shall be diagnosed (i.e. where <tt>n &lt; sizeof(T)</tt>). Also, any attempt to use this array in a manner that causes its array bound to be violated shall be diagnosed.
+</blockquote>
+
+In rule 5.21, replace
+<blockquote>
+EXAMPLE In this noncompliant example, a diagnostic is required because the value of <tt>n</tt> that is used in the <tt>malloc()</tt> call has been possibly miscalculated.
+<code><BR><pre>
+wchar_t *f1(void) {
+  const wchar_t *p = L"Hello, World!";
+  const size_t n = sizeof(p) * (wcslen(p) + 1);
+  wchar_t *q = (wchar_t *)malloc(n);  // diagnostic required
+
+  /* ... */
+  return q;
+}
+</pre></code>
+</blockquote>
+with
+<blockquote>
+<code><BR><pre>
+EXAMPLE 1 
+
+    struct S1 {
+        unsigned int x;
+        float        y;
+        struct S1   *z;
+    };
+
+
+    struct S1 *f1(void) {
+        struct S1 *p = (struct S1*)malloc(sizeof(p));  // diagnostic required
+        return p;
+    }
+
+
+
+
+
+EXAMPLE 2 
+
+    wchar_t *f2(void) {
+        const wchar_t *p = L"Hello, World!";
+        const size_t n = (wcslen(p) + 1);
+        wchar_t *q = (wchar_t *)malloc(n);
+        wcscpy(q, p); // diagnostic required
+        return q;
+    }
+</pre></code>
+</blockquote>
+<!-- LINKAGE --> <p align="center"> <a href="#dr_1">DR 1</a> Prev &lt;&mdash; Published &mdash;&gt; Next <a href="#dr_1">DR 1</a>, or summary at <a href="#top"> top </a></p><br><p>
+<hr style="border: 3px double #939;">
+<!-- DRNUM --><p align="center"> <a id=dr_2><b><u>DR 2</u></b></a><br></p>
+<!-- LINKAGE --> <p align="center"> <a href="#dr_2">DR 2</a> Prev &lt;&mdash; Closed &mdash;&gt; Next <a href="#dr_2">DR 2</a>, or summary at <a href="#top"> top </a></p><br><p>
+<b>Submitter:</b> Clive Pygott<br>
+  <b>Submission Date:</b> 2016-03-01<br>
+  <!-- yyyy-mm-dd -->
+   <b>Source:</b> WG14<br>
+  <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2006.htm">N2006</a><br>
+  <b>Subject:</b> Missing formatted input/output functions in Rule 5.40</p>
+
+  <p><b>Summary</b></p>
+<p>
+This suggestion comes from MISRA, as they are adding support for 17961 to their rules.
+<p>
+Rule 5.40 names a number of functions that can attempt to write beyond the bounds of the target array, if supplied with tainted input, namely: fscanf, scanf, vfscanf, vscanf, sscanf, vsscanf and sprintf.
+<p>
+The observation is that vsprintf should be included in this list. Also the _s versions of all the above (including vsprintf_s) should be included, as they also can write beyond the end of the target array.
+<p>
+It is suggested that this is a defect rather than an enhancement, as from the rationale for the rule, they should have been included when drafted.
+<hr>
+<p>Apr 2016 meeting</p>
+
+<p><b>Committee Discussion</b></p>
+<blockquote>
+The committee agrees with the author.
+</blockquote>
+
+<p><b>Proposed Technical Corrigendum</b>
+<p>
+
+To 5.40 Rule section first sentence change:
+
+<blockquote>
+Calls to the <code>fscanf</code>, <code>scanf</code>, <code>vfscanf</code>, and <code>vsscanf</code> functions that pass...
+</blockquote>
+
+to
+
+<blockquote>
+Calls to the <code>fscanf</code>, <code>scanf</code>, <code>vfscanf</code>, and <code>vsscanf</code> functions, and their Annex K counterparts <code>fscanf_s</code>, <code>scanf_s</code>, <code>vfscanf_s</code>, and <code>vsscanf_s</code>, that pass...
+</blockquote>
+
+To 5.40 Rule section second sentence change:
+
+<blockquote>
+Calls to the <code>sscanf</code> and <code>vsscanf</code> functions
+</blockquote>
+
+to
+
+<blockquote>
+Calls to the <code>sscanf</code>, <code>vsscanf</code>, <code>sscanf_s</code>, and <code>vsscanf_s</code> functions
+</blockquote>
+
+To 5.40 Rule section third sentence change:
+
+<blockquote>
+Calls to the <code>sprintf</code> function that
+</blockquote>
+
+to
+
+<blockquote>
+Calls to the <code>sprintf</code>, <code>vsprintf</code>, <code>sprintf_s</code>, and <code>vsprintf_s</code> functions that
+</blockquote>
+
+
+
+<!-- LINKAGE --> <p align="center"> <a href="#dr_2">DR 2</a> Prev &lt;&mdash; Closed &mdash;&gt; Next <a href="#dr_2">DR 2</a>, or summary at <a href="#top"> top </a></p><br><p>
+ </body>
+</html>

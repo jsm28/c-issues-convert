@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #031</TITLE></HEAD><BODY>
+<H2>Defect Report #031</H2>
+
+<P><B>Submission Date</B>: 10 Dec 92 <BR>
+<B>Submittor</B>: WG14 <BR>
+<B>Source</B>: X3J11/91-018 (Pawel Molenda) <BR>
+<B>Question</B> 1 <BR>
+Referring to subclause 6.3, page 38, lines 15-17: </P>
+
+<BLOCKQUOTE>
+<P>If an <I>exception</I> occurs during the evaluation of an expression
+(that is, if the result is not mathematically defined or not in the range
+of representable values for its type), the behavior is undefined. </P>
+</BLOCKQUOTE>
+
+<P>and subclause 6.4, page 55, lines 11-12: </P>
+
+<BLOCKQUOTE>
+<P>Each constant expression shall evaluate to a constant that is in the
+range of representable values for its type. </P>
+</BLOCKQUOTE>
+
+<P>What should be the result of the constant expression: <BR>
+<B><TT>INT_MAX + 2 <BR>
+</TT></B>Is this a constraint violation, or it should be mapped onto the
+set of representable values? <BR>
+What should be the result of: <BR>
+<B><TT>INT_MAX + 2ul <BR>
+</TT></B>How should compilers that do not evaluate the constant expressions
+at compile time behave? <BR>
+What is the result of: <BR>
+<B><TT>(INT_MAX*4)/4</TT></B> <BR>
+Referring to subclause 6.5.2.2, page 61, lines 29-30: </P>
+
+<BLOCKQUOTE>
+<P>The expression that defines the value of an enumeration constant shall
+be an integral constant expression that has a value representable as an
+<B><TT>int.</TT></B> </P>
+</BLOCKQUOTE>
+
+<P>What is the result of: <BR>
+<B><TT>enum { a=INT_MAX, b };</TT></B> <BR>
+Does this violate the C Standard? <BR>
+<B>Response</B> <BR>
+<B><TT>case INT_MAX + 2:</TT></B> is a constraint violation. <BR>
+<B><TT>case INT_MAX + 2ul:</TT></B> is okay, representable. <BR>
+<B><TT>case (INT_MAX*4)/4:</TT></B> is a constraint violation. <BR>
+When subclause 6.4 says on page 55, lines 11-12: </P>
+
+<BLOCKQUOTE>
+<P>Each constant expression shall evaluate to a constant that is in the
+range of representable values for its type. </P>
+</BLOCKQUOTE>
+
+<P>the Committee's judgement of the intent is that the ``representable''
+requirement applies to each subexpression of a constant expression, as
+shown in the third example. A constant expression is meant as defined by
+the syntax rules. <BR>
+<B><TT>enum {a=INT_MAX, b};</TT></B> is a constraint violation. <BR>
+</P>
+<A HREF="dr_030.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_032.html">Next Defect Report</A>
+</BODY></HTML>

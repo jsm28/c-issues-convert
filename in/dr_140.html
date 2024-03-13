@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #140</TITLE></HEAD><BODY>
+<H2>Defect Report #140</H2>
+<B>Submission Date</B>: 27 Jul 94
+<BR>
+<B>Submittor</B>: BSI
+<BR>
+<B>Source</B>: Andy Pepperdine
+<BR>
+<B>Question</B>
+<BR>
+Subclause 7.9.5.6 says:
+<BLOCKQUOTE>
+The <TT><B>setvbuf</B></TT> function may be used only after the stream 
+... has been associated with an open file and before any other operation 
+is performed on the stream.
+</BLOCKQUOTE>
+There are two related questions associated with this statement.
+<BR>
+1. What does ``performed'' mean?
+<BR><OL TYPE=a>
+<LI> Does it include attempts that failed (such as <TT><B>fread</B></TT> on 
+output file, etc.)?
+<LI> In particular, does it include a failed attempt to <TT><B>setvbuf</B></TT>?
+<LI> What about <TT><B>fprintf(f, "")</B></TT>?
+</OL>
+2. What does ``other operation'' mean?
+<BR><OL TYPE=a>
+<LI> Does it include <TT><B>setvbuf</B></TT> itself?
+<LI> Are <TT><B>ferror</B></TT> and <TT><B>feof</B></TT> operations?
+<LI> What about <TT><B>clearerr</B></TT>?
+</OL>
+Reasons for asking:
+<BR>
+It would seem reasonable to try to get a very large buffer in some 
+applications by attempting to do a <TT><B>setvbuf</B></TT> with, say, 1 MB of 
+buffer space. If that fails, try again with 0.5 MB, etc. Is this allowed?
+<BR>
+My <I>guess</I> as to the interpretation is as follows:
+<BR>
+1. An operation is ``performed'' even if it fails for whatever 
+reason.
+<BR>
+2. All functions defined in subclause 7.9 are to be treated as ``operations.''
+<BR>
+This is unsatisfactory, as the above approach of attempting to find 
+a good buffer size would fail.
+<BR>
+In the Rationale, it states ``The general principle is to provide 
+portable code with a means of requesting the most appropriate popular 
+buffering style, but not to <I>require</I> an implementation to support 
+these styles.'' [Emphasis added.]
+<BR>
+I interpret this as saying that <TT><B>setvbuf</B></TT> is an advisory call 
+and need not be acted on. However, my questions above still stand 
+as there seems to be no way of negotiating an agreement on good acceptable 
+buffer sizes.
+<BR>
+I believe that a clarification is required.
+<BR>
+<B>Response</B>
+<BR>
+As you say, ``<TT><B>setvbuf</B></TT> is an advisory call and need not be 
+acted on.'' That is to say, the C Standard allows it to fail. Therefore, 
+discussions of detailed constraints such as you describe could only 
+constitute non-normative advice to programmers or implementers. The 
+Committee does not have any specific advice to give in this regard.
+<BR>
+<A HREF="dr_139.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_141.html">Next Defect Report</A>
+</BODY></HTML>

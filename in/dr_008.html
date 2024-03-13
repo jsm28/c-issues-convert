@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #008</TITLE></HEAD>
+<BODY><H2>Defect Report #008</H2>  
+<B>Submission Date</B>: 10 Dec 92 <BR> 
+<B>Submittor</B>: WG14  <BR>
+<B>Source</B>: X3J11/90-021 (Otto R. Newman)  <BR><B>Question</B> 1
+<BR>  Could you tell me if it is legitimate for a conforming C compiler
+to perform what's commonly referred to as dead-store elimination for the
+first assignment in the following code fragment:
+<BR> 
+<TT><B>auto int flag;      /*</B><I> non-volatile</I> <B>*/</B><BR>
+<B>...<BR> flag = 1;<BR> flag = f();
+</B></TT><BR> If it is valid to do so, then consider
+<BR> 
+<TT><B>auto int flag;      /*</B><I> non-volatile </I><B>*/<BR> if
+(setjmp(buf))<BR>    {<BR>     if (flag == 1) ...<BR>    }<BR> flag
+= 1;<BR> flag = f();
+</B><BR></TT> where function <TT><B>f</B></TT> invokes <TT><B>longjmp</B></TT>.
+Is the result of the relational expression defined? A solution might be
+to define <TT><B>flag</B></TT> as <TT><B>volatile</B></TT>, but <TT><B>
+flag</B></TT> is <I>not</I> really volat ile, and the programmer may
+not wish to degrade all references to <TT><B>flag</B></TT> nor to
+locate all such possible <TT><B>flag</B></TT>s and lie about their
+volati lity.   A related issue is that in many existing applications,
+users have coded <TT><B>setjmp</B></TT>-like mechanisms based on a
+particular operational environment. The functions do not have the name
+``<TT><B>setjmp</B></TT>,'' but essentially establish an externally
+accessible entry point within the containing function. Sometimes,
+pointers are set to reference such functions, even though the standard
+precludes this from being done with <TT><B>setjmp</B></TT> itself
+since it is allowable that it only be provided as a macro.<BR>   There
+are a number of additional optimizations which must be inhibited across
+the actual invocation of <TT><B>setjmp</B></TT>, or a <TT><B>setjmp</B></TT>-like
+function. Always avoiding these optimizations as well as the dead-store
+elimination shown in the example may make the program safe for non-local
+jumps, but unnecessarily penalizes programs that don't use
+<TT><B>setjmp</B></TT>. To circumvent this problem, some implementors
+have defined a pragma which is included in <TT><B>setjmp.h</B></TT> to
+identify ``<TT><B>setjmp</B></TT>'' as having the property of
+establishing an externally accessible entry, i.e., defining an otherwise
+non-obvious point of control flow. Other implementations have hard-coded
+tests for the name ``<TT><B>setjmp</B></TT>.''<BR>   ... would you
+please respond to the question regarding the legitimacy of the
+optimization in the first example?<BR><B>Response</B>  <BR> The
+relevant citation is subclause 7.6.2.1:   <BLOCKQUOTE>All accessible
+objects have values as of the time
+<TT><B>longjmp</B></TT> was called, except that the values of objects
+of automatic storage duration that are local to the function containing
+the invocation of the corresponding <TT><B>setjmp</B></TT> macro that
+do not have volatile-qual ified type and have been changed between the
+<TT><B>setjmp</B></TT> invocation and
+<TT><B>longjmp</B></TT> call are indeterminate.</BLOCKQUOTE>   In
+response to your question about the effect on optimizations of
+<TT><B>setjmp</B></TT>: Yes, it is legitimate for a compiler to
+perform optimiza tions that eliminate dead stores to local,
+non-volatile, automatic variables when <TT><B>setjmp</B></TT> is used.
+Subclause 7.6.2.1 makes the values of all such variables indeterminate
+after the <TT><B>longjmp</B></TT> is called. This grants a compiler
+the liberty to perform dead-store elimination as well as several other
+optimizations.
+<BR> 
+<B>Question</B> 2  <BR> What is happening is that, since the standard
+has not provided a mechanism to describe a very recognizable and very
+important property of a function, such mechanisms are by necessity being
+provided in non-standard ways. My understanding is that a pragma should
+never be required for a program to execute correctly as defined by the
+standard.<BR>The existing situation serves to reduce portability of C
+programs. We believe the Committee should address this problem and would
+like to offer a suggestion which seems rather attractive.<BR>Currently,
+defining an object as <TT><B>volatile</B></TT> indicates to the compi
+ler that its contents may be altered in ways not under control of the
+implementation. This is meaningless with function declarations since a
+function doesn't have alterable contents (i.e., is not an lvalue).
+Instead, it may be possible to utilize this otherwise syntactic no-op by
+defining a ``volatile function'' to be one whose return may not
+necessarily occur sequentially at the point of the invocation, but
+possibly at some other point where the state of the calling program is
+unknown. In other words, invocation of such a function results in the
+state of the program becoming volatile.<BR>Now, I admit that this is
+not a perfectly ``clean'' extrapolation of the use of the type qualifier
+<TT><B>volatile</B></TT>, but it is rather compelling, having the
+following advantages: <BR><OL>  
+<LI> It solves the described problem in a general way that can be used
+with functions not necessarily named ``<TT><B>setjmp</B></TT>.''
+Implementations defining <TT><B>setjmp</B></TT> as a function in <TT><B>
+setjmp.h
+</B></TT> would simply declare<BR> <TT><B>int volatile setjmp(jmp_buf
+env);</B></TT>
+</LI>
+<LI>It utilizes an existing keyword and gives meaning to its use in a
+context which would be otherwise meaningless.
+</LI>
+<LI>It is consistent with the type specifier syntax to distinguish
+between volatile pointers and pointers to volatile objects. For example,<BR>
+
+<TT><B>int volatile setjmp();</B></TT><BR>defines <TT><B>setjmp</B></TT>
+to be a volatile function (i.e., a function whose invocation must
+inhibit certain optimizations).<BR>
+<TT><B>int volatile (*maybe_setjmp_ptr)();</B></TT><BR>defines a
+pointer to such a function, while<BR>
+<TT><B>int (*mustnotbe_setjmp_ptr)();</B></TT><BR>defines a pointer
+to a normal function.
+<BR> 
+<TT>int (* volatile vol_mustnotbe_setjmp_ptr)();</TT><BR> defines a
+volatile pointer to a normal function. <BR> 
+<TT><B>int volatile (* volatile vol_maybe_setjmp_ptr)();</B></TT><BR>
+defines a volatile pointer to a volatile function, and so on ...   
+</LI>
+<LI>Type consistency rules are already in place and make sense. For
+example,  <BR>
+<TT><B>maybe_setjmp_ptr = mustnotbe_setjmp_ptr;</B></TT>  
+<BR>is okay with no type-checking violation, whereas  
+<BR><TT><B>mustnotbe_setjmp_ptr = maybe_setjmp_ptr;</B></TT>  
+<BR>is diagnosed. It would require casting such as<BR>  
+<TT><B>mustnotbe_setjmp_ptr = (int (*)())maybe_setjmp_ptr;</B></TT>   
+</LI>
+<LI>Since no new syntax or keywords are required, the impact of this
+change is very small to both the document defining the standard and to
+compilers which support it.</LI>
+</OL>If there is enough Committee interest in this sort of solution, I
+would be glad to draft a formal proposal.
+<BR> 
+<B>Response</B>
+<BR>  The Committee reasserts that the current semantics for type
+qualifiers as they appear in the standard are as intended.  
+<BR>
+<A HREF="dr_007.html">Previous Defect Report</A> 
+&lt; -  > <A HREF="dr_009.html">Next Defect Report</A></BODY></HTML>

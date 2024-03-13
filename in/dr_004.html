@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #004</TITLE></HEAD>
+<BODY>
+<H2>Defect Report #004</H2>  
+<B>Submission Date</B>: 10 Dec 92
+<BR>
+<B>Submittor</B>: WG14
+<BR> 
+<B>Source</B>: X3J11/90-012 (Paul Eggert)
+<BR> 
+<B>Question</B> 1
+<BR>  Are multiple definitions of unused identifiers with external
+linkage permitted?
+<BR>  The wording in subclause 6.7 permits multiple definitions of
+identifiers with external linkage, so long as the identifiers are never
+used. For example, the following program is ``strictly conforming'' if
+you read the wording in subclause 6.7 literally:
+<BR>
+<TT><B>int F() {return 0;}<BR> int F() {return 1;}<BR> int V = 0;<BR>
+int V = 1;<BR> int main() {return 0;}
+<BR></B></TT> This must be a bug in the wording of subclause 6.7. It cannot
+have been the Committee's intent, since it prohibits the most commonly
+encountered linker model. For example, most linkers will flatly refuse
+to link the following ``strictly conforming'' program
+<BR>
+<TT><B>x.c:</B></TT>
+<BLOCKQUOTE> <TT><B>int F() {return 0;}<BR>     int G(int i) {return
+i;}<BR></B></TT>
+</BLOCKQUOTE> y.c:
+<BLOCKQUOTE><B> <TT>    int F() {return 1;}<BR>     int G(int);<BR>    
+int main() {return G(0);}
+</TT></B></BLOCKQUOTE> because <TT><B>F</B></TT> is defined twice.
+<BR>
+<B>Response</B>  
+<BR>This Defect Report referred to an earlier draft of the C Standard,
+and was corrected prior to the publication of the C Standard.
+<BR><A HREF="dr_003.html">Previous Defect Report</A> &lt; - > <A HREF="dr_005.html">Next Defect Report</A>
+</BODY></HTML>

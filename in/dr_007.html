@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #007</TITLE></HEAD>
+<BODY><H2>Defect Report #007</H2>  
+<B>Submission Date</B>: 10 Dec 92<BR>  
+<B>Submittor</B>: WG14<BR>  
+<B>Source</B>: X3J11/90-043 (Paul Eggert)<BR>  
+<B>Question</B> 1<BR>   Are declarations of the form <TT><B>struct-or-union
+identifier ; </B></TT> permitted after the <TT><B>identifier</B></TT> tag has
+already been declared? Here are some examples of the problem:
+<BR>  
+<TT><B>/*</B><I>1</I><B>*/ struct s;
+<BR> /*</B><I>2</I><B>*/ struct s;
+<BR> /*</B><I>3</I><B>*/ struct s {int a;};<BR>
+/*</B><I>4</I><B>*/ struct s;<BR>
+/*</B><I>5</I><B>*/ struct t {int a;};
+<BR>/*</B><I>6</I><B>*/ struct t;<BR>
+</B></TT>Subclause 6.5 says
+``A declaration shall declare at least a declarator, a tag, or the
+members of an enumeration.'' In this sense, does
+<TT><B>/*</B><I>2</I><B>*/</B></TT> also declare the tag <TT><B>s</B></TT>? 
+If so, then surely all of the above lines are conforming. But if not, 
+then in what sense does
+<TT><B>/*</B><I>3</I><B>*/</B></TT> 
+declare a tag and thus satisfy subclause 6.5's constraint?  
+<BR>
+The example at the end of subclause 6.5.2.3 says ``To
+eliminate this context sensitivity, the otherwise vacuous declaration
+<TT><B>struct s2;</B></TT> may be inserted ...'' This seems to imply
+that <TT><B>/*</B><I>2</I><B>*/</B></TT>,
+<TT><B>/*</B><I>4</I><B>*/</B></TT>, and <TT><B>/*</B><I>6</I><B>*/</B></TT> are not conforming,
+because the y are vacuous. But how can this be reconciled with the above
+argument?  
+<BR><B>Response</B> 
+<BR>The declaration  
+<BR><TT><B>struct s;</B></TT>
+<BR>declares the tag <TT><B>s</B></TT>. It need not be
+the first or only declaration of the tag <TT><B>s</B></TT> within a
+given scope to qualify as a declaration of <TT><B>s</B></TT>, just as 
+<BR>
+<TT><B>int i;</B></TT>
+<BR>declares <TT><B>i</B></TT> however often it is repeated.
+The applicable constrai nt is in subclause 6.5: ``A declaration shall
+declare at least a declarator, a tag, or the members of an
+enumeration.'' Clearly,
+<BR>
+<TT><B>struct s;</B></TT>
+<BR>declares the tag <TT><B>s</B></TT>.
+<BR>Subclause
+6.5.2.3, in the examples, characterizes a declaration of this form as
+``otherwise vacuous'' in the draft you read. The words ``otherwise
+vacuous'' were an editorial comment that was omitted from the
+International Standard. These words were intended to mean ``other than
+declaring <TT><B>s2</B></TT> to be an (incomplete) struct type,'' and
+should not be read as saying that the declaration fails to declare the
+tag.
+<BR>We believe that this interpretation is consistent with the intent
+of the Committee, and that a reasonable reading of the standard supports
+this interpretation.
+<BR>
+<A HREF="dr_006.html">Previous Defect Report</A> 
+&lt; -  > <A HREF="dr_008.html">Next Defect Report</A></BODY></HTML>

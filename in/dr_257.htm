@@ -1,0 +1,222 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #257</title>
+  </head>
+
+  <body bgcolor="#FFFFFF">
+    <h2 align="center">Defect Report #257</h2>
+    <a href="dr_256.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_258.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> UK C Panel<br>
+     <b>Submission Date:</b> 2001-09-07<br>
+     <b>Source:</b> Clive D.W. Feather &lt;clive@demon.net&gt;<br>
+     <b>Version:</b> 1.4<br>
+     <b>Date:</b> 2002-10-17<br>
+     <b>Subject:</b> common initial sequences and related issues
+    with unions</p>
+    <b>Problem</b> 
+
+    <p>6.5.2.3#5 reads:</p>
+
+    <blockquote>
+      [#5] One special guarantee is made in order to simplify the
+      use of unions: if a union contains several structures that
+      share a common initial sequence (see below), and if the union
+      object currently contains one of these structures, it is
+      permitted to inspect the common initial part of any of them
+      anywhere that a declaration of the complete type of the union
+      is visible. Two structures share a common initial sequence if
+      corresponding members have compatible types (and, for
+      bit-fields, the same widths) for a sequence of one or more
+      initial members.
+    </blockquote>
+
+    <p>Two possible reasons have been suggested for this rule.</p>
+
+    <ol>
+      <li>The implementation may put padding between structure
+      members. This rule is necessary to ensure that the common
+      initial sequence uses the same padding in both places, so
+      that the corresponding members occupy the same location.</li>
+
+      <li>
+        If we consider part of the second example in 6.5.2.3#8: 
+<pre>
+<tt><b>   struct t1 { int m; };
+    struct t2 { int m; };
+    int f(struct t1 * p1, struct t2 * p2)
+    {
+        if (p1-&gt;m &lt; 0)
+            p2-&gt;m = -p2-&gt;m;
+        return p1-&gt;m;
+    }
+</b></tt>
+</pre>
+        the rule is necessary for an implementation to realize that
+        <tt><b>p1</b></tt> and <tt><b>p2</b></tt> might refer the
+        same location.
+      </li>
+    </ol>
+
+    <p>If (1) is the reason, then the example is a bad one because
+    the two members are both at the start of their respective
+    structures, and therefore are required to be at an offset of 0
+    from the start of the structure (and therefore of the union).
+    It should be changed to use a member further along a common
+    initial sequence.</p>
+
+    <p>On the other hand, the requirement is not actually very
+    suitable. Consider the code:</p>
+<pre>
+<tt><b>   struct t1 { int x; double y; char z; } s1;
+    struct t2 { int i; double q; unsigned long u; } s2;
+    void f1 (struct t1 *p) { p-&gt;y = sqrt ((double) p-&gt;x); }
+    void f2 (struct t2 *p) { p-&gt;q = sqrt ((double) p-&gt;i); }
+ 
+    union { struct t1 t1; struct t2 t2; } u;
+    //</b> <i>Followed by code using the common initial sequence property</i> 
+</tt>
+</pre>
+
+    <p>The implementation might wish to use different padding in
+    structures <tt><b>t1</b></tt> and <tt><b>t2</b></tt>. It is
+    prevented from doing so by the existence of the union, but a
+    one-pass compilation will not become aware of this until after
+    compiling <tt><b>f1</b></tt> and <tt><b>f2</b></tt>. Therefore
+    it will have to assume, when deciding the layout of the
+    structures, that there might be a union. Therefore the rule
+    about a union type being visible is useless.</p>
+
+    <p>If, on the other hand, (2) is the reason, then the wording
+    does not address enough cases. For example, consider a version
+    of the example in 6.5.2.3#8 where one member is signed and the
+    other is unsigned.</p>
+<pre>
+<tt><b>   struct t1 { signed   int m; };
+    struct t2 { unsigned int m; };
+    int f(struct t1 * p1, struct t2 * p2)
+    {
+        if (p1-&gt;m &gt; 0)
+            p2-&gt;m = p2-&gt;m * 2;
+        return p1-&gt;m;
+    }
+</b></tt>
+</pre>
+
+    <p>There is no common initial sequence but nevertheless many of
+    the same issues apply. On the other hand, the correct way for a
+    function such as <tt><b>f</b></tt> to protect itself against
+    such aliasing is not to rely on the rule in 6.5.2.3#8, but
+    rather to use the <tt><b>restrict</b></tt> qualifier.</p>
+
+    <p>I would suggest, therefore, that (2) is not a valid reason
+    for the rule. As stated above, a corollary of this discussion
+    is that the "union type must be visible" rule is useless.</p>
+
+    <p>Finally, one of the changes from C90 to C99 was to remove
+    any restriction on accessing one member of a union when the
+    last store was to a different one. The rationale was that the
+    behaviour would then depend on the representations of the
+    values. Since this point is often misunderstood, it might well
+    be worth making it clear in the Standard.</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>To address point (1), in 6.5.2.3#8, second example, change
+    the two structures to:</p>
+<pre>
+<tt><b>           struct t1 { double d; int m; };
+            struct t2 { double d; int m; };
+</b></tt>
+</pre>
+
+    <p>To address the wider point about visibility, change the
+    first part of 6.5.2.3#5 to read:</p>
+
+    <blockquote>
+      [#5] One special guarantee is made in order to simplify the
+      use of unions: if several structure types share a common
+      initial sequence (see below), then corresponding members are
+      required to lie at the same offset from the start of the
+      union. Therefore if a union contains two or more such
+      structures, the common initial part may be inspected using
+      any of them, no matter which one was used to store the value.
+    </blockquote>
+    To address issues about "similar" types raised in point (2)
+    above, change the second part of #5 to read: 
+
+    <blockquote>
+      Two structures share a common initial sequence if
+      corresponding members have matching types for a sequence of
+      one or more initial members. Two types, in turn, are matching
+      if they are 
+
+      <ul>
+        <li>compatible types (and, for bit-fields, the same
+        widths)</li>
+
+        <li>signed and unsigned versions of the same integer
+        type</li>
+
+        <li>qualified or unqualified versions of matching types,
+        or</li>
+
+        <li>pointers to matching types.</li>
+      </ul>
+    </blockquote>
+    To address the issue about "type punning", attach a new
+    footnote 78a to the words "named member" in 6.5.2.3#3: 
+
+    <blockquote>
+      <p>78a If the member used to access the contents of a union
+      object is not the same as the member last used to store a
+      value in the object, the appropriate part of the object
+      representation of the value is reinterpreted as an object
+      representation in the new type as described in 6.2.6 (a
+      process sometimes called "type punning"). This might be a
+      trap representation.</p>
+    </blockquote>
+    Note: all the above changes are independent of one another,
+    depending on the committee's view of the issues. 
+    <hr>
+
+    <p><b>Committee Response</b></p>
+
+    <p>The current rules are the result of extensive previous
+    deliberations. The Committee does not see a defect here.</p>
+
+    <p><b>Committee Discussion</b></p>
+
+    <ol>
+      <li>The Committee agrees, but does not believe that this is a
+      defect in the Standard (or a substantive problem). There is
+      some support for changing the example.</li>
+
+      <li>This takes away the "visibility rule" and the Committee
+      does not want to do that; this is related to <a href=
+      "dr_236.htm">DR 236</a>.</li>
+
+      <li>The Committee agrees, but does not believe a change is
+      warranted at this time. This should be considered for a
+      future revision of the Standard.</li>
+
+      <li>The Committee believes this is a separate issue, and
+      should be a defect report (and possibly a new footnote). The
+      defect report generated is <a href="dr_283.htm">DR 283</a>,
+      also see <a href=
+      "http://www.open-std.org/jtc1/sc22/wg14/www/docs/n980.htm">N980</a>.</li>
+    </ol>
+
+    <p><br>
+     <a href="dr_256.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_258.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

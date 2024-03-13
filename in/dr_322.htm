@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #322</title>
+    <meta http-equiv="Content-Type" content=
+    "text/html; charset=iso-8859-1">
+    <meta content="MSHTML 6.00.2900.2873" name="GENERATOR">
+  </head>
+
+  <body>
+    <br>
+     
+
+    <h2 align="center">Defect Report #322</h2>
+    <a href="dr_321.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_323.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Cragun (US)<br>
+     <b>Submission Date:</b> 2005-09-28<br>
+     <!-- yyyy-mm-dd --><b>Source:</b> Donald W. Cragun
+    &lt;don.cragun@sun.com&gt;<br>
+     <b>Reference Document:</b> <a href="dr_276.htm">Defect Report
+    #276</a><br>
+     <b>Version:</b> 1.3<br>
+     <b>Date:</b> 2006-10-25<br>
+     <b>Subject:</b> Problem with TC2 Change #67 (Add
+    <code><b>perror</b></code> to the list defining byte
+    input/output functions.)</p>
+
+    <p><b>Summary</b></p>
+
+    <p>The perror function should not set the orientation of the
+    standard error stream if the orientation is not already
+    set.</p>
+
+    <p><b>Rationale</b></p>
+
+    <p><i>ISO/IEC 9899:1990</i> as updated by <i>Amendment 1: C
+    Integrity</i> did not identify the <code><b>perror</b></code>
+    function as a byte input/output function nor as a
+    wide-character input/output function. Therefore, calling
+    <code><b>perror</b></code> was not allowed to set the stream
+    orientation for the standard error stream. Although no
+    rationale was given in the amendment for not specifying
+    <code><b>perror</b></code> in either set of functions, it
+    seemed to be the appropriate behavior. We would like to be able
+    to use <code><b>perror</b></code> at any time when an
+    application needs to report an error condition. If
+    <code><b>perror</b></code> was defined to be a byte output
+    function or a wide-character output function and the standard
+    error stream's orientation had been set to the opposite
+    orientation, the standard requires that
+    <code><b>perror</b></code> shall not be applied to the stream.
+    Furthermore, as part of aligning with Amendment 1, The Single
+    UNIX Specification, version 2's description of
+    <code><b>perror</b></code> says:</p>
+
+    <blockquote>
+      The <code><b>perror()</b></code> function does not change the
+      orientation of the standard error stream.
+    </blockquote>
+    This quote was slightly transformed as Single UNIX
+    Specification, version 2; IEEE Std 1003.1-1996 and IEEE Std
+    1003.2-1992; and ISO/IEC 9945-1:1996 and ISO/IEC 9945-2:1993
+    were merged to create the common Single UNIX Specification,
+    version 3; IEEE Std 1003.1-2001; and ISO/IEC 9945-1, 9945-2,
+    9945-3, and 9945-4:2002 to be: 
+
+    <blockquote>
+      The <code><b>perror()</b></code> function shall not change
+      the orientation of the standard error stream.
+    </blockquote>
+    <br>
+     
+
+    <p>Therefore, the change in TC2 that turned
+    <code><b>perror</b></code> into a byte input/output function
+    created a conflict between the C standard and the POSIX
+    standard.</p>
+
+    <p>If a fatal error arises and an application wants to use
+    <code><b>perror</b></code> to print a diagnostic message, it is
+    now required to be prepared to do something like:</p>
+<pre>
+<tt>save_errno = errno;
+    or = fwide(stderr, 0);
+    errno = save_errno;
+    perror("error identifying string")
+    freopen("", "w", stderr);
+    fwide(stderr, or);
+</tt>   
+</pre>
+    rather than just calling <code><b>perror</b></code>. Note that
+    calling <code><b>freopen</b></code> with a null pointer as its
+    first argument did not have defined behavior in the previous C
+    standard and was required to give an <code><b>ENOENT</b></code>
+    error in the previous revision of the POSIX standard.
+    Furthermore, if the standard error stream had been
+    wide-character oriented before the call to
+    <code><b>freopen</b></code>, no application reading that stream
+    would know that it needed to switch input methods when the
+    orientation switched back to byte orientation for the
+    diagnostic. So, not changing orientation and just printing byte
+    oriented diagnostic messages would not seem to make any
+    difference to any application that was later trying to read
+    bytes that had been written to the standard error stream. <br>
+     
+
+    <p>If it is believed that <code><b>perror</b></code> really
+    needs to be classified as a byte output function, maybe it
+    should also be specified that applications that use any
+    wide-character input/output functions on the standard error
+    stream produce undefined behavior (especially if they call
+    <code><b>perror</b></code>).</p>
+
+    <p><b>Suggested Technical Corrigendum</b><br>
+     Rescind ISO/IEC 9899:1999/Cor.2:2004 change #67 which
+    states:</p>
+
+    <blockquote>
+      <i>Page 263, 7.19.6.1</i><br>
+       In paragraph 5, item 4, insert <code><b>perror</b></code>
+      after <code><b>gets</b></code>.
+    </blockquote>
+    <hr>
+    <!-- Entires below the line by WG14 only. -->
+
+    <p><b>Committee Discussion</b> (for history only)</p>
+    The Committee discussed making the behavior undefined, which
+    would allow <code><b>perror()</b></code> to fail if the stream
+    orientation has already been set to wide. 
+
+    <p>The proposed TC will permit (but not require)
+    <code>perror</code> to set the orientation of an un-oriented
+    <code>stderr</code> to narrow, and has what C calls
+    <i>undefined</i> behavior if <code>stderr</code> was previously
+    set to wide. This permits the POSIX required behavior.</p>
+
+    <p><b>Technical Corrigendum</b><br>
+     Rescind ISO/IEC 9899:1999/Cor.2:2004 change #67 which
+    states:</p>
+
+    <blockquote>
+      <i>Page 263, 7.19.1</i><br>
+       In paragraph 5, item 4, insert <code><b>perror</b></code>
+      after <code><b>gets</b></code>.
+    </blockquote>
+
+    <p><br>
+     <a href="dr_321.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_323.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #104</TITLE></HEAD><BODY>
+<H2>Defect Report #104</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Ron Guilmette
+<BR>
+<B>Question</B>
+<BR>
+ANSI/ISO C Defect report #rfg11:
+<BR>
+According to subclause 6.5:
+<BLOCKQUOTE>
+If an identifier for an object is declared with no linkage, 
+the type for the object shall be complete by the end of its declarator, 
+or by the end of its init-declarator if it has an initializer.
+</BLOCKQUOTE>
+It would appear that the above rule effectly renders the following 
+code not strictly conforming (because this code violates 
+the above rule):
+<BR>
+<TT><B>typedef struct incomplete_S ST;<BR>
+typedef union  incomplete_U UT;<BR>
+<BR>
+void example1(ST arg);	/*</B><I> diagnostic permitted/encouraged? </I><B>*/<BR>
+void example2(UT arg);	/*</B><I> diagnostic permitted/encouraged? </I><B>*/
+</B></TT><BR>
+I have noted however that many/most/all ``conforming'' implementations 
+do in fact accept code such as that shown above (without producing 
+any diagnostics).
+<BR>
+Is it the intention of the Committee that code such as that shown 
+above should be considered to be strictly conforming? If 
+so, then some change to the wording now present in subclause 6.5 is 
+in order (to allow for such cases).
+<BR>
+<B>Response</B>
+<BR>
+See <A HREF="dr_084.html"> Defect Report #084</A>.
+<BR>
+<A HREF="dr_103.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_105.html">Next Defect Report</A>
+</BODY></HTML>

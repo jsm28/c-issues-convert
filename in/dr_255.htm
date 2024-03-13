@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #255</title>
+  </head>
+
+  <body bgcolor="#FFFFFF">
+    <h2 align="center">Defect Report #255</h2>
+    <a href="dr_254.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_256.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> UK C Panel<br>
+     <b>Submission Date:</b> 2001-09-07<br>
+     <b>Source:</b> Clive D.W. Feather &lt;clive@demon.net&gt;<br>
+     <b>Version:</b> 1.2<br>
+     <b>Date:</b> 2002-05-15<br>
+     <b>Subject:</b> non-prototyped function calls and argument
+    mismatches</p>
+    <b>Problem</b> 
+
+    <p>Consider the code:</p>
+<pre>
+<tt><b>   #include &lt;stdio.h&gt;
+    int f ();
+    int main (void)
+    {
+        return f (0);
+    }
+    #ifdef PROTO
+    int f (unsigned int x)
+    #else
+    int f (x) unsigned int x;
+    #endif
+    {
+        return printf ("%u\n", x);
+    }
+</b></tt>
+</pre>
+
+    <p>Now, 6.5.2.2#6 reads:</p>
+
+    <blockquote>
+      [#6] If the expression that denotes the called function has a
+      type that does not include a prototype, the integer
+      promotions are performed on each argument, and arguments that
+      have type float are promoted to double. These are called the
+      default argument promotions.<br>
+       [...]<br>
+       If the function is defined with a type that includes a
+      prototype, and either the prototype ends with an ellipsis (,
+      ...) or the types of the arguments after promotion are not
+      compatible with the types of the parameters, the behavior is
+      undefined. If the function is defined with a type that does
+      not include a prototype, and the types of the arguments after
+      promotion are not compatible with those of the parameters
+      after promotion, the behavior is undefined, except for the
+      following cases: 
+
+      <ul>
+        <li>one promoted type is a signed integer type, the other
+        promoted type is the corresponding unsigned integer type,
+        and the value is representable in both types;</li>
+
+        <li>both types are pointers to qualified or unqualified
+        versions of a character type or <tt><b>void</b></tt>.</li>
+      </ul>
+    </blockquote>
+    So the above code is undefined if <tt><b>PROTO</b></tt> is
+    defined, but is legitimate if it is not. This seems
+    inconsistent. 
+
+    <p>Traditionally, when a function is called and no prototype is
+    in scope, the implementation applies the default argument
+    promotions to the argument value and then assumes that is the
+    parameter type. If it isn't, this can cause all kinds of
+    problems, which is why the undefined behaviour. However, if it
+    is known that the argument value will be correctly handled by
+    the parameter type, there is no problem; this is the rationale
+    behind the exceptions.</p>
+
+    <p>The exceptions should apply to both cases, no matter how the
+    function is eventually defined.</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Change the part of 6.5.2.2#6 after the omission to:</p>
+
+    <blockquote>
+      If the types of the arguments after promotion are not
+      compatible with those of the parameters after promotion 78A),
+      the behavior is undefined, except for the following cases: 
+
+      <ul>
+        <li>one promoted type is a signed integer type, the other
+        promoted type is the corresponding unsigned integer type,
+        and the value is representable in both types;</li>
+
+        <li>both types are pointers to qualified or unqualified
+        versions of a character type or <tt><b>void</b></tt>.</li>
+      </ul>
+
+      <p>If the function is defined with a type that includes a
+      prototype, and either any parameter has a type which is
+      altered by the default argument promotions or the prototype
+      ends with an ellipsis (, ...), the behavior is undefined.</p>
+
+      <p>78A) Because of the rule later in this paragraph, it is
+      only necessary to check whether the parameter type undergoes
+      promotion when the function is not defined using a
+      prototype.</p>
+    </blockquote>
+    <hr>
+
+    <p><b>Committee Response</b></p>
+
+    <p>The Committee does not wish to further refine the behavior
+    of calls not in the scope of prototypes. In practice, this will
+    not be a problem, and the Committee does not wish to define the
+    behavior.</p>
+
+    <p><br>
+     <a href="dr_254.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_256.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

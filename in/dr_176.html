@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #176</TITLE></HEAD>
+<BODY><H2>Defect Report #176</H2> 
+<B>Submission Date</B>: 16 Oct 95
+<BR>
+<B>Submittor</B>: BSI
+<BR>
+<B>Source</B>: Clive D.W. Feather
+<BR>
+<B>Question</B>
+<BR>
+<I>Submitted to BSI by Clive D.W. Feather  clive@sco.com .</I>
+<BR>
+<I>In this Defect Report, identifiers lexically identical to those 
+declared in standard headers refer to the identifiers declared in  those
+standard headers, whether or not the header is explicitly mentioned.</I>
+<BR>
+<I>This Defect Report has been prepared with considerable help from 
+Mark Brader, Jutta Degener, Ronald Guilmette, and a person whose
+employment  conditions require anonymity. However, except where stated,
+opinions  expressed or implied should not be assumed to be those of any
+person  other than myself.</I>
+<BR> Defect Report UK 024: Diagnostics for <TT><B>#error</B></TT>
+<BR> The rules concerning whether <TT><B>#error</B></TT> generates a
+diagnostic are  contradictory.
+<BR> Subclause 5.1.1.3 reads:
+<BR><BLOCKQUOTE> A conforming implementation shall produce at least one diagnostic 
+message (identified in an implementation-defined manner) for every 
+translation unit that contains a violation of any syntax rule or
+constraint.  Diagnostic messages need not be produced in other
+circumstances.</BLOCKQUOTE>
+<BR> Subclause 6.8.5 reads:
+<BR>
+<BLOCKQUOTE><B>Semantics</B>
+<BR> A preprocessing directive of the form
+<BR>
+<TT>          # error pp-tokens    new-line                   opt</TT></BLOCKQUOTE>
+<BR> causes the implementation to produce a diagnostic message that 
+includes the specified sequence of preprocessing tokens.
+<BR> Since this is not in a Constraints section, these two statements
+directly  contradict one another. Furthermore, the second statement can
+be read  as applying to a <TT><B>#error</B></TT> directive that is
+excluded by a false 
+<TT><B>#if</B></TT> condition.
+<BR>
+<B>Suggested Technical Corrigendum</B>
+<BR> In subclause 6.8.5, replace the entire subclause with:
+<BR>
+<B>Constraints</B>
+<BR> A <TT><B>#error</B></TT> preprocessing directive shall not occur
+in a  translation unit. Any diagnostic message generated because of the 
+violation of this constraint [Footnote: The intent of this subclause  is
+that <TT><B>#error</B></TT> indicates that translation should fail. As
+stated  in subclause 5.1.1.3, a translation unit excludes lines within
+the 
+<I>false</I> side of <TT><B>#if</B></TT> ... <TT><B>#else</B></TT>
+... <TT><B>#endif</B></TT>  groups.] shall include the sequence of
+preprocessing tokens in the  directive. 
+<BR><A HREF="dr_175.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_177.html">Next Defect Report</A></BODY></HTML>

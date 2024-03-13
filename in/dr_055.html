@@ -1,0 +1,62 @@
+<HTML><HEAD><TITLE>Defect Report #055</TITLE></HEAD><BODY>
+<H2>Defect Report #055</H2>
+<B>Submission Date</B>: 14 Apr 93
+<BR>
+<B>Submittor</B>: Project Editor (P.J. Plauger)
+<BR>
+<B>Source</B>: Loren Schall
+<BR>
+<B>Question</B> 1
+<BR>
+It has been suggested that the six macros <TT><B>SIGABRT</B></TT>, <TT><B>SIGFPE</B></TT>, 
+<TT><B>SIGILL</B></TT>, <TT><B>SIGINT</B></TT>, <TT><B>SIGSEGV</B></TT>, and <TT><B>SIGTERM</B></TT> must 
+have distinct values. Here is the relevant portion of subclause 7.7:
+<BLOCKQUOTE>
+``The macros defined are
+<BR>
+<TT><B>SIG_DFL<BR>
+		SIG_ERR<BR>
+		SIG_IGN<BR>
+</TT></B>
+which expand to constant expressions with distinct values that have 
+type compatible with the second argument to and the return value of 
+the <TT><B>signal</B></TT> function, and whose value compares unequal to the 
+address of any declarable function; and the following, each of which 
+expands to a positive integral constant expression that is the signal 
+number corresponding to the specified condition:
+<BR>
+...
+<BR>
+An implementation need not generate any of these signals, except as 
+a result of explicit calls to the <TT><B>raise</B></TT> function.''
+</BLOCKQUOTE>
+On the one hand, the reference to ``the signal number corresponding 
+to the specified condition'' might be assumed to imply different 
+numbers for each signal. On the other hand, the words ``distinct 
+values'' were explicitly used for the three <TT><B>SIG_*</B></TT> macros 
+and are conspicuously missing for the others.
+<BR>
+Also, I think it's worth noting that the standard expects <TT><B>raise</B></TT> 
+to work meaningfully (i.e. to be able to tell them apart).
+<BR>
+Summary: must <TT><B>SIGABRT</B></TT>, <TT><B>SIGFPE</B></TT>, <TT><B>SIGILL</B></TT>, <TT><B>SIGINT</B></TT>, 
+<TT><B>SIGSEGV</B></TT>, and <TT><B>SIGTERM</B></TT> have distinct values?
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>In subclause 7.7, page 120, lines 14-16, change:</B></I>
+<BR>
+and the following, each of which expands to a positive integral constant 
+expression that is the signal number corresponding to the specified 
+condition:
+<BR>
+<I><B>to:</B></I>
+<BR>
+and the following, which expand to positive integral constant expressions 
+with distinct values that are the signal numbers, each corresponding 
+to the specified condition:
+<BR>
+<A HREF="dr_054.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_056.html">Next Defect Report</A>
+</BODY></HTML>

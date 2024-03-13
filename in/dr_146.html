@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #146</TITLE></HEAD>
+<BODY><H2>Defect Report #146</H2> 
+<B>Submission Date</B>: 23 Feb 95
+<BR>
+<B>Submittor</B>: BSI
+<BR>
+<B>Source</B>: Clive D.W. Feather
+<BR>
+<B>Question</B>
+<BR>
+<I>Submitted to BSI by Clive D.W. Feather clive@sco.com.</I>
+<BR>
+<I>In this Defect Report, identifiers lexically identical to those 
+declared in standard headers refer to the identifiers declared in  those
+standard headers, whether or not the header is explicitly mentioned.</I>
+<BR>
+<I>This Defect Report has been prepared with considerable help from 
+Mark Brader, Jutta Degener, Ronald Guilmette, and a person whose
+employment  conditions require anonymity. However, except where stated,
+opinions  expressed or implied should not be assumed to be those of any
+person  other than myself.</I>
+<BR> Defect Report UK 030: Nugatory constraint
+<BR>
+<I>[BSI characterize this issue as minor.]</I>
+<BR> The constraint of 6.1.2 serves no purpose. Subclause 6.1.2 states 
+in part:
+<BR>
+<B>Constraints</B>
+<BR> In translation phases 7 and 8, an identifier shall not consist  of
+the same sequence of characters as a keyword.
+<BR>
+<B>Semantics</B>
+<BR> ... When preprocessing tokens are converted to tokens during 
+translation phase 7, if a preprocessing token could be converted to 
+either a keyword or an identifier, it is converted to a keyword.
+<BR> Given the latter text [added in Technical Corrigendum 1, reference
+
+<A HREF=dr_017.html#Question39>DR 017 Q39</A>], the constraint can never be violated.
+<BR>
+<B>Suggested Technical Corrigendum:</B>
+<BR> Delete the constraint in subclause 6.1.2.
+<BR> Suggested Future Change
+<BR> Delete the constraint in subclause 6.1.2.<BR>
+<A HREF="dr_145.html">Previous Defect Report</A> 
+&lt; - &gt; 
+<A HREF="dr_147.html"> Next Defect Report</A>
+</BODY></HTML>

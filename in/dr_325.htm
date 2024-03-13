@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #325</title>
+  </head>
+
+  <body>
+    <br>
+     
+
+    <h2 align="center">Defect Report #325</h2>
+    <a href="dr_324.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_326.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Stoughton (US)<br>
+     <b>Submission Date:</b>&nbsp;2006-03-20<br>
+     <!-- yyyy-mm-dd -->
+     <b>Source:</b>&nbsp;<br>
+     <b>Reference Document:</b>&nbsp;<a href=
+    "http://www.opengroup.org/austin/aardvark/latest/xshbug2.txt">XSH
+    Aardvark, ERN 137</a><br>
+     <b>Version:</b>&nbsp;1.4<br>
+     <b>Date:</b>&nbsp;2006-10-25<br>
+     <b>Subject:</b> <code><b>strerror()</b></code></p>
+
+    <p><b>Summary:</b> Is an implementation permitted to return an
+    empty string for <code><b>strerror()</b></code>?</p>
+
+    <p>This is a potential defect forwarded from the Austin Group.
+    Is an implementation of strerror permitted to return an empty
+    string if there is no associated error message for the given
+    <code><b>errnum</b></code>?</p>
+    <br>
+     The C Standard, although not perfectly clear, strongly implies
+    that the string returned by <code><b>strerror()</b></code>
+    cannot be empty. The C Standard says 
+
+    <blockquote>
+      <code><b>strerror</b></code> shall map any value of type
+      <code><b>int</b></code> to a message.
+    </blockquote>
+    It doesn't state that the message cannot be empty, but the fact
+    that it uses the word "message" means that any interpretation
+    that allows this message to be empty would also have to allow
+    the diagnostic messages produced by the compiler to be empty.
+    Clearly such an interpretation is very much not intended. Note
+    that the relationship between the term "diagnostic message" and
+    the "message" produced by <code><b>strerror()</b></code> is
+    clear from section 3.10:<br>
+     
+
+    <blockquote>
+      <b>diagnostic message</b><br>
+       message belonging to an implementation-defined subset of the
+      implementation's message output
+    </blockquote>
+
+    <p>On the other hand, some have argued that "An
+    implementation-defined subset" does not preclude the empty
+    string from being included in the set of messages, provided the
+    implementation has defined the error that equates to the
+    message.</p>
+
+    <p><b>Suggested Technical Corrigendum</b><br>
+     Clarification Required.</p>
+
+    <p>Change 7.21.6.2, p2 from:</p>
+
+    <blockquote>
+      The strerror function maps the number in
+      <code><b>errnum</b></code> to a message string. Typically,
+      the values for <code><b>errnum</b></code> come from
+      <code><b>errno</b></code>, but <code><b>strerror()</b></code>
+      shall map any value of type <code><b>int</b></code> to a
+      message.
+    </blockquote>
+    To: 
+
+    <blockquote>
+      The strerror function maps the number in
+      <code><b>errnum</b></code> to a message string. If the value
+      of <code><b>errnum</b></code> is a valid error number, the
+      message string shall indicate what error occurred; otherwise,
+      if this functions completes successfully, the message string
+      shall indicate that an unknown error occurred. Typically, the
+      values for <code><b>errnum</b></code> come from
+      <code><b>errno</b></code>, but strerror shall map any value
+      of type int to a message.
+    </blockquote>
+    <hr>
+    <!-- Entires below the line by WG14 only. -->
+
+    <p><b>Proposed Committee Response</b></p>
+
+    <p><br>
+     The intention is to allow implementations to decide what form
+    of message is appropriate. There is no consensus to make the
+    suggested change or any change along this line.</p>
+    <br>
+     <a href="dr_324.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_326.htm">Next Defect Report</a>
+  </body>
+</html>
+

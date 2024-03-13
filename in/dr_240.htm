@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #240</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #240</h2>
+    <a href="dr_239.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_241.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Fred Tydeman (US)<br>
+     <b>Submission Date:</b> 2001-02-25<br>
+     <b>Source:</b><br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n943.txt">ISO/IEC
+    WG14 N943</a><br>
+     <b>Version:</b> 1.2<br>
+     <b>Date:</b> 2004-03-16<br>
+     <b>Subject:</b> <tt><b>lrint</b></tt>, <tt><b>llrint</b></tt>,
+    <tt><b>lround</b></tt>, <tt><b>llround</b></tt>, and
+    <tt><b>ilogb</b></tt> descriptions are not consistent for
+    unrepresentable results.</p>
+
+    <p><b>Summary</b></p>
+
+    <blockquote>
+      <tt><b>lrint</b></tt>, <tt><b>llrint</b></tt>,
+      <tt><b>lround</b></tt>, <tt><b>llround</b></tt>, and
+      <tt><b>ilogb</b></tt> need to have consistent and explicit
+      descriptions when results are too big to represent in an
+      integer type. Also, that case should be treated as a domain
+      error.
+    </blockquote>
+
+    <p><b>Details</b></p>
+
+    <blockquote>
+      IEC 60559 requires that when a large floating-point value, an
+      infinity, or a NaN is converted to an integer, and the result
+      cannot be represented as an integer in the result's format,
+      an invalid operation has occurred. This is currently mostly
+      reflected in C99's Annex F. This condition corresponds to C's
+      domain error. 
+
+      <p><tt><b>ilogb</b></tt> does not discuss (in either 7.12.6.5
+      or annex F) what should happen if the expected result cannot
+      be represented as an <b>int</b>. It should be treated as a
+      domain error (because it is an invalid operation to IEC
+      60559). The "correct" result of <tt><b>ilogb(0)</b></tt> is
+      -infinity (which cannot be represented as an <b>int</b>, so
+      should be treated as a domain error).
+      <tt><b>ilogb(NaN)</b></tt> does not follow the normal
+      convention of NaN in implies NaN out, so this unusual case
+      needs to be discussed.</p>
+
+      <p><tt><b>lrint</b></tt> and <tt><b>llrint</b></tt> are
+      inconsistent on how large arguments are treated between
+      7.12.9.5 (range error) and Annex F (domain error).</p>
+
+      <p><tt><b>lround</b></tt> and <tt><b>llround</b></tt> are
+      inconsistent on how large arguments are treated between
+      7.12.9.7 (range error) and Annex F (domain error).</p>
+    </blockquote>
+
+    <p><b>Suggested Technical Corrigendum</b><br>
+    </p>
+
+    <p>In 7.12.6.5 <tt><b>ilogb</b></tt>:</p>
+
+    <p>Change:</p>
+
+    <blockquote>
+      A range error may occur if <tt><b>x</b></tt> is
+      <tt><b>0</b></tt>.
+    </blockquote>
+    to 
+
+    <blockquote>
+      A domain error occurs if <tt><b>x</b></tt> is
+      <tt><b>0</b></tt>, infinite, or <tt><b>NaN</b></tt>.
+    </blockquote>
+    Add: 
+
+    <blockquote>
+      If the correct value is outside the range of the return type,
+      the numeric result is unspecified, and a domain error occurs.
+    </blockquote>
+    In 7.12.9.5 <tt><b>lrint</b></tt> <tt><b>llrint</b></tt>: 
+
+    <p>Change:</p>
+
+    <blockquote>
+      If the rounded value is outside the range of the return type,
+      the numeric result is unspecified. A range error may occur if
+      the magnitude of <tt><b>x</b></tt> is too large.
+    </blockquote>
+    to 
+
+    <blockquote>
+      If the rounded value is outside the range of the return type,
+      the numeric result is unspecified, and a domain error occurs.
+    </blockquote>
+    In 7.12.9.7 <tt><b>lround</b></tt> <tt><b>llround</b></tt>: 
+
+    <p>Change:</p>
+
+    <blockquote>
+      If the rounded value is outside the range of the return type,
+      the numeric result is unspecified. A range error may occur if
+      the magnitude of <tt><b>x</b></tt> is too large.
+    </blockquote>
+    to 
+
+    <blockquote>
+      If the rounded value is outside the range of the return type,
+      the numeric result is unspecified, and a domain error occurs.
+    </blockquote>
+    <hr>
+
+    <p><b>Technical Corrigendum</b><br>
+    </p>
+
+    <p>In 7.12.6.5 <tt><b>ilogb</b></tt>:</p>
+
+    <p>Change:</p>
+
+    <blockquote>
+      A range error may occur if <tt><b>x</b></tt> is
+      <tt><b>0</b></tt>.
+    </blockquote>
+    to 
+
+    <blockquote>
+      A domain error or range error may occur if <tt><b>x</b></tt>
+      is <tt><b>0</b></tt>, infinite, or <tt><b>NaN</b></tt>.
+    </blockquote>
+    Add: 
+
+    <blockquote>
+      If the correct value is outside the range of the return type,
+      the numeric result is unspecified.
+    </blockquote>
+    In F.9.3.5 <tt><b>ilogb</b></tt>: 
+
+    <p>Change:</p>
+
+    <blockquote>
+      No additional requirements.
+    </blockquote>
+    to 
+
+    <blockquote>
+      If the correct result is outside the range of the return
+      type, the numeric result is unspecified and the "invalid"
+      floating-point exception is raised.
+    </blockquote>
+    In 7.12.9.5 <tt><b>lrint</b></tt> and <tt><b>llrint</b></tt>: 
+
+    <p>Change:</p>
+
+    <blockquote>
+      If the rounded value is outside the range of the return type,
+      the numeric result is unspecified. A range error may occur if
+      the magnitude of <tt><b>x</b></tt> is too large.
+    </blockquote>
+    to 
+
+    <blockquote>
+      If the rounded value is outside the range of the return type,
+      the numeric result is unspecified, and a domain error or
+      range error may occur.
+    </blockquote>
+    In 7.12.9.7 <tt><b>lround</b></tt> and <tt><b>llround</b></tt>:
+    
+
+    <p>Change:</p>
+
+    <blockquote>
+      If the rounded value is outside the range of the return type,
+      the numeric result is unspecified. A range error may occur if
+      the magnitude of <tt><b>x</b></tt> is too large.
+    </blockquote>
+    to 
+
+    <blockquote>
+      If the rounded value is outside the range of the return type,
+      the numeric result is unspecified, and a domain error or
+      range error may occur.
+    </blockquote>
+
+    <p><br>
+     <a href="dr_239.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_241.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

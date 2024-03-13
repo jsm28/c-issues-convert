@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #275</title>
+  </head>
+
+  <body bgcolor="#FFFFFF">
+    <h2 align="center">Defect Report #275</h2>
+    <a href="dr_274.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_276.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> UK C Panel<br>
+     <b>Submission Date:</b> 2001-09-07<br>
+     <b>Source:</b> Clive D.W. Feather &lt;clive@demon.net&gt;<br>
+     <b>Version:</b> 1.2 <!-- ! year-month-day hour:min:sec -->
+    <br>
+     <b>Date:</b> 2002-05-15<br>
+     <b>Subject:</b> bitwise-OR of nothing</p>
+    <b>Problem</b> 
+
+    <p><tt><b>FE_ALL_EXCEPT</b></tt> is defined in 7.6#6 as:</p>
+
+    <blockquote>
+      <p>[#6] The macro</p>
+<pre>
+            <tt><b>FE_ALL_EXCEPT</b></tt>
+</pre>
+
+      <p>is simply the bitwise OR of all floating-point exception
+      macros defined by the implementation.</p>
+    </blockquote>
+
+    <p>If no floating-point exception macros are defined, is
+    <tt><b>FE_ALL_EXCEPT</b></tt>:</p>
+
+    <ul>
+      <li>required to be defined as zero</li>
+
+      <li>required to be undefined</li>
+
+      <li>unspecified whether it is either of the above ?</li>
+    </ul>
+
+    <p>[This appears to be the only case of its kind.]</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Append to 7.6#6:</p>
+
+    <blockquote>
+      <p>If no such macros are defined,
+      <tt><b>FE_ALL_EXCEPT</b></tt> can either be defined as 0 or
+      left undefined.</p>
+    </blockquote>
+    <hr>
+
+    <p><b>Technical Corrigendum</b><br>
+    </p>
+
+    <p>Append to 7.6#6:</p>
+
+    <blockquote>
+      If no such macros are defined, <tt><b>FE_ALL_EXCEPT</b></tt>
+      shall be defined as 0.
+    </blockquote>
+
+    <p><br>
+     <a href="dr_274.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_276.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

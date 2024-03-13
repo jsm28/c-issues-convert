@@ -1,0 +1,34 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #030</TITLE></HEAD><BODY>
+<H2>Defect Report #030</H2>
+
+<P><B>Submission Date</B>: 10 Dec 92 <BR>
+<B>Submittor</B>: WG14 <BR>
+<B>Source</B>: X3J11/91-017 (Pawel Molenda) <BR>
+<B>Question</B> 1 <BR>
+Reference: subclause 7.5.1 <B>Treatment of error conditions</B>, page 111,
+lines 14-17: </P>
+
+<BLOCKQUOTE>
+<P>For all functions, a <I>domain error</I> occurs if an input argument
+is outside the domain over which the mathematical function is defined.
+... an implementation may define additional domain errors, provided that
+such errors are consistent with the mathematical definition of the function.
+</P>
+</BLOCKQUOTE>
+
+<P>If <B><TT>sin(DBL_MAX)</TT></B> results in <B><TT>errno</TT></B> being
+set to <B><TT>EDOM</TT></B>, is this a violation of the standard? If yes,
+what should be the result of this call? <BR>
+<B>Response</B> <BR>
+Subclause 7.5.1 does not give license for an implementation to set <B><TT>errno</TT></B>
+to <B><TT>EDOM</TT></B> for <B><TT>sin(DBL_MAX)</TT></B>. The mathematical
+function is defined for that argument value. While a conforming hosted
+implementation must not set <B><TT>errno</TT></B> to <B><TT>EDOM</TT></B>
+for this case, the standard imposes no constraint on the accuracy of the
+result value. <BR>
+</P>
+<A HREF="dr_029.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_031.html">Next Defect Report</A>
+</BODY></HTML>

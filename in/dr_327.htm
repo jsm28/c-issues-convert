@@ -1,0 +1,297 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+    <meta name="generator" content="Microsoft FrontPage 5.0">
+
+    <title>Defect report #327</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #327</h2>
+    <a href="dr_326.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_328.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> J11<br>
+     <b>Submission Date:</b> 2006-03-29<br>
+     <b>Source:</b> Rich Peterson &lt;Rich.Peterson@hp.com&gt;<br>
+     <b>Reference Document:</b><br>
+     <b>Version:</b>1.4<br>
+     <b>Date:</b> 2007-09-06<br>
+     <b>Subject:</b> Italicize definition of variable length array
+    type, add forward references</p>
+
+    <p><b>Summary</b></p>
+
+    <p>The definition of variable length array type is in 6.7.5.2p4
+    (Array declarators), but it is not italicized:</p>
+
+    <blockquote>
+      <blockquote>
+        <p>If the size is * instead of being an expression, the
+        array<br>
+         type is a variable length array type of unspecified
+        size,<br>
+         which can only be used in declarations with function
+        prototype<br>
+         scope; such arrays are nonetheless complete types. If the
+        size<br>
+         is an integer constant expression and the element type has
+        a<br>
+         known constant size, the array type is not a variable
+        length<br>
+         array type; otherwise, the array type is a variable
+        length<br>
+         array type.</p>
+      </blockquote>
+    </blockquote>
+
+    <p>The way that the term appears in the text is not in a form
+    where there is a single occurrence that gives the complete
+    definition, but it would still probably be better to italicize
+    it than not.</p>
+
+    <p>Or perhaps both the 1st and 3rd occurrence of it in the
+    above should get italics?&nbsp; It would not make sense to
+    italicize the 2nd occurrence.&nbsp; Re-writing the text to
+    create a single occurrence that provides a complete definition
+    does not seem worthwhile.</p>
+
+    <p>Also, variable length array types are mentioned several
+    times prior to this definition.&nbsp; The following sections
+    should probably have a forward reference "variable length array
+    type (6.7.5.2)":&nbsp; 6.2.4, 6.2.7, 6.5.3.4</p>
+
+    <p>Similarly, a forward reference "variably modified type
+    (6.7.5)" is desirable in&nbsp; 6.7.2.1.</p>
+
+    <p>&nbsp;</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>&nbsp;</p>
+
+    <p>1. Change first sentence of 6.7.5.2p4 (adding italics)
+    from::</p>
+
+    <blockquote>
+      <blockquote>
+        <p>If the size is * instead of being an expression, the
+        array type is a variable length array type of unspecified
+        size, which can only be used in declarations with function
+        prototype scope; such arrays are nonetheless complete
+        types.</p>
+      </blockquote>
+
+      <p>to</p>
+
+      <blockquote>
+        <p>If the size is * instead of being an expression, the
+        array type is a <i>variable length array type</i> of
+        unspecified size, which can only be used in declarations
+        with function prototype scope; such arrays are nonetheless
+        complete types.</p>
+      </blockquote>
+    </blockquote>
+
+    <p>&nbsp;&nbsp;&nbsp;&nbsp; It might also be desirable to
+    change the second sentence (adding italics) from:</p>
+
+    <blockquote>
+      <blockquote>
+        <p>If the size is an integer constant expression and the
+        element type has a known constant size, the array type is
+        not a variable length array type; otherwise, the array type
+        is a variable length array type.</p>
+      </blockquote>
+
+      <p>to</p>
+
+      <blockquote>
+        <p>If the size is an integer constant expression and the
+        element type has a known constant size, the array type is
+        not a variable length array type; otherwise, the array type
+        is a <i>variable length array type.</i></p>
+      </blockquote>
+    </blockquote>
+
+    <p>2. Change list of Forward references following 6.2.4p6
+    from</p>
+
+    <blockquote>
+      <p align="left"><b>Forward references:</b> statements (6.8),
+      function calls (6.5.2.2), declarators (6.7.5), array
+      declarators (6.7.5.2), initialization (6.7.8).</p>
+    </blockquote>
+
+    <p align="left">&nbsp;&nbsp;&nbsp; to</p>
+
+    <blockquote>
+      <p align="left"><b>Forward references:</b> statements (6.8),
+      function calls (6.5.2.2), declarators (6.7.5), array
+      declarators (6.7.5.2), variable length array type (6.7.5.2),
+      initialization (6.7.8).</p>
+    </blockquote>
+
+    <p align="left">3. Add forward reference section following
+    6.2.7p5:</p>
+
+    <blockquote>
+      <p align="left"><b>Forward references:</b> variable length
+      array type (6.7.5.2).</p>
+    </blockquote>
+
+    <p align="left">4. Change list of Forward references following
+    6.5.3.4p7 from:</p>
+
+    <blockquote>
+      <p align="left"><b>Forward references:</b> common definitions
+      <code><b>&lt;stddef.h&gt;</b></code> (7.17), declarations
+      (6.7), structure and union specifiers (6.7.2.1), type names
+      (6.7.6), array declarators (6.7.5.2).</p>
+    </blockquote>
+
+    <p align="left">&nbsp;&nbsp;&nbsp; to</p>
+
+    <blockquote>
+      <p align="left"><b>Forward references:</b> common definitions
+      <code><b>&lt;stddef.h&gt;</b></code> (7.17), declarations
+      (6.7), structure and union specifiers (6.7.2.1), type names
+      (6.7.6), array declarators (6.7.5.2), variable length array
+      type (6.7.5.2).</p>
+    </blockquote>
+
+    <p align="left">5. Change list of Forward references following
+    6.7.2.1p22 from:</p>
+
+    <blockquote>
+      <p align="left"><b>Forward references:</b> tags
+      (6.7.2.3).</p>
+    </blockquote>
+
+    <p align="left">&nbsp;&nbsp;&nbsp; to</p>
+
+    <blockquote>
+      <p align="left"><b>Forward references:</b> tags (6.7.2.3),
+      variably modified type (6.7.5).</p>
+    </blockquote>
+
+    <p align="left">&nbsp;</p>
+    <hr>
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p align="left">1. Change first sentence of 6.7.5.2p4 (adding
+    italics) from::</p>
+
+    <blockquote>
+      <blockquote>
+        <p>If the size is * instead of being an expression, the
+        array type is a variable length array type of unspecified
+        size, which can only be used in declarations with function
+        prototype scope; such arrays are nonetheless complete
+        types.</p>
+      </blockquote>
+
+      <p>to</p>
+
+      <blockquote>
+        <p>If the size is * instead of being an expression, the
+        array type is a <i>variable length array type</i> of
+        unspecified size, which can only be used in declarations
+        with function prototype scope; such arrays are nonetheless
+        complete types.</p>
+      </blockquote>
+    </blockquote>
+
+    <p align="left">2. Change the second sentence (adding italics)
+    from:</p>
+
+    <blockquote>
+      <blockquote>
+        <p>If the size is an integer constant expression and the
+        element type has a known constant size, the array type is
+        not a variable length array type; otherwise, the array type
+        is a variable length array type.</p>
+      </blockquote>
+
+      <p>to</p>
+
+      <blockquote>
+        <p>If the size is an integer constant expression and the
+        element type has a known constant size, the array type is
+        not a variable length array type; otherwise, the array type
+        is a <i>variable length array type.</i></p>
+      </blockquote>
+    </blockquote>
+
+    <p align="left">3. Change list of Forward references following
+    6.2.4p6 from</p>
+
+    <blockquote>
+      <p align="left"><b>Forward references:</b> statements (6.8),
+      function calls (6.5.2.2), declarators (6.7.5), array
+      declarators (6.7.5.2), initialization (6.7.8).</p>
+    </blockquote>
+
+    <p align="left">&nbsp;&nbsp;&nbsp; to</p>
+
+    <blockquote>
+      <p align="left"><b>Forward references:</b> statements (6.8),
+      function calls (6.5.2.2), declarators (6.7.5), array
+      declarators (6.7.5.2), variable length array type (6.7.5.2),
+      initialization (6.7.8).</p>
+    </blockquote>
+
+    <p align="left">4. Add forward reference section following
+    6.2.7p5:</p>
+
+    <blockquote>
+      <p align="left"><b>Forward references:</b> variable length
+      array type (6.7.5.2).</p>
+    </blockquote>
+
+    <p align="left">5. Change list of Forward references following
+    6.5.3.4p7 from:</p>
+
+    <blockquote>
+      <p align="left"><b>Forward references:</b> common definitions
+      <code><b>&lt;stddef.h&gt;</b></code> (7.17), declarations
+      (6.7), structure and union specifiers (6.7.2.1), type names
+      (6.7.6), array declarators (6.7.5.2).</p>
+    </blockquote>
+
+    <p align="left">&nbsp;&nbsp;&nbsp; to</p>
+
+    <blockquote>
+      <p align="left"><b>Forward references:</b> common definitions
+      <code><b>&lt;stddef.h&gt;</b></code> (7.17), declarations
+      (6.7), structure and union specifiers (6.7.2.1), type names
+      (6.7.6), array declarators (6.7.5.2), variable length array
+      type (6.7.5.2).</p>
+    </blockquote>
+
+    <p align="left">6. Change list of Forward references following
+    6.7.2.1p22 from:</p>
+
+    <blockquote>
+      <p align="left"><b>Forward references:</b> tags
+      (6.7.2.3).</p>
+    </blockquote>
+
+    <p align="left">&nbsp;&nbsp;&nbsp; to</p>
+
+    <blockquote>
+      <p align="left"><b>Forward references:</b> tags (6.7.2.3),
+      variably modified type (6.7.5).</p>
+    </blockquote>
+
+    <p><br>
+     <a href="dr_326.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_328.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

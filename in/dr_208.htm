@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect Report #208</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #208</h2>
+    <a href="dr_207.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_209.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Clive Feather (UK)<br>
+     <b>Submission Date:</b> 1999-09-06<br>
+     <b>Source:</b><br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n892.htm">ISO/IEC
+    WG14 N892</a><br>
+     <b>Version:</b> 1.2<br>
+     <b>Date:</b> 2000-11-02 13:46:02<br>
+     <b>Subject:</b> Ambiguity in initialization</p>
+
+    <p><b>Summary</b><br>
+     When there is more than one initializer for the same object it
+    is not clear whether both initializers are actually evaluated.
+    Wording changes are proposed to clarify this.</p>
+
+    <p><b>Details</b><br>
+     Subclause 6.7.8 paragraph 19 reads:</p>
+
+    <blockquote>
+      The initialization shall occur in initializer list order,
+      each initializer provided for a particular subobject
+      overriding any previously listed initializer for the same
+      subobject; all subobjects that are not initialized explicitly
+      shall be initialized implicitly the same as objects that have
+      static storage duration.
+    </blockquote>
+
+    <p>Paragraph 23 reads:</p>
+
+    <blockquote>
+      The order in which any side effects occur among the
+      initialization list expressions is unspecified.
+    </blockquote>
+
+    <p>If the same object is initialized twice, as in:</p>
+
+    <blockquote>
+      <tt><b>int a [2] = { f (0), f (1), [0] = f (2) };</b></tt>
+    </blockquote>
+    the term "overriding" could be taken to mean that the first
+    initializer is ignored completely, or it could be taken to mean
+    that the expression is evaluated and then discarded. The
+    proposed wording change assumes the latter. 
+
+    <p><b>Suggested Technical Corrigendum</b><br>
+     Replace 6.7.8 paragraph 23 with:</p>
+
+    <blockquote>
+      All the initialization list expressions are evaluated, even
+      if the resulting value will be overridden, but the order in
+      which any side effects occur is unspecified.
+    </blockquote>
+    <hr>
+
+    <p><b>Committee Response</b><br>
+     The question asks about the expression</p>
+
+    <blockquote>
+      <tt><b>int a [2] = { f (0), f (1), [0] = f (2) };</b></tt>
+    </blockquote>
+    and the meaning of the wording 
+
+    <blockquote>
+      each initializer provided for a particular subobject
+      overriding any previously listed initializer for the same
+      subobject;
+    </blockquote>
+    It was the intention of WG14 that the call <tt><b>f(0)</b></tt>
+    might, but need not, be made when <tt><b>a</b></tt> is
+    initialized. If the call <em>is</em> made, the order in which
+    <tt><b>f(0)</b></tt> and <tt><b>f(2)</b></tt> occur is
+    unspecified (as is the order in which <tt><b>f(1)</b></tt>
+    occurs relative to both of these). Whether or not the call is
+    made, the result of <tt><b>f(2)</b></tt> is used to initialize
+    <tt><b>a[0]</b></tt>. 
+
+    <p>The wording of paragraph 23:</p>
+
+    <blockquote>
+      The order in which any side effects occur among the
+      initialization list expressions is unspecified.
+    </blockquote>
+    should be taken to only apply to those side effects which
+    actually occur. 
+
+    <p><b>Technical Corrigendum</b><br>
+     In 6.7.8 paragraph 19, attach a footnote to "the same
+    subobject":</p>
+
+    <blockquote>
+      [*] Any initializer for the subobject which is overridden and
+      so not used to initialize that subobject might not be
+      evaluated at all.
+    </blockquote>
+
+    <p><br>
+     <a href="dr_207.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_209.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

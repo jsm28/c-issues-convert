@@ -1,0 +1,206 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #253</title>
+  </head>
+
+  <body bgcolor="#FFFFFF">
+    <h2 align="center">Defect Report #253</h2>
+    <a href="dr_252.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_254.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> UK C Panel<br>
+     <b>Submission Date:</b> 2001-09-07<br>
+     <b>Source:</b> Clive D.W. Feather &lt;clive@demon.net&gt;<br>
+     <b>Version:</b> 1.2<br>
+     <b>Date:</b> 2002-05-15<br>
+     <b>Subject:</b> "overriding" in designated initializers</p>
+    <b>Problem</b> 
+
+    <p>Consider the code:</p>
+<pre>
+<tt><b>   struct fred
+    {
+        char s [6];
+        int n;
+    };
+    struct fred x [] = { { { "abc" }, 1 }, [0].s[0] = 'q'        };
+    struct fred y [] = { { { "abc" }, 1 }, [0] = { .s[0] = 'q' } };
+</b></tt>
+</pre>
+
+    <p>Both <tt><b>x</b></tt> and <tt><b>y</b></tt> will contain
+    one element of type <tt><b>struct fred</b></tt>, which will be
+    initialized by the initializer <tt><b>{ { "abc" }, 1 }</b></tt>
+    and then modified in some way. The question is exactly how it
+    is modified.</p>
+
+    <p>6.7.8#19 reads:</p>
+
+    <blockquote>
+      [#19] The initialization shall occur in initializer list
+      order, each initializer provided for a particular subobject
+      overriding any previously listed initializer for the same
+      subobject; all subobjects that are not initialized explicitly
+      shall be initialized implicitly the same as objects that have
+      static storage duration.
+    </blockquote>
+    In the case of <tt><b>x</b></tt>, it is fairly clear that the
+    first initializer sets: 
+<pre>
+<tt><b>   x [0].s [0] = 'a'
+    x [0].s [1] = 'b'
+    x [0].s [2] = 'c'
+    x [0].s [3] = '\0'
+    x [0].n     = 1</b></tt>
+</pre>
+    and the second one sets: 
+<pre>
+<tt><b>   x [0].s [0] = 'q'</b></tt>
+</pre>
+    Finally, the remaining subobjects are initialized implicitly: 
+<pre>
+<tt><b>   x [0].s [4] = 0
+    x [0].s [5] = 0</b></tt>
+</pre>
+
+    <p>Now consider the second initializer for <tt><b>y</b></tt>.
+    One point of view says that this behaves the same as for
+    <tt><b>x</b></tt>: it specifies a value for <tt><b>y [0].s
+    [0]</b></tt>, after which the two remaining elements of
+    <tt><b>y [0].s</b></tt> are still uninitialized and so are set
+    to zero. The other point of view says that this sets:</p>
+<pre>
+<tt><b>   y [0] = (struct fred) { .s[0] = 'q' }</b></tt>
+</pre>
+    and that the rule concerning "all subobjects that are not
+    initialized explicitly" applies recursively. If so, the effect
+    is to set: 
+<pre>
+<tt><b>   x [0].s [0] = 'q'
+    x [0].s [1] = 0
+    x [0].s [2] = 0
+    x [0].s [3] = 0
+    x [0].s [4] = 0
+    x [0].s [5] = 0
+    x [0].n     = 0</b></tt>
+</pre>
+
+    <p>Which of these is correct ?</p>
+
+    <p><b>Suggested Technical Corrigendum 1</b></p>
+
+    <p>If <tt><b>x</b></tt> and <tt><b>y</b></tt> are supposed to
+    have the same effect, change 6.7.8#19 to:</p>
+
+    <blockquote>
+      <p>[#19] The initialization shall occur in initializer list
+      order, each initializer provided for a particular subobject
+      overriding any previously listed initializer for the same
+      subobject. When all initializers have been applied, any
+      subobjects of the overall object being initialized that have
+      not been initialized explicitly shall be initialized
+      implicitly the same as objects that have static storage
+      duration.</p>
+    </blockquote>
+
+    <p>and add a new paragraph at the end:</p>
+
+    <blockquote>
+      [#39] To illustrate the rules for implicit initialization,
+      in: 
+<pre>
+<tt><b>       struct fred
+        {
+            char s [6];
+            int n;
+        };
+        struct fred x [] = { { { "abc" }, 1 }, [0].s[0] = 'q'        };
+        struct fred y [] = { { { "abc" }, 1 }, [0] = { .s[0] = 'q' } };
+</b></tt>
+</pre>
+      the definitions of <tt><b>x</b></tt> and <tt><b>y</b></tt>
+      result in identical objects. Each will be an array with one
+      element; within that element, the members
+      <tt><b>s[4]</b></tt> and <tt><b>s[5]</b></tt> are implicitly
+      initialized to zero.
+    </blockquote>
+
+    <p><b>Suggested Technical Corrigendum 2</b></p>
+
+    <p>If <tt><b>x</b></tt> and <tt><b>y</b></tt> are supposed to
+    be different, change 6.7.8#19 to:</p>
+
+    <blockquote>
+      [#19] The initialization shall occur in initializer list
+      order, each initializer provided for a particular subobject
+      overriding any previously listed initializer for the same
+      subobject; for each brace-enclosed list, all subobjects
+      within the object that that list initializes that are not
+      initialized explicitly shall be initialized implicitly the
+      same as objects that have static storage duration.
+    </blockquote>
+    and add a new paragraph at the end: 
+
+    <blockquote>
+      [#39] To illustrate the rules for implicit initialization,
+      in: 
+<pre>
+<tt><b>       struct fred
+        {
+            char s [6];
+            int n;
+        };
+        struct fred x [] = { { { "abc" }, 1 }, [0] = { .s[0] = 'q' } };
+        struct fred y [] = { { .s[0] = 'q' } };
+</b></tt>
+</pre>
+      the definitions of <tt><b>x</b></tt> and <tt><b>y</b></tt>
+      result in identical objects. Each will be an array with one
+      element; within that element, all the members are implicitly
+      initialized to zero except for <tt><b>s[0]</b></tt>. In the
+      definition of <tt><b>x</b></tt> the first initializer has no
+      effect, since the second one initializes the same subobject
+      (<tt><b>x[0]</b></tt>).
+    </blockquote>
+    <hr>
+
+    <p><b>Committee Response</b></p>
+
+    <p>Given the example</p>
+<pre>
+<tt><b>   struct fred
+    {
+        char s [6];
+        int n;
+    };
+    struct fred y [] = { { { "abc" }, 1 }, [0] = { .s[0] = 'q' } };</b></tt>
+</pre>
+    6.7.8#21 makes it clear already that <tt><b>{ .s[0] = 'q'
+    }</b></tt> initializes a whole object of type "struct fred"
+    whose members (other than <tt><b>s[0]</b></tt>) are initialized
+    as though they were static storage, so this initialization of
+    <tt><b>y[0]</b></tt> overrides the previous one. Thus, all
+    subobjects of <tt><b>y[0]</b></tt> other than
+    <tt><b>s[0]</b></tt> are zeroed. Paragraph #21 of 6.7.8 also
+    makes it clear that the initializations for <tt><b>x</b></tt>
+    and <tt><b>y</b></tt> are different. 
+
+    <p><b>Committee Discussion</b></p>
+
+    <p>The tem "designated initializer" is never mentioned in the
+    Standard though it appears in the index and new features
+    section (the Standard uses the term "designation initializer"
+    in the text).</p>
+
+    <p><br>
+     <a href="dr_252.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_254.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

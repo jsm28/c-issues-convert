@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 1st December 2004), see www.w3.org">
+
+  <title>Defect report #341</title>
+</head>
+
+<body>
+  <h2 align="center">Defect Report #341</h2><a href=
+  "dr_340.htm">Previous Defect Report</a> &lt; - &gt; <a href=
+  "dr_342.htm">Next Defect Report</a>
+
+  <p><br>
+  <b>Submitter:</b> Joseph Myers (UK)<br>
+  <b>Submission Date:</b> 2007-03-24&gt;<br>
+  <b>Source:</b> Joseph Myers &lt;joseph@codesourcery.com&gt;<br>
+  <b>Reference Document:</b> <a href=
+  "http://www.dkuug.dk/JTC1/SC22/WG14/www/docs/n1222.htm">ISO/IEC
+  WG14 N1222</a><br>
+  <b>Version:</b> 1.4<br>
+  <b>Date:</b> 2008-07-21<br>
+  <b>Subject:</b> <code><b>[*]</b></code> in abstract
+  declarators</p>
+
+  <p><b>Summary</b></p>
+
+  <p>6.7.5.2#4 says that <code>*</code> as an array size "can only
+  be used in declarations with function prototype scope", and
+  paragraph 5 says "If the size is an expression that is not an
+  integer constant expression: if it occurs in a declaration at
+  function prototype scope, it is treated as if it were replaced by
+  <code>*</code>".</p>
+
+  <p>But is a type name in a function prototype a declaration, and
+  does it have function prototype scope? Scopes are only defined in
+  6.2.1 for identifiers, and such type names do not declare
+  identifiers. The presence of <code>[*]</code> in the syntax for
+  abstract declarators suggests that</p>
+  <pre>
+    void f(int (*)[*]);
+</pre>
+
+  <p>was intended to be valid and <code>void f(int (*)[a]);</code>
+  was intended to be equivalent to it, but there are no
+  declarations at function prototype scope involved.</p>
+
+  <p>Similarly, what is "in" such a declaration? Is the following
+  valid?</p>
+  <pre>
+    void f(int (*)[sizeof(int (*)[*])]);
+</pre>
+
+  <p>Although the <code>[*]</code> lies within a parameter
+  declaration, it's within an expression inside it; not one of the
+  declarators involved in declaring the identifier with function
+  prototype scope.</p>
+
+  <p><b>Suggested Technical Corrigendum</b><br>
+  6.7.5.2 paragraph 4, change "declarations with function prototype
+  scope" to "the nested sequence of declarators or abstract
+  declarators for a function parameter in a function declaration
+  that is not a definition"; remove the footnote. Paragraph 5,
+  change "declaration at function prototype scope" to "the nested
+  sequence of declarators or abstract declarators for a function
+  parameter in a function declaration that is not a
+  definition".</p>
+  <hr>
+
+  <p><b>Committee Discussion</b></p>
+
+  <h4>Spring 2007</h4>
+
+  <p>There was consensus that the first example should be valid,
+  and the second should be invalid.</p>
+
+  <p>Also see <a href=
+  "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1238.htm">N1238</a>.</p>
+
+  <p><b>Fall 2007</b></p>
+
+  <p>Above reference to N1238 is not relevant.</p>
+
+  <p>It appears the issue hinges entirely on the point that a
+  <i>type-name</i> is not a declaration and does not declare an
+  identifier, and because of that it has no scope.  Instead of
+  adding complex wording to avoid using the term "scope" as
+  suggested in the DR, it seems clearer to modify the definition of
+  Scope such that it applies to <i>type-name</i>, which is
+  described in 6.7.6 as "syntactically a declaration for a function
+  or an object of that type that omits the identifier".</p>
+
+<p><b>Spring 2008</b></p>
+<p>The Committee does not see a way to avoid this change, it seems to be safe. 
+Not altogether satisfied 
+with the aesthetics of this change, but this seems to be a satisfactory way forward. </p>
+
+  <p><b>Technical Corrigendum</b></p><br>
+  6.2.1, add a new paragraph at the end (following paragraph 7):
+
+  <blockquote>
+    As a special case, a <i>type-name</i> (which is not a
+    declaration of an identifier) is considered to have a scope
+    that begins just after the place within the <i>type-name</i>
+    where the omitted identifier would appear were it not omitted.
+  </blockquote>
+
+     <p>Also add a forward reference to Type names (6.7.6).</p>
+
+  <p>6.7.5.2 paragraph 4, change</p>
+
+  <blockquote>
+    declarations with function prototype scope
+  </blockquote>to
+
+  <blockquote>
+    declarations or type-names with function prototype scope
+  </blockquote>
+
+  <p><br>
+  <a href="dr_340.htm">Previous Defect Report</a> &lt; - &gt;
+  <a href="dr_342.htm">Next Defect Report</a></p>
+</body>
+</html>

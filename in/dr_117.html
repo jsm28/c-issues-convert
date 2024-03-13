@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN"><html><head><title>Defect Report #117</title></head>
+<body>
+<h2>Defect Report #117</h2>
+<b>Submission Date</b>: 03 Dec 93
+<br>
+<b>Submittor</b>: WG14
+<br>
+<b>Source</b>: Ron Guilmette
+<br>
+<b>Question</b>
+<br>
+ANSI/ISO C Defect Report #rfg24:
+<br>
+Subject: Abstract semantics, sequence points, and expression evaluation.
+<br>
+Does the following code involve usage which renders the 
+code itself not strictly conforming?
+<br>
+<tt><b>int example ()<br>
+	{<br>
+	int x1 = 2, x2 = 1, x_temp;<br>
+<br>
+	return (x_temp = x1, x_temp) + (x_temp = x2, x_temp);<br>
+	}
+</b></tt><br>
+Background:
+<br>
+Subclause 5.1.2.3:
+<blockquote>
+The semantic descriptions in this International Standard describe 
+the behavior of an abstract machine in which issues of optimization 
+are irrelevant.
+</blockquote>
+Subclause 6.3:
+<blockquote>
+Between the previous and next sequence point an object shall 
+have its stored value modified at most once by the evaluation of an 
+expression.
+</blockquote>
+Although it is quite clear that the above quoted ``modified at 
+most once'' rule was intended to render certain programs ``not 
+strictly conforming,'' there is an unfortunate amount of ambiguity 
+built into the current wording of that rule.
+<br>
+Quite simply, while the ``modified at most once'' rule is obviously 
+telling us what a ``strictly conforming program'' must not do 
+between two particular points <i>in time,</i> it is altogether less 
+than clear what events and/or actions (exactly) are associated with 
+these two points in time. Additionally, it is also less than clear 
+(from reading the remainder of the C Standard) what actions and/or 
+events are allowed (or required) to take place between some pair of 
+sequence points in cases where both members of the pair are part of 
+some large single expression whose evaluation order is not completely 
+dictated by the C Standard.
+<br>
+Note that despite the assertion given in subclause 5.1.2.3 (and quoted 
+above) the C Standard does not <i>fully</i> specify the behavior of 
+the ``abstract machine,'' especially when it comes to the issue 
+of the ordering of sub-expression evaluation used by the ``abstract 
+machine'' model.
+<br>
+This fact makes it inherently impossible to precisely determine even 
+just the <i>relative</i> timings of various events (including the 
+``occurrence'' of or the ``execution'' of or the ``evaluation'' 
+of sequence points) which may (or must) occur sometime during the 
+evaluation of a larger containing expression (except in a few cases 
+involving <tt><b>||</b></tt> or <tt><b>&amp;&amp;</b></tt> or <tt><b>?:</b></tt> or <tt><b>,</b></tt> operators).
+<br>
+To put it more plainly, if some pair of sequence points will be ``reached'' 
+(or ``evaluated'' or ``executed'') during the evaluation 
+of any pair of subexpressions which are themselves operands for some 
+binary operator (other than the operators <tt><b>||</b></tt> or <tt><b>&amp;&amp;</b></tt> or 
+<tt><b>?:</b></tt> or <tt><b>,</b></tt>) then the C Standard's description of the ``abstract 
+machine'' semantics are inadequate to enable us to know either 
+which <i>order</i> these two sequence points will occur in, or even 
+which other aspects of the evaluation of the overall expression may 
+(or must) occur ``between'' the two sequence points.
+<br>
+Thus, it seems that it may also be inherently impossible to know 
+whether or not the prohibition against multiple modifications of a 
+given variable ``between'' two consecutive sequence points is 
+(or may be) violated in such contexts.
+<br>
+Here is a simple example of an expression which illustrates these 
+points:
+<blockquote>
+<tt><b>	(x = i, x) + (x = j, x)</b></tt>
+</blockquote>
+In this expression there are two ``comma'' sequence points;
+however, nothing in the C Standard gives any indication as to which 
+of these two may be (or must be) ``evaluated'' or ``reached'' 
+first. (Indeed, it would seem that on a parallel machine of some sort, 
+<i>both</i> points could perhaps be reached simultaneously.)  It is 
+fairly clear however that each of the references to the stored values 
+of <tt><b>x</b></tt> must not be evaluated until their respective preceeding 
+``comma sequence points'' have been ``reached'' or ``evaluated.'' 
+Thus, a partial (but very incomplete) ordering is imposed upon the 
+sequence of events which must occur during the evaluation of this 
+expression.
+<br>
+For the sake of this example, let us call the leftmost comma in the 
+above expression ``lcomma'' and call the rightmost comma ``rcomma.'' 
+Given this terminology, it would appear that the C Standard permits 
+the following sequence of events during evaluation of the above expression:
+<blockquote>
+<tt><b>	eval(i)<br>
+	x=          (leftmost assignment to x)<br>
+	lcomma      &lt;==== sequence point<br>
+	eval(x)     (leftmost reference to stored value of x)<br>
+	eval(j)<br>
+	x=          (rightmost assignment to x)<br>
+	rcomma      &lt;==== sequence point<br>
+	eval(x)     (rightmost reference to stored value of x)<br>
+	+
+</b></tt></blockquote>
+Note that in this (very realistic) example, the stored value of <tt><b>x</b></tt> 
+is <i>never</i> modified more than once between any pair of sequence 
+points. Given that the ordering described above is both a perfectly 
+<i>plausible</i> and also a perfectly <i>permissible</i> ordering 
+for the evaluation of the expression in question, and given that this 
+particular permissible ordering of events does not violate the ``modified 
+at most once'' rule (quoted earlier) it therefore appears that 
+the expression in question may in fact be interpreted as being ``strictly 
+conforming,'' and that such expressions may appear within ``strictly 
+conforming'' programs.
+<br>
+I would like the Committee to either confirm or reject this view, 
+and to provide some commentary explaining that confirmation or rejection.
+<br>
+<b>Response</b>
+<br>
+The C Standard does not forbid an implementation from interleaving
+the subexpressions in the given example as specified above. Similarly,
+there is no requirement that an implementation use this particular
+interleaving. It is irrelevant that one particular interleaving
+yields code that properly delimits multiple modifications of the
+same object with sequence points. Any program that depends on this
+particular interleaving is depending on unspecified behavior, and is
+therefore not strictly conforming.
+<br>
+<a href="http://std.dkuug.dk/jtc1/sc22/wg14/www/docs/dr_116.html">Previous Defect Report</a>
+&lt; - &gt; 
+<a href="http://std.dkuug.dk/jtc1/sc22/wg14/www/docs/dr_118.html">Next Defect Report</a>
+</body></html>

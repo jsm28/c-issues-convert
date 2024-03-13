@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #081</TITLE></HEAD><BODY>
+<H2>Defect Report #081</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Clive Feather
+<BR>
+<B>Question</B>
+<BR>
+Item 18 - left shift operator
+<BR>
+The result of the left shift operator <TT><B>E1 &lt; E2</B></TT>, when <TT><B>E1</B></TT> 
+is signed, is defined (subclause 6.3.7) as <TT><B>E1</B></TT> left-shifted by 
+<TT><B>E2</B></TT> bits, with vacated bits filled with zeros. But what exactly 
+does this mean?
+<BR>
+The C Standard defines a bit (subclause 3.3) only as a unit of data 
+storage. Bits are related to the value of an object
+only in subclause 6.1.2.5, 
+which specifies the representation of certain types. It may therefore 
+be claimed that the left shift operator must act on representations, 
+which are of fixed length. In this interpretation, the left <TT><B>E2</B></TT> 
+bits (including the sign bit) are lost, as they would be if <TT><B>E1</B></TT> 
+was unsigned; the sign bit of the result is taken from a bit in <TT><B>E1</B></TT>, 
+<TT><B>E2</B></TT> places to the right of the sign bit and, provided that the 
+resultant bit pattern actually represents a value of the result type, 
+an exception is impossible.
+<BR>
+On the other hand, it may also be claimed that the whole of subclause 
+6.3 specifies the meaning of operations in abstract mathematical terms, 
+subject to the general note about exceptions. In this view, the bit 
+sequence representing the non-sign part of a signed integer is converted 
+by the shift operation to a bit sequence of indefinite length, and, 
+to avoid an exception due to overflow, this bit sequence must fit 
+back in the non-sign part without the loss at the left of anything 
+but copies of the sign bit.
+<BR><OL TYPE=a>
+<LI> Which of these two views is correct?
+<LI> If the answer to (a) is the first view, does undefined behavior 
+occur if the resulting bit pattern is not the representation of an 
+integer?
+<P>
+The following questions apply only if the answer to (a) is that the 
+second view is correct.
+</P>
+<LI> If <TT><B>E1</B></TT> is positive, and <TT><B>E1</B></TT> times 2 to the power <TT><B>E2</B></TT> 
+is less than or equal to <TT><B>INT_MAX</B></TT> (or <TT><B>LONG_MAX</B></TT>), is the 
+result always <TT><B>E1</B></TT> times 2 to the power <TT><B>E2</B></TT>?
+<LI> Under what circumstances is the result undefined?
+</OL>
+<B>Response</B>
+<BR>
+Subclause 6.3 states that the binary operator <TT><B> &lt; </B></TT>,
+among others, has implementation-defined aspects for signed types.
+Therefore, the answer to ``What does it mean to left shift a signed
+value?'' is that it is implementation-defined.
+<BR>
+<A HREF="dr_080.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_082.html">Next Defect Report</A>
+</BODY></HTML>

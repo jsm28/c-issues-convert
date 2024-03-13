@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #158</TITLE></HEAD>
+<BODY><H2>Defect Report #158</H2> 
+<B>Submission Date</B>: 16 Oct 95
+<BR>
+<B>Submittor</B>: BSI
+<BR>
+<B>Source</B>: Clive D.W. Feather
+<BR>
+<B>Question</B>
+<BR>
+<I>Submitted to BSI by Clive D.W. Feather clive@sco.com.</I>
+<BR>
+<I>In this Defect Report, identifiers lexically identical to those
+declared in standard headers refer to the identifiers declared in  those
+standard headers, whether or not the header is explicitly mentioned.</I>
+<BR>
+<I>This Defect Report has been prepared with considerable help from 
+Mark Brader, Jutta Degener, Ronald Guilmette, and a person whose
+employment  conditions require anonymity. However, except where stated,
+opinions  expressed or implied should not be assumed to be those of any
+person  other than myself.</I>
+<BR> Defect Report UK 006: Null pointer conversions
+<BR> The C Standard does not define semantics for the explicit
+conversion  of null pointer constants and for the implicit conversion of
+null  pointers.
+<BR> Subclause 6.2.2.3 reads in part:
+<BR> If a null pointer constant is assigned to or compared for equality
+ to a pointer, the constant is converted to a pointer of that type. 
+Such a pointer, called a null pointer, is guaranteed to compare unequal 
+to a pointer to any object or function.
+<BR> Two null pointers, converted through possibly different sequences 
+of casts to pointer types, shall compare equal.
+<BR> Given the definitions:
+<BR>
+<TT><B>void * p = 0;<BR> int  * i = 0;</B>
+</TT><BR> does the standard guarantee that the expression <TT><B>p ==
+i</B></TT> always  evaluates to 1? The last quoted sentence only covers
+casts, and not  the implicit conversions of that comparison. Conversely,
+do the expressions 
+<TT><B>(int *)0</B></TT> or <TT><B>1 ? 0 : (int *)0</B></TT> yield
+null pointers of type 
+<TT><B>(int *)</B></TT>? The quoted text does not cover the case of a
+null pointer  constant being converted other than by assignment or in a
+test for  equality, yet expressions such as these are widely used.
+<BR>
+<B>Suggested Technical Corrigendum:</B>
+<BR> In subclause 6.2.2.3, change:
+<BLOCKQUOTE> Two null pointers, converted through possibly different sequences 
+of casts to pointer types, shall compare equal.
+</BLOCKQUOTE> to:
+<BLOCKQUOTE> Conversion of a null pointer to another pointer type yields  a
+null pointer of that type. Any two null pointers shall compare equal.
+</BLOCKQUOTE> Alternatively, a common term could be introduced to more
+conveniently  describe the various forms of pointer that cannot be
+dereferenced.  In this case, replace the last two paragraphs of
+subclause 6.2.2.3  with:
+<BLOCKQUOTE>For each pointer type, there exist values which can participate 
+in assignment and equality operations, but which cause undefined
+behavior  if dereferenced. These are referred to as <I>undereferenceable.</I>
+ An undereferenceable pointer compares unequal to any other value of 
+the same pointer type. For each pointer type, one particular
+undereferenceable  pointer value is called the <I>null pointer.</I>
+[Footnote: Since  there is only one such value, all null pointers of the
+same type compare  equal.]</BLOCKQUOTE>
+ <BLOCKQUOTE>An integral constant expression with the value 0, or such an 
+expression cast to type <TT><B>void *</B></TT>, is called a <I>null
+pointer  constant.</I> If a null pointer constant is assigned to or
+compared  for equality with an object of pointer type, or cast to
+pointer type,  then it is converted to the null pointer of that type.
+Conversion  of a null pointer to another pointer type produces the null
+pointer  of that type.</BLOCKQUOTE>
+<BR> If the answer to
+<A HREF="dr_155.html"> Defect Report #155 </A>is that <I>unique</I> means 
+<I>different each time,</I> then replace the last two sentences  of
+subclause 7.10.3 with:<BR>
+<BLOCKQUOTE> If the size of the space requested is zero, an undereferenceable 
+pointer is returned. It is implementation-defined whether this is 
+always a null pointer or whether the implementation attempts to produce 
+a value distinct from any other undereferenceable pointer. Any pointer 
+value returned by an allocation can be passed to the free function;  if
+the value is not a null pointer, it becomes indeterminate. [Footnote:  A
+subsequent allocation may return a pointer value with the same bit 
+pattern, but a strictly conforming program can't detect this.] The 
+value of a pointer that refers to any part of a freed object is also 
+indeterminate.</BLOCKQUOTE>
+<B>Response</B>
+<BR><BR>
+Does the Standard guarantee that <TT><B>p == i</B></TT>?  Yes.
+<BR><BR>
+Does <TT><B>(int *) 0</B></TT> yield a null pointer of type <TT><B>int *</B></TT>? Yes.
+<BR><BR>
+Does <TT><B>1 ? 0 : (int *) 0</B></TT> yield a null pointer of type <TT><B>int *</B></TT>? Yes.
+<BR><BR>
+The intent of the part of Subclause 6.2.2.3 that you quote is to state that a null pointer results
+ when a null pointer constant is converted to a pointer.  By singling out assignment and 
+comparison, the Standard is misleadingly specific.  This should be clarified in the
+Standard.
+<BR><BR>
+<B>Future Change</B>
+<BR><BR>
+In Subclause 6.2.2.3
+<BR>
+Change
+<BLOCKQUOTE>
+"If a null pointer constant is assigned to or compared for equality
+to a pointer, the constant is converted to a pointer of that type.
+Such a pointer, called a null pointer, is guaranteed to compare
+unequal to a pointer to any object or function.
+<BR><BR>
+Two null pointers, converted through possibly different sequences
+of casts to pointer types, shall compare equal."
+</BLOCKQUOTE>
+To
+<BLOCKQUOTE>
+"The result of converting a null pointer constant to a pointer
+type is called a null pointer.  A null pointer is guaranteed
+to compare unequal to a pointer to any object or function.
+<BR>
+Conversion of a null pointer to another pointer type yields
+a null pointer of that type.  Any two null pointers shall compare
+equal."
+</BLOCKQUOTE>
+In Subclause 6.3.9
+<BR>
+Add a new paragraph after the first paragraph in Semantics
+<BLOCKQUOTE>
+"If a null pointer constant is compared for equality to a pointer,
+the constant is converted to the type of the pointer."
+</BLOCKQUOTE>
+<A HREF="dr_157.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_159.html">Next Defect Report</A></BODY></HTML>

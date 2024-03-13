@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #231</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #231</h2>
+    <a href="dr_230.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_232.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Makoto Noda (Japan)<br>
+     <b>Submission Date:</b> 2000-04-14<br>
+     <b>Source:</b><br>
+     <b>Reference Document:</b> N/A<br>
+     <b>Version:</b> 1.3<br>
+     <b>Date:</b> 2001-09-18 16:15:47<br>
+     <b>Subject:</b> Semantics of <i>text-line</i> and
+    <i>non-directive</i></p>
+
+    <p><b>Summary</b><br>
+     The semantics of <i>text-line</i> and <i>non-directive</i> are
+    not specified in the C99 Standard.</p>
+
+    <p><b>Question</b><br>
+     Are <i>text-line</i> and <i>non-directive</i>
+    implementation-defined ?</p>
+    <hr>
+
+    <p><b>Committee Response</b></p>
+
+    <p>The standard is correct, but provide the following words
+    with the response, and include them in the Rationale
+    document:</p>
+
+    <blockquote>
+      Neither <i>text-line</i> nor <i>non-directive</i> is
+      implementation defined. They are strictly defined as
+      sequences of <i>pp-tokens</i> followed by <i>new-line</i>.
+      Each of these rules represents a placeholder for an
+      intermediate state in the phases of translation, and is
+      expressed as a non-terminal since it has no associated
+      semantics at this phase.<br>
+      <br>
+       However, these sequences of <i>pp-tokens</i> are still
+      subject to normal processing in the subsequent phases of
+      translation.
+    </blockquote>
+
+    <p><br>
+     <a href="dr_230.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_232.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

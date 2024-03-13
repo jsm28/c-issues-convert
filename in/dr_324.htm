@@ -1,0 +1,285 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect Report #324</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #324</h2>
+    <a href="dr_323.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_325.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Ivan A. Kosarev (Unicals Group, RU)<br>
+     <b>Submission Date:</b> 2005-04-19<br>
+     <b>Source:</b><br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1123.htm">N1123</a><br>
+
+     <b>Version:</b> 1.3<br>
+     <b>Date:</b> 2006-10-25<br>
+     <b>Subject:</b> Tokenization obscurities</p>
+
+    <p><b>Summary #1</b></p>
+
+    <p>5.1.1.2 #2 ("Translation phases") says:</p>
+
+    <blockquote>
+      <p>[#2] ...2. Each instance of a backslash character
+      (<tt><b>\</b></tt>) immediately followed by a new-line
+      character is deleted, splicing physical source lines to form
+      logical source lines. Only the last backslash on any physical
+      source line shall be eligible for being part of such a
+      splice. A source file that is not empty shall end in a
+      new-line character, which shall not be immediately preceded
+      by a backslash character before any such splicing takes
+      place.</p>
+
+      <p>3. The source file is decomposed into preprocessing
+      tokens<sup>6)</sup> and sequences of white-space characters
+      (including comments). A source file shall not end in a
+      partial preprocessing token or in a partial comment. Each
+      comment is replaced by one space character. New-line
+      characters are retained. Whether each nonempty sequence of
+      white-space characters other than new-line is retained or
+      replaced by one space character is
+      implementation-defined.</p>
+    </blockquote>
+
+    <p>Assuming there is a non-empty source file legally ending
+    with a new-line character, what are examples of such partial
+    preprocessing tokens that could end the file? And, generally,
+    what the partial preprocessing tokens are?</p>
+
+    <p><b>Summary #2</b></p>
+
+    <p>6.4.4.4 ("Character constants") says:</p>
+
+    <blockquote>
+      [#3] The single-quote <tt><b>'</b></tt>, the double-quote
+      <tt><b>"</b></tt>, the question-mark <tt><b>?</b></tt>, the
+      backslash <tt><b>\</b></tt>, and arbitrary integer values are
+      representable according to the following table of escape
+      sequences...<br>
+      <br>
+       
+
+      <p>[#5] The octal digits that follow the backslash in an
+      octal escape sequence are taken to be part of the
+      construction of a single character for an integer character
+      constant or of a single wide character for a wide character
+      constant...</p>
+
+      <p>[#6] The hexadecimal digits that follow the backslash and
+      the letter <tt><b>x</b></tt> in a hexadecimal escape sequence
+      are taken to be part of the construction of a single
+      character for an integer character constant or of a single
+      wide character for a wide character constant...</p>
+
+      <p>[#8] In addition, characters not in the basic character
+      set are representable by universal character names and
+      certain nongraphic characters are representable by escape
+      sequences consisting of the backslash <tt><b>\</b></tt>
+      followed by a lowercase letter: <tt><b>\a</b></tt>,
+      <tt><b>\b</b></tt>, <tt><b>\f</b></tt>, <tt><b>\n</b></tt>,
+      <tt><b>\r</b></tt>, <tt><b>\t</b></tt>, and
+      <tt><b>\v</b></tt>.<sup>64)</sup></p>
+
+      <p><sup>64)</sup> The semantics of these characters were
+      discussed in 5.2.2. If any other character follows a
+      backslash, the result is not a token and a diagnostic is
+      required. See ''future language directions'' (6.11.4).</p>
+    </blockquote>
+
+    <p>6.4 #3 ("Lexical elements") says:</p>
+
+    <blockquote>
+      <p>[#3] ...The categories of preprocessing tokens are: header
+      names, identifiers, preprocessing numbers, character
+      constants, string literals, punctuators, and single
+      non-white-space characters that do not lexically match the
+      other preprocessing token categories.<sup>58)</sup> If a
+      <tt><b>'</b></tt> or a <tt><b>"</b></tt> character matches
+      the last category, the behavior is undefined.</p>
+    </blockquote>
+
+    <p>What in the formal content of the standard says that if any
+    other character follows a backslash, there should be a
+    diagnostic? Does such a case causes undefined behaviour?
+    Furthermore, if a character sequence that is coming just after
+    a double quote <tt><b>"</b></tt> (that is not terminating a
+    string literal) begins with, say, <tt><b>\l</b></tt> and the
+    result of the tokenization is not a token, then what the result
+    is?</p>
+
+    <p><b>Summary #3</b></p>
+
+    <p>6.10.9 #2 ("Pragma operator") gives the following
+    example:</p>
+
+    <blockquote>
+      <p>[#2] EXAMPLE A directive of the form:</p>
+<pre>
+<tt><b>#pragma listing on "..\listing.dir"</b></tt>
+</pre>
+
+      <p>can also be expressed as:</p>
+<pre>
+<tt><b>_Pragma ( "listing on \"..\\listing.dir\"" )</b></tt>
+</pre>
+    </blockquote>
+
+    <p>The previous summary says that if there an unknown escape
+    sequence encountered during tokenization of a character
+    constant or string literal, then the result is not token. The
+    question is whether the example above is well-defined.</p>
+
+    <p><b>Suggested Technical Corrigendum</b><br>
+    </p>
+    <hr>
+
+    <p><b>Proposed Committee Response</b></p>
+
+    <p><b>Answers to Summary #1</b></p>
+
+    <p>"Partial preprocessing token" is not itself a technical
+    term; it is merely the English Language word "partial"
+    modifying the technical term "preprocessing token". A
+    preprocessing token is defined by the grammar non-terminal
+    <i>preprocessing-token</i> in Subclause 6.4. A partial
+    preprocessing token is therefore just part of a preprocessing
+    token that is not the entire preprocessing token.</p>
+
+    <p>The statement that "source files shall not end in a partial
+    preprocessing token or in a partial comment" has two
+    implications. First, a preprocessing token may not begin in one
+    file and end in another file. Second, the last preprocessing
+    token in a source file must be well-formed and complete. For
+    example, the last token may not be a string literal missing the
+    close quote.</p>
+
+    <p><b>Answers to Summary #2</b></p>
+
+    <p>Subclause 5.1.1.3 requires a diagnostic to be produced if
+    there is a violation of any syntax rule or constraint. The
+    syntax for character constants (Subclause 6.4.4.4) and string
+    literals (Subclause 6.4.5) both require that any escape
+    sequence be well formed according the nonterminal
+    <i>escape-sequence</i> (Subclause 6.4.4.4). Thus a diagnostic
+    is required if a character constant or string literal contains
+    a <tt><b>\</b></tt> not followed by the remainder of a valid
+    escape sequence.</p>
+
+    <p>Note that a preprocessor token may be a <i>header-name</i>
+    in addition to a <i>string-literal</i>. Although a
+    <i>header-name</i> has the appearance of a string literal, it
+    is parsed by a different grammar (Subclause 6.4.7). The syntax
+    for <i>header-name</i> is not violated if a <tt><b>\</b></tt>
+    is not followed by the remainder of a valid escape sequence.
+    Thus, no diagnostic is required. However, if a header name
+    contains a <tt><b>\</b></tt>, the behavior is undefined
+    (Subclause 6.4.7, paragraph 3).</p>
+
+    <p>Since the behavior is undefined, the implementation is free
+    to do anything it wishes. Some possible examples:</p>
+
+    <ul>
+      <li>Fail</li>
+
+      <li>Issue a diagnostic</li>
+
+      <li>Treat the <tt><b>\</b></tt> as the start of an escape
+      sequence</li>
+
+      <li>Treat the <tt><b>\</b></tt> as a literal character</li>
+    </ul>
+
+    <p>The last alternative is useful if your operating system
+    normally uses <tt><b>\</b></tt> in the names of files.</p>
+
+    <p><b>Answers to Summary #3</b></p>
+
+    <p>Before your question can be answered, it is necessary to
+    understand the precise steps taken in translating a
+    <tt><b>_Pragma</b></tt> operator as controlled by the phases of
+    translation (Subclause 5.1.1.2).</p>
+
+    <p>The <tt><b>_Pragma</b></tt> operator (Subclause 6.10.9) has
+    an argument that is a string literal. If any escape sequence in
+    that string literal is not grammatically well-formed, a
+    diagnostic is required. In the example, the string literal is
+    syntactically correct, so no diagnostic is required so far.</p>
+
+    <p>The <tt><b>_Pragma</b></tt> operator is executed during
+    translation phase 4. Note that escape sequences in a string are
+    not replaced by the characters that they represent until
+    translation phase 5. However, the <tt><b>_Pragma</b></tt>
+    operator itself does limited processing to handle
+    <tt><b>\\</b></tt> and <tt><b>\"</b></tt> escape sequences
+    (Subclause 6.10.9 paragraph 1), and so when the value of the
+    string literal is retokenized to produce preprocessor tokens,
+    the result for the example matches the <tt><b>#pragma</b></tt>
+    directive given.</p>
+
+    <p>The final answer to your question rests with whether the
+    preprocessor tokens in the <tt><b>#pragma</b></tt> directive
+    require a diagnostic. Subclause 6.10.6 states that a
+    <tt><b>#pragma</b></tt> directive ends in just a list of
+    preprocessor tokens without placing any requirements on which
+    preprocessor tokens.</p>
+
+    <p>Your question then becomes whether the preprocessor token
+    that looks like a string in the <tt><b>#pragma</b></tt> in the
+    example is a <i>string-literal</i> or a <i>header-name</i>. If
+    it is a <i>string-literal</i>, a diagnostic is required. If it
+    is a <i>header-name</i>, no diagnostic is required, but there
+    is undefined behavior. The choice of which preprocessor tokens
+    are allowed in a <tt><b>#pragma</b></tt> directive is
+    implementation defined.</p>
+
+    <p>Subclause 6.10.9 paragraph 1 states that a
+    <tt><b>#pragma</b></tt> causes the implementation to behave in
+    an implementation-defined manner including the possibility that
+    the implementation might fail or otherwise behave in a
+    non-conforming manner. The intent of the committee was that
+    implementations could recognize <i>header-name</i> preprocessor
+    tokens in <tt><b>#pragma</b></tt> directives, if the
+    implementation chooses, but this seems to be contradicted by
+    the two places requiring Technical Corrigenda below.</p>
+
+    <p><b>Technical Corrigendum</b><br>
+    </p>
+
+    <p>Change Subclause 6.4.7, paragraph 3, last sentence to:</p>
+
+    <p>Header name preprocessing tokens are recognized only within
+    <tt><b>#include</b></tt> preprocessing directives or in
+    implementation-defined locations within <tt><b>#pragma</b></tt>
+    directives<sup>*)</sup>.</p>
+
+    <p>(* New Footnote): For an example of a header name
+    preprocessing token used in a <tt><b>#pragma</b></tt>
+    directive, see Subclause 6.10.9.</p>
+
+    <p>Change Subclause 6.4, paragraph 4, last sentence to:</p>
+
+    <p>There is one exception to this rule: Header name
+    preprocessing tokens are recognized only within
+    <tt><b>#include</b></tt> preprocessing directives or in
+    implementation-defined locations within <tt><b>#pragma</b></tt>
+    directives. In such contexts, a sequence of characters that
+    could be either a header name or a string literal is recognized
+    as the former.</p>
+    <br>
+     
+
+    <p><br>
+     <a href="dr_323.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_325.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

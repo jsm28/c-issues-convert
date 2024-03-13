@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #109</TITLE></HEAD><BODY>
+<H2>Defect Report #109</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Ron Guilmette
+<BR>
+<B>Question</B>
+<BR>
+[Question was revised in Jun 94.]
+<BR>
+ANSI/ISO C Defect Report #rfg16:
+<BR>
+Does the C Standard draw any significant distinction between ``undefined 
+values'' and ``undefined behavior?'' (It appears that it 
+does, but if it does, that fact is not always apparent.)
+<BR>
+Just to give two examples which, it would appear, involve the generation 
+(in a running program) of undefined values (as opposed to totally 
+undefined behavior at either compile-time or link-time or run-time) 
+I provide the following two citations.
+<BR>
+Subclause 6.3.8 <B>Relational operators</B>:
+<BLOCKQUOTE>
+If the objects pointed to are not members of the same aggregate 
+or union object, the <I>result</I> is undefined,...
+</BLOCKQUOTE>
+(Emphasis added.)
+<BR>
+Subclause 7.5.2.1 <B>The <TT>acos</TT> function</B>:
+<BLOCKQUOTE>
+A domain error occurs for arguments not in the range [-1,+1].
+</BLOCKQUOTE>
+The issue of ``undefined values'' versus ``undefined behavior'' 
+has great significance and importance to people doing compiler testing. 
+It is generally accepted that the C Standard's use of the term ``undefined 
+behavior'' is meant to imply that absolutely <I>anything</I> can 
+happen at any time, e.g. at compile-time, at link-time, or at run-time. 
+Thus, people testing compilers must either totally avoid writing test 
+cases which involve any kind of ``undefined behavior'' or else 
+they must treat any such test cases which they <I>do</I> write as 
+strictly ``quality of implementation'' tests which may validly 
+cause errors at compile-time, at link-time, or at run-time.
+<BR>
+If however the C Standard recognizes the separate existence of ``undefined 
+values'' (whose mere creation <I>does not</I> involve wholly ``undefined 
+behavior'') then a person doing compiler testing could write a 
+test case such as the following, and he/she could also expect (or 
+possibly demand) that a conforming implementation should, 
+at the very least, compile this code (and possibly also allow it to 
+execute) without ``failure.''
+<BR>
+<TT><B> int array1[5];<BR>
+int array2[5];<BR>
+int *p1 = &amp;array1[0];<BR>
+int *p2 = &amp;array2[0];<BR>
+<BR>
+int foo()<BR>
+	{<BR>
+	int i;<BR>
+	i = (p1 > p2);  /*</B><I> Must this be "successfully translated"? </I><B>*/<BR>
+	1/0;             /*</B><I> Must this be "successfully translated"? </I><B>*/<BR>
+	return 0;<BR>
+	}
+</B></TT><BR>
+So the bottom line question is this: Must the above code be ``successfully 
+translated'' (whatever that means)? (See the footnote attached 
+to subclause 5.1.1.3.)
+<BR>
+<B>Response</B>
+<BR>
+The C Standard uses the term ``indeterminately valued''
+not ``undefined value.''
+Use of an indeterminate valued object results in undefined
+behavior.
+<BR>
+The footnote to subclause 5.1.1.3 points out that an implementation
+is free to produce any number of diagnostics as long as a valid
+program is still correctly translated.
+<BR>
+If an expression whose evaulation would result in undefined behavior
+appears in a context where a constant expression is required, the
+containing program is not strictly conforming.
+Furthermore, if <I>every</I> possible execution of a given program
+would result in undefined behavior, the given program is not
+strictly conforming.
+<BR>
+A conforming implementation must not fail to translate a strictly
+conforming program simply because <I>some</I> possible execution
+of that program would result in undefined behavior.
+Because <TT><B>foo</B></TT> might never be called, the example given
+must be successfully translated by a conforming implementation.
+<BR>
+<A HREF="dr_108.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_110.html">Next Defect Report</A>
+</BODY></HTML>

@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #092</TITLE></HEAD><BODY>
+<H2>Defect Report #092</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Clive Feather
+<BR>
+<B>Question</B>
+<BR>
+Item 29 - partial initialization of strings
+<BR>
+Consider the following program:
+<BR>
+<TT><B>#include &lt;stdio.h><BR>
+<BR>
+int main (void)<BR>
+	{<BR>
+	char s [10] = "Hello";<BR>
+<BR>
+	printf ("s [9] is %d\n", s [9]);<BR>
+	return 0;<BR>
+	}
+</B></TT><BR>
+Is this program strictly conforming? If so, is the value of <TT><B>s[9]</B></TT> 
+guaranteed to be zero? Subclause 6.5.7 states:
+<BLOCKQUOTE>
+If there are fewer initializers in a brace-enclosed list than 
+there are members of an aggregate, the remainder of the aggregate 
+shall be initialized the same as objects that have static storage 
+duration.
+</BLOCKQUOTE>
+However, the initializer is not brace-enclosed, so this clause does 
+not apply.
+<BR>
+<B>Response</B>
+<BR>
+See the response to <A HREF="dr_060.html">Defect Report #060</A>.
+<BR>
+<A HREF="dr_091.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_093.html">Next Defect Report</A>
+</BODY></HTML>

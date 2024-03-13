@@ -1,0 +1,70 @@
+<HTML><HEAD><TITLE>Defect Report #049</TITLE></HEAD><BODY>
+<H2>Defect Report #049</H2>
+<B>Submission Date</B>: 10 Jan 93
+<BR>
+<B>Submittor</B>: Project Editor (P.J. Plauger)
+<BR>
+<B>Source</B>: David Metsky
+<BR>
+<B>Question</B> 1
+<BR>
+It has been suggested that, at least in the <TT><B>"C"</B></TT> locale, the 
+transformed string output from <TT><B>strxfrm</B></TT> will not contain more 
+characters than the original string. I believe that this suggestion 
+is overly restrictive, and that the standard does not impose such 
+a restriction on implementations. I am requesting a clarification 
+from the appropriate standards committee(s). I hope that you will 
+agree with the following resolution:
+<BLOCKQUOTE>
+The C Standard does not impose a requirement upon the length 
+of the transformed string output from <TT><B>strxfrm</B></TT>. (The returned 
+value does indicate the necessary length.)
+</BLOCKQUOTE>
+Here are some citations from the C Standard:
+<BR>
+Subclause 7.4.1.1 <B>The <TT>setlocale</TT> function</B>:
+<BLOCKQUOTE>
+<TT><B>LC_COLLATE</B></TT> affects the behavior of the <TT><B>strcoll</B></TT> and 
+<TT><B>strxfrm</B></TT> functions... A value of <TT><B>"C"</B></TT> for <TT><B>locale</B></TT> specifies 
+the minimal environment for C translation... At program startup, the 
+equivalent of
+</BLOCKQUOTE>
+<TT><B>setlocale(LC_ALL, "C");</B></TT>
+<BLOCKQUOTE>
+is executed.
+</BLOCKQUOTE>
+Subclause 7.11.4.3 <B>The <TT>strcoll</TT> function</B>:
+<BLOCKQUOTE>
+The <TT><B>strcoll</B></TT> function compares the string pointed to by 
+<TT><B>s1</B></TT> to the string pointed to by <TT><B>s2</B></TT>, both interpreted as 
+appropriate to the <TT><B>LC_COLLATE</B></TT> category of the current locale.
+</BLOCKQUOTE>
+Subclause 7.11.4.5 <B>The <TT>strxfrm</TT> function</B>:
+<BLOCKQUOTE>
+The transformation is such that if the <TT><B>strcmp</B></TT> function 
+is applied to two transformed strings, it returns a value greater 
+than, equal to, or less than zero, corresponding to the result of 
+the <TT><B>strcoll</B></TT> function applied to the same two original strings... 
+The <TT><B>strxfrm</B></TT> function returns the length of the transformed string 
+(not including the terminating null character). If the value returned 
+is <TT><B>n</B></TT> or more, the contents of the array pointed to by <TT><B>s1</B></TT> 
+are indeterminate.
+</BLOCKQUOTE>
+I haven't located any requirement that the <TT><B>"C"</B></TT> locale behavior 
+of <TT><B>strcoll</B></TT> must be identical to <TT><B>strcmp</B></TT>. Even if there 
+were such a requirement, I haven't located any requirement that the 
+transformed string must not be longer than the original string.
+<BR>
+<B>Response</B>
+<BR>
+We support your resolution:
+<BR>
+The C Standard does not impose a requirement upon the length of the 
+transformed string output from <TT><B>strxfrm</B></TT>, other than a limitation 
+on the size of objects. (The returned value does indicate the necessary 
+length.)
+<BR>
+<A HREF="dr_048.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_050.html">Next Defect Report</A>
+</BODY></HTML>

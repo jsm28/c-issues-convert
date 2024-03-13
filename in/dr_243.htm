@@ -1,0 +1,234 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #243</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #243</h2>
+    <a href="dr_242.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_244.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Fred Tydeman (US)<br>
+     <b>Submission Date:</b> 2001-02-25<br>
+     <b>Source:</b><br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n943.txt">ISO/IEC
+    WG14 N943</a><br>
+     <b>Version:</b> 1.1<br>
+     <b>Date:</b> 2001-10-16 12:15:00<br>
+     <b>Subject:</b> Make the base standard and Annex F consistent
+    for <tt><b>fmod()</b></tt>, <tt><b>remainder()</b></tt>, and
+    <tt><b>remquo()</b></tt> for a zero divisor.</p>
+
+    <p><b>Summary</b></p>
+
+    <blockquote>
+      <tt><b>fmod()</b></tt>, <tt><b>remainder()</b></tt>, and
+      <tt><b>remquo()</b></tt> should be made consistent with each
+      other when the divisor is zero. There are two "correct"
+      behaviours when the divisor is zero: Treat it as a domain
+      error (cannot divide by zero), or, based upon limits, compute
+      a zero remainder. This series of changes may also require
+      that IEEE-754 be changed (to allow a zero result in addition
+      to the currently required invalid operation). Assuming that
+      <tt><b>fmod()</b></tt>, <tt><b>remainder()</b></tt>, and
+      <tt><b>remquo()</b></tt> should be consistent with each
+      other, the following needs to be done. 
+
+      <p>An alternative is to do some of these changes, or changes
+      along these lines.</p>
+
+      <p>It is assumed that requiring just the return of zero
+      behaviour is too drastic as there are many millions of chips
+      already doing the invalid operation behaviour.</p>
+    </blockquote>
+
+    <p><b>Details</b></p>
+
+    <blockquote>
+      For a fixed <tt><b>x</b></tt>, as one takes the limit as
+      <tt><b>y</b></tt> approaches zero, the remainder of
+      <tt><b>x</b></tt>/<tt><b>y</b></tt> approaches zero <tt><b>(0
+      &lt;= |result| &lt; |y|)</b></tt> and the quotient is
+      unspecified. 
+
+      <p>IEC 60559 requires that <tt><b>x</b></tt> REM
+      <tt><b>y</b></tt>, when <tt><b>y</b></tt> is zero, be an
+      invalid operation, e.g., a domain error.</p>
+
+      <p><tt><b>fmod(x,0)</b></tt> is currently allowed to be
+      either 0 or a domain error by 7.12.10.1, while Annex F
+      requires it to be an invalid exception, e.g., domain
+      error.</p>
+
+      <p><tt><b>remainder(x,0)</b></tt> is currently unspecified by
+      7.12.10.2, while Annex F requires it to be an invalid
+      exception, e.g., domain error.</p>
+
+      <p><tt><b>remquo(x,0)</b></tt> is currently unspecified by
+      7.12.10.3, while Annex F requires it to be an invalid
+      exception, e.g., domain error. In addition, nothing is said
+      about the quotient that is stored for this case.</p>
+
+      <p><u>Counter-argument</u>: These functions are discontinuous
+      along the lines <tt><b>y = mx</b></tt> or <tt><b>y =
+      (m+1/2)x</b></tt> for integers <b>m</b>. We see no reason to
+      "take the limit as <tt><b>y</b></tt> approaches zero".</p>
+
+      <p>Allowing two different behaviours for these functions for
+      the same arguments, will cause applications to be more
+      complicated, with no real added benefit.</p>
+
+      <p><u>Counter-counter-argument</u>: By discontinuous, I
+      assume you mean that they are like saw-tooth shaped
+      functions, e.g., a linear rise and a vertical fall. I agree
+      with that, but, as one approaches the line
+      <tt><b>y=0</b></tt>, the height of the teeth gets smaller and
+      smaller.</p>
+    </blockquote>
+
+    <p><b>Suggested Technical Corrigendum</b><br>
+    </p>
+
+    <p>In 7.12.10.1 <tt><b>fmod</b></tt>:</p>
+
+    <blockquote>
+      No change needed.
+    </blockquote>
+
+    <p>In 7.12.10.2 <tt><b>remainder</b></tt>:</p>
+
+    <p>Add to Returns:</p>
+
+    <blockquote>
+      If <tt><b>y</b></tt> is zero, whether a domain error occurs
+      or the <tt><b>remainder</b></tt> functions return zero is
+      implementation defined.
+    </blockquote>
+
+    <p>In 7.12.10.3 <tt><b>remquo</b></tt>:</p>
+
+    <p>Add to Returns:</p>
+
+    <blockquote>
+      If <tt><b>y</b></tt> is zero, whether a domain error occurs
+      or the <tt><b>remquo</b></tt> functions return zero is
+      implementation defined.
+    </blockquote>
+
+    <blockquote>
+      If <tt><b>y</b></tt> is zero, the quotient stored is
+      unspecified.
+    </blockquote>
+
+    <p>In F.9.7.1 <tt><b>fmod</b></tt>:</p>
+
+    <p>Change</p>
+
+    <blockquote>
+      <tt><b>fmod(x,y)</b></tt> returns a <tt><b>NaN</b></tt> and
+      raises the "invalid" floating-point exception for
+      <tt><b>x</b></tt> infinite or <tt><b>y</b></tt> zero.
+    </blockquote>
+    to two items: 
+
+    <blockquote>
+      <tt><b>fmod(x,y)</b></tt> returns a <tt><b>NaN</b></tt> and
+      raises the "invalid" floating-point exception for
+      <tt><b>x</b></tt> infinite.
+    </blockquote>
+    and 
+
+    <blockquote>
+      For <tt><b>y</b></tt> zero, <tt><b>fmod(x,y)</b></tt> either
+      returns a zero (with sign of <tt><b>x</b></tt>), or returns a
+      <tt><b>NaN</b></tt> and raises the "invalid" floating-point
+      exception.
+    </blockquote>
+
+    <p>In F.9.7.2 <tt><b>remainder</b></tt>:</p>
+
+    <p>Add:</p>
+
+    <blockquote>
+      For <tt><b>y</b></tt> zero, <tt><b>remainder(x,y)</b></tt>
+      either returns a zero (with sign of <tt><b>x</b></tt>), or
+      returns a <tt><b>NaN</b></tt> and raises the "invalid"
+      floating-point exception.
+    </blockquote>
+
+    <p>In F.9.7.3 <tt><b>remquo</b></tt>:</p>
+
+    <p>Add:</p>
+
+    <blockquote>
+      For <tt><b>y</b></tt> zero, <tt><b>remquo(x,y)</b></tt>
+      either returns a zero (with sign of <tt><b>x</b></tt>), or
+      returns a <tt><b>NaN</b></tt> and raises the "invalid"
+      floating-point exception; and, in both cases, has an
+      unspecified quotient stored.
+    </blockquote>
+    Also add, 
+
+    <blockquote>
+      When <tt><b>remquo</b></tt> returns a <tt><b>NaN</b></tt>,
+      the quotient stored is unspecified.
+    </blockquote>
+    <hr>
+
+    <p><b>Technical Corrigendum</b><br>
+    </p>
+
+    <p>In 7.12.10.2 <tt><b>remainder</b></tt>:</p>
+
+    <p>Add to Returns:</p>
+
+    <blockquote>
+      If <tt><b>y</b></tt> is zero, whether a domain error occurs
+      or the <tt><b>remainder</b></tt> functions return zero is
+      implementation defined.
+    </blockquote>
+
+    <p>In 7.12.10.3 <tt><b>remquo</b></tt>:</p>
+
+    <p>Add to Returns:</p>
+
+    <blockquote>
+      If <tt><b>y</b></tt> is zero, whether a domain error occurs
+      or the <tt><b>remquo</b></tt> functions return zero is
+      implementation defined.
+    </blockquote>
+
+    <blockquote>
+      If <tt><b>y</b></tt> is zero, the quotient stored is
+      unspecified.
+    </blockquote>
+
+    <p>In J.3.12 Library functions:</p>
+
+    <p>Add (after fmod):</p>
+
+    <blockquote>
+      Whether a domain error occurs or zero is returned when an
+      <tt><b>remainder</b></tt> function has a second argument of
+      zero (7.12.10.2).
+    </blockquote>
+
+    <blockquote>
+      Whether a domain error occurs or zero is returned when an
+      <tt><b>remquo</b></tt> function has a second argument of zero
+      (7.12.10.3).
+    </blockquote>
+
+    <p><br>
+     <a href="dr_242.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_244.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

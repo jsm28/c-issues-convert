@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #089</TITLE></HEAD><BODY>
+<H2>Defect Report #089</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Clive Feather
+<BR>
+<B>Question</B>
+<BR>
+Item 26 - multiple definitions of macros
+<BR>
+Consider the following code:
+<BR>
+<TT><B>#define macro	object_like<BR>
+#define macro(argument)	function_like
+</B></TT><BR>
+Does this code require a diagnostic?
+<BR>
+The wording of subclause 6.8.3 specifies that a macro may be redefined 
+under certain circumstances (basically identical definitions), but 
+does not actually forbid any other redefinition. Thus it can be argued 
+that the constraint in subclause 6.8.3 is not violated, and a diagnostic 
+is not required.
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>In subclause 6.8.3, page 89, change, in both paragraphs 2 and 3:</B></I>
+<BR>
+may be redefined by another 
+<TT><B>#define</B></TT> preprocessing directive provided that
+<BR>
+<I><B>to:</B></I>
+<BR>
+shall not be redefined by another
+<TT><B>#define</B></TT> preprocessing directive unless
+<BR>
+<A HREF="dr_088.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_090.html">Next Defect Report</A>
+</BODY></HTML>

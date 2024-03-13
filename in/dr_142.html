@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML>
+<HEAD><TITLE>Defect Report #142</TITLE></HEAD> 
+<BODY><H2>Defect Report #142</H2> 
+<B>Submission Date</B>: 23 Feb 95
+<BR>
+<B>Submittor</B>: BSI
+<BR>
+<B>Source</B>: Clive D.W. Feather
+<BR>
+<B>Question</B>
+<BR>
+<I>Submitted to BSI by Clive D.W. Feather clive@sco.com.</I>
+<BR>
+<I>In this Defect Report, identifiers lexically identical to those 
+declared in standard headers refer to the identifiers declared in  those
+standard headers, whether or not the header is explicitly mentioned.</I>
+<BR>
+<I>This Defect Report has been prepared with considerable help from 
+Mark Brader, Jutta Degener, Ronald Guilmette, and a person whose
+employment  conditions require anonymity. However, except where stated,
+opinions  expressed or implied should not be assumed to be those of any
+person  other than myself.</I>
+<BR> Defect Report UK 026: Reservation of macro names
+<BR> Is it permitted to <TT><B>#undef</B></TT> a reserved macro name?
+Consider the  translation unit:
+<BR>
+<TT>#include &lt;errno.h><BR> #undef EASTER<BR> #undef EDOM<BR>
+#undef __ERRNO_BASE<BR> int error (void) { return errno == ERANGE; }
+<BR></TT> Considering each of the three <TT><B>#undef</B></TT>
+directives independently,  is each directive permitted in a strictly
+conforming program? Is the  translation unit strictly conforming?
+<BR> Subclause 7.1.3 describes various classes of reserved identifiers,
+ and then states:
+<BLOCKQUOTE> If the program declares or defines an identifier with the same 
+name as an identifier reserved in that context (other than as allowed 
+by 7.1.7), the behavior is undefined.
+</BLOCKQUOTE> However, this does mention the use of <TT><B>#undef</B></TT>.
+Subclause 7.1.7  does so, for certain identifiers, but in rather
+ambiguous words:
+<BLOCKQUOTE> The use of <TT><B>#undef</B></TT> to remove any macro definition
+will  also ensure ...
+</BLOCKQUOTE> It has been suggested that this wording merely describes a
+strictly  conforming coding technique, rather than establishing a
+special case  (rather like the wording about placing the name in
+parentheses does).
+<BR> Therefore, can a strictly conforming program <TT><B>#undef</B></TT>
+a name which  is reserved for any use at that point?
+<BR> There is a good reason to allow such an <TT><B>#undef</B></TT>.
+A program can  make use of a identifier which is convenient but would
+otherwise be  reserved (for example, the identifier <TT><B>EASTER</B></TT>).
+There is also  a good reason to forbid it: the macro <TT><B>ERANGE</B></TT>
+might actually  be defined as (<TT><B>__ERRNO_BASE + 42</B></TT>).
+This leads to the conclusion  that it might be best to permit it for
+some names but not others.
+<BR> A further example [inserted at the request of BSI] is the
+translation  unit:
+<BR>
+<TT><B>#include &lt;stdlib.h><BR> #undef __INCLUDED_STDLIB_H<BR>
+#include &lt;stdlib.h>
+<BR></B></TT>
+<B>Suggested Technical Corrigendum:</B>
+<BR> Add to the end of subclause 7.1.3:
+<BR> If the program removes (with <TT><B>#undef</B></TT>) the macro
+definition of  an identifier in the first group listed above, the
+behavior is undefined.
+<BR><B>Technical Corrigendum</B>
+<BR>Replace the third bullet in subclause 7.1.3 with the following:
+<BR>Each macro name in any of the following subclauses (including <B>Future
+ library directions</B>) is reserved for use as specified if any of  its
+associated headers is included, unless explicitly stated otherwise.
+<BR> Forward reference: 7.1.7.<BR>
+<A HREF="dr_141.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_143.html">Next Defect Report</A></BODY></HTML>

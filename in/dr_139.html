@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #139</TITLE></HEAD><BODY>
+<H2>Defect Report #139</H2>
+<B>Submission Date</B>: 13 Jun 94
+<BR>
+<B>Submittor</B>: Project Editor (P.J. Plauger)
+<BR>
+<B>Source</B>: Larry Jones
+<BR>
+<B>Question</B>
+<BR>
+Subject: Compatibility of complete and incomplete types.
+<BR>
+The Committee has already endorsed the concept of using incomplete 
+types which are completed in some translation units and left incomplete 
+in others for encapsulation and data hiding (cf. <A HREF="dr_059.html">Defect Report #059</A>). 
+However, I can find nothing in the Standard which allows the incomplete 
+type to be compatible with the completed type, which causes such usage 
+to be not strictly conforming. I believe this to be an oversight.
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>In subclause 6.1.2.6, page 25, first paragraph,
+change:</B></I>
+<BR>
+Moreover, two structure, union, or enumerated types declared in separate 
+translation units are compatible if they have the same number of members, 
+the same member names, and compatible member types; for two structures, 
+the members shall be in the same order; for two structures or unions, 
+the bit-fields shall have the same widths; for two enumerated types, the 
+members shall have the same values.
+<BR>
+<I><B>to:</B></I>
+<BR>
+Moreover, two structure, union, or enumerated types declared in separate 
+translation units are compatible if at least one is an incomplete 
+type or if they have the same number of members, the same member names, 
+and compatible member types; for two complete structure types,
+the members shall be in the same order; for two complete structure
+or union types,  
+the bit-fields shall have the same widths; for two enumerated types, 
+the members shall have the same values.
+<BR>
+<A HREF="dr_138.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_140.html">Next Defect Report</A>
+</BODY></HTML>

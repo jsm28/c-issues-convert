@@ -1,0 +1,175 @@
+<HTML><HEAD><TITLE>Defect Report #044</TITLE></HEAD><BODY>
+<H2>Defect Report #044</H2>
+<B>Submission Date</B>: 10 Dec 92
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: X3J11/92-010 (Steve M. Hoxey)
+<BR>
+<B>Question</B> 1
+<BR>
+Subclause 7.1.6, page 98, lines 24-30 describe the macro
+<BR>
+<TT>offsetof(<I><B>type, member_designator)</B></I></TT>
+<BR>
+``which expands to an integral constant expression that has type 
+<TT><B>size_t</B></TT>, ...''
+<BR>
+How is this statement to be interpreted? The expansion of the macro 
+<TT><B>offsetof</B></TT> is
+<OL TYPE=a>
+<LI> an expression which can be evaluated during translation, the 
+value of which is in the range representable by a <TT><B>size_t</B></TT> type.
+<BR>
+Or
+<BR>
+<LI> an expression as (a) above, but further constrained to be an 
+``integral constant expression'' as defined in subclause 6.4, 
+page 55, lines 17-21.
+</OL>
+<B>Response</B>
+<BR>
+Neither alternative (a) nor (b) in Question 1 fully captures the intent. 
+What is intended is exactly what is specified in the C Standard. A 
+strictly conforming program shall not produce output that varies depending 
+upon details of implementation of facilities defined by the standard 
+headers. Hence, use of the <TT><B>offsetof</B></TT> macro, in a context requiring 
+an integer constant expression, per se does not render a program not 
+strictly conforming.
+<BR>
+Further clarification provided by David Prosser:
+<BR>
+Although the replacement for the <TT><B>offsetof</B></TT> macro must be an integral 
+constant expression, and must follow all the constraints appropriate 
+to expressions, an implementation is permitted to make use of its 
+extensions to constant expressions that behave like integral constant 
+expressions. This is why the sample replacement expressions for the 
+<TT><B>offsetof</B></TT> macro in the Rationale are valid candidates (for many 
+implementations) but do not come under the strict definition of integral 
+constant expression that strictly conforming code must follow. In 
+particular, this is why the <TT><B>offsetof</B></TT> macro exists: there was 
+otherwise no portable means to compute such translation-time constants. 
+Therefore, of the two choices, (b) is the closest, but it is not the 
+whole story.
+<BR>
+<B>Question</B> 2
+<BR>
+Subclause 5.1.1.1, page 5, lines 11-20 define a ``translation unit'' 
+to be equivalent to the sequence of preprocessing tokens and white-space 
+characters which exists at the end of translation phase 4 (subclause 
+5.1.1.2). Later in translation phases 5, 6, 7, these preprocessing 
+tokens are converted to tokens and syntactically and semantically 
+analyzed and translated.
+<BR>
+Therefore, must a conforming implementation provide strictly conforming 
+expansions of macros defined by the standard headers, such that any 
+use of the resulting preprocessing token sequence, and ultimately 
+the token sequence, beyond phase 4 does not alter the behavior of 
+an otherwise strictly conforming program? See also clause 4 <B>Compliance</B>, 
+page 4, lines 24-26.
+<BR>
+<B>Response</B>
+<BR>
+A conforming implementation need not provide strictly conforming expansion 
+of macros defined by the standard headers.
+<BR>
+<B>Question</B> 3
+<BR>
+Assuming (b) is the correct interpretation of Question 1, if a particular 
+implementation expands <TT><B>offsetof</B></TT> into an expression which contains 
+operands and/or operators which result in a violation of the definition 
+of ``integral constant expression'' from subclause 6.4, page 
+55, lines 17-21, does this situation constitute:
+<BR>
+<OL TYPE=a>
+<LI> a constraint violation since the expansion presented for further 
+translation is not an ``integer constant expression?''
+<BR>
+or
+<BR>
+<LI> undefined behavior since the definition of ``integral constant 
+expression'' appears in a ``shall'' requirement in the semantic 
+description of subclause 6.4 <B>Constant expressions</B>?
+</OL>
+<B>Response</B>
+<BR>
+The response to Question 1 makes this a moot question.
+<BR>
+<B>Question</B> 4
+<BR>
+Assuming (b) is the correct interpretation of Question 3, if within 
+a translation unit at a point where an ``integer constant expression'' 
+is required to satisfy a language constraint - such as to specify 
+the size of a bit-field member of a structure, the value of an enumeration 
+constant, the size of an array, or the value of a case constant - 
+does the use of the macro <TT><B>offsetof</B></TT> constitute:
+<OL TYPE=a>
+<LI> a constraint violation?
+<BR>
+or
+<LI> the use of undefined behavior, which renders the translation 
+unit to be not strictly conforming?
+</OL>
+<B>Response</B>
+<BR>
+The response to Question 1 makes this a moot question.
+<BR>
+<B>Question</B> 5
+<BR>
+Revisiting (b) as the correct interpretation of Question 1, it seems 
+the only possibility for a definition of the macro <TT><B>offsetof</B></TT> 
+constitutes use of an identifier from the reserved name space to define 
+a builtin which interrogates the translator's symbol table in a fashion 
+analogous to the <TT><B>sizeof</B></TT> operator. Further, this builtin must 
+appear syntactically as a keyword rather than an identifier to avoid 
+the constraint violation of subclause 6.4, page 55, line 9, which 
+invalidates the use of what appears to be a function call within that 
+which is otherwise required to be a constant expression.
+<BR>
+Further, implementing an expansion for <TT><B>offsetof</B></TT> as described 
+in the previous paragraph would violate the implementation constraint 
+outlined in Question 2 above, since the expansion would inject preprocessing 
+tokens requiring recognition of a keyword outside the scope of a strictly 
+conforming program.
+<BR>
+In any case, the implication is that the fragment:
+<BR>
+<TT><B>#include &lt;stddef.h><BR>
+static struct x {int field1, field2; } s;<BR>
+enum fields {F0, F1, F2 = offsetof(struct x,field2), F3 };
+</B></TT><BR>
+is either rendered not strictly conforming or the implementation is 
+rendered a nonconforming implementation.
+<BR>
+Alternatively, if the answer to Question 2 above is no, then the following 
+questions are raised:
+<BR>
+Since translation phases 1 through 4 may introduce into the translation 
+unit token sequences which are not strictly conforming, what mechanism 
+exists, if any, to determine whether such sequences originated from 
+the program source?
+<BR>
+How is one to interpret the meaning of ``strictly conforming program'' 
+from clause 4, page 3, lines 38-40, given that subclause 5.1.1.1, 
+page 5, lines 12-15 define the translation unit to be ``a source 
+file together with all the headers and source files included via the 
+preprocessing directive <TT><B>#include</B></TT>, less any source lines skipped 
+by any of the conditional inclusion preprocessing directives?''
+<BR>
+It seems that any program which makes use of the macro <TT><B>offsetof</B></TT> 
+in the context of a constraint requirement mandating an ``integer 
+constant expression'' will require use of unspecified, undefined, 
+or implementation-defined behavior.
+<BR>
+As near as I can tell, <TT><B>offsetof</B></TT> is the only macro defined by 
+the C Standard which can alter the behavior of a strictly conforming 
+program as a consequence of its own definition.
+<BR>
+<B>Response</B>
+<BR>
+The response to Question 1 addresses this issue.
+<BR>
+<A HREF="dr_043.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_045.html">Next Defect Report</A>
+</BODY></HTML>

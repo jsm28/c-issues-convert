@@ -1,0 +1,231 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 13), see www.w3.org">
+
+  <title>Defect report #314</title>
+</head>
+
+<body>
+  <h2 align="center">Defect Report #314</h2><a href=
+  "dr_313.htm">Previous Defect Report</a> &lt; - &gt; <a href=
+  "dr_315.htm">Next Defect Report</a>
+
+  <p><br>
+  <b>Submitter:</b> UK C Panel<br>
+  <b>Submission Date:</b> 2005-03-04<br>
+  <b>Source:</b> Joseph Myers &lt;joseph@codesourcery.com&gt;<br>
+  <b>Reference Document:</b> <a href=
+  "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1102.htm">ISO/IEC
+  WG14 N1102</a><br>
+  <b>Version:</b> 1.5<br>
+  <b>Date:</b> 2008-09-12<br>
+  <b>Subject:</b> Cross-translation-unit tagged type
+  compatibility</p>
+
+  <p><b>Summary</b></p>
+
+  <p>Compatibility of tagged types can be intransitive when there
+  are multiple translation units:</p>
+  <pre>
+// TU 1:
+struct s;
+struct t { struct s *a; };
+</pre>
+  <pre>
+// TU 2:
+struct s { int p; };
+struct t { struct s *a; };
+</pre>
+  <pre>
+// TU 3:
+struct s { long q; };
+struct t { struct s *a; };
+</pre>
+
+  <p>where <code>struct t</code> in TU 1 is compatible with that in
+  TU 2 and TU 3 but they are not compatible with each other.</p>
+
+  <p>C++ avoids problems with such cases by giving types linkage,
+  meaning that the incompatible definitions of named struct types
+  yield undefined behavior. In C types do not have linkage, and
+  such incompatibilities can give rise to several problems. The
+  requirement of 6.2.7#2 that "All declarations that refer to the
+  same object or function shall have compatible type; otherwise,
+  the behavior is undefined." does not seem sufficient to avoid all
+  such problems.</p>
+
+  <p>Question 1: Does 6.2.7#2 refer to the types immediately after
+  the declarations, or the types at any point where the
+  declarations are in scope?</p>
+
+  <p>Question 2: If each of the above three translation units
+  started <code>extern struct t *x;</code>, would there be
+  undefined behavior?</p>
+
+  <p>Even if the requirement applies to the types anywhere in
+  scope, this may not be enough. Each translation unit above could
+  have prepended to it</p>
+  <pre>
+struct t;
+static void f(void) { extern struct t *x; }
+</pre>
+
+  <p>and the incompatible completions are not within the scope of
+  <code>x</code>. (<code>x</code> might then be defined in another
+  translation unit that just says <code>struct t *x;</code>.)</p>
+
+  <p>The above example at least leads to incompatible "ultimate"
+  types for <code>x</code> that the object has at the end of each
+  translation unit, albeit outside the scope of the declaration.
+  But now consider the following three translation units.</p>
+  <pre>
+// TU 1:
+struct s;
+struct t { struct s *a; };
+int g1(struct s *);
+int g2(struct s *);
+int f(struct t *p, int x) { return x ? g1(p-&gt;a) : g2(p-&gt;a); }
+</pre>
+  <pre>
+// TU 2:
+struct t { int b; };
+struct s { int a; struct t *z; };
+int g1(struct s *p) { return p-&gt;a  + p-&gt;z-&gt;b; }
+</pre>
+  <pre>
+// TU 3:
+struct t { long c; };
+struct s { struct t *z; long a; };
+int g2(struct s *p) { return p-&gt;a + p-&gt;z-&gt;c; }
+</pre>
+
+  <p>Each object and function has a well-defined complete type. But
+  a <code>struct t</code> in TU 1 may contain pointers to two
+  different versions of <code>struct s</code>, and each of these
+  contains pointers to an entirely different <code>struct t</code>
+  from that in TU 1. This requires very strange gymnastics for an
+  implementation inlining across translation units to inline
+  <code>g1</code> and <code>g2</code> into <code>f</code>. There is
+  no single translation unit representing a natural merger of the
+  three above; renaming static objects with conflicting names does
+  not suffice (indeed, there are no such objects), and renaming
+  type names used in different names in different translation units
+  does not help either because there is no single natural
+  expression of a recursive completion of TU 1's <code>struct
+  t</code>.</p>
+
+  <p>Question 3: Is an implementation required to accept compiling
+  the three translation units above together into a program?</p>
+
+  <p>This issue arises directly from actual implementation problems
+  implementing optimizations across multiple translation units in
+  GCC. It is natural for an implementation to take multiple
+  translation units and convert them into a language-independent
+  intermediate representation of the whole program which is then
+  optimized, and in so doing to unify the declarations in different
+  translation units which refer to the same object or function. But
+  unifying them involves unifying their types, and so recursively
+  the types involved in the definitions of those types, and the
+  above translation units, although apparently valid to link into a
+  single program at present, do not admit of such a
+  unification.</p>
+
+  <p><b>Suggested Technical Corrigendum</b><br></p>
+  <hr>
+
+  <p><b>Committee Discussion</b> (for history only)</p>
+
+  <p>2006-10-25, There was not consensus for the <i>Proposed
+  Committee Response</i> listed below. There was no consensus that
+  question 2 is <i>undefined behavior</i>. There does not seem to
+  be specific words in the Standard that make it undefined
+  behavior, however that may be what the Committee intended.</p>
+
+  <h4>Spring 2007</h4>
+
+  <p>See <a href=
+  "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1237.htm">N1237</a>.</p>
+
+  <h4>Fall 2007</h4>
+
+  <p>The Standard doesn't seem to specifically allow the
+  compilation/linking of the three translations units in question,
+  but is does not seem to disallow it either.</p>
+
+  <h4>Spring 2008</h4>
+
+  <p>Current response is good. However, is this is an issue that
+  should be addressed in C1x? Looked again at N1237 (reviewed in
+  Kona).</p>
+
+  <ul>
+    <li>publish an answer that C99 is unspecified/undefined, and we
+    will fix it in C1x</li>
+
+    <li>just come up with a fix for C1x</li>
+  </ul>
+
+  <p>There is consensus that it should be possible for an
+  implementation to combine the translation units of a program into
+  a single internal representation and optimize that, unifying
+  structure and union types across translation units where required
+  to be compatible in the process.</p>
+
+  <p>Normally, it is possible to create a single translation unit
+  equivalent to multiple translation units, after renaming static
+  variables and functions and structure and union tags. DR314
+  question 3 is an example where such renaming is not possible. My
+  proposal is to add a requirement that it is possible.</p>
+
+  <p>It was noted that this has been hanging around for several
+  years. Needs someone to actually come up with the right
+  words.</p>
+
+  <p><b>Proposed Committee Response</b></p>
+
+  <p>Question 1: Does 6.2.7#2 refer to the types immediately after
+  the declarations, or the types at any point where the
+  declarations are in scope?</p>
+
+  <blockquote>
+    Subclause 6.2.7 Paragraph 2 makes a statement about <i>all</i>
+    declarations of the same object or function, regardless of
+    where the declarations that object or function are. It requires
+    that all declarations of the same object or function, even if
+    those declarations are in different translation units of the
+    program, to have compatible type.<br>
+    Note also that if an object with struct or union type is
+    declared with an incomplete type, and that type is later
+    completed in the same scope, the type of the declaration is the
+    completed type (Subclause 6.2.5, Paragraph 22). Under such
+    conditions, the type of the object or function is the completed
+    type, and that type must be compatible with any other
+    declarations.
+  </blockquote>
+
+  <p>Question 2: If each of the above three translation units
+  started <tt><b>extern struct t *x;</b></tt>, would there be
+  undefined behavior?</p>
+
+  <blockquote>
+    Yes, undefined behavior.
+  </blockquote>
+
+  <p>Question 3: Is an implementation required to accept compiling
+  the three translation units above together into a program?</p>
+
+  <blockquote>
+    It was never the Committees intention that the standard be
+    interpreted this way.<br>
+    This will be addressed in a future revision of the standard.
+    See WG14 N<small><b>xxx</b></small>.
+  </blockquote>
+
+  <p><br>
+  <a href="dr_313.htm">Previous Defect Report</a> &lt; - &gt;
+  <a href="dr_315.htm">Next Defect Report</a></p>
+</body>
+</html>

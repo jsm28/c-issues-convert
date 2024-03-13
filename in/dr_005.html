@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #005</TITLE></HEAD>
+<BODY><H2>Defect Report #005</H2>  
+<B>Submission Date</B>: 10 Dec 92 <BR> 
+<B>Submittor</B>: WG14 <BR> 
+<B>Source</B>: X3J11/90-020 (Walter J. Murray)  <BR>
+<B>Question</B> 1
+<P>According to subclause 6.8.6, a pragma directive ``causes the
+implementation to behave in an implementation-defined manner.'' May a
+conforming implementation define and recognize a pragma which would
+change the semantics of the language? For example, might a conforming
+implementation recognize and honor the directive
+</P>
+<P><TT><B>#pragma UNSIGNED_PRESERVING</B></TT></P>
+<P>as a way for a program to request non-standard integral promotions?
+</P>
+<P>I also pose the corollary question. May a strictly conforming
+program contain a pragma directive? According to subclause 4, a strictly
+conforming program ``shall use only those features of the language ...
+specified in this standard. It shall not produce output dependent on any
+unspecified, undefined, or implementation-defined behavior...''
+</P><P>If there is no constraint on how a conforming implementation may
+behave when encountering a pragma directive, would it not follow that a
+strictly conforming program may not contain a pragma directive?
+</P>
+<B>Response</B>
+<BR> The relevant citations are subclause 6.8.6:
+<BLOCKQUOTE> A ... <TT><B>pragma</B></TT> ... causes the implementation to
+behave in an implementation-defined manner.</BLOCKQUOTE>and clause 4:
+<BLOCKQUOTE>A strictly
+conforming program ... shall not produce output dependent on any ...
+implementation-defined behavior ... </BLOCKQUOTE>
+In response to each question:
+<BR>
+<OL>
+<LI>Yes, a conforming implementation may define and recognize a pragma
+which would change the semantics of the language.
+</LI>
+<LI>Yes, for example, it might honor <TT><B>UNSIGNED_PRESERVING</B></TT>.
+</LI>
+<LI> No, a strictly conforming program may not contain a pragma
+directive. 
+</LI>
+<LI> We agree with your conclusion, reasserting answer number 3.
+</LI>
+</OL>
+<A HREF="dr_004.html">Previous Defect Report</A> &lt; - > <A HREF="dr_006.html">Next Defect Report</A></BODY></HTML>

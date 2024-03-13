@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #110</TITLE></HEAD><BODY>
+<H2>Defect Report #110</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Ron Guilmette
+<BR>
+<B>Question</B>
+<BR>
+ANSI/ISO C Defect report #rfg17:
+<BR>
+Subject: Formal parameters having array-of-non-object types.
+<BR>
+a) For which (if any) of the following function declarations 
+and definitions is a diagnostic required?
+<BR>
+b) Which (if any) of the following function declarations 
+and definitions would, if present in a translation unit, render the 
+translation unit not strictly conforming?
+<BR>
+<TT><B>typedef void VT;<BR>
+typedef struct incomplete_S ST;<BR>
+typedef union  incomplete_U UT;<BR>
+typedef int AT[];<BR>
+typedef void (FT) ();<BR>
+<BR>
+void declaration1 (VT arg[]);		/*</B><I> ? </I><B>*/<BR>
+void declaration2 (ST arg[]);		/*</B><I> ? </I><B>*/<BR>
+void declaration3 (UT arg[]);		/*</B><I> ? </I><B>*/<BR>
+void declaration4 (AT arg[]);		/*</B><I> ? </I><B>*/<BR>
+void declaration5 (FT arg[]);		/*</B><I> ? </I><B>*/<BR>
+<BR>
+void definition1 (VT arg[]) { }	/*</B><I> ? </I><B>*/<BR>
+void definition2 (ST arg[]) { }	/*</B><I> ? </I><B>*/<BR>
+void definition3 (UT arg[]) { }	/*</B><I> ? </I><B>*/<BR>
+void definition4 (AT arg[]) { }	/*</B><I> ? </I><B>*/<BR>
+void definition5 (FT arg[]) { }	/*</B><I> ? </I><B>*/
+</B></TT><BR>
+Footnote: I have heard rumors that the issue of the exact timing of 
+the decay of a formal parameter's array type into a pointer type (relative 
+to the timing of the necessary check that the type of the formal parameter 
+is in fact a valid type) was determined <I>explicitly</I> to be undefined 
+by the Committee, but there is no record of this in the CIB #1 document 
+I have. [CIB #1 is X3J11's earlier attempt to respond to Defect Reports
+#001-#035, then called Requests for Interpretation #001-#035.]
+<BR>
+References: CIB #1, <A HREF="dr_013.html">RFI #13, question #1</A>; 
+CIB #1, <A HREF="dr_017.html#Question14">RFI #17, question #14</A>;
+CIB #1, <A HREF="dr_017.html#Question15">RFI #17, question #15</A>
+<BR>
+<B>Response</B>
+<BR>
+No diagnostics are required for any of the above declarations. Each
+of the function declarations and definitions would
+render the translation unit not strictly conforming. See also
+<A HREF="dr_047.html"> Defect Report #047</A>.
+<BR>
+<A HREF="dr_109.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_111.html">Next Defect Report</A>
+</BODY></HTML>

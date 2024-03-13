@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #277</title>
+  </head>
+
+  <body bgcolor="#FFFFFF">
+    <h2 align="center">Defect Report #277</h2>
+    <a href="dr_276.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_278.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> UK C Panel<br>
+     <b>Submission Date:</b> 2001-09-07<br>
+     <b>Source:</b> Clive D.W. Feather &lt;clive@demon.net&gt;<br>
+     <b>Version:</b> 1.1 <!-- ! year-month-day hour:min:sec -->
+    <br>
+     <b>Date:</b> 2002-03-07<br>
+     <b>Subject:</b> declarations within iteration statements</p>
+    <b>Problem</b> 
+
+    <p>Consider the code:</p>
+<pre>
+<tt><b>  for (enum fred { jim, sheila = 10 } i = jim; i &lt; sheila; i++)
+        //</b> <i>loop body</i>
+</tt>
+</pre>
+    6.8.5#3 reads: 
+
+    <blockquote>
+      <p>[#3] The declaration part of a <tt><b>for</b></tt>
+      statement shall only declare identifiers for objects having
+      storage class <tt><b>auto</b></tt> or
+      <tt><b>register</b></tt>.</p>
+    </blockquote>
+
+    <p>Does this wording forbid the declaration of tag
+    <tt><b>fred</b></tt> - since it is not an object - or is
+    <tt><b>fred</b></tt> not covered by that wording because it is
+    not an object ?</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Change 6.8.5#3 to one of:</p>
+
+    <blockquote>
+      <p>[#3] The declaration part of a <tt><b>for</b></tt>
+      statement shall only declare identifiers for objects; any
+      object so declared shall have storage class
+      <tt><b>auto</b></tt> or <tt><b>register</b></tt>.</p>
+    </blockquote>
+
+    <p>or:</p>
+
+    <blockquote>
+      [#3] Any object whose identifier is declarared in the
+      declaration part of a <tt><b>for</b></tt> statement shall
+      have storage class <tt><b>auto</b></tt> or
+      <tt><b>register</b></tt>.
+    </blockquote>
+    <hr>
+
+    <p><b>Committee Response</b></p>
+
+    <p>The intent is clear enough; <tt><b>fred</b></tt>,
+    <tt><b>jim</b></tt>, and <tt><b>sheila</b></tt> are all
+    identifiers which do not denote objects with
+    <tt><b>auto</b></tt> or <tt><b>register</b></tt> storage
+    classes, and are not allowed in this context.</p>
+
+    <p><br>
+     <a href="dr_276.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_278.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

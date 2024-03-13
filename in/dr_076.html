@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #076</TITLE></HEAD><BODY>
+<H2>Defect Report #076</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Clive Feather
+<BR>
+<B>Question</B>
+<BR>
+Item 13 - pointers to the end of arrays
+<BR>
+Consider the following code extracts:
+<BR>
+<TT><B>int a [10];<BR>
+	int *p;<BR>
+	/*</B><I> ... </I><B>*/<BR>
+	p = &amp;a[10];
+</B></TT><BR>
+and
+<BR>
+<TT><B>int *n = NULL;<BR>
+	int *p<BR>
+	/*</B><I> ... </I><B>*/<BR>
+	p = &*n;
+</B></TT><BR>
+In the first extract, is the assignment strictly conforming (with 
+<TT><B>p</B></TT> being set to the expression <TT><B>a + 10</B></TT>), or is the constraint 
+in subclause 6.3.3.2 violated because <TT><B>a[10]</B></TT> is not an object? 
+Note that this expression is often seen in the idiom:
+<BLOCKQUOTE>
+<TT><B>for (p = &amp;a[0]; p &amp;lt; &amp;a[10]; p++)<BR>
+		/*</B><I> ... </I><B>*/
+</B></TT></BLOCKQUOTE>
+In the second extract, is the assignment strictly conforming (with 
+<TT><B>p</B></TT> being set to a null pointer), or is the constraint
+in subclause 6.3.3.2 
+violated because <TT><B>*n</B></TT> is not an object?
+<BR>
+If only one assignment is strictly conforming, what distinguishes 
+the two cases? If either assignment is strictly conforming, what distinguishes 
+it from the situation described in the following extract from the 
+response to <A HREF="dr_012.html">Defect Report #012</A>?
+<BLOCKQUOTE>
+Given the following declaration:
+<BR>
+<TT><B>void *p;</B></TT>
+<BR>
+the expression <TT><B>&*p</B></TT> is invalid. This is because <TT><B>*p</B></TT> is of 
+type <TT><B>void</B></TT> and so is not an lvalue, as discussed in the quote 
+from subclause 6.2.2.1 above. Therefore, as discussed in the quote 
+from subclause 6.3.3.2 above, the operand of the <TT><B>&</B></TT> operator 
+in the expression <TT><B>&*p</B></TT> is invalid because it is neither a function 
+designator nor an lvalue.
+<BR>
+This is a constraint violation
+and the translator must issue a diagnostic message.
+</BLOCKQUOTE>
+<B>Response</B>
+<BR>
+This issue remains open. The C Standard as currently worded
+has the following consequences:
+<BR>
+1) Subclause 6.3.3.2 requires the operand of <TT><B>&</B></TT>
+to be an lvalue designating an object; <TT><B>a[10]</B></TT> is not an object.
+<BR>
+2) Subclause 6.3.3.2 requires the operand of <TT><B>&</B></TT>
+to be an lvalue; <TT><B>NULL</B></TT> is not an lvalue.
+<BR>
+Since the use of either construct prevents a program from being strictly
+conforming, the remaining portion of the question is not applicable.
+<BR>
+However, the Committee is not entirely comfortable with these
+restrictions and may decide to relax them in resolving this issue.
+<BR>
+<A HREF="dr_075.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_077.html">Next Defect Report</A>
+</BODY></HTML>

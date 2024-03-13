@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #039</TITLE></HEAD><BODY>
+<H2>Defect Report #039</H2>
+
+<P><B>Submission Date</B>: 10 Dec 92 <BR>
+<B>Submittor</B>: WG14 <BR>
+<B>Source</B>: X3J11/91-061 (Vania Joloboff) <BR>
+<B>Question</B> 1 <BR>
+My interpretation of the Standard is that the value of <B><TT>MB_CUR_MAX</TT></B>
+must be one in the <B><TT>&quot;C&quot;</TT></B> locale. I infer that from
+the fact that: </P>
+
+<OL>
+<LI>The characters in the <B><TT>&quot;C&quot;</TT></B> locale must be
+alphanumeric + space. </LI>
+
+<LI>The <B><TT>is<I>XXX</I></TT></B> functions specify character constant
+values for the <B><TT>&quot;C&quot;</TT></B> locale. </LI>
+
+<LI>A character constant consists of one or more characters that are enclosed
+within apostrophes. A character is regarded as having type <B><TT>char</TT></B>.
+</LI>
+
+<LI>The data type <B><TT>char</TT></B> consists of one byte of storage.
+</LI>
+</OL>
+
+<P>However this clarification should be made explicit. <BR>
+<B>Response</B> <BR>
+In fact 3, we presume the second sentence was intended to be: ``A character
+<I>constant</I> is regarded as having type <B><TT>char</TT></B>,'' in order
+to be applicable to this request. That is not true; a character constant
+is of type <B><TT>int</TT></B>. Also facts 1-4 deal with the single-byte
+chars and not the extended character set. <BR>
+In any case, the facts as listed do not logically lead to the conclusion
+that <B><TT>MB_CUR_MAX</TT></B> must be one (1) in the <B><TT>&quot;C&quot;</TT></B>
+locale. In fact, this conclusion is not true. It is possible for <B><TT>MB_CUR_MAX</TT></B>
+to be greater than one in the <B><TT>&quot;C&quot;</TT></B> locale. In
+subclause 7.10, page 149, <B><TT>MB_CUR_MAX</TT></B> is ``the maximum number
+of bytes in a multibyte character for the extended character set specified
+by the current locale.'' In subclause 7.4.1.1, page 107, the <B><TT>&quot;C&quot;</TT></B>
+locale is ``the minimal environment for C translation.'' The minimal environment
+may still require more than one byte for multibyte characters. <BR>
+<B>Question</B> 2 <BR>
+I also would like to make a requirement that if the current locale is the
+<B><TT>&quot;C&quot;</TT></B> locale, the value returned by <B><TT>setlocale(LC_ALL,
+NULL)</TT></B> be a string of length one, consisting of the single character
+<B><TT>C</TT></B>. <BR>
+Currently the value of <B><TT>setlocale(LC_ALL, NULL)</TT></B> is unspecified
+for the <B><TT>&quot;C&quot;</TT></B> locale. <BR>
+This makes it difficult to build libraries where you want to maintain the
+behavior pre-existing to internationalization for backward compatibility.
+<BR>
+Typically you want to say in these programs: <BR>
+<B><TT>if (*setlocale(LC_ALL, NULL) == 'C')<BR>
+<I>do the old thing<BR>
+</I>else<BR>
+<I>do the new thing</I> <BR>
+</TT>Response</B> <BR>
+The reference is to subclause 7.4.1.1, page 107. <BR>
+The Committee acknowledges that there exists no strictly portable method
+for determining whether the current locale is the <B><TT>&quot;C&quot;</TT></B>
+locale. The request for this feature is neither an erratum nor a request
+for interpretation; it is a request for an amendment. The Committee will
+consider this request for a future revision of the C Standard. <BR>
+</P>
+
+<A HREF="dr_038.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_040.html">Next Defect Report</A>
+</BODY></HTML>

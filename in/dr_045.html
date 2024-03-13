@@ -1,0 +1,62 @@
+<HTML><HEAD><TITLE>Defect Report #045</TITLE></HEAD><BODY>
+<H2>Defect Report #045</H2>
+<B>Submission Date</B>: 10 Dec 92
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: X3J11/92-036 (David J. Hendricksen)
+<BR>
+<B>Question</B> 1
+<BR>
+Under subclause 7.9.5.4 <B>The <TT>freopen</TT> function</B>, the C Standard 
+states on page 130, lines 24-29:
+<BLOCKQUOTE>
+The <TT><B>freopen</B></TT> function opens the file whose name is the 
+string pointed to by <TT><B>filename</B></TT> and associates the stream pointed 
+to by <TT><B>stream</B></TT> with it. The <TT><B>mode</B></TT> argument is used just as 
+in the <TT><B>fopen</B></TT> function.
+<BR>
+The <TT><B>freopen</B></TT> function first attempts to close any file 
+that is associated with the specified stream. Failure to close the 
+file successfully is ignored. The error and end-of-file indicators 
+for the stream are cleared.
+</BLOCKQUOTE>
+It is not clear whether the following situations have defined behavior:
+<BR><OL>
+<LI> Calling <TT><B>freopen</B></TT> where <TT><B>stream</B></TT> points to uninitialized 
+storage. For example:
+<BR>
+<TT><B>	{ FILE a, *b;<BR>
+	b = freopen("c.d", "r", &a);<BR>
+	}
+</B></TT><BR>
+(It may not be possible to detect that the information contained 
+within <TT><B>a</B></TT> is not valid when the close for <TT><B>freopen</B></TT> is attempted.)
+<LI> Calling <TT><B>freopen</B></TT> where <TT><B>stream</B></TT> is associated with 
+a previously closed file. (The storage pointed to by <TT><B>stream</B></TT> 
+may have been deallocated.)
+</OL>
+<B>Response</B>
+<BR>
+The behavior is undefined in both cases; case (2) is clear from subclause 
+7.9.3 <B>Files</B>, page 126, lines 24-27, ``A file may be disassociated 
+from a controlling stream by <I>closing</I> the file... The value 
+of a pointer  to a <TT><B>FILE</B></TT> object is indeterminate after the associated 
+file is closed (including the standard text streams).'' Also subclause 
+7.9.3 <B>Files</B>, page 126, lines 2-3 and lines 37-39, ``A stream 
+is associated with an external file... by <I>opening</I> a file, ... 
+At program startup, three text streams are predefined and need not 
+be opened explicitly...'' Also subclause 7.9.5.3 <B>The <TT>fopen</B></TT> 
+<B>function</B>, and, similarly, subclause 7.9.5.4 <B>The <TT>freopen</B></TT> 
+<B>function</B>: ``The ... function opens the file ... and associates 
+a stream with it...'' Thus when subclause 7.9.5.4 says ``The 
+<TT><B>freopen</B></TT> function ... associates the stream pointed to by <TT><B>stream</B></TT> 
+with it,'' the intention is certainly that <TT><B>stream</B></TT> already 
+points to a valid stream. Extending this to case (1), we observe that 
+<TT><B>a</B></TT> (or <TT><B>&a</B></TT>) might not refer to a stream, since none has 
+been ``associated'' by any means specified in the C Standard.
+<BR>
+<A HREF="dr_044.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_046.html">Next Defect Report</A>
+</BODY></HTML>

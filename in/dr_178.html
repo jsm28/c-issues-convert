@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #178</TITLE></HEAD>
+<BODY><H2>Defect Report #178</H2> 
+<B>Submission Date</B>: 06 Feb 96
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Frank Farance
+<BR>
+<B>Question</B>
+<BR> Is the following conforming?
+<BR>
+<TT>  <B>struct x<BR>                 {<BR>                 char y[1];<BR>
+                 };<BR>         struct x *z;<BR>
+<BR>         z = (struct x *) malloc(sizeof (*z) + 100);<BR>        
+z- y[5] = '?';</B>
+<BR>
+</TT>
+<A HREF="dr_051.html">Defect Report #051</A> states that this isn't conforming behavior
+because the pointer arithmetic for the larger structure might not be
+compatible  with a smaller structure. Thus, it recommends the <I>safer</I>
+ idiom:
+<BR>
+<TT><B>#define HUGE_ARR  1000    /* </B><I>or bigger than ever needed</I><B> */<BR>    
+    struct x<BR>                 {<BR>                 char
+y[HUGE_ARR];<BR>                 };<BR>         struct x *z;<BR>
+<BR>         z = (struct x *) malloc(sizeof (*z) + 100);<BR>        
+z- y[5] = '?';</B>
+</TT><BR> However, <A HREF="dr_073.html">Defect Report #073</A> states that the <I>safer</I>
+idiom  is undefined behavior because it is possible to implement the
+operator 
+<TT><B>- </B></TT> as first fetching all of <TT><B>*z</B></TT>, then
+selecting <TT><B>y[5]</B></TT>  from it. This approach would cause
+access to unallocated memory. Thus,  the operation produces undefined
+behavior.
+<BR> These responses are inconsistent. At the Oct 95 meeting in Nashua 
+NH, WG14 indicated that it wanted to designate this as undefined
+behavior.
+<BR><A HREF="dr_177.html">Previous Defect Report</A>
+</BODY></HTML>

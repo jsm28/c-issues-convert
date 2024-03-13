@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 13), see www.w3.org">
+
+  <title>Defect report #342</title>
+</head>
+
+<body>
+  <h2 align="center">Defect Report #342</h2><a href=
+  "dr_341.htm">Previous Defect Report</a> &lt; - &gt; <a href=
+  "dr_343.htm">Next Defect Report</a>
+
+  <p><br>
+  <b>Submitter:</b> Joseph Myers (UK)<br>
+  <b>Submission Date:</b> 2007-03-24<br>
+  <b>Source:</b> Joseph Myers &lt;joseph@codesourcery.com&gt;<br>
+  <b>Reference Document:</b> <a href=
+  "http://www.dkuug.dk/JTC1/SC22/WG14/www/docs/n1223.htm">ISO/IEC
+  WG14 N1223</a><br>
+  <b>Version:</b> 1.4<br>
+  <b>Date:</b> 2008-09-10<br>
+  <b>Subject:</b> VLAs and conditional expressions</p>
+
+  <p><b>Summary</b></p>
+
+  <p>Consider the code:</p>
+  <pre>
+    int a, b;
+    void *p1(void), *p2(void);
+    int c1(void);
+    int d1(void);
+    int z1(void), z2(void);
+
+    int
+    h(void)
+    {
+      int r = (c1()
+               ? (z1(), (int (*)[d1()])p1())
+               : (z2(), (int (*)[])p2()))[a][b];
+      return r;
+    }
+</pre>
+
+  <p>The type of the conditional expression involves the size
+  expression <code>d1()</code> that's only evaluated in one part of
+  the expression, and this information is needed to evaluate the
+  array reference even when <code>c1()</code> returns false.</p>
+
+  <p>For a more complicated example and discussion see reflector
+  messages 10731-10754. The validity of that more complicated
+  example depends on the interpretation of composite type rules as
+  in <a href="dr_340.htm">DR 340</a>, so this example has been
+  simplified to avoid that problem.</p>
+
+  <p><b>Suggested Technical Corrigendum</b><br>
+  6.7.5.2 paragraph 6 at end add "or one of the size specifiers
+  (including the case of a single size specifier where the other
+  array type does not include a size specifier) is not an integer
+  constant expression and is not evaluated during the flow of
+  execution." with a footnote "This case arises where a conditional
+  expression involves a cast to variably modified type or a
+  compound literal of variably modified type."</p>
+  <hr>
+
+  <p><b>Committee Discussion</b> (for history only)</p>
+
+  <h4>Spring 2008</h4>
+
+  <p>The consensus is that the <i>Note</i> in the previous version
+  of this DR was not accurate and should be removed. The DR should
+  be in Review status</p>
+
+  <h4>Fall 2008</h4>
+
+  <p>The consensus at this meeting is that this defect should be
+  linked with defect report 340.</p>
+
+  <p><b>Proposed Committee Response</b></p>
+
+  <p>See <a href="dr_340.htm:">defect report 340</a></p>
+
+  <p><br>
+  <a href="dr_341.htm">Previous Defect Report</a> &lt; - &gt;
+  <a href="dr_343.htm">Next Defect Report</a></p>
+</body>
+</html>

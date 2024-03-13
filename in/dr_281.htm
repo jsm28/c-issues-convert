@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #281</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #281</h2>
+    <a href="dr_280.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_282.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b>J. Benito (convener)<br>
+     <b>Submission Date:</b> 2002-06-06<br>
+     <b>Source:</b> Convener<br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/">ISO/IEC WG14
+    N982</a><br>
+     <b>Version:</b> 1.1<br>
+     <b>Date:</b> 2003-03-06<br>
+     <b>Subject:</b> CLOCKS_PER_SEC should not be a constant
+    expression.</p>
+
+    <p><b>Summary</b></p>
+
+    <p>In 7.23.1 Components of time, <tt><b>CLOCKS_PER_SEC</b></tt>
+    is defined as a macro which expands to a constant expression
+    with type <tt><b>clock_t</b></tt>.
+    <tt><b>CLOCKS_PER_SEC</b></tt> need not be a compile time
+    constant expression, but should be a runtime constant. A value
+    that is unchanged during program execution.<br>
+    </p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+    <hr>
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>In 7.23.1 Components of time, remove the word "constant" in
+    the 2<sup>nd</sup> paragraph.</p>
+
+    <p><br>
+     <a href="dr_280.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_282.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

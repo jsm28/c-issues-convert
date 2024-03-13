@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #097</TITLE></HEAD><BODY>
+<H2>Defect Report #097</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Ron Guilmette
+<BR>
+<B>Question</B>
+<BR>
+ANSI/ISO C Defect report #rfg4:
+<BR>
+Subclause 7.1.6 fails to contain any constraint which would prohibit 
+the type argument given in an invocation of the <TT><B>offsetof</B></TT> macro 
+from being an incomplete type. This situation can arise in examples 
+such as the following:
+<BR>
+<TT><B>#include &lt;stddef.h><BR>
+<BR>
+struct S<BR>
+	{<BR>
+	int member1;<BR>
+	int member2[1+offsetof(struct S, member1)];<BR>
+	};
+</B></TT><BR>
+I believe that a constraint prohibiting the type argument to <TT><B>offsetof</B></TT> 
+from being an incomplete type is clearly needed.
+<BR>
+This problem could be solved by adding an explicit constraint to subclause 
+7.1.6, such as:
+<BLOCKQUOTE>
+The type argument given in an invocation of the <TT><B>offsetof</B></TT> 
+macro shall be the name of a complete structure type or a complete union 
+type. (Note that this way of expressing the constraint also makes 
+it completely clear that diagnostics are required for cases where 
+the type given in the invocation is, for instance, a function type, 
+an array type, an enumerated type, a pointer type, or a built-in arithmetic 
+type.)
+</BLOCKQUOTE>
+<B>Response</B>
+<BR>
+See the response to <A HREF="dr_040.html#Question6">Defect Report #040</A>, question 6.
+This code is not strictly conforming.
+<BR>
+<A HREF="dr_096.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_098.html">Next Defect Report</A>
+</BODY></HTML>

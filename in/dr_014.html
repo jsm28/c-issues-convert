@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #014</TITLE></HEAD>
+<BODY><H2>Defect Report #014</H2>  
+<B>Submission Date</B>: 10 Dec 92
+<BR> 
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: X3J11/90-049 (Max K. Goff)
+<BR> 
+<B>Question</B> 1
+<BR>  X/Open Reference Number KRT3.159.1
+<BR>  There are conflicting descriptions of the <TT><B>setjmp()</B></TT>
+interface in ISO 9899:1990. In subclause 7.6 on page 118, line 8, it is
+stated that ``It is unspecified whether <TT><B>setjmp</B></TT> is a
+macro or an identifier declared with external linkage.'' Throughout the
+rest of the standard, however, it is referred to as ``the <TT><B>setjmp</B></TT>
+macro''; in addition, the rationale document states that <TT><B>setjmp</B></TT>
+must be implemented as a macro. Please clarify whether <TT><B>setjmp</B></TT>
+must be implemented as a macro, or may be a function as well as a macro,
+or may just be a function.
+<BR> 
+<B>Response</B>
+<BR>  The standard states that <TT><B>setjmp</B></TT> can be either a
+macro or a function.  It is referred to as ``the <TT><B>setjmp</B></TT>
+macro'' just to avoid longwindedness. The rationale document is
+incorrect in saying that it must be a macro.
+<BR> 
+<A NAME="Question02"><B>Question</B> 2</A>
+<BR>  X/Open Reference Number KRT3.159.2
+<BR>  Subclause 7.9.6.2 <B>The <TT>fscanf</TT> function</B> states:
+<BLOCKQUOTE>  If end-of-file is encountered during input, conversion is
+terminated. If end-of-file occurs before any characters matching the
+current input directive have been read (other than leading white space,
+where permitted), execution of the current directive terminates with
+input failure; otherwise, unless execution of the current directive is
+terminated with a matching failure, execution of the following directive
+(if any) is terminated with an input failure.
+</BLOCKQUOTE>  How should an implementation behave when end-of-file
+terminates an input stream that satisfies all conversion specifications
+that consume input but there is a remaining specification request that
+consumes no input (e.g. <TT><B>%n</B></TT>)? Should the
+non-input-consuming directive be evaluated or terminated with an input
+failure as described above?
+<BR> 
+<B>Correction</B>
+<BR> 
+<I><B>Add to subclause 7.9.6.2, page 137, line 4 (the</B></I> <TT><B>n</B></TT>
+<B><I>conversion specifier):</I></B>
+<BR>  No argument is converted, but one is consumed. If the conversion
+specification with this conversion specifier is not one of <TT><B>%n</B></TT>,
+<TT><B>%ln</B></TT>, or <TT><B>%hn</B></TT>, the behavior is
+undefined.
+<BR> 
+<I><B>Add to subclause 7.9.6.2, page 138, another Example:</B></I>
+<BR>  In:
+<BR> 
+<TT><B>#include &lt;stdio.h><BR> /*</B><I> ... </I><B>*/<BR> int d1,
+d2, n1, n2, i;<BR> i = sscanf("123", "%d%n%n%d",&amp;d1, &amp;n1, &amp;n2,
+&amp;d2);</B>
+</TT> <BR> the value 123 is assigned to <TT><B>d1</B></TT> and the
+value 3 to <TT><B>n1</B>
+</TT>. Because <TT><B>%n</B></TT> can never get an input failure the
+value of 3 is also assigned to <TT><B>n2</B></TT>. The value of <TT><B>
+d2</B></TT> is not affe cted. The value 3 is assigned to <TT><B>i</B></TT>.
+<BR>
+<A HREF="dr_013.html">Previous Defect Report</A> 
+&lt; -  > 
+<A HREF="dr_015.html">Next Defect Report</A></BODY></HTML>

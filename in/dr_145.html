@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #145</TITLE></HEAD>
+<BODY><H2>Defect Report #145</H2> 
+<B>Submission Date</B>: 23 Feb 95
+<BR>
+<B>Submittor</B>: BSI
+<BR>
+<B>Source</B>: Clive D.W. Feather
+<BR>
+<B>Question</B>
+<BR>
+<I>Submitted to BSI by Clive D.W. Feather clive@sco.com.</I>
+<BR>
+<I>In this Defect Report, identifiers lexically identical to those 
+declared in standard headers refer to the identifiers declared in  those
+standard headers, whether or not the header is explicitly mentioned.</I>
+<BR>
+<I>This Defect Report has been prepared with considerable help from 
+Mark Brader, Jutta Degener, Ronald Guilmette, and a person whose
+employment  conditions require anonymity. However, except where stated,
+opinions  expressed or implied should not be assumed to be those of any
+person  other than myself.</I>
+<BR> Defect Report UK 029: Constant expressions
+<BR> There is a confusion of contextual levels in subclause 6.4.
+Subclause  6.4 lists four possible forms for a constant expression in an
+initializer:
+<BLOCKQUOTE> Such a constant expression shall evaluate to one of the following:
+<BR>
+<BR>an arithmetic constant expression,
+<BR>a null pointer constant,
+<BR>an address constant, or
+<BR>an address constant for an object type plus or minus an integral 
+constant expression.
+</BLOCKQUOTE> The first two of these are syntactic forms, not something that a
+syntactic  form would evaluate to. The third is the result of an
+evaluation,  and the fourth is a compound of the two types of entity.
+<BR> This confusion makes it unclear whether expressions like:
+<BR>
+<TT><B>(int *)0</B></TT>
+<BR> which is not a null pointer constant, or<BR>
+<TT><B>x[5] - x[2]</B></TT>
+<BR> which is clearly a constant, are permitted in initializers.<BR>
+<B>Suggested Technical Corrigendum:</B>
+<BR> Replace the quoted text with:
+<BLOCKQUOTE> Such a constant expression shall be either an arithmetic constant 
+expression, a null pointer constant, or an address constant expression.
+</BLOCKQUOTE> In the second subsequent paragraph, change:
+<BLOCKQUOTE> An address constant is a pointer to an lvalue designating an 
+object of static storage duration, or to a function designator; it 
+shall be created explicitly, using the unary & operator, or implicitly 
+...
+</BLOCKQUOTE> to:
+<BLOCKQUOTE> An address constant expression shall have pointer type, and  shall
+evaluate to:
+<BR>
+<BR>a null pointer,
+<BR>the address of a function, or
+<BR>the address of an object of static storage duration plus or  minus
+some integer.
+<BR> The address may be created explicitly, using the unary <TT><B>&</B></TT>
+ operator, or implicitly ...
+</BLOCKQUOTE><B>Future Change</B>
+<BR>In subclause 6.4 Sematics, change:
+<BLOCKQUOTE>More latitude is permitted for constant expressions in
+initializers.  Such an expression shall evaluate to one of the following:</BLOCKQUOTE>
+to:
+<BLOCKQUOTE>More latitude is permitted for consant expressions in
+initializers.  Such an expression shall be, or evaluate to, one of the following:</BLOCKQUOTE>
+and change:
+<BLOCKQUOTE>An <I>address constant</I> is a
+pointer to an lvalue designating an object of static storage duration, or to a function
+designator; it shall be created explicitly, using the unary &amp; operator, or implicity,
+by the use of an expression of array or function type.</BLOCKQUOTE>
+to:
+<BLOCKQUOTE>An <I>address constant</I> is a null pointer, a pointer to an lvalue designating an object of static storage
+duration, or a pointer to a function desingator.  It shall be created explicitly using the unary &amp;
+operator or an integral constant expression cast to pointer type, or implicitly by the use of an
+expression of array or function type.</BLOCKQUOTE>
+<A HREF="dr_144.html">Previous Defect Report</A> 
+&lt; - &gt; 
+<A HREF="dr_146.html"> Next Defect Report</A>
+</BODY></HTML>

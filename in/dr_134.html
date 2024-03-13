@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #134</TITLE></HEAD><BODY>
+<H2>Defect Report #134</H2>
+<B>Submission Date</B>: 31 Jan 94
+<BR>
+<B>Submittor</B>: Project Editor (P.J. Plauger)
+<BR>
+<B>Source</B>: Clive Feather
+<BR>
+<B>Question</B>
+<BR>
+Subclause 7.11.6.2 <B>The <TT>strerror</TT> function</B>, page 168, reads:
+<BLOCKQUOTE>
+The <TT><B>strerror</B></TT> function maps the error number in <TT><B>errnum</B></TT> 
+to an error message string.
+</BLOCKQUOTE>
+However, ``error number'' is an undefined term. Must <TT><B>strerror</B></TT> 
+provide a valid message for every value of type <TT><B>int</B></TT>, or can 
+some values be a domain error, allowing it to return garbage or a 
+null pointer? If the latter, then what are the values that must generate 
+a valid string? Must the following generate a valid string:
+<BR>
+zero
+<BR>
+<TT><B>EDOM</B></TT> and <TT><B>ERANGE</B></TT>
+<BR>
+the value of any other symbol defined in <TT><B>&lt;errno.h></B></TT>
+<BR>
+any value that a library routine might set <TT><B>errno</B></TT> to
+<BR>
+<B>Response</B>
+<BR>
+The <TT><B>strerror</B></TT> function must provide a valid message for the error 
+numbers <TT><B>EDOM</B></TT>, <TT><B>ERANGE</B></TT>, and any other value a library function 
+might store in <TT><B>errno</B></TT>. For all other values, the behavior is 
+undefined.
+<BR>
+<A HREF="dr_133.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_135.html">Next Defect Report</A>
+</BODY></HTML>

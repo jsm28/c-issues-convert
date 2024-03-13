@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #264</title>
+  </head>
+
+  <body bgcolor="#FFFFFF">
+    <h2 align="center">Defect Report #264</h2>
+    <a href="dr_263.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_265.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> UK C Panel<br>
+     <b>Submission Date:</b> 2001-09-07<br>
+     <b>Source:</b> Clive D.W. Feather &lt;clive@demon.net&gt;<br>
+     <b>Version:</b> 1.1<br>
+     <b>Date:</b> 2002-03-07<br>
+     <b>Subject:</b> graphic characters</p>
+    <b>Problem</b> 
+
+    <p>The Standard uses the terms "printing character", "graphic
+    character", and "nongraphic character". The first is discussed
+    in 5.2.2#1 and defined formally in 7.4#3:</p>
+
+    <blockquote>
+      <p>[#3] The term printing character refers to a member of a
+      locale-specific set of characters, each of which occupies one
+      printing position on a display device;</p>
+    </blockquote>
+
+    <p>A "nongraphic character" is clearly a character which is not
+    a graphic character, but "graphic character" is nowhere
+    defined. It is used only in 5.2.1#3, which requires "the
+    following 29 graphic characters" to be part of the basic
+    character sets, while "nongraphic character" is used in 5.2.2#2
+    and 6.4.4.4#8 when discussing the <tt><b>\a</b></tt>
+    <tt><b>\b</b></tt> <tt><b>\f</b></tt> <tt><b>\n</b></tt>
+    <tt><b>\r</b></tt> <tt><b>\t</b></tt> and <tt><b>\v</b></tt>
+    escape sequences.</p>
+
+    <p>The key questions are:</p>
+
+    <ol>
+      <li>Are the 29 enumerated graphic characters required to be
+      printing characters ?</li>
+
+      <li>Are <tt><b>isalnum()</b></tt> and
+      <tt><b>isspace()</b></tt> required to be false for them
+      ?</li>
+
+      <li>Is <tt><b>ispunct()</b></tt> required to be true for them
+      ?</li>
+    </ol>
+
+    <p>In addition, given that the seven characters corresponding
+    to the escape sequences above are required to be control
+    characters (see 5.2.1#3):</p>
+
+    <ol>
+      <li value="4">Should "nongraphic character" be replaced by
+      "control character" ?</li>
+    </ol>
+
+    <p>I believe that the answers should be:</p>
+
+    <ol>
+      <li>yes</li>
+
+      <li>yes;</li>
+
+      <li>yes in the C locale, but not otherwise;</li>
+
+      <li>yes.</li>
+    </ol>
+
+    <p>However, it is not clear that these answers can be derived
+    from the Standard (though if (1) and (2) are "yes", (3) must at
+    least be "yes in the C locale").</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>To address (1): in 5.2.1#3, replace "29 graphic characters"
+    with "29 printing characters".</p>
+
+    <p>To address (4): in 5.2.2#2 and 6.4.4.4#8 replace
+    "nongraphic" with "control".</p>
+
+    <p>To address (2): append to 5.2.1#4:</p>
+
+    <blockquote>
+      A <i>graphical mark character</i> is one of the 29 other
+      printing characters listed above.
+    </blockquote>
+    in 7.4.1.2#2, insert between the two sentences: 
+
+    <blockquote>
+      The <tt><b>isalpha</b></tt> function returns false for all
+      graphical mark characters.
+    </blockquote>
+    and in 7.4.1.10#2, change "characters for which" to "characters
+    which are not graphical mark characters and for which". 
+
+    <p>Given the above changes, (3) can be derived from the
+    modified Standard.</p>
+    <hr>
+
+    <p><b>Committee Response</b></p>
+
+    <p>The referenced sections in the standard only use the term
+    "non-graphic character" in the context of backslash-escape
+    sequences, for which the standard is clear enough, and no
+    changes are needed.</p>
+
+    <p><br>
+     <a href="dr_263.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_265.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

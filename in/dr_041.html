@@ -1,0 +1,56 @@
+<HTML><HEAD><TITLE>Defect Report #041</TITLE></HEAD><BODY>
+<H2>Defect Report #041</H2>
+<B>Submission Date</B>: 10 Dec 92
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: X3J11/91-076 (Andrew Josey)
+<BR>
+<B>Question</B> 1
+<BR>
+Does the description in subclause 7.3.1 imply that the characters 
+defined in subclause 5.2.1 are always classified as implied by subclause 
+5.2.1 regardless of the locale specified?
+<BR>
+In particular, do the characters <TT><B>'a'</B></TT> through <TT><B>'z'</B></TT> and <TT><B>'A'</B></TT> 
+through <TT><B>'Z'</B></TT> have to be classified as ``lower case and ``upper 
+case,'' respectively, in every locale?
+<BR>
+The specific lines needing interpretation are lines 20-21 in subclause 
+7.3.1.6, page 103, and lines 16-17 in subclause 7.3.1.10, page 104. 
+The word ``or'' can be interpreted to require a superset of 
+the characters specified as lower/upper case in subclause 5.2.1 or 
+to allow an implementation-defined set of characters (which might 
+contain none of the subclause 5.2.1 designated lower/upper case characters).
+<BR>
+<B>Response</B>
+<BR>
+Does the description in subclause 7.3.1 imply that the characters 
+defined in subclause 5.2.1 are always classified as implied by subclause 
+5.2.1 regardless of the locale specified?
+<BR>
+Answer: By subclause 7.3.1.6 <B>The <TT>islower</TT> function</B> and subclause 
+7.3.1.10 <B>The <TT>isupper</TT> function</B> which refer to lower- and 
+upper-case letters, respectively, and by subclause 5.2.1: ``basic 
+source and basic execution character sets shall have at least ... 
+upper-case letters of the English alphabet'' (with example) ... 
+``lower-case letters of the English alphabet'' (with example), 
+and by subclause 5.2.1.2 ``The single-byte characters defined in 
+subclause 5.2.1 shall be present,'' which refers to multibyte characters, 
+therefore, yes, the characters defined in subclause 5.2.1 are always 
+classified as implied by subclause 5.2.1 regardless of the locale 
+specified.
+<BR>
+Do the characters <TT><B>'a'</B></TT> through <TT><B>'z'</B></TT>, and <TT><B>'A'</B></TT> through 
+<TT><B>'Z'</B></TT>, have to be classified as ``lower case'' and ``upper 
+case,'' respectively, in every locale?
+<BR>
+Answer: Yes, the characters <TT><B>'a'</B></TT> through <TT><B>'z'</B></TT>, and <TT><B>'A'</B></TT> 
+through <TT><B>'Z'</B></TT>, have to be classified as ``lower case'' and 
+``upper case,'' respectively, in every locale (following the 
+citations above).
+<BR>
+<A HREF="dr_040.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_042.html">Next Defect Report</A>
+</BODY></HTML>

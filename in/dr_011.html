@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #011</TITLE></HEAD>
+<BODY><H2>Defect Report #011</H2>  
+<B>Submission Date</B>: 10 Dec 92
+<BR> 
+<B>Submittor</B>: WG14
+<BR> 
+<B>Source</B>: X3J11/90-008 (Rich Peterson)
+<BR> 
+<B>Question</B> 1
+<BR>  Merging of declarations for linked identifier
+<BR>  When more than one declaration is present in a program for an
+externally-linked identifier, exactly when do the declared types get
+formed into a composite type?
+<BR>  Certainly, if two declarations have file scope, then after the
+second, the effective type for semantic analysis is the composite type
+of the two declarations (subclause 6.1.2.6, page 25, lines 19-20).
+However, if one declaration is in an inner scope and one is in an outer
+scope, are their types formed into a composite type?
+<BR>  In particular, consider the code:
+<BR> 
+<TT><B>{<BR> extern int i[];<BR> {<BR>     /* </B><I>a different
+declaration of the same object</I><B> */<BR>     extern int i[10];<BR>
+}<BR> /*</B> <I>Is the following legal?<BR>    That is, does the
+outer declaration<BR>    inherit any information from the inner one?</I><B>
+ */<BR> sizeof (i);<BR> }
+</B><BR></TT>  Similar situations can be constructed with internally
+linked identifiers. For instance:
+<BR> 
+<TT><B>/* </B><I>File scope </I><B>*/<BR> static int i[];<BR>
+<BR> main()<BR> {<BR> /* </B><I>a different declaration of the same
+object</I>
+<B>*/<BR> extern int i[10];<BR> }<BR>
+<BR> /* </B><I>Is the following legal?<BR>    That is, does the outer
+declaration<BR>    inherit any information from the inner one?</I><B>*/<BR
+> int j = sizeof (i);
+</B><BR></TT>  Further variants of this question can be asked:
+<BR> 
+<TT><B>{<BR> extern int i[10];<BR> {<BR>     /* </B><I>a different
+declaration of the same object</I> <B>*/<BR>     extern int i[];<BR>
+<BR>     /* </B><I>Is the following legal?<BR>        That is, does
+the inner declaration<BR>        inherit any information from the outer
+one?</I> <B>*/<BR>      sizeof (i);<BR> }<BR> }
+</B></TT><BR> 
+<B>Correction</B>
+<BR> 
+<I><B>In subclause 6.1.2.6, page 25, lines 19-20, change: </B></I>
+<BR>  For an identifier with external or internal linkage declared in
+the same scope as another declaration for that identifier, the type of
+the identifier becomes the composite type.
+<BR> 
+<I><B>to:</B></I>
+<BR>  For an identifier with internal or external linkage declared in a
+scope in which a prior declaration of that identifier is visible<B>*</B>,
+if the prior declaration specifies internal or external linkage, the
+type of the identifier at the latter declaration becomes the composite
+type.<BR> [Footnote *: As specified in 6.1.2.1, the latter declaration
+might hide the prior declaration.] <BR>  
+<B>Question</B> 2
+<BR>  Interpretation of <TT><B>extern</B></TT>
+<BR>  Consider the code:
+<BR> 
+<TT><B>/*</B> <I>File scope</I> <B>*/<BR> static int i;          
+/* </B><I>declaration 1</I><B> */<BR>
+<BR> main()<BR> {<BR> extern int i;           /*</B> <I>declaration
+2</I><B> */<BR> {<BR>     extern int i;       /* </B><I>declaration
+3 </I><B>*/<BR> }<BR> }
+</B></TT><BR>  A literal reading of subclause 6.1.2.2 says that
+declarations 1 and 2 have internal linkage, but that declaration 3 has
+external linkage (since declaration 1 is not visible, being hidden by
+declaration 2). (This combination of internal and external linkage is
+undefined by subclause 6.1.2.2, page 21, lines 27-28.)
+<BR>  Is this what is intended?
+<BR> 
+<B>Correction</B>
+<BR> 
+<I><B>In subclause 6.1.2.2, page 21, change:</B></I>
+<BR>  If the declaration of an identifier for an object or a function
+contains the storage-class specifier <TT><B>extern</B></TT>, the
+identifier has the same linkage as any visible declaration of the
+identifier with file scope. If there is no visible declaration with file
+scope, the identifier has external linkage.
+<BR> 
+<I><B>to:</B></I><BR> For an identifier declared with the
+storage-class specifier <TT><B>extern</B></TT> in a scope in which a
+prior declaration of that identifier is visible<B>*</B>, if the prior
+declaration specifies internal or external linkage, the linkage of the
+identifier at the latter declaration becomes the linkage specified at
+the prior declaration. If no prior declaration is visible, or if the
+prior declaration specifies no linkage, then the identifier has external
+linkage. [Footnote *: As specified in 6.1.2.1, the latter declaration
+might hide the prior declaration.]
+<BR> 
+<B>Question</B> 3
+<BR>  Initialization of tentative definitions
+<BR>  If the file scope declaration
+<BR> 
+<TT><B>int i[10];</B></TT>
+<BR>  appears in a translation unit, subclause 6.7.2 suggests that it
+is implicitly initialized as if
+<BR> 
+<TT><B>int i[10] = 0;</B> </TT>
+<BR>appears at the end of the translation unit. However, this
+initializer is invalid, since subclause 6.5.7 prescribes that the
+initializer for any object of array type must be brace-enclosed. We
+believe that the intention of subclause 6.7.2 is that this declaration
+has an implicit initializer of
+<BR> 
+<TT><B>int i[10] = {0};</B></TT>
+<BR>  Is this true?
+<BR> 
+<B>Response</B>
+<BR>  Subclause 6.7.2 <B>External object definitions</B> contains the
+following excerpt:
+<BLOCKQUOTE>  If a translation unit contains one or more tentative definitions
+for an identifier, and the translation unit contains no external
+definition for that identifier, then the behavior is exactly as if the
+translation unit contains a file scope declaration of that identifier,
+with the composite type as of the end of the translation unit, with an
+initializer equal to 0.
+</BLOCKQUOTE>  This statement describes an effect and not a literal token
+sequence. Therefore, this example does not contain an error.
+<BR> 
+<B>Question</B> 4
+<BR>Tentative definition of externally-linked object with incomplete
+type
+<BR>If one writes the file-scope declaration
+<BR> 
+<TT><B>int i[];</B></TT>
+<BR>then subclause 6.7.2 suggests that at the end of the translation
+unit the implicit declaration
+<BR> 
+<TT><B>int i[] = {0};</B></TT>
+<BR>or equivalently
+<BR> 
+<TT><B>int i[1] = {0};</B></TT>
+<BR> appears. This seems peculiar, since subclause 6.7.2, (page 83,
+lines 35-36) specifically forbids this case for internally linked
+identifiers.
+<BR>Is this what is intended?
+<BR> 
+<B>Correction</B>
+<BR> 
+<I><B>Add to subclause 6.7.2, page 84, a second Example:</B></I>
+<BR>If at the end of the translation unit containing
+<BR> 
+<TT><B>int i[]; </B></TT>
+<BR>the array <TT><B>i</B></TT> still has incomplete type, the array
+is assumed to have one element. This element is initialized to zero on
+program startup.
+<BR>
+<A HREF="dr_010.html">Previous Defect Report</A> 
+&lt; -  > <A HREF="dr_012.html">Next Defect Report</A></BODY></HTML>

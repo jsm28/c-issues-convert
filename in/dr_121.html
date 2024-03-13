@@ -1,0 +1,62 @@
+<HTML><HEAD><TITLE>Defect Report #121</TITLE></HEAD><BODY>
+<H2>Defect Report #121</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Ron Guilmette
+<BR>
+<B>Question</B>
+<BR>
+ANSI/ISO C Defect Report #rfg28:
+<BR>
+Subject: Conversions of pointer values to integral types.
+<BR>
+Subclause 6.3.4 (<B>Semantics</B>):
+<BLOCKQUOTE>
+A pointer may be converted to an integral type. The size of 
+integer required and the result are implementation-defined. If 
+the space provided is not long enough, the behavior is undefined.
+</BLOCKQUOTE>
+This passage is worded rather ambiguously.
+<BR>
+In the first place, it talks about ``The size of the integer required....'' 
+Required by whom?  Required by what?  I can't tell.
+<BR>
+Also, I get the feeling that the way this passage reads, an implementation 
+might permit conversions of pointers to types <TT><B>char</B></TT>, <TT><B>short</B></TT>, 
+and <TT><B>int</B></TT> (with implementation defined semantics) while <I>disallowing</B> 
+conversions of pointers to type <TT><B>long</B></TT>! (Of course that would 
+be highly counterintuitive.)
+<BR>
+Here is a suggested replacement for the above passage:
+<BR>
+The value of any pointer expression whose <TT><B>sizeof</B></TT>, if computed, 
+would be <I>N,</I> may be converted (via a cast) to any integral type whose 
+<TT><B>sizeof</B></TT> is <I>N</B> or greater.
+The values resulting from such conversions 
+are implementation-defined.
+<BR>
+If an attempt is made to convert (via a cast) the value of a pointer 
+expression whose <TT><B>sizeof</B></TT>, if computed, would be <I>N,</B>
+to some integral type whose <TT><B>sizeof</B></TT>
+is less than <I>N,</I> the behavior is undefined.
+<BR>
+This is simply a more precise (and accurate) way of saying exactly 
+what was (obviously) intended.
+<BR>
+<B>Response</B>
+<BR>
+The ``size required'' is that required by the implementation.
+The words ``If the space provided is not long enough''
+make it clear that
+it is the size of the type that is relevant, and means that any type
+that is at least as long as the type of the
+``size required'' is also acceptable.
+The size required need not be related to the result of
+<TT><B>sizeof</B></TT> applied to the expression.
+<BR>
+<A HREF="dr_120.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_122.html">Next Defect Report</A>
+</BODY></HTML>

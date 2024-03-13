@@ -1,0 +1,87 @@
+<HTML><HEAD><TITLE>Defect Report #047</TITLE></HEAD>
+<BODY>
+<H2>Defect Report #047</H2>
+<B>Submission Date</B>: 10 Dec 92
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: X3J11/92-040 (Randall Meyers)
+<BR>
+<B>Question</B> 1
+<BR>
+Are the following declarations strictly conforming?
+<BR>
+<TT><B>/*</B><I> 1 </I><B>*/	struct S;<BR>
+/*</B><I> 2 </I><B>*/	struct S *f(struct S *p) {return p; }<BR>
+/*</B><I> 3 </I><B>*/	struct S *g(struct S a[]) {return a; }<BR>
+/*</B><I> 4 </I><B>*/	int *h(int a2[][]) {return *a2; }<BR>
+/*</B><I> 5 </I><B>*/	extern struct S es1;<BR>
+/*</B><I> 6 </I><B>*/	extern struct S es2[1];
+<BR></B></TT>
+The declaration of struct tag <TT><B>S</B></TT> introduces an incomplete type 
+(subclause 6.5.2.3, page 62, lines 25-29) that may only be used when 
+the size of the type is not needed.
+<BR>
+The function <TT><B>f</B></TT> therefore is a fairly common and non-controversial 
+use of an incomplete pointer type by a function. It is strictly conforming.
+<BR>
+The function <TT><B>g</B></TT> is more interesting. A parameter of type array 
+is adjusted to pointer type (subclause 6.7.1, page 82, lines 23-26). 
+(Note that is an adjustment of the type of the parameter definition. 
+It is not a conversion, as is what happens when an argument of type 
+array is passed to a function.) Thus, the type of parameter <TT><B>a</B></TT> 
+is pointer to struct <TT><B>S</B></TT>. This would seem to make the function 
+<TT><B>g</B></TT> the same case as function <TT><B>f</B></TT>. However, subclause 6.1.2.5, 
+page 23, lines 23-24 (also Footnote 17) disallow array types from 
+having an incomplete element type (like struct <TT><B>S</B></TT>). This raises 
+the question, is function <TT><B>g</B></TT> strictly conforming because the 
+type of <TT><B>a</B></TT> is really pointer, or is function <TT><B>g</B></TT> not strictly 
+conforming because <TT><B>a</B></TT> had an invalid array type before the compiler 
+in effect rewrote the declaration?
+<BR>
+The function <TT><B>h</B></TT> is similar to function <TT><B>g</B></TT>. The type of <TT><B>a2</B></TT> 
+after adjustment is pointer to array of unknown size of <TT><B>int</B></TT>, 
+which does not violate any rules. However, before adjustment, the 
+type of <TT><B>a2</B></TT> is illegal because it is an array whose element type 
+is array of unknown size, which is an incomplete type.
+<BR>
+In previous Committee discussion that occurred concerning <A HREF="dr_017.html#Question7"> Defect Report 
+#017 Question 10</A>, the Committee took the position that a declaration 
+like that of <TT><B>es1</B></TT> was strictly conforming, since the size of 
+<TT><B>es1</B></TT> is not needed for an external reference, and thus was similar 
+to the cases described in Footnote 63 in subclause 6.5.2.3 on page 
+62.
+<BR>
+The declaration of <TT><B>es2</B></TT> also does not require its size to be 
+known. However, it appears that the rule from subclause 6.1.2.5, page 
+23, lines 23-24 that prohibits an incomplete array element type makes 
+<TT><B>es2</B></TT> not strictly conforming.
+<BR>
+<B>Response</B>
+<BR>
+First of all, no constraints are violated. Therefore, no diagnostics 
+are required.
+<BR>
+Declarations 1, 2, and 5 are strictly conforming. Declarations 3, 
+4, and 6 are not, and therefore cause undefined behavior.
+<BR>
+The struct <TT><B>S</B></TT> is an incomplete type (subclause 6.5.2.3, page 
+62, lines 25-28). Also, an array of unknown size is an incomplete 
+type (subclause 6.5.4.2, page 67, lines 9-10). Therefore, arrays of 
+either of the above are not strictly conforming (subclause 6.1.2.5, 
+page 23, lines 23-24). This makes declarations 3, 4, and 6 not strictly 
+conforming. (But an implementation could get it right.)
+<BR>
+As an aside, array parameters are adjusted to pointer type (subclause 
+6.7.1, page 82, lines 23-24). However, there is nothing to suggest 
+that a not-strictly-conforming array type can magically be transformed 
+into a strictly conforming pointer parameter via this rule.
+<BR>
+The types in question can be interpreted two different ways. (Array 
+to pointer conversion can happen as soon as possible or as late as 
+possible.) Hence a program that uses such a form has undefined behavior.
+<BR>
+<A HREF="dr_046.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_048.html">Next Defect Report</A>
+</BODY></HTML>

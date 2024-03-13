@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #010</TITLE></HEAD>
+<BODY><H2>Defect Report #010</H2>  
+<B>Submission Date</B>: 10 Dec 92
+<BR> 
+<B>Submittor</B>: WG14
+<BR> 
+<B>Source</B>: X3J11/90-044 (Michael S. Ball)
+<BR> 
+<B>Question</B> 1
+<BR>  Consider:
+<BR> 
+<TT><B>typedef int table[];        /* </B><I>line 1</I> <B>*/<BR>
+<BR> table one = {1};        /*</B><I> line 2</I> <B>*/<BR>
+<BR> table two = {1, 2};     /*</B> <I>line 3</I> <B>*/
+</B></TT><BR>First, is the typedef to an incomplete type legal? I can't
+find a prohibition in the standard. But an incomplete type is completed
+by a later definition, such as line 2, so what is the status of line 3?
+<BR>The type, of which <TT><B>table</B></TT> is only a synonym, can't
+be completed by line 2 if it is to be used in line 3. And what is <TT><B>
+sizeof(table)</B></TT>? What old C compilers seem to do is treat the
+typedef as some sort of textual equivalent, which is clearly wrong.
+<BR><B>Response</B>  <BR> A typedef of an incomplete type is
+permitted.  <BR> Regarding objects <TT><B>one</B></TT> and <TT><B>two</B></TT>,
+refer to the standard subclause 6.1.2.5, page 24, lines 8-9: ``An array
+of unknown size is an incomplete type. It is completed, <I>for an
+identifier of that type,</I> by specifying the size in a later
+declaration ...'' [emphasis added]. The types of objects <TT><B>one</B></TT>
+and <TT><B>two</B></TT> are completed but the typ e <TT><B>table</B></TT>
+itself is <I>never</I> completed. Hence, <TT><B>sizeof(table)</B></TT>
+is not permitted.  <BR> An example very similar to that submitted is
+shown in example 6, subclause 6.5.7 on page 74, lines 16-23.
+<BR>
+<A HREF="dr_009.html">Previous Defect Report</A> 
+&lt; -  > <A HREF="dr_011.html">Next Defect Report</A></BODY></HTML>

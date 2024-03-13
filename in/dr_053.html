@@ -1,0 +1,88 @@
+<HTML><HEAD><TITLE>Defect Report #053</TITLE></HEAD><BODY>
+<H2>Defect Report #053</H2>
+<B>Submission Date</B>: 25 Mar 93
+<BR>
+<B>Submittor</B>: Project Editor (P.J. Plauger)
+<BR>
+<B>Source</B>: Larry Jones
+<BR>
+<B>Question</B> 1
+<BR>
+There's been a discussion on <TT><B>comp.std.c</B></TT> recently about accessing 
+a pointer to a function with parameter type information through a 
+pointer to a pointer to a function without parameter type information. 
+For example:
+<BR>
+<TT><B>int f(int);<BR>
+	int (*fp1)(int);<BR>
+	int (*fp2)();<BR>
+	int (**fpp)();<BR>
+<BR>
+	fp1 = f;<BR>
+	fp2 = fp1;	/*</B><I> pointers to compatible types, assignment ok </I><B>*/<BR>
+	(*fp2)(3);	/*</B><I> function types are compatible, call is ok </I><B>*/<BR>
+	fpp = &fp1;	/*</B><I> pointer to compatible types, assignment ok </I><B>*/<BR>
+	(**fpp)(3);	/*</B><I> valid? </I><B>*/
+</B></TT><BR>
+The final call itself should be valid since the resulting function 
+type is compatible with the type of the function being called, but 
+there's still a problem: Subclause 6.3 <B>Expressions</B>, page 38, 
+says:
+<BLOCKQUOTE>
+An object shall have its stored value accessed only by an lvalue 
+expression that has one of the following types:<B>36</B>
+<BR>
+- the declared type of the object,
+<BR>
+- a qualified version of the declared type of the object,
+<BR>
+- a type that is the signed or unsigned type corresponding 
+to the declared type of the object,
+<BR>
+- a type that is the signed or unsigned type corresponding 
+to a qualified version of the declared type of the object,
+<BR>
+- an aggregate or union type that includes one of the aforementioned 
+types among its members (including, recursively, a member of a subaggregate 
+or contained union), or
+<BR>
+- a character type.
+<BR>
+[Footnote 36: The intent of this list is to specify those circumstances 
+in which an object may or may not be aliased.]
+</BLOCKQUOTE>
+This would appear to render the final call undefined since the stored 
+value of <TT><B>fp1</B></TT> is being accessed by an lvalue that does not match 
+its declared type: <TT><B>(int (*)())</B></TT> vs. <TT><B>(int (*)(int))</B></TT>.
+<BR>
+I think that this example should be valid and that the above limitation 
+is too strict. I think what we meant to say was ``<I>a type compatible 
+with</I> the declared type of the object,'' which would allow ``reasonable'' 
+type mismatches without allowing aliasing between wildly different 
+types.
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>In subclause 6.3, page 38, lines 18-21, change:</B></I>
+<BR>
+An object shall have its stored value accessed only by an lvalue expression 
+that has one of the following types:<B>36</B>
+<BR>
+- the declared type of the object,
+<BR>
+- a qualified version of the declared type of the object,
+<BR>
+<I><B>to:</B></I>
+<BR>
+An object shall have its stored value accessed only by an lvalue expression 
+that has one of the following types:<B>36</B>
+<BR>
+- a type compatible with the declared type of the object,
+<BR>
+- a qualified version of a type compatible with the declared type 
+of the object,
+<BR>
+<A HREF="dr_052.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_054.html">Next Defect Report</A>
+</BODY></HTML>

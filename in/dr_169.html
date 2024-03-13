@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #169</TITLE></HEAD>
+<BODY><H2>Defect Report #169</H2> 
+<B>Submis>sion Date</B>: 16 Oct 95
+<BR>
+<B>Submittor</B>: BSI
+<BR>
+<B>Source</B>: Clive D.W. Feather
+<BR>
+<B>Question</B>
+<BR>
+<I>Submitted to BSI by Clive D.W. Feather  clive@sco.com .</I>
+<BR>
+<I>In this Defect Report, identifiers lexically identical to those 
+declared in standard headers refer to the identifiers declared in  those
+standard headers, whether or not the header is explicitly mentioned.</I>
+<BR>
+<I>This Defect Report has been prepared with considerable help from 
+Mark Brader, Jutta Degener, Ronald Guilmette, and a person whose
+employment  conditions require anonymity. However, except where stated,
+opinions  expressed or implied should not be assumed to be those of any
+person  other than myself.</I>
+<BR> Defect Report UK 017: Trigraphs
+<BR> The C Standard's description of the replacement of trigraphs is
+contradictory.
+<BR> Subclause 5.2.1.1 reads in part:
+<BR> All occurrences in a source file of the following sequences  of
+three characters (called trigraph sequences [7]) are replaced with  the
+corresponding single character... Each <TT><B>?</B></TT> that does not
+begin  one of the trigraphs listed above is not changed.
+<BR> Since the second character in each trigraph is a <TT><B>?</B></TT>
+that does  not begin the trigraph, this is a direct contradiction.
+<BR>
+<B>Suggested Technical Corrigendum</B>
+<BR> Change the last sentence of the cited text to:
+<BR> Each <TT><B>?</B></TT> that is not part of one of the trigraphs
+listed  above is not changed.
+<BR> Proposed Response
+<BR> The C Standard is clear enough as is. A trigraph begins with two
+question  marks, so it is reasonable to refer to both of them as
+beginning the  trigraph.
+<BR>
+<A HREF="dr_168.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_170.html">Next Defect Report</A></BODY></HTML>

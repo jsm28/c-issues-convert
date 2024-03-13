@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect Report #203</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #203</h2>
+    <a href="dr_202.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_204.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Project Editor (Larry Jones)<br>
+     <b>Submission Date:</b> 1999-08-18<br>
+     <b>Source:</b> WG15<br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n888.htm">ISO/IEC
+    WG14 N888</a><br>
+     <b>Version:</b> 1.1<br>
+     <b>Date:</b> 2000-04-18 02:08:50<br>
+     <b>Subject:</b> C locale conflict with ISO/IEC 9945-2</p>
+
+    <p><b>Summary</b><br>
+     In subclause 7.23.3.5p7, the specifications for the
+    <tt><b>strftime</b></tt> <tt><b>%c</b></tt>,
+    <tt><b>%p</b></tt>, and<tt><b>%x</b></tt> conversion specifiers
+    in the C locale conflict with the specifications in ISO/IEC
+    9945-2 for the POSIX locale.&nbsp; As the POSIX and C locales
+    have always been intended to be compatible, we strongly suggest
+    changing these specifications to match the pre-existing POSIX
+    specifications.</p>
+
+    <p><b>Suggested Correction</b><br>
+     In subclause 7.23.3.5, paragraph 7, page 345, change the
+    definitions of <tt><b>%c</b></tt>, <tt><b>%p</b></tt>, and
+    <tt><b>%x</b></tt> to:</p>
+
+    <blockquote>
+      <dl compact>
+        <dt><tt><b>%c</b></tt></dt>
+
+        <dd>equivalent to "<tt><b>%a %b %e %T %Y</b></tt>".</dd>
+
+        <dt><tt><b>%p</b></tt></dt>
+
+        <dd>one of "<tt><b>AM</b></tt>" or
+        "<tt><b>PM</b></tt>".</dd>
+
+        <dt><tt><b>%x</b></tt></dt>
+
+        <dd>equivalent to "<tt><b>%m/%d/%y</b></tt>".</dd>
+      </dl>
+    </blockquote>
+    <hr>
+
+    <p><b>Committee Response</b><br>
+     Changes were incorporated into the Standard just before
+    printing. This was considered an editorial change by the
+    Committee.</p>
+
+    <p><br>
+     <a href="dr_202.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_204.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

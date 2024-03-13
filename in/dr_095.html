@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #095</TITLE></HEAD><BODY>
+<H2>Defect Report #095</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Ron Guilmette
+<BR>
+<B>Question</B>
+<BR>
+ANSI/ISO C Defect report #rfg2:
+<BR>
+There is an ambiguity with respect to the constraints which may (or may 
+not) apply to initializations.
+<BR>
+Subclause 6.5.7 says:
+<BLOCKQUOTE>
+... the same type constraints and conversions as for simple 
+assignment apply, ...
+</BLOCKQUOTE>
+Note however that this rule itself appears within a <B>Semantics</B> section, 
+thus leading some implementors to feel that no diagnostics are required 
+in cases where an attempt is made to provide an initializer for a 
+given scalar and where the type of the initializer is <I>not</I> assignment 
+compatible with the type of the scalar object being initialized. This 
+ambiguity should be removed by adding an explicit constraint to the 
+section covering initializations, such as:
+<BLOCKQUOTE>
+Each scalar initializer expression given in an initializer shall 
+have a type such that its value may be assigned to an object with 
+the unqualified version of the corresponding scalar object to be initialized 
+by the given scalar initializer expression.
+</BLOCKQUOTE>
+(This roughly mirrors the existing constraint on parameter matching 
+imposed upon calls to prototyped functions.)
+<BR>
+<B>Response</B>
+<BR>
+An explicit constraint is not required in the initializer section. 
+Early on, the Committee decided that if a behavior was described as 
+being equivalent to another construct, all of the constraints of that 
+construct would apply. This ``chaining'' process means that 
+any violation of a constraint in any section referred to explicitly 
+or by the phrases ``equivalent behavior'' or ``as if'' 
+will generate a diagnostic.
+<BR>
+The constraints in the section on simple assignment 
+(subclause 6.3.16.1) are sufficient to assure type compatibility of 
+the object and the initializer.
+<BR>
+
+<A HREF="dr_094.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_096.html">Next Defect Report</A>
+</BODY></HTML>

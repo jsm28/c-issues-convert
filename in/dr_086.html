@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #086</TITLE></HEAD><BODY>
+<H2>Defect Report #086</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Clive Feather
+<BR>
+<B>Question</B>
+<BR>
+Item 23 - object-like macros in system headers
+<BR>
+Consider an implementation where <TT><B>&lt;string.h></B></TT> defines the macro 
+<TT><B>strlen</B></TT> thus:
+<BR>
+<TT><B>#define strlen	__internal_fast_strlen</B></TT>
+<BR>
+and declares functions (defined elsewhere) called <TT><B>__internal_fast_strlen</B></TT> 
+and <TT><B>strlen</B></TT>, both with the functionality of <TT><B>strlen</B></TT> in subclause 
+7.11.6.3. Is such an implementation conforming with respect to the 
+rules of subclause 7.1.7?
+<BR>
+Note that a strictly conforming application can detect this situation 
+by comparing the value of the expression <TT><B>strlen</B></TT> taken before 
+and after a <TT><B>#undef</B></TT>.
+<BR>
+<B>Response</B>
+<BR>
+The question asks whether a system header can define the name of a library
+function as an object-like macro, and cites subclause 7.1.7
+as not using the term ``function-like.''
+<BR>
+The Committee notes the absence of this term, but also notes that subclause
+7.1.7 requires that the macro definition
+always be suppressed when not followed
+by an open parenthesis. Therefore such macros must either be function-like,
+or the implementation must cause them to act as function-like macros.
+<BR>
+<A HREF="dr_085.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_087.html">Next Defect Report</A>
+</BODY></HTML>

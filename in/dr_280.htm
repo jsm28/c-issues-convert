@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #280</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #280</h2>
+    <a href="dr_279.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_281.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b>Randy Meyers (US)<br>
+     <b>Submission Date: 2002-09-26</b><br>
+     <b>Source:</b> Emmanuel Ruffin (ruffin@besancon.sema.slb.com)
+    via ANSI<br>
+     <b>Reference Document:</b><br>
+     <b>Version:</b> 1.2<br>
+     <b>Date:</b> 2003-10-06 15:10<br>
+     <b>Subject:</b> <tt><b>struct tm</b></tt>, member
+    <tt><b>tm_isdst</b></tt>, and <tt><b>mktime()</b></tt> in
+    <tt><b>&lt;time.h&gt;</b></tt></p>
+
+    <p><b>Summary</b></p>
+
+    <p>If it is not known whether daylight saving time is in effect
+    (<tt><b>tm_isdst</b></tt> set to <tt><b>-1</b></tt>), some
+    times expressed in <tt><b>struct tm</b></tt> become ambiguous.
+    There is no specification as to what <tt><b>mktime()</b></tt>
+    should do for such cases.</p>
+
+    <p><b>Questions</b></p>
+
+    <ol>
+      <li>Normally when calling <tt><b>mktime()</b></tt>, the user
+      will set <tt><b>tm_isdst</b></tt> to <tt><b>-1</b></tt> to
+      request that <tt><b>mktime()</b></tt> determine the true
+      value (See 7.23.2.3 footnote 267). Usually,
+      <tt><b>mktime()</b></tt> can determine whether daylight
+      saving time is in effect based on the time and date
+      information initially stored in the <tt><b>struct tm</b></tt>
+      argument. However, during the Fall change over, there is one
+      hour that exists both in daylight saving time and standard
+      time. Example: In France, we will change time on October the
+      27th at 3am. That means that at 3am it will be 2am again. If
+      asked to convert October 27 at 2.30am when
+      <tt><b>tm_isdst</b></tt> is <tt><b>-1</b></tt>, what value
+      should <tt><b>mktime()</b></tt> store in
+      <tt><b>tm_isdst</b></tt> and what is the return value?</li>
+
+      <li>For the same example as point <tt><b>1</b></tt>, what
+      should we return in case <tt><b>tm_isdst</b></tt> is set to
+      <tt><b>0</b></tt> or <tt><b>1</b></tt> ?</li>
+
+      <li>In a general case, what should we do in case
+      <tt><b>tm_isdst</b></tt> is different from <tt><b>-1</b></tt>
+      ?</li>
+
+      <li>When calling <tt><b>mktime()</b></tt> function, is it
+      true that this function should modify the <tt><b>tm</b></tt>
+      structure to put in it the GM time instead the local time
+      given as an entry ?</li>
+    </ol>
+
+    <p><b>Suggested Committee Response</b></p>
+
+    <p>Subclause 7.23.1 Paragraph 1 of the C Standard says,</p>
+
+    <blockquote>
+      "The local time zone and Daylight Saving Time are
+      implementation-defined."
+    </blockquote>
+    That means that the standard does not specify the behavior and
+    that the implementation is free to make choices that it must
+    document. Although the C Standard imposes no particular
+    definition on daylight saving time, other standards or local
+    custom may. 
+
+    <ol>
+      <li>It is implementation defined. For example, an
+      implementation might assume that daylight saving time is not
+      in effect and set <tt><b>tm_isdst</b></tt> to
+      <tt><b>0</b></tt> and return the <tt><b>time_t</b></tt> value
+      corresponding to 2:30 AM Standard Time.</li>
+
+      <li>It is implementation defined. However, assuming that an
+      implementation chose a conventional definition of daylight
+      saving time, these times are unambiguous since the user
+      specified whether daylight saving time was in effect, and the
+      <tt><b>time_t</b></tt> return value would be different for
+      2:30 daylight saving time versus 2:30 standard time. Note
+      that it would be reasonable for <tt><b>mktime()</b></tt> to
+      change <tt><b>tm_hour</b></tt> and <tt><b>tm_isdst</b></tt>
+      on output. For example, <tt><b>tm_hour=2</b></tt> and
+      <tt><b>tm_isdst=1</b></tt> on input might change to
+      <tt><b>tm_hour=1</b></tt> and <tt><b>tm_dst=0</b></tt> on
+      output.</li>
+
+      <li>It is implementation defined. One possibility would be to
+      consider any two <tt><b>struct tm</b></tt> values as being
+      exactly one hour apart if all members have the same value
+      except that one <tt><b>struct tm</b></tt> value has
+      <tt><b>tm_isdst=1</b></tt> and the other has
+      <tt><b>tm_isdst=0</b></tt> (regardless of the date stored in
+      the <tt><b>struct tm</b></tt> values).</li>
+
+      <li>No. A <tt><b>struct tm</b></tt> represents a local time
+      in the local time zone for <tt><b>mktime()</b></tt>. See
+      7.23.2.3 Paragraph 2.</li>
+    </ol>
+    <hr>
+
+    <p><b>Committee Response</b></p>
+
+    <blockquote>
+      It is implementation defined. One possibility would be to
+      consider any two <tt><b>struct tm</b></tt> values as being
+      exactly one hour apart if all members have the same value
+      except that one <tt><b>struct tm</b></tt> value has
+      <tt><b>tm_isdst=1</b></tt> and the other has
+      <tt><b>tm_isdst=0</b></tt> (regardless of the date stored in
+      the <tt><b>struct tm</b></tt> values).
+    </blockquote>
+
+    <blockquote>
+      See footnote 267.
+    </blockquote>
+
+    <p><br>
+     <a href="dr_279.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_281.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

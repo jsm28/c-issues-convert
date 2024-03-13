@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #038</TITLE></HEAD><BODY>
+<H2>Defect Report #038</H2>
+
+<P><B>Submission Date</B>: 10 Dec 92 <BR>
+<B>Submittor</B>: WG14 <BR>
+<B>Source</B>: X3J11/91-046 (Kuo-Wei Lee) <BR>
+<B>Question</B> 1 <BR>
+Under subclause 6.8.3.1 <B>Argument substitution</B>, the C Standard states
+on page 90, lines 12-14: </P>
+
+<BLOCKQUOTE>
+<P>Before being substituted, each argument's preprocessing tokens are completely
+macro replaced as if they form the rest of the translation unit; no other
+preprocessing tokens are available. </P>
+</BLOCKQUOTE>
+
+<P>It is not clear to us what should happen if, after the first replacement,
+the argument is a valid preprocessing number. Consider the following example:
+<BR>
+<B><TT>#define X 0x000E<BR>
+#define Y 0x0100<BR>
+#define FOO(a) a<BR>
+FOO(X+Y) <BR>
+</TT></B>After <B><TT>X</TT></B> is replaced, <B><TT>FOO(X+Y)</TT></B>
+becomes <B><TT>FOO(0x000E+Y)</TT></B>. At this point, should the macro
+replacement continue and expand <B><TT>Y</TT></B> to be 0x0100 with the
+final result being <B><TT>FOO(0x000E+0x0100)</TT></B>; or should the expansion
+stop since <B><TT>0x000E+Y</TT></B> is a syntactically valid preprocessing
+number? <BR>
+In other words, should <B><TT>FOO(X+Y)</TT></B> be expanded into <B><TT>FOO(0x000E+0x0100)</TT></B>,
+or should it be <B><TT>FOO(0x000E+Y)</TT></B>? <BR>
+<B>Response</B> <BR>
+Subclause 5.1.1.2, page 5, lines 32-39 indicate that translation must proceed
+as if all creation of preprocessing tokens completes before any macro expansion
+begins. These are translation phases 3 and 4: 
+<BLOCKQUOTE>
+3. The source file is decomposed into preprocessing tokens and sequences
+of white-space characters (including comments)... <BR>
+4. Preprocessing directives are executed and macro invocations are expanded.
+</BLOCKQUOTE>
+Therefore, if <B><TT>X+Y</TT></B> were expanded to <B><TT>0x000E+Y</TT></B>,
+a new preprocessing number would not be created. The macro expansion proceeds
+as follows. <BR>
+<B><TT>FOO(X+Y) <I>(6 tokens) --<BR>
+</I>FOO(0x000E+0x0100) <I>(6 tokens) --<BR>
+</I>0x000E+0x0100 <I>(3 tokens)</I> <BR>
+</TT></B>This sequence is required by subclause 6.8.3.1, page 90, lines
+10-14: <BLOCKQUOTE>
+A parameter in the replacement list ... is replaced by the corresponding
+argument after all macros contained therein have been expanded. Before
+being substituted, each argument's preprocessing tokens are completely
+macro replaced as if they formed the rest of the translation unit... 
+</BLOCKQUOTE>
+
+<A HREF="dr_036.html">Previous Defect Rep8rt</A>
+&lt; - &gt; 
+<A HREF="dr_039.html">Next Defect Report</A>
+</BODY></HTML>

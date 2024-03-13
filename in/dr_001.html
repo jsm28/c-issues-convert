@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #001</TITLE></HEAD><BODY>
+<H2>Defect Report #001</H2>
+<B>Submission Date</B>: 10 Dec 92
+<BR> 
+<B>Submittor</B>: WG14
+<BR> 
+<B>Source</B>: X3J11/90-009 (Paul Eggert)
+<BR> 
+<B>Question</B> 1
+<BR> 
+Do functions return values by copying?
+<BR>
+The C Standard is clear (in subclause 6.3.2.2) that function arguments
+are copied, but is not clear (in subclause 6.6.6.4) whether a function's
+returned value is also copied. This question becomes an issue in the
+assignment statement <TT><B>s=f();</B></TT> where <TT><B>f</B></TT> yields a str
+ucture:
+is the result defined when the structure <TT><B>s</B></TT> overlaps the structur
+e
+that <TT><B>f</B></TT> obtained the returned value from?
+<BR>
+I ask this question because the GNU C compiler does not copy the structure
+in this case. When I filed the enclosed bug report [omitted from this
+document], Richard Stallman, the author of GNU C, replied that he
+didn't think that Standard C required the extra copy. I sympathize
+with Stallman's desire for efficient code, and I also would prefer
+that the C Standard did not require the extra copy here, but the point
+should be made clear in the C Standard.
+<BR>
+<B>Correction</B>
+<BR> 
+<I><B>In subclause 6.6.6.4, page 80, lines 30-32, replace:</B></I>
+<BR> 
+If the expression has a type different from that of the function in
+which it appears, it is converted as if it were assigned to an object
+of that type.
+<BR> 
+<I><B>with:</B></I>
+<BR> 
+If the expression has a type different from the return type of the
+function in which it appears, the value is converted as if by assignment
+toan object having the return type of the function.<B>*</B>
+<BR> 
+[Footnote *: The <TT><B>return</B></TT> statement is not an assignment. The
+overlap restriction in subclause 6.3.16.1 does not apply to the case
+of function return.]
+<BR> 
+<I><B>Add to subclause 6.6.6.4, page 80:</B></I>
+<BR> 
+<B>Example</B>
+<BR> 
+In:
+<BR> 
+<TT><B>struct s {double i;} f(void);<BR>
+union {struct {int f1;<BR>
+               struct s f2;} u1;<BR>
+       struct {struct s f3;<BR>
+               int f4;} u2;<BR>
+      } g;<BR>
+struct s f(void)<BR>
+        {<BR>
+        return g.u1.f2;<BR>
+        }<BR>
+/*</B><I> ... </I><B>*/<BR>
+g.u2.f3 = f();
+<BR></B></TT>
+the behavior is defined.
+<BR><A HREF="dr_002.html"> Next Defect Report </A>
+</BODY></HTML>

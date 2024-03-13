@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #209</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #209</h2>
+    <a href="dr_208.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_210.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Douglas A. Gwyn (J11)<br>
+     <b>Submission Date:</b> 1999-10-19<br>
+     <b>Source:</b><br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n896.htm">ISO/IEC
+    WG14 N896</a><br>
+     <b>Version:</b> 1.2<br>
+     <b>Date:</b> 2000-11-02 13:46:31<br>
+     <b>Subject:</b> Problem implementing
+    <tt><b>INT</b></tt><i>N</i><tt><b>_C</b></tt> macros</p>
+
+    <p><b>Summary</b><br>
+     The requirements of subclause 7.18.4.1 may be impossible to
+    satisfy (for <i>N</i> = 8 or 16, typically) unless an
+    implementation has special (non-standard) support for integer
+    constants of types <tt><b>char</b></tt> and
+    <tt><b>short</b></tt>:</p>
+
+    <blockquote>
+      The macro
+      <tt><b>INT</b></tt><i>N</i><tt><b>_C(</b></tt><i>value</i>
+      <tt><b>)</b></tt> shall expand to a signed integer constant
+      with the specified value and type
+      <tt><b>int_least</b></tt><i>N</i><tt><b>_t</b></tt>.
+    </blockquote>
+    (Similarly for <tt><b>UINT</b></tt><i>N</i><tt><b>_C</b></tt>.)
+    The paragraph preceding this overly restrictive specification
+    reflects the actual intent: 
+
+    <blockquote>
+      ... a type with at least the specified width.
+    </blockquote>
+
+    <p><b>Possible Solutions</b></p>
+
+    <ol>
+      <li>Change "integer constant" to "integer constant
+      expression". While this still does not reflect the original
+      intent, at least it permits accurate implementation without
+      special support from the compiler.</li>
+
+      <li>Specify that the type shall be the promoted type
+      corresponding to
+      <tt><b>int_least</b></tt><i>N</i><tt><b>_t</b></tt>.</li>
+
+      <li>Specify that the type shall be any appropriately signed
+      integer type of sufficient width.</li>
+    </ol>
+
+    <p><b>Suggested Technical Correction</b><br>
+     In subclause 7.18.4.1 paragraph 2, change the two occurrences
+    of "and type" to "and [un]signed integer type at least as wide
+    as".</p>
+    <hr>
+
+    <p><b>Technical Corrigendum</b><br>
+     7.18.4 Macros for integer constants</p>
+
+    <blockquote>
+      [#1] The following function-like
+      macros<small><sup>220</sup></small> expand to integer
+      constant expressions suitable for initializing objects that
+      have integer types corresponding to types defined in
+      &lt;<tt>stdint.h</tt>&gt;. Each macro name corresponds to a
+      similar type name in 7.18.1.2 or 7.18.1.5. 
+
+      <p>[#2] The argument in any instance of these macros shall be
+      a decimal, octal, or hexadecimal constant (as defined in
+      6.4.4.1) with a value that does not exceed the limits for the
+      corresponding type.</p>
+    </blockquote>
+    Add: 
+
+    <blockquote>
+      [#3] Each invocation of one of these macros shall expand to
+      an integer constant expression suitable for use in
+      <tt>#if</tt> preprocessing directives. The type of the
+      expression shall have the same type as would an expression
+      that is an object of the corresponding type converted
+      according to the integer promotions. The value of the
+      expression shall be that of the argument.
+    </blockquote>
+
+    <p><i>Most of the following wording is taken almost exactly
+    from</i> <tt><b>&lt;limits.h&gt;</b></tt></p>
+
+    <p>7.18.4.1 Macros for minimum-width integer constants</p>
+
+    <p>Remove:</p>
+
+    <blockquote>
+      [#1] Each of the following macros expands to an integer
+      constant having the value specified by its argument and a
+      type with at least the specified
+      width.<small><sup>221</sup></small>) 
+
+      <p><small><sup>221</sup></small> For each name described in
+      7.18.1.2 that the implementation provides, the corresponding
+      macro in this subclause is required.</p>
+    </blockquote>
+
+    <p>Change [#2] to:</p>
+
+    <blockquote>
+      [#2] The macro
+      <tt><b>INT</b></tt><i>N</i><tt><b>_C(</b></tt><i>value</i>
+      <tt><b>)</b></tt> shall expand to an integer constant
+      expression corresponding to the type
+      <tt><b>int_least</b></tt><i>N</i><tt><b>_t</b></tt>. The
+      macro
+      <tt><b>UINT</b></tt><i>N</i><tt><b>_C(</b></tt><i>value</i>
+      <tt><b>)</b></tt> shall expand to an integer constant
+      expression corresponding to the type
+      <tt><b>uint_least</b></tt><i>N</i><tt><b>_t</b></tt>. For
+      example, if <tt><b>uint_least64_t</b></tt> is a name for the
+      type <tt><b>unsigned long long int</b></tt>, then
+      <tt><b>UINT64_C(0x123)</b></tt> might expand to the integer
+      constant <tt><b>0x123ULL</b></tt>.
+    </blockquote>
+
+    <p>7.18.4.2 Macros for greatest-width integer constants</p>
+
+    <blockquote>
+      [#1] The following macro expands to an integer constant
+      expression having the value specified by its argument and the
+      type <tt><b>intmax_t</b></tt>: 
+
+      <blockquote>
+        <tt><b>INTMAX_C(</b></tt><i>value</i><tt><b>)</b></tt>
+      </blockquote>
+      The following macro expands to an integer constant expression
+      having the value specified by its argument and the type
+      <tt>uintmax_t</tt>: 
+
+      <blockquote>
+        <tt><b>UINTMAX_C(</b></tt><i>value</i><tt><b>)</b></tt>
+      </blockquote>
+    </blockquote>
+
+    <p><br>
+     <a href="dr_208.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_210.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #106</TITLE></HEAD><BODY>
+<H2>Defect Report #106</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Ron Guilmette
+<BR>
+<B>Question</B>
+<BR>
+ANSI/ISO C Defect report #rfg13:
+<BR>
+Subclause 6.2.2.2 says:
+<BLOCKQUOTE>
+The (nonexistent) value of a <I>void expression</I> (an expression 
+that has type <TT><B>void</B></TT>) shall not be used in any way, ...
+</BLOCKQUOTE>
+There are two separate (but related) problems with this rule.
+<BR>
+First, it is not entirely clear what constitutes a ``use'' of 
+a value (or of an expression). In which lines of the following code 
+is a type <TT><B>void</B></TT> value actually ``used?''
+<BR>
+<TT><B>void example(void *pv, int i)<BR>
+	{<BR>
+	&*pv;            /*</B><I> ? </I><B>*/<BR>
+	*pv;             /*</B><I> ? </I><B>*/<BR>
+	i ? *pv : *pv;   /*</B><I> ? </I><B>*/<BR>
+	*pv, *pv;        /*</B><I> ? </I><B>*/<BR>
+	}
+</B></TT><BR>
+(The answer to this question will determine which of the above lines 
+cause undefined behavior, and which cause well defined behavior.)
+<BR>
+If one or more of the (questionable) lines from the above example 
+are judged by the Committee to result in well defined behavior, then 
+a second (separate) issue arises. This second issue requires some 
+explaining.
+<BR>
+Subclause 6.2.2.1 contains the following rules:
+<BLOCKQUOTE>
+An <I>lvalue</I> is an expression (with an object type
+or an incomplete type other than <TT><B>void</B></TT>) ...
+<BR>
+Except when it is the operand of the <TT><B>sizeof</B></TT> operator, 
+the unary <TT><B>&</B></TT> operator, the <TT><B>++</B></TT> operator, the <TT><B>--</B></TT> operator, 
+or the left operand of the <TT><B>.</B></TT> operator or an assignment operator, 
+an lvalue that does not have array type is converted to the value 
+stored in the designated object (and is no longer an lvalue)... If 
+the lvalue has an incomplete  type and does not have array type, the 
+behavior is undefined.
+</BLOCKQUOTE>
+Note that the final rule (specifying a condition under which undefined 
+behavior arises) seems, based upon the context, to only apply to those 
+cases in which ``...an lvalue that does not have an array type 
+is converted to the value...'' More specifically, it appears that 
+undefined behavior is <I>not</I> necessarily produced for non-lvalue 
+expressions (appearing in the indicated contexts).
+<BR>
+Furthermore, it should be noted that the definition of an lvalue (quoted 
+above) <I>does not include</I> all void types. Rather, it only includes 
+<I>the</I> <TT><B>void</B></TT> type.
+<BR>
+The result is that the indicated lines in following example would 
+seem to yield well defined behavior (or at least they <I>will</I> 
+yield well defined behavior if the Committee decides that their unqualified 
+counterparts do), however I suspect that this may not have been what 
+the Committee intended.
+<BR>
+<TT><B>void example(const void *pcv, volatile void *pvv, int i)<BR>
+	{<BR>
+	&*pcv;              /*</B><I> ? </I><B>*/<BR>
+	*pcv;               /*</B><I> ? </I><B>*/<BR>
+	i ? *pcv : *pcv;    /*</B><I> ? </I><B>*/<BR>
+	*pcv, *pcv;         /*</B><I> ? </I><B>*/<BR>
+<BR>
+	&*pvv;              /*</B><I> ? </I><B>*/<BR>
+	*pvv;               /*</B><I> ? </I><B>*/<BR>
+	i ? *pvv : *pvv;    /*</B><I> ? </I><B>*/<BR>
+	*pvv, *pvv;         /*</B><I> ? </I><B>*/<BR>
+	}
+</B></TT><BR>
+In summary, I would ask that the Committee comment upon and/or clarify 
+the behavior produced by each of the examples shown herein. Separately, 
+I would request that the Committee make changes in the existing C 
+Standard in order to make the rules applicable to such cases more 
+readily apparent.
+<BR>
+<B>Response</B>
+<BR>
+In the first function called <TT><B>example</B></TT>, the expression
+statement <TT><B>&*pv</B></TT> is dealt with in <A HREF="dr_012.html">Defect Report #012</A>.
+The remaining three statements are well formed. See the last
+sentence of the cited reference and also subclause 6.6.3.
+<BR>
+In the second function called <TT><B>example</B></TT>, the expression
+statements <TT><B>&*pcv</B></TT> and <TT><B>&*pvv</B></TT> are
+dealt with in <A HREF="dr_012.html">Defect Report #012</A>. The remaining six statements
+are well formed. The restrictions given in subclause 6.5.3 apply
+to object types, not incomplete types.
+<BR>
+<A HREF="dr_105.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_107.html">Next Defect Report</A>
+</BODY></HTML>

@@ -1,0 +1,345 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #291</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #291</h2>
+    <a href="dr_290.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_292.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> P.J. Plauger<br>
+     <b>Submission Date:</b> 2003-08-29<br>
+     <b>Source:</b> WG 14<br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1024.txt">ISO/IEC
+    WG14 N1024</a><br>
+     <b>Version:</b> 1.2<br>
+     <b>Date:</b> 2004-09-28<br>
+     <b>Subject:</b> corrections to requirements on inexact
+    floating-point exceptions</p>
+
+    <p><b>Summary</b></p>
+
+    <blockquote>
+      IEC 60559 says very little about the setting of the inexact
+      floating-point exception. C99 perhaps says a bit too much.
+      Inexact is a condition that can arise when computing an
+      expression as innocuous as 2.0/3.0, so it happens all the
+      time during floating-point computations. It is thus arguably
+      of little practical use. And it is rather difficult to avoid
+      in writing math functions. Requiring math functions to set,
+      or not set, inexact is thus arguably of more cost than
+      benefit.<br>
+      <br>
+       
+
+      <p>What follows is a review of certain statements in the C99
+      Standard, with suggestions for making them more sensible.</p>
+    </blockquote>
+
+    <p>7.12.9.3 promises that <tt><b>nearbyint</b></tt> will
+    <i>not</i> set inexact. This is a tiresome but not onerous
+    requirement. It is also all that distinguishes
+    <tt><b>nearbyint</b></tt> from <tt><b>rint</b></tt>, so the
+    requirement should probably be retained.</p>
+
+    <p>7.12.9.4 says that <tt><b>rint</b></tt>:</p>
+
+    <blockquote>
+      <i>may</i> raise the inexact floating-point exception if the
+      result differs in value from the argument.
+    </blockquote>
+
+    <p>This grants license to perform faster operations than are
+    permitted <tt><b>nearbyint</b></tt>, but doesn't promise to
+    reliably set inexact. Note that it is otherwise foolish for
+    <tt><b>rint</b></tt> to set inexact, because the rounded result
+    is <i>always</i> exactly the expected result. It is a false
+    analogy to match the behavior of <tt><b>lrint</b></tt> or
+    <tt><b>llrint</b></tt>, where the library functions are
+    arguably mapping floating-point values to integer values, using
+    a recipe for making the best of matters when the integer cannot
+    exactly represent the original value.</p>
+
+    <p>Given the small distinction between <tt><b>rint</b></tt> and
+    <tt><b>nearbyint</b></tt>, the latitude to set inexact should
+    probably also be retained. (It is also worth an explicit
+    mention, despite the general license suggested below for all
+    math functions.)</p>
+
+    <p>Footnote 301 in F.4 says:</p>
+
+    <blockquote>
+      ANSI/IEEE 854, but not IEC 60559 (ANSI/IEEE 754), directly
+      specifies that floating-to-integer conversions raise the
+      inexact floating-point exception for non-integer in-range
+      values. In those cases where it matters, library functions
+      can be used to effect such conversions with or without
+      raising the inexact floating-point exception. See
+      <tt><b>rint</b></tt>, <tt><b>lrint</b></tt>,
+      <tt><b>llrint</b></tt>, and <tt><b>nearbyint</b></tt> in
+      <tt><b>&lt;math.h&gt;</b></tt>.
+    </blockquote>
+
+    <p>This clearly overstates the case, suggesting as it does that
+    rint reliably sets inexact.</p>
+
+    <p><b>SUGGESTION:</b> Remove <tt><b>rint</b></tt> from the list
+    in the last sentence.</p>
+
+    <p>F.9, para 8 says:</p>
+
+    <blockquote>
+      Whether or when the trigonometric, hyperbolic, base-e
+      exponential, base-e logarithmic, error, and log gamma
+      functions raise the inexact floating-point exception is
+      implementation-defined. For other functions, the inexact
+      floating-point exception is raised whenever the rounded
+      result is not identical to the mathematical result.
+    </blockquote>
+
+    <p>Given the difficulty of avoiding inexact exceptions, and
+    their consequential uselessness in most cases, this license
+    should be extended to <i>all</i> library functions.</p>
+
+    <p><b>SUGGESTION:</b> Change the above to:</p>
+
+    <blockquote>
+      Whether or when library functions other than
+      <tt><b>nearbyint</b></tt> raise the inexact floating-point
+      exception is unspecified.
+    </blockquote>
+
+    <p>F.9, para 9 says:</p>
+
+    <blockquote>
+      Whether the inexact floating-point exception can be raised
+      when the rounded result actually does equal the mathematical
+      result is implementation-defined. Whether the underflow (and
+      inexact) floating-point exception can be raised when a result
+      is tiny but not inexact is implementation-defined.(312)
+      Otherwise, as implied by F.7.6, the
+      <tt><b>&lt;math.h&gt;</b></tt> functions do not raise
+      spurious floating-point exceptions (detectable by the user).
+    </blockquote>
+
+    <p>The first sentence is mooted by the earlier suggested
+    change. The second sentence (and the footnote, discussed below)
+    doesn't go far enough. Avoiding intermediate underflows can be
+    as annoying, and fruitless, as avoiding intermediate inexact
+    reports. Library functions <i>should</i> report underflow if
+    the final result underflows, but they should also have the
+    latitude not to avoid reporting intermediate underflows.</p>
+
+    <p><b>SUGGESTION:</b> Change the above to:</p>
+
+    <blockquote>
+      Whether or when library functions raise an undeserved
+      underflow floating-point exception is unspecified.(312)
+      Otherwise, as implied by F.7.6, the
+      <tt><b>&lt;math.h&gt;</b></tt> functions do not raise
+      spurious floating-point exceptions (detectable by the user).
+    </blockquote>
+    Footnote 312 says: 
+
+    <blockquote>
+      It is intended that undeserved underflow and inexact
+      floating-point exceptions are raised only if determining
+      inexactness would be too costly.
+    </blockquote>
+
+    <p><b>SUGGESTION:</b> Change the above to:</p>
+
+    <blockquote>
+      It is intended that undeserved underflow and inexact
+      floating-point exceptions are raised only if avoiding them
+      would be too costly.
+    </blockquote>
+    F.9, para 10 says: 
+
+    <blockquote>
+      Whether the functions honor the rounding direction mode is
+      implementation-defined.
+    </blockquote>
+    This is inaccurate, since some functions (such as
+    <tt><b>rint</b></tt>) are obliged to honor the rounding
+    direction mode. 
+
+    <p><b>SUGGESTION:</b> Change the above to:</p>
+
+    <blockquote>
+      Whether the functions honor the rounding direction mode is
+      implementation-defined, unless explicitly specified
+      otherwise.
+    </blockquote>
+    F.9.6.4 says: 
+
+    <blockquote>
+      The <tt><b>rint</b></tt> functions differ from the
+      <tt><b>nearbyint</b></tt> functions only in that they do
+      raise the inexact floating-point exception if the result
+      differs in value from the argument.
+    </blockquote>
+    This contradicts 7.12.9.4, which does not require
+    <tt><b>rint</b></tt> to set inexact. 
+
+    <p><b>SUGGESTION:</b> Change the above to:</p>
+
+    <blockquote>
+      The <tt><b>rint</b></tt> functions differ from the
+      <tt><b>nearbyint</b></tt> functions only in that they may
+      raise the inexact floating-point exception if the result
+      differs in value from the argument.
+    </blockquote>
+    F9.8.3 says: 
+
+    <blockquote>
+      <tt><b>-nextafter(x, y)</b></tt> raises the overflow and
+      inexact floating-point exceptions for <tt><b>x</b></tt>
+      finite and the function value infinite. <tt><b>nextafter(x,
+      y)</b></tt> raises the underflow and inexact floating-point
+      exceptions for the function value subnormal or zero and
+      <tt><b>x != y</b></tt>.
+    </blockquote>
+    This is inconsistent with the general license for reporting
+    overflow and underflow in J.3.1.2, which makes the setting of
+    inexact with either of these exceptions implementation defined.
+    It is also inconsistent with the general license for not
+    reporting underflow on tiny results in J.3.6. 
+
+    <p><b>SUGGESTION:</b> Change the above to:</p>
+
+    <blockquote>
+      <tt><b>-nextafter(x, y)</b></tt> raises the overflow
+      floating-point exception for <tt><b>x</b></tt> finite and the
+      function value infinite. <tt><b>nextafter(x, y)</b></tt>
+      raises the underflow floating-point exception for the
+      function value zero and <tt><b>x != y</b></tt>.
+      <tt><b>nextafter(x, y)</b></tt> may raise the underflow
+      floating-point exception for the function value subnormal and
+      <tt><b>x != y</b></tt>.
+    </blockquote>
+    J.3.1.2 includes as implementation-defined behavior: 
+
+    <blockquote>
+      Whether or when the trigonometric, hyperbolic, base-e
+      exponential, base-e logarithmic, error, and log gamma
+      functions raise the inexact floating-point exception in an
+      IEC 60559 conformant implementation (F.9).
+    </blockquote>
+    This should be unspecified behavior, not implementation
+    defined. 
+
+    <p><b>SUGGESTION:</b> Remove the above.</p>
+    <hr>
+
+    <p><b>Committee Discussion</b></p>
+
+    <p>The intent of Annex F is to <i>require</i> the
+    <tt><b>rint</b></tt> functions to raise inexact if the result
+    differs from the argument value. This is in contrast to the
+    weaker clause 7 statement that the <tt><b>rint</b></tt>
+    functions <i>may</i> raise inexact. Moreover,
+    <tt><b>nextafter</b></tt> has the behavior suggested by IEC
+    60559 and thus should not be changed. With these changes, the
+    suggested changes are acceptable.</p>
+
+    <p><b>Technical Corrigendum</b><br>
+    </p>
+
+    <p>Change F.9, paragraph 8 from:</p>
+
+    <blockquote>
+      Whether or when the trigonometric, hyperbolic, base-<i>e</i>
+      exponential, base-<i>e</i> logarithmic, error, and log gamma
+      functions raise the "inexact" floating-point exception is
+      implementation-defined. For other functions, the inexact
+      floating-point exception is raised whenever the rounded
+      result is not identical to the mathematical result.
+    </blockquote>
+
+    <p>to:</p>
+
+    <blockquote>
+      Whether or when library functions raise the inexact
+      floating-point exception is unspecified, unless explicitly
+      specified otherwise.
+    </blockquote>
+
+    <p>Change F.9, paragraph 9 from:</p>
+
+    <blockquote>
+      Whether the inexact floating-point exception can be raised
+      when the rounded result actually does equal the mathematical
+      result is implementation-defined. Whether the underflow (and
+      inexact) floating-point exception can be raised when a result
+      is tiny but not inexact is implementation-defined.(312)
+      Otherwise, as implied by F.7.6, the
+      <tt><b>&lt;math.h&gt;</b></tt> functions do not raise
+      spurious floating-point exceptions (detectable by the user).
+    </blockquote>
+
+    <p>to:</p>
+
+    <blockquote>
+      Whether or when library functions raise an undeserved
+      underflow floating-point exception is unspecified.(312)
+      Otherwise, as implied by F.7.6, the
+      <tt><b>&lt;math.h&gt;</b></tt> functions do not raise
+      spurious floating-point exceptions (detectable by the user),
+      other than the inexact floating-point exception.
+    </blockquote>
+
+    <p>Change Footnote 312 from:</p>
+
+    <blockquote>
+      It is intended that undeserved underflow and inexact
+      floating-point exceptions are raised only if determining
+      inexactness would be too costly.
+    </blockquote>
+
+    <p>to:</p>
+
+    <blockquote>
+      It is intended that undeserved underflow and inexact
+      floating-point exceptions are raised only if avoiding them
+      would be too costly.
+    </blockquote>
+
+    <p>Change F.9, paragraph 10 from:</p>
+
+    <blockquote>
+      Whether the functions honor the rounding direction mode is
+      implementation-defined.
+    </blockquote>
+
+    <p>to:</p>
+
+    <blockquote>
+      Whether the functions honor the rounding direction mode is
+      implementation-defined, unless explicitly specified
+      otherwise.
+    </blockquote>
+
+    <p>Remove J.3.1.2 (from implementation-defined behavior):</p>
+
+    <blockquote>
+      Whether or when the trigonometric, hyperbolic, base-e
+      exponential, base-e logarithmic, error, and log gamma
+      functions raise the inexact floating-point exception in an
+      IEC 60559 conformant implementation (F.9).
+    </blockquote>
+
+    <p><br>
+     <a href="dr_290.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_292.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

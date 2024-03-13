@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #056</TITLE></HEAD><BODY>
+<H2>Defect Report #056</H2>
+<B>Submission Date</B>: 15 Apr 93
+<BR>
+<B>Submittor</B>: Project Editor (P.J. Plauger)
+<BR>
+<B>Source</B>: Thomas Plum
+<BR>
+<B>Question</B> 1
+<BR>
+The following requirement is implied in several places, but not explicitly 
+stated. It should be explicitly affirmed, or alternative wording adopted.
+<BR>
+The representation of floating-point values (such as floating-point 
+constants, the results of floating-point expressions, and floating-point 
+values returned by library functions) shall be accurate to one unit 
+in the last position, as defined in the implementation's <TT><B>&lt;float.h></B></TT> 
+header.
+<BR>
+Discussion: The values in <TT><B>&lt;float.h></B></TT> aren't required to document 
+the underlying bitwise representations. If you want to know how many 
+bits, or bytes, a floating-point values occupies, use <TT><B>sizeof</B></TT>. 
+The <TT><B>&lt;float.h></B></TT> values document the mathematical properties of 
+the representation, the behaviors that the programmer can count upon 
+in analyzing algorithms.
+<BR>
+It is a quality-of-implementation question as to whether the implementation 
+delivers accurate bits throughout the bitwise representation, or alternatively, 
+delivers considerably less accuracy. The point being clarified is 
+that <TT><B>&lt;float.h></B></TT> documents the delivered precision, not the theoretically 
+possible precision.
+<BR>
+<B>Open Issue</B>
+<BR>
+<A HREF="dr_055.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_057.html">Next Defect Report</A>
+</BODY></HTML>

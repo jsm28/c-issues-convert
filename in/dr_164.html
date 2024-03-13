@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #164</TITLE></HEAD>
+<BODY><H2>Defect Report #164</H2> 
+<B>Submission Date</B>: 16 Oct 95
+<BR>
+<B>Submittor</B>: BSI
+<BR>
+<B>Source</B>: Clive D.W. Feather
+<BR>
+<B>Question</B>
+<BR>
+<I>Submitted to BSI by Clive D.W. Feather  clive@sco.com .</I>
+<BR>
+<I>In this Defect Report, identifiers lexically identical to those 
+declared in standard headers refer to the identifiers declared in  those
+standard headers, whether or not the header is explicitly mentioned.</I>
+<BR>
+<I>This Defect Report has been prepared with considerable help from 
+Mark Brader, Jutta Degener, Ronald Guilmette, and a person whose
+employment  conditions require anonymity. However, except where stated,
+opinions  expressed or implied should not be assumed to be those of any
+person  other than myself.</I>
+<BR> Defect Report UK 012: Bad declarations
+<BR> The C Standard contains no constraint to prevent declarations
+involving  types not defined by subclause 6.1.2.5.
+<BR> Subclause 6.5 states that:
+<BR> A declaration shall declare at least a declarator, a tag, or  the
+members of an enumeration. There seems to be no constraint that  a
+declarator generate a well-formed type. Consider the following code:
+<BR>
+<TT> <B> {<BR>         int a [][5];            /*</B> <I>Line A</I> <B>*/<BR>        
+int x, b [][5];         /*</B> <I>Line B</I> <B>*/<BR>         }</B><BR>
+</TT><BR>  Neither <TT><B>a</B></TT> nor <TT><B>b</B></TT> has a
+well formed type. Does line A nevertheless 
+<I>declare a declarator,</I> or does it violate the quoted constraint? 
+If it violates the constraint, does line B?
+<BR> Is it the intent of the C Standard that an ill-formed (but
+syntactically  correct) type generate a diagnostic? If so, then is there
+one, or  does one need to be added?
+<BR> Response
+<BR> Line A declares a declarator. It violates the semantics described 
+in subclause 6.5:
+<BR> If an identifier for an object is declared with no linkage, the
+type for the object shall be complete by the end of its declarator,  ...
+<BR> But no diagnostic is required. <BR>
+<A HREF="dr_163.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_165.html">Next Defect Report</A></BODY></HTML>

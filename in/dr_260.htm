@@ -1,0 +1,364 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #260</title>
+  </head>
+
+  <body bgcolor="#FFFFFF">
+    <h2 align="center">Defect Report #260</h2>
+    <a href="dr_259.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_261.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> UK C Panel<br>
+     <b>Submission Date:</b> 2001-09-07<br>
+     <b>Source:</b> Clive D.W. Feather &lt;clive@demon.net&gt;<br>
+     <b>Version:</b> 1.1<br>
+     <b>Date:</b> 2004-09-28<br>
+     <b>Subject:</b> indeterminate values and identical
+    representations</p>
+    <b>Problem</b> 
+
+    <p>This is an intermingling of something that started out as
+    two separate questions:</p>
+
+    <ol>
+      <li>if an object holds an indeterminate value, can that value
+      change other than by an explicit action of the program ?</li>
+
+      <li>if two objects hold identical representations derived
+      from different sources, can they be used exchangeably ?</li>
+    </ol>
+
+    <p>However, after much discussion the UK C Panel decided that
+    they were better treated together. Both involve the concept of
+    the "provenance" of a value.</p>
+
+    <p>Consider the code:</p>
+<pre>
+<tt><b> char *p;
+    unsigned char cp [sizeof p];
+    p = malloc (SOME_VALUE);
+    //</b> <i>Assume the allocation succeeds</i> <b>
+    //</b> <i>Other code omitted that does not alter p.</i> <b> memcpy (cp, &amp;p, sizeof p);
+    (free)(p); //</b> <i>Point X</i> <b>
+               //</b> <i>...</i> <b>
+               //</b> <i>Point Y</i> <b> if (memcmp (cp, &amp;p, sizeof p))
+              //</b> <i>...</i> 
+</tt>
+</pre>
+
+    <p>After the call to <tt><b>free</b></tt> the value of
+    <tt><b>p</b></tt> is indeterminate. Is the implementation
+    allowed, at this point (point X), to change this indeterminate
+    value (presumably through compiler magic) so that the
+    <tt><b>memcmp</b></tt> function sees a difference, or must the
+    value remain constant ? Can it make the change later, between
+    points X and Y ?</p>
+
+    <p>It is suggested that this is implied by 6.2.4#2:</p>
+
+    <blockquote>
+      <p>An object [...] retains its last-stored value throughout
+      its lifetime.</p>
+    </blockquote>
+
+    <p>particularly if each byte of an object is also an
+    object.</p>
+
+    <p>On the other hand, such a requirement would eliminate useful
+    optimisation and debugging opportunities. (As an example of an
+    optimisation, if <tt><b>p</b></tt> has been loaded into a
+    register and then modified, it need not be written back to
+    memory; as an example of a debugging opportunity,
+    <tt><b>p</b></tt> could be set to a null pointer or to a
+    detectable value).</p>
+
+    <p>[Note that where an object contains padding, 6.2.6.1#6 and
+    #7 allows the value of padding bits and bytes to change
+    whenever the object changes.]</p>
+
+    <p>If an implementation <i>is</i> allowed to change the value
+    of <tt><b>p</b></tt>, then consider the code:</p>
+<pre>
+<tt><b> char *p, *q, *r;
+    p = malloc (SOME_VALUE);
+    //</b> <i>Assume the allocation succeeds</i> <b> q = p;
+    r = p + 1;
+    //</b> <i>Other code omitted that does not alter p, q, or r</i> <b> (free)(p);
+    //</b> <i>Point Z</i> 
+</tt>
+</pre>
+
+    <p>Can it change the value of q or r at point Z ? What about
+    later ?</p>
+
+    <p>Now consider the code:</p>
+<pre>
+<tt><b> int *p, *q;
+    p = malloc (sizeof (int)); assert (p != NULL);
+    (free)(p);
+    q = malloc (sizeof (int)); assert (q != NULL);
+    if (memcmp (&amp;p, &amp;q, sizeof p) == 0)
+    {
+        //</b> <i>Assume this point is reached</i> <b>    
+        *p = 42;  //</b> <i>Line A</i> 
+</tt>
+</pre>
+
+    <p>Is the assignment valid (because an assignment using
+    <tt><b>*q</b></tt> would have been, and the two variables hold
+    identical values) ? Or is it invalid because the last-stored
+    value of <tt><b>p</b></tt> is now indeterminate (because of the
+    <tt><b>free</b></tt>) ?</p>
+
+    <p>Similarly, consider the code:</p>
+<pre>
+<tt><b> int x, y;
+    int *p, *q;
+    p = &amp;x + 1;
+    q = &amp;y;
+    if (memcmp (&amp;p, &amp;q, sizeof p) == 0)
+    {
+        //</b> <i>Assume this point is reached</i> <b>    *q = 42; p [-1] = 42;   //</b> <i>Line B</i> <b>    *p = 42; q [-1] = 42;   //</b> <i>Line C</i> 
+</tt>
+</pre>
+
+    <p>The assignments on line B are clearly valid, but what about
+    those on line C ? After all, <tt><b>p</b></tt> and
+    <tt><b>q</b></tt> are identical, even in their hidden bits.
+    What if we then add:</p>
+<pre>
+<tt><b>     int *r;
+        remote_memcpy (&amp;r, &amp;p, sizeof p);   //</b> <i>See note</i> <b>     *r = 42;      //</b> <i>Line D</i> <b>     r [-1] = 42;  //</b> <i>Line E</i> 
+</tt>
+</pre>
+
+    <p>(The function <tt><b>remote_memcpy</b></tt> is identical to
+    <tt><b>memcpy</b></tt>, but it is done in another translation
+    unit so that the compiler cannot associate special semantics
+    with it.) Which, if either, of the assignments is allowed ?</p>
+
+    <p>Another example is the program:</p>
+<pre>
+<tt><b> static int *p;
+    void f (int n)
+    {
+        int sum = 0;
+        int *q = &amp;n;
+        if (memcmp (&amp;p, &amp;q, sizeof p) == 0)
+            for (int i = 0; i &lt; n; i++)
+                sum += i, p [i] = 0;
+        p = &amp;n;
+    }
+    int main (void)
+    {
+        int x;
+        p = &amp;x;
+        f (1);
+        f (6);
+        return 0;
+    }
+</b></tt>
+</pre>
+
+    <p>On the first call to <tt><b>f</b></tt> the test is false.
+    Therefore <tt><b>p</b></tt> is set to point to
+    <tt><b>n</b></tt>. The value of <tt><b>p</b></tt> becomes
+    indeterminate at the end of the call, but on most
+    implementations this will have no effect. On the second call
+    the test is true. Therefore the first time round the loop
+    <tt><b>p [0]</b></tt>, which is <tt><b>n</b></tt>, will be set
+    to 0 and the loop will terminate.</p>
+
+    <p>However, most implementations would reasonably assume that
+    <tt><b>n</b></tt> is not changed by anything in the loop and
+    generate code accordingly. If the behaviour were undefined for
+    some reason, such an implementation would be conforming. But is
+    it strictly-conforming or is it undefined ?</p>
+
+    <p>Finally, note that we can generate a similar situation
+    without giving the compiler any clue in advance:</p>
+<pre>
+<tt><b> void f (int vec [], int n)
+    {
+        void *vp;
+        int *p;
+        printf ("%p or %p", (void *) vec, (void *) &amp;n);    //</b> <i>Line Q</i> <b>     scanf ("%p", &amp;vp); p = vp;
+        for (int i = 0; i &lt; n; i++)
+            p [i] = 0;
+    }
+</b></tt>
+</pre>
+
+    <p>The user could ensure that <tt><b>p</b></tt> is set to
+    either of the values printed. If a debugger is used, it isn't
+    even necessary to retain line Q to determine the value to enter
+    on <tt><b>stdin</b></tt>, and therefore the compiler has no
+    warning that the address of <tt><b>n</b></tt> is being
+    taken.</p>
+
+    <p><b>Resolution</b></p>
+
+    <p>After much discussion, the UK C Panel came to a number of
+    conclusions as to what it would be desirable for the Standard
+    to mean. These can be expressed as three requirements.</p>
+
+    <ol>
+      <li>The implementation is entitled to take account of the
+      provenance of a pointer value when determining what actions
+      are and are not defined. Thus the assignments on lines A and
+      C involve undefined behaviour. Similarly line D would be
+      undefined and line E valid, though in practice a compiler
+      would probably assume that <tt><b>p</b></tt> could point
+      anywhere.</li>
+
+      <li>Where a pointer value becomes indeterminate because the
+      object pointed to has reached the end of its lifetime, all
+      objects whose effective type is a pointer and that point to
+      the same object acquire an indeterminate value. Thus
+      <tt><b>p</b></tt> at point X, and <tt><b>p</b></tt>,
+      <tt><b>q</b></tt>, and <tt><b>r</b></tt> at point Z, can all
+      change their value.</li>
+
+      <li>At any time that the compiler can determine that an
+      object contains an indeterminate value, even if the type of
+      the object does not have trap representations, the object may
+      change value arbitrarily. Thus <tt><b>p</b></tt> need not
+      have the same values at lines X and Y. As soon as the object
+      is given an explicit value, this behaviour stops.</li>
+    </ol>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Change 3.17.2 to:</p>
+
+    <blockquote>
+      <p>[#1] <i>indeterminate value</i><br>
+       a value which, at any given moment, could be either an
+      unspecified value or a trap representation.</p>
+
+      <p>[#2] While an object holds an indeterminate value it is
+      <i>indeterminate</i>. Successive reads from an object that is
+      indeterminate might return different results. Storing a value
+      in an object, other than an indeterminate value, means that
+      the object is no longer indeterminate.</p>
+    </blockquote>
+
+    <p>Change the last sentence of 6.2.4#2 from:</p>
+
+    <blockquote>
+      <p>The value of a pointer becomes indeterminate when the
+      object it points to reaches the end of its lifetime.</p>
+    </blockquote>
+
+    <p>to:</p>
+
+    <blockquote>
+      <p>When an object reaches the end of its lifetime, any object
+      with an effective type that is a pointer type and that points
+      to that object becomes indeterminate.</p>
+    </blockquote>
+
+    <p>[Various uses of the word "indeterminate" could be tidied
+    up, but this is the only one where the meaning needs to
+    change.]</p>
+
+    <p>Add a new paragraph to 6.5.3.2:</p>
+
+    <blockquote>
+      <p>[#5] The implementation is permitted to use the derivation
+      of a pointer value in determining whether or not access
+      through that pointer is undefined behaviour, even if the
+      pointer compares equal to, or has the same representation as,
+      a different pointer for which the access would be permitted.
+      For example, if two objects with the same type have
+      non-overlapping lifetimes and happened to occupy the same
+      address, a pointer to one cannot be used to access the
+      other.</p>
+    </blockquote>
+
+    <p>[The <tt><b>*</b></tt> operator seems a reasonable place to
+    put this. However, it could equally be elsewhere.]</p>
+    <hr>
+
+    <p><b>Committee Discussion</b> (for history only)</p>
+
+    <p>Result does not mean the same as value. This is undefined
+    because 6.5.6#8 has a 'shall' in it. The bits have to stay the
+    same. 6.4.2 applies.</p>
+
+    <p>A bit pattern + type does not imply a unique value. There
+    can be more than one bit pattern that represents the same
+    value. C only requires that an object with a determinate value
+    retain that value during its lifetime unless a an explicit
+    action (assignment, increment, decrement or through such
+    functions as <tt><b>memcpy</b></tt> and
+    <tt><b>memmove</b></tt>) change that value to another one or
+    renders the value indeterminate.</p>
+
+    <p>An indeterminate value may be represented by any bit
+    pattern. The C Standard lays down no requirement that two
+    inspections of the bits representing a given value will observe
+    the same bit-pattern only that the observed pattern on each
+    occasion will be a valid representation of the value.</p>
+
+    <p>In addition the C Standard does not prohibit an
+    implementation from tracking the provenance of the bit-pattern
+    representing a value. An indeterminate value happening to have
+    a bit pattern that is identical to a bit pattern representing a
+    determinate value is not sufficient to allow access to the
+    indeterminate value free from undefined behavior.</p>
+
+    <p>In reaching our response we noted that requiring immutable
+    bit patterns for indeterminate values would reduce optimization
+    opportunities. For example, it would require tracking of the
+    actual bit-patterns of indeterminate values if the memory
+    containing them were paged out. That seems an unnecessary
+    constraint on optimizers with no compensatory benefit to
+    programmers.</p>
+    <b>Committee Response</b><br>
+     <br>
+     
+
+    <p>Question 1:</p>
+
+    <blockquote>
+      Values may have any bit-pattern that validly represents them
+      and the implementation is free to move between alternate
+      representations (for example, it may normalize pointers,
+      floating-point representations etc.). In the case of an
+      indeterminate value all bit-patterns are valid
+      representations and the actual bit-pattern may change without
+      direct action of the program.
+    </blockquote>
+    Question 2: 
+
+    <blockquote>
+      If two objects have identical bit-pattern representations and
+      their types are the same they may still compare as unequal
+      (for example if one object has an indeterminate value) and if
+      one is an indeterminate value attempting to read such an
+      object invokes undefined behavior. Implementations are
+      permitted to track the origins of a bit-pattern and treat
+      those representing an indeterminate value as distinct from
+      those representing a determined value. They may also treat
+      pointers based on different origins as distinct even though
+      they are bitwise identical.
+    </blockquote>
+
+    <p>Note that using assignment or bitwise copying via
+    <tt><b>memcpy</b></tt> or <tt><b>memmove</b></tt> of a
+    determinate value makes the destination acquire the same
+    determinate value.</p>
+
+    <p><br>
+     <a href="dr_259.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_261.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

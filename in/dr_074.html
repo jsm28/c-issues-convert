@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #074</TITLE></HEAD><BODY>
+<H2>Defect Report #074</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Clive Feather
+<BR>
+<B>Question</B>
+<BR>
+Item 11 - alignment and structure padding
+<BR>
+The existence of structure padding (subclause 6.5.2.1) can be detected 
+by a strictly conforming program by use of the <TT><B>sizeof</B></TT> operator 
+and the <TT><B>offsetof</B></TT> macro.
+<BR><OL TYPE=a>
+<LI> If a structure has a field of type <TT><B>t</B></TT>, can the alignment 
+requirements of the field be different from the alignment requirements 
+of objects of the same type that are not members of structures?
+<P>
+If the answer to (a) is ``yes,'' then where applicable the remaining 
+questions should be assumed to have been asked for both objects within 
+structures and objects outside structures.
+</P>
+<LI> If an array has a component type of <TT><B>t</B></TT>, can the alignment 
+requirements of the elements of the array be different from those 
+of independent variables of type <TT><B>t</B></TT>?
+<P>
+The alignment requirement of a type is that addresses of objects of 
+that type must be multiples of some constant (subclause 3.1); for 
+some type <TT><B>t</B></TT>, this is written <TT><B>A(t)</B></TT> in this Defect Report.
+</P>
+<LI> For any type <TT><B>t</B></TT>, can the expression <TT><B>sizeof (t) % A(t)</B></TT> 
+be non-zero (in other words, can <TT><B>A(t)</B></TT> be a value other than 
+1, <TT><B>sizeof (t)</B></TT>, or a factor of <TT><B>sizeof (t)</B></TT>)? It would appear 
+not, because otherwise adjacent elements of an array of objects of 
+type <TT><B>t</B></TT> would either not be correctly aligned, or else would 
+not be contiguously allocated.
+<LI> Can <TT><B>A(struct foo)</B></TT> be greater than the least common multiple 
+of <TT><B>A(type_1)</B></TT>, <TT><B>A(type_2)</B></TT>, ..., <TT><B>A(type_n)</B></TT>, where <TT><B>type_1</B></TT> 
+to <TT><B>type_n</B></TT> are the types of the elements of <TT><B>struct foo</B></TT>? 
+In particular, if a structure holds exactly one element, can <TT><B>A(structure 
+type)</B></TT> be different from <TT><B>A(element type)</B></TT>? (In each case, if 
+the answer to (a) is ``yes,'' <TT><B>A(type)</B></TT> should be interpreted 
+appropriately.)
+<LI> If, at any point in a structure or union (obviously excluding 
+the start), there is more than one size of padding that can satisfy 
+all alignment requirements, can any size be used, or must the smallest 
+(possibly zero) padding be used because that is all that is ``necessary 
+to achieve the appropriate alignment?''
+<LI> If a structure type has trailing padding to ensure that its 
+use as an array element would be correctly aligned, must objects of 
+that type which are not array elements also have the padding? If not, 
+what is the effect of using <TT><B>memcpy</B></TT> to copy the value of one 
+such object to another thus?
+<P>
+<TT><B>struct fred a, b;<BR>
+	/*</B><I> ... </I><B>/*<BR>
+	memcpy(&amp;a, &amp;b, sizeof (struct fred));
+</B></TT><BR>
+It appears from subclause 6.3.3.4 (``the size is determined from 
+the type of the operand'') that <TT><B>sizeof a</B></TT> must equal <TT><B>sizeof 
+(struct fred)</B></TT>. Is this correct?
+</P>
+<LI> When an element of a structure is in turn a structure, can trailing 
+padding of the inner structure be reused to hold other elements of 
+the enclosing structure? For example, in:
+<P>
+<TT><B>struct outer<BR>
+	{<BR>
+	struct inner { long a; char b; } inner;<BR>
+	char c;<BR>
+	};
+</B></TT></P>
+is it permitted for <TT><B>offsetof (struct outer, c)</B></TT> to be less than 
+<TT><B>sizeof (struct inner)</B></TT>?
+</OL>
+<B>Response</B>
+<BR>
+Subclause 6.1.2.5 says, ``... pointers to qualified or unqualified 
+versions of compatible types shall have the same representation and 
+alignment requirements.''
+<BR>
+Subclause 6.5.2.1 says, ``Each non-bit-field member of a structure 
+or union object is aligned in an implementation-defined manner appropriate 
+to its type.'' And later, ``There may therefore be unnamed padding 
+within a structure object, ... as necessary to achieve the appropriate 
+alignment.''
+<BR>
+a) It is possible for an implementation to state generalized requirements 
+to satisfy sublause 6.1.2.5. These requirements may be further strengthened 
+using the implementation-defined behavior made available in subclause 
+6.5.2.1. Yes, the alignment requirements can be different.
+<BR>
+b) In several places the C Standard states that a single object may 
+be treated as an array of one element. Nowhere does it give permission 
+for array element types to have different alignment requirements from 
+isolated object types.
+<BR>
+c) <TT><B>sizeof (t)</B></TT> must indeed be a multiple of <TT><B>A(t)</B></TT>.
+<BR>
+d) Yes. A structure object can have an alignment that is greater than 
+the least common multiple of the alignments of its members.
+<BR>
+e) The phrase ``necessary to achieve the appropriate alignment'' 
+is not considered to mean the use of the minimum padding possible. 
+The Committee does not see any advantage to changing this phrase.
+<BR>
+f) Yes. See answer to question (b). <TT><B>sizeof (struct fred)</B></TT> must 
+equal <TT><B>sizeof a</B></TT>.
+<BR>
+g) Such sharing of storage by objects would cause the requirements 
+of subclause 6.3 to be violated and is not allowed.
+<BR>
+<A HREF="dr_073.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_075.html">Next Defect Report</A>
+</BODY></HTML>

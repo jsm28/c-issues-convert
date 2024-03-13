@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #251</title>
+  </head>
+
+  <body bgcolor="#FFFFFF">
+    <h2 align="center">Defect Report #251</h2>
+    <a href="dr_250.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_252.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> UK C Panel<br>
+     <b>Submission Date:</b> 2001-09-07<br>
+     <b>Source:</b> Clive D.W. Feather &lt;clive@demon.net&gt;<br>
+     <b>Version:</b> 1.3<br>
+     <b>Date:</b> 2006-03-29<br>
+     <b>Subject:</b> are <tt><b>struct fred</b></tt> and
+    <tt><b>union fred</b></tt> the same type ?</p>
+    <b>Problem</b> 
+
+    <p>Consider the code:</p>
+<pre>
+<tt><b> union fred { int a; }
+    int main (void)
+    {
+        struct fred *ptr;  /*</b> <i>Line X</i> <b>*/
+        //</b> <i>...</i> 
+</tt>
+</pre>
+
+    <p>I can see nothing that forbids this code. In particular,
+    6.7.2.3#8 reads:</p>
+
+    <blockquote>
+      <p>[#8] If a type specifier of the form<br>
+      </p>
+<pre>
+<tt><b>        struct-or-union identifier</b></tt>
+</pre>
+      or 
+<pre>
+<tt><b>        enum identifier</b></tt>
+</pre>
+      <br>
+       occurs other than as part of one of the above forms, and a
+      declaration of the identifier as a tag is visible, then it
+      specifies the same type as that other declaration, and does
+      not redeclare the tag.
+    </blockquote>
+
+    <p>At line X a declaration of <tt><b>fred</b></tt> as a tag is
+    visible, so this line specifies the same type as that other
+    declaration, even though this uses <tt><b>struct</b></tt> and
+    that uses <tt><b>union</b></tt> !</p>
+
+    <p>It has been further pointed out to me that nothing in the
+    Standard actually says that <tt><b>union x</b></tt> is a union
+    type as opposed to a structure type, and vice versa.</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Append to 6.7.2.1#6:</p>
+
+    <blockquote>
+      <p>The keywords <tt><b>struct</b></tt> and
+      <tt><b>union</b></tt> indicate that the type being specified
+      is, respectively, a structure type or a union type.</p>
+    </blockquote>
+
+    <p>Add a new paragraph following 6.7.2.3#1:</p>
+
+    <blockquote>
+      [#1a] Where two declarations that use the same tag declare
+      the same type, they shall both use the same choice of
+      <tt><b>struct</b></tt>, <tt><b>union</b></tt>, or
+      <tt><b>enum</b></tt>.
+    </blockquote>
+    <hr>
+
+    <p><b>Committee Discussion</b></p>
+
+    <p>The Committee is inclined to accept the suggested TC, but
+    the issue is still being debated.</p>
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>Append to 6.7.2.1#6:</p>
+
+    <blockquote>
+      <p>The keywords <tt><b>struct</b></tt> and
+      <tt><b>union</b></tt> indicate that the type being specified
+      is, respectively, a structure type or a union type.</p>
+    </blockquote>
+
+    <p>Add a new paragraph following 6.7.2.3#1:</p>
+
+    <blockquote>
+      [#1a] Where two declarations that use the same tag declare
+      the same type, they shall both use the same choice of
+      <tt><b>struct</b></tt>, <tt><b>union</b></tt>, or
+      <tt><b>enum</b></tt>.
+    </blockquote>
+
+    <p><br>
+     <a href="dr_250.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_252.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

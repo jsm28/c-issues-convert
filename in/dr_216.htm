@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #216</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #216</h2>
+    <a href="dr_215.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_217.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Clive Feather (UK)<br>
+     <b>Submission Date:</b> 2000-04-04<br>
+     <b>Source:</b><br>
+     <b>Reference Document:</b> N/A<br>
+     <b>Version:</b> 1.4<br>
+     <b>Date:</b> 2000-11-02 13:50:26<br>
+     <b>Subject:</b> Source character encodings</p>
+
+    <p><b>Summary</b><br>
+     The Standard is clear that the basic source character set need
+    not have the same encoding as the basic execution character
+    set, and that while the latter must be all positive, there is
+    no such requirement on the former:</p>
+
+    <p>6.2.5:</p>
+
+    <blockquote>
+      [#3] [...] If a member of the basic execution character set
+      is stored in a char object, its value is guaranteed to be
+      positive.
+    </blockquote>
+
+    <p>6.10.1:</p>
+
+    <blockquote>
+      [#3] [...] Whether the numeric value for these character
+      constants matches the value obtained when an identical
+      character constant occurs in an expression (other than within
+      a <tt><b>#if</b></tt> or <tt><b>#elif</b></tt> directive) is
+      implementation-defined.<small><sup>141)</sup></small> Also,
+      whether a single-character character constant may have a
+      negative value is implementation-defined.
+    </blockquote>
+
+    <p>However, there are two problems with this. Firstly, the
+    cited wording in 6.2.5 conflicts with the definition of the
+    basic execution character set:</p>
+
+    <p>5.2.1:</p>
+
+    <blockquote>
+      [#2] [...] A byte with all bits set to 0, called the <i>null
+      character</i>, shall exist in the basic execution character
+      set; it is used to terminate a character string.
+    </blockquote>
+    in that zero is not positive. Secondly, it is not clear whether
+    a source character constant can have the value zero; in other
+    words, can: 
+<pre>
+<tt><b>  #if !'A'
+    #error Character A is zero
+    #endif</b></tt>
+</pre>
+    reach the <tt><b>#error</b></tt> directive ? 
+
+    <p><b>Suggested Technical Corrigendum</b><br>
+     Change the cited wording in 6.2.5 to:</p>
+
+    <blockquote>
+      #3] [...] If a member of the basic execution character set
+      (other than the null character) is stored in a char object,
+      its value is guaranteed to be positive.
+    </blockquote>
+    and the last part of the cited wording in 6.10.1 to: 
+
+    <blockquote>
+      [#3] [...] Also, whether a single-character character
+      constant may have a negative value is implementation-defined
+      (nevertheless, it may not be zero).
+    </blockquote>
+    <hr>
+
+    <p><b>Committee Response</b><br>
+     Regarding the <tt><b>#error</b></tt> directive, 6.10.1
+    paragraph 3 states:</p>
+
+    <blockquote>
+      The resulting tokens compose the controlling constant
+      expression which is evaluated according to the rules of 6.6,
+      except that all signed integer types and all unsigned integer
+      types act as if they have the same representation as,
+      respectively, the types <tt><b>intmax_t</b></tt> and
+      <tt><b>uintmax_t</b></tt> defined in the header
+      <tt><b>&lt;stdint.h&gt;</b></tt>. This includes interpreting
+      character constants, which may involve converting escape
+      sequences into execution character set members. Whether the
+      numeric value for these character constants matches the value
+      obtained when an identical character constant occurs in an
+      expression (other than within a <tt><b>#if</b></tt> or
+      <tt><b>#elif</b></tt> directive) is implementation-defined.
+    </blockquote>
+    The evaluation of the controlling constant expression according
+    to the rules of 6.6 implies that character constants are
+    converted into an execution character set (translation phase 5)
+    just as it also implies that preprocessor tokens representing
+    integer constants are translated into integer constants
+    (translation phase 7). 
+
+    <p>Thus, all character constants operated upon by
+    <tt><b>#if</b></tt> have been translated to <em>some</em>
+    execution character set. The liberty given by 6.10.1 paragraph
+    3 that allows the value of character constants to differ in
+    preprocessor versus non-preprocessor expressions exists to
+    allow cross-compilers to use a standalone "native" preprocessor
+    that is unaware of the cross-compiled target and its execution
+    character set.</p>
+
+    <p>Thus, in your example, the <tt><b>#error</b></tt> directive
+    can never be reached on a conforming implementation.</p>
+
+    <p><b>Technical Corrigendum</b><br>
+     Change the cited wording in 6.2.5 to:</p>
+
+    <blockquote>
+      [#3] [...] If a member of the basic execution character set
+      is stored in a char object, its value is guaranteed to be
+      non-negative.
+    </blockquote>
+
+    <p><br>
+     <a href="dr_215.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_217.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #096</TITLE></HEAD><BODY>
+<H2>Defect Report #096</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Ron Guilmette
+<BR>
+<B>Question</B>
+<BR>
+ANSI/ISO C Defect report #rfg3:
+<BR>
+Subclause 6.5.4.2 <B>Array declarators</B> fails to contain any constraint 
+which would prohibit the element type in an array declarator from 
+being a type which is not an object type. (Note that subclause 6.1.2.5 
+seems to suggest that such usage is prohibited by saying that ``An 
+<I>array type</I> describes a contiguously allocated
+nonempty set of objects ...'' 
+But this still leaves the matter rather unclear.)
+<BR>
+I believe that some new constraint prohibiting the element type in 
+an array declarator from being a non-object type (at least in some 
+obvious cases) is clearly needed.
+<BR>
+Please consider the case of an array declarator, occuring at some 
+point within a given translation unit, and indicating an element type 
+<TT><B>T</B></TT>, where <TT><B>T</B></TT> is one of the following:
+<BR><OL>
+<LI> A function type.
+<LI> A void type.
+<LI> An incomplete struct or union type which is <I>never</I> completed 
+within the given translation unit.
+<LI> An incomplete struct or union type which <I>is</I> completed 
+later within the given translation unit.
+<LI> An incomplete array type which is <I>never</I> completed within 
+the given translation unit.
+<LI> An incomplete array type which <I>is</I> completed later within 
+the given translation unit.
+</OL>
+I believe that it should be abundantly clear that the C Standard should 
+contain a constraint prohibiting array declarators where the specified 
+element type is either (1) or (2). Essentially all existing implementations 
+already issue diagnostics for such usage.
+<BR>
+Also, in cases where an array declarator uses either a (3) or a (5) 
+as the element type, it seems eminently reasonable to require diagnostics 
+- and indeed, many existing implementations already do issue 
+diagnostics for such usage - but this is perhaps debatable.
+<BR>
+Cases (4) and (6) from the above list are <I>entirely</I> debatable. 
+Existing practice among so-called ``conforming'' C compilers 
+varies with respect to these cases (in which an element type is completed 
+at some point <I>after</I> use of the type, as an element type, in 
+an array declarator). Here are two examples:
+<BR>
+<TT><B>struct S array[10];			/*</B><I> ok? </I><B>*/<BR>
+struct S { int member; };	/*</B><I> type completed now </I><B>*/<BR>
+<BR>
+int array_of_array[][];		/*</B><I> ok? </I><B>*/<BR>
+int array_of_array[5][5];	/*</B><I> type completed now </I><B>*/</B></TT>
+<BR>
+As I say, I believe that the very least the Committee should do is 
+to add a constraint requiring diagnostics for array declarators whose 
+element types fall into categories (1) or (2). The Committee may wish 
+to provide an even more stringent interpretation of subclause 6.1.2.5 
+and also require diagnostics for element types falling into categories 
+(3) and/or (5). The Committee may even wish to take the simplest 
+approach to this entire problem, and simply require diagnostics for 
+<I>any</I> case in which an array declarator specifies an element 
+type which is not (already) an object type.
+<BR>
+Regardless of which choice is made, I feel strongly that it is important 
+for subclause 6.5.4.2 <B>Array declarators</B> to be revised to fully 
+reflect both common sense and (to the extent possible) the intent 
+of subclause 6.1.2.5.
+<BR>
+Footnote: Note that while is it <I>always</I> possible for a given 
+incomplete struct or union type to be completed somewhere later within 
+the same scope and same translation unit where it is used, and while 
+it is <I>often</I> possible to complete a given incomplete array type 
+later within the same scope and same translation unit where it is 
+used (as illustrated by the above examples) it can sometimes be <I>impossible</I> 
+to <I>ever</I> complete a given array type later within its scope 
+and translation unit. This will certainly be the case whenever the 
+array type in question is <I>not</I> used to declare an entity having 
+<I>some</I> linkage (either internal or external).
+<BR>
+Examples:
+<BLOCKQUOTE>
+<TT><B>
+void example ()<BR>
+	{<BR>
+	void *vp = (int (*)[][]) 0;	/*</B><I> abstract declarator<BR>
+		declares no  object - type can't be completed </I><B>*/<BR>
+	int array[][];	/*</B><I> no linkage - type can't ever be<BR>
+			completed </I><B>*/<BR>
+	}
+</B></TT></BLOCKQUOTE>
+I mention these cases only because they may potentially have some 
+small bearing upon the Committee's deliberations of the central issues 
+of this Defect Report.
+<BR>
+<B>Response</B>
+<BR>
+Subclause 6.1.2.5 does clearly state, ``An <I>array type</I> describes 
+a contiguously allocated nonempty set of objects with a particular 
+member object type, called the <I>element type.</I><B>17</B>'' Footnote 
+17 and the first paragraph of subclause 6.1.2.5 both state that object 
+types do not include incomplete types. Nor do object types include 
+function types. Thus, the array element type must not be any of the 
+items you have listed. A diagnostic is not required. The Committee 
+believes that whether or not a diagnostic is produced is an
+issue of quality of implementation.
+<BR>
+<A HREF="dr_095.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_097.html">Next Defect Report</A>
+</BODY></HTML>

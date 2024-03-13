@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 1st December 2004), see www.w3.org">
+
+  <title>Defect report #339</title>
+</head>
+
+<body>
+  <h2 align="center">Defect Report #339</h2><a href=
+  "dr_338.htm">Previous Defect Report</a> &lt; - &gt; <a href=
+  "dr_340.htm">Next Defect Report</a>
+
+  <p><br>
+  <b>Submitter:</b> Joseph Myers (UK)<br>
+  <b>Submission Date:</b> 2007-03-24<br>
+  <b>Source:</b> Joseph Myers &lt;joseph@codesourcery.com&gt;<br>
+  <b>Reference Document:</b> <a href=
+  "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1220.htm">ISO/IEC
+  WG14 N1120</a><br>
+  <b>Version:</b> 1.4<br>
+  <b>Date:</b> 2008-07-21<br>
+  <b>Subject:</b> Variably modified compound literals</p>
+
+  <p><b>Summary</b></p>
+
+  <p>Consider the code:</p>
+  <pre>
+    extern int a;
+    void *p = &amp;(int (*)[a]){ 0 };
+</pre>
+
+  <p>Does such a variably modified compound literal at file scope
+  violate any constraint? 6.7.5.2#2 says:</p>
+
+  <blockquote>
+    [#2] Only an ordinary identifier (as defined in 6.2.3) with
+    both block scope or function prototype scope and no linkage
+    shall have a variably modified type. If an identifier is
+    declared to be an object with static storage duration, it shall
+    not have a variable length array type.
+  </blockquote>
+
+  <p>However, this only seems to constrain declarations of
+  identifiers, not any other expression with variably modified type
+  (such as a compound literal, inside or outside a function). If
+  however the above code is valid, when is <code>a</code> evaluated
+  for the purposes of the requirement in 6.7.5.2#5 that "each time
+  it is evaluated it shall have a value greater than zero"? Must
+  <code>a</code> have positive value throughout execution of the
+  program, or is it only the initial value of <code>a</code> which
+  must be positive? (I think the initializer <strong>is</strong> a
+  constant expression, being the address of an object of static
+  storage duration.)</p>
+
+  <p>The variably modified compound literal is an object, and I
+  think it should be treated like other objects outside functions
+  and required not to have variably modified type (even if inside
+  sizeof, just like the initializers of compound literals outside
+  functions must be constant even if inside
+  <code>sizeof</code>).</p>
+
+  <p><b>Suggested Technical Corrigendum</b><br>
+  6.5.2.5 paragraph 3, after "shall consist of constant
+  expressions" add "and the type name shall not specify a variably
+  modified type".</p>
+  <hr>
+
+  <p><b>Committee Discussion</b></p>
+
+  <p>Paragraph in question (paragraph 3 of 6.5.2.5) has been
+  changed by <a href="dr_328.htm">DR 328</a>.</p>
+
+  <p>The suggested Technical Corrigendum looks appropriate,
+  however, it could be redundant.</p>
+
+  <p><b>Committee Response</b></p>
+
+  <p>This defect report is answered by <a href="dr_328.htm">DR
+  328</a>.</p>
+
+  <p>Constraints and Semantics are the same as 6.7.8 Initialization</p>
+
+  <p><br>
+  <a href="dr_338.htm">Previous Defect Report</a> &lt; - &gt;
+  <a href="dr_340.htm">Next Defect Report</a></p>
+</body>
+</html>

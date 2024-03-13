@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #300</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #300</h2>
+    <a href="dr_299.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_301.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Fred Tydeman (USA)<br>
+     <b>Submission Date:</b> 2004-08-26<br>
+     <b>Source:</b> WG 14<br>
+     <b>Reference Document:</b><br>
+     <b>Version:</b> 1.1<br>
+     <b>Date:</b> 2006-03-05<br>
+     <b>Subject:</b>Translation-time expresssion evaluation</p>
+
+    <p><b>Summary</b></p>
+
+    <p>The standard does not require translation-time expression
+    evaluation to produce "obvious" values. For example, there is
+    no requirement that <b><tt>static const double d = 1.23/4.56 -
+    1.23/4.56;</tt></b> be zero.</p>
+
+    <p><b>Details</b></p>
+
+    <p>5.2.4.2.2p7 discusses <b><tt>FLT_EVAL_FORMAT</tt></b>, range
+    and precision of floating-point constants and operations.</p>
+
+    <p>6.4.4.2p5 discusses translation time conversion of
+    floating-point constants to internal format.</p>
+
+    <p>6.6p5 discusses translation time evaluation of
+    floating-point constant expressions.</p>
+
+    <p>F.7.2p2 and footnote 306 discusses conversion of
+    floating-point constants to internal representation.</p>
+
+    <p>F.7.5p3 discusses initialization and internal representation
+    of floating-point constants.</p>
+
+    <p>Currently, if <b><tt>FLT_EVAL_METHOD</tt></b> is negative,
+    there is no requirement that the first 1.23 and the second 1.23
+    convert to the same internal representation; one could have
+    more precision than the other. While the same range and
+    precision is a requirement when <b><tt>FLT_EVAL_METHOD</tt></b>
+    is 0, 1, or 2, there is no requirement that those two identical
+    constants convert to the same value.</p>
+
+    <p>Currently, if <b><tt>FLT_EVAL_METHOD</tt></b> is negative,
+    there is no requirement that the first '/' produce a result
+    with the same precision as the second '/' (for the same
+    operands). This is a requirement when
+    <b><tt>FLT_EVAL_METHOD</tt></b> is 0, 1, or 2.</p>
+
+    <p>Without these two requirements, the best one can do to try
+    to get zero is: <b><tt>static const double d =
+    (double)((double)1.23/(double)4.56) -
+    (double)((double)1.23/(double)4.56);</tt></b> and even that
+    could fail if the first 1.23 and the second 1.23 convert to
+    different values.</p>
+
+    <p>For translation-time expression evaluation to produce the
+    "obvious" value, two requirments must be met: the same decimal
+    constants must result in the same value and internal
+    representation, and operators must use the same precision.</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>6.4.4.2 Floating constants: Add to paragraph 5: All
+    floating-constants of the same source form in the same
+    translation unit shall convert to the same internal format with
+    the same value. Footnote: 1.23, 1.230, 123e-2, 123e-02, 1.23L
+    are all different source forms, so need not convert to the same
+    internal format and value.</p>
+
+    <p>Add to 6.4.4.2p7, All floating-constants with the same
+    mathematical value and type in the same translation unit should
+    convert to the same internal format and value. Footnote: 1.23,
+    1.230, 123e-2 and 123e-02 have the same mathematical value, so
+    should convert to the same internal format and value.</p>
+
+    <p>6.6: Constant expression: Add a 12th paragraph: All
+    operators with the same type(s) of floating-point operand(s) in
+    the same translation unit shall use the same precision.</p>
+    <hr>
+
+    <p><b>Committee Discussion</b></p>
+    The Committee consensus is this is not a defect, and that this
+    DR imposes a new requirement on implementations. 
+
+    <p><b>Committee Response</b></p>
+
+    <p>This is not really a requirement, but an area to be
+    investigated that could be addressed in a future revision of
+    the C Standard.</p>
+
+    <p><br>
+     <a href="dr_299.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_301.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

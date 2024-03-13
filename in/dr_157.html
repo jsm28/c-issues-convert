@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #157</TITLE></HEAD>
+<BODY><H2>Defect Report #157</H2> 
+<B>Submission Date</B>: 16 Oct 95
+<BR>
+<B>Submittor</B>: BSI
+<BR>
+<B>Source</B>: Clive D.W. Feather
+<BR>
+<B>Question</B>
+<BR>
+<I>Submitted to BSI by Clive D.W. Feather clive@sco.com.</I>
+<BR>
+<I>In this Defect Report, identifiers lexically identical to those 
+declared in standard headers refer to the identifiers declared in  those
+standard headers, whether or not the header is explicitly mentioned.</I>
+<BR>
+<I>This Defect Report has been prepared with considerable help from 
+Mark Brader, Jutta Degener, Ronald Guilmette, and a person whose
+employment  conditions require anonymity. However, except where stated,
+opinions  expressed or implied should not be assumed to be those of any
+person  other than myself.</I>
+<BR> Defect Report UK 005: Legitimacy of type synonyms
+<BR> The C Standard does not clearly indicate when the spelling of a
+type  name is or is not significant; in other words, when a type name
+may  be replaced by another type name representing the same type.
+<BR>
+<B>Part 1</B>
+<BR> Subclause 6.5.4.3 reads in part:
+<BR> The special case of <TT><B>void</B></TT> as the only item in the
+list  specifies that the function has no parameters.
+<BR> Subclause 6.7.1 reads in part:
+<BR> (except in the special case of a parameter list consisting of  a
+single parameter of type <TT><B>void</B></TT>, in which there shall
+not be  an identifier).
+<BR> In both cases, the word <TT><B>void</B></TT> is set in the
+typeface used to  indicate C code.
+<BR> In the code:
+<BR>
+<TT><B>typedef void Void;<BR> extern int f (Void);<BR> int f (Void) {
+return 0; }</B>
+</TT><BR> is the declaration on line 2 strictly conforming, and is the
+external  definition on line 3 strictly conforming?
+<BR>
+<B>Part 2</B>
+<BR> Subclause 5.1.2.2.1 reads in part:  It can be defined with no
+parameters:<BR>
+<BR>
+<TT>                <B>int main (void) { /*</B> <I>...</I><B> */ }</B></TT>
+<BR> Is the following definition of <TT><B>main</B></TT> strictly
+conforming?
+<BR>
+<TT><B>typedef int word;<BR> word main (void) { /*</B> <I>...</I> <B>*/ }</B>
+</TT><BR>
+<B>Part 3</B>
+<BR> Are there any circumstances in which a typedef name is not
+permitted  instead of the type it is a synonym for? If so, what are
+they?
+<BR> Proposed Response
+<BR> A synonym is always acceptable, except that a function definition 
+may not use a typedef for the function type.<BR>
+<BR><B>Response</B>
+<BR><BR>
+<B>Part 1</B>
+<BR>
+Both function declarations are strictly conforming.
+<BR>
+Subclause 6.7.1 makes clear that it is a single parameter having the
+type <TT><B>void</B></TT> (as opposed to use of the <TT><B>void</B></TT> keyword) that indicates
+that a function takes no parameters.
+<BR>
+For clarity, Subclause 6.5.4.3 should be rephrased to emphasize
+that it is the type <TT><B>void</B></TT>, not the keyword <TT><B>void</B></TT>that matters.
+<BR>
+<B>Future Change</B>
+<BR>
+In Subclause 6.5.4.3,
+<BR>
+Change
+<BLOCKQUOTE>
+"The special case of <TT><B>void</B></TT> as the only item in the list specifies that
+the function has no parameters."
+</BLOCKQUOTE>
+To
+<BLOCKQUOTE>
+"The special case of an unnamed parameter of type <TT><B>void</B></TT> as the only item
+in the list specifies that the function has no parameters."
+</BLOCKQUOTE><BR>
+<B>Part 2</B>
+<BR>
+Yes, the definition of <TT><B>main</B></TT> is strictly conforming.
+<BR><BR>
+<B>Part 3</B>
+<BR>
+A synonym is not acceptable in these cases:
+<BR>
+<OL>
+<LI>A function definition may not use a typedef for the function type:
+<BLOCKQUOTE>
+<TT><B>typedef void F(void);
+<BR>extern F g { } /*</B></TT> <I>Invalid</I><TT><B> */</B></TT>
+</BLOCKQUOTE>
+<LI>A typedef may not be combined with another type specifier:
+<BLOCKQUOTE>
+<TT><B>typedef int I;
+<BR> short I x;     /*</B></TT><I> Invalid</I> <TT><B>*/</B></TT>
+</BLOCKQUOTE>
+</OL>
+<A HREF="dr_156.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_158.html">Next Defect Report</A></BODY></HTML>

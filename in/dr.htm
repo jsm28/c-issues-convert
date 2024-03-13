@@ -1,0 +1,684 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>WG14 Defect Report Summary</TITLE></HEAD><BODY>
+<H2>WG14 Defect Report Summary</H2>
+The list that follows provides a brief summary of all issues 
+raised as separate questions within Defect Reports #001 through #178. 
+Please note that the one-sentence summaries that follow seldom do 
+justice to the issues, which are often subtle or complex. Read them 
+to get a sense of the area of the C Standard requiring interpretation 
+or correction. Be warned that they may well fail to properly characterize 
+the precise concern.
+<BR><BR>
+<A HREF="dr_001.html"> Defect Report Number 001</A>    10 Dec 92	Paul Eggert<BR>
+Q1: Do functions return values by copying?  See <A HREF="dr_100.html"> Defect Report #100</A>
+<BR>
+<A HREF="dr_002.html">Defect Report Number 002</A>	10 Dec 92	Terence David Carroll
+<BR>
+Q1: Should <TT><B>\</B></TT> be escaped within macro actual parameters?
+<br>
+<A HREF="dr_003.html">Defect Report Number 003</A> 10 Dec 92  Terence David Carroll
+<BR>
+Q1: Are preprocessing numbers too inclusive?
+<BR>
+Q2: Should white space surround macro substitutions?
+<BR>
+Q3: Is an empty macro argument a constraint violation?
+<BR>
+Q4: Should preprocessing directives be permitted within macro invokations?
+<br><A HREF="dr_004.html">Defect Report Number 004</A>	10 Dec 92	Paul Eggert
+<BR>
+Q1: Are multiple definitions of unused identifiers with external linkage 
+permitted?
+<br><A HREF="dr_005.html">Defect Report Number 005</A>	10 Dec 92	Walter J. Murray
+<BR>
+Q1: May a conforming implementation define and recognize a pragma 
+which would change the semantics of the language?
+<br><A HREF="dr_006.html">Defect Report Number 006</A>	10 Dec 92	Walter J. Murray
+<BR>
+Q1: How does <TT><B>strtoul</B></TT> behave when presented with a subject sequence 
+that begins with a minus sign?
+<br><A HREF="dr_007.html">Defect Report Number 007</A>	10 Dec 92	Paul Eggert
+<BR>
+Q1: Are declarations of the form <TT><B>struct <I>tag</I></B></TT> permitted after 
+<TT><B><I>tag</I></B></TT> has already been declared? 
+<br><A HREF="dr_008.html">Defect Report Number 008</A>	10 Dec 92	Otto R. Newman
+<BR>
+Q1: Is dead-store elimination permitted near <TT><B>setjmp</B></TT>?
+<BR>
+Q2: Should volatile functions be added?
+<br><A HREF="dr_009.html">Defect Report Number 009</A>	10 Dec 92	Bruce Blodgett
+<BR>
+Q1: Are typedef names sometimes ambiguous in parameter declarations?
+<br>
+<A HREF="dr_010.html">Defect Report Number 010</A>	10 Dec 92	Michael S. Ball
+<BR>
+Q1: Is the typedef to an incomplete type valid?
+<br>
+<A HREF="dr_011.html">Defect Report Number 011</A>	10 Dec 92	Rich Peterson
+<BR>
+Q1: When do the types of multiple external declarations get formed 
+into a composite type?
+<BR>
+Q2: Does <TT><B>extern</B></TT> link to a static declaration that is not visible?
+<BR>
+Q3: Are implicit initializers for tentative array definitions syntactically 
+valid?
+<BR>
+Q4: Does an incomplete array get completed as a tentative definition?
+<br>
+<A HREF="dr_012.html">Defect Report Number 012</A>	10 Dec 92	David F. Prosser
+<BR>
+Q1: Can one take the address of a void expression?
+<br>
+<A HREF="dr_013.html">Defect Report Number 013</A>	10 Dec 92	Sam Kendall
+<BR>
+Q1: How does one form the composite type of mixed array and pointer 
+parameter types?
+<BR>
+Q2: Is compatible properly defined for recursive types?
+<BR>
+Q3: What is the composite type of an enumeration and an integer?
+<BR>
+Q4: When is a struct type complete?
+<BR>
+Q5: When is the <TT><B>sizeof</B></TT> an enumeration type known?
+<br>
+<A HREF="dr_014.html">Defect Report Number 014</A>	10 Dec 92	Max K. Goff
+<BR>
+Q1: Is <TT><B>setjmp</B></TT> a macro or a function?
+<BR>
+Q2: How does <TT><B>fscanf("%n")</B></TT> behave on end-of-file?
+<br>
+<A HREF="dr_015.html">Defect Report Number 015</A>	10 Dec 92	Craig Blitz
+<BR>
+Q1: How does an unsigned plain bitfield promote?
+<BR>
+<A HREF="dr_016.html">Defect Report Number 016</A>	10 Dec 92	Sam Kendall
+<BR>
+Q1: Can a tentative definition have an incomplete type initially?
+<BR>
+Q2: Can you implicitly initialize a union when null pointers have 
+nonzero bit patterns?
+<br>
+<A HREF="dr_017.html">Defect Report Number 017</A>	10 Dec 92	Derek M. Jones
+<BR>
+Q1: Are newlines permitted within macro invocations in preprocessing 
+directives?
+<BR>
+Q2: Should the absence of function <TT><B>main</B></TT> be explicitly undefined?
+<BR>
+Q3: Does a constraint violation win over undefined behavior?
+<BR>
+Q4: Do numeric escape sequences map from source to execution character 
+sets?
+<BR>
+Q5: When are character constants implementation defined?
+<BR>
+Q6: Are register aggregates permitted?
+<BR>
+Q7: What is the scope and uniqueness of <TT><B>size_t</B></TT>?
+<BR>
+Q8: What types are compatible with pointer to <TT><B>void</B></TT>?
+<BR>
+Q9: What is the type of an assignment expression?
+<BR>
+Q10: When is the <TT><B>sizeof</B></TT> an object needed?
+<BR>
+Q11: Is <TT><B>struct t; struct t;</B></TT> valid?
+<BR>
+Q12: How do typedefs parse in function prototypes?
+<BR>
+Q13: How does <TT><B>register</B></TT> affect compatibility of function parameters?
+<BR>
+Q15: When do array parameters get converted to pointers?
+<BR>
+Q16: Are subarrays of arrays distinct objects?
+<BR>
+Q17: How do you initialize the first member of a union if it has no 
+name?
+<BR>
+Q18: Are <TT><B>f()</B></TT> and <TT><B>f(void)</B></TT> compatible?
+<BR>
+Q19: Are macro expansions ambiguous?
+<BR>
+Q20: Is the scope of macro parameters defined in the right place?
+<BR>
+Q21: Is translation phase 4 defined unambiguously?
+<BR>
+Q22: Does the rescan of a macro invocation also perform token pasting?
+<BR>
+Q23: How long does <TT>blue paint</TT> persist on macro names?
+<BR>
+Q24: Can subclause 7.1.2 be better expressed?
+<BR>
+Q25: Should <I>must</I> appear in footnotes?
+<BR>
+Q26: Are unnamed union members required to be initialized?
+<BR>
+Q27: Does the <TT><B>#</B></TT> flag alter zero stripping of <TT><B>%g</B></TT> in <TT><B>fprintf</B></TT>?
+<BR>
+Q28: Does <TT><B>errno</B></TT> get stored before library functions return?
+<BR>
+Q29: When does conversion failure occur in floating-point <TT><B>fscanf</B></TT> 
+input?
+<BR>
+Q30: Do <TT><B>fseek/fsetpos</B></TT> require values from successful calls to 
+<TT><B>ftell/fgetpos</B></TT>?
+<BR>
+Q31: Are object sizes always in bytes?
+<BR>
+Q32: Are <TT><B>strcmp/strncmp</B></TT> defined when <TT><B>char</B></TT> is signed?
+<BR>
+Q33: Are <TT><B>strcmp/strncmp</B></TT> defined for strings of differing length.
+<BR>
+Q34: Is <TT><B>strtok</B></TT> described properly?
+<BR>
+Q35: When is a physical source line created?
+<BR>
+Q36: Is a function returning <TT><B>const void</B></TT> defined?
+<BR>
+Q37: What is the type of a function call?
+<BR>
+Q38: What is an iteration control structure or selection control structure?
+<BR>
+Q39: Are header names tokens outside include directives?
+<BR>
+<A HREF="dr_018.html">Defect Report Number 018</A>	10 Dec 92	Yasushi Nakahara
+<BR>
+Q1: Does <TT><B>fscanf</B></TT> recognize literal multibyte characters properly?
+<br>
+<A HREF="dr_019.html">Defect Report Number 019</A>	10 Dec 92	Richard Wiersma
+<BR>
+Q1: Are printing characters implementation defined?
+<br>
+<A HREF="dr_020.html">Defect Report Number 020</A>	10 Dec 92	Bruce Lambert
+<BR>
+Q1: Is the relaxed Ref/Def linkage model conforming?
+<BR>
+<A HREF="dr_021.html">Defect Report Number 021</A>	10 Dec 92	Fred Tydeman
+<BR>
+Q1: What is the result of <TT><B>printf("%#.4o", 345)</B></TT>?
+<br>
+<A HREF="dr_022.html">Defect Report Number 022</A>	10 Dec 92	Fred Tydeman
+<BR>
+Q1: What is the result of <TT><B>strtod("100ergs", &amp;ptr)</B></TT>?
+<br>
+<A HREF="dr_023.html">Defect Report Number 023</A>	10 Dec 92	Fred Tydeman
+<BR>
+Q1: If 99,999 is larger than <TT><B>DBL_MAX_10_EXP</B></TT>, what is the result 
+of <TT><B>strtod("0.0e99999", &amp;ptr)</B></TT>?
+<BR>
+<A HREF="dr_024.html">Defect Report Number 024</A>	10 Dec 92	Fred Tydeman
+<BR>
+Q1: For <TT><B>strtod</B></TT>, what does <TT><B>"C"</B></TT> locale mean?
+<br>
+<A HREF="dr_025.html">Defect Report Number 025</A>	10 Dec 92	Fred Tydeman
+<BR>
+Q1: What is meant by <I>representable floating-point value?</I>
+<br>
+<A HREF="dr_026.html">Defect Report Number 026</A>	10 Dec 92	Randall Meyers
+<BR>
+Q1: Can one use other than the basic C character set in a strictly conforming program?
+<br>
+<A HREF="dr_027.html">Defect Report Number 027</A>	10 Dec 92	Randall Meyers
+<BR>
+Q1: May a standard conforming implementation add identifier characters?
+<br>
+<A HREF="dr_028.html">Defect Report Number 028</A>	10 Dec 92	Randall Meyers
+<BR>
+Q1: What are the aliasing rules for dynamically allocated objects?
+<BR>
+<A HREF="dr_029.html">Defect Report Number 029</A>	10 Dec 92	Sam Kendall
+<BR>
+Q1: Must compatible structs/unions have the same tag in different 
+translation units?
+<br>
+<A HREF="dr_030.html">Defect Report Number 030</A>	10 Dec 92	Pawel Molenda
+<BR>
+Q1: May <TT><B>sin(DBL_MAX)</B></TT> set <TT><B>errno</B></TT> to <TT><B>EDOM</B></TT>?
+<br>
+<A HREF="dr_031.html">Defect Report Number 031</A>	10 Dec 92	Pawel Molenda
+<BR>
+Q1: How are exceptions handled in constant expressions?
+<br>
+<A HREF="dr_032.html">Defect Report Number 032</A>	10 Dec 92	Stephen D. Clamage
+<BR>
+Q1: Can an implementation permit a comma operator in a constant expression?
+<br>
+<A HREF="dr_033.html">Defect Report Number 033</A>	10 Dec 92	Mike Vermeulen
+<BR>
+Q1: Must a conforming implementation diagnose <I>shall</I> violations 
+outside <B>Constraints</B>?
+<br>
+<A HREF="dr_034.html">Defect Report Number 034</A>	10 Dec 92	Stephen D. Clamage
+<BR>
+Q1: Does size information evaporate when a declaration goes out of 
+scope, even for objects with external linkage?
+<BR>
+Q2: If so, can one then write conflicting declarations in disjoint 
+scopes?
+<br>
+<A HREF="dr_035.html">Defect Report Number 035</A>	10 Dec 92	Derek M. Jones
+<BR>
+Q1: Can one declare an enumeration or struct tag as part of an old-style 
+parameter declaration?
+<BR>
+Q2: If so, what is the scope of enumeration tags and constants declared 
+in old-style parameter declarations?
+<br>
+<A HREF="dr_036.html">Defect Report Number 036</A>	10 Dec 92	Fred Tydeman
+<BR>
+Q1: May a floating-point constant be represented with more precision 
+than implied by its type?
+<br>
+<A HREF="dr_037.html">Defect Report Number 037</A>	10 Dec 92	Isai Scheinberg
+<BR>
+Q1: Can UNICODE or ISO 10646 be used as a multibyte code?
+<br>
+<A HREF="dr_038.html">Defect Report Number 038</A>	10 Dec 92	Kuo-Wei Lee
+<BR>
+Q1: What happens when macro replacement creates adjacent tokens that 
+can be taken as a single token?
+<br>
+<A HREF="dr_039.html">Defect Report Number 039</A>	10 Dec 92	Vania Joloboff
+<BR>
+Q1: Must <TT><B>MB_CUR_MAX</B></TT> be one in the <TT><B>"C"</B></TT> locale?
+<BR>
+Q2: Should <TT><B>setlocale(LC_ALL, NULL)</B></TT> return <TT><B>"C"</B></TT> in the <TT><B>"C"</B></TT> 
+locale?
+<br>
+<A HREF="dr_040.html">Defect Report Number 040</A>	10 Dec 92	Derek M. Jones
+<BR>
+Q1: What is the composite type of <TT><B>f(int)</B></TT> and <TT><B>f(const int)</B></TT>?
+<BR>
+Q2: Is an implementation that fails to equal the value of an environmental 
+limit conforming?
+<BR>
+Q3: Is an <B>Environmental Constraint</B> a constraint?
+<BR>
+Q4: Should the response to <A HREF="dr_017.html#Question39">Defect Report #017, Q39</A> be reconsidered?
+<BR>
+Q5: Can a conforming implementation accept <TT><B>long long</B></TT>?
+<BR>
+Q6: Can one use <TT><B>offsetof(struct t1, mbr)</B></TT> before <TT><B>struct t1</B></TT> 
+is completely defined?
+<BR>
+Q7: Can <TT><B>sizeof</B></TT> be applied to earlier parameter names in a prototype, 
+or to earlier fields in a struct?
+<BR>
+Q8: What arithmetic can be performed on a <TT><B>char</B></TT> holding a defined 
+character literal value?
+<BR>
+Q9: Should the response to <A HREF="dr_017.html#Question27">Defect Report #017, Q27</A> be reconsidered?
+<br>
+<A HREF="dr_041.html">Defect Report Number 041</A>	10 Dec 92	Andrew Josey
+<BR>
+Q1: Are <TT><B>'A'</B></TT> through <TT><B>'Z'</B></TT> always <TT><B>isupper</B></TT> in all locales?
+<br>
+<A HREF="dr_042.html">Defect Report Number 042</A>	10 Dec 92	Tom MacDonald
+<BR>
+Q1: Does <TT><B>memcpy</B></TT> define a (sub)object?
+<BR>
+Q2: If so, how big is the object defined by <TT><B>memcpy</B></TT>?
+<BR>
+Q3: How big is a string object defined by the <TT><B>str*</B></TT> functions?
+<br>
+<A HREF="dr_043.html">Defect Report Number 043</A>	10 Dec 92	Robert Paul Corbett
+<BR>
+Q1: Can <TT><B>NULL</B></TT> be defined as <TT><B>4-4</B></TT>?
+<BR>
+Q2: Can an identifier that starts with an underscore be defined as 
+a macro in a source file that includes at least one standard header?
+<br>
+<A HREF="dr_044.html">Defect Report Number 044</A>	10 Dec 92	Steve M. Hoxey
+<BR>
+Q1: What does it mean to say that the type of <TT><B>offsetof</B></TT> is <TT><B>size_t</B></TT>?
+<BR>
+Q2: Must the expansion of a standard header be a strictly conforming 
+program?
+<BR>
+Q3: Does expanding <TT><B>offsetof</B></TT> result in a non-strictly conforming 
+program?
+<BR>
+Q4: Can one use <TT><B>offsetof</B></TT> in a strictly conforming program?
+<BR>
+Q5: Is <TT><B>offsetof</B></TT> the only standard macro that renders a program 
+not strictly conforming?
+<br>
+<A HREF="dr_045.html">Defect Report Number 045</A>	10 Dec 92	David J. Hendricksen
+<BR>
+Q1: Can one <TT><B>freopen</B></TT> an already closed file?
+<br>
+<A HREF="dr_046.html">Defect Report Number 046</A>	10 Dec 92	Neal Weidenhofer
+<BR>
+Q1: May a typedef be redeclared as a parameter outside an old-style 
+function parameter list?
+<br>
+<A HREF="dr_047.html">Defect Report Number 047</A>	10 Dec 92	Randall Meyers
+<BR>
+Q1: Can an array parameter have elements of incomplete type?
+<br>
+<A HREF="dr_048.html">Defect Report Number 048</A>	10 Dec 92	David F. Prosser
+<BR>
+Q1: Is <TT><B>abort</B></TT> compatible with POSIX?
+<br>
+<A HREF="dr_049.html">Defect Report Number 049</A>	10 Jan 93	David Metsky
+<BR>
+Q1: Can <TT><B>strxfrm</B></TT> produce a longer translation string?
+<br>
+<A HREF="dr_050.html">Defect Report Number 050</A>	24 Feb 93	C. Breeus
+<BR>
+Q1: Does a proper definition of <TT><B>wchar_t</B></TT> need to be in scope 
+to write a wide-character literal?
+<br>
+<A HREF="dr_051.html">Defect Report Number 051</A>	08 Mar 93	Andrew R. Koenig
+<BR>
+Q1: Can one index beyond the declared end of an array if space is 
+allocated for the extra elements?
+<br>
+<A HREF="dr_052.html">Defect Report Number 052</A>	21 Mar 93	Paul Edwards
+<BR>
+Q1: Should the <TT><B>mktime</B></TT> example use <TT><B>(time_t)-1</B></TT> instead of 
+<TT><B>-1</B></TT>?
+<BR>
+Q2: Is the index entry for static correct?
+<BR>
+Q3: Does the C Standard come with a Rationale, as indicated in Footnote 1?
+<br>
+<A HREF="dr_053.html">Defect Report Number 053</A>	25 Mar 93	Larry Jones
+<BR>
+Q1: Do the aliasing rules cover accesses to different function pointers 
+properly?
+<br>
+<A HREF="dr_054.html">Defect Report Number 054</A>	01 Apr 93	Larry Jones
+<BR>
+Q1: What is the behavior of various string functions with a specified 
+length of zero?
+<br>
+<A HREF="dr_055.html">Defect Report Number 055</A>	14 Apr 93	Loren Schall
+<BR>
+Q1: Must the <TT><B>SIG*</B></TT> macros have distinct values?
+<br>
+<A HREF="dr_056.html">Defect Report Number 056</A>	15 Apr 93	Thomas Plum
+<BR>
+Q1: How accurate must floating-point arithmetic be?
+<br>
+<A HREF="dr_057.html">Defect Report Number 057</A>	07 Jun 93	Fred Tydeman
+<BR>
+Q1: Must there exist a user-accessible integral type for every pointer? 
+<BR>
+<A HREF="dr_058.html">Defect Report Number 058</A>	07 Jun 93	Fred Tydeman
+<BR>
+Q1: What is the number of digits in a number that can be processed 
+by the <TT><B>scanf</B></TT> family and the <TT><B>strtod</B></TT> family?
+<BR>
+<A HREF="dr_059.html">Defect Report Number 059</A>	15 Jun 93	Martin Ruckert
+<BR>
+Q1: Must an incomplete type be completed by the end of a translation 
+unit?
+<BR>
+<A HREF="dr_060.html">Defect Report Number 060</A>     19 Jul 93 Larry Jones
+<BR>Q1: When an array of <TT><B>char</B></TT> (or <TT><B>wchar_t</B></TT>) is
+ initialized with a string literal that contains fewer characters than the array, are 
+the remaining elements of the array initialized? <BR>
+<A HREF="dr_061.html">Defect Report Number 061</A>     19 Aug 93 Ed Bendickson
+<BR>Q1: Interpretation of white space in the format string of a scan statement. <BR>
+<A HREF="dr_062.html">Defect Report Number 062</A>    19 Aug 93 David J. Hendricksen
+<BR>Q1: Can  the <TT><B>rename</B></TT> function alway return a failure? <BR>
+<A HREF="dr_063.html">Defect Report Number 063</A>     01 Dec 93 Thomas Plum
+<BR>Q1: This is <A HREF="dr_056.html" >Defect Report 056</A>.<BR>
+<A HREF="dr_064.html">Defect Report Number 064</A>     03 Dec 93 Clive Feather
+<BR>Q1:  What is a null pointer constant?<BR>
+<A HREF="dr_065.html">Defect Report Number 065</A>     03 Dec 93 Clive Feather
+<BR>Q1: Can strictly conforming programs contain locales other that the 'C' locale?<BR>
+<A HREF="dr_066.html">Defect Report Number 066</A>     03 Dec 93 Clive Feather
+<BR>Q1: A set of locale questions.<BR>
+<A HREF="dr_067.html">Defect Report Number 067</A>     03 Dec 93 Clive Feather
+<BR>Q1: Are the definitions of types clear?<BR>
+<A HREF="dr_068.html">Defect Report Number 068</A>     03 Dec 93 Clive Feather
+<BR>Q1: When are values of the type <TT><B>char</B></TT> treated as <TT><B>signed</B></TT>or <TT><B>nonnegative </B></TT>integers. <BR>
+<A HREF="dr_069.html">Defect Report Number 069</A>     03 Dec 93 Clive Feather
+<BR>Q1: What is the meaning of <I>pure binary numeration system</I>?<BR>
+<A HREF="dr_070.html">Defect Report Number 070</A>     03 Dec 93 Clive Feather
+<BR>Q1: Can non-compatible types be used interchangeabily for function arguments? <BR>
+<A HREF="dr_071.html">Defect Report Number 071</A>     03 Dec 93 Clive Feather
+<BR>Q1: Are  all enumerated types compatible with a single type?<BR>
+<A HREF="dr_072.html">Defect Report Number 072</A>     03 Dec 93 Clive Feather
+<BR>Q1: What is the definition of an object? <BR>
+<A HREF="dr_073.html">Defect Report Number 073</A>     03 Dec 93 Clive Feather
+<BR>Q1: Another definition of an object question.  See <A HREF="dr_072.html">Defect Report Number 072</A>. <BR>  
+<A HREF="dr_074.html">Defect Report Number 074</A>     03 Dec 93 Clive Feather
+<BR>Q1: Can the alignment of an object that is a member of a structure be different from the alignment of an object of the same type that is not a member of a structure?<BR>
+<A HREF="dr_075.html">Defect Report Number 075</A>     03 Dec 93 Clive Feather
+<BR>Q1: What is the alignment of allocated memory?<BR>
+<A HREF="dr_076.html">Defect Report Number 076</A>     03 Dec 93 Clive Feather
+<BR>Q1: A set of pointers to the end of arrays questions.<BR>
+<A HREF="dr_077.html">Defect Report Number 077</A>     03 Dec 93 Clive Feather
+<BR>Q1: Is the address of an object constant throughout its lifetime?<BR>
+<A HREF="dr_078.html">Defect Report Number 078</A>     03 Dec 93 Clive Feather
+<BR>Q1: May optimizer invoke the as-if rule to rearrange code?<BR>
+<A HREF="dr_079.html">Defect Report Number 079</A>     03 Dec 93 Clive Feather
+<BR>Q1: Is the address of a standard library function the same in different translation units?<BR>
+<A HREF="dr_080.html">Defect Report Number 080</A>     03 Dec 93 Clive Feather
+<BR>Q1: Questions on merging of string constants.<BR>
+<A HREF="dr_081.html">Defect Report Number 081</A>     03 Dec 93 Clive Feather
+<BR>Q1: What is the result of the left shift operator <TT><B>E1 &lt; E2</B></TT>, when <TT><B>E1</B></TT> is signed?<BR>
+<A HREF="dr_082.html">Defect Report Number 082</A>     03 Dec 93 Clive Feather
+<BR>Q1: Many varargs questions.<BR>
+<A HREF="dr_083.html">Defect Report Number 083</A>     03 Dec 93 Clive Feather
+<BR>Q1: A use of library functions question.<BR>
+<A HREF="dr_084.html">Defect Report Number 084</A>     03 Dec 93 Clive Feather
+<BR>Q1: When is an incomplete type in function declaration a parameter>?<BR>
+<A HREF="dr_085.html">Defect Report Number 085</A>     03 Dec 93 Clive Feather
+<BR>Q1: Is the return from <TT><B>main</B></TT> equivalent to calling <TT><B>exit</B></TT>?<BR>
+<A HREF="dr_086.html">Defect Report Number 086</A>     03 Dec 93 Clive Feather
+<BR>Q1: At object-like macros in system headers conforming?<BR>
+<A HREF="dr_087.html">Defect Report Number 087</A>     03 Dec 93 Clive Feather
+<BR>Q1: Is the order of evaluation when there are no sequence points well defined? <BR>
+<A HREF="dr_088.html">Defect Report Number 088</A>     03 Dec 93 Clive Feather
+<BR>Q1:  Are two incomplete structure types with a (lexically) identical
+tag always compatible?<BR>
+<A HREF="dr_089.html">Defect Report Number 089</A>     03 Dec 93 Clive Feather
+<BR>Q1: When does multiple definitions of a macro require a diagnositc message?<BR>
+<A HREF="dr_090.html">Defect Report Number 090</A>     03 Dec 93 Clive Feather
+<BR>Q1: Multibyte characters in formats question.<BR>
+<A HREF="dr_091.html">Defect Report Number 091</A>     03 Dec 93 Clive Feather
+<BR>Q1: Does a locale with multibye characters conform?<BR>
+<A HREF="dr_092.html">Defect Report Number 092</A>     03 Dec 93 Clive Feather
+<BR>Q1: Are the remaining elements in a partially initalized string guaranteed to be zero?<BR>
+<A HREF="dr_093.html">Defect Report Number 093</A>     03 Dec 93 Clive Feather
+<BR>Q1: Can a conforming freestanding implementation reserve identifiers?<BR>
+<A HREF="dr_094.html">Defect Report Number 094</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: Is there an inconsistency between the constraints on passing values versus returning values?<BR>
+<A HREF="dr_095.html">Defect Report Number 095</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: Are the initialization constraints clear? <BR>
+<A HREF="dr_096.html">Defect Report Number 096</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: Can the element type in an array declarator be a non-object type?<BR>
+<A HREF="dr_097.html">Defect Report Number 097</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: Can the <TT><B>type</B></TT> argument of the <TT><B>offsetof</B></TT> macro be an incomplete type?<BR>
+<A HREF="dr_098.html">Defect Report Number 098</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: Do function types and incomplete type have size?<BR>
+<A HREF="dr_099.html">Defect Report Number 099</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: What does the term <I>assignment operator</I> mean?<BR>
+<A HREF="dr_100.html">Defect Report Number 100</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: Do functions return values by copying?  See <A HREF="dr_001.html"> Defect Report #001</A> <BR>
+<A HREF="dr_101.html">Defect Report Number 101</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: Are mismatched qualifiers allowed? <BR>
+<A HREF="dr_102.html">Defect Report Number 102</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: Does a constraint violation win over undefined behavior?  
+See <A HREF="dr_017.html#Question3"> Defect Report #17, Question #3</A>.<BR>
+<A HREF="dr_103.html">Defect Report Number 103</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: Is a diagnostic required when formal parameters for functions are incomplete types?<BR>
+<A HREF="dr_104.html">Defect Report Number 104</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: When is an incomplete type in function declaration a parameter>?
+See <A HREF="dr_084.html"> Defect Report #084</A>.<BR>
+<A HREF="dr_105.html">Defect Report Number 105</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: Does a constraint violation win over undefined behavior? 
+ See <A HREF="dr_017.html#Question3"> Defect Report #17, Question #3</A>.<BR>
+<A HREF="dr_106.html">Defect Report Number 106</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: Can one take the address of a void expression?  
+See <A HREF="dr_012.html">Defect Report #012</A>. <BR>
+<A HREF="dr_107.html">Defect Report Number 107</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: Several <TT><B>assert</B></TT> questions.<BR>
+<A HREF="dr_108.html">Defect Report Number 108</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: Is it conforming to allow macros to make keywords?<BR>
+<A HREF="dr_109.html">Defect Report Number 109</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: Does the C Standard draw any significant distinction between <I>undefined
+values</I> and <I>undefined behavior</I>?<BR>
+<A HREF="dr_110.html">Defect Report Number 110</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: When is a formal parameter having array-of-non-object type not conforming?  See also
+<A HREF="dr_047.html"> Defect Report #047</A>.<BR>
+<A HREF="dr_111.html">Defect Report Number 111</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: A question on conversion of <I>pointer-to-qualified</I> type values to type <TT><B>(void*)
+</B></TT>values.<BR>
+<A HREF="dr_112.html">Defect Report Number 112</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: A Null pointer constants and relational comparison question. <BR>
+<A HREF="dr_113.html">Defect Report Number 113</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: Return expressions in functions declared to return qualified
+<TT><B>void</B></TT> questions.<BR>
+<A HREF="dr_114.html">Defect Report Number 114</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: Initialization of multi-dimensional <TT><B>char</B></TT> array object questions.<BR>
+<A HREF="dr_115.html">Defect Report Number 115</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: What it means to <I>declare</I> a declarator?<BR>
+<A HREF="dr_116.html">Defect Report Number 116</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: Is a diagnostic required when the address of a <TT><B>reigister</B></TT> arry is implicitly taken?<BR>
+<A HREF="dr_117.html">Defect Report Number 117</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: Abstract semantics, sequence points, and expression evaluation question.<BR>
+<A HREF="dr_118.html">Defect Report Number 118</A>     03 Dec 93 Ron Gulmette
+<BR>Q1:  When is the <TT><B>sizeof</B></TT> an enumeration type known?  
+See <A HREF="dr_013.html#Question5">RFI #13, question #5</A><BR>
+<A HREF="dr_119.html">Defect Report Number 119</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: Is a diagnostic required on an example of an initialization of multi-dimensional array objects.  <BR>
+<A HREF="dr_120.html">Defect Report Number 120</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: Semantics of assignment to (and initialization of) bit-fields question.<BR>
+<A HREF="dr_121.html">Defect Report Number 121</A>     03 Dec 93 Ron Gulmette
+<BR>Q1:What is ment by <I>size required</I> when convering a ponter value to an integral type? <BR>
+<A HREF="dr_122.html">Defect Report Number 122</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: Is the <I>type</I> of a bit-field  totally independent from its <I>width</I>? 
+See <A HREF="dr_015.html">Defect Report #015</A>. <BR>
+<A HREF="dr_123.html">Defect Report Number 123</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: <I>Type categories</I>'' and qualified types question.<BR>
+<A HREF="dr_124.html">Defect Report Number 124</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: What is the difference between casts to <I>a void type</I> versus casts to the <TT><B>void</B></TT> type?<BR>
+<A HREF="dr_125.html">Defect Report Number 125</A>     03 Dec 93 Ron Gulmette
+<BR>Q1:  When are declarations useing <TT><B>extern</B></TT>
+<I>(qualified)</I> <TT><B>void</B></TT> not conforming?  <BR>
+<A HREF="dr_126.html">Defect Report Number 126</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: What does <I>synonym</I> mean with respect to typedef names?<BR>
+<A HREF="dr_127.html">Defect Report Number 127</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: What is the composite type of an enumeration and an integer?
+See <A HREF="dr_013.html#Question3">Defect Report #013, Question 3</A>.<BR>
+<A HREF="dr_128.html">Defect Report Number 128</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: Editorial issue relating to tag declarations in type specifiers.<BR>
+<A HREF="dr_129.html">Defect Report Number 129</A>     03 Dec 93 Ron Gulmette
+<BR>Q1: When is name spaces of tags are shared?<BR>
+<A HREF="dr_130.html">Defect Report Number 130</A>     03 Dec 93 Sheng Yu
+<BR>Q1: When is data read from a text stream guaranteed to match what was written to the stream? <BR>
+<A HREF="dr_131.html">Defect Report Number 131</A>     03 Dec 93 Douglas Gwyn
+<BR>Q1: What is the meaning of <I>const-qualification</I>? <BR>
+<A HREF="dr_132.html">Defect Report Number 132</A>     03 Dec 93 Clive Feather
+<BR>Q1: Can undefined behavior occur at translation time, or only at run time?<BR>
+<A HREF="dr_133.html">Defect Report Number 133</A>     03 Dec 93 P. J. Plauger
+<BR>Q1: Undefined behavior not previously listed in subclause G2.<BR>
+<A HREF="dr_134.html">Defect Report Number 134</A>     31 Jan 94 Clive Feather
+<BR>Q1: Is <I>error number</I> an undefined term?<BR>
+<A HREF="dr_135.html">Defect Report Number 135</A>     31 Jan 94 Per Bothner
+<BR>Q1: Is the <TT>SVR4</TT> <TT><B>fwrite</B></TT> different? <BR>
+<A HREF="dr_136.html">Defect Report Number 136</A>     31 Mar 94 Paul Eggert
+<BR>Q1: Does <TT><B>mktime</B></TT>  yield a -1 in the <I>spring-forward</I> gap
+when <TT><B>tm_isdst</B></TT> is -1?<BR>
+<A HREF="dr_137.html">Defect Report Number 137</A>     30 Apr 94 Larry Jones
+<BR>Q1: Is <TT><B>printf("%.1f", -0.01)</B></TT> required to produce <TT><B>0.0</B></TT>
+, <TT><B>-0.0</B></TT>, or are both acceptable?<BR>
+<A HREF="dr_138.html">Defect Report Number 138</A>     02 Jun 94 John Max Skaller
+<BR>Q1: What are the storage durations? <BR>
+<A HREF="dr_139.html">Defect Report Number 139</A>     13 Jun 94 Larry Jones
+<BR>Q1: Is an incomplete type compatible with the completed type?  
+See <A HREF="dr_059.html">Defect Report #059</A> <BR>
+<A HREF="dr_140.html">Defect Report Number 140</A>     27 Jul 94 Andy Pepperdine
+<BR>Q1: What does <I>performed</I> and <I>other operation</I> mean?<BR>
+<A HREF="dr_141.html">Defect Report Number 141</A>     10 Sep 94 Doug McIlroy
+<BR>Q1: What does <TT><B>EOF</B></TT> mean in <TT><B>&lt;stdio.h></B></TT>?<BR>
+<A HREF="dr_142.html">Defect Report Number 142</A>     23 Feb 95 Clive Feather
+<BR>Q1: Is it permitted to <TT><B>#undef</B></TT> a reserved macro name? <BR>
+<A HREF="dr_143.html">Defect Report Number 143</A>     23 Feb 95 Clive Feather
+<BR>Q1: What are the definitions of file opening modes?<BR>
+<A HREF="dr_144.html">Defect Report Number 144</A>     23 Feb 95 Clive Feather  
+<BR>Q1: Can the white space preceeding the initial <TT><B>#</B></TT> of
+a preprocessing  directive be derived from macro expansion?<BR>
+<A HREF="dr_145.html">Defect Report Number 145</A>     23 Feb 95 Clive Feather
+<BR>Q1: The  four possible forms for a constant expression are not consistent..<BR>
+<A HREF="dr_146.html">Defect Report Number 146</A>     23 Feb 95 Clive Feather
+<BR>Q1: Does the constraint of 6.1.2 serve a purpose?<BR>
+<A HREF="dr_147.html">Defect Report Number 147</A>     23 Feb 95 Clive Feather
+<BR>Q1: Is there a requirement for a sequence point to occur within a library  function? <BR>
+<A HREF="dr_148.html">Defect Report Number 148</A>     23 Feb 95 Clive Feather
+<BR>Q1: Is it clear  when it is permitted to declare a  library function?<BR>
+<A HREF="dr_149.html">Defect Report Number 149</A>     23 Feb 95 Clive Feather
+<BR>Q1: Is the  term <I>variable</I> defiend?<BR>
+<A HREF="dr_150.html">Defect Report Number 150</A>     11 Jun 95 Jutta Degener
+<BR>Q1: Are programs containing <TT>char array[] = "Hello, World";</TT> strictly conforming? <BR>
+<A HREF="dr_151.html">Defect Report Number 151</A>     11 Jun 95 Jutta Degener
+<BR>Q1: Is the out from <TT>printf("%#.0o", 0);</TT> ambiguous?<BR>
+<A HREF="dr_152.html">Defect Report Number 152</A>     11 Jun 95 Jutta Degener
+<BR>Q1: Can <TT><B>longjmp</B></TT> be used to return from a signal
+handler invoked  other than through <TT><B>abort</B></TT> or <TT><B>raise</B></TT>?<BR>
+<A HREF="dr_153.html">Defect Report Number 153</A>     21 Aug 95 Ed Keizer
+<BR>Q1: Is there a problem with empty arguments in macro calls?<BR>
+<A HREF="dr_154.html">Defect Report Number 154</A>     16 Oct 95 Clive Feather
+<BR>Q1: What restrictions apply to implementation-defined entities?<BR>
+<A HREF="dr_155.html">Defect Report Number 155</A>     16 Oct 95 Clive Feather
+<BR>Q1: Is the word <I>unique</I> in subclause 7.10.3 ambiguous?
+See also <A HREF="dr_158.html"> Defect Report #158</A>.<BR>
+<A HREF="dr_156.html">Defect Report Number 156</A>     16 Oct 95 Clive Feather
+<BR>Q1: Should calls to <TT><B>fsetpos</B></TT> with positions in closed and reopened streams be undefined?<BR>
+<A HREF="dr_157.html">Defect Report Number 157</A>     16 Oct 95 Clive Feather
+<BR>Q1: Is it clearly indicated when the spelling of a type name is or is not significant?<BR>
+<A HREF="dr_158.html">Defect Report Number 158</A>     16 Oct 95 Clive Feather
+<BR>Q1: Are the semantics for the explicit conversion  of null pointer constants defined? <BR>
+<A HREF="dr_159.html">Defect Report Number 159</A>     16 Oct 95 Clive Feather
+<BR>Q1: Is the introduction to the C Standard confusing? <BR>
+<A HREF="dr_160.html">Defect Report Number 160</A>     16 Oct 95 Clive Feather
+<BR>Q1:It is unclear what applications can and cannot do with identifiers that are reserved?<BR>
+<A HREF="dr_161.html">Defect Report Number 161</A>     16 Oct 95 Clive Feather
+<BR>Q1: Is the wording of subclause 7.13 unclear?<BR>
+<A HREF="dr_162.html">Defect Report Number 162</A>     16 Oct 95 Clive Feather
+<BR>Q1: Is the description of the static objects used by <TT><B> time.h</B></TT>
+ functions misleading?<BR>
+<A HREF="dr_163.html">Defect Report Number 163</A>     16 Oct 95 Clive Feather
+<BR>Q1:  Is it clear whether the use of an undeclared identifier as a primary expression requires a diagnostic message to be issued?<BR>
+<A HREF="dr_164.html">Defect Report Number 164</A>     16 Oct 95 Clive Feather
+<BR>Q1: Is there a constraint to prevent declarations involving types not defined by 
+subclause 6.1.2.5?<BR>
+<A HREF="dr_165.html">Defect Report Number 165</A>     16 Oct 95 Clive Feather
+<BR>Q1: Is the wording of subclause 6.5.2.3 concerning tags defective?<BR>
+<A HREF="dr_166.html">Defect Report Number 166</A>     16 Oct 95 Clive Feather
+<BR>Q1:Do constraints that require something to be an lvalue place an unacceptable  burden on the implementation?<BR>
+<A HREF="dr_167.html">Defect Report Number 167</A>     16 Oct 95 Clive Feather
+<BR>Q1: The <TT><B>n</B></TT> conversion specifier in subclause 7.9.6.2  made by TC1,
+ <A HREF="dr_014.html#Question14"> Defect Report #014, Question 2</A>, should be applied  to subclause 7.9.6.1.<BR>
+<A HREF="dr_168.html">Defect Report Number 168</A>     16 Oct 95 Clive Feather
+<BR>Q1: The change to subclause 6.3 made by TC1, <A HREF="dr_053.html"> Defect Report #053, Question  1</A>, should also be applied in Annex .2 (page 200).<BR>
+<A HREF="dr_169.html">Defect Report Number 169</A>     16 Oct 95 Clive Feather
+<BR>Q1: Is the description of the replacement of trigraphs contradictory?<BR>
+<A HREF="dr_170.html">Defect Report Number 170</A>     16 Oct 95 Clive Feather
+<BR>Q1: Are the description of operators and punctuators is confusing, and are the 
+ constraints contradictory? <BR>
+<A HREF="dr_171.html">Defect Report Number 171</A>     16 Oct 95 Clive Feather
+<BR>Q1: Is it  possible to create implementations with unreasonable  arrangements of integral types?<BR>
+<A HREF="dr_172.html">Defect Report Number 172</A>     16 Oct 95 Clive Feather
+<BR>Q1: Does the description for the relational and equality operators contain defects? <BR>
+<A HREF="dr_173.html">Defect Report Number 173</A>     16 Oct 95 Clive Feather
+<BR>Q1: What is the meaning of <I>line number</I> when a token is split over more than one physical source line?<BR>
+<A HREF="dr_174.html">Defect Report Number 174</A>     16 Oct 95 Clive Feather
+<BR>Q1: Is there a number of errors in the  usual arithmetic conversions section?<BR>
+<A HREF="dr_175.html">Defect Report Number 175</A>     16 Oct 95 Clive Feather
+<BR>Q1: Is the <TT><B>sscanf</B></TT> example added by TC1 wrong?<BR>
+<A HREF="dr_176.html">Defect Report Number 176</A>     16 Oct 95 Clive Feather
+<BR>Q1: Are rules concerning whether <TT><B>#error</B></TT> generates a diagnostic contradictory?<BR>
+<A HREF="dr_177.html">Defect Report Number 177</A>     16 Oct 95 Clive Feather
+<BR>Q1: A Preprocessing directives question.<BR>
+<A HREF="dr_178.html">Defect Report Number 178</A>     06 Feb 96 Frank Farance
+<BR>Q1: Why does <A HREF="dr_051.html">Defect Report #051</A> and <A HREF="dr_073.html">Defect Report #073</A> answer the same question differently?<BR>
+</BODY></HTML>
+

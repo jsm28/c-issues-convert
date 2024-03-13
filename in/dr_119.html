@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #119</TITLE></HEAD><BODY>
+<H2>Defect Report #119</H2>
+<B>Submission Daee</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Ron Guilmette
+<BR>
+<B>Question</B>
+<BR>
+ANSI/ISO C Defect Report #rfg26:
+<BR>
+Subject: Initialization of multi-dimensional array objects.
+<BR>
+a) Is a diagnostic required for the following declaration?
+<BR>
+b) Is the following declaration strictly conforming 
+or not?
+<BR>
+<TT><B>static int array[][] = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 
+} };
+</B></TT><BR>
+Background:
+<BR>
+Subclause 6.5.7 (<B>Semantics</B>):
+<BLOCKQUOTE>
+If an array of unknown size is initialized, its size is determined 
+by the number of initializers provided for its elements.
+</BLOCKQUOTE>
+Subclause 6.5.7 (<B>Semantics</B>):
+<BLOCKQUOTE>
+If the aggregate contains members that are aggregates or unions, 
+or if the first member of a union is an aggregate or union, the rules 
+apply recursively to the subaggregates or contained unions.
+</BLOCKQUOTE>
+On the basis of the above quoted rules, one might conclude that the 
+code example given above is strictly conforming. (Many existing implementations 
+seem to disagree, however.)
+<BR>
+<B>Response</B>
+<BR>
+a) No, a diagnostic is not required. It is a semantic requirement
+that array elements must be objects, not a constraint.
+<BR>
+b) No, this is undefined behavior. Note that <TT><B>array</B></TT>
+does not have an array type because its element type is not an
+object type; hence subclause 6.5.7 does not apply. See subclause
+6.1.2.5.
+<BR>
+<A HREF="dr_118.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_120.html">Next Defect Report</A>
+</BODY></HTML>

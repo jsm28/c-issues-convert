@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #082</TITLE></HEAD><BODY>
+<H2>Defect Report #082</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Clive Feather
+<BR>
+<B>Question</B>
+<BR>
+Item 19 - multiple varargs
+<BR>
+Consider the following translation unit:
+<BR>
+<TT><B>#include &lt;stdarg.h><BR>
+#include &lt;stdio.h><BR>
+<BR>
+extern int is_final_arg (int);<BR>
+<BR>
+void f1 (int n, ...)<BR>
+	{<BR>
+	va_list ap1, ap2;<BR>
+<BR>
+	va_start (ap1, n);<BR>
+	va_start (ap2, n);<BR>
+	while (va_arg (ap1, int) != 0)<BR>
+		printf ("Value is %d\n", va_arg (ap2, int));<BR>
+	va_end (ap1);<BR>
+	va_end (ap2);<BR>
+	}<BR>
+<BR>
+void f2 (int n, ...)<BR>
+	{<BR>
+	va_list ap;<BR>
+<BR>
+	va_start (ap, n);<BR>
+	for (;;)<BR>
+		{<BR>
+		n = va_arg (ap, int);<BR>
+		if (is_final_arg (n))<BR>
+			{<BR>
+			va_end (ap);<BR>
+			return;<BR>
+			}<BR>
+		printf ("Value is %d\n", n);<BR>
+		}<BR>
+	}<BR>
+<BR>
+void f3 (int n, ...)<BR>
+	{<BR>
+	va_list ap;<BR>
+<BR>
+	va_start (ap, n);<BR>
+	while (n = va_arg (ap, int), n != 0)<BR>
+		printf ("Value is %d\n", n);<BR>
+	va_start (ap, n);<BR>
+	while (n = va_arg (ap, int), n != 0)<BR>
+		printf ("Value is still %d\n", n);<BR>
+	va_end (ap);<BR>
+	}<BR>
+<BR>
+void f4a (va_list *pap)<BR>
+	{<BR>
+	int n;<BR>
+<BR>
+	while (n = va_arg (*pap, int), n != 0)<BR>
+		printf ("Value is %d\n", n);<BR>
+	}<BR>
+<BR>
+void f4 (int n, ...)<BR>
+	{<BR>
+	va_list ap;<BR>
+<BR>
+	va_start (ap, n);<BR>
+	f4a (&amp;ap);<BR>
+	va_end (ap);<BR>
+	}<BR>
+<BR>
+void f5a (va_list apc)<BR>
+	{<BR>
+	int n;<BR>
+<BR>
+	while (n = va_arg (apc, int), n != 0)<BR>
+		printf ("Value is %d\n", n);<BR>
+	}<BR>
+<BR>
+void f5 (int n, ...)<BR>
+	{<BR>
+	va_list ap;<BR>
+<BR>
+	va_start (ap, n);<BR>
+	f5a (ap);<BR>
+	va_end (ap);<BR>
+	}
+</B></TT><BR>
+<OL TYPE=a>
+<LI> Is each function in this translation unit strictly conforming? 
+Note in particular:
+<BR>
+in <TT><B>f1</B></TT>, the use of simultaneous <TT><B>va_lists</B></TT> in <TT><B>f1</B></TT>;
+<BR>
+in <TT><B>f2</B></TT>, <TT><B>va_start</B></TT> and <TT><B>va_end</B></TT> are in different scopes;
+<BR>
+in <TT><B>f3</B></TT>, there are two <TT><B>va_start</B></TT>s and one <TT><B>va_end</B></TT>;
+<BR>
+in <TT><B>f4</B></TT>, the address of an object of type <TT><B>va_list</B></TT> 
+is taken;
+<BR>
+in <TT><B>f4a</B></TT> and <TT><B>f5a</B></TT>,
+<TT><B>va_arg</B></TT> is called with a first 
+parameter which is not ``the same as the <TT><B>va_list ap</B></TT>
+initialized by <TT><B>va_start</B></TT>'' (subclause 7.8.1.2).
+<LI> Is the following implementation conforming?
+<BR>
+<TT><B>va_start</B></TT> allocates a block of memory with <TT><B>malloc</B></TT>;
+<BR>
+a <TT><B>va_list</B></TT> is a pointer to the block;
+<BR>
+<TT><B>va_end</B></TT> frees the same block;
+<LI> Is there any portable method to copy the current state of a 
+<TT><B>va_list</B></TT>, for example in order that the remaining arguments 
+can be scanned twice without knowledge of the <TT><B>va_arg</B></TT> calls made 
+previous to that point? If the answer to (b) is ``yes,'' I believe 
+the answer to (c) must be ``no.''
+</OL>
+<B>Response</B>
+<BR>
+a) All functions listed except for <TT><B>f3</B></TT> contain
+strictly conforming code. The function <TT><B>f3</B></TT> violates the
+intended requirement for <TT><B>va_start</B></TT>
+and <TT><B>va_end</B></TT> to be invoked in matching pairs, as reflected
+in the following Correction.
+<BR>
+b) There is nothing described in this section that would make such an
+implementation non-conforming.
+<BR>
+c) No.
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>In subclause 7.8.1, page 122,
+change the last sentence from:</B></I>
+<BR>
+The <TT><B>va_start</B></TT> and <TT><B>va_end</B></TT> macros shall
+be invoked in the function accepting a varying number of arguments,
+if access to the varying arguments is desired.
+<BR>
+<I><B>to:</B></I>
+<BR>
+The <TT><B>va_start</B></TT> and <TT><B>va_end</B></TT> macros shall
+be invoked in corresponding pairs in the function accepting a varying number of arguments,
+if access to the varying arguments is desired.
+<BR>
+<I><B>In subclause 7.8.1.1, page 122, add at the end of the second paragraph
+of the Description:</B></I>
+<BR>
+<TT><B>va_start</B></TT> shall not be invoked again for the
+same <TT><B>ap</B></TT> without an intervening invocation of
+<TT><B>va_end</B></TT> for the same <TT><B>ap</B></TT>.
+<BR>
+<A HREF="dr_081.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_083.html">Next Defect Report</A>
+</BODY></HTML>

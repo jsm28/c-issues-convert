@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #218</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #218</h2>
+    <a href="dr_217.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_219.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Clive Feather (UK)<br>
+     <b>Submission Date:</b> 2000-04-04<br>
+     <b>Source:</b><br>
+     <b>Reference Document:</b> N/A<br>
+     <b>Version:</b> 1.2<br>
+     <b>Date:</b> 2001-09-18 15:58:00<br>
+     <b>Subject:</b> Signs of non-numeric floating point values</p>
+
+    <p><b>Summary</b><br>
+     There is an implication at various points in the standard,
+    notably the copysign function, that infinities and NaNs have
+    signs. This is not the case in all implementations, and this
+    needs to be allowed for.</p>
+
+    <p><b>Suggested Technical Corrigendum</b><br>
+     Add a new paragraph to 5.2.4.2.2, preferably after [#3]:</p>
+
+    <blockquote>
+      [#3a] An implementation may give zero and non-numeric values
+      (such as infinities and <tt>NaNs</tt>) a sign or may leave
+      them unsigned. Wherever such values are unsigned, any
+      requirement in this International Standard to retrieve the
+      sign shall act as if the value were positive, and any
+      requirement to set the sign shall be ignored.
+    </blockquote>
+    or: 
+
+    <blockquote>
+      [...]<br>
+       to retrieve the sign shall produce an unspecified sign, and
+      any requirement to set the sign shall be ignored.
+    </blockquote>
+    <hr>
+
+    <p><b>Committee Response</b><br>
+     In addition to the following Technical Corrigendum, add to the
+    Rationale section that discusses 5.2.4.2.2 of the C
+    Standard:</p>
+
+    <blockquote>
+      The committee has been made aware of at least one
+      implementation (VAX and Alpha in VAX mode) whose
+      floating-point format does not support signed zeros. The
+      hardware representation that one thinks would represent -0.0
+      is in fact treated as a non-numeric value similar to a NaN.
+      Therefore, <tt><b>copysign(+0.0,-1.0)</b></tt> returns +0.0,
+      not the expected -0.0, on this implementation. Some places
+      that mention (or might have) signed zero results and the sign
+      might be different than you expect: 
+
+      <p>The complex functions, in particular with branch cuts;</p>
+
+      <blockquote>
+<pre>
+<tt><b>ceil()
+conj()
+copysign()
+fmod()
+modf()
+fprintf()</b></tt> <i>(Footnote 233 is OK)</i><tt><b>fwprintf()</b></tt> <i>(Footnote 273 is OK)</i><tt><b>nearbyint()
+nextafter()
+nexttoward()
+remainder()</b></tt> <i>(Footnote 201 does not need to be changed)</i><tt><b>remquo()
+rint()
+round()
+signbit()
+strtod()</b></tt> <i>(Footnote 249 is OK)</i><tt><b>trunc()
+wcstod()</b></tt> <i>(Footnote 285 is OK)</i>
+</pre>
+      </blockquote>
+
+      <p>Underflow: In particular: <tt><b>ldexp()</b></tt>,
+      <tt><b>scalbn()</b></tt>, <tt><b>scalbln()</b></tt>.</p>
+    </blockquote>
+
+    <p><b>Technical Corrigendum</b><br>
+     Add a new paragraph to 5.2.4.2.2, after [#3]:</p>
+
+    <blockquote>
+      [#3a] An implementation may give zero and non-numeric values
+      (such as infinities and NaNs) a sign or may leave them
+      unsigned. Wherever such values are unsigned, any requirement
+      in this International Standard to retrieve the sign shall
+      produce an unspecified sign, and any requirement to set the
+      sign shall be ignored.
+    </blockquote>
+
+    <p><br>
+     <a href="dr_217.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_219.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

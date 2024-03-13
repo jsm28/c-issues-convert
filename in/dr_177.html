@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #177</TITLE></HEAD>
+<BODY><H2>Defect Report #177</H2> 
+<B>Submission Date</B>: 16 Oct 95
+<BR>
+<B>Submittor</B>: BSI
+<BR>
+<B>Source</B>: Clive D.W. Feather
+<BR>
+<B>Question</B>
+<BR>
+<I>Submitted to BSI by Clive D.W. Feather  clive@sco.com .</I>
+<BR>
+<I>In this Defect Report, identifiers lexically identical to those 
+declared in standard headers refer to the identifiers declared in  those
+standard headers, whether or not the header is explicitly mentioned.</I>
+<BR>
+<I>This Defect Report has been prepared with considerable help from 
+Mark Brader, Jutta Degener, Ronald Guilmette, and a person whose
+employment  conditions require anonymity. However, except where stated,
+opinions  expressed or implied should not be assumed to be those of any
+person  other than myself.</I>
+<BR> Defect Report UK 025: Preprocessing directives
+<BR> Preprocessing directives are not removed from the translation unit
+ at any point during or after translation phase 4, and thus wreck the 
+syntax analysis in translation phase 7.
+<BR> Subclause 5.1.1.1 reads in part:
+<BR> A source file together with all the headers and source files 
+included via the preprocessing directive <TT><B>#include</B></TT>,
+less any  source lines skipped by any of the conditional inclusion
+preprocessing  directives, is called a <I>translation unit.</I>
+<BR> Nothing here, in the description of translation phase 4, or in
+subclause  6.8, states that any preprocessing directive is removed
+(except for 
+<TT><B>#include</B></TT>, which is <I>replaced</I>).
+<BR> Consider the source file:
+<BR>
+<TT><B>#define QUIT return 0<BR> #if 0<BR> This is some junk<BR> #else<BR>
+ int main (void)<BR> {<BR>         puts ("Hello world\n");<BR> #endif<BR>
+         QUIT;<BR> }</B>
+</TT><BR> The translation unit resulting at the end of translation
+phase 4 is  thus:
+<BR>
+<TT><B>#define QUIT return 0<BR> #if 0<BR> #else<BR> int main (void)<BR>
+ {<BR>         puts ("Hello world\n");<BR> #endif<BR>         return
+0;<BR> }</B>
+</TT><BR> and this clearly does not match the syntax of <I>translation-unit</I>
+ in subclause 6.7.
+<BR>
+<B>Suggested Technical Corrigendum</B>
+<BR> In subclause 5.1.1.2, add at the end of the description of
+translation  phase 4: All preprocessing directives are then removed from
+the translation  unit.<BR><BR><A HREF="dr_176.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_178.html">Next Defect Report</A></BODY></HTML>

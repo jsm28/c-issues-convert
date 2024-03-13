@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect Report #230</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #230</h2>
+    <a href="dr_229.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_231.htm">Previous Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Derek Jones (UK)<br>
+     <b>Submission Date:</b> 2000-04-11<br>
+     <b>Source:</b><br>
+     <b>Reference Document:</b> N/A<br>
+     <b>Version:</b> 1.2<br>
+     <b>Date:</b> 2001-01-29 01:00:05<br>
+     <b>Subject:</b> Enumerated type rank.</p>
+
+    <p><b>Summary</b><br>
+     Clause 6.3.1.1p2:</p>
+
+    <blockquote>
+      An enumerated type may have a rank equal to that of
+      <tt><b>int</b></tt>, or even greater than
+      <tt><b>int</b></tt>.
+    </blockquote>
+
+    <p>The wording in this paragraph does not allow an object
+    having an enumerated type equal to that of <tt><b>int</b></tt>
+    to appear wherever an object of type <tt><b>int</b></tt> or
+    <tt><b>unsigned int</b></tt> may appear.</p>
+
+    <p><b>Suggested Technical Corrigendum</b><br>
+     Changing the existing wording to:</p>
+
+    <blockquote>
+      An object or expression with an integer type whose integer
+      conversion rank is less than or equal to the rank of
+      <tt><b>int</b></tt> and <tt><b>unsigned int</b></tt>.
+    </blockquote>
+    solves the issue, for enumerators, at this point. 
+
+    <p>A more general solution for enumerations is to add the
+    wording:</p>
+
+    <blockquote>
+      An enumerated type with integer conversion rank not less than
+      the rank of <tt><b>int</b></tt> and <tt><b>unsigned
+      int</b></tt> may be used in an expression wherever the
+      compatible signed or unsigned integer may be; the enumerated
+      type is converted to the compatible type. These conversions
+      are also called integer promotions.
+    </blockquote>
+    <hr>
+
+    <p><b>Committee Discussion</b><br>
+     Integer conversion rank does not address <tt><b>enums</b></tt>
+    that rank equal to <tt><b>int</b></tt>.</p>
+
+    <p>The words "or equal to" should be added, but there is
+    another issue regarding <tt><b>enum</b></tt> and whether or not
+    it can ever be greater in rank than <tt><b>int</b></tt> (or
+    <tt><b>unsigned int</b></tt>) since the
+    <i>constant-expressions</i> for the initializers are
+    constrained to the range of values that may be expressed by an
+    <tt><b>int</b></tt>. The words of the simple proposed change
+    are good. The more general proposal doesn't seem to fix
+    anything else.</p>
+
+    <p><b>Technical Corrigendum</b><br>
+     In 6.3.1.1 paragraph 2, change the first bullet to:</p>
+
+    <blockquote>
+      An object or expression with an integer type whose integer
+      conversion rank is less than or equal to the rank of
+      <tt><b>int</b></tt> and <tt><b>unsigned int</b></tt>.
+    </blockquote>
+
+    <p><a href="dr_229.htm">Previous Defect Report</a> &lt; - &gt;
+    <a href="dr_231.htm">Previous Defect Report</a></p>
+  </body>
+</html>
+

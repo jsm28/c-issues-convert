@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+    <meta name="generator" content="Microsoft FrontPage 5.0">
+
+    <title>Defect report #311</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #311</h2>
+    <a href="dr_310.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_312.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> UK C Panel<br>
+     <b>Submission Date:</b> 2005-03-04<br>
+     <b>Source:</b> Joseph Myers
+    &lt;joseph@codesourcery.com&gt;<br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1099.htm">ISO/IEC
+    WG14 N1099</a><br>
+     <b>Version:</b> 1.6<br>
+     <b>Date:</b> 2007-09-06<br>
+     <b>Subject:</b> Definition of variably modified types</p>
+
+    <p><b>Summary</b></p>
+
+    <p>Variably modified types are defined by 6.7.5#3:</p>
+
+    <blockquote>
+      [#3] A <i>full declarator</i> is a declarator that is not
+      part of another declarator. The end of a full declarator is a
+      sequence point. If the nested sequence of declarators in a
+      full declarator contains a variable length array type, the
+      type specified by the full declarator is said to be
+      <i>variably modified</i>.
+    </blockquote>
+
+    <p>It is desirable for the definition to look at the declarator
+    rather than just the resulting type, so that function
+    parameters adjusted from array to pointer type are variably
+    modified if the array size is variable: in</p>
+<pre>
+    void
+    f (int i, int a[static ++i])
+    {
+      // ...
+    }
+</pre>
+
+    <p>the increment of <code>i</code> must be evaluated for the
+    definition of <code>static</code> in this context to make
+    sense. However, what it means for the declarators to "contain"
+    a type is unclear. The natural interpretation is that they
+    include an array declarator with array size <code>[*]</code> or
+    an expression which is not an integer constant expression.
+    However, this does not cover cases such as</p>
+<pre>
+    int x;
+    // ...
+    typedef int vla[x];
+    vla y[3];
+</pre>
+
+    <p>where a typedef for a variably modified type is used.
+    <code>y</code> is a VLA, and clearly ought to be variably
+    modified, but nothing about the declarators makes it variably
+    modified; only the declaration specifier does so.</p>
+
+    <p><b>Suggested Technical Corrigendum</b><br>
+    </p>
+    <hr>
+
+    <p><b>Committee Discussion</b> (for history only)</p>
+
+    <p>Declarators don't contain a type, it is the sequence of
+    declarators that contains types.</p>
+
+    <p>The sentence in 6.7.5;p3 that defines variably modified
+    types may be wrong, and that may not even be the right place
+    for it to be defined. The definition ties it too closely to the
+    declarator. In the example provided in the DR, the type of
+    <code><b>y</b></code> is variably modified. The declarator for
+    <code><b>y</b></code> does not include a variable length array
+    type. Para 3 needs to have it's wording adjusted in some
+    fashion, the text there is insufficient to provide us the
+    answer.</p>
+
+    <p>The definition in the standard for variable length array
+    does not seem to be in italics.</p>
+
+    <p>2006-Mar-29:</p>
+
+    <p>For the reason noted in the Summary, variably modified types
+    do need to be tied to the declarator syntax.&nbsp; But the
+    current definition fails to state that a new type derived from
+    a variably modified type is itself variably modified.</p>
+
+    <p><b>Commitee Response</b></p>
+
+    <p>Yes, this is a defect in the definition..&nbsp; The
+    definition will be modified to state explicitly that types
+    derived from a variably modified type are themselves variably
+    modified.<br>
+     &nbsp;</p>
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>[<strong>Note</strong>, these are relative to wg14's <a
+    href=
+    "http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1124.pdf">N1124</a>.]</p>
+
+    <p>Change 3rd sentence in 6.7.5p3 from:</p>
+
+    <blockquote>
+      <p>If the nested sequence of declarators in a full declarator
+      contains a variable length array type, the type specified by
+      the full declarator is said to be <i>variably
+      modified</i>.</p>
+    </blockquote>
+
+    <p>to</p>
+
+    <blockquote>
+      <p>If in the nested sequence of declarators in a full
+      declarator there is a declarator specifying a variable length
+      array type, the type specified by the full declarator is said
+      to be <i>variably modified</i>.&nbsp; Furthermore, any type
+      derived by declarator type derivation from a variably
+      modified type is itself variably modified.</p>
+    </blockquote>
+
+    <p><br>
+     <a href="dr_310.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_312.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

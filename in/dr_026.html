@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #026</TITLE></HEAD><BODY>
+<H2>Defect Report #026</H2>
+
+<P><B>Submission Date</B>: 10 Dec 92 <BR>
+<B>Submittor</B>: WG14 <BR>
+<B>Source</B>: X3J11/91-007 (Randall Meyers) <BR>
+<B>Question</B> 1 <BR>
+Example: <BR>
+<B><TT>#include stdio.h&gt;<BR>
+int main()<BR>
+{<BR>
+puts(&quot;@$(etc.)&quot;);<BR>
+return 0;<BR>
+}</TT></B> <BR>
+Is this a strictly conforming program? <BR>
+<B>Response</B> <BR>
+Strictly conforming programs cannot depend on unspecified or implementation-defined
+behavior (cf. clause 4, page 3, lines 31-32). Note that <B><TT>@</TT></B>
+and <B><TT>$</TT></B> are extended source characters. Source characters
+are translated to execution characters in an unspecified manner (cf. subclause
+5.2.1). This is in the <B><TT>&quot;C&quot;</TT></B> locale. The <B><TT>@</TT></B>
+character is either a printing character or a control character, either
+of which is implementation-defined (subclause 7.3, page 102, lines 8-11).
+Therefore, the program is <I>not</I> strictly conforming. <BR>
+</P>
+
+<A HREF="dr_025.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_027.html">Next Defect Report</A>
+</BODY></HTML>

@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #113</TITLE></HEAD><BODY>
+<H2>Defect Report #113</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Ron Guilmette
+<BR>
+<B>Question</B>
+<BR>
+ANSI/ISO C Defect report #rfg20:
+<BR>
+Subject: Return expressions in functions declared to return qualified 
+<TT><B>void</B></TT>.
+<BR>
+a) Does the following code involve usage which requires 
+a diagnostic from a conforming implementation?
+<BR>
+b) Does the following code involve usage which renders the 
+code itself not strictly conforming?
+<BR>
+<TT><B>volatile void func0 (volatile void *vvp)<BR>
+	{<BR>
+	return *vvp;	/*</B><I> ? </I><B>*/<BR>
+	}<BR>
+ <BR>
+const void func1 (const void *cvp)<BR>
+	{<BR>
+	return *cvp;	/*</B><I> ? </I><B>*/<BR>
+	}
+</B></TT><BR>
+Background:
+<BR>
+Subclause 6.6.6.4 (<B>Constraints</B>):
+<BLOCKQUOTE>
+A <TT><B>return</B></TT> statement with an expression
+shall not appear in a function whose 
+return type is <TT><B>void</B></TT>.
+</BLOCKQUOTE>
+Note that this constraint doesn't say anything about functions declared 
+to return some qualified version of the <TT><B>void</B></TT> type.
+<BR>
+I believe that it was probably the Committee's true intent to require 
+a diagnostic for any attempt to specify an expression in a return 
+statement within any function declared to return <I>any</I> qualified 
+or unqualified version of the <TT><B>void</B></TT> type (and indeed, many existing 
+implementations do already issue diagnostics for usage such as that 
+shown in the example above). Thus, it would seem appropriate for the 
+Committee to amend the above quoted constraint
+(from subclause 6.6.6.4) to read:
+<BLOCKQUOTE>
+A <TT><B>return</B></TT> statement with an expression shall not appear 
+in a function whose return type is a void type.
+</BLOCKQUOTE>
+<B>Response</B>
+<BR>
+a) Yes, a diagnostic is required.
+<BR>
+b) Yes, this renders the program not strictly conforming 
+code.
+<BR>
+A qualified <TT><B>void</B></TT> function return type
+is disallowed by the constraints of subclause 6.7.1:
+<BLOCKQUOTE>
+The return type from a function shall be <TT><B>void</B></TT>
+or an object type other than array.
+</BLOCKQUOTE>
+The constraint does not say ``a void type'' and thus <TT><B>void</B></TT> 
+must not be qualified when used as a function return type. Since a 
+qualified <TT><B>void</B></TT> return type
+is already invalid, there is no need for 
+the additional constraint on the
+<TT><B>return</B></TT> statement (subclause 6.6.6.4).
+<BR>
+<A HREF="dr_112.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_114.html">Next Defect Report</A>
+</BODY></HTML>

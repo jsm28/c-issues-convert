@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #278</title>
+  </head>
+
+  <body bgcolor="#FFFFFF">
+    <h2 align="center">Defect Report #278</h2>
+    <a href="dr_277.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_279.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> UK C Panel<br>
+     <b>Submission Date:</b> 2001-09-07<br>
+     <b>Source:</b> Clive D.W. Feather &lt;clive@demon.net&gt;<br>
+     <b>Version:</b> 1.1 <!-- ! year-month-day hour:min:sec -->
+    <br>
+     <b>Date:</b> 2002-03-07<br>
+     <b>Subject:</b> lacuna in character encodings</p>
+    <b>Problem</b> 
+
+    <p>Defect Report 091 discussed a multibyte character encoding
+    where some single-byte characters are proper prefixes of
+    two-byte characters. For example, single-byte characters have
+    codes 1 to 127 while two-byte characters consist of such a code
+    followed by a code from 128 to 255. At the time WG14 stated
+    that such an encoding was legitimate.</p>
+
+    <p>Now 5.2.1.2 states, inter alia:</p>
+
+    <blockquote>
+      <ul>
+        <li>The basic character set shall be present and each
+        character shall be encoded as a single byte.</li>
+
+        <li>A byte with all bits zero shall be interpreted as a
+        null character independent of shift state.</li>
+
+        <li>A byte with all bits zero shall not occur in the second
+        or subsequent bytes of a multibyte character.</li>
+      </ul>
+    </blockquote>
+
+    <p>Nothing in this wording forbids a two-byte character from
+    having a first byte that is zero. By the logic of DR091, just
+    as the sequences 0x12 and 0x12 0x9A are both valid, but
+    different, characters, so would the sequences 0x00 and 0x00
+    0x9A; the first would be the null character and the second
+    would be something else. Note that there are no shift states,
+    and so the wording "independent of shift state" is
+    irrelevant.</p>
+
+    <p>This interpretation is undesirable for obvious reasons, and
+    so it ought to be outlawed.</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Replace the current last two bullets with a single one:</p>
+
+    <blockquote>
+      <ul>
+        <li>A byte with all bits zero shall be interpreted as a
+        null character independent of shift state. Such a byte
+        shall not occur as part of any other multibyte
+        character.</li>
+      </ul>
+    </blockquote>
+    <hr>
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>Replace the current last two bullets in 5.2.1.2 with a
+    single bullet:</p>
+
+    <blockquote>
+      <ul>
+        <li>A byte with all bits zero shall be interpreted as a
+        null character independent of shift state. Such a byte
+        shall not occur as part of any other multibyte
+        character.</li>
+      </ul>
+    </blockquote>
+
+    <p><br>
+     <a href="dr_277.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_279.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

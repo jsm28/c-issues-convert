@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #304</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #304</h2>
+    <a href="dr_303.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_305.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> WG21<br>
+     <b>Submission Date:</b> 2004-10-26<br>
+     <b>Source:</b> WG21<br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1068.htm">ISO/IEC
+    WG14 N1068</a><br>
+     <b>Version:</b> 1.2<br>
+     <b>Date:</b> 2006-04-04<br>
+     <b>Subject:</b> Clarifying illegal tokens in <code>#if</code>
+    directives</p>
+
+    <p><b>Summary</b></p>
+
+    <p>According to 6.10.1p3, "each preprocessing token [in a #if
+    directive] is converted into a token." But what if, for
+    example, the line contains an unmatched quote mark, or a
+    preprocessing number like 4hello? How is such a preprocessing
+    token converted into a token? No indication is given that the
+    conversion may fail.</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Insert new constraint paragraph after 6.10.1p1:</p>
+
+    <blockquote>
+      <p>Each preprocessing token that remains after all macro
+      replacements have occurred shall be in the lexical form of a
+      token (6.4).</p>
+    </blockquote>
+    <hr>
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>Insert new constraint paragraph after 6.10.1p1:</p>
+
+    <blockquote>
+      Each preprocessing token that remains after all macro
+      replacements have occurred shall be in the lexical form of a
+      token (6.4).
+    </blockquote>
+
+    <p><br>
+     <a href="dr_303.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_305.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

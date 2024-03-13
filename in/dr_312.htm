@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #312</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #312</h2>
+    <a href="dr_311.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_313.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> UK C Panel<br>
+     <b>Submission Date:</b> 2005-03-04<br>
+     <b>Source:</b> Joseph Myers
+    &lt;joseph@codesourcery.com&gt;<br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1100.htm">ISO/IEC
+    WG14 N1100</a><br>
+     <b>Version:</b> 1.2<br>
+     <b>Date:</b> 2006-04-04<br>
+     <b>Subject:</b> Meaning of "known constant size"</p>
+
+    <p><b>Summary</b></p>
+
+    <p>Does "known constant size" mean something different from
+    "not a VLA"? The phrase is used in the definition of composite
+    types, 6.2.7#3:</p>
+
+    <blockquote>
+      -- If one type is an array of known constant size, the
+      composite type is an array of that size; otherwise, if one
+      type is a variable length array, the composite type is that
+      type.
+    </blockquote>
+
+    <p>and in an example in 6.5.6#11 (where it doesn't cause
+    problems), and in 6.7.5.2#4 to define VLAs:</p>
+
+    <blockquote>
+      [#4] If the size is not present, the array type is an
+      incomplete type. If the size is <code>*</code> instead of
+      being an expression, the array type is a variable length
+      array type of unspecified size, which can only be used in
+      declarations with function prototype scope;122) such arrays
+      are nonetheless complete types. If the size is an integer
+      constant expression and the element type has a known constant
+      size, the array type is not a variable length array type;
+      otherwise, the array type is a variable length array type.
+    </blockquote>
+
+    <p>Suppose the implementation does not accept any non-standard
+    forms of constant expressions under 6.6#10, so that
+    <code>(int)+1.0</code> is an arithmetic constant expression but
+    not an integer constant expression. Thus
+    <code>int[(int)+1.0]</code> is a VLA type. But is
+    <code>int[1][(int)+1.0]</code> a VLA type? The element type is
+    a VLA type, but the element size is a known constant. If "known
+    constant size" is interpreted to include some VLA cases, this
+    also means further indeterminacy of composite types in such
+    cases; is "an array of that size" a VLA of that size, or a
+    non-VLA of that size, and may cases involving compatible array
+    types with different known constant sizes (which would yield
+    undefined behavior if executed) be rejected at translation
+    time?</p>
+
+    <p><b>Suggested Technical Corrigendum</b><br>
+    </p>
+    <hr>
+
+    <p><b>Committee Discussion</b> (for history only)</p>
+
+    <p>The statement, "Suppose the implementation does not accept
+    any non-standard forms of constant expressions under 6.6#10, so
+    that <tt><b>(int)+1.0</b></tt> is an arithmetic constant
+    expression but not an integer constant expression." , implies
+    an interpretation of the standard that the implementation can
+    extend the meaning of what constitutes an integer constant
+    expression. For example, that <tt><b>(int)+1.0</b></tt> is an
+    integer constant expression.</p>
+
+    <p>The committee does not believe that it does. Even if an
+    implementation accepts other forms of constant expressions,
+    paragraph 6.6#10 does not change the definition of an integer
+    constant expression given by paragraph 6.6#6, and
+    <tt><b>int[(int)+1.0]</b></tt> is still a VLA.</p>
+
+    <p>Paragraph 6.6#10 cannot be used to get around issuing
+    diagnostics for constraint violations where integer constant
+    expressions are required. Which we believe is what the first
+    paragraph of the introductory text is implying</p>
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>Add to 6.2.5, after Paragraph 22</p>
+
+    <blockquote>
+      A type has <i>known constant size</i> if the type is not
+      incomplete and is not a variable length array type.
+    </blockquote>
+    <br>
+     <br>
+     
+
+    <p><br>
+     <a href="dr_311.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_313.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #306</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #306</h2>
+    <a href="dr_305.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_307.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> WG21<br>
+     <b>Submission Date:</b> 2004-10-26<br>
+     <b>Source:</b> WG21<br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1068.htm">ISO/IEC
+    WG14 N1068</a><br>
+     <b>Version:</b> 1.1<br>
+     <b>Date:</b> 2006-03-05<br>
+     <b>Subject:</b> 6.10.3p9: Clarifying that rescanning applies
+    to object-like macros</p>
+
+    <p><b>Summary</b></p>
+
+    <p>I suspect that this was introduced as a result of a public
+    comment from someone who was confused (honestly or perversely)
+    about 6.10.3.4p1: "<strong>After all parameters in the
+    replacement list have been substituted,</strong> the resulting
+    preprocessing token sequence is rescanned <em>...</em>"
+    (emphasis added). This clearly describes the rescanning of
+    function-like macros, but because of the reference to
+    parameters, may be taken as not applying to object-like
+    macros.</p>
+
+    <p><b>Suggested Technical Corrigendum</b></p>
+
+    <p>Add a new sentence to the end of 6.10.3p9:</p>
+
+    <blockquote>
+      <p>A preprocessing directive of the form</p>
+
+      <blockquote>
+<pre>
+# define <var>identifier replacement-list new-line</var>
+</pre>
+      </blockquote>
+
+      <p>defines an object-like macro that causes each subsequent
+      instance of the macro name<sup>145)</sup> to be replaced by
+      the replacement list of preprocessing tokens that constitute
+      the remainder of the directive. <u>The replacement list is
+      then rescanned for more macro names as specified
+      below.</u></p>
+    </blockquote>
+    <hr>
+
+    <p><b>Technical Corrigendum</b></p>
+
+    <p>Add a new sentence to the end of 6.10.3p9:</p>
+
+    <blockquote>
+      <p>A preprocessing directive of the form</p>
+
+      <blockquote>
+<pre>
+# define <var>identifier replacement-list new-line</var>
+</pre>
+      </blockquote>
+
+      <p>defines an object-like macro that causes each subsequent
+      instance of the macro name<sup>145)</sup> to be replaced by
+      the replacement list of preprocessing tokens that constitute
+      the remainder of the directive. <u>The replacement list is
+      then rescanned for more macro names as specified
+      below.</u></p>
+    </blockquote>
+
+    <p><br>
+     <a href="dr_305.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_307.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 1st December 2004), see www.w3.org">
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii">
+
+  <title>Defect report #337</title>
+</head>
+
+<body>
+  <center>
+    <h2>Defect Report #337</h2>
+  </center><a href="dr_336.htm">Previous Defect Report</a> &lt; -
+  &gt; <a href="dr_338.htm">Next Defect Report</a><br>
+  &nbsp;
+
+  <p><b>Submitter:</b> Nick Stoughton (US)<br>
+  <b>Submission Date:</b> 2007-02-28<br>
+  <b>Source:</b> Austin Group<br>
+  <br>
+  <b>Version:</b> 1.4<br>
+  <b>Date:</b> 2007-10-30<br>
+  <b>Subject:</b> <code><b>stdio.h</b></code> macro definition
+  problems</p>
+
+  <p><b>Summary</b></p>
+
+  <p>The BUFSIZ macro is introduced in 7.19.1 para 3 as</p>
+
+  <blockquote>
+    BUFSIZ<br>
+    which expands to an integer constant expression that is the
+    size of the buffer used by the setbuf function
+  </blockquote>
+
+  <p>There is no requirement that BUFSIZ should be a non-zero,
+  positive integer constant expression. Such a requirement should
+  be spelled out clearly.</p>
+
+  <p>The same is true for FOPEN_MAX and FILENAME_MAX.</p>
+
+  <p><b>Suggested Technical Corrigendum</b></p>
+
+  <p>Change the definition of BUFSIZ to:</p>
+
+  <blockquote>
+    BUFSIZ<br>
+    which expands to a non-zero, positive integer constant
+    expression that is the size of the buffer used by the setbuf
+    function
+  </blockquote>Similarly,
+
+  <blockquote>
+    FOPEN_MAX<br>
+    which expands to a non-zero, positive integer constant
+    expression that is the minimum number of files that the
+    implementation guarantees can be open simultaneously;
+
+    <p>FILENAME_MAX<br>
+    which expands to a non-zero, positive integer constant
+    expression that is the size needed for an array of char large
+    enough to hold the longest file name string that the
+    implementation guarantees can be opened;</p>
+  </blockquote>
+  <hr>
+
+  <p><b>Committee discussion</b></p>
+
+  <h4>Spring 2007</h4>
+
+  <p><code><b>FOPEN_MAX</b></code> is required to be at least 8,
+  see 7.19.3 paragraph 13. So <code><b>FOPEN_MAX</b></code> does
+  not require any additional words.</p>
+
+  <p><code><b>BUFSIZ</b></code> likewise must be at least 256, see
+  7.19.2 paragraph 7.</p>
+
+  <p><code><b>FILENAME_MAX</b></code> 7.19.1 paragraph 3 requires
+  that <code><b>FILENAME_MAX</b></code> must be at least 1.</p>
+
+  <p><b>Proposed Committee Response</b></p>
+
+  <p>All of these constants already have required minimum values
+  that are positive, non-zero. No changes are required.</p>
+
+  <p><br>
+  <a href="dr_336.htm">Previous Defect Report</a> &lt; - &gt;
+  <a href="dr_338.htm">Next Defect Report</a></p>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #131</TITLE></HEAD><BODY>
+<H2>Defect Report #131</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Douglas Gwyn
+<BR>
+<B>Question</B>
+<BR>
+I've discovered an apparent bug in the C Standard. The code snippet:
+<BR>
+<TT><B>struct {const int a[5]; } s1, s2;<BR>
+void f(void) {s1 = s2; }
+</B></TT><BR>
+can be contained in a strictly conforming program, which runs counter 
+to my understanding of the meaning of ``const-qualification.'' 
+That occurs because, according to subclause 6.5.3, the member <TT><B>s1.a</B></TT> 
+is <I>not</I> const-qualified and thus slips past the modifiable-lvalue 
+definition in subclause 6.2.2.1. Subclause 6.5.3 says that the <I>elements</I> 
+of the array <TT><B>s1.a</B></TT> are const-qualified, not the array itself, 
+and I can find no reasonable way to construe <TT><B>s1.a[3]</B></TT>, for example, 
+as a ``member'' of <TT><B>s1</B></TT>; its only member is <TT><B>s1.a</B></TT>, 
+as I see it. Apparently, the C Standard does not define the term ``member,'' 
+except implicitly through its use in subclause 6.3.2.3 <B>Semantics</B>, 
+which says that <TT><B>s1.a</B></TT> is the member (on which the subscripting 
+operator can operate to extract an element, but the element is not 
+a member of the structure.)
+<BR>
+What I think is desirable would be a required diagnostic for this 
+example, as it <I>should</I> be considered to violate the constraint 
+in subclause 6.3.16 that requires the left operand of an assignment 
+operator to be a modifiable lvalue.
+<BR>
+Relevant citations:
+<BR>
+Subclause 6.2.2.1 <B>Lvalues and function designators</B>:
+<BLOCKQUOTE>
+A <I>modifiable lvalue</I> is an lvalue that does not have array 
+type, does not have an incomplete type, does not have a const-qualified 
+type, and if it is a structure or union, does not have any member 
+(including, recursively, any member of all contained structures or 
+unions) with a const-qualified type.
+</BLOCKQUOTE>
+Subclause 6.3.16 <B>Assignment operators</B>:
+<BLOCKQUOTE>
+<B>Constraints</B>:
+<BR>
+An assignment operator shall have a modifiable lvalue as its 
+left operand.
+</BLOCKQUOTE>
+Subclause 6.5.3 <B>Type qualifiers</B>:
+<BLOCKQUOTE>
+If the specification of an array type includes any type qualifiers, 
+the element type is so-qualified, not the array type. If the specification 
+of a function type includes any type qualifiers, the behavior is undefined.
+</BLOCKQUOTE>
+<B>Response</B>
+<BR>
+The example code is <I>not</I> strictly conforming, because some objects 
+(the elements of the array <TT><B>s1.a</B></TT>) are being modified through 
+use of an lvalue (<TT><B>s1</B></TT>) with non-const-qualified type, which according 
+to subclause 6.5.3 results in undefined behavior.
+<BR>
+However, a diagnostic is indeed desired here.
+<BR>
+<B>Correction</B>
+<BR>
+<I><B>In subclause 6.2.2.1, page 36,
+change the parenthetic remark in the
+final sentence of the first paragraph:</B></I>
+<BR>
+(including, recursively, any member of all contained structures or 
+unions)
+<BR>
+<I><B>to:</B></I>
+<BR>
+(including, recursively, any member or element of all contained aggregates 
+or unions)
+<BR>
+<A HREF="dr_130.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_132.html">Next Defect Report</A>
+</BODY></HTML>

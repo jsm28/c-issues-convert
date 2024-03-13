@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #088</TITLE></HEAD><BODY>
+<H2>Defect Report #088</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Clive Feather
+<BR>
+<B>Question</B>
+<BR>
+<I>[Question was revised in Dec 94]</I>
+<BR>
+Item 25 - compatibility of incomplete types
+<BR>
+According to subclause 6.1.2.6 <B>Compatible type and composite type</B>,
+an incomplete structure type is incompatible with everything except ``the same type:''
+<BLOCKQUOTE>
+Two types <I>have compatible type</I> if their types are the same.
+</BLOCKQUOTE>
+The C Standard fails to define when exactly two types are ``the same.'' It is intuitively 
+clear in context of basic types and array or pointer
+derivation, but becomes vague when genuinely new structure or union types
+are involved, especially when they are created as incomplete types first and completed later.
+<BR>
+a) Are two incomplete structure types with a (lexically) identical
+tag always ``the same'' in the sense of subclause 6.1.2.6?
+It would appear not, unless they are declared in the same scope of the same
+translation unit.
+<BR>
+b) Can two different incomplete structure types be compatible in other
+ways? If so, how?
+<BR>
+c) Is a structure type before and after completion
+``the same type'' in the sense of subclause 6.1.2.6?
+If the answer to (c) is no, then questions (d) to (g) apply.
+<BR>
+d) Are the types before completion and after completion compatible?
+<BR>
+Consider the following translation unit (the file <TT><B>a.c</B></TT>):
+<BR>
+<TT><B> struct tag;<BR>
+<BR>
+int a1 (struct tag * p)<BR>
+	{ a2 (p); }		/*</B><I> Line A </I><B>*/<BR>
+<BR>
+struct tag { int i; } s;<BR>
+<BR>
+int main ()<BR>
+	{<BR>
+	a1 (&amp;s);<BR>
+	return 0;<BR>
+	}<BR>
+<BR>
+int a2 (struct tag * p)<BR>
+	{ /*</B><I> ... </I><B>*/ }
+</B></TT><BR>
+e) Is the call to <TT><B>a2</B></TT> in line A valid?
+The parameter and argument types
+appear to be incompatible.
+<BR>
+f) Suppose that the definition of <TT><B>a2</B></TT> were moved to a separate
+translation unit, preceeded by a definition of <TT><B>struct tag</B></TT>
+which was compatible with the one in the above translation unit. Would the
+call in line A then be valid?
+<BR>
+g) A constraint in subclause 6.5 demands that:
+<BLOCKQUOTE>
+All declarations in the same scope that refer to the same object
+or function shall specify compatible types.
+</BLOCKQUOTE>
+Does this mean that:
+<BR>
+<TT><B>struct tag;<BR>
+extern struct tag* p;		/*</B><I> Line B </I><B>*/<BR>
+<BR>
+struct tag { int x; }<BR>
+extern struct tag* p;
+</B></TT><BR>
+requires a diagnostic since the two declarations of
+<TT><B>p</B></TT> specify incompatible
+types? If not, what is the type <TT><B>p</B></TT> is declared as in Line B ?
+<BR>
+If the answer to (c) is yes, then question (h) applies.
+<BR>
+h) If two types <TT><B>A</B></TT> and <TT><B>B</B></TT> are compatible,
+is <TT><B>A</B></TT> compatible with all types that
+are the same as <TT><B>B</B></TT>?
+For example, is the call in line D below valid?
+If the redeclaration in line C is omitted, does undefined behavior
+result?
+<BR>
+<TT><B>
+/*</B><I> First translation unit </I><B>*/<BR>
+<BR>
+struct tag;<BR>
+int c1 (struct tag * p)<BR>
+	{ /*</B><I> ... </I><B>*/ }<BR>
+<BR>
+struct tag { int i; };		/*</B><I> Line C </I><B>*/<BR>
+<BR>
+/*</B><I> Second translation unit </I><B>*/<BR>
+<BR>
+struct tag { int i; } s;<BR>
+int main()<BR>
+	{<BR>
+	c1 (&amp;s);		/*</B><I> Line D </I><B>*/<BR>
+	return 0;<BR>
+	}
+</B></TT><BR>
+<B>Response</B>
+<BR>
+a) No.
+<BR>
+b) Yes, see the Response to <A HREF="dr_139.html">Defect Report #139</A>.
+<BR>
+c) Yes. The C Standard failed to make clear that the type remains
+the same, but that is the obvious intent.
+<BR>
+d) through (g) not applicable, because of the response to (c).
+<BR>
+h) Yes, yes, and no.
+<BR>
+<A HREF="dr_087.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_089.html">Next Defect Report</A>
+</BODY></HTML>

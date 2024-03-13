@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect Report #228</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #228</h2>
+    <a href="dr_227.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_229.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> Bill Plauger (US)<br>
+     <b>Submission Date:</b> 2000-04-10<br>
+     <b>Source:</b><br>
+     <b>Reference Document:</b> N/A<br>
+     <b>Version:</b> 1.2<br>
+     <b>Date:</b> 2000-11-02 13:51:27<br>
+     <b>Subject:</b> <tt><b>wmemcmp</b></tt> declaration in Annex
+    B.</p>
+
+    <p><b>Summary</b><br>
+     The <tt><b>wmemcmp</b></tt> declaration in Annex B should not
+    have <tt><b>restrict</b></tt> for the arguments, and the first
+    argument should be a <tt><b>const</b></tt>.</p>
+    <hr>
+
+    <p><b>Technical Corrigendum</b><br>
+     In Annex B, change:</p>
+
+    <blockquote>
+      <tt><b>int wmemcmp(wchar_t * restrict s1, const wchar_t *
+      restrict s2, size_t n);</b></tt>
+    </blockquote>
+    to: 
+
+    <blockquote>
+      <tt><b>int wmemcmp(const wchar_t *s1, const wchar_t *s2,
+      size_t n);</b></tt>
+    </blockquote>
+
+    <p>Also, <tt><b>wmemcmp</b></tt> should follow
+    <tt><b>wcsncpy</b></tt>, <tt><b>wmemcpy</b></tt> and
+    <tt><b>wmemmove</b></tt> should follow <tt><b>wcsxfrm</b></tt>,
+    and <tt><b>wcslen</b></tt> should follow
+    <tt><b>wmemchr</b></tt>.</p>
+
+    <p><br>
+     <a href="dr_227.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_229.htm">Next Defect Report</a></p>
+  </body>
+</html>
+

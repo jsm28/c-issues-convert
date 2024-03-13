@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #136</TITLE></HEAD><BODY>
+<H2>Defect Report #136</H2>
+<B>Submission Date</B>: 31 Mar 94
+<BR>
+<B>Submittor</B>: Project Editor (P.J. Plauger)
+<BR>
+<B>Source</B>: Paul Eggert
+<BR>
+<B>Question</B>
+<BR>
+Suppose I run the following program in a US environment, where the 
+clocks will jump forward from 01:59:59 to 03:00:00 on April 3, 1994. 
+This program attempts to invoke <TT><B>mktime</B></TT> on a <TT><B>struct tm</B></TT> 
+that represents 02:30:00 on that date. Does the C Standard let <TT><B>mktime</B></TT> 
+return -1 in this case?
+<BR>
+<TT><B>#include &lt;stdio.h><BR>
+#include &lt;time.h><BR>
+int main()<BR>
+	{<BR>
+	struct tm t;<BR>
+	time_t r;<BR>
+<BR>
+	/*</B><I> 1994-04-03 02:30:00 </I><B>*/<BR>
+	t.tm_year = 1994 - 1900; t.tm_mon = 3; t.tm_mday = 3;<BR>
+	t.tm_hour = 2; t.tm_min = 30; t.tm_sec = 0;<BR>
+<BR>
+	t.tm_isdst = -1; /*</B><I> i.e. unknown </I><B>*/<BR>
+<BR>
+	r = mktime(&amp;t);<BR>
+	if (r == -1)<BR>
+		printf("mktime failed\n");<BR>
+	else<BR>
+		printf("%s", ctime(&amp;r));<BR>
+	return 0;<BR>
+	}
+</B></TT><BR>
+The ANSI C Rationale (corresponding to subclause 7.12.2.3) clearly 
+lets <TT><B>mktime</B></TT> yield -1 in the ``fall-backward fold'' 
+that will occur when the clock is turned back from 01:59:59 to 01:00:00 
+on October 30, 1994. The question is whether <TT><B>mktime</B></TT> is also 
+allowed to yield -1 in the ``spring-forward gap'' when the 
+clock is advanced from 01:59:59 to 03:00:00.
+<BR>
+This question arose when Arthur David Olson's popular ``tz'' 
+time zone software was tested using NIST-PCTS:151-2, Version 1.4, 
+(1993-12-03) a test suite put out by the National Institute of Standards 
+and Technology that attempts to test C and Posix conformance.  The 
+PCTS package insists that in the above case, <TT><B>mktime</B></TT> must yield 
+a <TT><B>time_t</B></TT> corresponding to either 01:30:00 or 03:30:00; i.e. 
+PCTS rejects Olson's <TT><B>mktime</B></TT>, which yields -1.
+<BR>
+This test case differs in an important way from the common practical 
+use of <TT><B>mktime</B></TT> to ``add 1'' to the output of <TT><B>localtime</B></TT> 
+or <TT><B>gmtime</B></TT>, since those functions normally set <TT><B>tm_isdst</B></TT> 
+to a nonnegative value, whereas <TT><B>tm_isdst</B></TT> is -1 in the case 
+under question.
+<BR>
+I suggest that the Committee issue a clarification which makes it 
+clear that <TT><B>mktime</B></TT> can yield -1 in the spring-forward gap 
+when <TT><B>tm_isdst</B></TT> is -1.
+<BR>
+<B>Response</B>
+<BR>
+The Standard does not specify the behavior precisely enough to preclude 
+<TT><B>mktime</B></TT> from returning a value of <TT><B>(time_t)-1</B></TT> and leaving 
+the <TT><B>tm_isdst</B></TT> member set to -1 in such situations.
+<BR>
+<A HREF="dr_135.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_137.html">Next Defect Report</A>
+</BODY></HTML>

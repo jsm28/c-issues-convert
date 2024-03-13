@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML><HEAD><TITLE>Defect Report #079</TITLE></HEAD><BODY>
+<H2>Defect Report #079</H2>
+<B>Submission Date</B>: 03 Dec 93
+<BR>
+<B>Submittor</B>: WG14
+<BR>
+<B>Source</B>: Clive Feather
+<BR>
+<B>Question</B>
+<BR>
+Item 16 - constancy of system library function addresses
+<BR>
+(These questions approach the same problem from three slightly different 
+directions.)
+<BR><OL TYPE=a>
+<LI> If a pointer to a given standard library function (say <TT><B>strlen</B></TT>) 
+is evaluated in two different translation units, and the pointers 
+compared, must they compare equal?
+<LI> Can a conforming implementation declare a standard library function 
+as having internal linkage, or must the identifiers with file scope 
+declared in standard headers have external linkage?
+<LI>
+If the contents of the header <TT><B>&lt;string.h></B></TT>
+include the following definition of <TT><B>strlen</B></TT>,
+is the implementation conforming?
+<BR>
+<TT><B>static size_t strlen (const char *__s)<BR>
+	{<BR>
+	size_t __len = 0;<BR>
+<BR>
+	while (*__s++)<BR>
+		__len++;<BR>
+	return __len;<BR>
+	}
+</B></TT>
+</OL>
+<B>Response</B>
+<BR>
+Since the answer to question (b) is needed for question (a) it
+is given first.
+<BR>
+b) Since, according to the fourth item in subclause 7.1.3,
+the library function prototypes are implicitly
+<TT><B>extern</B></TT>, the standard library functions have
+external linkage.
+<BR>
+a) If the usage of <TT><B>strlen</B></TT>
+is such that standard library functions are
+referred to, the pointers must compare equal by the requirements of
+subclauses 5.1.1.2 and 6.1.2.2.
+<BR>
+c) The contents of standard headers are implementation-defined. For
+instance, they may contain code written in other languages. It is not
+the job of this Committee to mandate implementation. Whatever their
+contents, including a standard header must achieve the effects required by
+the C Standard.
+<BR>
+<A HREF="dr_078.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_080.html">Next Defect Report</A>
+</BODY></HTML>

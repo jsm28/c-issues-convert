@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0 plus SQ/ICADD Tables//EN" "html.dtd"
+>
+<HTML><HEAD><TITLE>Defect Report #171</TITLE></HEAD>
+<BODY><H2>Defect Report #171</H2> 
+<B>Submission Date</B>: 16 Oct 95
+<BR>
+<B>Submittor</B>: BSI
+<BR>
+<B>Source</B>: Clive D.W. Feather
+<BR>
+<B>Question</B>
+<BR>
+<I>Submitted to BSI by Clive D.W. Feather  clive@sco.com .</I>
+<BR>
+<I>In this Defect Report, identifiers lexically identical to those 
+declared in standard headers refer to the identifiers declared in  those
+standard headers, whether or not the header is explicitly mentioned.</I>
+<BR>
+<I>This Defect Report has been prepared with considerable help from 
+Mark Brader, Jutta Degener, Ronald Guilmette, and a person whose
+employment  conditions require anonymity. However, except where stated,
+opinions  expressed or implied should not be assumed to be those of any
+person  other than myself.</I>
+<BR> Defect Report UK 019: Ranges of integral types
+<BR> It appears to be possible to create implementations with
+unreasonable  arrangements of integral types.
+<BR> Subclause 6.1.2.5 states various rules which allow the following
+deductions  to be made:
+<BLOCKQUOTE><TT><B>SCHAR_MAX  = SHRT_MAX<BR> SHRT_MAX   = INT_MAX<BR> INT_MAX    =
+LONG_MAX<BR> SCHAR_MIN  = SHRT_MIN<BR> SHRT_MIN   = INT_MIN<BR>
+INT_MIN    = LONG_MIN<BR> SCHAR_MAX  = UCHAR_MAX<BR> SHRT_MAX   =
+USHRT_MAX<BR> INT_MAX    = UINT_MAX<BR> LONG_MAX   = ULONG_MAX</B>
+</TT></BLOCKQUOTE> and, depending on the interpretation of the term <I>the same
+amount  of storage:</I>
+<BLOCKQUOTE><TT><B>sizeof (unsigned short) == sizeof (short)<BR> sizeof (unsigned
+int)   == sizeof (int)<BR> sizeof (unsigned long)  == sizeof (long)</B>
+</TT></BLOCKQUOTE>
+However, (based on the preliminary discussions of<A HREF="dr_069.html"> Defect
+Report #069</A>,  which allow padding bits in integral types) there does not
+appear  to be any requirement for the following:
+<BLOCKQUOTE><TT><B>UCHAR_MAX  = USHRT_MAX<BR> USHRT_MAX  = UINT_MAX<BR> UINT_MAX   =
+ULONG_MAX<BR> sizeof (short)  = sizeof (int)<BR> sizeof (int)    =
+sizeof (long)<BR> UCHAR_MAX  = INT_MAX</B>
+</TT></BLOCKQUOTE>
+The first five of these are necessary to allow reasonable
+deductions  to be made about the behavior of types in the presence of
+padding  bits (for example, that unsigned long can hold any value
+representable  in any integral type). The sixth is necessary to allow
+the <TT><B>&lt;ctype.h&gt;</B></TT>  functions to behave sensibly (it is also
+assumed by example 2 of subclause  5.1.2.3).
+<BR>
+<B>Suggested Technical Corrigendum</B>
+<BR> In subclause 6.1.2.5, change in the fourth paragraph:
+<BLOCKQUOTE>In the list of signed integer types above, the range of values  of
+each type is a subrange of the values of the next type in the list</BLOCKQUOTE>.
+ to:
+<BLOCKQUOTE>In the list of signed integer types above, the range of values  of
+each type is a subrange of the values of the next type in the list,  and
+the size of an object of each type is not greater than the size  of an
+object of the next type in the list.</BLOCKQUOTE>
+ Add to the fifth paragraph:
+<BLOCKQUOTE> The range of values of each unsigned integer type is a subrange 
+of the next type (in the list <TT><B>unsigned char</B></TT>, <TT><B>unsigned
+short</B></TT>, 
+<TT><B>unsigned int</B></TT>, <TT><B>unsigned long</B></TT>).</BLOCKQUOTE>
+Add to the fifth or eighth paragraph:
+<BLOCKQUOTE>The range of values of the type <TT><B>unsigned char</B></TT> is
+a subrange  of the values of the type <TT><B>int</B></TT>.</BLOCKQUOTE>
+Response
+<BR> This is a work in progress item.
+<BR> Summary: Explicit statements are not made about ranges for all
+types.  It can be argued that you can derive this information from the C
+Standard.
+<BR> Does the Commitee want to make explicit statements about all
+relationships,  specifically the unsigned types?
+<BR>
+<A HREF="dr_170.html">Previous Defect Report</A>
+&lt; - &gt; 
+<A HREF="dr_172.html">Next Defect Report</A></BODY></HTML>

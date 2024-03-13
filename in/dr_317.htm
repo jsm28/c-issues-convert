@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 1st August 2002), see www.w3.org">
+
+    <title>Defect report #317</title>
+  </head>
+
+  <body>
+    <h2 align="center">Defect Report #317</h2>
+    <a href="dr_316.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_318.htm">Next Defect Report</a> 
+
+    <p><br>
+     <b>Submitter:</b> UK C Panel<br>
+     <b>Submission Date:</b> 2005-03-04<br>
+     <b>Source:</b> Joseph Myers
+    &lt;joseph@codesourcery.com&gt;<br>
+     <b>Reference Document:</b> <a href=
+    "http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1105.htm">ISO/IEC
+    WG14 N1105</a><br>
+     <b>Version:</b> 1.3<br>
+     <b>Date:</b> 2006-04-04<br>
+     <b>Subject:</b> Function definitions with empty
+    parentheses</p>
+
+    <p><b>Summary</b></p>
+
+    <p>I believe the intent of C is that old-style function
+    definitions with empty parentheses do not give the function a
+    type including a prototype for the rest of the translation
+    unit. For example,</p>
+<pre>
+void f(){}
+void g(){if(0)f(1);}
+</pre>
+
+    <p>is valid.</p>
+
+    <p>6.9.1#7 specifies that if the declarator in the function
+    definition includes a parameter type list, it also serves as a
+    prototype for the rest of the translation unit. It does not
+    specify that nothing else serves as a prototype. Some readers
+    of the standard interpret 6.7.5.3#14, "An empty list in a
+    function declarator that is part of a definition of that
+    function specifies that the function has no parameters.", as
+    specifying that it provides a prototype.</p>
+
+    <p>Question 1: Does such a function definition give the
+    function a type including a prototype for the rest of the
+    translation unit?</p>
+
+    <p>Question 2: Is the above translation unit valid?</p>
+
+    <p><b>Suggested Technical Corrigendum</b><br>
+    </p>
+    <hr>
+
+    <p><b>Committee Response</b></p>
+
+    <p>The grammar states that an empty parens stands for an empty
+    identifier list not an empty parameter-type-list.</p>
+
+    <p>The answer to question #1 is NO, and to question #2 is YES.
+    There are no constraint violations, however, if the function
+    call were executed it would have undefined behavior. See
+    6.5.2.2;p6.</p>
+
+    <p><br>
+     <a href="dr_316.htm">Previous Defect Report</a> &lt; - &gt; <a
+    href="dr_318.htm">Next Defect Report</a></p>
+  </body>
+</html>
+
