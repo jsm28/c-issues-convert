@@ -229,6 +229,127 @@ def clean_chars(doc, text):
     return text
 
 
+def get_one_tag(doc, rtext):
+    """Process rtext up to the next tag, returning (a) text before that
+    tag, (b) text to output for that tag, if it's a comment, (c) the
+    tag name (or None), (d) whether an end tag, (e) the tag attributes
+    (or None), (f) the text after that tag."""
+    if '<' not in rtext and '>' not in rtext:
+        return (rtext, '', None, False, None, '')
+    m = re.search('<([^<>]*)>', rtext)
+    if not m:
+        raise ValueError("unmatched '<' or '>' in %s [%s]" % (doc, rtext))
+    before = rtext[:m.start(0)]
+    tag = m.group(0)
+    tag_contents = m.group(1)
+    after = rtext[m.end(0):]
+    if '<' in before or '>' in before:
+        raise ValueError("unmatched '<' or '>' in %s [%s]" % (doc, before))
+    if tag.startswith('<!DOCTYPE'):
+        # Discard the DOCTYPE.
+        return before, '', None, False, None, after
+    if tag.startswith('<!--') and tag.endswith('-->'):
+        # Pass through the comment (may be relevant for splitting
+        # individual issues out of multi-issue files, though not
+        # for the final output).
+        return before, tag, None, False, None, after
+    tag_contents = tag_contents.strip()
+    tag_contents = re.sub(r'\s+', ' ', tag_contents, flags=re.ASCII)
+    if tag_contents.startswith('/'):
+        end_tag = True
+        tag_contents = tag_contents[1:].lstrip()
+    else:
+        end_tag = False
+    m = re.match('[0-9A-Za-z:]+', tag_contents)
+    if not m:
+        raise ValueError('unknown tag %s in %s' % (tag, doc))
+    tag_name = m.group(0).lower()
+    tag_contents = tag_contents[m.end(0):]
+    if end_tag:
+        if tag_contents not in ('', ' '):
+            raise ValueError('bad end tag %s in %s' % (tag, doc))
+        tag_attrs = None
+    else:
+        seen_attrs = set()
+        tag_attrs = []
+        while tag_contents not in ('', ' ', '/', ' /'):
+            if not tag_contents.startswith(' '):
+                raise ValueError('missing space in tag %s in %s'
+                                 % (tag, doc))
+            tag_contents = tag_contents[1:]
+            m = re.match('[-0-9A-Za-z:]+', tag_contents)
+            if not m:
+                raise ValueError('unknown tag attribute %s in %s'
+                                 % (tag, doc))
+            attr_name = m.group(0).lower()
+            if attr_name in seen_attrs:
+                raise ValueError('duplicate tag attribute %s in %s'
+                                 % (tag, doc))
+            seen_attrs.add(attr_name)
+            tag_contents = tag_contents[m.end(0):]
+            have_value = False
+            if tag_contents.startswith('='):
+                have_value = True
+                tag_contents = tag_contents[1:].lstrip()
+            elif tag_contents.startswith(' ='):
+                have_value = True
+                tag_contents = tag_contents[2:].lstrip()
+            if have_value:
+                if tag_contents.startswith('"'):
+                    m = re.match('"[^"]*"', tag_contents)
+                    if not m:
+                        raise ValueError(
+                            'unclosed attribute value %s in %s'
+                            % (tag, doc))
+                    value = m.group(0)
+                    tag_contents = tag_contents[m.end(0):]
+                elif tag_contents.startswith("'"):
+                    m = re.match("'[^']*'", tag_contents)
+                    if not m:
+                        raise ValueError(
+                            'unclosed attribute value %s in %s'
+                            % (tag, doc))
+                    value = m.group(0)
+                    tag_contents = tag_contents[m.end(0):]
+                    if '"' not in value:
+                        value = '"%s"' % value[1:-1]
+                else:
+                    m = re.match('[^ ]+', tag_contents)
+                    if not m:
+                        raise ValueError(
+                            'missing attribute value %s in %s'
+                            % (tag, doc))
+                    value = m.group(0)
+                    tag_contents = tag_contents[m.end(0):]
+                    if '"' not in value:
+                        value = '"%s"' % value
+                    elif "'" not in value:
+                        value = "'%s'" % value
+                    else:
+                        raise ValueError(
+                            'cannot quote attribute value %s in %s'
+                            % (tag, doc))
+                tag_attrs.append((attr_name, value))
+            else:
+                tag_attrs.append((attr_name, None))
+    return before, '', tag_name, end_tag, tag_attrs, after
+
+
+def text_for_tag(tag_name, end_tag, tag_attrs):
+    """Return text to output for one tag."""
+    if end_tag:
+        return '</%s>' % tag_name
+    new_text_list = []
+    new_text_list.append('<%s' % tag_name)
+    for attr_name, value in tag_attrs:
+        if value is None:
+            new_text_list.append(' %s' % attr_name)
+        else:
+            new_text_list.append(' %s=%s' % (attr_name, value))
+    new_text_list.append('>')
+    return ''.join(new_text_list)
+
+
 # Known HTML tags accepted in input.  Any tag that won't be adequately
 # processed into Markdown by default needs manual processing in this
 # script to ensure a good conversion.
@@ -271,6 +392,11 @@ KNOWN_TAGS_ALIAS = {
 
 # Known tags that are empty so should only have opening tags.
 KNOWN_TAGS_EMPTY = {'br', 'hr'}
+
+
+# Known tags that are considered inline tags.
+KNOWN_TAGS_INLINE = {'br', 'a', 'code', 'b', 'i', 'del', 'sup', 'sub', 'u',
+                     'span'}
 
 
 # Attributes to discard on certain tags (regardless of the attribute
@@ -322,104 +448,12 @@ def clean_tags(doc, text):
     new_text_list = []
     rtext = text
     while '<' in rtext or '>' in rtext:
-        m = re.search('<([^<>]*)>', rtext)
-        if not m:
-            raise ValueError("unmatched '<' or '>' in %s [%s]" % (doc, rtext))
-        before = rtext[:m.start(0)]
-        tag = m.group(0)
-        tag_contents = m.group(1)
-        after = rtext[m.end(0):]
-        if '<' in before or '>' in before:
-            raise ValueError("unmatched '<' or '>' in %s [%s]" % (doc, before))
+        before, tag_text, tag_name, end_tag, tag_attrs, rtext = get_one_tag(
+            doc, rtext)
         new_text_list.append(before)
-        rtext = after
-        if tag.startswith('<!DOCTYPE'):
-            # Discard the DOCTYPE.
+        new_text_list.append(tag_text)
+        if tag_name is None:
             continue
-        if tag.startswith('<!--') and tag.endswith('-->'):
-            # Pass through the comment (may be relevant for splitting
-            # individual issues out of multi-issue files, though not
-            # for the final output).
-            new_text_list.append(tag)
-            continue
-        tag_contents = tag_contents.strip()
-        tag_contents = re.sub(r'\s+', ' ', tag_contents, flags=re.ASCII)
-        if tag_contents.startswith('/'):
-            end_tag = True
-            tag_contents = tag_contents[1:].lstrip()
-        else:
-            end_tag = False
-        m = re.match('[0-9A-Za-z:]+', tag_contents)
-        if not m:
-            raise ValueError('unknown tag %s in %s' % (tag, doc))
-        tag_name = m.group(0).lower()
-        tag_contents = tag_contents[m.end(0):]
-        if end_tag:
-            if tag_contents not in ('', ' '):
-                raise ValueError('bad end tag %s in %s' % (tag, doc))
-        else:
-            seen_attrs = set()
-            tag_attrs = []
-            while tag_contents not in ('', ' ', '/', ' /'):
-                if not tag_contents.startswith(' '):
-                    raise ValueError('missing space in tag %s in %s'
-                                     % (tag, doc))
-                tag_contents = tag_contents[1:]
-                m = re.match('[-0-9A-Za-z:]+', tag_contents)
-                if not m:
-                    raise ValueError('unknown tag attribute %s in %s'
-                                     % (tag, doc))
-                attr_name = m.group(0).lower()
-                if attr_name in seen_attrs:
-                    raise ValueError('duplicate tag attribute %s in %s'
-                                     % (tag, doc))
-                seen_attrs.add(attr_name)
-                tag_contents = tag_contents[m.end(0):]
-                have_value = False
-                if tag_contents.startswith('='):
-                    have_value = True
-                    tag_contents = tag_contents[1:].lstrip()
-                elif tag_contents.startswith(' ='):
-                    have_value = True
-                    tag_contents = tag_contents[2:].lstrip()
-                if have_value:
-                    if tag_contents.startswith('"'):
-                        m = re.match('"[^"]*"', tag_contents)
-                        if not m:
-                            raise ValueError(
-                                'unclosed attribute value %s in %s'
-                                % (tag, doc))
-                        value = m.group(0)
-                        tag_contents = tag_contents[m.end(0):]
-                    elif tag_contents.startswith("'"):
-                        m = re.match("'[^']*'", tag_contents)
-                        if not m:
-                            raise ValueError(
-                                'unclosed attribute value %s in %s'
-                                % (tag, doc))
-                        value = m.group(0)
-                        tag_contents = tag_contents[m.end(0):]
-                        if '"' not in value:
-                            value = '"%s"' % value[1:-1]
-                    else:
-                        m = re.match('[^ ]+', tag_contents)
-                        if not m:
-                            raise ValueError(
-                                'missing attribute value %s in %s'
-                                % (tag, doc))
-                        value = m.group(0)
-                        tag_contents = tag_contents[m.end(0):]
-                        if '"' not in value:
-                            value = '"%s"' % value
-                        elif "'" not in value:
-                            value = "'%s'" % value
-                        else:
-                            raise ValueError(
-                                'cannot quote attribute value %s in %s'
-                                % (tag, doc))
-                    tag_attrs.append((attr_name, value))
-                else:
-                    tag_attrs.append((attr_name, None))
         if tag_name not in KNOWN_TAGS:
             raise ValueError('unknown tag %s in %s' % (tag_name, doc))
         if end_tag and tag_name in KNOWN_TAGS_EMPTY:
@@ -542,28 +576,202 @@ def clean_tags(doc, text):
                                                  % (k, doc))
                         if not styles_new:
                             continue
-                        value = ';'.join(styles_new)
+                        value = '"%s"' % ';'.join(styles_new)
                 if attr_name not in to_keep:
                     raise ValueError('unknown attribute %s on %s tag in %s'
                                      % (attr_name, tag_name, doc))
                 cleaned_tag_attrs.append((attr_name, value))
             tag_attrs = cleaned_tag_attrs
-        if end_tag:
-            new_text_list.append('</%s>' % tag_name)
-        else:
-            new_text_list.append('<%s' % tag_name)
-            for attr_name, value in tag_attrs:
-                if value is None:
-                    new_text_list.append(' %s' % attr_name)
-                else:
-                    new_text_list.append(' %s=%s' % (attr_name, value))
-            new_text_list.append('>')
+        new_text_list.append(text_for_tag(tag_name, end_tag, tag_attrs))
     new_text_list.append(rtext)
     return ''.join(new_text_list)
 
 
+def process_nesting(doc, text, iterate=False, fix_invalid_nesting=False):
+    """Process the document based on the nested structure of HTML tags,
+    making various checks and changes depending on other arguments passed.
+    If iterate, rerun the processing until there are no more changes to
+    the text; this is relevant for some cleanup that may expose other
+    cleanup opportunities.  If fix_invalid_nesting, fix certain cases of
+    badly nested tags or missing end tags rather than giving an error for
+    them; this should only be needed on the first call after
+    clean_tags."""
+    orig_text = text
+    new_text_list = []
+    rtext = text
+    open_tags = []
+    while rtext:
+        before, tag_text, tag_name, end_tag, tag_attrs, rtext = get_one_tag(
+            doc, rtext)
+        new_text_list.append(before)
+        if tag_text != '':
+            new_text_list.append(tag_text)
+        if tag_name is None:
+            continue
+        this_tag_text = text_for_tag(tag_name, end_tag, tag_attrs)
+        if tag_name in KNOWN_TAGS_EMPTY:
+            new_text_list.append(this_tag_text)
+            continue
+        if not end_tag:
+            if fix_invalid_nesting:
+                # Close an unterminated <li> when another <li> starts.
+                if (tag_name == 'li'
+                    and open_tags[-1] == 'li'):
+                    new_text_list.append('</li>')
+                    open_tags = open_tags[:-1]
+                # Fix specific invalid nesting cases from specific input files.
+                if doc == 'n2396.htm':
+                    if (tag_name == 'ul'
+                        and open_tags[-1] == 'ul'):
+                        new_text_list.append('</ul>')
+                        open_tags = open_tags[:-1]
+                        continue
+                    if (tag_name == 'pre'
+                        and open_tags[-1] == 'pre'):
+                        new_text_list.append('</pre>')
+                        open_tags = open_tags[:-1]
+                        continue
+                    if (tag_name == 'i'
+                        and open_tags[-1] == 'i'
+                        and before == 'struct-declarator-lists,'):
+                        new_text_list.append('</i>')
+                        open_tags = open_tags[:-1]
+                        continue
+                    if (tag_name == 'blockquote'
+                        and open_tags[-1] == 'span'
+                        and open_tags[-2] == 'span'
+                        and open_tags[-3] == 'span'):
+                        new_text_list.append('</span></span></span></p>')
+                        open_tags = open_tags[:-3]
+                    if (tag_name == 'body'
+                        and open_tags[-1] != 'html'):
+                        continue
+                if (doc == 'n2397.htm'
+                    and tag_name == 'b'
+                    and open_tags[-1] == 'b'
+                    and before == 'fesetmode'):
+                    new_text_list.append('</b>')
+                    open_tags = open_tags[:-1]
+                    continue
+            # TODO: <pre>, <ul>, <li> shouldn't be allowed inside
+            # inline tags either.
+            if (tag_name not in KNOWN_TAGS_INLINE
+                and tag_name != 'pre'
+                and not (doc == 'n2150.htm' and tag_name in ('ul', 'li'))):
+                for t in open_tags:
+                    if t in KNOWN_TAGS_INLINE:
+                        raise ValueError(
+                            '<%s> inside <%s> in %s [%s]'
+                            % (tag_name, t, doc, rtext[:200]))
+            if ((tag_name == 'li' and open_tags[-1] not in ('ol', 'ul'))
+                or (tag_name == 'tr' and open_tags[-1] != 'table')
+                or (tag_name in ('td', 'th') and open_tags[-1] != 'tr')):
+                raise ValueError(
+                    '<%s> inside <%s> in %s [%s]'
+                    % (tag_name, open_tags[-1], doc, rtext[:200]))
+            new_text_list.append(this_tag_text)
+            if tag_name != 'p':
+                open_tags.append(tag_name)
+            continue
+        if tag_name == 'p':
+            new_text_list.append(this_tag_text)
+            continue
+        if fix_invalid_nesting:
+            # Close an unterminated <li> when a list ends.
+            if (open_tags[-1] == 'li'
+                and tag_name in ('ol', 'ul')):
+                new_text_list.append('</li>')
+                open_tags = open_tags[:-1]
+            # Fix specific invalid nesting cases from specific input files.
+            if (doc in ('dr_003.html', 'dr_015.html')
+                and tag_name == 'b'
+                and open_tags[-1] == 'code'
+                and rtext.startswith('</code>')):
+                continue
+            if (doc == 'dr_045.html'
+                and tag_name == 'b'
+                and open_tags[-1] == 'code'
+                and rtext.startswith('</code>')):
+                tag_name = 'code'
+                this_tag_text = '</code>'
+                rtext = '</b>' + rtext[len('</code>'):]
+            if (doc == 'dr_055.html'
+                and tag_name == 'code'
+                and open_tags[-1] == 'b'
+                and rtext.startswith('</b>')):
+                tag_name = 'b'
+                this_tag_text = '</b>'
+                rtext = '</code>' + rtext[len('</b>'):]
+            if (doc == 'dr_121.html'
+                and tag_name == 'b'
+                and open_tags[-1] == 'i'):
+                tag_name = 'i'
+                this_tag_text = '</i>'
+            if doc == 'n2396.htm':
+                if (tag_name == 'blockquote'
+                    and open_tags[-1] == 'body'):
+                    new_text_list.append('<blockquote>')
+                    open_tags.append('blockquote')
+                    continue
+                if (tag_name == 'h2'
+                    and open_tags[-1] == 'h3'):
+                    tag_name = 'h3'
+                    this_tag_text = '</h3>'
+                if (tag_name == 'span'
+                    and open_tags[-1] == 'li'
+                    and rtext.startswith('<span>')):
+                    continue
+                if (tag_name == 'span'
+                    and open_tags[-1] == 'blockquote'
+                    and rtext.startswith('</span></span></p>')):
+                    rtext = rtext[len('</span></span></p>'):]
+                    continue
+                if (tag_name == 'blockquote'
+                    and open_tags[-1] == 'span'):
+                    while open_tags[-1] == 'span':
+                        new_text_list.append('</span>')
+                        open_tags = open_tags[:-1]
+                if (tag_name == 'blockquote'
+                    and open_tags[-1] == 'u'
+                    and new_text_list[-2] == '<u>'):
+                    new_text_list[-2] = ''
+                    open_tags = open_tags[:-1]
+                if (tag_name == 'code'
+                    and open_tags[-1] == 'b'
+                    and rtext.startswith('</b>')):
+                    continue
+            if (doc in ('n2396.htm', 'n2397.htm')
+                and tag_name == 'div'
+                and open_tags[-1] == 'body'):
+                continue
+            if (doc == 'n2397.htm'
+                and tag_name == 'pre'
+                and open_tags[-1] == 'b'
+                and rtext.startswith('</code></b>')):
+                tag_name = 'b'
+                this_tag_text = '</b>'
+                rtext = '</pre></code>' + rtext[len('</code></b>'):]
+        if tag_name != open_tags[-1]:
+            raise ValueError('<%s> closed by </%s> in %s [%s]'
+                             % (open_tags[-1], tag_name, doc, rtext[:200]))
+        new_text_list.append(this_tag_text)
+        open_tags = open_tags[:-1]
+    if open_tags:
+        raise ValueError('%s ends without closing all tags' % doc)
+    text = ''.join(new_text_list)
+    if iterate and text != orig_text:
+        return process_nesting(doc, text, iterate=iterate)
+    return text
+
+
+def clean_nesting(doc, text):
+    """Clean up invalid testing of tags and missing end tags."""
+    return process_nesting(doc, text, fix_invalid_nesting=True)
+
+
 # List of functions for cleaning HTML issue lists.
-CLEAN_FUNCS_LIST = (clean_amp, clean_ltgt, clean_chars, clean_tags)
+CLEAN_FUNCS_LIST = (clean_amp, clean_ltgt, clean_chars, clean_tags,
+                    clean_nesting)
 
 
 def clean_doc(doc, write_out):
