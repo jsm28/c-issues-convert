@@ -6,6 +6,7 @@ import os.path
 import re
 import subprocess
 import time
+import urllib.parse
 import urllib.request
 
 
@@ -28,11 +29,14 @@ def input_filename(doc):
     return os.path.join('in', doc)
 
 
+def doc_url(doc):
+    """Return the WG14 website URL of a WG14 document."""
+    return 'https://www.open-std.org/jtc1/sc22/wg14/www/docs/%s' % doc
+
+
 def download_wg14_doc(doc):
     """Download a file from the WG14 website."""
-    urllib.request.urlretrieve(
-        'https://www.open-std.org/jtc1/sc22/wg14/www/docs/%s' % doc,
-        filename=input_filename(doc))
+    urllib.request.urlretrieve(doc_url(doc), filename=input_filename(doc))
     time.sleep(1)
 
 
@@ -160,6 +164,17 @@ def clean_ltgt(doc, text):
     # n2396.htm uses these tags that should be entities.
     text = text.replace('<ldquo>', '&ldquo;')
     text = text.replace('<rdquo>', '&rdquo;')
+    # This does not make sense as an end tag, but should be an empty
+    # tag, in n2396.htm.
+    text = text.replace('</br>', '<br>')
+    # Fix this badly quoted link for proper parsing in n2396.htm.
+    # (Doesn't actually involve '<' or '>', but fixing here seems an
+    # appropriate place as it's relevant to subsequent tag parsing.)
+    text = text.replace(
+        'href=https://en.wikipedia.org/wiki/'
+        'Volatile_%28computer_programming%29""',
+        'href="https://en.wikipedia.org/wiki/'
+        'Volatile_%28computer_programming%29"')
     # These are missing '<' in n2397.htm.
     text = text.replace('inclusions/p>', 'inclusions</p>')
     text = text.replace('name/p>', 'name</p>')
@@ -227,12 +242,13 @@ KNOWN_TAGS = {
     # Tags with some handling by markdownify that should be more or
     # less OK (possibly with some customization needed).
     'h1', 'h2', 'h3', 'h4', 'p', 'ol', 'ul', 'li', 'blockquote', 'pre', 'br',
-    'a', 'tt', 'b', 'i', 'del', 'sup', 'sub', 'table', 'tr', 'td', 'th', 'hr',
+    'a', 'code', 'b', 'i', 'del', 'sup', 'sub', 'table', 'tr', 'td', 'th',
+    'hr',
     # Tags markdownify handles as aliases (but we canonicalize to
-    # simpify subsequent processing).
-    'code', 'strong', 'em',
+    # simplify subsequent processing).
+    'strong', 'em',
     # Tags we can handle as aliases ourselves.
-    'var', 'strike', 'dfn',
+    'tt', 'var', 'strike', 'dfn',
     # Custom handling needed (output HTML): <u> and <ins> have no
     # direct Markdown equivalent.
     'u', 'ins',
@@ -249,8 +265,50 @@ KNOWN_TAGS_DISCARD = {'meta', 'thead', 'tbody', 'small'}
 
 # Known tags handled as aliases early on.
 KNOWN_TAGS_ALIAS = {
-    'code': 'tt', 'strong': 'b', 'em': 'i', 'var': 'i', 'strike': 'del',
+    'tt': 'code', 'strong': 'b', 'em': 'i', 'var': 'i', 'strike': 'del',
     'dfn': 'i', 'ins': 'u'}
+
+
+# Known tags that are empty so should only have opening tags.
+KNOWN_TAGS_EMPTY = {'br', 'hr'}
+
+
+# Attributes to discard on certain tags (regardless of the attribute
+# value).
+KNOWN_ATTRS_DISCARD = {
+    'a': {'title'},
+    'b': {'style'},
+    'body': {'bgcolor', 'link', 'vlink'},
+    'br': {'style'},
+    'dl': {'compact'},
+    'h2': {'align', 'id'},
+    'h3': {'align'},
+    'hr': {'style'},
+    'html': {'lang', 'xml:lang', 'xmlns'},
+    'i': {'style'},
+    'p': {'align'},
+    'pre': {'class'},
+    'span': {'lang'},
+    'table': {'bgcolor', 'border', 'cellpadding', 'cellspacing', 'class',
+              'style', 'summary'},
+    'td': {'style', 'valign', 'width'},
+    'th': {'align', 'style'},
+    'tr': {'style'},
+    'ul': {'type'}}
+
+
+# Attributes to keep on certain tags (possibly after custom logic to
+# remap or discard certain cases).
+KNOWN_ATTRS_KEEP = {
+    'a': {'href', 'id', 'name'},
+    'center': {'class'},
+    'div': {'style'},
+    'li': {'id', 'value'},
+    'ol': {'type'},
+    'p': {'class', 'style'},
+    'span': {'class', 'style'},
+    'style': {'type'},
+    'sup': {'style'}}
 
 
 def clean_tags(doc, text):
@@ -300,6 +358,7 @@ def clean_tags(doc, text):
             if tag_contents not in ('', ' '):
                 raise ValueError('bad end tag %s in %s' % (tag, doc))
         else:
+            seen_attrs = set()
             tag_attrs = []
             while tag_contents not in ('', ' ', '/', ' /'):
                 if not tag_contents.startswith(' '):
@@ -311,6 +370,10 @@ def clean_tags(doc, text):
                     raise ValueError('unknown tag attribute %s in %s'
                                      % (tag, doc))
                 attr_name = m.group(0).lower()
+                if attr_name in seen_attrs:
+                    raise ValueError('duplicate tag attribute %s in %s'
+                                     % (tag, doc))
+                seen_attrs.add(attr_name)
                 tag_contents = tag_contents[m.end(0):]
                 have_value = False
                 if tag_contents.startswith('='):
@@ -359,13 +422,132 @@ def clean_tags(doc, text):
                     tag_attrs.append((attr_name, None))
         if tag_name not in KNOWN_TAGS:
             raise ValueError('unknown tag %s in %s' % (tag_name, doc))
+        if end_tag and tag_name in KNOWN_TAGS_EMPTY:
+            raise ValueError('bad end tag %s in %s' % (tag_name, doc))
         if tag_name in KNOWN_TAGS_DISCARD:
             continue
         if tag_name in KNOWN_TAGS_ALIAS:
             tag_name = KNOWN_TAGS_ALIAS[tag_name]
+        if tag_name == 'font':
+            # Remap to <span>, with attributes remapped to style=.
+            tag_name = 'span'
+            if not end_tag:
+                new_style = []
+                for attr_name, value in tag_attrs:
+                    if value is None or not (value.startswith('"')
+                                             and value.endswith('"')):
+                        raise ValueError('bad font attribute %s in %s'
+                                         % (attr_name, doc))
+                    value = value[1:-1]
+                    if attr_name == 'size':
+                        continue
+                    if attr_name == 'color':
+                        new_style.append('color:%s' % value)
+                    elif attr_name == 'face':
+                        new_style.append('font-family:%s' % value)
+                    else:
+                        raise ValueError('bad font attribute %s in %s'
+                                         % (attr_name, doc))
+                if new_style:
+                    tag_attrs = [('style', '"%s"' % ';'.join(new_style))]
+                else:
+                    tag_attrs = []
         if not end_tag:
-            # TODO: check attrs known and remove some.
-            pass
+            to_discard = KNOWN_ATTRS_DISCARD.get(tag_name, set())
+            to_keep = KNOWN_ATTRS_KEEP.get(tag_name, set())
+            cleaned_tag_attrs = []
+            for attr_name, value in tag_attrs:
+                if attr_name in to_discard:
+                    continue
+                if attr_name == 'class':
+                    if value in ('"MsoNoSpacing"', '"MsoNormal"',
+                                 '"MsoNormalCxSpMiddle"', '"GramE"',
+                                 '"SpellE"'):
+                        continue
+                if tag_name == 'a' and attr_name == 'href':
+                    # Put URLs for WG14 website in a consistent canonical form.
+                    value = value.replace('std.dkuug.dk', 'www.open-std.org')
+                    value = value.replace('www.dkuug.dk', 'www.open-std.org')
+                    value = value.replace('http://www.open-std.org',
+                                          'https://www.open-std.org')
+                    value = value.replace(
+                        'https://www.open-std.org/JTC1/SC22/WG14',
+                        'https://www.open-std.org/jtc1/sc22/wg14')
+                    value = value.replace(
+                        'https://www.open-std.org/jtc1/sc22/WG14',
+                        'https://www.open-std.org/jtc1/sc22/wg14')
+                    if not value.startswith('"http'):
+                        if not (value.startswith('"') and value.endswith('"')):
+                            raise ValueError(
+                                'bad href %s in %s' % (value, doc))
+                        value = '"%s"' % urllib.parse.urljoin(
+                            doc_url(doc), value[1:-1])
+                    # There are several typos in links to the WG14 website.
+                    if value.startswith('"https://www.open-std.org/'):
+                        value = value.replace('dr_340.htm:', 'dr_340.htm')
+                        value = value.replace('n1138.txt', 'n1138.pdf')
+                        value = value.replace('n1987.html ', 'n1987.pdf')
+                        value = value.replace('n2007."', 'n2007.pdf"')
+                        value = value.replace('n2025."', 'n2025.htm"')
+                        value = value.replace('n2027."', 'n2025.htm"')
+                        value = value.replace('n2031."', 'n2031.htm"')
+                        value = value.replace('n2032."', 'n2032.htm"')
+                        value = value.replace('n2037."', 'n2037.htm"')
+                        value = value.replace('n2038."', 'n2038.htm"')
+                        value = value.replace('n2077.html ', 'n2077.pdf')
+                if attr_name == 'style':
+                    if (tag_name == 'ol'
+                        and value == '"list-style-type: upper-alpha"'):
+                        attr_name = 'type'
+                        value = '"A"'
+                    else:
+                        # Discard all styles except those indicating
+                        # colours, basic text styling or the use of a
+                        # fixed-width font.  margin-left is kept as an
+                        # indicator of block quoting.
+                        if (value is None
+                            or (not (value.startswith('"')
+                                     and value.endswith('"'))
+                                and not (value.startswith("'")
+                                         and value.endswith("'")))):
+                            raise ValueError('bad style attribute %s in %s'
+                                             % (value, doc))
+                        value = value[1:-1].replace(' ', '')
+                        styles_list = [x for x in value.split(';') if x]
+                        styles_new = []
+                        for s in styles_list:
+                            k, v = s.split(':')
+                            if k.startswith('mso-'):
+                                continue
+                            if k == 'color':
+                                if v not in ('black', '#000000'):
+                                    styles_new.append('%s:%s' % (k, v))
+                            elif k == 'font-weight':
+                                if v != 'normal':
+                                    styles_new.append('%s:%s' % (k, v))
+                            elif k == 'font-family':
+                                if 'monospace' in v or 'Courier' in v:
+                                    styles_new.append('%s:monospace' % k)
+                            elif k in ('margin-left', 'text-decoration',
+                                       'background-color'):
+                                styles_new.append('%s:%s' % (k, v))
+                            elif k in ('font-size', 'line-height',
+                                       'margin-bottom', 'margin-right',
+                                       'margin-top', 'page-break-after',
+                                       'tab-stops', 'text-autospace',
+                                       'text-indent'):
+                                continue
+                            else:
+                                raise ValueError('unknown style %s in %s'
+                                                 % (k, doc))
+                        if not styles_new:
+                            continue
+                        value = ';'.join(styles_new)
+                if attr_name not in to_keep:
+                    raise ValueError('unknown attribute %s on %s tag in %s'
+                                     % (attr_name, tag_name, doc))
+                cleaned_tag_attrs.append((attr_name, value))
+            tag_attrs = cleaned_tag_attrs
         if end_tag:
             new_text_list.append('</%s>' % tag_name)
         else:
