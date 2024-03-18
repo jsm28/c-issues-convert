@@ -399,6 +399,10 @@ KNOWN_TAGS_INLINE = {'br', 'a', 'code', 'b', 'i', 'del', 'sup', 'sub', 'u',
                      'span'}
 
 
+# Known non-inline tags that should not contain other non-inline tags.
+KNOWN_TAGS_LEAF = {'p', 'pre'}
+
+
 # Attributes to discard on certain tags (regardless of the attribute
 # value).
 KNOWN_ATTRS_DISCARD = {
@@ -609,29 +613,35 @@ class ProcessNesting:
         """Remove a tag from the stack of open tags."""
         self.open_tags = self.open_tags[:-1]
 
-    def handle_empty_tag(self, tag_name, end_tag, tag_attrs):
-        """Handle an empty tag."""
-        self.new_text_list.append(text_for_tag(tag_name, end_tag, tag_attrs))
-
-    def handle_start_tag(self, tag_name, tag_attrs):
-        """Handle a start tag."""
-        this_tag_text = text_for_tag(tag_name, False, tag_attrs)
+    def check_nesting(self, tag_name):
+        """Check for a tag inappropriately contained in another tag."""
         # TODO: <pre>, <ul>, <li> shouldn't be allowed inside inline
         # tags either.
         if (tag_name not in KNOWN_TAGS_INLINE
             and tag_name != 'pre'
             and not (self.doc == 'n2150.htm' and tag_name in ('ul', 'li'))):
             for t in self.open_tags:
-                if t in KNOWN_TAGS_INLINE:
+                if t in KNOWN_TAGS_INLINE or t in KNOWN_TAGS_LEAF:
                     raise ValueError(
                         '<%s> inside <%s> in %s [%s]'
                         % (tag_name, t, self.doc, self.rtext[:200]))
         if ((tag_name == 'li' and self.open_tags[-1] not in ('ol', 'ul'))
+            or (tag_name in ('dt', 'dd') and self.open_tags[-1] != 'dl')
             or (tag_name == 'tr' and self.open_tags[-1] != 'table')
             or (tag_name in ('td', 'th') and self.open_tags[-1] != 'tr')):
             raise ValueError(
                 '<%s> inside <%s> in %s [%s]'
                 % (tag_name, self.open_tags[-1], self.doc, self.rtext[:200]))
+
+    def handle_empty_tag(self, tag_name, end_tag, tag_attrs):
+        """Handle an empty tag."""
+        self.check_nesting(tag_name)
+        self.new_text_list.append(text_for_tag(tag_name, end_tag, tag_attrs))
+
+    def handle_start_tag(self, tag_name, tag_attrs):
+        """Handle a start tag."""
+        this_tag_text = text_for_tag(tag_name, False, tag_attrs)
+        self.check_nesting(tag_name)
         self.new_text_list.append(this_tag_text)
         self.push_tag(tag_name)
 
