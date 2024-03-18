@@ -602,6 +602,9 @@ class ProcessNesting:
         self.open_tags = []
         self.wrap_text_in = []
         self.end_wrap = []
+        self.tag_outside = []
+        self.tag_inside = []
+        self.replace_end = []
 
     def handle_before_tag(self, before):
         """Handle the text coming before a tag."""
@@ -624,12 +627,18 @@ class ProcessNesting:
         else:
             self.wrap_text_in.append([])
         self.end_wrap.append([])
+        self.tag_outside.append([])
+        self.tag_inside.append([])
+        self.replace_end.append(None)
 
     def pop_tag(self):
         """Remove a tag from the stack of open tags."""
         self.open_tags = self.open_tags[:-1]
         self.wrap_text_in = self.wrap_text_in[:-1]
         self.end_wrap = self.end_wrap[:-1]
+        self.tag_outside = self.tag_outside[:-1]
+        self.tag_inside = self.tag_inside[:-1]
+        self.replace_end = self.replace_end[:-1]
 
     def check_nesting(self, tag_name):
         """Check for a tag inappropriately contained in another tag."""
@@ -652,12 +661,21 @@ class ProcessNesting:
         self.check_nesting(tag_name)
         self.new_text_list.append(text_for_tag(tag_name, end_tag, tag_attrs))
 
-    def handle_start_tag(self, tag_name, tag_attrs):
+    def handle_start_tag_internal(self, tag_name, tag_attrs):
+        """Output a start tag."""
+        self.new_text_list.append(text_for_tag(tag_name, False, tag_attrs))
+
+    def handle_start_tag(self, tag_name, tag_attrs, replace_tag=None):
         """Handle a start tag."""
-        this_tag_text = text_for_tag(tag_name, False, tag_attrs)
         self.check_nesting(tag_name)
-        self.new_text_list.append(this_tag_text)
+        self.handle_start_tag_internal(
+            replace_tag if replace_tag is not None else tag_name, tag_attrs)
         self.push_tag(tag_name)
+        self.replace_end[-1] = replace_tag
+
+    def handle_end_tag_internal(self, tag_name):
+        """Output an end tag."""
+        self.new_text_list.append(text_for_tag(tag_name, True, None))
 
     def handle_end_tag(self, tag_name):
         """Handle an end tag."""
@@ -668,9 +686,16 @@ class ProcessNesting:
             raise ValueError('<%s> closed by </%s> in %s [%s]'
                              % (self.open_tags[-1], tag_name, self.doc,
                                 self.rtext[:200]))
-        self.new_text_list.append(text_for_tag(tag_name, True, None))
+        for t in self.tag_inside[-1]:
+            self.handle_end_tag_internal(t)
+        if self.replace_end[-1]:
+            tag_name = self.replace_end[-1]
+        self.handle_end_tag_internal(tag_name)
         end_wrap = self.end_wrap[-1]
+        tag_outside = self.tag_outside[-1]
         self.pop_tag()
+        for t in tag_outside:
+            self.handle_end_tag_internal(t)
         if end_wrap:
             for t in end_wrap:
                 self.handle_start_tag(t, [])
@@ -884,9 +909,72 @@ def clean_nesting(doc, text):
     return FixInvalidNesting(doc, text).run()
 
 
+# Tags to use outside for p class= attributes
+P_CLASS_OUTSIDE = {'quote': 'blockquote', 'stdtext': 'blockquote'}
+
+
+# Tags to use inside for p class= attributes
+P_CLASS_INSIDE = {'alternative': 'u', 'inserted': 'u', 'strike': 'del'}
+
+
+# Replacement tags for span class= attributes.
+SPAN_CLASS_REPLACE = {'alternative': 'u', 'inserted': 'u', 'deleted': 'del'}
+
+
+class ReplaceClass(ProcessNesting):
+
+    """Replace 'class=' attributes by simpler markup."""
+
+    def handle_start_tag(self, tag_name, tag_attrs):
+        """Handle a start tag."""
+        tclass = None
+        if tag_name in ('p', 'span', 'center'):
+            for tn, tv in tag_attrs:
+                if tn == 'class':
+                    tclass = tv[1:-1]
+        tag_outside = None
+        tag_inside = None
+        tag_replace = None
+        if tclass:
+            if tag_name == 'p':
+                tag_outside = P_CLASS_OUTSIDE.get(tclass, None)
+                tag_inside = P_CLASS_INSIDE.get(tclass, None)
+                tag_attrs = [t for t in tag_attrs if t[0] != 'class']
+            if tag_name == 'span':
+                tag_replace = SPAN_CLASS_REPLACE.get(tclass, None)
+                if len(tag_attrs) != 1:
+                    raise ValueError(
+                        'replacing tag with multiple attributes: %s'
+                        % repr(tag_attrs))
+                if tag_replace:
+                    tag_attrs = []
+            if tag_name == 'center' and tclass == 'quote':
+                tag_replace = 'blockquote'
+                tag_inside = 'p'
+                if len(tag_attrs) != 1:
+                    raise ValueError(
+                        'replacing tag with multiple attributes: %s'
+                        % repr(tag_attrs))
+                tag_attrs = []
+        if tag_outside:
+            super().handle_start_tag_internal(tag_outside, [])
+        super().handle_start_tag(tag_name, tag_attrs, tag_replace)
+        if tag_inside:
+            super().handle_start_tag_internal(tag_inside, [])
+        if tag_outside:
+            self.tag_outside[-1] = [tag_outside]
+        if tag_inside:
+            self.tag_inside[-1] = [tag_inside]
+
+
+def clean_class(doc, text):
+    """Clean up use of class= on tags."""
+    return ReplaceClass(doc, text).run()
+
+
 # List of functions for cleaning HTML issue lists.
 CLEAN_FUNCS_LIST = (clean_amp, clean_ltgt, clean_chars, clean_tags,
-                    clean_nesting)
+                    clean_nesting, clean_class)
 
 
 def clean_doc(doc, write_out):
