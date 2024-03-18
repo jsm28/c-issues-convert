@@ -587,220 +587,253 @@ def clean_tags(doc, text):
     return ''.join(new_text_list)
 
 
-def process_nesting(doc, text, iterate=False, fix_invalid_nesting=False):
-    """Process the document based on the nested structure of HTML tags,
-    making various checks and changes depending on other arguments passed.
-    If iterate, rerun the processing until there are no more changes to
-    the text; this is relevant for some cleanup that may expose other
-    cleanup opportunities.  If fix_invalid_nesting, fix certain cases of
-    badly nested tags or missing end tags rather than giving an error for
-    them; this should only be needed on the first call after
-    clean_tags."""
-    orig_text = text
-    new_text_list = []
-    rtext = text
-    open_tags = []
-    while rtext:
-        before, tag_text, tag_name, end_tag, tag_attrs, rtext = get_one_tag(
-            doc, rtext)
+class ProcessNesting:
+
+    """Process the document based on the nested structure of HTML tags."""
+
+    def __init__(self, doc, text):
+        self.doc = doc
+        self.new_text_list = []
+        self.rtext = text
+        self.open_tags = []
+
+    def handle_before_tag(self, before):
+        """Handle the text coming before a tag."""
+        self.new_text_list.append(before)
+
+    def push_tag(self, tag_name):
+        """Add a tag to the stack of open tags."""
+        self.open_tags.append(tag_name)
+
+    def pop_tag(self):
+        """Remove a tag from the stack of open tags."""
+        self.open_tags = self.open_tags[:-1]
+
+    def handle_empty_tag(self, tag_name, end_tag, tag_attrs):
+        """Handle an empty tag."""
+        self.new_text_list.append(text_for_tag(tag_name, end_tag, tag_attrs))
+
+    def handle_start_tag(self, tag_name, tag_attrs):
+        """Handle a start tag."""
+        this_tag_text = text_for_tag(tag_name, False, tag_attrs)
+        # TODO: <pre>, <ul>, <li> shouldn't be allowed inside inline
+        # tags either.
+        if (tag_name not in KNOWN_TAGS_INLINE
+            and tag_name != 'pre'
+            and not (self.doc == 'n2150.htm' and tag_name in ('ul', 'li'))):
+            for t in self.open_tags:
+                if t in KNOWN_TAGS_INLINE:
+                    raise ValueError(
+                        '<%s> inside <%s> in %s [%s]'
+                        % (tag_name, t, self.doc, self.rtext[:200]))
+        if ((tag_name == 'li' and self.open_tags[-1] not in ('ol', 'ul'))
+            or (tag_name == 'tr' and self.open_tags[-1] != 'table')
+            or (tag_name in ('td', 'th') and self.open_tags[-1] != 'tr')):
+            raise ValueError(
+                '<%s> inside <%s> in %s [%s]'
+                % (tag_name, self.open_tags[-1], self.doc, self.rtext[:200]))
+        self.new_text_list.append(this_tag_text)
+        self.push_tag(tag_name)
+
+    def handle_end_tag(self, tag_name):
+        """Handle an end tag."""
+        if not self.open_tags:
+            raise ValueError('no open tag at </%s> in %s [%s]'
+                             % (tag_name, self.doc, self.rtext[:200]))
+        if tag_name != self.open_tags[-1]:
+            raise ValueError('<%s> closed by </%s> in %s [%s]'
+                             % (self.open_tags[-1], tag_name, self.doc,
+                                self.rtext[:200]))
+        self.new_text_list.append(text_for_tag(tag_name, True, None))
+        self.pop_tag()
+
+    def run(self):
+        """Execute the document processing.  Subclasses may act on the input
+        as it is processed; this class itself just carries out checks while
+        passing the input through."""
+        while self.rtext:
+            before, tag_text, tag_name, end_tag, tag_attrs, self.rtext = \
+                get_one_tag(self.doc, self.rtext)
+            self.handle_before_tag(before)
+            # Handle HTML comments.
+            if tag_text != '':
+                self.new_text_list.append(tag_text)
+            if tag_name is None:
+                continue
+            # Handle empty, start and end tags.
+            if tag_name in KNOWN_TAGS_EMPTY:
+                self.handle_empty_tag(tag_name, end_tag, tag_attrs)
+            elif end_tag:
+                self.handle_end_tag(tag_name)
+            else:
+                self.handle_start_tag(tag_name, tag_attrs)
+        if self.open_tags:
+            raise ValueError('%s ends without closing all tags' % self.doc)
+        return ''.join(self.new_text_list)
+
+
+class FixInvalidNesting(ProcessNesting):
+
+    """Fix certain cases of badly nested tags or missing end tags."""
+
+    def handle_before_tag(self, before):
+        """Handle the text coming before a tag."""
         # Insert explicit paragraphs in certain contexts.
-        if (fix_invalid_nesting
-            and before.strip()
-            and open_tags
-            and open_tags[-1] in ('body', 'blockquote')):
-            new_text_list.append('<p>')
-            open_tags.append('p')
-        new_text_list.append(before)
-        if tag_text != '':
-            new_text_list.append(tag_text)
-        if tag_name is None:
-            continue
-        this_tag_text = text_for_tag(tag_name, end_tag, tag_attrs)
-        # Close an unterminated <p> when any non-inline tag starts or
-        # ends.
-        if (fix_invalid_nesting
-            and open_tags
-            and open_tags[-1] == 'p'
+        if (before.strip()
+            and self.open_tags
+            and self.open_tags[-1] in ('body', 'blockquote')):
+            self.handle_start_tag('p', [])
+        super().handle_before_tag(before)
+
+    def maybe_close_p(self, tag_name, end_tag):
+        """Close an unterminated <p> when any non-inline tag starts or ends."""
+        if (self.open_tags
+            and self.open_tags[-1] == 'p'
             and not (end_tag and tag_name == 'p')
             and tag_name not in KNOWN_TAGS_INLINE):
-            new_text_list.append('</p>')
-            open_tags = open_tags[:-1]
-        # Insert explicit paragraphs for inline tags in certain
-        # contexts.
-        if (fix_invalid_nesting
-            and open_tags
-            and open_tags[-1] in ('body', 'blockquote')
-            and not end_tag
-            and tag_name in KNOWN_TAGS_INLINE):
-            new_text_list.append('<p>')
-            open_tags.append('p')
-        if tag_name in KNOWN_TAGS_EMPTY:
-            new_text_list.append(this_tag_text)
-            continue
-        if not end_tag:
-            if fix_invalid_nesting:
-                # Close an unterminated <li> when another <li> starts.
-                if (tag_name == 'li'
-                    and open_tags
-                    and open_tags[-1] == 'li'):
-                    new_text_list.append('</li>')
-                    open_tags = open_tags[:-1]
-                # Fix specific invalid nesting cases from specific input files.
-                if doc == 'n2396.htm':
-                    if (tag_name == 'ul'
-                        and open_tags[-1] == 'ul'):
-                        new_text_list.append('</ul>')
-                        open_tags = open_tags[:-1]
-                        continue
-                    if (tag_name == 'pre'
-                        and open_tags[-1] == 'pre'):
-                        new_text_list.append('</pre>')
-                        open_tags = open_tags[:-1]
-                        continue
-                    if (tag_name == 'i'
-                        and open_tags[-1] == 'i'
-                        and before == 'struct-declarator-lists,'):
-                        new_text_list.append('</i>')
-                        open_tags = open_tags[:-1]
-                        continue
-                    if (tag_name == 'blockquote'
-                        and open_tags[-1] == 'span'
-                        and open_tags[-2] == 'span'
-                        and open_tags[-3] == 'span'):
-                        new_text_list.append('</span></span></span></p>')
-                        open_tags = open_tags[:-3]
-                    if (tag_name == 'body'
-                        and open_tags[-1] != 'html'):
-                        continue
-                if (doc == 'n2397.htm'
-                    and tag_name == 'b'
-                    and open_tags[-1] == 'b'
-                    and before == 'fesetmode'):
-                    new_text_list.append('</b>')
-                    open_tags = open_tags[:-1]
-                    continue
-            # TODO: <pre>, <ul>, <li> shouldn't be allowed inside
-            # inline tags either.
-            if (tag_name not in KNOWN_TAGS_INLINE
-                and tag_name != 'pre'
-                and not (doc == 'n2150.htm' and tag_name in ('ul', 'li'))):
-                for t in open_tags:
-                    if t in KNOWN_TAGS_INLINE:
-                        raise ValueError(
-                            '<%s> inside <%s> in %s [%s]'
-                            % (tag_name, t, doc, rtext[:200]))
-            if ((tag_name == 'li' and open_tags[-1] not in ('ol', 'ul'))
-                or (tag_name == 'tr' and open_tags[-1] != 'table')
-                or (tag_name in ('td', 'th') and open_tags[-1] != 'tr')):
-                raise ValueError(
-                    '<%s> inside <%s> in %s [%s]'
-                    % (tag_name, open_tags[-1], doc, rtext[:200]))
-            new_text_list.append(this_tag_text)
-            open_tags.append(tag_name)
-            continue
-        if fix_invalid_nesting:
-            # Close an unterminated <li> when a list ends.
-            if (open_tags
-                and open_tags[-1] == 'li'
-                and tag_name in ('ol', 'ul')):
-                new_text_list.append('</li>')
-                open_tags = open_tags[:-1]
-            # Fix specific invalid nesting cases from specific input files.
-            if (doc in ('dr_003.html', 'dr_015.html')
-                and tag_name == 'b'
-                and open_tags[-1] == 'code'
-                and rtext.startswith('</code>')):
-                continue
-            if (doc == 'dr_045.html'
-                and tag_name == 'b'
-                and open_tags[-1] == 'code'
-                and rtext.startswith('</code>')):
-                tag_name = 'code'
-                this_tag_text = '</code>'
-                rtext = '</b>' + rtext[len('</code>'):]
-            if (doc == 'dr_055.html'
-                and tag_name == 'code'
-                and open_tags[-1] == 'b'
-                and rtext.startswith('</b>')):
-                tag_name = 'b'
-                this_tag_text = '</b>'
-                rtext = '</code>' + rtext[len('</b>'):]
-            if (doc == 'dr_121.html'
-                and tag_name == 'b'
-                and open_tags[-1] == 'i'):
-                tag_name = 'i'
-                this_tag_text = '</i>'
-            if doc == 'n2396.htm':
-                if (tag_name == 'blockquote'
-                    and open_tags[-1] == 'body'):
-                    new_text_list.append('<blockquote>')
-                    open_tags.append('blockquote')
-                    continue
-                if (tag_name == 'h2'
-                    and open_tags[-1] == 'h3'):
-                    tag_name = 'h3'
-                    this_tag_text = '</h3>'
-                if (tag_name == 'span'
-                    and open_tags[-1] == 'li'
-                    and rtext.startswith('<span>')):
-                    continue
-                if (tag_name == 'span'
-                    and open_tags[-1] == 'blockquote'
-                    and rtext.startswith('</span></span></p>')):
-                    rtext = rtext[len('</span></span></p>'):]
-                    continue
-                if (tag_name == 'p'
-                    and open_tags[-1] == 'span'):
-                    while open_tags[-1] == 'span':
-                        new_text_list.append('</span>')
-                        open_tags = open_tags[:-1]
-                if (tag_name == 'blockquote'
-                    and open_tags[-1] == 'u'
-                    and new_text_list[-2] == '<u>'
-                    and open_tags[-2] == 'p'):
-                    new_text_list[-2] = ''
-                    new_text_list.append('</p>')
-                    open_tags = open_tags[:-2]
-                if (tag_name == 'code'
-                    and open_tags[-1] == 'b'
-                    and rtext.startswith('</b>')):
-                    continue
-                if (tag_name == 'p'
-                    and open_tags[-1] in ('blockquote', 'body', 'li')):
-                    continue
-                if (tag_name == 'span'
-                    and open_tags[-1] == 'p'):
-                    continue
-            if (doc in ('n2396.htm', 'n2397.htm')
-                and tag_name == 'div'
-                and open_tags[-1] == 'body'):
-                continue
-            if (doc == 'n2397.htm'
-                and tag_name == 'pre'
-                and open_tags[-1] == 'b'
-                and rtext.startswith('</code></b>')):
-                tag_name = 'b'
-                this_tag_text = '</b>'
-                rtext = '</pre></code>' + rtext[len('</code></b>'):]
-        if not open_tags:
-            raise ValueError('no open tag at </%s> in %s [%s]'
-                             % (tag_name, doc, rtext[:200]))
-        if tag_name != open_tags[-1]:
-            raise ValueError('<%s> closed by </%s> in %s [%s]'
-                             % (open_tags[-1], tag_name, doc, rtext[:200]))
-        new_text_list.append(this_tag_text)
-        open_tags = open_tags[:-1]
-    if open_tags:
-        raise ValueError('%s ends without closing all tags' % doc)
-    text = ''.join(new_text_list)
-    if iterate and text != orig_text:
-        return process_nesting(doc, text, iterate=iterate)
-    return text
+            self.handle_end_tag('p')
+
+    def maybe_insert_p_for_tag(self, tag_name):
+        """Insert explicit paragraphs for inline tags in certain contexts."""
+        if (tag_name in KNOWN_TAGS_INLINE
+            and self.open_tags
+            and self.open_tags[-1] in ('body', 'blockquote')):
+            self.handle_start_tag('p', [])
+
+    def handle_empty_tag(self, tag_name, end_tag, tag_attrs):
+        """Handle an empty tag."""
+        self.maybe_close_p(tag_name, end_tag)
+        self.maybe_insert_p_for_tag(tag_name)
+        super().handle_empty_tag(tag_name, end_tag, tag_attrs)
+
+    def handle_start_tag(self, tag_name, tag_attrs):
+        """Handle a start tag."""
+        self.maybe_close_p(tag_name, False)
+        self.maybe_insert_p_for_tag(tag_name)
+        # Close an unterminated <li> when another <li> starts.
+        if (tag_name == 'li'
+            and self.open_tags
+            and self.open_tags[-1] == 'li'):
+            self.handle_end_tag('li')
+        # Fix specific invalid nesting cases from specific input files.
+        if self.doc == 'n2396.htm':
+            if (tag_name == 'ul'
+                and self.open_tags[-1] == 'ul'):
+                self.handle_end_tag('ul')
+                return
+            if (tag_name == 'pre'
+                and self.open_tags[-1] == 'pre'):
+                self.handle_end_tag('pre')
+                return
+            if (tag_name == 'i'
+                and self.open_tags[-1] == 'i'
+                and self.new_text_list[-1] == 'struct-declarator-lists,'):
+                self.handle_end_tag('i')
+                return
+            if (tag_name == 'blockquote'
+                and self.open_tags[-1] == 'span'
+                and self.open_tags[-2] == 'span'
+                and self.open_tags[-3] == 'span'
+                and self.open_tags[-4] == 'p'):
+                self.handle_end_tag('span')
+                self.handle_end_tag('span')
+                self.handle_end_tag('span')
+                self.handle_end_tag('p')
+            if (tag_name == 'body'
+                and self.open_tags[-1] != 'html'):
+                return
+        if (self.doc == 'n2397.htm'
+            and tag_name == 'b'
+            and self.open_tags[-1] == 'b'
+            and self.new_text_list[-1] == 'fesetmode'):
+            self.handle_end_tag('b')
+            return
+        super().handle_start_tag(tag_name, tag_attrs)
+
+    def handle_end_tag(self, tag_name):
+        """Handle an end tag."""
+        self.maybe_close_p(tag_name, True)
+        # Close an unterminated <li> when a list ends.
+        if (self.open_tags
+            and self.open_tags[-1] == 'li'
+            and tag_name in ('ol', 'ul')):
+            self.handle_end_tag('li')
+        # Fix specific invalid nesting cases from specific input files.
+        if (self.doc in ('dr_003.html', 'dr_015.html')
+            and tag_name == 'b'
+            and self.open_tags[-1] == 'code'
+            and self.rtext.startswith('</code>')):
+            return
+        if (self.doc == 'dr_045.html'
+            and tag_name == 'b'
+            and self.open_tags[-1] == 'code'
+            and self.rtext.startswith('</code>')):
+            tag_name = 'code'
+            self.rtext = '</b>' + self.rtext[len('</code>'):]
+        if (self.doc == 'dr_055.html'
+            and tag_name == 'code'
+                and self.open_tags[-1] == 'b'
+            and self.rtext.startswith('</b>')):
+            tag_name = 'b'
+            self.rtext = '</code>' + self.rtext[len('</b>'):]
+        if (self.doc == 'dr_121.html'
+            and tag_name == 'b'
+            and self.open_tags[-1] == 'i'):
+            tag_name = 'i'
+        if self.doc == 'n2396.htm':
+            if (tag_name == 'blockquote'
+                and self.open_tags[-1] == 'body'):
+                self.handle_start_tag('blockquote', [])
+                return
+            if (tag_name == 'h2'
+                and self.open_tags[-1] == 'h3'):
+                tag_name = 'h3'
+            if (tag_name == 'span'
+                and self.open_tags[-1] == 'li'
+                and self.rtext.startswith('<span>')):
+                return
+            if (tag_name == 'span'
+                and self.open_tags[-1] == 'blockquote'
+                and self.rtext.startswith('</span></span></p>')):
+                self.rtext = self.rtext[len('</span></span></p>'):]
+                return
+            if (tag_name == 'p'
+                and self.open_tags[-1] == 'span'):
+                while self.open_tags[-1] == 'span':
+                    self.handle_end_tag('span')
+            if (tag_name == 'blockquote'
+                and self.open_tags[-1] == 'u'
+                and self.new_text_list[-2] == '<u>'
+                and self.open_tags[-2] == 'p'):
+                self.new_text_list[-2] = ''
+                self.pop_tag()
+                self.handle_end_tag('p')
+            if (tag_name == 'code'
+                and self.open_tags[-1] == 'b'
+                and self.rtext.startswith('</b>')):
+                return
+            if (tag_name == 'p'
+                and self.open_tags[-1] in ('blockquote', 'body', 'li')):
+                return
+            if (tag_name == 'span'
+                and self.open_tags[-1] == 'p'):
+                return
+        if (self.doc in ('n2396.htm', 'n2397.htm')
+            and tag_name == 'div'
+            and self.open_tags[-1] == 'body'):
+            return
+        if (self.doc == 'n2397.htm'
+            and tag_name == 'pre'
+            and self.open_tags[-1] == 'b'
+            and self.rtext.startswith('</code></b>')):
+            tag_name = 'b'
+            self.rtext = '</pre></code>' + self.rtext[len('</code></b>'):]
+        super().handle_end_tag(tag_name)
 
 
 def clean_nesting(doc, text):
     """Clean up invalid testing of tags and missing end tags."""
-    return process_nesting(doc, text, fix_invalid_nesting=True)
+    return FixInvalidNesting(doc, text).run()
 
 
 # List of functions for cleaning HTML issue lists.
