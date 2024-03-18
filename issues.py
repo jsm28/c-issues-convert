@@ -600,26 +600,40 @@ class ProcessNesting:
         self.new_text_list = []
         self.rtext = text
         self.open_tags = []
+        self.wrap_text_in = []
+        self.end_wrap = []
 
     def handle_before_tag(self, before):
         """Handle the text coming before a tag."""
+        should_wrap = (self.wrap_text_in
+                       and self.wrap_text_in[-1]
+                       and before.strip())
+        if should_wrap:
+            for t in self.wrap_text_in[-1]:
+                self.handle_start_tag(t, [])
         self.new_text_list.append(before)
+        if should_wrap:
+            for t in reversed(self.wrap_text_in[-1]):
+                self.handle_end_tag(t)
 
     def push_tag(self, tag_name):
         """Add a tag to the stack of open tags."""
         self.open_tags.append(tag_name)
+        if self.wrap_text_in:
+            self.wrap_text_in.append(self.wrap_text_in[-1])
+        else:
+            self.wrap_text_in.append([])
+        self.end_wrap.append([])
 
     def pop_tag(self):
         """Remove a tag from the stack of open tags."""
         self.open_tags = self.open_tags[:-1]
+        self.wrap_text_in = self.wrap_text_in[:-1]
+        self.end_wrap = self.end_wrap[:-1]
 
     def check_nesting(self, tag_name):
         """Check for a tag inappropriately contained in another tag."""
-        # TODO: <pre>, <ul>, <li> shouldn't be allowed inside inline
-        # tags either.
-        if (tag_name not in KNOWN_TAGS_INLINE
-            and tag_name != 'pre'
-            and not (self.doc == 'n2150.htm' and tag_name in ('ul', 'li'))):
+        if tag_name not in KNOWN_TAGS_INLINE:
             for t in self.open_tags:
                 if t in KNOWN_TAGS_INLINE or t in KNOWN_TAGS_LEAF:
                     raise ValueError(
@@ -655,7 +669,11 @@ class ProcessNesting:
                              % (self.open_tags[-1], tag_name, self.doc,
                                 self.rtext[:200]))
         self.new_text_list.append(text_for_tag(tag_name, True, None))
+        end_wrap = self.end_wrap[-1]
         self.pop_tag()
+        if end_wrap:
+            for t in end_wrap:
+                self.handle_start_tag(t, [])
 
     def run(self):
         """Execute the document processing.  Subclasses may act on the input
@@ -726,6 +744,18 @@ class FixInvalidNesting(ProcessNesting):
             and self.open_tags[-1] == 'li'):
             self.handle_end_tag('li')
         # Fix specific invalid nesting cases from specific input files.
+        wrap_num = 0
+        if (self.doc == 'n2150.htm'
+            and tag_name == 'ul'
+            and self.open_tags[-1] == 'i'):
+            wrap_num = 1
+        if (self.doc in ('dr_025.html', 'dr_069.html', 'n2150.htm',
+                         'n2396.htm', 'n2397.htm')
+            and tag_name == 'pre'
+            and self.open_tags[-1] in ('b', 'code')):
+            wrap_num = 1
+            if self.open_tags[-2] in ('b', 'code'):
+                wrap_num = 2
         if self.doc == 'n2396.htm':
             if (tag_name == 'ul'
                 and self.open_tags[-1] == 'ul'):
@@ -758,7 +788,15 @@ class FixInvalidNesting(ProcessNesting):
             and self.new_text_list[-1] == 'fesetmode'):
             self.handle_end_tag('b')
             return
+        if wrap_num:
+            wrap_tags = self.open_tags[-wrap_num:]
+            for t in reversed(wrap_tags):
+                self.handle_end_tag(t)
+            self.maybe_close_p(tag_name, False)
         super().handle_start_tag(tag_name, tag_attrs)
+        if wrap_num:
+            self.wrap_text_in[-1] = wrap_tags
+            self.end_wrap[-1] = wrap_tags
 
     def handle_end_tag(self, tag_name):
         """Handle an end tag."""
