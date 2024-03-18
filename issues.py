@@ -603,12 +603,37 @@ def process_nesting(doc, text, iterate=False, fix_invalid_nesting=False):
     while rtext:
         before, tag_text, tag_name, end_tag, tag_attrs, rtext = get_one_tag(
             doc, rtext)
+        # Insert explicit paragraphs in certain contexts.
+        if (fix_invalid_nesting
+            and before.strip()
+            and open_tags
+            and open_tags[-1] in ('body', 'blockquote')):
+            new_text_list.append('<p>')
+            open_tags.append('p')
         new_text_list.append(before)
         if tag_text != '':
             new_text_list.append(tag_text)
         if tag_name is None:
             continue
         this_tag_text = text_for_tag(tag_name, end_tag, tag_attrs)
+        # Close an unterminated <p> when any non-inline tag starts or
+        # ends.
+        if (fix_invalid_nesting
+            and open_tags
+            and open_tags[-1] == 'p'
+            and not (end_tag and tag_name == 'p')
+            and tag_name not in KNOWN_TAGS_INLINE):
+            new_text_list.append('</p>')
+            open_tags = open_tags[:-1]
+        # Insert explicit paragraphs for inline tags in certain
+        # contexts.
+        if (fix_invalid_nesting
+            and open_tags
+            and open_tags[-1] in ('body', 'blockquote')
+            and not end_tag
+            and tag_name in KNOWN_TAGS_INLINE):
+            new_text_list.append('<p>')
+            open_tags.append('p')
         if tag_name in KNOWN_TAGS_EMPTY:
             new_text_list.append(this_tag_text)
             continue
@@ -616,6 +641,7 @@ def process_nesting(doc, text, iterate=False, fix_invalid_nesting=False):
             if fix_invalid_nesting:
                 # Close an unterminated <li> when another <li> starts.
                 if (tag_name == 'li'
+                    and open_tags
                     and open_tags[-1] == 'li'):
                     new_text_list.append('</li>')
                     open_tags = open_tags[:-1]
@@ -670,15 +696,12 @@ def process_nesting(doc, text, iterate=False, fix_invalid_nesting=False):
                     '<%s> inside <%s> in %s [%s]'
                     % (tag_name, open_tags[-1], doc, rtext[:200]))
             new_text_list.append(this_tag_text)
-            if tag_name != 'p':
-                open_tags.append(tag_name)
-            continue
-        if tag_name == 'p':
-            new_text_list.append(this_tag_text)
+            open_tags.append(tag_name)
             continue
         if fix_invalid_nesting:
             # Close an unterminated <li> when a list ends.
-            if (open_tags[-1] == 'li'
+            if (open_tags
+                and open_tags[-1] == 'li'
                 and tag_name in ('ol', 'ul')):
                 new_text_list.append('</li>')
                 open_tags = open_tags[:-1]
@@ -726,19 +749,27 @@ def process_nesting(doc, text, iterate=False, fix_invalid_nesting=False):
                     and rtext.startswith('</span></span></p>')):
                     rtext = rtext[len('</span></span></p>'):]
                     continue
-                if (tag_name == 'blockquote'
+                if (tag_name == 'p'
                     and open_tags[-1] == 'span'):
                     while open_tags[-1] == 'span':
                         new_text_list.append('</span>')
                         open_tags = open_tags[:-1]
                 if (tag_name == 'blockquote'
                     and open_tags[-1] == 'u'
-                    and new_text_list[-2] == '<u>'):
+                    and new_text_list[-2] == '<u>'
+                    and open_tags[-2] == 'p'):
                     new_text_list[-2] = ''
-                    open_tags = open_tags[:-1]
+                    new_text_list.append('</p>')
+                    open_tags = open_tags[:-2]
                 if (tag_name == 'code'
                     and open_tags[-1] == 'b'
                     and rtext.startswith('</b>')):
+                    continue
+                if (tag_name == 'p'
+                    and open_tags[-1] in ('blockquote', 'body', 'li')):
+                    continue
+                if (tag_name == 'span'
+                    and open_tags[-1] == 'p'):
                     continue
             if (doc in ('n2396.htm', 'n2397.htm')
                 and tag_name == 'div'
@@ -751,6 +782,9 @@ def process_nesting(doc, text, iterate=False, fix_invalid_nesting=False):
                 tag_name = 'b'
                 this_tag_text = '</b>'
                 rtext = '</pre></code>' + rtext[len('</code></b>'):]
+        if not open_tags:
+            raise ValueError('no open tag at </%s> in %s [%s]'
+                             % (tag_name, doc, rtext[:200]))
         if tag_name != open_tags[-1]:
             raise ValueError('<%s> closed by </%s> in %s [%s]'
                              % (open_tags[-1], tag_name, doc, rtext[:200]))
