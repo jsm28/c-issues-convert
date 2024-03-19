@@ -1056,9 +1056,65 @@ def clean_font(doc, text):
     return ReplaceFont(doc, text).run()
 
 
+# CSS length units in points.
+CSS_LENGTHS = {'in': 72, 'cm': 72 / 2.54, 'px': 0.75, 'pt': 1}
+
+
+def css_len(number, unit):
+    """Calculate a CSS length in points."""
+    return float(number) * CSS_LENGTHS[unit]
+
+
+def clean_margin_left(doc, text):
+    """Clean up use of margin-left CSS styles on tags."""
+    if doc not in ('n2396.htm', 'n2397.htm'):
+        return text
+    if doc == 'n2396.htm':
+        # This is the only <div> tag.
+        text = text.replace('<div style="margin-left:40px">', '<blockquote>')
+        text = text.replace('</div>', '</blockquote>')
+    text = text.replace('<p style="margin-left:0in">', '<p>')
+    rtext = text
+    new_text_list = []
+    while rtext:
+        # Look for a sequence of consecutive paragraphs with
+        # margin-left styles, and replace those styles with
+        # appropriate numbers of <blockquote>.
+        m = re.search(
+            '<p style="margin-left:([0-9.]+)(in|cm|px|pt)">(.*?)</p>',
+            rtext, flags=re.DOTALL)
+        if not m:
+            break
+        cur_paras = []
+        new_text_list.append(rtext[:m.start(0)])
+        while m:
+            cur_paras.append((css_len(m.group(1), m.group(2)), m.group(3)))
+            rtext = rtext[m.end(0):]
+            m = re.search(
+                '<p style="margin-left:([0-9.]+)(in|cm|px|pt)">(.*?)</p>',
+                rtext, flags=re.DOTALL)
+            if m and rtext[:m.start(0)].strip():
+                # The next paragraph found is in a separate sequence
+                # of consecutive paragraphs with margin-left
+                # specified.
+                break
+        indents = {}
+        for i, clen in enumerate(sorted({x[0] for x in cur_paras}), start=1):
+            indents[clen] = i
+        for clen, content in cur_paras:
+            indent = indents[clen]
+            new_text_list.append('%s<p>%s</p>%s\n'
+                                 % ('<blockquote>' * indent,
+                                    content,
+                                    '</blockquote>' * indent))
+    new_text_list.append(rtext)
+    return ''.join(new_text_list)
+
+
 # List of functions for cleaning HTML issue lists.
 CLEAN_FUNCS_LIST = (clean_amp, clean_ltgt, clean_chars, clean_tags,
-                    clean_nesting, clean_class, clean_color, clean_font)
+                    clean_nesting, clean_class, clean_color, clean_font,
+                    clean_margin_left)
 
 
 def clean_doc(doc, write_out):
