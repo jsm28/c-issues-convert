@@ -406,7 +406,6 @@ KNOWN_TAGS_LEAF = {'p', 'pre'}
 # Attributes to discard on certain tags (regardless of the attribute
 # value).
 KNOWN_ATTRS_DISCARD = {
-    'a': {'title'},
     'b': {'style'},
     'body': {'bgcolor', 'link', 'vlink'},
     'br': {'style'},
@@ -430,7 +429,7 @@ KNOWN_ATTRS_DISCARD = {
 # Attributes to keep on certain tags (possibly after custom logic to
 # remap or discard certain cases).
 KNOWN_ATTRS_KEEP = {
-    'a': {'href', 'id', 'name'},
+    'a': {'href', 'id', 'name', 'title'},
     'center': {'class'},
     'div': {'style'},
     'li': {'id', 'value'},
