@@ -734,7 +734,7 @@ class FixInvalidNesting(ProcessNesting):
         # Insert explicit paragraphs in certain contexts.
         if (before.strip()
             and self.open_tags
-            and self.open_tags[-1] in ('body', 'blockquote')):
+            and self.open_tags[-1] in ('body', 'blockquote', 'div')):
             self.handle_start_tag('p', [])
         super().handle_before_tag(before)
 
@@ -750,7 +750,7 @@ class FixInvalidNesting(ProcessNesting):
         """Insert explicit paragraphs for inline tags in certain contexts."""
         if (tag_name in KNOWN_TAGS_INLINE
             and self.open_tags
-            and self.open_tags[-1] in ('body', 'blockquote')):
+            and self.open_tags[-1] in ('body', 'blockquote', 'div')):
             self.handle_start_tag('p', [])
 
     def handle_empty_tag(self, tag_name, end_tag, tag_attrs):
