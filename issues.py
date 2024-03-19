@@ -971,9 +971,50 @@ def clean_class(doc, text):
     return ReplaceClass(doc, text).run()
 
 
+class ReplaceColor(ProcessNesting):
+
+    """Replace 'color' and 'background-color' CSS styles by simpler markup."""
+
+    def handle_start_tag(self, tag_name, tag_attrs):
+        """Handle a start tag."""
+        tstyle = None
+        if tag_name in ('span', 'sup'):
+            for tn, tv in tag_attrs:
+                if tn == 'style':
+                    tstyle = tv[1:-1].split(';')
+        tag_outside = None
+        if tstyle:
+            colors = [c for c in tstyle if 'color' in c]
+            if len(colors) > 1:
+                raise ValueError('multiple color styles: %s' % repr(tag_attrs))
+            tstyle = [x for x in tstyle if 'color' not in x]
+            if len(tag_attrs) != 1:
+                raise ValueError(
+                    'replacing tag with multiple attributes: %s'
+                    % repr(tag_attrs))
+            if tstyle:
+                tag_attrs = [('style', '"%s"' % ';'.join(tstyle))]
+            else:
+                tag_attrs = []
+            if colors and colors[0] in ('background-color:rgb(51,204,0)',
+                                        'color:#C00000'):
+                tag_outside = 'u'
+            # All other color styles are appropriately discarded.
+        if tag_outside:
+            super().handle_start_tag_internal(tag_outside, [])
+        super().handle_start_tag(tag_name, tag_attrs)
+        if tag_outside:
+            self.tag_outside[-1] = [tag_outside]
+
+
+def clean_color(doc, text):
+    """Clean up use of color CSS styles on tags."""
+    return ReplaceColor(doc, text).run()
+
+
 # List of functions for cleaning HTML issue lists.
 CLEAN_FUNCS_LIST = (clean_amp, clean_ltgt, clean_chars, clean_tags,
-                    clean_nesting, clean_class)
+                    clean_nesting, clean_class, clean_color)
 
 
 def clean_doc(doc, write_out):
