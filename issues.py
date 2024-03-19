@@ -1012,9 +1012,43 @@ def clean_color(doc, text):
     return ReplaceColor(doc, text).run()
 
 
+# Replacement tags for font-related CSS styles.
+FONT_STYLES = {'font-family:monospace': 'code', 'font-weight:bold': 'b',
+               'text-decoration:underline': 'u'}
+
+
+class ReplaceFont(ProcessNesting):
+
+    """Replace font-related CSS styles by simpler markup."""
+
+    def handle_start_tag(self, tag_name, tag_attrs):
+        """Handle a start tag."""
+        tstyle = None
+        if tag_name == 'span':
+            for tn, tv in tag_attrs:
+                if tn == 'style':
+                    tstyle = tv[1:-1].split(';')
+        tag_replace = None
+        if tstyle:
+            if len(tstyle) > 1:
+                raise ValueError('multiple font styles: %s' % repr(tag_attrs))
+            if len(tag_attrs) != 1:
+                raise ValueError(
+                    'replacing tag with multiple attributes: %s'
+                    % repr(tag_attrs))
+            tag_replace = FONT_STYLES[tstyle[0]]
+            tag_attrs = []
+        super().handle_start_tag(tag_name, tag_attrs, tag_replace)
+
+
+def clean_font(doc, text):
+    """Clean up use of font-related CSS styles on tags."""
+    return ReplaceFont(doc, text).run()
+
+
 # List of functions for cleaning HTML issue lists.
 CLEAN_FUNCS_LIST = (clean_amp, clean_ltgt, clean_chars, clean_tags,
-                    clean_nesting, clean_class, clean_color)
+                    clean_nesting, clean_class, clean_color, clean_font)
 
 
 def clean_doc(doc, write_out):
