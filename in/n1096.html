@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+<title>in/n1096</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta name="generator" content="pdftohtml 0.36"/>
+<style type="text/css">
+<!--
+.xflip {
+    -moz-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: fliph;
+}
+.yflip {
+    -moz-transform: scaleY(-1);
+    -webkit-transform: scaleY(-1);
+    -o-transform: scaleY(-1);
+    transform: scaleY(-1);
+    filter: flipv;
+}
+.xyflip {
+    -moz-transform: scaleX(-1) scaleY(-1);
+    -webkit-transform: scaleX(-1) scaleY(-1);
+    -o-transform: scaleX(-1) scaleY(-1);
+    transform: scaleX(-1) scaleY(-1);
+    filter: fliph + flipv;
+}
+-->
+</style>
+</head>
+<body bgcolor="#A0A0A0" vlink="blue" link="blue">
+<a name=1></a>WG14&#160;N1096<br/>
+<b>Introduction<br/></b>This&#160;document&#160;presents&#160;a&#160;further&#160;set&#160;of&#160;TR&#160;18037 defects,&#160;and&#160;will&#160;be presented and<br/>discussed during&#160;the&#160;WG14&#160;meeting&#160;in Lillehammer (April&#160;2005).&#160;The&#160;numbering&#160;follows<br/>the&#160;issue&#160;numbering&#160;1&#160;through 18&#160;from&#160;document&#160;WG14&#160;N1087 and&#160;hence&#160;starts&#160;with<br/>Defect&#160;19.<br/>
+<b>Defect&#160;19:<br/></b>Problem:&#160;Sec&#160;7.18a.2&#160;introduces&#160;a&#160;set&#160;of typedefs,&#160;and describes&#160;a&#160;convention&#160;for&#160;the<br/>return&#160;type&#160;of&#160;bits'<i>fx</i>':&#160;either&#160;int_<i>fx</i>_t,&#160;or&#160;uint_<i>fx</i>_t.<br/>
+Sec&#160;7.18a.6.5&#160;lists&#160;the&#160;12&#160;functions&#160;for&#160;bits'<i>fx</i>',&#160;all&#160;of&#160;which&#160;make&#160;use&#160;of the&#160;form<br/>'int_<i>fx</i>_t'.&#160;&#160;According&#160;to&#160;7.18a.2&#160;the&#160;last&#160;six&#160;should&#160;be&#160;of&#160;the&#160;form&#160;'uint_<i>fx</i>_t'.<br/>
+Solution:&#160;change&#160;the&#160;last&#160;6&#160;function prototypes&#160;in&#160;the&#160;Synopsis&#160;of&#160;7.18a.6.5&#160;to:<br/>
+<b>uint_uhr_t bitsuhr(unsigned short fract f);<br/>uint_ur_t bitsur(unsigned fract f);<br/>uint_ulr_t bitsulr(unsigned long fract f);<br/>uint_uhk_t bitsuhk(unsigned short accum f);<br/>uint_uk_t bitsuk(unsigned accum f);<br/>uint_ulk_t bitsulk(unsigned long accum f);</b><br/>
+<b>Defect&#160;20:<br/></b>Problem:&#160;the&#160;text&#160;on&#160;the&#160;countls&#160;function&#160;in 4.1.7.3 and&#160;7.18a.6.4&#160;reads:<br/>
+The&#160;integer&#160;return&#160;value&#160;of&#160;the above&#160;functions&#160;is&#160;defined&#160;as&#160;follows:<br/>-&#160;if the&#160;value&#160;of&#160;the&#160;fixed-point&#160;argument f&#160;is&#160;non-zero,&#160;the&#160;return&#160;value&#160;is<br/>
+the&#160;largest&#160;integer&#160;k&#160;for&#160;which&#160;the expression&#160;f&lt;&lt;k&#160;does&#160;not&#160;overflow;<br/>
+-&#160;if the&#160;value&#160;of&#160;the&#160;fixed-point&#160;argument&#160;is&#160;zero,&#160;an&#160;integer&#160;value&#160;is<br/>
+returned&#160;that&#160;is&#160;at&#160;least&#160;as&#160;large&#160;as&#160;N-1,&#160;where&#160;N&#160;is&#160;the&#160;total&#160;number&#160;of<br/>(nonpadding)&#160;bits&#160;of the&#160;fixed-point&#160;type&#160;of the&#160;argument.<br/>
+Note:&#160;if the&#160;value&#160;of the&#160;fixed-point&#160;argument&#160;is&#160;zero,&#160;the&#160;recommended&#160;return<br/>value&#160;is&#160;exactly&#160;N-1.<br/>
+In&#160;the&#160;'argument&#160;is&#160;zero'&#160;case,&#160;for&#160;a&#160;signed&#160;fixed-point type, the notion&#160;'nonpadding bits'<br/>includes&#160;the&#160;sign&#160;bit&#160;(see 6.2.6.3);&#160;this&#160;implies&#160;that the&#160;N&#160;for&#160;signed&#160;types&#160;is&#160;one&#160;larger<br/>that&#160;the&#160;N&#160;for&#160;the&#160;corresponding&#160;unsigned&#160;types;&#160;this&#160;is&#160;wrong&#160;(it&#160;suggests&#160;that&#160;shifting<br/>into&#160;the&#160;sign bit&#160;does&#160;not&#160;generate an&#160;overflow).&#160;In&#160;stead&#160;of&#160;'(nonpadding)&#160;bits', the<br/>notion&#160;'value bits'&#160;should&#160;be&#160;used.<br/>
+Solution:&#160;in&#160;4.1.7.3 and&#160;7.18a.6.4,&#160;replace&#160;in&#160;the&#160;2nd bullet&#160;'(nonpadding)' &#160;by&#160;'value'.<br/>
+<hr/>
+<a name=2></a><b>Defect&#160;21:<br/></b>Problem:&#160;the&#160;text&#160;on&#160;the&#160;countls&#160;function&#160;in 4.1.7.3 and 7.18a.6.4&#160;reads:<br/>
+The&#160;integer&#160;return&#160;value&#160;of&#160;the above&#160;functions&#160;is&#160;defined&#160;as&#160;follows:<br/>-&#160;if the&#160;value&#160;of&#160;the&#160;fixed-point&#160;argument f&#160;is&#160;non-zero,&#160;the&#160;return&#160;value&#160;is<br/>
+the&#160;largest&#160;integer&#160;k&#160;for&#160;which&#160;the expression&#160;f&lt;&lt;k&#160;does&#160;not&#160;overflow;<br/>
+-&#160;if the&#160;value&#160;of&#160;the&#160;fixed-point&#160;argument&#160;is&#160;zero,&#160;an&#160;integer&#160;value&#160;is<br/>
+returned&#160;that&#160;is&#160;at&#160;least&#160;as&#160;large&#160;as&#160;N-1,&#160;where&#160;N is&#160;the&#160;total&#160;number&#160;of<br/>(nonpadding)&#160;bits&#160;of the&#160;fixed-point type&#160;of the&#160;argument.<br/>
+Note:&#160;if the&#160;value&#160;of the&#160;fixed-point&#160;argument&#160;is&#160;zero,&#160;the&#160;recommended&#160;return<br/>value&#160;is&#160;exactly&#160;N-1.<br/>
+From&#160;the&#160;definition&#160;it&#160;is clear&#160;that&#160;for&#160;instance<br/>&#160;&#160;&#160; countlsur(&#160;UFRACT_EPSILON&#160;)&#160;==&#160;(UFRACT_FBIT&#160;-&#160;1)<br/>and<br/>&#160;&#160;&#160; countlsk&#160;(&#160;ACCUM_EPSILON&#160;)&#160;==&#160;(ACCUM_IBIT&#160;+&#160;ACCUM_FBIT&#160;-&#160;1)<br/>If the&#160;text&#160;'&#160;(nonpadding)&#160;bits'&#160;&#160;is&#160;replaced&#160;by&#160;'&#160;value b&#160;i(ts<br/>
+s&#160;'<br/>
+ee&#160;Defect&#160;20),&#160;then&#160;the&#160;text<br/>
+requires&#160;that<br/>&#160;&#160;&#160; countlsr(&#160;0.0r )&#160;&gt;=&#160;(N&#160;-&#160;1)<br/>where&#160;the&#160;latter&#160;value equals&#160;countls(&#160;FRACT_EPSILON&#160;).<br/>This seems&#160;counterintuitive;&#160;one&#160;would expect&#160;the&#160;value&#160;of&#160;countlsr(&#160;0.0r )&#160;to&#160;be&#160;one&#160;less<br/>than&#160;countls(&#160;FRACT_EPSILON&#160;).<br/>
+Solution:&#160;change&#160;in 4.1.7.3&#160;and&#160;7.18a.6.4&#160;the&#160;text&#160;of the&#160;2nd bullet&#160;and&#160;the&#160;Note as<br/>follows:<br/>
+-&#160;if the&#160;value&#160;of&#160;the&#160;fixed-point&#160;argument&#160;is&#160;zero,&#160;an&#160;integer&#160;value&#160;is<br/>
+returned&#160;that&#160;is&#160;at&#160;least&#160;as&#160;large&#160;as&#160;N,&#160;where&#160;N&#160;is&#160;the&#160;total&#160;number&#160;of<br/>value bits&#160;of&#160;the&#160;fixed-point type&#160;of&#160;the&#160;argument.<br/>
+Note:&#160;if the&#160;value&#160;of the&#160;fixed-point&#160;argument&#160;is&#160;zero,&#160;the&#160;recommended&#160;return<br/>value&#160;is&#160;exactly&#160;N.<br/>
+<b>Defect&#160;22:<br/></b>Problem:&#160;the&#160;bitwise&#160;integer&#160;to&#160;fixed-point&#160;functions&#160;(in 7.18a.6.6)&#160;do not&#160;use&#160;the&#160;int_<i>fx</i>_t<br/>and uint_<i>fx</i>_t&#160;integer&#160;types;&#160;the&#160;text&#160;in 4.1.7.5&#160;is&#160;already&#160;correct.<br/>
+Solution:<br/>-&#160;change&#160;the&#160;Synopsis section&#160;of&#160;7.18a.6.6&#160;to&#160;read:<br/>
+<b>#include &lt;stdfix.h&gt;<br/>short fract hrbits(int_hr_t&#160;n);<br/>fract rbits(int_r_t&#160;n);<br/>long fract lrbits(int_lr_t&#160;n);<br/>short accum hkbits(int_hk_t&#160;n);<br/>accum kbits(int_k_t&#160;n);<br/>long accum lkbits(int_lk_t&#160;n);<br/>unsigned short fract uhrbits(uint_uhr_t&#160;n);<br/>unsigned fract urbits(uint_ur_t&#160;n);</b><br/>
+<hr/>
+<a name=3></a><b>unsigned long fract ulrbits(uint_ulr_t&#160;n);<br/>unsigned short accum uhkbits(uint_uhk_t&#160;n);<br/>unsigned accum ukbits(uint_uk_t&#160;n);<br/>unsigned long accum ulkbits(uint_ulk_t&#160;n);</b><br/>
+-&#160;remove&#160;from&#160;the&#160;of&#160;7.18a.2&#160;the&#160;words&#160;'&#160;as&#160;return&#160;types'<br/>-&#160;change&#160;in 7.18a.2&#160;the&#160;first&#160;sentence after&#160;the&#160;list&#160;to&#160;read:<br/>
+The&#160;integer&#160;types&#160;<b>int_<i>fx</i></b><b>_t</b>&#160;and&#160;<b>uint_<i>fx</i></b><b>_t</b>&#160;are&#160;the&#160;return&#160;types&#160;of the<br/>corresponding&#160;<b>bits<i>fx</i></b>&#160;functions&#160;and&#160;are&#160;chosen&#160;so&#160;that the&#160;return&#160;value&#160;can<br/>hold all&#160;the necessary&#160;bits;&#160;the&#160;<i><b>fx</b></i><b>bits</b>&#160;functions&#160;use&#160;these&#160;integer&#160;types&#160;as<br/>types&#160;for&#160;their&#160;parameters.<br/>
+<hr/>
+</body>
+</html>

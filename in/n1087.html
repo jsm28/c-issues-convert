@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+<title>in/n1087</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta name="generator" content="pdftohtml 0.36"/>
+<style type="text/css">
+<!--
+.xflip {
+    -moz-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: fliph;
+}
+.yflip {
+    -moz-transform: scaleY(-1);
+    -webkit-transform: scaleY(-1);
+    -o-transform: scaleY(-1);
+    transform: scaleY(-1);
+    filter: flipv;
+}
+.xyflip {
+    -moz-transform: scaleX(-1) scaleY(-1);
+    -webkit-transform: scaleX(-1) scaleY(-1);
+    -o-transform: scaleX(-1) scaleY(-1);
+    transform: scaleX(-1) scaleY(-1);
+    filter: fliph + flipv;
+}
+-->
+</style>
+</head>
+<body bgcolor="#A0A0A0" vlink="blue" link="blue">
+<a name=1></a>WG14&#160;N1087<br/>
+<b>Introduction<br/></b>This&#160;document&#160;is&#160;a&#160;consolidated&#160;report&#160;on&#160;the&#160;TR&#160;18037&#160;defects,&#160;as&#160;presented&#160;and<br/>discussed during&#160;the&#160;WG14&#160;meeting&#160;in&#160;Redmond&#160;(October&#160;2004).&#160;The numbering<br/>follows&#160;the&#160;issue numbering&#160;1&#160;through 12&#160;from&#160;document&#160;WG14&#160;N1071;&#160;the&#160;latter<br/>document&#160;has&#160;some&#160;more background&#160;for&#160;some&#160;of&#160;these&#160;issues.&#160;During&#160;the&#160;meeting<br/>defects&#160;13-18&#160;were added.<br/>
+<b>Defect&#160;1:<br/></b>Problem: &#160;Using&#160;the&#160;suffix&#160;'k'&#160;to&#160;stand&#160;for&#160;'accum'&#160;with&#160;the&#160;base&#160;'strto'&#160;for&#160;numeric<br/>conversion&#160;functions yields&#160;a&#160;conflict&#160;with&#160;the existing&#160;C&#160;function&#160;'strtok'.<br/>
+Solution: &#160;Rename&#160;the&#160;fixed-point&#160;numeric conversion&#160;functions&#160;to have&#160;a&#160;base&#160;of<br/>'strtofx'&#160;instead of&#160;'strto'. &#160;The&#160;new&#160;names&#160;will&#160;be&#160;'strtofxhr',&#160;'strtofxr',&#160;'strtofxlr',&#160;'strtofxhk',<br/>'strtofxk',&#160;'strtofxlk',&#160;'strtofxuhr',&#160;'strtofxur',&#160;'strtofxulr',&#160;'strtofxuhk',&#160;'strtofxuk',&#160;and<br/>'strtofxulk'.<br/>
+Affected&#160;sections&#160;in&#160;TR18037:&#160;4.1.7&#160;(2&#160;times),&#160;4.1.9,&#160;replacement&#160;text&#160;for&#160;7.18a.6.8<br/>(many&#160;times),&#160;replacement text for&#160;7.19.6.2&#160;para&#160;12.<br/>
+<b>Defect&#160;2:<br/></b>Problem:&#160;&#160;TR&#160;18037&#160;requires&#160;that&#160;overflow&#160;handling&#160;be&#160;done before&#160;rounding,&#160;which<br/>causes&#160;problems&#160;for&#160;alternative overflow&#160;modes such as&#160;modular&#160;wraparound.&#160;&#160;(When<br/>the overflow&#160;mode&#160;is&#160;saturation, the&#160;order&#160;in&#160;which&#160;rounding and&#160;overflow&#160;handling&#160;are<br/>performed&#160;has&#160;no effect&#160;on&#160;the&#160;end-result.)<br/>
+Solution: &#160;Specify&#160;that&#160;rounding&#160;should be&#160;done before&#160;overflow&#160;handling.<br/>
+Changes:<br/>
+•&#160;Clause 4.1.3,&#160;para&#160;3:&#160;strike&#160;'(after&#160;any&#160;overflow&#160;handling)'.<br/>
+Replacement text for&#160;5.2.4.2.3:<br/>
+•&#160;Replace&#160;in para&#160;6&#160;(staring&#160;with&#160;'If the&#160;result&#160;type&#160;of&#160;an&#160;arithmetic<br/>
+operation')&#160;the&#160;text&#160;'and&#160;then overflow&#160;handling&#160;and&#160;rounding'&#160;by&#160;'and&#160;then<br/>rounding and overflow&#160;handling'<br/>
+•&#160;Strike&#160;from&#160;para&#160;9&#160;(starting&#160;with&#160;'If&#160;(after&#160;any&#160;overflow&#160;handling)')&#160;the&#160;text<br/>
+'(after&#160;any&#160;overflow&#160;handling)'<br/>
+<b>Defect&#160;3:<br/></b>Problem:&#160;4.1.6.2.1&#160;(Binary&#160;arithmetic&#160;operations),&#160;last&#160;para,&#160;the&#160;text&#160;on&#160;the divi&#160;functions<br/>has&#160;'yielding&#160;a&#160;fixed-point type&#160;result'&#160;while&#160;the divi&#160;functions&#160;have an&#160;integer&#160;result.<br/>
+Solution:&#160;Change&#160;'yielding&#160;a&#160;fixed-point type&#160;result';&#160;this&#160;must&#160;be&#160;'yielding&#160;an&#160;integer&#160;type<br/>result'<br/>
+Change:&#160;Modify&#160;4.1.6.2.1 para&#160;5&#160;accordingly.<br/>
+<hr/>
+<a name=2></a><b>Defect&#160;4:<br/></b>Problem:&#160;The&#160;type-generic&#160;macro definition&#160;sections&#160;(4.1.7.6&#160;and&#160;7.18a.6.7)&#160;are<br/>incomplete and&#160;possibly&#160;wrong&#160;(see&#160;N1071&#160;for more&#160;information)<br/>
+Solution:&#160;The&#160;generic&#160;function&#160;names&#160;should be&#160;&#160;'absfx',&#160;'countlsfx'&#160;and&#160;'roundfx';<br/>7.18a.6.7&#160;should&#160;better&#160;explain&#160;which underlying&#160;functions&#160;are&#160;selected.<br/>
+Changes:&#160;in&#160;the&#160;replacement text for&#160;7.18a.6.7:<br/>
+•&#160;Change&#160;the&#160;type&#160;font for&#160;'fx'&#160;from&#160;bold&#160;italic&#160;to&#160;bold&#160;(3&#160;times)<br/>
+•&#160;Add&#160;to 7.18a.6.7:<br/>
+For&#160;each&#160;macro,&#160;use of the&#160;macro&#160;invokes&#160;the&#160;function&#160;whose&#160;corresponding&#160;real<br/>type and&#160;type domain&#160;is&#160;the&#160;real&#160;type&#160;of&#160;the&#160;first&#160;generic&#160;argument.&#160;&#160;If the&#160;real<br/>type&#160;of&#160;the&#160;first&#160;generic&#160;argument&#160;is&#160;not&#160;a&#160;fixed-point type,&#160;the&#160;behavior&#160;is<br/>undefined.<br/>
+<b>Defect&#160;5:<br/></b>Problem:&#160;The&#160;replacement text for&#160;6.2.6.3&#160;para&#160;3,&#160;last&#160;sentence&#160;says&#160;'integer&#160;types'<br/>while&#160;it&#160;should&#160;say&#160;'fixed-point&#160;types'&#160;(twice).<br/>
+Solution:&#160;Make&#160;the&#160;change<br/>
+Change:&#160;Replace&#160;the&#160;last&#160;sentence of the&#160;replacement&#160;text&#160;for&#160;6.2.6.3 para 3&#160;with:&#160;The<br/>width&#160;of&#160;a&#160;fixed-point&#160;type&#160;is&#160;the&#160;same&#160;but&#160;including&#160;any&#160;sign&#160;bit;&#160;thus&#160;for&#160;unsigned&#160;fixed-<br/>point types&#160;the&#160;two&#160;values&#160;are&#160;the&#160;same,&#160;while&#160;for&#160;signed&#160;fixed-point&#160;types&#160;the&#160;width&#160;is<br/>one&#160;greater&#160;than&#160;the&#160;precision.<br/>
+<b>Defect&#160;6<br/></b>Problem:&#160;The&#160;replacement text for&#160;7.18a.6.1&#160;(on&#160;fixed-point&#160;arithmetic&#160;support functions)<br/>does&#160;not&#160;specify&#160;what&#160;happens&#160;if&#160;an&#160;integer result&#160;overflows.<br/>
+Solution:&#160;Undefined behavior&#160;is&#160;implied by&#160;default&#160;in&#160;the&#160;C&#160;standard.&#160;Mention&#160;in&#160;the<br/>descriptive&#160;text that&#160;this&#160;should&#160;result&#160;in&#160;undefined behavior.<br/>
+Change:&#160;In 4.1.6.2.1&#160;para&#160;5,&#160;add&#160;the&#160;following&#160;sentence&#160;to&#160;the&#160;end of the&#160;paragraph: If<br/>an&#160;integer&#160;result&#160;of&#160;one&#160;of these&#160;functions&#160;overflows, the&#160;behavior&#160;is&#160;undefined.<br/>
+<b>Defect&#160;7<br/></b>Problem:&#160;The description&#160;of the&#160;fixed-point&#160;rounding&#160;functions&#160;in&#160;the&#160;replacement&#160;text&#160;for<br/>7.18a.6.3&#160;require&#160;that&#160;fractional&#160;bits&#160;beyond&#160;the&#160;rounding point&#160;are&#160;set&#160;to&#160;zero&#160;in&#160;the<br/>result.&#160;This should&#160;not&#160;apply&#160;when&#160;saturation has&#160;occurred.<br/>
+Solution:&#160;Replace&#160;the&#160;text&#160;as&#160;proposed.<br/>
+Change:&#160;Modify&#160;the&#160;third&#160;sentence&#160;of the description of&#160;7.18a.6.3&#160;to&#160;read:&#160;'When<br/>saturation has&#160;not&#160;occurred, fractional&#160;bits&#160;beyond&#160;the&#160;rounding&#160;point&#160;are&#160;set&#160;to&#160;zero&#160;in<br/>the&#160;result.'<br/>
+<hr/>
+<a name=3></a><b>Defect&#160;8<br/></b>Problem:&#160;Consider<br/>
+//&#160;file 1<br/>register REG_A int reg_a;<br/>
+//&#160;file 2<br/>extern int reg_a;<br/>int main() { return reg_a; }<br/>
+According&#160;to&#160;the&#160;second&#160;new&#160;constraints&#160;for&#160;6.7.1&#160;this&#160;is&#160;not&#160;allowed:<br/>
+If&#160;an object&#160;is&#160;declared&#160;with a named-register&#160;storage-class&#160;specifier,&#160;every<br/>declaration&#160;of that&#160;object&#160;shall include&#160;the&#160;same named-register&#160;storage-class<br/>specifier.<br/>
+The&#160;'shall'&#160;implies&#160;that&#160;a&#160;diagnostic&#160;is&#160;required here.&#160;However,&#160;so&#160;far&#160;C&#160;compilers&#160;have<br/>not&#160;been&#160;required&#160;to&#160;diagnose&#160;such&#160;issues&#160;across&#160;translation units. Is&#160;this&#160;really&#160;the<br/>intention?<br/>
+Solution:&#160;The&#160;intent&#160;is&#160;to&#160;require&#160;a&#160;diagnostic&#160;for&#160;different&#160;named-register&#160;storage-class<br/>specifier&#160;declarations&#160;within a&#160;single&#160;translation&#160;unit for&#160;the&#160;same object.<br/>
+Changes:<br/>
+•&#160;Change&#160;in&#160;the&#160;second of the&#160;new&#160;constraint&#160;paragraphs&#160;for&#160;6.7.1&#160;the&#160;words<br/>
+'every&#160;declaration&#160;of that&#160;object'&#160;to&#160;'every&#160;declaration&#160;of that&#160;object&#160;within&#160;the<br/>same&#160;translation unit'.<br/>
+•&#160;In&#160;the new&#160;text for&#160;6.7.1.1,&#160;add&#160;at the beginning&#160;of&#160;the&#160;last&#160;paragraph&#160;(paragraph<br/>
+6)&#160;the&#160;sentence:&#160;'If&#160;an&#160;object&#160;is&#160;declared&#160;with a named-register&#160;storage-class<br/>specifier,&#160;every&#160;declaration&#160;of that&#160;object&#160;shall include&#160;the&#160;same named-register<br/>storage-class specifier.'<br/>
+<b>Defect&#160;9:<br/></b>Problem:&#160;&#160;If&#160;_X&#160;and&#160;_Y&#160;are address&#160;spaces&#160;with&#160;_Y&#160;enclosing&#160;_X,&#160;after&#160;the declarations<br/>
+_X char a;<br/>_Y char *p = &amp;a;<br/>
+the dereference&#160;*p&#160;is&#160;undefined&#160;because of the&#160;way&#160;TR&#160;18037&#160;applies&#160;the&#160;notion&#160;of<br/>effective&#160;type&#160;(C&#160;Standard&#160;6.5,&#160;paragraphs&#160;6&#160;and&#160;7).&#160;&#160;This&#160;makes&#160;overlapping named<br/>address spaces&#160;unusable by&#160;strictly&#160;conforming&#160;code&#160;in&#160;most&#160;circumstances.<br/>
+Solution: In&#160;the&#160;detailed&#160;changes&#160;to&#160;the&#160;C&#160;Standard,&#160;modify&#160;the definition&#160;of&#160;<i>effective<br/>type</i>&#160;(clause&#160;6.5,&#160;paragraph&#160;6)&#160;to&#160;exclude address&#160;space&#160;qualifiers,&#160;and&#160;restore&#160;the&#160;rules<br/>in paragraph&#160;7&#160;to&#160;their&#160;original&#160;form.&#160;&#160;(Note&#160;that&#160;the&#160;whole&#160;concept&#160;of&#160;<i>effective&#160;type</i>&#160;is<br/>used only&#160;in 6.5 and&#160;in one&#160;footnote&#160;elsewhere&#160;in&#160;the&#160;C&#160;Standard.)&#160;&#160;This&#160;makes&#160;TR<br/>18037's&#160;definition&#160;of&#160;<i>additionally&#160;access-qualified&#160;version</i>&#160;of&#160;a&#160;type&#160;(in&#160;the&#160;new&#160;text&#160;for<br/>6.2.5)&#160;unnecessary.<br/>
+Changes:&#160;&#160;Change&#160;the&#160;replacement text&#160;for&#160;clause&#160;6.5&#160;of the&#160;C&#160;Standard&#160;to&#160;the<br/>following:<br/>
+<hr/>
+<a name=4></a><b>Clause 6.5&#160;-&#160;Expressions</b>,&#160;replace&#160;the&#160;first&#160;two&#160;sentences&#160;of&#160;paragraph&#160;6&#160;with:<br/>
+The&#160;<i>effective&#160;type</i>&#160;of&#160;an&#160;object for&#160;an&#160;access&#160;to&#160;its&#160;stored&#160;value&#160;is&#160;the declared<br/>type&#160;of&#160;the object,&#160;if&#160;any,&#160;without&#160;any&#160;address-space&#160;qualifier&#160;that&#160;the&#160;declared<br/>type&#160;may&#160;have.72)&#160;&#160;If&#160;a&#160;value&#160;is&#160;stored&#160;into an&#160;object&#160;having&#160;no&#160;declared&#160;type<br/>through&#160;an&#160;lvalue having&#160;a&#160;type&#160;that&#160;is&#160;not&#160;a&#160;character&#160;type, then&#160;the&#160;type&#160;of&#160;the<br/>lvalue,&#160;without&#160;any&#160;address-space&#160;qualifier,&#160;becomes&#160;the&#160;effective&#160;type&#160;of the<br/>object&#160;for&#160;that&#160;access&#160;and&#160;for&#160;subsequent&#160;accesses&#160;that&#160;do&#160;not&#160;modify&#160;the&#160;stored<br/>value.<br/>
+Remove&#160;the&#160;sentence&#160;defining&#160;<i>additionally&#160;access-qualified&#160;version</i>&#160;from&#160;TR&#160;18037&#160;(first<br/>paragraph&#160;replacing&#160;paragraph&#160;26&#160;of&#160;6.2.5).<br/>
+<b>Defect&#160;10:<br/></b>After&#160;close&#160;reading&#160;during&#160;the&#160;meeting&#160;it&#160;appeared&#160;that&#160;Issue 10 of&#160;N1071&#160;was&#160;not&#160;a<br/>defect.&#160;The&#160;number&#160;is&#160;maintained&#160;for&#160;consistency&#160;with&#160;N1071.<br/>
+<b>Defect&#160;11<br/></b>Problem:&#160;The&#160;current&#160;specification&#160;allows&#160;global&#160;named-registers&#160;to be&#160;initialized. It&#160;is<br/>however&#160;unclear&#160;when,&#160;and by&#160;whom&#160;this&#160;initialization&#160;should be done&#160;(one&#160;could<br/>imagine&#160;that the&#160;register&#160;storage&#160;onto&#160;which&#160;the&#160;variable&#160;maps&#160;does&#160;not&#160;really&#160;exist&#160;until<br/>some device&#160;is&#160;initialized by&#160;some user&#160;code).<br/>
+Solution:&#160;Disallow&#160;initializers&#160;on named-register&#160;variables.<br/>
+Change:&#160;Add&#160;the&#160;following&#160;new&#160;constraint&#160;to&#160;section 6.7:&#160;'A&#160;declaration&#160;containing&#160;a<br/>named-register&#160;storage-class specifier&#160;shall&#160;not&#160;contain&#160;an&#160;initializer.'<br/>
+<b>Defect&#160;12<br/></b>Problem:&#160;The new&#160;text for&#160;6.7.2.1,&#160;requires&#160;that&#160;a&#160;specifier-qualifier-list&#160;in&#160;the declaration<br/>of&#160;a&#160;member&#160;of&#160;a&#160;structure&#160;or&#160;union&#160;shall&#160;not&#160;include an address&#160;space&#160;qualifier.&#160;This<br/>disallows&#160;for&#160;instance&#160;the&#160;type&#160;of&#160;a&#160;member&#160;of&#160;structure&#160;to&#160;be&#160;a&#160;pointer&#160;into&#160;a named<br/>address space.<br/>
+Solution:&#160;The&#160;intention&#160;was&#160;to&#160;disallow&#160;members&#160;of&#160;a&#160;single&#160;structure/union&#160;to&#160;have<br/>different&#160;address&#160;qualifiers.<br/>
+Change:&#160;Modify&#160;the&#160;constraint&#160;for&#160;6.7.2.1&#160;to be:&#160;'Within a&#160;structure&#160;or&#160;union&#160;specifier, the<br/>type&#160;of&#160;a&#160;member&#160;shall&#160;not&#160;be&#160;qualified by&#160;an address&#160;space&#160;qualifier.'<br/>
+<b>Defect&#160;13<br/></b>Problem:&#160;TR&#160;18037&#160;does&#160;not&#160;alter&#160;the&#160;definition&#160;of&#160;integer&#160;constant&#160;expression&#160;in para 6<br/>of&#160;6.6.<br/>
+Solution:&#160;This&#160;is&#160;an&#160;oversight&#160;which,&#160;for&#160;consistency&#160;reasons,&#160;should&#160;be&#160;corrected.<br/>
+Change:&#160;Add new&#160;replacement&#160;text&#160;for&#160;6.6&#160;to&#160;change&#160;the&#160;first&#160;sentence&#160;of&#160;para&#160;6 as<br/>
+<hr/>
+<a name=5></a>follows:&#160;insert&#160;before&#160;'and&#160;floating'&#160;the&#160;text&#160;'fixed-point&#160;constants&#160;that&#160;are&#160;the&#160;immediate<br/>operand&#160;of&#160;casts'<br/>
+<b>Defect&#160;14<br/></b>Problem:&#160;The new&#160;text for&#160;6.5.8&#160;(relational&#160;operators)&#160;and&#160;6.5.9&#160;(equality&#160;operators)&#160;add<br/>as&#160;a&#160;constraint:&#160;'If&#160;the&#160;two operands&#160;are pointers&#160;into different&#160;address&#160;spaces,&#160;the<br/>address spaces&#160;must&#160;overlap.'.&#160;Such&#160;a&#160;constraint&#160;is&#160;missing&#160;for&#160;6.5.6&#160;(additive<br/>operators),&#160;where&#160;it&#160;is&#160;relevant&#160;for&#160;pointer&#160;subtraction.<br/>
+Solution:&#160;Add&#160;the&#160;requested&#160;constraint.<br/>
+Change:&#160;Add&#160;the&#160;following&#160;constraint to&#160;6.5.6&#160;:&#160;'For&#160;subtraction,&#160;if the&#160;two operands&#160;are<br/>pointers&#160;into different&#160;address&#160;spaces, the&#160;address&#160;spaces&#160;must&#160;overlap.'<br/>
+<b>Defect&#160;15<br/></b>Problem:&#160;The&#160;third&#160;sentence of&#160;para&#160;5 of&#160;4.1.6.2.1&#160;start&#160;with&#160;'The&#160;generic&#160;function&#160;names<br/>...'; the&#160;word&#160;'generic'&#160;might&#160;cause&#160;confusion&#160;with&#160;'type-generic'.<br/>
+Solution:&#160;Change&#160;'generic&#160;function names'&#160;to&#160;just&#160;'names'.<br/>
+Change:&#160;Modify&#160;4.1.6.2.1 para&#160;5&#160;third&#160;sentence&#160;accordingly.<br/>
+<b>Defect&#160;16<br/></b>Problem:&#160;The&#160;first&#160;sentence of&#160;4.1.6.2.1 para&#160;5&#160;('&#160;According&#160;to&#160;the&#160;rules&#160;above,&#160;the&#160;result<br/>type&#160;of&#160;an&#160;arithmetic&#160;operation&#160;where&#160;(at&#160;least)&#160;one&#160;operand&#160;has&#160;a&#160;fixed-point&#160;type&#160;is<br/>always&#160;a&#160;fixed-point type.')&#160;is&#160;wrong&#160;as&#160;it&#160;does&#160;not&#160;take&#160;operands&#160;with&#160;floating-point type<br/>into account.<br/>
+Solution:&#160;As&#160;it&#160;is&#160;the&#160;intention&#160;to only&#160;discuss&#160;integer&#160;types&#160;and&#160;fixed-point types&#160;in&#160;this<br/>paragraph,&#160;change&#160;the&#160;sentence&#160;accordingly.<br/>
+Change:&#160;Modify&#160;the&#160;first&#160;sentence&#160;of&#160;4.1.6.2.1&#160;para&#160;5&#160;to&#160;read:&#160;'According&#160;to&#160;the&#160;rules<br/>above, the&#160;result&#160;type&#160;of&#160;an&#160;arithmetic&#160;operation&#160;where one&#160;operand&#160;has&#160;a&#160;fixed-point<br/>type and&#160;the&#160;other&#160;operand&#160;has&#160;an&#160;integer&#160;or&#160;a&#160;fixed-point type&#160;is&#160;always&#160;a&#160;fixed-point<br/>type.'<br/>
+<b>Defect&#160;17<br/></b>Problem:&#160;TR&#160;18037&#160;has&#160;in&#160;many&#160;places&#160;the&#160;text fragment&#160;'overflow&#160;and&#160;rounding',&#160;but<br/>has&#160;also&#160;the&#160;text&#160;'rounding and&#160;overflow'.<br/>
+Solution:&#160;Defect&#160;2&#160;has&#160;established&#160;that&#160;the&#160;required&#160;order&#160;is&#160;first to do&#160;rounding&#160;and&#160;then<br/>to do&#160;overflow&#160;handling;&#160;make&#160;the&#160;text&#160;consistent&#160;by&#160;replacing&#160;the&#160;text fragment&#160;'overflow<br/>and&#160;rounding'&#160;by&#160;'rounding and overflow'&#160;throughout the document.<br/>
+Change:&#160;Make&#160;the&#160;required&#160;change&#160;in&#160;many&#160;places&#160;(including&#160;the&#160;title of&#160;4.1.3 and&#160;A.4).<br/>
+<hr/>
+<a name=6></a><b>Defect&#160;18:<br/></b>Problem:&#160;In&#160;6.5, the&#160;first&#160;sentence of the&#160;replacement text&#160;for&#160;the description&#160;section&#160;of<br/>7.8a.4.6&#160;lists&#160;a number&#160;of functions.&#160;The&#160;second&#160;sentence&#160;of the&#160;same&#160;paragraph has&#160;a<br/>similar&#160;list&#160;of functions&#160;that&#160;should be&#160;in&#160;the&#160;same&#160;order&#160;as&#160;in&#160;the&#160;first&#160;sentence,&#160;but<br/>which&#160;is&#160;not.<br/>
+Solution:&#160;Reorder&#160;the&#160;list&#160;in&#160;the&#160;second&#160;sentence.<br/>
+Change:&#160;Change&#160;in&#160;6.5&#160;(detailed&#160;changes&#160;for&#160;the&#160;Basic&#160;I/O&#160;Hardware&#160;Addressing)&#160;the<br/>second&#160;sentence&#160;of the&#160;description&#160;section&#160;in&#160;7.8a.4.6&#160;to&#160;start&#160;with:&#160;'&#160;The&#160;functions&#160;are<br/>equivalent to&#160;ioand,&#160;ioor,&#160;ioxor,&#160;ioandl,&#160;ioorl,&#160;and&#160;ioxorl,&#160;respectively, ...'.<br/>
+<hr/>
+</body>
+</html>

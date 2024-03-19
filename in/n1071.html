@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+<title>in/n1071</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta name="generator" content="pdftohtml 0.36"/>
+<style type="text/css">
+<!--
+.xflip {
+    -moz-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: fliph;
+}
+.yflip {
+    -moz-transform: scaleY(-1);
+    -webkit-transform: scaleY(-1);
+    -o-transform: scaleY(-1);
+    transform: scaleY(-1);
+    filter: flipv;
+}
+.xyflip {
+    -moz-transform: scaleX(-1) scaleY(-1);
+    -webkit-transform: scaleX(-1) scaleY(-1);
+    -o-transform: scaleX(-1) scaleY(-1);
+    transform: scaleX(-1) scaleY(-1);
+    filter: fliph + flipv;
+}
+-->
+</style>
+</head>
+<body bgcolor="#A0A0A0" vlink="blue" link="blue">
+<a name=1></a><b>WG14&#160;N1071</b><br/>
+Title:<br/>
+ISO/IEC&#160;TR&#160;18037&#160;issues<br/>
+Status:<br/>
+For&#160;discussion&#160;at&#160;the&#160;WG14&#160;Redmond&#160;meeting, October&#160;2004<br/>
+Source:<br/>
+TR&#160;18037&#160;editor<br/>
+Note: the&#160;clause numbering&#160;used&#160;in&#160;this&#160;document&#160;is&#160;the&#160;numbering used&#160;in&#160;the official<br/>approved&#160;version&#160;of&#160;TR&#160;18037;&#160;in&#160;this&#160;official&#160;version,&#160;the&#160;fixed-point&#160;arithmetic&#160;is&#160;in<br/>clause&#160;4&#160;(was clause&#160;2), the named address&#160;spaces&#160;and named-register&#160;storage&#160;classes<br/>are&#160;in&#160;clause&#160;5&#160;(was clause&#160;3)&#160;and&#160;the basic&#160;I/O&#160;hardware addressing&#160;is&#160;in&#160;clause&#160;6&#160;(was<br/>clause&#160;4).<br/>
+The&#160;issues&#160;presented&#160;in&#160;this&#160;document&#160;were&#160;reported&#160;earlier&#160;by&#160;email;&#160;parts&#160;of the&#160;email<br/>discussion&#160;is&#160;added here as&#160;well.&#160;The&#160;order&#160;of the&#160;issues&#160;is&#160;roughly&#160;the&#160;order&#160;in&#160;which<br/>they&#160;appear&#160;in&#160;TR&#160;18037.<br/>
+<b>Issue&#160;1:&#160;Name&#160;conflict&#160;for&#160;strtok<br/></b>Description:&#160;by&#160;selecting&#160;the&#160;letter&#160;'k'&#160;as suffix&#160;for&#160;the&#160;accum&#160;type,&#160;the&#160;the&#160;function&#160;to<br/>convert&#160;a&#160;string&#160;to&#160;an&#160;accum&#160;type&#160;gets&#160;the&#160;name&#160;strtok;&#160;this&#160;name&#160;is&#160;already&#160;in use&#160;in&#160;the<br/>C&#160;standard.<br/>
+Possible&#160;solutions:<br/>-&#160;use a different&#160;letter<br/>
+-&#160;'q'&#160;as&#160;proposed&#160;originally,&#160;conflicts&#160;with&#160;quadruple&#160;precision&#160;format<br/>-&#160;'y'&#160;the&#160;only&#160;reasonable&#160;choice of the&#160;'free'&#160;letters&#160;(others&#160;are&#160;'b',&#160;'m',&#160;'v'&#160;and<br/>
+'w');<br/>
+-&#160;change&#160;the&#160;names&#160;of&#160;all&#160;&#34;strto&#34;&#160;functions&#160;to&#160;&#34;strto_&#34;;&#160;that&#160;is:&#160;&#34;strtok&#34;&#160;becomes<br/>
+&#34;strto_k&#34;,&#160;&#34;strtoht&#34;&#160;becomes&#160;&#34;strto_hr&#34;,&#160;etc.&#160;Easy&#160;to do&#160;but&#160;a&#160;little&#160;bit&#160;inconsistent<br/>with&#160;the&#160;C library;<br/>
+-&#160;use&#160;the&#160;letter&#160;'q'&#160;only&#160;for&#160;the&#160;functionnames,&#160;leave&#160;the&#160;'k'&#160;everywhere else.<br/>
+<b>Issue&#160;2:&#160;Order&#160;in&#160;which overflow&#160;handling&#160;and&#160;rounding&#160;is&#160;done<br/></b>Description:&#160;the&#160;current&#160;text&#160;requires&#160;that&#160;overflow&#160;handling&#160;is&#160;done&#160;before&#160;rounding; this<br/>is counter&#160;intuitive,&#160;and&#160;not&#160;what&#160;is&#160;done&#160;for&#160;floating-point&#160;overflow/rounding.&#160;As&#160;it<br/>happens, the&#160;order&#160;in&#160;which overflow&#160;and&#160;rounding are&#160;done has&#160;no effect&#160;on&#160;the&#160;result<br/>when&#160;saturation&#160;is&#160;used&#160;for&#160;overflow&#160;handling.<br/>Hence,&#160;if&#160;we&#160;change&#160;the&#160;order,&#160;the&#160;result&#160;remains&#160;the&#160;same&#160;for&#160;saturation.&#160;However,&#160;with<br/>the&#160;current&#160;required order,&#160;mod_wrap as&#160;overflow&#160;handling&#160;(which&#160;is&#160;allowed but&#160;not<br/>required)&#160;cannot&#160;(reasonably)&#160;be&#160;implemented. It&#160;is&#160;therefore&#160;proposed&#160;to&#160;change&#160;the<br/>order.<br/>
+Proposed&#160;solution:&#160;change&#160;the&#160;required&#160;order&#160;of&#160;overflow&#160;handling&#160;and&#160;rounding.<br/>
+<b>Issue&#160;3:&#160;Typo&#160;in&#160;4.1.6.2.1&#160;-&#160;Binary&#160;arithmetic&#160;operations<br/></b>Description:&#160;4.1.6.2.1&#160;(Binary&#160;arithmetic&#160;operations),&#160;last&#160;para, the&#160;text&#160;on&#160;the&#160;divi<br/>fuctions&#160;has&#160;'yielding&#160;a&#160;fixed-point&#160;type&#160;result'; this&#160;must&#160;be&#160;'yielding&#160;an&#160;integer&#160;type<br/>result'.<br/>
+<hr/>
+<a name=2></a>Proposed&#160;solution:&#160;obvious<br/>
+<b>Issue&#160;4:&#160;Type&#160;generic&#160;macro's<br/></b>Description:&#160;The&#160;type-generic&#160;macro&#160;definition&#160;sections&#160;(2.1.7.6 and 7.18a.6.7)&#160;are<br/>incomplete and&#160;possibly&#160;wrong.<br/>
+Incomplete because&#160;there&#160;are&#160;no&#160;rules&#160;on&#160;which&#160;function&#160;should&#160;be&#160;called&#160;when a&#160;type-<br/>generic&#160;macro&#160;is called&#160;with a non&#160;fixed-point type argument.&#160;&#160;Possibly&#160;wrong,&#160;because<br/>it&#160;is&#160;not&#160;clear&#160;what the&#160;name&#160;of the&#160;type-generic&#160;macro's&#160;should be:&#160;2.1.7.6&#160;suggest&#160;to<br/>call&#160;the&#160;type-generic&#160;abs&#160;function&#160;'absfx',&#160;in&#160;7.18a.6.7&#160;the&#160;'fx'&#160;part&#160;of the&#160;name&#160;is&#160;in&#160;italic<br/>which&#160;might&#160;suggest that the&#160;name&#160;should&#160;really&#160;be&#160;'abs'.&#160;So,&#160;do&#160;we&#160;want to have&#160;'abs',<br/>'round'&#160;and&#160;'countls',&#160;or&#160;'absfx',&#160;'roundfx'&#160;and&#160;'countls'?<br/>
+Proposed&#160;solution:<br/>
+<b>Issue&#160;5:&#160;Typo&#160;in new&#160;text for&#160;6.2.6.3<br/></b>Description:&#160;the&#160;new&#160;text&#160;for&#160;clause&#160;6.2.6.3,&#160;3rd&#160;para,&#160;last&#160;sentence:&#160;replace&#160;'integer<br/>types'&#160;by&#160;'fixed-point&#160;types'&#160;twice.<br/>
+Proposed&#160;solution:&#160;obvious<br/>
+<b>Issue&#160;6: fp&#160;arithmetic&#160;support&#160;functions&#160;do not&#160;specify&#160;what&#160;happens&#160;if&#160;an&#160;integer<br/>result&#160;overflows<br/></b>Description:&#160;7.18a.6.1&#160;(fp&#160;arithmetic support functions)&#160;does&#160;not&#160;specify&#160;what&#160;happens&#160;if<br/>an&#160;integer&#160;result&#160;overflows.<br/>
+Proposed&#160;solution: Isn't there a&#160;blanket&#160;statement&#160;to&#160;the effect&#160;that&#160;when a&#160;specified<br/>result&#160;is&#160;not&#160;representable&#160;in&#160;the&#160;type,&#160;the&#160;behavior&#160;is&#160;undefined?&#160;&#160;If&#160;not,&#160;there&#160;should&#160;be.<br/>
+<b>Issue&#160;7:&#160;Error&#160;in&#160;7.18.a.6.3<br/></b>Description:&#160;the&#160;rounding&#160;functions&#160;in&#160;7.18a.6.3&#160;require&#160;that<br/>
+Fractional&#160;bits&#160;beyond&#160;the&#160;rounding&#160;point&#160;are&#160;set to&#160;zero&#160;in&#160;the&#160;result.<br/>
+This should not&#160;apply&#160;when&#160;saturation&#160;has&#160;occurred.<br/>
+Proposed&#160;solution:&#160;replace&#160;the&#160;offending&#160;text&#160;by:<br/>
+When&#160;saturation has&#160;not&#160;occurred, fractional&#160;bits&#160;beyond&#160;the&#160;rounding&#160;point&#160;are<br/>set to&#160;zero&#160;in&#160;the&#160;result.<br/>
+<b>Issue&#160;8:&#160;Diagnostic&#160;required&#160;on named-register&#160;constraint&#160;violation?<br/></b>Description:&#160;consider<br/>
+//&#160;file 1<br/>register REG_A int reg_a;<br/>
+//&#160;file 2<br/>extern int reg_a;<br/>
+<hr/>
+<a name=3></a>int main() { return reg_a; }<br/>
+According&#160;to&#160;the new&#160;constraints&#160;for&#160;6.7.1&#160;this&#160;is&#160;not&#160;allowed:<br/>
+If&#160;an object&#160;is&#160;declared&#160;with a named-register&#160;storage-class&#160;specifier,&#160;every<br/>declaration&#160;of that&#160;object&#160;shall include&#160;the&#160;same named-register&#160;storage-class<br/>specifier.<br/>
+The&#160;'shall'&#160;implies&#160;that&#160;a&#160;diagnostic&#160;is&#160;required here.&#160;However,&#160;so&#160;far&#160;C&#160;compilers&#160;have<br/>not&#160;been&#160;required&#160;to&#160;diagnose&#160;such&#160;issues&#160;across&#160;translation units. Is&#160;this&#160;really&#160;the<br/>intention?<br/>
+Proposed&#160;solution:<br/>
+<b>Issue&#160;9:&#160;Effective&#160;type&#160;definition&#160;(aka&#160;US-40)<br/></b>Description:&#160;a&#160;couple&#160;of the&#160;statements&#160;concerning&#160;effective&#160;types&#160;in 6.5 of the<br/>C&#160;Standard&#160;are not&#160;exactly&#160;correct&#160;in&#160;the&#160;presence of&#160;address-space&#160;qualifiers. &#160;The<br/>easiest&#160;fix&#160;is&#160;probably&#160;to&#160;modify&#160;the&#160;concept&#160;of&#160;<i>effective&#160;type</i>&#160;in&#160;the&#160;C&#160;Standard&#160;so&#160;as&#160;not<br/>to&#160;include an&#160;address-space&#160;qualifier.&#160;&#160;(The&#160;whole&#160;concept&#160;of&#160;<i>effective&#160;type</i>&#160;is&#160;used only<br/>in 6.5 and&#160;in one&#160;footnote&#160;elsewhere&#160;in&#160;the&#160;C&#160;Standard.)<br/>
+Prossible&#160;solution:&#160;add&#160;the&#160;following&#160;section&#160;to&#160;clause&#160;5.3 of&#160;TR&#160;18037:<br/>
+<b>Clause 6.5&#160;-&#160;Expressions</b>,&#160;replace&#160;the&#160;first&#160;two&#160;sentences&#160;of&#160;paragraph&#160;6&#160;with:<br/>
+The&#160;<i>effective&#160;type</i>&#160;of&#160;an&#160;object for&#160;an&#160;access&#160;to&#160;its&#160;stored&#160;value&#160;is&#160;the declared<br/>type&#160;of&#160;the object,&#160;if&#160;any,&#160;without&#160;any&#160;address-space&#160;qualifier&#160;that&#160;the&#160;declared<br/>type&#160;may&#160;have.72)&#160;&#160;If&#160;a&#160;value&#160;is&#160;stored&#160;into an&#160;object&#160;having&#160;no&#160;declared&#160;type<br/>through&#160;an&#160;lvalue having&#160;a&#160;type&#160;that&#160;is&#160;not&#160;a&#160;character&#160;type, then&#160;the&#160;type&#160;of&#160;the<br/>lvalue,&#160;without&#160;any&#160;address-space&#160;qualifier,&#160;becomes&#160;the&#160;effective&#160;type&#160;of the<br/>object&#160;for&#160;that&#160;access&#160;and&#160;for&#160;subsequent&#160;accesses&#160;that&#160;do&#160;not&#160;modify&#160;the&#160;stored<br/>value.<br/>
+and&#160;remove&#160;the&#160;notion&#160;<i>additionally&#160;access-qualified&#160;version</i>&#160;from&#160;TR&#160;18037&#160;(first<br/>replacement&#160;paragraph of&#160;paragraph&#160;26 of&#160;6.2.5,&#160;replacement&#160;text for&#160;paragraph&#160;7&#160;of<br/>6.5).<br/>
+<b>Issue 10:&#160;The&#160;relationship&#160;beween&#160;named-registers and&#160;external&#160;object&#160;definitions<br/></b>Description:&#160;the&#160;relationship beween named-registers&#160;and&#160;6.9.2&#160;(external&#160;object<br/>definitions)&#160;need&#160;to&#160;specified:&#160;when&#160;there&#160;is&#160;no&#160;initializer&#160;in&#160;the named-register<br/>declaration,&#160;the&#160;declaration&#160;is&#160;not&#160;an&#160;external&#160;definition&#160;for&#160;the&#160;identifier.&#160;The declaration<br/>is&#160;however&#160;also not&#160;a&#160;tentative definition,&#160;because&#160;it&#160;has&#160;a&#160;storage-class&#160;specifier.&#160;Then,<br/>what&#160;is&#160;it?<br/>
+Proposed&#160;solution:&#160;That's&#160;one&#160;problem&#160;with using existing&#160;syntactic categories&#160;for&#160;new<br/>facilities.&#160;A&#160;workaround&#160;would be&#160;to&#160;change&#160;storage-class-specifier&#160;to&#160;storage-class-<br/>specifier|whatever&#160;in&#160;the&#160;grammar,&#160;where&#160;&#34;whatever&#34;&#160;is&#160;some&#160;new&#160;category,&#160;and<br/>then adjust&#160;the&#160;text that&#160;constrains&#160;storage-class-specifier&#160;to&#160;say&#160;the&#160;right&#160;thing&#160;(just<br/>storage-class-specifier&#160;or&#160;storage-class-specifier|whatever,&#160;depending). &#160;Then&#160;the<br/>construct&#160;would not&#160;have a&#160;storage-class-specifier&#160;and&#160;thus&#160;would be a&#160;tentative<br/>definition.<br/>
+<hr/>
+<a name=4></a><b>Issue 11:&#160;Initialization&#160;of&#160;global&#160;named-registers<br/></b>Description:&#160;the&#160;current&#160;specification allows&#160;global&#160;named-registers&#160;to&#160;be&#160;initialized:<br/>
+register REG_A int reg_a = 32;<br/>
+It&#160;is&#160;however&#160;unclear&#160;when,&#160;and by&#160;whom&#160;this&#160;initialization&#160;should be done&#160;(one&#160;could<br/>imagine&#160;that the&#160;register&#160;storage&#160;onto&#160;which&#160;the&#160;variable&#160;maps&#160;does&#160;not&#160;really&#160;exist&#160;until<br/>some device&#160;is&#160;initialized by&#160;some user&#160;code).<br/>
+Proposed&#160;solution:&#160;disallow&#160;initializers&#160;on named-register&#160;variables.<br/>
+<b>Issue 12:&#160;Address space&#160;qualifier&#160;in&#160;specifier-qualifier-list<br/></b>Description:&#160;in&#160;the&#160;new&#160;text&#160;for&#160;6.7.2.1, the&#160;TR&#160;adds&#160;a&#160;constraint:<br/>
+The&#160;<i>specifier-qualifier-list</i>&#160;in&#160;the&#160;declaration&#160;of&#160;a&#160;member&#160;of&#160;a&#160;structure&#160;or&#160;union<br/>shall&#160;not&#160;include an&#160;address space&#160;qualifier.<br/>
+This&#160;is&#160;a&#160;mistake,&#160;because&#160;it&#160;keeps&#160;us&#160;from&#160;declaring&#160;something&#160;innocuous&#160;like<br/>
+struct onePointer { _X int *pX; };<br/>
+As&#160;written,&#160;the&#160;constraint&#160;would&#160;make&#160;the&#160;member&#160;declaration&#160;invalid,&#160;whereas&#160;we only<br/>intended&#160;to&#160;prohibit&#160;declarations such&#160;as&#160;this:<br/>
+struct oneInteger { _X int iX; };<br/>
+Proposed&#160;solution:&#160;change&#160;the&#160;constraint to be:<br/>
+Within a&#160;structure&#160;or&#160;union&#160;specifier, the&#160;type&#160;of&#160;a&#160;member&#160;shall&#160;not&#160;be&#160;qualified<br/>by&#160;an address&#160;space&#160;qualifier.<br/>
+<b>Email&#160;crossreference&#160;list:<br/></b>Item<br/>
+Embedded-c&#160;emailnumber<br/>
+1:<br/>
+188,&#160;189,&#160;190,&#160;191,&#160;192,&#160;194,&#160;196,&#160;198,&#160;200,&#160;201,&#160;203,&#160;204,&#160;207<br/>
+2:<br/>
+208<br/>
+3:<br/>
+206<br/>
+4:<br/>
+211<br/>
+5:<br/>
+206<br/>
+6:<br/>
+208,&#160;210<br/>
+7:<br/>
+208<br/>
+8:<br/>
+208,&#160;210<br/>
+9:<br/>
+184,&#160;195,&#160;199,&#160;207<br/>
+10:<br/>
+208,&#160;210<br/>
+11:<br/>
+208,&#160;209,&#160;210<br/>
+12:<br/>
+207<br/>
+<hr/>
+</body>
+</html>

@@ -20,8 +20,13 @@ C99_LAST = 345
 C11_ALL = 'n2396.htm'
 CFP_ALL = 'n2397.htm'
 CSCR_ALL = 'n2150.htm'
-EMBC_2004_ALL_PDF = 'n1180.pdf'
-EMBC_2004_ALL = 'n1180.html'
+# These are successive versions of the issue list, since the Embedded
+# C lists edited the original description and proposed solution rather
+# than just appending text from each meeting, so the closest
+# equivalence to the other lists involves using the older versions
+# rather than just the most recent one.
+EMBC_2004_ALL_PDF = ('n1071.pdf', 'n1087.pdf', 'n1096.pdf', 'n1180.pdf')
+EMBC_2004_ALL = ('n1071.html', 'n1087.html', 'n1096.html', 'n1180.html')
 
 
 def input_filename(doc):
@@ -55,9 +60,9 @@ def list_docs(for_download):
     ret.append(CFP_ALL)
     ret.append(CSCR_ALL)
     if for_download:
-        ret.append(EMBC_2004_ALL_PDF)
+        ret.extend(EMBC_2004_ALL_PDF)
     else:
-        ret.append(EMBC_2004_ALL)
+        ret.extend(EMBC_2004_ALL)
     return ret
 
 
@@ -67,10 +72,12 @@ def action_download():
     again."""
     for doc in list_docs(True):
         download_wg14_doc(doc)
-    # Convert the Embedded C list to HTML for subsequent processing.
-    subprocess.run(['pdftohtml', '-noframes', '-q',
-                    input_filename(EMBC_2004_ALL_PDF),
-                    input_filename(EMBC_2004_ALL)], check=True)
+    # Convert the Embedded C lists to HTML for subsequent processing.
+    for pdf_doc in EMBC_2004_ALL_PDF:
+        subprocess.run(['pdftohtml', '-noframes', '-q',
+                        input_filename(pdf_doc),
+                        input_filename(pdf_doc.replace('.pdf', '.html'))],
+                       check=True)
 
 
 def clean_amp(doc, text):
@@ -99,6 +106,8 @@ def clean_amp(doc, text):
         'ldquo', 'rdquo', 'lsquo', 'rsquo', 'pi', 'sect', 'hellip', 'ne',
         'infin', 'emsp', 'frac34', 'times',
         # Known numerical entities used in these lists.
+        # "
+        '#34',
         # '
         '#39',
         # [
@@ -213,6 +222,7 @@ def clean_chars(doc, text):
     # This is never used in a context where escaping is actually
     # needed (i.e. inside a double-quoted attribute value).
     text = text.replace('&quot;', '"')
+    text = text.replace('&#34;', '"')
     # This is never used in a context where escaping is actually
     # needed (i.e. inside a single-quoted attribute value).
     text = text.replace('&#39;', "'")
