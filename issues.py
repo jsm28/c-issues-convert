@@ -677,8 +677,10 @@ class ProcessNesting:
     def handle_start_tag(self, tag_name, tag_attrs, replace_tag=None):
         """Handle a start tag."""
         self.check_nesting(tag_name)
-        self.handle_start_tag_internal(
-            replace_tag if replace_tag is not None else tag_name, tag_attrs)
+        if replace_tag != '':
+            self.handle_start_tag_internal(
+                replace_tag if replace_tag is not None else tag_name,
+                tag_attrs)
         self.push_tag(tag_name)
         self.replace_end[-1] = replace_tag
 
@@ -699,7 +701,8 @@ class ProcessNesting:
             self.handle_end_tag_internal(t)
         if self.replace_end[-1]:
             tag_name = self.replace_end[-1]
-        self.handle_end_tag_internal(tag_name)
+        if self.replace_end[-1] != '':
+            self.handle_end_tag_internal(tag_name)
         end_wrap = self.end_wrap[-1]
         tag_outside = self.tag_outside[-1]
         self.pop_tag()
@@ -1111,10 +1114,66 @@ def clean_margin_left(doc, text):
     return ''.join(new_text_list)
 
 
+class RemoveRedundantTags(ProcessNesting):
+
+    """Remove tags that are redundant based on their context."""
+
+    def handle_start_tag(self, tag_name, tag_attrs):
+        """Handle a start tag."""
+        tag_replace = None
+        # The remaining <center> are around headers and give no
+        # information useful for the conversion.  <span> with no
+        # attributes is useless, and code style tags inside the same
+        # tag are useless, as is <code> inside <pre>.  <b> inside
+        # <code> or <pre> is a stylistic choice for formatting C code,
+        # used inconsistently in some of the input files; rather than
+        # representing it in issue tracker data, it's better for any
+        # such styling to be done at the point where issue tracker
+        # data is presented to the user (converted back to HTML for
+        # display).
+        if tag_name == 'center':
+            tag_replace = ''
+        elif tag_name == 'span' and not tag_attrs:
+            tag_replace = ''
+        elif tag_name in ('code', 'b', 'i', 'del', 'u'):
+            if tag_name in self.open_tags:
+                tag_replace = ''
+            elif tag_name in ('b', 'code') and 'pre' in self.open_tags:
+                tag_replace = ''
+            elif tag_name == 'b' and 'code' in self.open_tags:
+                tag_replace = ''
+        super().handle_start_tag(tag_name, tag_attrs, tag_replace)
+
+
+def clean_redundant_tags(doc, text):
+    """Remove tags that are redundant based on their context."""
+    rtext = RemoveRedundantTags(doc, text).run()
+    # Now remove <b> around <code>, if <code> is the only
+    # non-whitespace content inside that <b>.
+    new_text_list = []
+    while rtext:
+        m = re.search('<b>(.*?)</b>', rtext, flags=re.DOTALL)
+        if not m:
+            break
+        new_text_list.append(rtext[:m.start(0)])
+        bcontent = m.group(0)
+        content = m.group(1)
+        rtext = rtext[m.end(0):]
+        rcontent = re.sub('<code>.*?</code>', '', content, flags=re.DOTALL)
+        if re.fullmatch(r'(<[^>]*>|\s|&nbsp;)*', rcontent):
+            # No non-whitespace non-tag non-code content; remove <b>.
+            new_text_list.append(content)
+        else:
+            # Preserve <b>.
+            new_text_list.append(bcontent)
+    new_text_list.append(rtext)
+    return ''.join(new_text_list)
+
+
 # List of functions for cleaning HTML issue lists.
 CLEAN_FUNCS_LIST = (clean_amp, clean_ltgt, clean_chars, clean_tags,
                     clean_nesting, clean_class, clean_color, clean_font,
-                    clean_margin_left)
+                    clean_margin_left, clean_redundant_tags)
 
 
 def clean_doc(doc, write_out):
