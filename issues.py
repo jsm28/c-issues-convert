@@ -66,6 +66,11 @@ def list_docs(for_download):
     return ret
 
 
+def is_c90_dr(doc):
+    """Return whether a document is a C90 DR."""
+    return bool(re.fullmatch(r'dr_[01][0-9][0-9]\.html', doc))
+
+
 def action_download():
     """Download old issue lists from the WG14 website.  Since the lists
     are checked into git, it should not be necessary to run this action
@@ -1160,7 +1165,7 @@ def clean_redundant_tags(doc, text):
         content = m.group(1)
         rtext = rtext[m.end(0):]
         rcontent = re.sub('<code>.*?</code>', '', content, flags=re.DOTALL)
-        if re.fullmatch(r'(<[^>]*>|\s|&nbsp;)*', rcontent):
+        if re.fullmatch(r'(<[^!>][^>]*>|\s|&nbsp;)*', rcontent):
             # No non-whitespace non-tag non-code content; remove <b>.
             new_text_list.append(content)
         else:
@@ -1170,10 +1175,164 @@ def clean_redundant_tags(doc, text):
     return ''.join(new_text_list)
 
 
+def replace_empty(text, tag, replacement):
+    """Replace instances of the given tag that are empty (apart from
+    whitespace and other tags) by the replacement text.  All instances of
+    the tag to be replaced must be properly closed, and not have any
+    attributes."""
+    start_tag = '<%s>' % tag
+    tag_re = '<%s>(.*?)</%s>' % (tag, tag)
+    rtext = text
+    new_text_list = []
+    while rtext:
+        m = re.search(tag_re, rtext, flags=re.DOTALL)
+        if not m:
+            break
+        if start_tag in m.group(1):
+            # Nested copies of the tag; the end tag found does not
+            # match the opening tag found.
+            new_text_list.append(rtext[:m.start(1)])
+            rtext = rtext[m.start(1):]
+            continue
+        if re.fullmatch(r'(<[^!>][^>]*>|\s|&nbsp;)*', m.group(1)):
+            # Tag contains only whitespace and other tags.
+            new_text_list.append(rtext[:m.start(0)])
+            new_text_list.append(replacement)
+            rtext = rtext[m.end(0):]
+        else:
+            mc = re.fullmatch(
+                r'(?:<[^!>][^>]*>|\s|&nbsp;)*'
+                r'(<!--[^>]*-->)'
+                r'(?:<[^!>][^>]*>|\s|&nbsp;)*', m.group(1))
+            if mc:
+                # Tag contains a comment but no other content to preserve.
+                new_text_list.append(rtext[:m.start(0)])
+                new_text_list.append(mc.group(1))
+                new_text_list.append(replacement)
+                rtext = rtext[m.end(0):]
+            else:
+                # Tag contains other content, so cannot be removed.
+                new_text_list.append(rtext[:m.end(0)])
+                rtext = rtext[m.end(0):]
+    new_text_list.append(rtext)
+    return ''.join(new_text_list)
+
+
+class FixParagraphs(ProcessNesting):
+
+    """Insert missing <p> and </p> tags."""
+
+    def handle_before_tag(self, before):
+        """Handle the text coming before a tag."""
+        # Insert explicit paragraphs in certain contexts.
+        if (before.strip()
+            and self.open_tags
+            and self.open_tags[-1] in ('body', 'blockquote', 'div')):
+            self.handle_start_tag('p', [])
+        super().handle_before_tag(before)
+
+    def maybe_close_p(self, tag_name, end_tag):
+        """Close an unterminated <p> when any non-inline tag starts or ends."""
+        if (self.open_tags
+            and self.open_tags[-1] == 'p'
+            and not (end_tag and tag_name == 'p')
+            and tag_name not in KNOWN_TAGS_INLINE):
+            self.handle_end_tag('p')
+
+    def maybe_insert_p_for_tag(self, tag_name):
+        """Insert explicit paragraphs for inline tags in certain contexts."""
+        if (tag_name in KNOWN_TAGS_INLINE
+            and self.open_tags
+            and self.open_tags[-1] in ('body', 'blockquote', 'div')):
+            self.handle_start_tag('p', [])
+
+    def handle_empty_tag(self, tag_name, end_tag, tag_attrs):
+        """Handle an empty tag."""
+        self.maybe_close_p(tag_name, end_tag)
+        self.maybe_insert_p_for_tag(tag_name)
+        super().handle_empty_tag(tag_name, end_tag, tag_attrs)
+
+    def handle_start_tag(self, tag_name, tag_attrs):
+        """Handle a start tag."""
+        self.maybe_close_p(tag_name, False)
+        self.maybe_insert_p_for_tag(tag_name)
+        super().handle_start_tag(tag_name, tag_attrs)
+
+    def handle_end_tag(self, tag_name):
+        """Handle an end tag."""
+        self.maybe_close_p(tag_name, True)
+        super().handle_end_tag(tag_name)
+
+
+def clean_general(doc, text, multiline_code_converted=False):
+    """Apply various general local cleanups.  If multiline_code_converted
+    is False (the default), some whitespace-related cleanups are not
+    applied to <code> in some places because whitespace may be
+    significant there until multiline <code> has been turned into
+    <pre>."""
+    clean_code_whitespace = multiline_code_converted or not is_c90_dr(doc)
+    # Applying some of these cleanups may open opportunities for
+    # applying further instances of the same or another cleanup, so
+    # this function iterates until no more changes are made.
+    orig_text = text
+    # Remove empty paragraphs, <pre> and <blockquote>.  Because there
+    # are contexts (such as in <li>) where we allow text not in a
+    # paragraph, an empty paragraph, <pre> or <blockquote> might serve
+    # as a separator between two pieces of inline text in such a
+    # context.  Thus we do this cleanup in multiple stages: first
+    # replace the empty paragraph, <pre> or <blockquote> by a <p>
+    # opening tag, then insert missing </p> tags, then remove any
+    # empty paragraphs left afterwards.
+    text = replace_empty(text, 'p', '<p>')
+    text = replace_empty(text, 'blockquote', '<p>')
+    text = replace_empty(text, 'pre', '<p>')
+    text = FixParagraphs(doc, text).run()
+    text = replace_empty(text, 'p', '')
+    # Combine adjacent blockquotes.
+    text = re.sub(r'</blockquote>\s*<blockquote>', '', text)
+    # Combine adjacent copies of the same inline tag (preserving
+    # whitespace between those copies).
+    for tag in ('b', 'code', 'i', 'u', 'del'):
+        text = re.sub(r'</%s>((?:\s|<br>|&nbsp;)*)<%s>' % (tag, tag), r'\1',
+                      text)
+    # Migrate whitespace at the start or end of an inline tag outside
+    # that tag.
+    ws_clean_tags = ['b', 'i', 'u', 'del']
+    if clean_code_whitespace:
+        ws_clean_tags.append('code')
+    ws_clean_tags_a = ws_clean_tags + ['a']
+    for tag in ws_clean_tags:
+        if tag == 'code' and not multiline_code_converted:
+            # Do not move &nbsp; out of the start of <code> yet; it
+            # may be significant here even outside C90 DRs.
+            text = re.sub(r'<code>((?:\s|<br>)+)', r'\1<code>', text)
+            pass
+        else:
+            text = re.sub(r'<%s>((?:\s|<br>|&nbsp;)+)' % tag, r'\1<%s>' % tag,
+                          text)
+    text = re.sub(r'<a ([^>]*)>((?:\s|<br>|&nbsp;)+)', r'\2<a \1>',
+                  text)
+    for tag in ws_clean_tags_a:
+        text = re.sub(r'((?:\s|<br>|&nbsp;)+)</%s>' % tag, r'</%s>\1' % tag,
+                      text)
+    # Remove empty inline tags.
+    for tag in ('b', 'code', 'i', 'u', 'del'):
+        text = text.replace('<%s></%s>' % (tag, tag), '')
+    # Remove <br> at the start of paragraphs, and <br> and &nbsp; at
+    # the end of paragraphs.  (We don't remove plain whitespace at
+    # this point if not mixed with <br> or &nbsp;.)
+    text = re.sub(r'<p>\s*<br>(\s|<br>)*', '<p>', text)
+    text = re.sub(r'\s*(<br>|&nbsp;)(\s|<br>|&nbsp;)*</p>', '</p>', text)
+    if text == orig_text:
+        return text
+    else:
+        return clean_general(doc, text, multiline_code_converted)
+
+
 # List of functions for cleaning HTML issue lists.
 CLEAN_FUNCS_LIST = (clean_amp, clean_ltgt, clean_chars, clean_tags,
                     clean_nesting, clean_class, clean_color, clean_font,
-                    clean_margin_left, clean_redundant_tags)
+                    clean_margin_left, clean_redundant_tags, clean_general)
 
 
 def clean_doc(doc, write_out):
