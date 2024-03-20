@@ -1329,10 +1329,117 @@ def clean_general(doc, text, multiline_code_converted=False):
         return clean_general(doc, text, multiline_code_converted)
 
 
+class MoveCodeOut(ProcessNesting):
+
+    """Where <code> appears inside inline style tags, move those tags
+    inside <code>.  This enables conversion of multi-line <code> to <pre>,
+    although it is the opposite direction to what is representable in
+    Markdown (where <code> can be inside but not outside such tags)."""
+
+    def handle_start_tag(self, tag_name, tag_attrs):
+        """Handle a start tag."""
+        wrap_num = 0
+        if tag_name == 'code':
+            for outer_tag in reversed(self.open_tags):
+                if outer_tag in ('b', 'i', 'del', 'u'):
+                    wrap_num += 1
+                else:
+                    break
+        if wrap_num:
+            wrap_tags = self.open_tags[-wrap_num:]
+            for t in reversed(wrap_tags):
+                self.handle_end_tag(t)
+        super().handle_start_tag(tag_name, tag_attrs)
+        if wrap_num:
+            self.wrap_text_in[-1] = wrap_tags
+            self.end_wrap[-1] = wrap_tags
+
+
+class MoveCodeIn(ProcessNesting):
+
+    """Where inline tags (<style>, <sub> or <sup>) appear inside <code>,
+    move <code> inside those tags."""
+
+    def handle_start_tag(self, tag_name, tag_attrs):
+        """Handle a start tag."""
+        wrap_num = 0
+        if (tag_name in ('b', 'i', 'del', 'u', 'sub', 'sup')
+            and self.open_tags[-1] == 'code'):
+            wrap_num = 1
+        if wrap_num:
+            wrap_tags = self.open_tags[-wrap_num:]
+            for t in reversed(wrap_tags):
+                self.handle_end_tag(t)
+        super().handle_start_tag(tag_name, tag_attrs)
+        if wrap_num:
+            self.wrap_text_in[-1] = wrap_tags
+            self.end_wrap[-1] = wrap_tags
+
+
+def code_to_pre(text, is_c90):
+    """Convert <code> contents to a <pre> element."""
+    if is_c90:
+        # Treat whitespace as significant; it appears to be intended
+        # to be (possibly as a result of original conversion from a
+        # non-HTML format).
+        text = text.replace('\n', ' ')
+        text = text.replace('<br>', '\n')
+    else:
+        text = re.sub(r'\s+', ' ', text)
+        text = re.sub(r'<br>\s*', '\n', text)
+    return '<pre>%s</pre>' % text
+
+
+def clean_code_to_pre(doc, text):
+    """Convert multi-line or whole-line <code> to <pre>."""
+    is_c90 = is_c90_dr(doc)
+    text = MoveCodeOut(doc, text).run()
+    text = clean_general(doc, text, False)
+    rtext = text
+    new_text_list = []
+    while rtext:
+        m = re.search('<code>(.*?)</code>', rtext, flags=re.DOTALL)
+        if not m:
+            break
+        code_content = m.group(1)
+        break_in = '<br>' in m.group(1)
+        break_after = bool(re.match(r'(\s|&nbsp;)*(<br>|</p>|</li>)',
+                                    rtext[m.end(0):]))
+        li_after = bool(re.match(r'(\s|&nbsp;)*(</li>)', rtext[m.end(0):]))
+        mb = re.search(r'(?:<br>|<p>|</p>|<li>)((?:\s|&nbsp;)*)\Z',
+                       rtext[:m.start(0)])
+        break_before = bool(mb)
+        li_before = bool(re.search(r'(?:<li>)((?:\s|&nbsp;)*)\Z',
+                                   rtext[:m.start(0)]))
+        if break_before:
+            code_content = mb.group(1).lstrip() + code_content
+        if break_before and break_in and not break_after:
+            mc = re.search(r'<br>(\s|&nbsp;)*\Z', code_content)
+            if mc:
+                break_after = True
+                if '<br>' not in code_content[:mc.start(0)]:
+                    break_in = False
+        if (break_before
+            and break_after
+            and not (li_before and li_after and not break_in)):
+            new_text_list.append(rtext[:mb.start(1)])
+            new_text_list.append(code_to_pre(code_content, is_c90))
+            new_text_list.append('<p>')
+        else:
+            new_text_list.append(rtext[:m.end(0)])
+        rtext = rtext[m.end(0):]
+    new_text_list.append(rtext)
+    text = ''.join(new_text_list)
+    text = FixParagraphs(doc, text).run()
+    text = MoveCodeIn(doc, text).run()
+    return clean_general(doc, text, True)
+
+
 # List of functions for cleaning HTML issue lists.
 CLEAN_FUNCS_LIST = (clean_amp, clean_ltgt, clean_chars, clean_tags,
                     clean_nesting, clean_class, clean_color, clean_font,
-                    clean_margin_left, clean_redundant_tags, clean_general)
+                    clean_margin_left, clean_redundant_tags, clean_general,
+                    clean_code_to_pre)
 
 
 def clean_doc(doc, write_out):
