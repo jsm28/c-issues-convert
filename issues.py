@@ -1435,11 +1435,107 @@ def clean_code_to_pre(doc, text):
     return clean_general(doc, text, True)
 
 
+def clean_pre(doc, text, insert_blank_line=True):
+    """Clean up <pre> contents and combine consecutive <pre> blocks.  If
+    insert_blank_line is True (the default), a blank line is inserted
+    between such blocks being combined unless the first ends with a
+    backslash."""
+    rtext = text
+    new_text_list = []
+    while rtext:
+        m = re.search('<pre>(.*?)</pre>', rtext, flags=re.DOTALL)
+        if not m:
+            break
+        new_text_list.append(rtext[:m.start(0)])
+        pre_content = m.group(1)
+        rtext = rtext[m.end(0):]
+        pre_content = pre_content.replace('<br>', '\n')
+        pre_content = pre_content.replace('&nbsp;', ' ')
+        pre_content = pre_content.rstrip()
+        pre_content = re.sub(r'^\s*\n', '', pre_content)
+        pre_lines = []
+        for line in pre_content.split('\n'):
+            line = line.rstrip()
+            line_chars = []
+            num_cols = 0
+            while line:
+                m = re.match('(.*)[<\t]', line)
+                if not m:
+                    break
+                line_chars.append(m.group(1))
+                num_cols += len(m.group(1))
+                line = line[m.end(1):]
+                if line.startswith('\t'):
+                    line_chars.append(' ' * (8 - num_cols % 8))
+                    line = line[1:]
+                    num_cols = 0
+                else:
+                    m = re.match('<[^>]*>', line)
+                    line_chars.append(m.group(0))
+                    line = line[m.end(0):]
+            line_chars.append(line)
+            pre_lines.append(''.join(line_chars))
+        new_text_list.append('<pre>%s</pre>' % '\n'.join(pre_lines))
+    new_text_list.append(rtext)
+    text = ''.join(new_text_list)
+    text = re.sub(r'\\</pre>\s*<pre>', r'\\' '\n', text)
+    if insert_blank_line:
+        text = re.sub(r'</pre>\s*<pre>', '\n\n', text)
+    else:
+        text = re.sub(r'</pre>\s*<pre>', '\n', text)
+    return text
+
+
+class BrToP(ProcessNesting):
+
+    """Convert all <br> to paragraph breaks.  This is for C90 DRs that
+    rarely use <p> at all but generally use <br> to indicate a paragraph
+    break instead.  Uses inside code blocks have already been converted to
+    <pre>."""
+
+    def handle_empty_tag(self, tag_name, end_tag, tag_attrs):
+        """Handle an empty tag."""
+        if tag_name != 'br':
+            super().handle_empty_tag(tag_name, end_tag, tag_attrs)
+            return
+        num_inlines = 0
+        for outer_tag in reversed(self.open_tags):
+            if outer_tag in ('b', 'code', 'i', 'del', 'u'):
+                num_inlines += 1
+            elif outer_tag in KNOWN_TAGS_INLINE:
+                raise ValueError('<br> inside <%s> cannot be converted to <p>'
+                                 % outer_tag)
+            else:
+                break
+        if num_inlines:
+            inline_tags = self.open_tags[-num_inlines:]
+            for t in reversed(inline_tags):
+                self.handle_end_tag(t)
+        self.handle_start_tag_internal('p', [])
+        super().handle_empty_tag(tag_name, end_tag, tag_attrs)
+        if num_inlines:
+            for t in inline_tags:
+                self.handle_start_tag(t, [])
+
+
+def clean_br(doc, text):
+    """In C90 DRs, convert remaining <br> to paragraph breaks."""
+    if not is_c90_dr(doc):
+        return text
+    text = BrToP(doc, text).run()
+    text = FixParagraphs(doc, text).run()
+    # The conversion to paragraph breaks may have opened up more
+    # opportunities to turn <p><code>...</code></p> into a use of
+    # <pre>, and then to combine such <pre>.
+    text = clean_code_to_pre(doc, text)
+    return clean_pre(doc, text, False)
+
+
 # List of functions for cleaning HTML issue lists.
 CLEAN_FUNCS_LIST = (clean_amp, clean_ltgt, clean_chars, clean_tags,
                     clean_nesting, clean_class, clean_color, clean_font,
                     clean_margin_left, clean_redundant_tags, clean_general,
-                    clean_code_to_pre)
+                    clean_code_to_pre, clean_pre, clean_br)
 
 
 def clean_doc(doc):
