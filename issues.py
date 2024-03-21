@@ -1442,10 +1442,10 @@ CLEAN_FUNCS_LIST = (clean_amp, clean_ltgt, clean_chars, clean_tags,
                     clean_code_to_pre)
 
 
-def clean_doc(doc, write_out):
+def clean_doc(doc):
     """Pass an HTML input document through a series of cleaning steps,
     returning the cleaned document, and writing out the output of each
-    step if requested."""
+    step."""
     encoding = 'cp1252' if doc == CSCR_ALL else 'utf-8'
     # To handle \r\r\n as well as \r, \n and \r\n as a line ending, we
     # handle newline translation outselves.
@@ -1456,21 +1456,19 @@ def clean_doc(doc, write_out):
     text = text.replace('\r', '\n')
     for n, clean_func in enumerate(CLEAN_FUNCS_LIST):
         text = clean_func(doc, text).strip() + '\n'
-        if write_out:
-            out_dir = 'clean-%d' % n
-            os.makedirs(out_dir, exist_ok=True)
-            with open(os.path.join(out_dir, doc), 'w', encoding='utf-8') as f:
-                f.write(text)
+        out_dir = 'tmp/clean-%02d' % n
+        os.makedirs(out_dir, exist_ok=True)
+        with open(os.path.join(out_dir, doc), 'w', encoding='utf-8') as f:
+            f.write(text)
     return text
 
 
-def action_clean():
-    """Test the process of cleaning the HTML issue lists, writing out the
-    state of the files after each cleaning step.  The actual issue
-    conversion does the cleaning without writing out intermediate files;
-    this action is only intended for test purposes."""
+def action_convert():
+    """Convert the issue lists.  The source data is in in/; the results of
+    the conversion are written to out/; intermediate files are left in
+    tmp/ to help in checking and debugging the conversion."""
     for doc in list_docs(False):
-        clean_doc(doc, True)
+        clean_doc(doc)
 
 
 def main():
@@ -1479,9 +1477,9 @@ def main():
         description='Convert old C standard issues to JSON + Markdown')
     parser.add_argument('action',
                         help='What to do',
-                        choices=('download', 'clean'))
+                        choices=('download', 'convert'))
     args = parser.parse_args()
-    action_map = {'download': action_download, 'clean': action_clean}
+    action_map = {'download': action_download, 'convert': action_convert}
     action_map[args.action]()
 
 
