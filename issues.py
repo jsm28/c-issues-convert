@@ -491,9 +491,13 @@ KNOWN_TAGS_ALIAS = {
 KNOWN_TAGS_EMPTY = {'br', 'hr'}
 
 
-# Known tags that are considered inline tags.
+# Known tags that are considered inline tags.  <uncode> is a
+# pseudo-tag used internally to translate <span
+# style="font-family:serif">, which in turn is used for all
+# non-monospace font-family styles, to handle cases where such a style
+# is specified inside <code>.
 KNOWN_TAGS_INLINE = {'br', 'a', 'code', 'b', 'i', 'del', 'sup', 'sub', 'u',
-                     'span'}
+                     'span', 'uncode'}
 
 
 # Known non-inline tags that should not contain other non-inline tags.
@@ -662,6 +666,8 @@ def clean_tags(doc, text):
                             elif k == 'font-family':
                                 if 'monospace' in v or 'Courier' in v:
                                     styles_new.append('%s:monospace' % k)
+                                else:
+                                    styles_new.append('%s:serif' % k)
                             elif k in ('margin-left', 'text-decoration',
                                        'background-color'):
                                 styles_new.append('%s:%s' % (k, v))
@@ -1113,8 +1119,8 @@ def clean_color(doc, text):
 
 
 # Replacement tags for font-related CSS styles.
-FONT_STYLES = {'font-family:monospace': 'code', 'font-weight:bold': 'b',
-               'text-decoration:underline': 'u'}
+FONT_STYLES = {'font-family:monospace': 'code', 'font-family:serif': 'uncode',
+               'font-weight:bold': 'b', 'text-decoration:underline': 'u'}
 
 
 class ReplaceFont(ProcessNesting):
@@ -1137,13 +1143,53 @@ class ReplaceFont(ProcessNesting):
                     'replacing tag with multiple attributes: %s'
                     % repr(tag_attrs))
             tag_replace = FONT_STYLES[tstyle[0]]
+            if tag_replace == 'uncode' and 'code' not in self.open_tags:
+                tag_replace = None
             tag_attrs = []
         super().handle_start_tag(tag_name, tag_attrs, tag_replace)
 
 
+class ReplaceUncode(ProcessNesting):
+
+    """Replace <uncode> pseudo-tags."""
+
+    def handle_start_tag(self, tag_name, tag_attrs):
+        """Handle a start tag."""
+        tag_replace = None
+        close_tags = []
+        reopen_tags = []
+        if tag_name == 'uncode':
+            tag_replace = ''
+            # End inline tags out to the furthest <code> not contained
+            # in another <uncode>, and restart them, except <code>,
+            # for contained content.
+            last_uncode = 0
+            for i in range(len(self.open_tags)):
+                if self.open_tags[i] == 'uncode':
+                    last_uncode = i
+            first_code = 0
+            for i in range(last_uncode, len(self.open_tags)):
+                if self.open_tags[i] == 'code':
+                    first_code = i
+                    break
+            if first_code > last_uncode:
+                close_tags = self.open_tags[first_code:]
+                reopen_tags = [t for t in close_tags if t != 'code']
+                for t in reopen_tags:
+                    if t in ('a', 'sup', 'sub'):
+                        raise ValueError('<uncode> in <%s> in %s'
+                                         % (t, self.doc))
+        for t in reversed(close_tags):
+            self.handle_end_tag(t)
+        super().handle_start_tag(tag_name, tag_attrs, tag_replace)
+        self.wrap_text_in[-1] = reopen_tags
+        self.end_wrap[-1] = close_tags
+
+
 def clean_font(doc, text):
     """Clean up use of font-related CSS styles on tags."""
-    return ReplaceFont(doc, text).run()
+    text = ReplaceFont(doc, text).run()
+    return ReplaceUncode(doc, text).run()
 
 
 # CSS length units in points.
