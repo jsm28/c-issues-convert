@@ -244,6 +244,88 @@ def clean_chars(doc, text):
     return text
 
 
+# Textual replacements to apply in the given input file.
+TEXT_REPLACE = {'dr_001.html': (('str\nucture', 'structure'),
+                                ('structur\ne', 'structure'),
+                                ('toan', 'to an')),
+                'dr_002.html': (('c haracter', 'character'),
+                                ('esc aped', 'escaped'),
+                                ('directiv es', 'directives'),
+                                ('characte r', 'character'),
+                                ('constru cted', 'constructed')),
+                'dr_003.html': (('composin g', 'composing'),
+                                ('lif e', 'life'),
+                                ('responees', 'responses'),
+                                ('withou ', 'without ')),
+                'dr_007.html': (('constrai nt', 'constraint'),),
+                'dr_008.html': (('volat ile', 'volatile'),
+                                ('volati lity', 'volatility'),
+                                ('qual ified', 'qualified'),
+                                ('optimiza tions', 'optimizations'),
+                                ('compi\nler', 'compiler')),
+                'dr_009.html': (('contai n', 'contain'),
+                                ('returni ng', 'returning')),
+                'dr_010.html': (('typ e', 'type'),),
+                'dr_012.html': (('Plau\nger', 'Plauger'),
+                                ('succe\nssfully', 'successfully')),
+                'dr_013.html': (('occurr ence', 'occurrence'),
+                                ('declara tion', 'declaration')),
+                'dr_014.html': (('affe cted', 'affected'),),
+                'dr_015.html': (('val ues', 'values'),
+                                ('ca n', 'can'),
+                                ('promoti on', 'promotion')),
+                'dr_040.html': (('envrionment', 'environment'),
+                                ('previosly', 'previously'),
+                                ('withrdaw', 'withdraw')),
+                'dr_051.html': (('</TT>\n<A HREF="dr_050.html">',
+                                 '</TT>\n<BR>\n<A HREF="dr_050.html">'),),
+                'dr_074.html': (('sublause', 'subclause'),),
+                'dr_088.html': (('preceeded', 'preceded'),),
+                'dr_096.html': (('occuring', 'occurring'),),
+                'dr_098.html': (('Posfix', 'Postfix'),),
+                'dr_105.html': (('compatability', 'compatibility'),),
+                'dr_108.html': (('preceeding', 'preceding'),),
+                'dr_109.html': (('evaulation', 'evaluation'),),
+                'dr_114.html': (('initialiers', 'initializers'),),
+                'dr_116.html': (('considerd', 'considered'),),
+                'dr_117.html': (('preceeding', 'preceding'),),
+                'dr_119.html': (('Submission Daee', 'Submission Date'),),
+                'dr_130.html': (('implemetation', 'implementation'),),
+                'dr_144.html': (('preceeding', 'preceding'),),
+                'dr_145.html': (('Sematics', 'Semantics'),
+                                ('consant', 'constant'),
+                                ('implicity', 'implicitly'),
+                                ('desingator', 'designator')),
+                'dr_157.html': (('</TT> <I>Invalid</I><TT>',
+                                 ' <I>Invalid</I>'),
+                                ('</TT><I> Invalid</I> <TT>',
+                                 '<I> Invalid</I> ')),
+                'dr_160.html': (('stddef.h &gt;', 'stddef.h&gt;'),
+                                ('reseved', 'reserved')),
+                'dr_162.html': (('retruned', 'returned'),),
+                'dr_165.html': (('identifer', 'identifier'),),
+                'dr_166.html': (('Subclasue', 'Subclause'),),
+                'dr_170.html': (('occurence', 'occurrence'),),
+                'dr_171.html': (('Commitee', 'Committee'),),
+                'dr_201.htm': (('</tt> <i>make P1', ' <i>make P1'),
+                               ('array</i><tt>', 'array</i>')),
+                'dr_264.htm': (('<ol>\n      <li value="4">',
+                                '<ol start="4">\n      <li>'),),
+                'n2397.htm': (('macro-\nreplacement', 'macro-replacement'),
+                              ('macro- replacement', 'macro-replacement'))}
+
+
+def clean_per_file(doc, text):
+    """Clean up unambiguous typos, formatting inconsistencies, and (if
+    they affect subsequent processing) HTML inconsistencies, where a
+    hardcoded change specific to a given file is more appropriate than a
+    broader algorithmic change."""
+    replacements = TEXT_REPLACE.get(doc, ())
+    for x, y in replacements:
+        text = text.replace(x, y)
+    return text
+
+
 def get_one_tag(doc, rtext):
     """Process rtext up to the next tag, returning (a) text before that
     tag, (b) text to output for that tag, if it's a comment, (c) the
@@ -447,8 +529,8 @@ KNOWN_ATTRS_KEEP = {
     'a': {'href', 'id', 'name', 'title'},
     'center': {'class'},
     'div': {'style'},
-    'li': {'id', 'value'},
-    'ol': {'type'},
+    'li': {'id'},
+    'ol': {'start', 'type'},
     'p': {'class', 'style'},
     'span': {'class', 'style'},
     'style': {'type'},
@@ -1531,11 +1613,22 @@ def clean_br(doc, text):
     return clean_pre(doc, text, False)
 
 
+def clean_quotes(doc, text):
+    """Convert LaTeX-style quotes to Unicode quotes."""
+    text = text.replace('``', '&ldquo;')
+    # '' is used in a few places as an opening quote, otherwise as a
+    # closing quote.
+    text = text.replace(" ''", ' &ldquo;')
+    text = text.replace("''", '&rdquo;')
+    return text
+
+
 # List of functions for cleaning HTML issue lists.
-CLEAN_FUNCS_LIST = (clean_amp, clean_ltgt, clean_chars, clean_tags,
-                    clean_nesting, clean_class, clean_color, clean_font,
-                    clean_margin_left, clean_redundant_tags, clean_general,
-                    clean_code_to_pre, clean_pre, clean_br)
+CLEAN_FUNCS_LIST = (
+    clean_amp, clean_ltgt, clean_chars, clean_per_file, clean_tags,
+    clean_nesting, clean_class, clean_color, clean_font, clean_margin_left,
+    clean_redundant_tags, clean_general, clean_code_to_pre, clean_pre,
+    clean_br, clean_quotes)
 
 
 def clean_doc(doc):
