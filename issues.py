@@ -311,6 +311,9 @@ TEXT_REPLACE = {'dr_001.html': (('str\nucture', 'structure'),
                                ('array</i><tt>', 'array</i>')),
                 'dr_264.htm': (('<ol>\n      <li value="4">',
                                 '<ol start="4">\n      <li>'),),
+                'n2396.htm': (('<code>Note </code>', 'Note '),
+                              ('<code>Note 11:</code>', 'Note 11:'),
+                              ('<code>Note 13:</code>', 'Note 13:')),
                 'n2397.htm': (('macro-\nreplacement', 'macro-replacement'),
                               ('macro- replacement', 'macro-replacement'))}
 
