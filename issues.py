@@ -363,6 +363,9 @@ def clean_per_file(doc, text):
         text = text.replace('<br/>\n<b>Email crossreference',
                             '\n<p><b>Email crossreference')
         text = text.replace('<br/>\n<b>Defect ', '\n<p><b>Defect ')
+        text = re.sub('(?:<p>|<br/>)<b>Defect ([0-9]+): ?<br/></b>',
+                      r'<p><b>Defect \1:</b><p>',
+                      text)
         text = text.replace('<br/>\nSolution: ', '\n<p>Solution: ')
         text = text.replace('<br/>\nChanges:<br/>\n', '\n<p>Changes:\n<p>')
         text = text.replace('<br/>\nChanges: ', '\n<p>Changes: ')
@@ -372,21 +375,52 @@ def clean_per_file(doc, text):
         text = re.sub('<p>&bull; ?', '<li>', text)
         text = text.replace('Changes: <li>', 'Changes: <ul><li>')
         text = text.replace('Changes:\n<li>', 'Changes:\n<ul><li>')
+        text = text.replace('Replacement text for 5.2.4.2.3:',
+                            '<li>Replacement text for 5.2.4.2.3:\n<ul>')
         text = text.replace('text for 7.18a.6.7: <li>',
                             'text for 7.18a.6.7: <ul><li>')
         text = text.replace('text for 7.18a.6.7:<li>',
                             'text for 7.18a.6.7:<ul><li>')
-        text = text.replace('<p><b>Defect 3', '</ul><p><b>Defect 3')
-        text = text.replace('<p><b>Defect 5', '</ul><p><b>Defect 5')
+        text = text.replace('Add to 7.18a.6.7:',
+                            'Add to 7.18a.6.7:\n<blockquote>')
+        text = re.sub('\n(If an object is declared.*?)\n',
+                      r'\n<blockquote>\1</blockquote>\n',
+                      text)
+        text = text.replace('<p><b>Defect 3', '</ul></ul><p><b>Defect 3')
+        text = text.replace('<p><b>Defect 5',
+                            '</blockquote></ul><p><b>Defect 5')
         text = text.replace('<p><b>Defect 9', '</ul><p><b>Defect 9')
-        # Defect 22.
+        # Defect 9.
+        text = re.sub(
+            r'(<b>Clause 6\.5.*?not modify the stored(?: |<br/>)value\.)',
+            r'<blockquote>\1</blockquote>',
+            text,
+            flags=re.DOTALL)
+        text = text.replace('.72)', '.<sup>72)</sup>')
+        # Defects 20, 21 and 22.
         if doc in ('n1096.html', 'n1180.html'):
+            text = re.sub('<br/>\n?- ?if', '<li>if', text)
             text = re.sub('<br/>\n?- ?change', '<li>change', text)
             text = re.sub('<br/>\n?- ?remove', '<li>remove', text)
+            text = re.sub('<p>- ?if', '<li>if', text)
             text = re.sub('<p>- ?change', '<li>change', text)
             text = re.sub('<p>- ?remove', '<li>remove', text)
             text = text.replace('Solution: <li>', 'Solution: <ul><li>')
             text = text.replace('Solution:<li>', 'Solution:<ul><li>')
+            text = text.replace(': <li>if', ': <ul><li>if')
+            text = text.replace(':<li>if', ':<ul><li>if')
+            text = text.replace('7.18a.6.4 reads:',
+                                '7.18a.6.4 reads:<blockquote>')
+            text = text.replace('Note: if the value of the fixed-point',
+                                '</ul>Note: if the value of the fixed-point')
+            text = text.replace('exactly N-1.', 'exactly N-1.</blockquote>')
+            text = text.replace('Note as follows:',
+                                'Note as follows:<blockquote>')
+            text = text.replace('Note as<br/>follows:',
+                                'Note as follows:<blockquote>')
+            text = text.replace('is exactly N.', 'is exactly N.</blockquote>')
+            text = text.replace('is <br/>exactly N.',
+                                'is exactly N.</blockquote>')
             text = text.replace('<br/>\n</body>', '</ul>\n</body>')
             text = text.replace('<p> </body>', '</ul>\n</body>')
         # Defect 8.
