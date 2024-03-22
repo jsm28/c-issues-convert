@@ -311,9 +311,9 @@ TEXT_REPLACE = {'dr_001.html': (('str\nucture', 'structure'),
                                ('array</i><tt>', 'array</i>')),
                 'dr_264.htm': (('<ol>\n      <li value="4">',
                                 '<ol start="4">\n      <li>'),),
-                'n2396.htm': (('<code>Note </code>', 'Note '),
-                              ('<code>Note 11:</code>', 'Note 11:'),
-                              ('<code>Note 13:</code>', 'Note 13:')),
+                'n2396.htm': (('<code>Note </code>', '<b>Note</b> '),
+                              ('<code>Note 11:</code>', '<b>Note 11:</b>'),
+                              ('<code>Note 13:</code>', '<b>Note 13:</b>')),
                 'n2397.htm': (('macro-\nreplacement', 'macro-replacement'),
                               ('macro- replacement', 'macro-replacement'))}
 
@@ -326,6 +326,107 @@ def clean_per_file(doc, text):
     replacements = TEXT_REPLACE.get(doc, ())
     for x, y in replacements:
         text = text.replace(x, y)
+    if doc in EMBC_2004_ALL:
+        # The Embedded C files are very differently structured from
+        # the rest because of the conversion from PDF to HTML; fix up
+        # issues here.
+        # First, remove page breaks.
+        if doc == 'n1180.html':
+            text = re.sub(
+                '<br/>\n'
+                '[0-9]&nbsp;<br/>\n'
+                '<hr/>\n'
+                '<a name=[0-9]></a>WG14&nbsp;N1180&nbsp;<br/>\n',
+                '<br/>\n',
+                text)
+        else:
+            text = re.sub(
+                '</b><br/>\n'
+                '<hr/>\n'
+                '<a name=[0-9]></a><b>',
+                '<br/>\n',
+                text)
+            text = re.sub(
+                '<br/>\n'
+                '<hr/>\n'
+                '<a name=[0-9]></a>',
+                '<br/>\n',
+                text)
+        text = text.replace('<br/>\n8&nbsp;<br/>\n<hr/>\n</body>', '</body>')
+        text = text.replace('<hr/>\n', '')
+        text = text.replace('<br/>&nbsp;<br/>', '<p>')
+        text = text.replace('<br/>\n&nbsp;<br/>', '<p>')
+        text = text.replace('&nbsp;', ' ')
+        text = text.replace('<br/>\n<b>Issue ', '\n<p><b>Issue ')
+        text = text.replace('<br/>\nProposed solution:',
+                            '\n<p>Proposed solution:')
+        text = text.replace('<br/>\n<b>Email crossreference',
+                            '\n<p><b>Email crossreference')
+        text = text.replace('<br/>\n<b>Defect ', '\n<p><b>Defect ')
+        text = text.replace('<br/>\nSolution: ', '\n<p>Solution: ')
+        text = text.replace('<br/>\nChanges:<br/>\n', '\n<p>Changes:\n<p>')
+        text = text.replace('<br/>\nChanges: ', '\n<p>Changes: ')
+        text = text.replace('<br/>\nChange: ', '\n<p>Change: ')
+        # Defects 2, 4 and 8.
+        text = re.sub('<br/>\n?&bull; ?', '<li>', text)
+        text = re.sub('<p>&bull; ?', '<li>', text)
+        text = text.replace('Changes: <li>', 'Changes: <ul><li>')
+        text = text.replace('Changes:\n<li>', 'Changes:\n<ul><li>')
+        text = text.replace('text for 7.18a.6.7: <li>',
+                            'text for 7.18a.6.7: <ul><li>')
+        text = text.replace('text for 7.18a.6.7:<li>',
+                            'text for 7.18a.6.7:<ul><li>')
+        text = text.replace('<p><b>Defect 3', '</ul><p><b>Defect 3')
+        text = text.replace('<p><b>Defect 5', '</ul><p><b>Defect 5')
+        text = text.replace('<p><b>Defect 9', '</ul><p><b>Defect 9')
+        # Defect 22.
+        if doc in ('n1096.html', 'n1180.html'):
+            text = re.sub('<br/>\n?- ?change', '<li>change', text)
+            text = re.sub('<br/>\n?- ?remove', '<li>remove', text)
+            text = re.sub('<p>- ?change', '<li>change', text)
+            text = re.sub('<p>- ?remove', '<li>remove', text)
+            text = text.replace('Solution: <li>', 'Solution: <ul><li>')
+            text = text.replace('Solution:<li>', 'Solution:<ul><li>')
+            text = text.replace('<br/>\n</body>', '</ul>\n</body>')
+            text = text.replace('<p> </body>', '</ul>\n</body>')
+        # Defect 8.
+        m = re.search(r'// file 1.*?return reg_a; \}', text, flags=re.DOTALL)
+        if m:
+            codetxt = m.group(0)
+            codetxt = codetxt.replace('<br/>', '\n')
+            codetxt = codetxt.replace('<p>', '\n\n')
+            text = (text[:m.start(0)]
+                    + '<pre>' + codetxt + '</pre>'
+                    + text[m.end(0):])
+        # Defect 9.
+        m = re.search('_X char a.*?p = &amp;a;', text, flags=re.DOTALL)
+        if m:
+            codetxt = m.group(0)
+            codetxt = codetxt.replace('<br/>\n', '\n')
+            codetxt = codetxt.replace('<br/>', '\n')
+            codetxt = codetxt.replace('<p>', '\n\n')
+            text = (text[:m.start(0)]
+                    + '<pre>' + codetxt + '</pre>'
+                    + text[m.end(0):])
+        # Defect 19.
+        m = re.search('<b>(uint_uhr_t.*?)</b>', text, flags=re.DOTALL)
+        if m:
+            text = (text[:m.start(0)]
+                    + '<pre>' + m.group(1).replace('<br/>', '\n') + '</pre>'
+                    + text[m.end(0):])
+        # Defect 21.
+        text = re.sub('<br/>( +countls.*?)<br/>',
+                      r'<pre>\1</pre>',
+                      text)
+        # Defect 22.
+        m = re.search('<b>(#include.*?)</b>', text, flags=re.DOTALL)
+        if m:
+            text = (text[:m.start(0)]
+                    + '<pre>' + m.group(1).replace('<br/>', '\n') + '</pre>'
+                    + text[m.end(0):])
+        # Remove remaining hard line breaks.
+        text = text.replace('<br/>\n', '\n')
+        text = text.replace('<br/>', '\n')
     return text
 
 
