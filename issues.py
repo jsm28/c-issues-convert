@@ -361,7 +361,9 @@ def clean_per_file(doc, text):
         if doc == 'n1096.html':
             text = text.replace("value b i(ts<br/>\ns '<br/>\nee",
                                 "value bits ' (see")
-        text = text.replace('<br/>\n<b>Issue ', '\n<p><b>Issue ')
+        text = re.sub('<br/>\n(<b>Issue .*?)<br/></b>',
+                      r'\n<p>\1</b><p>\n',
+                      text)
         text = text.replace('<br/>\nProposed solution:',
                             '\n<p>Proposed solution:')
         text = text.replace('<br/>\n<b>Email crossreference',
@@ -379,7 +381,52 @@ def clean_per_file(doc, text):
         text = text.replace('<br/>\nChange: ', '\n<p>Change: ')
         text = text.replace('<br/>\nAffected sections',
                             '\n<p>Affected sections')
+        text = text.replace('<br/>\nProssible solution: ',
+                            '\n<p>Possible solution: ')
         text = text.replace('to read:<br/>', 'to read:\n<p>')
+        # Issue 1 in N1071.
+        if doc == 'n1071.html':
+            text = re.sub("<br/>\n?- ?(use|change|'q'|'y')", r'<li>\1', text)
+            text = text.replace('solutions:<li>', 'solutions:<ul><li>')
+            text = text.replace("<li>'q'", "<ul><li>'q'")
+            text = text.replace("'w');<li>", "'w');</ul><li>")
+            text = text.replace('else.\n<p><b>Issue 2',
+                                'else.</ul>\n<p><b>Issue 2')
+        # Issue 2 in N1071.
+        text = text.replace('for overflow handling.<br/>',
+                            'for overflow handling.\n<p>')
+        # Issue 4 in N1071.
+        text = text.replace('possibly wrong.<br/>\n',
+                            'possibly wrong.\n<p>')
+        # Issue 7 in N1071.
+        text = re.sub('require that<br/>\n(Fractional.*?result\.)<br/>\n',
+                      r'require that\n<blockquote>\1</blockquote>\n',
+                      text)
+        text = re.sub(
+            r'offending text by:<br/>\n'
+            r'(When saturation.*?in the result\.)\n<p>',
+            r'offending text by:\n<blockquote>\1</blockquote>\n<p>',
+            text)
+        # Issue 11 in N1071.
+        text = re.sub('\n(register.*?= 32;)<br/>\n',
+                      r'<pre>\1</pre>',
+                      text)
+        # Issue 12 in N1071.
+        text = re.sub(
+            r'\n(The <i>specifier-qualifier-list.*?qualifier\.)<br/>\n',
+            r'\n<blockquote>\1</blockquote>\n',
+            text)
+        text = re.sub('\n(struct one.*?;)(?:<br/>\n|\n<p>)',
+                      r'<pre>\1</pre>',
+                      text)
+        text = re.sub(
+            r'\n(Within a structure.*?address space qualifier\.)\n<p>',
+            r'\n<blockquote>\1</blockquote>\n<p>',
+            text)
+        # Email cross-reference in N1071.
+        text = re.sub('\n([0-9][0-9]?):<br/>\n',
+                      r'<p>\1: ',
+                      text)
         # Defects 2, 4 and 8.
         text = re.sub('<br/>\n?&bull; ?', '<li>', text)
         text = re.sub('<p>&bull; ?', '<li>', text)
