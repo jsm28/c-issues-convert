@@ -357,6 +357,10 @@ def clean_per_file(doc, text):
         text = text.replace('<br/>&nbsp;<br/>', '<p>')
         text = text.replace('<br/>\n&nbsp;<br/>', '<p>')
         text = text.replace('&nbsp;', ' ')
+        # Overlapping text in PDF.
+        if doc == 'n1096.html':
+            text = text.replace("value b i(ts<br/>\ns '<br/>\nee",
+                                "value bits ' (see")
         text = text.replace('<br/>\n<b>Issue ', '\n<p><b>Issue ')
         text = text.replace('<br/>\nProposed solution:',
                             '\n<p>Proposed solution:')
@@ -366,10 +370,16 @@ def clean_per_file(doc, text):
         text = re.sub('(?:<p>|<br/>)<b>Defect ([0-9]+): ?<br/></b>',
                       r'<p><b>Defect \1:</b><p>',
                       text)
+        text = re.sub('(?:<p>|<br/>)<b>Defect ([0-9]+) ?<br/></b>Problem',
+                      r'<p><b>Defect \1</b><p>Problem',
+                      text)
         text = text.replace('<br/>\nSolution: ', '\n<p>Solution: ')
         text = text.replace('<br/>\nChanges:<br/>\n', '\n<p>Changes:\n<p>')
         text = text.replace('<br/>\nChanges: ', '\n<p>Changes: ')
         text = text.replace('<br/>\nChange: ', '\n<p>Change: ')
+        text = text.replace('<br/>\nAffected sections',
+                            '\n<p>Affected sections')
+        text = text.replace('to read:<br/>', 'to read:\n<p>')
         # Defects 2, 4 and 8.
         text = re.sub('<br/>\n?&bull; ?', '<li>', text)
         text = re.sub('<p>&bull; ?', '<li>', text)
