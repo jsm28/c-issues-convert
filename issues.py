@@ -29,6 +29,10 @@ EMBC_2004_ALL_PDF = ('n1071.pdf', 'n1087.pdf', 'n1096.pdf', 'n1180.pdf')
 EMBC_2004_ALL = ('n1071.html', 'n1087.html', 'n1096.html', 'n1180.html')
 
 
+# The location of the WG14 documents site.
+WG14_DOCS = 'https://www.open-std.org/jtc1/sc22/wg14/www/docs/'
+
+
 def input_filename(doc):
     """Return the local filename of a WG14 document."""
     return os.path.join('in', doc)
@@ -36,7 +40,7 @@ def input_filename(doc):
 
 def doc_url(doc):
     """Return the WG14 website URL of a WG14 document."""
-    return 'https://www.open-std.org/jtc1/sc22/wg14/www/docs/%s' % doc
+    return WG14_DOCS + doc
 
 
 def download_wg14_doc(doc):
@@ -828,6 +832,35 @@ def clean_tags(doc, text):
                         value = value.replace('n2037."', 'n2037.htm"')
                         value = value.replace('n2038."', 'n2038.htm"')
                         value = value.replace('n2077.html ', 'n2077.pdf')
+                    # Replace issue references with an issue: URL.
+                    if value.startswith('"' + WG14_DOCS):
+                        tvalue = value[1+len(WG14_DOCS):-1]
+                        m = re.fullmatch(r'dr_([0-9][0-9][0-9])\.html?',
+                                         tvalue)
+                        if m:
+                            value = 'issue:0%s' % m.group(1)
+                        else:
+                            m = re.fullmatch(
+                                r'dr_([0-9][0-9][0-9])\.html#Question([0-9]+)',
+                                tvalue)
+                            if m:
+                                value = 'issue:0%s.%02d' % (
+                                    m.group(1), int(m.group(2)))
+                            else:
+                                # There are no internal links to
+                                # Embedded C or C Secure Coding Rules
+                                # issues other than from the tables of
+                                # contents in the issue lists, so the
+                                # remaining cases are C11/C17 and CFP.
+                                m = re.fullmatch(
+                                    r'(n2396|n2397|summary)\.htm#dr_([0-9]+)',
+                                    tvalue)
+                                if m:
+                                    if m.group(1) in ('n2396', 'summary'):
+                                        value = 'issue:0%s' % m.group(2)
+                                    else:
+                                        value = ('issue:0CFP.%02s'
+                                                 % int(m.group(2)))
                 if attr_name == 'style':
                     if (tag_name == 'ol'
                         and value == '"list-style-type: upper-alpha"'):
