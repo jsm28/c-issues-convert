@@ -399,7 +399,7 @@ def clean_per_file(doc, text):
         text = text.replace('possibly wrong.<br/>\n',
                             'possibly wrong.\n<p>')
         # Issue 7 in N1071.
-        text = re.sub('require that<br/>\n(Fractional.*?result\.)<br/>\n',
+        text = re.sub(r'require that<br/>\n(Fractional.*?result\.)<br/>\n',
                       r'require that\n<blockquote>\1</blockquote>\n',
                       text)
         text = re.sub(
@@ -1864,12 +1864,50 @@ def clean_quotes(doc, text):
     return text
 
 
+class CleanBlockquote(ProcessNesting):
+
+    """Fix redundantly nested <blockquote>."""
+
+    def __init__(self, doc, text):
+        super().__init__(doc, text)
+        self.open_tag_pos = []
+
+    def handle_start_tag(self, tag_name, tag_attrs):
+        """Handle a start tag."""
+        super().handle_start_tag(tag_name, tag_attrs)
+        self.open_tag_pos.append(len(self.new_text_list) - 1)
+
+    def handle_end_tag(self, tag_name):
+        """Handle an end tag."""
+        if (tag_name == 'blockquote'
+            and self.open_tags[-1] == 'blockquote'
+            and self.open_tags[-2] == 'blockquote'
+            and self.open_tag_pos[-2] == self.open_tag_pos[-1] - 2
+            and not self.new_text_list[self.open_tag_pos[-1] - 1].strip()
+            and self.rtext.lstrip().startswith('</blockquote>')):
+            self.new_text_list[self.open_tag_pos[-1]] = ''
+            self.pop_tag()
+        else:
+            super().handle_end_tag(tag_name)
+        self.open_tag_pos = self.open_tag_pos[:-1]
+
+
+def clean_blockquote(doc, text):
+    """Fix redundantly nested <blockquote>."""
+    old_text = text
+    text = CleanBlockquote(doc, text).run()
+    if old_text == text:
+        return text
+    else:
+        return clean_blockquote(doc, text)
+
+
 # List of functions for cleaning HTML issue lists.
 CLEAN_FUNCS_LIST = (
     clean_amp, clean_ltgt, clean_chars, clean_per_file, clean_tags,
     clean_nesting, clean_class, clean_color, clean_font, clean_margin_left,
     clean_redundant_tags, clean_general, clean_code_to_pre, clean_pre,
-    clean_br, clean_quotes)
+    clean_br, clean_quotes, clean_blockquote)
 
 
 def clean_doc(doc):
