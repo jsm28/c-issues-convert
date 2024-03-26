@@ -2116,7 +2116,7 @@ def extract_c90_issues(docs_content, issues_data):
             if full_issue_num in issues_data:
                 raise ValueError('issue %s already seen' % full_issue_num)
             summary_orig = summary
-            # TODO split crossref out of summary, and remove trailing '.'.
+            summary = re.sub(' See .*', '', summary).rstrip('.')
             issues_data[full_issue_num] = {
                 'date': date,
                 'author-html': author,
