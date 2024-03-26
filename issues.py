@@ -731,6 +731,14 @@ KNOWN_TAGS_LEAF = {'p', 'pre'}
 # Attributes to discard on certain tags (regardless of the attribute
 # value).
 KNOWN_ATTRS_DISCARD = {
+    # <a name> is only ever linked to when it's a link to a question
+    # within an issue, and those links are reprocessed, so the <a
+    # name> are redundant.  <a id> is only used for links to Suggested
+    # Technical Corrigendum within a C11 issue (and indeed one link to
+    # #tc is incorrect as #tc is for a different issue), which doesn't
+    # seem to be a necessary link; likewise, <li id> is for links to
+    # references within an issue, which also seem unnecessary.
+    'a': {'id', 'name'},
     'b': {'style'},
     'body': {'bgcolor', 'link', 'vlink'},
     'br': {'style'},
@@ -740,6 +748,7 @@ KNOWN_ATTRS_DISCARD = {
     'hr': {'style'},
     'html': {'lang', 'xml:lang', 'xmlns'},
     'i': {'style'},
+    'li': {'id'},
     'p': {'align'},
     'pre': {'class'},
     'span': {'lang'},
@@ -754,10 +763,9 @@ KNOWN_ATTRS_DISCARD = {
 # Attributes to keep on certain tags (possibly after custom logic to
 # remap or discard certain cases).
 KNOWN_ATTRS_KEEP = {
-    'a': {'href', 'id', 'name', 'title'},
+    'a': {'href', 'title'},
     'center': {'class'},
     'div': {'style'},
-    'li': {'id'},
     'ol': {'start', 'type'},
     'p': {'class', 'style'},
     'span': {'class', 'style'},
@@ -842,6 +850,12 @@ def clean_tags(doc, text):
                         if not (value.startswith('"') and value.endswith('"')):
                             raise ValueError(
                                 'bad href %s in %s' % (value, doc))
+                        if value == '"#tc"':
+                            # Discard these within-issue links.
+                            continue
+                        if re.fullmatch('"#[1-9][0-9]*"', value):
+                            # Discard these within-issue links.
+                            continue
                         value = '"%s"' % urllib.parse.urljoin(
                             doc_url(doc), value[1:-1])
                     # There are several typos in links to the WG14 website.
@@ -869,7 +883,7 @@ def clean_tags(doc, text):
                                 r'dr_([0-9][0-9][0-9])\.html#Question([0-9]+)',
                                 tvalue)
                             if m:
-                                value = 'issue:0%s.%02d' % (
+                                value = '"issue:0%s.%02d"' % (
                                     m.group(1), int(m.group(2)))
                             else:
                                 # There are no internal links to
@@ -882,9 +896,9 @@ def clean_tags(doc, text):
                                     tvalue)
                                 if m:
                                     if m.group(1) in ('n2396', 'summary'):
-                                        value = 'issue:0%s' % m.group(2)
+                                        value = '"issue:0%s"' % m.group(2)
                                     else:
-                                        value = ('issue:0CFP.%02s'
+                                        value = ('"issue:0CFP.%02d"'
                                                  % int(m.group(2)))
                 if attr_name == 'style':
                     if (tag_name == 'ol'
@@ -1524,13 +1538,20 @@ class RemoveRedundantTags(ProcessNesting):
         elif tag_name == 'span' and not tag_attrs:
             tag_replace = ''
         elif tag_name == 'a':
-            keep = False
+            href = None
             for attr, value in tag_attrs:
-                if attr in ('href', 'id'):
-                    keep = True
-            if not keep:
+                if attr == 'href':
+                    href = value
+            if href is None:
                 tag_replace = ''
                 tag_attrs = []
+            elif len(tag_attrs) > 1 and href.startswith('"issue:'):
+                # An issue link with title specified.  Remove that
+                # title as redundant with the actual metadata for the
+                # issue linked to (titles on links to issues should be
+                # inserted at display time, not stored in the data
+                # with the link itself).
+                tag_attrs = [('href', href)]
         elif tag_name in ('code', 'b', 'i', 'del', 'u'):
             if tag_name in self.open_tags:
                 tag_replace = ''
