@@ -261,7 +261,11 @@ TEXT_REPLACE = {'dr.htm': (('<BR>\nQ15: When do array parameters',
                             # are suitable substitutes when needed.)
                             '<BR>\nQ14: <TT><B>const void</B></TT> type '
                             'as a parameter\n'
-                            '<BR>\nQ15: When do array parameters'),),
+                            '<BR>\nQ15: When do array parameters'),
+                           ('<A HREF="dr_014.html#Question14"> Defect '
+                            'Report #014, Question 2</A>',
+                            '<A HREF="dr_014.html#Question2"> Defect '
+                            'Report #014, Question 2</A>')),
                 'dr_001.html': (('str\nucture', 'structure'),
                                 ('structur\ne', 'structure'),
                                 ('toan', 'to an')),
@@ -298,14 +302,34 @@ TEXT_REPLACE = {'dr.htm': (('<BR>\nQ15: When do array parameters',
                                 ('promoti on', 'promotion')),
                 'dr_016.html': (('<B>Submittor</B>',
                                  '<BR>\n<B>Submittor</B>'),),
+                'dr_017.html': (('<A HREF="dr_013.html">Defect Report #013, '
+                                 'Question 1</A>',
+                                 '<A HREF="dr_013.html#Question1">Defect '
+                                 'Report #013, Question 1</A>'),),
                 'dr_019.html': (('Defect Report #XXX', 'Defect Report #019'),),
+                'dr_034.html': (('<A HREF="dr_011.html">Defect '
+                                 'Report #011</A>',
+                                 '<A HREF="dr_011.html#Question1">Defect '
+                                 'Report #011</A>'),),
                 'dr_038.html': (('Previous Defect Rep8rt',
                                  'Previous Defect Report'),),
                 'dr_040.html': (('envrionment', 'environment'),
                                 ('previosly', 'previously'),
-                                ('withrdaw', 'withdraw')),
+                                ('withrdaw', 'withdraw'),
+                                ('<A HREF="dr_013.html">Defect\n'
+                                 'Report #013, Question 1</A>',
+                                 '<A HREF="dr_013.html#Question1">Defect\n'
+                                 'Report #013, Question 1</A>')),
                 'dr_051.html': (('</TT>\n<A HREF="dr_050.html">',
                                  '</TT>\n<BR>\n<A HREF="dr_050.html">'),),
+                'dr_054.html': (('<A HREF="dr_042.html"> Defect '
+                                 'Report #042 Question 1</A>',
+                                 '<A HREF="dr_042.html#Question1"> Defect '
+                                 'Report #042 Question 1</A>'),),
+                'dr_072.html': (('<A HREF="dr_044.html">Defect '
+                                 'Report #044, question 1</A>',
+                                 '<A HREF="dr_044.html#Question1">Defect '
+                                 'Report #044, question 1</A>'),),
                 'dr_074.html': (('sublause', 'subclause'),),
                 'dr_088.html': (('preceeded', 'preceded'),),
                 'dr_096.html': (('occuring', 'occurring'),),
@@ -313,6 +337,10 @@ TEXT_REPLACE = {'dr.htm': (('<BR>\nQ15: When do array parameters',
                 'dr_105.html': (('compatability', 'compatibility'),),
                 'dr_108.html': (('preceeding', 'preceding'),),
                 'dr_109.html': (('evaulation', 'evaluation'),),
+                'dr_110.html': (('<A HREF="dr_013.html">RFI #13, '
+                                 'question #1</A>',
+                                 '<A HREF="dr_013.html#Question1">RFI #13, '
+                                 'question #1</A>'),),
                 'dr_114.html': (('initialiers', 'initializers'),),
                 'dr_116.html': (('considerd', 'considered'),),
                 'dr_117.html': (('preceeding', 'preceding'),),
@@ -332,6 +360,10 @@ TEXT_REPLACE = {'dr.htm': (('<BR>\nQ15: When do array parameters',
                 'dr_162.html': (('retruned', 'returned'),),
                 'dr_165.html': (('identifer', 'identifier'),),
                 'dr_166.html': (('Subclasue', 'Subclause'),),
+                'dr_167.html': (('<A HREF="dr_014.html#Question14"> Defect '
+                                 'Report #014, Question 2</A>',
+                                 '<A HREF="dr_014.html#Question2"> Defect '
+                                 'Report #014, Question 2</A>'),),
                 'dr_170.html': (('occurence', 'occurrence'),),
                 'dr_171.html': (('Commitee', 'Committee'),),
                 'dr_172.html': (('\n<A HREF="dr_171.html">',
@@ -2170,8 +2202,6 @@ def extract_c90_issues(docs_content, issues_data):
                 raise ValueError('issue %s already processed'
                                  % full_issue_num)
             # TODO split question and response (putting latter in comments).
-            # TODO find any issues referenced in content, add those to
-            # crossref.
             issues_data[full_issue_num]['content-html'] = (
                 '<html><body>%s</body></html>' % this_content)
             issues_data[full_issue_num]['comments'] = []
@@ -2227,6 +2257,31 @@ def extract_cscr_issues(docs_content, issues_data):
 def extract_embc_issues(docs_content, issues_data):
     """Extract Embedded C issue data from the source documents."""
     # TODO
+
+
+def extract_crossrefs(issues_data):
+    """Add cross-references between issues based on links in HTML data."""
+    for issue_num, issue_content in issues_data.items():
+        issue_content['crossref'] = set(issue_content['crossref'])
+        html_values = []
+        for k, v in issue_content.items():
+            if k.endswith('-html'):
+                html_values.append(v)
+        for c in issue_content['comments']:
+            for k, v in c.items():
+                if k.endswith('-html'):
+                    html_values.append(v)
+        for v in html_values:
+            for m in re.finditer('<a href="issue:([0-9A-Z.]*)">', v):
+                issue_content['crossref'].add(m.group(1))
+        if issue_num in issue_content['crossref']:
+            raise ValueError('self-reference from issue %s' % issue_num)
+    # Add backward cross-references as well.
+    for issue_num, issue_content in issues_data.items():
+        for v in issue_content['crossref']:
+            issues_data[v]['crossref'].add(issue_num)
+    for issue_content in issues_data.values():
+        issue_content['crossref'] = sorted(issue_content['crossref'])
 
 
 def process_issue(issue_num, issue_content):
@@ -2304,8 +2359,7 @@ def action_convert():
     extract_cfp_issues(docs_content, issues_data)
     extract_cscr_issues(docs_content, issues_data)
     extract_embc_issues(docs_content, issues_data)
-    # TODO look for links in content and extend cross-references, and
-    # make cross-references symmetric.
+    extract_crossrefs(issues_data)
     for issue_num, issue_content in sorted(issues_data.items()):
         process_issue(issue_num, issue_content)
 
