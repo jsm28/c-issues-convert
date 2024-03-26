@@ -2320,10 +2320,11 @@ def extract_c99_issues(docs_content, issues_data):
             m = re.fullmatch('Closed, published in TC ([123])', status_text)
             if m:
                 issues_data[full_issue_num]['status'] = 'fixed'
-                issues_data[full_issue_num]['fixed-in'] = 'c99tc' + m.group(1)
+                issues_data[full_issue_num]['fixed-in'] = ['c99tc'
+                                                           + m.group(1)]
             elif status_text == 'Closed, published in 9899:1999':
                 issues_data[full_issue_num]['status'] = 'fixed'
-                issues_data[full_issue_num]['fixed-in'] = 'c99'
+                issues_data[full_issue_num]['fixed-in'] = ['c99']
             else:
                 raise ValueError('C99 DR #%d: cannot parse published status %s'
                                  % (last_dr, status_text))
@@ -2507,11 +2508,13 @@ def process_issue(issue_num, issue_content):
     if issue_content['status'] == 'fixed':
         if 'fixed-in' not in issue_content:
             raise ValueError('issue %s missing key fixed-in' % issue_num)
-        if issue_content['fixed-in'] not in (
-                'c90tc1', 'c90tc2', 'c99', 'c99tc1', 'c99tc2', 'c99tc3', 'c11',
-                'c11tc1', 'c17', 'c23', 'cscr2013tc1', 'cscr202y', 'embc2008'):
-            raise ValueError('issue %s bad fixed-in %s'
-                             % (issue_num, issue_content['fixed-in']))
+        for c in issue_content['fixed-in']:
+            if c not in (
+                    'c90tc1', 'c90tc2', 'c99', 'c99tc1', 'c99tc2', 'c99tc3',
+                    'c11', 'c11tc1', 'c17', 'c23', 'cfp4-c23', 'cscr2013tc1',
+                    'cscr202y', 'embc2008'):
+                raise ValueError('issue %s bad fixed-in %s'
+                                 % (issue_num, issue_content['fixed-in']))
     for c in issue_content['comments']:
         for k in ('date', 'filename', 'content-html'):
             if k not in c:
