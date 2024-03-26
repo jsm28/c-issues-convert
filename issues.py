@@ -2083,17 +2083,22 @@ def extract_c90_issues(docs_content, issues_data):
                 full_issue_num = '%04d.%02d' % (last_dr, qnum)
             if full_issue_num in issues_data:
                 raise ValueError('issue %s already seen' % full_issue_num)
+            summary_orig = summary
             # TODO split crossref out of summary, and remove trailing '.'.
             issues_data[full_issue_num] = {
                 'date': date,
                 'author-html': author,
+                'x-summary-author-html': author,
                 'submitted-against': 'c90',
                 'summary-html': summary,
+                'x-orig-summary-html': summary_orig,
                 'status': 'unknown',
+                'conversion-src': [C90_INDEX],
                 'crossref': []}
             c90_issues.add(full_issue_num)
     for dr_num in range(C90_FIRST, C90_LAST + 1):
-        dr_body = docs_content['dr_%03d.html' % dr_num]
+        dr_doc = 'dr_%03d.html' % dr_num
+        dr_body = docs_content[dr_doc]
         m = re.fullmatch(
             r'<html>\s*<head><title>Defect\s+Report\s+#%03d</title></head>\s*'
             r'<body>\s*<h2>Defect\s+Report\s+#%03d\s*</h2>\s*'
@@ -2116,8 +2121,14 @@ def extract_c90_issues(docs_content, issues_data):
         source = m.group(5)
         content = m.group(6).strip()
         date = '19%s-%s-%s' % (year, MONTHS[month], day)
+        m = re.fullmatch(r'(X3J11/\S*)\s+\((.*)\)', source)
+        if m:
+            refdoc = m.group(1)
+            author = m.group(2)
+        else:
+            author = source
+            refdoc = None
         last_q = 0
-        # TODO split author from reference document in source info.
         while content:
             if dr_num >= 60:
                 m = re.match(
@@ -2170,12 +2181,20 @@ def extract_c90_issues(docs_content, issues_data):
                                  % (full_issue_num,
                                     issues_data[full_issue_num]['date'],
                                     date))
-            if source != issues_data[full_issue_num]['author-html']:
-#                print('%s: author %s -> %s'
-#                      % (full_issue_num,
-#                         issues_data[full_issue_num]['author-html'],
-#                         source))
-                issues_data[full_issue_num]['author-html'] = source
+            if author != issues_data[full_issue_num]['author-html']:
+                if ((issues_data[full_issue_num]['author-html'], author)
+                    not in (('Ron Gulmette', 'Ron Guilmette'),
+                            ('P. J. Plauger', 'Project Editor (P.J. Plauger)'),
+                            ('Clive Feather', 'Clive D.W. Feather'))):
+                    raise ValueError(
+                        '%s: author %s -> %s'
+                        % (full_issue_num,
+                           issues_data[full_issue_num]['author-html'],
+                           author))
+            issues_data[full_issue_num]['author-html'] = author
+            issues_data[full_issue_num]['conversion-src'].append(dr_doc)
+            if refdoc is not None:
+                issues_data[full_issue_num]['reference-doc-html'] = refdoc
     for issue in sorted(c90_issues):
         if 'content-html' not in issues_data[issue]:
             raise ValueError('content of issue %s not found' % issue)
@@ -2215,7 +2234,7 @@ def process_issue(issue_num, issue_content):
     out_dir_html = os.path.join('tmp/out-html', issue_num)
     os.makedirs(out_dir_html, exist_ok=True)
     for k in ('date', 'submitted-against', 'summary-html', 'status',
-              'content-html', 'comments', 'crossref'):
+              'content-html', 'comments', 'crossref', 'conversion-src'):
         if k not in issue_content:
             raise ValueError('issue %s missing key %s' % (issue_num, k))
     if ('author-html' not in issue_content
