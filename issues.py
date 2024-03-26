@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 
 import argparse
+import json
 import os
 import os.path
 import re
@@ -249,7 +250,19 @@ def clean_chars(doc, text):
 
 
 # Textual replacements to apply in the given input file.
-TEXT_REPLACE = {'dr_001.html': (('str\nucture', 'structure'),
+TEXT_REPLACE = {'dr.htm': (('<BR>\nQ15: When do array parameters',
+                            # The summary in dr.htm fails to include
+                            # Q14 of this DR, so insert the summary
+                            # used in the DR itself.  (The summaries
+                            # in the DRs themselves aren't always the
+                            # same as in dr.htm, and those in dr.htm
+                            # are used in preference to generate
+                            # output metadata, but the ones in the DRs
+                            # are suitable substitutes when needed.)
+                            '<BR>\nQ14: <TT><B>const void</B></TT> type '
+                            'as a parameter\n'
+                            '<BR>\nQ15: When do array parameters'),),
+                'dr_001.html': (('str\nucture', 'structure'),
                                 ('structur\ne', 'structure'),
                                 ('toan', 'to an')),
                 'dr_002.html': (('c haracter', 'character'),
@@ -260,7 +273,11 @@ TEXT_REPLACE = {'dr_001.html': (('str\nucture', 'structure'),
                 'dr_003.html': (('composin g', 'composing'),
                                 ('lif e', 'life'),
                                 ('responees', 'responses'),
-                                ('withou ', 'without ')),
+                                ('withou ', 'without '),
+                                ('\n<A HREF="dr_002.html">',
+                                 '\n<BR>\n<A HREF="dr_002.html">')),
+                'dr_006.html': (('<B>Question</B> 1   ',
+                                 '<B>Question</B> 1\n<BR>\n'),),
                 'dr_007.html': (('constrai nt', 'constraint'),),
                 'dr_008.html': (('volat ile', 'volatile'),
                                 ('volati lity', 'volatility'),
@@ -275,9 +292,15 @@ TEXT_REPLACE = {'dr_001.html': (('str\nucture', 'structure'),
                 'dr_013.html': (('occurr ence', 'occurrence'),
                                 ('declara tion', 'declaration')),
                 'dr_014.html': (('affe cted', 'affected'),),
-                'dr_015.html': (('val ues', 'values'),
+                'dr_015.html': (('Defect Repost #015', 'Defect Report #015'),
+                                ('val ues', 'values'),
                                 ('ca n', 'can'),
                                 ('promoti on', 'promotion')),
+                'dr_016.html': (('<B>Submittor</B>',
+                                 '<BR>\n<B>Submittor</B>'),),
+                'dr_019.html': (('Defect Report #XXX', 'Defect Report #019'),),
+                'dr_038.html': (('Previous Defect Rep8rt',
+                                 'Previous Defect Report'),),
                 'dr_040.html': (('envrionment', 'environment'),
                                 ('previosly', 'previously'),
                                 ('withrdaw', 'withdraw')),
@@ -311,6 +334,8 @@ TEXT_REPLACE = {'dr_001.html': (('str\nucture', 'structure'),
                 'dr_166.html': (('Subclasue', 'Subclause'),),
                 'dr_170.html': (('occurence', 'occurrence'),),
                 'dr_171.html': (('Commitee', 'Committee'),),
+                'dr_172.html': (('\n<A HREF="dr_171.html">',
+                                 '\n<BR>\n<A HREF="dr_171.html">'),),
                 'dr_201.htm': (('</tt> <i>make P1', ' <i>make P1'),
                                ('array</i><tt>', 'array</i>')),
                 'dr_264.htm': (('<ol>\n      <li value="4">',
@@ -1491,11 +1516,21 @@ class RemoveRedundantTags(ProcessNesting):
         # representing it in issue tracker data, it's better for any
         # such styling to be done at the point where issue tracker
         # data is presented to the user (converted back to HTML for
-        # display).
+        # display).  <a name> is only ever linked to when it's a link
+        # to a question within an issue, and those links are
+        # reprocessed, so the <a name> are redundant.
         if tag_name == 'center':
             tag_replace = ''
         elif tag_name == 'span' and not tag_attrs:
             tag_replace = ''
+        elif tag_name == 'a':
+            keep = False
+            for attr, value in tag_attrs:
+                if attr in ('href', 'id'):
+                    keep = True
+            if not keep:
+                tag_replace = ''
+                tag_attrs = []
         elif tag_name in ('code', 'b', 'i', 'del', 'u'):
             if tag_name in self.open_tags:
                 tag_replace = ''
@@ -1964,12 +1999,275 @@ def clean_doc(doc):
     return text
 
 
+# Months for parsing C90 DR list.
+MONTHS = {'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04', 'May': '05',
+          'Jun': '06', 'Jul': '07', 'Aug': '08', 'Sep': '09', 'Oct': '10',
+          'Nov': '11', 'Dec': '12'}
+
+
+def extract_c90_issues(docs_content, issues_data):
+    """Extract C90 issue data from the source documents."""
+    dr_index = docs_content[C90_INDEX]
+    last_dr = 0
+    c90_issues = set()
+    while True:
+        m = re.search(
+            r'<a href="issue:(0[0-1][0-9][0-9])">'
+            r'Defect Report Number ([0-1][0-9][0-9])</a>\s+'
+            r'([0-3][0-9]) ([A-Z][a-z][a-z]) (9[2-6])\s+'
+            r'([A-Z][^\n<]*\S)\s*<br>\s*(.*?)(?:</p>|<br> *\n?<a href="issue)',
+            dr_index, flags=re.DOTALL)
+        if not m:
+            if last_dr != C90_LAST:
+                raise ValueError('found C90 DRs up to %d' % last_dr)
+            break
+        dr_num_1 = m.group(1)
+        dr_num_2 = m.group(2)
+        day = m.group(3)
+        month = m.group(4)
+        year = m.group(5)
+        author = m.group(6)
+        date = '19%s-%s-%s' % (year, MONTHS[month], day)
+        summaries = m.group(7)
+        dr_index = dr_index[m.end(7):]
+        last_dr += 1
+        if dr_num_1 != '0' + dr_num_2 or dr_num_1 != '%04d' % last_dr:
+            raise ValueError('inconsistent DR numbers %d %s %s'
+                             % (last_dr, dr_num_1, dr_num_2))
+        last_q = 0
+        summaries = summaries.strip() + '<br>'
+        summaries_list = []
+        while True:
+            m = re.search('<br>', summaries)
+            if not m:
+                break
+            next_summary = summaries[:m.start(0)].strip()
+            summaries = summaries[m.end(0):]
+            m = re.fullmatch(r'Q([1-9][0-9]*):\s*(.*)', next_summary,
+                             flags=re.DOTALL)
+            if not m:
+                raise ValueError('issue %d: failed to parse summary %s'
+                                 % (last_dr, next_summary))
+            last_q += 1
+            if m.group(1) != str(last_q):
+                raise ValueError(
+                    'issue %d: inconsistent question numbers %d %s'
+                    % (last_dr, last_q, m.group(1)))
+            this_q_summary = re.sub(r'\s+', ' ', m.group(2))
+            summaries_list.append(this_q_summary)
+        for qnum, summary in enumerate(summaries_list, start=1):
+            if qnum == 1 and len(summaries_list) == 1:
+                full_issue_num = '%04d' % last_dr
+            else:
+                full_issue_num = '%04d.%02d' % (last_dr, qnum)
+            if full_issue_num in issues_data:
+                raise ValueError('issue %s already seen' % full_issue_num)
+            # TODO split crossref out of summary, and remove trailing '.'.
+            issues_data[full_issue_num] = {
+                'date': date,
+                'author-html': author,
+                'submitted-against': 'c90',
+                'summary-html': summary,
+                'status': 'unknown',
+                'crossref': []}
+            c90_issues.add(full_issue_num)
+    for dr_num in range(C90_FIRST, C90_LAST + 1):
+        dr_body = docs_content['dr_%03d.html' % dr_num]
+        m = re.fullmatch(
+            r'<html>\s*<head><title>Defect\s+Report\s+#%03d</title></head>\s*'
+            r'<body>\s*<h2>Defect\s+Report\s+#%03d\s*</h2>\s*'
+            r'<p><b>Submission Date</b>: '
+            r'([0-3][0-9]) ([A-Z][a-z][a-z]) (9[2-6])\s*</p>\s*'
+            r'<p><b>Submittor</b>:\s*([^<]*\S)\s*</p>\s*'
+            r'<p><b>Source</b>:\s*([^<]*\S)\s*</p>\s*'
+            r'(.*)<p>\s*'
+            r'(?:<a href="issue:....">Previous Defect Report</a>\s*)?'
+            r'(?:(?:&lt;)?\s+-\s+(?:&gt;)?\s*)?'
+            r'(?:<a href="issue:....">Next Defect Report</a>\s*)?'
+            r'</p>\s*</body></html>\n'
+            % (dr_num, dr_num), dr_body, flags=re.DOTALL)
+        if not m:
+            raise ValueError('failed to match issue %d body' % dr_num)
+        day = m.group(1)
+        month = m.group(2)
+        year = m.group(3)
+        submitter = m.group(4)
+        source = m.group(5)
+        content = m.group(6).strip()
+        date = '19%s-%s-%s' % (year, MONTHS[month], day)
+        last_q = 0
+        # TODO split author from reference document in source info.
+        while content:
+            if dr_num >= 60:
+                m = re.match(
+                    r'<p>\s*<b>Question</b>\s*</p>\s*',
+                    content)
+            else:
+                m = re.match(
+                    r'<p>\s*<b>Question</b>\s*([1-9][0-9]*)\s*</p>\s*',
+                    content)
+            if not m:
+                raise ValueError('failed to match issue %d Q %d'
+                                 % (dr_num, last_q + 1))
+            last_q += 1
+            if dr_num < 60 and m.group(1) != str(last_q):
+                raise ValueError(
+                    'issue %d (body): inconsistent question numbers %d %s'
+                    % (dr_num, last_q, m.group(1)))
+            content = content[m.end(0):]
+            if dr_num >= 60:
+                this_content = content.strip()
+                content = ''
+            else:
+                m = re.search(
+                    r'<p>\s*<b>Question</b>\s*([1-9][0-9]*)\s*</p>\s*',
+                    content)
+                if m:
+                    this_content = content[:m.start(0)].strip()
+                    content = content[m.start(0):]
+                else:
+                    this_content = content.strip()
+                    content = ''
+            full_issue_num = '%04d' % dr_num
+            if last_q != 1 or full_issue_num not in issues_data:
+                full_issue_num = '%s.%02d' % (full_issue_num, last_q)
+            if full_issue_num not in issues_data:
+                raise ValueError('issue %s in content but not summary'
+                                 % full_issue_num)
+            if 'content-html' in issues_data[full_issue_num]:
+                raise ValueError('issue %s already processed'
+                                 % full_issue_num)
+            # TODO split question and response (putting latter in comments).
+            # TODO find any issues referenced in content, add those to
+            # crossref.
+            issues_data[full_issue_num]['content-html'] = (
+                '<html><body>%s</body></html>' % this_content)
+            issues_data[full_issue_num]['comments'] = []
+            issues_data[full_issue_num]['submitter-html'] = submitter
+            if date != issues_data[full_issue_num]['date']:
+                raise ValueError('%s: date %s -> %s'
+                                 % (full_issue_num,
+                                    issues_data[full_issue_num]['date'],
+                                    date))
+            if source != issues_data[full_issue_num]['author-html']:
+#                print('%s: author %s -> %s'
+#                      % (full_issue_num,
+#                         issues_data[full_issue_num]['author-html'],
+#                         source))
+                issues_data[full_issue_num]['author-html'] = source
+    for issue in sorted(c90_issues):
+        if 'content-html' not in issues_data[issue]:
+            raise ValueError('content of issue %s not found' % issue)
+
+
+def extract_c99_issues(docs_content, issues_data):
+    """Extract C99 issue data from the source documents."""
+    dr_index = docs_content[C99_INDEX]
+    # TODO
+
+
+def extract_c11_issues(docs_content, issues_data):
+    """Extract C11 issue data from the source documents."""
+    all_drs = docs_content[C11_ALL]
+    # TODO
+
+
+def extract_cfp_issues(docs_content, issues_data):
+    """Extract CFP issue data from the source documents."""
+    all_drs = docs_content[CFP_ALL]
+    # TODO
+
+
+def extract_cscr_issues(docs_content, issues_data):
+    """Extract C Secure Coding Rules issue data from the source documents."""
+    all_drs = docs_content[CSCR_ALL]
+    # TODO
+
+
+def extract_embc_issues(docs_content, issues_data):
+    """Extract Embedded C issue data from the source documents."""
+    # TODO
+
+
+def process_issue(issue_num, issue_content):
+    """Store and convert the data from an extracted issue."""
+    out_dir_html = os.path.join('tmp/out-html', issue_num)
+    os.makedirs(out_dir_html, exist_ok=True)
+    for k in ('date', 'submitted-against', 'summary-html', 'status',
+              'content-html', 'comments', 'crossref'):
+        if k not in issue_content:
+            raise ValueError('issue %s missing key %s' % (issue_num, k))
+    if ('author-html' not in issue_content
+        and 'submitter-html' not in issue_content):
+        raise ValueError('issue %s missing author and submitter')
+    if issue_content['submitted-against'] not in (
+            'c90', 'c99', 'c11c17', 'cfp-c11', 'cscr2013', 'embc2004'):
+        raise ValueError('issue %s bad submitted-against %s'
+                         % (issue_num, issue_content['submitted-against']))
+    if issue_content['status'] not in ('fixed', 'closed', 'unknown'):
+        # fixed = there has been a change in a subsequent document (as
+        # specified in fixed-in) to address the issue.
+        #
+        # closed = resolved without any textual change (answered with
+        # interpretation given, not a defect, etc.)
+        #
+        # unknown = not classified yet into fixed or closed (applies
+        # to many past issues where the issue list doesn't give the
+        # required information and so it needs adding manually,
+        # including where issue lists only identified issues fixed in
+        # TCs and not those later fixed in a future standard revision)
+        raise ValueError('issue %s bad status %s'
+                         % (issue_num, issue_content['status']))
+    if issue_content['status'] == 'fixed':
+        if 'fixed-in' not in issue_content:
+            raise ValueError('issue %s missing key fixed-in' % issue_num)
+        if issue_content['fixed-in'] not in (
+                'c90tc1', 'c90tc2', 'c99', 'c99tc1', 'c99tc2', 'c99tc3', 'c11',
+                'c11tc1', 'c17', 'c23', 'cscr2013tc1', 'cscr202y', 'embc2008'):
+            raise ValueError('issue %s bad fixed-in %s'
+                             % (issue_num, issue_content['fixed-in']))
+    for c in issue_content['comments']:
+        for k in ('date', 'filename', 'content-html'):
+            if k not in c:
+                raise ValueError('issue %s comment missing key %s'
+                                 % (issue_num, k))
+        if 'author-html' not in c and 'submitter-html' not in c:
+            raise ValueError('issue %s comment missing author and submitter')
+    issue_json = issue_content.copy()
+    del issue_json['content-html']
+    issue_json['comments'] = [c.copy() for c in issue_json['comments']]
+    for c in issue_json['comments']:
+        del c['content-html']
+    with open(os.path.join(out_dir_html, 'metadata.json'), 'w',
+              encoding='utf-8') as f:
+        json.dump(issue_json, f, indent=4, sort_keys=True)
+    with open(os.path.join(out_dir_html, 'issue.html'), 'w',
+              encoding='utf-8') as f:
+        f.write(issue_content['content-html'])
+    for c in issue_content['comments']:
+        with open(os.path.join(out_dir_html, 'comments', c['filename']), 'w',
+                  encoding='utf-8') as f:
+            f.write(c['content-html'])
+
+
 def action_convert():
     """Convert the issue lists.  The source data is in in/; the results of
     the conversion are written to out/; intermediate files are left in
     tmp/ to help in checking and debugging the conversion."""
+    docs_content = {}
     for doc in list_docs(False):
-        clean_doc(doc)
+        docs_content[doc] = clean_doc(doc)
+    issues_data = {}
+    extract_c90_issues(docs_content, issues_data)
+    extract_c99_issues(docs_content, issues_data)
+    extract_c11_issues(docs_content, issues_data)
+    extract_cfp_issues(docs_content, issues_data)
+    extract_cscr_issues(docs_content, issues_data)
+    extract_embc_issues(docs_content, issues_data)
+    # TODO look for links in content and extend cross-references, and
+    # make cross-references symmetric.
+    for issue_num, issue_content in sorted(issues_data.items()):
+        process_issue(issue_num, issue_content)
 
 
 def main():
