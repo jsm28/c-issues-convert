@@ -370,8 +370,30 @@ TEXT_REPLACE = {'dr.htm': (('<BR>\nQ15: When do array parameters',
                                  '\n<BR>\n<A HREF="dr_171.html">'),),
                 'dr_201.htm': (('</tt> <i>make P1', ' <i>make P1'),
                                ('array</i><tt>', 'array</i>')),
+                'dr_202.htm': (('20001-01-22', '2001-01-22'),),
+                'dr_235.htm': (('Sumitter', 'Submitter'),
+                               ('<br>\n     <a href="dr_234.htm">',
+                                '\n     <p><a href="dr_234.htm">')),
                 'dr_264.htm': (('<ol>\n      <li value="4">',
                                 '<ol start="4">\n      <li>'),),
+                'dr_282.htm': (('<br>\n     <b>Summary</b>',
+                                '\n     <p><b>Summary</b>'),),
+                'dr_315.htm': (('<br>\n    <a href="dr_314.htm">',
+                                '</blockquote>\n    <p><a href="dr_314.htm">'),
+                               ('</blockquote>\n</body>', '</body>')),
+                'dr_318.htm': (('<b>Reference Document:</b> Version:',
+                                '<b>Reference Document:</b><br>'
+                                '<b>Version:</b>'),),
+                'dr_331.htm': (('2006/08/01', '2006-08-01'),),
+                'dr_337.htm': (('Austin Group<br>\n  <br>\n',
+                                'Austin Group<br>\n'),),
+                'dr_341.htm': (('2007-03-24&gt;', '2007-03-24'),),
+                'dr_343.htm': (('<b>Date: 2007-09-07</b>',
+                                '<b>Date:</b> 2007-09-07'),
+                               ('<b>Subject: Initializing qualified '
+                                'wchar_t arrays</b>',
+                                '<b>Subject:</b> Initializing qualified '
+                                'wchar_t arrays')),
                 'n2396.htm': (('<code>Note </code>', '<b>Note</b> '),
                               ('<code>Note 11:</code>', '<b>Note 11:</b>'),
                               ('<code>Note 13:</code>', '<b>Note 13:</b>')),
@@ -2058,6 +2080,11 @@ MONTHS = {'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04', 'May': '05',
           'Nov': '11', 'Dec': '12'}
 
 
+def clean_for_metadata(text):
+    """Clean some HTML text to go in JSON metadata."""
+    return re.sub(r'(\s|&nbsp;)+', ' ', text).strip()
+
+
 def extract_c90_issues(docs_content, issues_data):
     """Extract C90 issue data from the source documents."""
     dr_index = docs_content[C90_INDEX]
@@ -2106,7 +2133,7 @@ def extract_c90_issues(docs_content, issues_data):
                 raise ValueError(
                     'issue %d: inconsistent question numbers %d %s'
                     % (last_dr, last_q, m.group(1)))
-            this_q_summary = re.sub(r'\s+', ' ', m.group(2))
+            this_q_summary = clean_for_metadata(m.group(2))
             summaries_list.append(this_q_summary)
         for qnum, summary in enumerate(summaries_list, start=1):
             if qnum == 1 and len(summaries_list) == 1:
@@ -2233,7 +2260,171 @@ def extract_c90_issues(docs_content, issues_data):
 def extract_c99_issues(docs_content, issues_data):
     """Extract C99 issue data from the source documents."""
     dr_index = docs_content[C99_INDEX]
-    # TODO
+    last_dr = 200
+    c99_issues = set()
+    while True:
+        m = re.search(
+            r'<p><a href="issue:(0[2-3][0-9][0-9])">'
+            r'Defect Report #([2-3][0-9][0-9])</a>\s+'
+            r'(\S.*?\S)\s*&nbsp;&ndash;&nbsp;'
+            r'<span class="(closed|published|review)">([^<]*)</span><br>'
+            r'\s*(Q.*?\S)\s*</p>',
+            dr_index, flags=re.DOTALL)
+        if not m:
+            if last_dr != C99_LAST:
+                raise ValueError('found C99 DRs up to %d' % last_dr)
+            break
+        dr_num_1 = m.group(1)
+        dr_num_2 = m.group(2)
+        date_and_author = clean_for_metadata(m.group(3))
+        status_class = m.group(4)
+        status_text = clean_for_metadata(m.group(5))
+        summary = clean_for_metadata(m.group(6))
+        dr_index = dr_index[m.end(0):]
+        last_dr += 1
+        if dr_num_1 != '0' + dr_num_2 or dr_num_1 != '%04d' % last_dr:
+            raise ValueError('inconsistent DR numbers %d %s %s'
+                             % (last_dr, dr_num_1, dr_num_2))
+        full_issue_num = '%04d' % last_dr
+        if full_issue_num in issues_data:
+            raise ValueError('issue %s already seen' % full_issue_num)
+        m = re.fullmatch('([1-2][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]) (.*)',
+                         date_and_author)
+        if m:
+            date = m.group(1)
+            author = m.group(2)
+        else:
+            date = None
+            author = date_and_author
+        # For C99 DRs, we prefer the summary from the DR itself (a
+        # single summary even for DRs with multiple questions; those
+        # multiple-question DRs also have a single response, so are
+        # not split up into separate issues, unlike multiple-question
+        # C90 DRs) over the one from the summary page, so the one from
+        # the summary page is only stored as x-index-summary-html.
+        issues_data[full_issue_num] = {
+            'x-summary-author-html': author,
+            'submitted-against': 'c99',
+            'x-index-summary-html': summary,
+            'x-orig-status-class': status_class,
+            'status': 'unknown',
+            'conversion-src': [C99_INDEX],
+            'crossref': []}
+        if date is not None:
+            issues_data[full_issue_num]['date'] = date
+            issues_data[full_issue_num]['x-summary-date'] = date
+        if status_class not in ('published', 'closed', 'review'):
+            raise ValueError('C99 DR #%d: unknown status %s'
+                             % (last_dr, status_class))
+        if status_class == 'published':
+            m = re.fullmatch('Closed, published in TC ([123])', status_text)
+            if m:
+                issues_data[full_issue_num]['status'] = 'fixed'
+                issues_data[full_issue_num]['fixed-in'] = 'c99tc' + m.group(1)
+            elif status_text == 'Closed, published in 9899:1999':
+                issues_data[full_issue_num]['status'] = 'fixed'
+                issues_data[full_issue_num]['fixed-in'] = 'c99'
+            else:
+                raise ValueError('C99 DR #%d: cannot parse published status %s'
+                                 % (last_dr, status_text))
+        else:
+            m = re.fullmatch('%s, (2[0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9])'
+                             % status_class.capitalize(),
+                             status_text)
+            if not m:
+                raise ValueError('C99 DR #%d: cannot parse %s status %s'
+                                 % (last_dr, status_class, status_text))
+            issues_data[full_issue_num]['x-status-date'] = m.group(1)
+        c99_issues.add(full_issue_num)
+    for dr_num in range(C99_FIRST, C99_LAST + 1):
+        dr_doc = 'dr_%03d.htm' % dr_num
+        dr_body = docs_content[dr_doc]
+        dr_body = re.sub('<!--.*?-->', '', dr_body)
+        if 'Reference Document' in dr_body:
+            refdoc_re_frag = (
+                r'(?:<b>)?Reference Documents?:(?:</b>)?\s*(.*?)\s*<br>\s*')
+        else:
+            refdoc_re_frag = '()'
+        m = re.fullmatch(
+            (r'<html>\s*<head>.*?<title>Defect\s+[Rr]eport\s+#%03d</title>.*?'
+             r'</head>\s*<body>\s*<h2>Defect\s+Report\s+#%03d\s*</h2>\s*'
+             r'<p><a href="issue:....">(?:Last|Previous) Defect Report</a>\s+'
+             r'&lt; -\s+&gt;\s*<a href="issue:....">'
+             r'(?:Previous|Next|First) Defect Report</a>\s*</p>'
+             r'\s*<p>\s*<b>Submitter:(?:</b>)?\s*(\S[^<]*)<br>\s*'
+             r'(?:<b>)?Submission Date:(?:</b>)?(?:\s|&nbsp;)*'
+             r'((?:[1-2][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9])?)\s*<br>\s*'
+             r'(?:<b>)?Source:(?:</b>)?\s*(.*?)<br>\s*'
+             % (dr_num, dr_num))
+            + refdoc_re_frag
+            + r'(?:<b>)?Version:</b>\s*(\S[^< ]*)\s*<br>\s*'
+            r'<b>Date:</b>(?:\s|&nbsp;)*'
+            r'([1-2][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]'
+            r'(?: [0-2][0-9]:[0-5][0-9](?::[0-5][0-9])?)?)\s*<br>\s*'
+            r'<b>Subject:</b>\s*(\S.*?)</p>\s*'
+            r'(.*)<p>\s*'
+            r'<a href="issue:....">(?:Last|Previous) Defect Report</a>\s+'
+            r'&lt;\s+- &gt;\s+<a href="issue:....">'
+            r'(?:Previous|Next|First) Defect Report</a>\s*</p>'
+            r'\s*</body>\s*</html>\n',
+            dr_body, flags=re.DOTALL)
+        if not m:
+            raise ValueError('failed to match issue %d body' % dr_num)
+        submitter = clean_for_metadata(m.group(1))
+        date = m.group(2)
+        if not date:
+            if dr_num == 245:
+                # This DR lacks a submission date in both the summary
+                # list and the DR itself.  In the set of C99 DRs
+                # version 1.7 (pre-redmond-drs.zip, distributed 25 Sep
+                # 2001), the Date (not Submission Date) of version 1.0
+                # of this DR was given as 2001-09-21, so use that as a
+                # submission date.
+                date = '2001-09-21'
+            else:
+                raise ValueError('missing submission date in DR #%d'
+                                 % dr_num)
+        author = clean_for_metadata(m.group(3))
+        refdoc = clean_for_metadata(m.group(4))
+        if refdoc in ('', 'N/A'):
+            refdoc = None
+        version = clean_for_metadata(m.group(5))
+        version_date = m.group(6)
+        summary = clean_for_metadata(m.group(7)).rstrip('.')
+        content = m.group(8).strip()
+        full_issue_num = '%04d' % dr_num
+        if 'content-html' in issues_data[full_issue_num]:
+            raise ValueError('issue %s already processed' % full_issue_num)
+        issues_data[full_issue_num]['summary-html'] = summary
+        # TODO split question and response (putting latter in comments).
+        issues_data[full_issue_num]['content-html'] = (
+            '<html><body>%s</body></html>' % content)
+        issues_data[full_issue_num]['comments'] = []
+        issues_data[full_issue_num]['submitter-html'] = submitter
+        # Submission dates are not always consistent between the
+        # summary (where listed at all) and the individual issues;
+        # prefer the individual issue versions.
+        # if ('date' in issues_data[full_issue_num]
+        #     and date != issues_data[full_issue_num]['date']):
+        #     print('%s: date %s -> %s'
+        #           % (full_issue_num,
+        #              issues_data[full_issue_num]['date'],
+        #              date))
+        issues_data[full_issue_num]['date'] = date
+        # Authors are not generally listed in consistent forms in
+        # summary and individual issues; prefer the individual issue
+        # versions.
+        # print('%s: author %s -> %s'
+        #       % (full_issue_num,
+        #          issues_data[full_issue_num]['x-summary-author-html'],
+        #          author))
+        if author:
+            issues_data[full_issue_num]['author-html'] = author
+        issues_data[full_issue_num]['conversion-src'].append(dr_doc)
+        if refdoc is not None:
+            issues_data[full_issue_num]['reference-doc-html'] = refdoc
+        issues_data[full_issue_num]['x-dr-version'] = version
+        issues_data[full_issue_num]['x-dr-version-date'] = version_date
 
 
 def extract_c11_issues(docs_content, issues_data):
