@@ -394,9 +394,26 @@ TEXT_REPLACE = {'dr.htm': (('<BR>\nQ15: When do array parameters',
                                 'wchar_t arrays</b>',
                                 '<b>Subject:</b> Initializing qualified '
                                 'wchar_t arrays')),
+                # The DR submitter for CSCR DR#1 was lost at some
+                # point in the defect report summary, but is present
+                # in N1891 (version 1.1 of that summary).
+                'n2150.htm': (('<b>Submission Date:</b> 2014-03-11<br>',
+                               '<b>Submitter:</b> Clive Pygott<br>'
+                               '<b>Submission Date:</b> 2014-03-11<br>'),),
                 'n2396.htm': (('<code>Note </code>', '<b>Note</b> '),
                               ('<code>Note 11:</code>', '<b>Note 11:</b>'),
-                              ('<code>Note 13:</code>', '<b>Note 13:</b>')),
+                              ('<code>Note 13:</code>', '<b>Note 13:</b>'),
+                              ('<b>Submission Date:</b> 2012-1-11',
+                               '<b>Submission Date:</b> 2012-01-11'),
+                              # DR #417; use the date of the start of
+                              # the October 2012 meeting.
+                              ('<b>Submission Date:</b> Oct 2012',
+                               '<b>Submission Date:</b> 2012-10-22'),
+                              ('<b>Submission Date:</b> 2012-9-13<br>',
+                               '<b>Submission Date:</b> 2012-09-13<br>'),
+                              ('<b>Submission Date:</b> 2013/07/21<br>',
+                               '<b>Submission Date:</b> 2013-07-21<br>'),
+                              ('can not be cyclic', 'cannot be cyclic')),
                 'n2397.htm': (('macro-\nreplacement', 'macro-replacement'),
                               ('macro- replacement', 'macro-replacement'))}
 
@@ -2261,7 +2278,6 @@ def extract_c99_issues(docs_content, issues_data):
     """Extract C99 issue data from the source documents."""
     dr_index = docs_content[C99_INDEX]
     last_dr = 200
-    c99_issues = set()
     while True:
         m = re.search(
             r'<p><a href="issue:(0[2-3][0-9][0-9])">'
@@ -2336,11 +2352,10 @@ def extract_c99_issues(docs_content, issues_data):
                 raise ValueError('C99 DR #%d: cannot parse %s status %s'
                                  % (last_dr, status_class, status_text))
             issues_data[full_issue_num]['x-status-date'] = m.group(1)
-        c99_issues.add(full_issue_num)
     for dr_num in range(C99_FIRST, C99_LAST + 1):
         dr_doc = 'dr_%03d.htm' % dr_num
         dr_body = docs_content[dr_doc]
-        dr_body = re.sub('<!--.*?-->', '', dr_body)
+        dr_body = re.sub('<!--.*?-->', ' ', dr_body)
         if 'Reference Document' in dr_body:
             refdoc_re_frag = (
                 r'(?:<b>)?Reference Documents?:(?:</b>)?\s*(.*?)\s*<br>\s*')
@@ -2428,22 +2443,164 @@ def extract_c99_issues(docs_content, issues_data):
         issues_data[full_issue_num]['x-dr-version-date'] = version_date
 
 
+def extract_single_doc_issues(docs_content, issues_data, doc_name,
+                              submitted_against, first_num_expected,
+                              last_num_expected, issue_num_format):
+    """Extract issue data from a single-document list."""
+    all_drs = docs_content[doc_name]
+    m = re.fullmatch(
+        r'<html>.*?<table>\s*<tr>\s*<th>(?:Request|Defect)</th>\s*'
+        r'<th>Summary</th>\s*<th>Date</th>\s*<th>Status</th>\s*</tr>\s*'
+        r'(.*?)\s*</table>\s*<hr>\s*(.*?)</body>\s*</html>\s*',
+        all_drs, flags=re.DOTALL)
+    if not m:
+        raise ValueError('failed to parse overall %s content' % doc_name)
+    summary_table = m.group(1)
+    all_drs = m.group(2)
+    prev_dr = first_num_expected - 1
+    while True:
+        m = re.match(
+            r'<tr>\s*<td><a href="[^"]*">DR ([1-9][0-9]*)</a></td>\s*'
+            r'<td>(.*?)</td>\s*'
+            r'<td>(.*?)</td>\s*'
+            r'<td><span class="([^"]*)">(.*?)</span></td>\s*'
+            r'</tr>\s*',
+            summary_table, flags=re.DOTALL)
+        if not m:
+            if prev_dr != last_num_expected:
+                raise ValueError('summary table in %s parsed up to %d'
+                                 % (doc_name, prev_dr))
+            break
+        prev_dr += 1
+        dr_num = m.group(1)
+        summary = clean_for_metadata(m.group(2))
+        version_date = m.group(3)
+        status_class = m.group(4)
+        status_text = m.group(5)
+        summary_table = summary_table[m.end(0):]
+        if dr_num != str(prev_dr):
+            raise ValueError('inconsistent DR numbers %s %d %d'
+                             % (doc_name, prev_dr, dr_num))
+        full_issue_num = issue_num_format % prev_dr
+        if full_issue_num in issues_data:
+            raise ValueError('issue %s already seen' % full_issue_num)
+        issues_data[full_issue_num] = {
+            'submitted-against': submitted_against,
+            'x-table-summary-html': summary,
+            'x-dr-version-date': version_date,
+            'x-orig-status-class': status_class,
+            'status': 'unknown',
+            'conversion-src': [doc_name],
+            'crossref': []}
+        summary = summary.replace('Proposed defect report regarding ', '')
+        issues_data[full_issue_num]['summary-html'] = summary
+        if status_class not in ('published', 'closed', 'c17', 'c2x'):
+            raise ValueError('%s %d: unknown status %s'
+                             % (doc_name, prev_dr, status_class))
+        if status_text != status_class.capitalize():
+            raise ValueError('%s %d: status %s %s mismatch'
+                             % (doc_name, prev_dr, status_class,
+                                status_text))
+        if status_class != 'closed':
+            issues_data[full_issue_num]['status'] = 'fixed'
+            if status_class == 'c17':
+                fixed_in = 'c17'
+            elif status_class == 'c2x':
+                fixed_in = 'c23'
+            else:
+                if doc_name == C11_ALL:
+                    fixed_in = 'c11tc1'
+                else:
+                    fixed_in = 'cscr2013tc1'
+            issues_data[full_issue_num]['fixed-in'] = [fixed_in]
+    prev_dr = first_num_expected - 1
+    while all_drs.startswith('<!-- DRNUM -->'):
+        m = re.match('(<!-- DRNUM -->.*?)<!-- DRNUM -->',
+                     all_drs, flags=re.DOTALL)
+        if m:
+            this_dr = m.group(1)
+            all_drs = all_drs[m.end(1):]
+        else:
+            this_dr = all_drs
+            all_drs = ''
+        prev_dr += 1
+        full_issue_num = issue_num_format % prev_dr
+        expect_status = (issues_data[full_issue_num]
+                         ['x-orig-status-class'].capitalize())
+        m = re.fullmatch(
+            r'<!-- DRNUM --><p> <b><u>DR %d</u></b></p>\n'
+            r'<!-- LINKAGE -->\s*<p>\s*<a href="[^"]*">[^<]*</a>\s*'
+            r'Prev &lt;&mdash; %s &mdash;&gt; Next '
+            r'<a href="[^"]*">[^<]*</a>\s*, or summary at\s*'
+            r'<a href="[^"]*">top</a>\s*</p>\s*'
+            r'<p>\s*<b>Submitter:</b>\s*(.*?)<br>\s*'
+            r'<b>Submission Date:</b>\s*'
+            r'(?:<!--[^>]*-->)?\s*'
+            r'(2[0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9])\s*<br>\s*'
+            r'(?:<!--[^>]*-->)?\s*'
+            r'<b>Source:</b>\s*(.*?)<br>\s*'
+            r'<b>Reference Documents?:</b>\s*(.*?)<br>\s*'
+            r'<b>Subject:</b>\s*(.*?)</p>\s*'
+            r'(.*?)'
+            r'<!-- LINKAGE -->\s*(?:</p>)?<p>\s*<a href="[^"]*">[^<]*</a>\s*'
+            r'Prev &lt;&mdash; %s &mdash;&gt; Next '
+            r'<a href="[^"]*">[^<]*</a>\s*, or summary at\s*'
+            r'<a href="[^"]*">top</a>\s*</p>\s*(?:<hr>\s*)?'
+            % (prev_dr, expect_status, expect_status),
+            this_dr, flags=re.DOTALL)
+        if not m:
+            raise ValueError('failed to parse %s %d content: [[%s]]'
+                             % (doc_name, prev_dr, this_dr[:500]))
+        submitter = clean_for_metadata(m.group(1))
+        date = m.group(2)
+        author = clean_for_metadata(m.group(3))
+        refdoc = m.group(4)
+        refdoc = re.sub('<!--.*?-->', ' ', refdoc, flags=re.DOTALL)
+        refdoc = clean_for_metadata(refdoc)
+        if refdoc in ('', 'N/A'):
+            refdoc = None
+        summary = clean_for_metadata(m.group(5))
+        content = m.group(6)
+        content = re.sub('<!--.*?-->', ' ', content, flags=re.DOTALL)
+        content = content.strip()
+        if 'content-html' in issues_data[full_issue_num]:
+            raise ValueError('issue %s already processed' % full_issue_num)
+        issues_data[full_issue_num]['x-dr-summary-html'] = summary
+        summary = summary.replace('Possible defect report: ', '')
+        summary = re.sub('<br> <b>Related:</b>.*', '', summary)
+        if summary != issues_data[full_issue_num]['summary-html']:
+            if len(summary) > len(issues_data[full_issue_num]['summary-html']):
+                # Prefer the longer version of the summary.
+                issues_data[full_issue_num]['summary-html'] = summary
+        # TODO split question and response (putting latter in comments).
+        issues_data[full_issue_num]['content-html'] = (
+            '<html><body>%s</body></html>' % content)
+        issues_data[full_issue_num]['comments'] = []
+        issues_data[full_issue_num]['author-html'] = author
+        issues_data[full_issue_num]['submitter-html'] = submitter
+        issues_data[full_issue_num]['date'] = date
+        if refdoc is not None:
+            issues_data[full_issue_num]['reference-doc-html'] = refdoc
+    if prev_dr != last_num_expected:
+        raise ValueError('content in %s parsed up to %d' % (doc_name, prev_dr))
+
+
 def extract_c11_issues(docs_content, issues_data):
     """Extract C11 issue data from the source documents."""
-    all_drs = docs_content[C11_ALL]
-    # TODO
+    extract_single_doc_issues(docs_content, issues_data, C11_ALL, 'c11c17',
+                              400, 503, '%04d')
 
 
 def extract_cfp_issues(docs_content, issues_data):
     """Extract CFP issue data from the source documents."""
-    all_drs = docs_content[CFP_ALL]
-    # TODO
+    extract_single_doc_issues(docs_content, issues_data, CFP_ALL, 'cfp-c11',
+                              1, 25, '0CFP.%02d')
 
 
 def extract_cscr_issues(docs_content, issues_data):
     """Extract C Secure Coding Rules issue data from the source documents."""
-    all_drs = docs_content[CSCR_ALL]
-    # TODO
+    extract_single_doc_issues(docs_content, issues_data, CSCR_ALL, 'cscr2013',
+                              1, 2, '0SCR.%02d')
 
 
 def extract_embc_issues(docs_content, issues_data):
@@ -2467,7 +2624,13 @@ def extract_crossrefs(issues_data):
             for m in re.finditer('<a href="issue:([0-9A-Z.]*)">', v):
                 issue_content['crossref'].add(m.group(1))
         if issue_num in issue_content['crossref']:
-            raise ValueError('self-reference from issue %s' % issue_num)
+            if issue_num in ('0469', '0479', '0493'):
+                # Valid (if useless) link in a list of some related
+                # issues, that is repeated in the response to each of
+                # those issues.
+                issue_content['crossref'].remove(issue_num)
+            else:
+                raise ValueError('self-reference from issue %s' % issue_num)
     # Add backward cross-references as well.
     for issue_num, issue_content in issues_data.items():
         for v in issue_content['crossref']:
