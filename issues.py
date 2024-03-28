@@ -2245,10 +2245,29 @@ def extract_c90_issues(docs_content, issues_data):
             if 'content-html' in issues_data[full_issue_num]:
                 raise ValueError('issue %s already processed'
                                  % full_issue_num)
-            # TODO split question and response (putting latter in comments).
+            m = re.search(
+                r'<p>\s*(?:<b>)?(?:Correction|Response|Open Issue'
+                r'|Technical Corrigendum|Suggested Future Change'
+                r'|Future Change|Proposed Response)(?:</b>)?\s*</p>',
+                this_content)
+            if m:
+                comment = ('<html><body>%s</body></html>'
+                           % this_content[m.start(0):])
+                this_content = this_content[:m.start(0)]
+                # C90 defect reports do not come with dates for their
+                # responses; use 1997-09-23 as the most recent
+                # timestamp in defect_reports.tar.gz (a downloadable
+                # version of the full set that is or was available on
+                # the WG14 website).
+                comments = [{'date': '1997-09-23',
+                             'filename': '1.html',
+                             'author-html': 'WG14',
+                             'content-html': comment}]
+            else:
+                comments = []
             issues_data[full_issue_num]['content-html'] = (
                 '<html><body>%s</body></html>' % this_content)
-            issues_data[full_issue_num]['comments'] = []
+            issues_data[full_issue_num]['comments'] = comments
             issues_data[full_issue_num]['submitter-html'] = submitter
             if date != issues_data[full_issue_num]['date']:
                 raise ValueError('%s: date %s -> %s'
