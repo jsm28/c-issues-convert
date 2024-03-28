@@ -2412,10 +2412,15 @@ def extract_c99_issues(docs_content, issues_data):
         if 'content-html' in issues_data[full_issue_num]:
             raise ValueError('issue %s already processed' % full_issue_num)
         issues_data[full_issue_num]['summary-html'] = summary
-        # TODO split question and response (putting latter in comments).
-        issues_data[full_issue_num]['content-html'] = (
-            '<html><body>%s</body></html>' % content)
-        issues_data[full_issue_num]['comments'] = []
+        content_list = ['<html><body>%s</body></html>' % s
+                        for s in re.split(r'\s*<hr>\s*', content)]
+        issues_data[full_issue_num]['content-html'] = content_list[0]
+        comments_list = [{'date': version_date[:10],
+                          'filename': '%d.html' % c[0],
+                          'author-html': 'WG14',
+                          'content-html': c[1]}
+                         for c in enumerate(content_list[1:], start=1)]
+        issues_data[full_issue_num]['comments'] = comments_list
         issues_data[full_issue_num]['submitter-html'] = submitter
         # Submission dates are not always consistent between the
         # summary (where listed at all) and the individual issues;
@@ -2441,6 +2446,33 @@ def extract_c99_issues(docs_content, issues_data):
             issues_data[full_issue_num]['reference-doc-html'] = refdoc
         issues_data[full_issue_num]['x-dr-version'] = version
         issues_data[full_issue_num]['x-dr-version-date'] = version_date
+
+
+# Mapping from mm/yyyy dates used in single-document issue lists (the
+# date of the last change to an issue) to yyyy-mm-dd dates to
+# associate with committee responses extracted as comments from the
+# issue text.  Issue status changes generally occurred at meetings, so
+# use the nominal last day of that month's meeting if available.
+# Status changes may not reflect the actual date of the text in the
+# extracted comment (especially when the status change came with a
+# much later publication of a TC or revised standard), but seem to be
+# the closest we can readily get without a lot more case-by-case
+# investigation of the history of each issue.
+DR_DATE_MAP = {
+    '02/2012': '2012-02-17',
+    '04/2013': '2013-04-26',
+    '10/2013': '2013-10-03',
+    '04/2014': '2014-04-11',
+    '10/2014': '2014-10-31',
+    '04/2015': '2015-04-17',
+    '10/2015': '2015-10-29',
+    '04/2016': '2016-04-14',
+    '10/2016': '2016-10-21',
+    '04/2017': '2017-04-07',
+    '10/2017': '2017-11-03',
+    '04/2018': '2018-04-26',
+    '10/2018': '2018-10-18',
+    '04/2019': '2019-05-03'}
 
 
 def extract_single_doc_issues(docs_content, issues_data, doc_name,
@@ -2572,10 +2604,20 @@ def extract_single_doc_issues(docs_content, issues_data, doc_name,
             if len(summary) > len(issues_data[full_issue_num]['summary-html']):
                 # Prefer the longer version of the summary.
                 issues_data[full_issue_num]['summary-html'] = summary
-        # TODO split question and response (putting latter in comments).
-        issues_data[full_issue_num]['content-html'] = (
-            '<html><body>%s</body></html>' % content)
-        issues_data[full_issue_num]['comments'] = []
+        content_list = re.split(r'\s*<hr>\s*', content)
+        if full_issue_num == '0433':
+            # This issue uses <hr> in the original statement.
+            content_list = ['<hr>'.join(content_list[:-1]), content_list[-1]]
+        content_list = ['<html><body>%s</body></html>' % s
+                        for s in content_list]
+        issues_data[full_issue_num]['content-html'] = content_list[0]
+        version_date = issues_data[full_issue_num]['x-dr-version-date']
+        comments_list = [{'date': DR_DATE_MAP[version_date],
+                          'filename': '%d.html' % c[0],
+                          'author-html': 'WG14',
+                          'content-html': c[1]}
+                         for c in enumerate(content_list[1:], start=1)]
+        issues_data[full_issue_num]['comments'] = comments_list
         issues_data[full_issue_num]['author-html'] = author
         issues_data[full_issue_num]['submitter-html'] = submitter
         issues_data[full_issue_num]['date'] = date
@@ -2697,6 +2739,7 @@ def process_issue(issue_num, issue_content):
               encoding='utf-8') as f:
         f.write(issue_content['content-html'])
     for c in issue_content['comments']:
+        os.makedirs(os.path.join(out_dir_html, 'comments'), exist_ok=True)
         with open(os.path.join(out_dir_html, 'comments', c['filename']), 'w',
                   encoding='utf-8') as f:
             f.write(c['content-html'])
