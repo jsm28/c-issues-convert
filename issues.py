@@ -319,7 +319,23 @@ TEXT_REPLACE = {'dr.htm': (('<BR>\nQ15: When do array parameters',
                                 ('<A HREF="dr_013.html">Defect\n'
                                  'Report #013, Question 1</A>',
                                  '<A HREF="dr_013.html#Question1">Defect\n'
-                                 'Report #013, Question 1</A>')),
+                                 'Report #013, Question 1</A>'),
+                                # An ordered list wrongly starts in
+                                # the response to Question 7 and
+                                # continues in the statement of
+                                # Question 8.  It appears that the
+                                # "c)" and "e)" in Question 8 should
+                                # actually be <LI> markers, which
+                                # would be consistent with the actual
+                                # <LI> there being items a, b and d.
+                                ('<BR>\n<B>Question</B> 8',
+                                 '<BR></OL>\n<B>Question</B> 8'),
+                                ('Refer to subclause 6.1.2.5, page 22, '
+                                 'lines 32-36: <BR>\n<BR>',
+                                 'Refer to subclause 6.1.2.5, page 22, '
+                                 'lines 32-36: <BR>\n<BR><OL TYPE=a>'),
+                                ('</TT>c) <BR>', '</TT><LI><BR>'),
+                                ('</TT>e) <BR>', '</TT><LI><BR>')),
                 'dr_051.html': (('</TT>\n<A HREF="dr_050.html">',
                                  '</TT>\n<BR>\n<A HREF="dr_050.html">'),),
                 'dr_054.html': (('<A HREF="dr_042.html"> Defect '
@@ -1059,6 +1075,10 @@ class ProcessNesting:
             for t in reversed(self.wrap_text_in[-1]):
                 self.handle_end_tag(t)
 
+    def handle_comment(self, tag_text):
+        """Handle an HTML comment."""
+        self.new_text_list.append(tag_text)
+
     def push_tag(self, tag_name):
         """Add a tag to the stack of open tags."""
         self.open_tags.append(tag_name)
@@ -1153,7 +1173,7 @@ class ProcessNesting:
             self.handle_before_tag(before)
             # Handle HTML comments.
             if tag_text != '':
-                self.new_text_list.append(tag_text)
+                self.handle_comment(tag_text)
             if tag_name is None:
                 continue
             # Handle empty, start and end tags.
@@ -1180,6 +1200,21 @@ class FixInvalidNesting(ProcessNesting):
             and self.open_tags[-1] in ('body', 'blockquote', 'div')):
             self.handle_start_tag('p', [])
         super().handle_before_tag(before)
+
+    def handle_comment(self, tag_text):
+        """Handle an HTML comment."""
+        if self.doc == 'n2396.htm':
+            # Close <blockquote> tags crossing issue boundaries.
+            # (Actually the original file has more </blockquote> than
+            # <blockquote>, but heuristic replacement of some of those
+            # by <blockquote> sometimes results in this issue.)
+            if tag_text.startswith('<!-- LINKAGE'):
+                while 'blockquote' in self.open_tags:
+                    self.handle_end_tag('blockquote')
+        if self.doc == 'n2397.htm':
+            if self.open_tags and self.open_tags[-1] == 'p':
+                self.handle_end_tag('p')
+        super().handle_comment(tag_text)
 
     def maybe_close_p(self, tag_name, end_tag):
         """Close an unterminated <p> when any non-inline tag starts or ends."""
@@ -1336,7 +1371,7 @@ class FixInvalidNesting(ProcessNesting):
                 return
         if (self.doc in ('n2396.htm', 'n2397.htm')
             and tag_name == 'div'
-            and self.open_tags[-1] == 'body'):
+            and self.open_tags[-1] in ('body', 'blockquote')):
             return
         if (self.doc == 'n2397.htm'
             and tag_name == 'pre'
@@ -2756,11 +2791,15 @@ def process_issue(issue_num, issue_content):
         json.dump(issue_json, f, indent=4, sort_keys=True)
     with open(os.path.join(out_dir_html, 'issue.html'), 'w',
               encoding='utf-8') as f:
+        # Validate that the content is still properly nested HTML.
+        ProcessNesting(issue_num, issue_content['content-html']).run()
         f.write(issue_content['content-html'])
     for c in issue_content['comments']:
         os.makedirs(os.path.join(out_dir_html, 'comments'), exist_ok=True)
         with open(os.path.join(out_dir_html, 'comments', c['filename']), 'w',
                   encoding='utf-8') as f:
+            # Validate that the comment is still properly nested HTML.
+            ProcessNesting(issue_num, c['content-html']).run()
             f.write(c['content-html'])
 
 
