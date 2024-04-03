@@ -10,6 +10,9 @@ import time
 import urllib.parse
 import urllib.request
 
+from bs4 import BeautifulSoup
+from markdownify import ATX, MarkdownConverter
+
 
 # Filenames for DR lists and indices, and numbers of C90 and C99 DRs.
 C90_INDEX = 'dr.htm'
@@ -2864,6 +2867,22 @@ def extract_crossrefs(issues_data):
         issue_content['crossref'] = sorted(issue_content['crossref'])
 
 
+class CMarkdownConverter(MarkdownConverter):
+
+    """Convert HTML to Markdown for C issues."""
+
+    class Options(MarkdownConverter.DefaultOptions):
+        heading_style = ATX
+        code_language = 'c'
+        wrap = True
+
+
+def convert_to_md(content):
+    """Convert some HTML content to Markdown."""
+    soup = BeautifulSoup(content, 'html5lib')
+    return CMarkdownConverter().convert_soup(soup)
+
+
 def process_issue(issue_num, issue_content):
     """Store and convert the data from an extracted issue."""
     out_dir_html = os.path.join('tmp/out-html', issue_num)
@@ -2930,6 +2949,34 @@ def process_issue(issue_num, issue_content):
             # Validate that the comment is still properly nested HTML.
             ProcessNesting(issue_num, c['content-html']).run()
             f.write(c['content-html'])
+    out_dir_md = os.path.join('out', issue_num)
+    os.makedirs(out_dir_md, exist_ok=True)
+    html_keys = [k for k in issue_content if k.endswith('-html')]
+    for k in html_keys:
+        k_md = k[:-len('-html')] + '-md'
+        issue_content[k_md] = convert_to_md(issue_content[k])
+    for c in issue_content['comments']:
+        html_keys = [k for k in c if k.endswith('-html')]
+        for k in html_keys:
+            k_md = k[:-len('-html')] + '-md'
+            c[k_md] = convert_to_md(c[k])
+        c['filename'] = c['filename'][:-len('.html')] + '.md'
+    issue_json = issue_content.copy()
+    del issue_json['content-md']
+    issue_json['comments'] = [c.copy() for c in issue_json['comments']]
+    for c in issue_json['comments']:
+        del c['content-md']
+    with open(os.path.join(out_dir_md, 'metadata.json'), 'w',
+              encoding='utf-8') as f:
+        json.dump(issue_json, f, indent=4, sort_keys=True)
+    with open(os.path.join(out_dir_md, 'issue.md'), 'w',
+              encoding='utf-8') as f:
+        f.write(issue_content['content-md'])
+    for c in issue_content['comments']:
+        os.makedirs(os.path.join(out_dir_md, 'comments'), exist_ok=True)
+        with open(os.path.join(out_dir_md, 'comments', c['filename']), 'w',
+                  encoding='utf-8') as f:
+            f.write(c['content-md'])
 
 
 def action_convert():
