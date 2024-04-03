@@ -2699,9 +2699,138 @@ def extract_cscr_issues(docs_content, issues_data):
                               1, 2, '0SCR.%02d')
 
 
+def extract_embc_one(docs_content, issues_data, doc_name,
+                     first_num_expected, last_num_expected, issue_num_format,
+                     doc_date):
+    """Extract issue data from one Embedded C list."""
+    all_drs = docs_content[doc_name]
+    if doc_name == EMBC_2004_ALL[0]:
+        tail_re = (r'<p><b>Email crossreference list:</b>\s*Item\s*'
+                   r'Embedded-c emailnumber\s*</p>(.*?)')
+    else:
+        tail_re = ''
+    m = re.fullmatch(
+        r'<html>.*?(<p><b>(?:Issue|Defect) %d(?::|</b>).*)%s'
+        r'(</body>\s*</html>\s*)'
+        % (first_num_expected, tail_re),
+        all_drs, flags=re.DOTALL)
+    if not m:
+        raise ValueError('failed to parse overall %s content' % doc_name)
+    all_drs = m.group(1)
+    email_data = {}
+    if tail_re:
+        prev_dr = first_num_expected - 1
+        email_list = m.group(2)
+        while email_list:
+            m = re.match('<p>([1-9][0-9]*): ([^\n]*)\n</p>', email_list)
+            if not m:
+                raise ValueError('failed to parse email list: %s' % email_list)
+            if m.group(1) in email_data:
+                raise ValueError('duplicate email data: %s' % m.group(1))
+            prev_dr += 1
+            if int(m.group(1)) != prev_dr:
+                raise ValueError('unexpected email list entry: %s != %d'
+                                 % (m.group(1), prev_dr))
+            email_data[m.group(1)] = clean_for_metadata(m.group(2))
+            email_list = email_list[m.end(0):]
+        if prev_dr != last_num_expected:
+            raise ValueError('email list unexpected ending: %d %d'
+                             % (prev_dr, last_num_expected))
+    prev_dr = first_num_expected - 1
+    while True:
+        m = re.match(r'<p><b>(?:Issue|Defect) %d(.*?)\s*</b>\s*</p>\s*'
+                     r'(.*?)\s*'
+                     r'(<p><b>(?:Issue |Defect )|\Z)'
+                     % (prev_dr + 1),
+                     all_drs, flags=re.DOTALL)
+        if not m:
+            if prev_dr == last_num_expected and not all_drs:
+                break
+            else:
+                raise ValueError('failed to parse issue list after %d'
+                                 % prev_dr)
+        all_drs = all_drs[m.start(3):]
+        prev_dr += 1
+        full_issue_num = issue_num_format % prev_dr
+        summary = m.group(1)
+        if summary.startswith(':'):
+            summary = summary[1:]
+        summary = clean_for_metadata(summary)
+        if not summary:
+            # Only the first 12 issues have summaries because only the
+            # first version of the defect list provides such
+            # summaries.
+            summary = '[Embedded C 2004 DR#%d]' % prev_dr
+        content = m.group(2)
+        if full_issue_num in issues_data:
+            if email_data:
+                raise ValueError('unexpected email data: %s in %s'
+                                 % (full_issue_num, doc_name))
+            content_html = '<html><body>%s</body></html>' % content
+            if issues_data[full_issue_num]['comments']:
+                last_is_comment = True
+                last_content_html = \
+                    issues_data[full_issue_num]['comments'][-1]['content-html']
+            else:
+                last_is_comment = False
+                last_content_html = issues_data[full_issue_num]['content-html']
+            compare_content = re.sub(r'(\s|<p>|</p>)', '', content_html)
+            compare_last_content = re.sub(r'(\s|<p>|</p>)', '',
+                                          last_content_html)
+            issues_data[full_issue_num]['conversion-src'].append(doc_name)
+            if compare_content == compare_last_content:
+                # No non-whitespace differences from the previous
+                # version; prefer the whitespace in this version in
+                # case of any differences, but keep other metadata
+                # from the previous version.
+                if last_is_comment:
+                    (issues_data[full_issue_num]['comments'][-1]
+                     ['content-html']) = content_html
+                else:
+                    issues_data[full_issue_num]['content-html'] = content_html
+            else:
+                this_comment = {
+                    'date': doc_date,
+                    'filename': '%d.html' % (len(
+                        issues_data[full_issue_num]['comments']) + 1),
+                    'author-html': 'WG14',
+                    'content-html': '<html><body>%s</body></html>' % content}
+                issues_data[full_issue_num]['comments'].append(this_comment)
+        else:
+            issues_data[full_issue_num] = {
+                'submitted-against': 'embc2004',
+                'status': 'unknown',
+                'conversion-src': [doc_name],
+                'crossref': [],
+                'summary-html': summary,
+                'content-html': '<html><body>%s</body></html>' % content,
+                'comments': [],
+                'author-html': 'WG14',
+                'date': doc_date}
+            if email_data:
+                issues_data[full_issue_num]['reference-doc-html'] = \
+                    'Embedded-c email list %s' % email_data[str(prev_dr)]
+
+
 def extract_embc_issues(docs_content, issues_data):
     """Extract Embedded C issue data from the source documents."""
-    # TODO
+    # The Embedded C lists are different from the other lists in that
+    # rather than having a fixed issue statement, from which WG14 then
+    # iterated towards a solution that appeared together with the
+    # issue statement in the DR list, the issue statement and solution
+    # were edited together (including in one case removing the
+    # statement when something was marked as not a defect).  To
+    # approximate the structure of the other lists more closely,
+    # process multiple versions of the Embedded C list, whereas only
+    # the most recent version is processed for other lists.
+    extract_embc_one(docs_content, issues_data, EMBC_2004_ALL[0], 1, 12,
+                     '0EMB.%02d', '2004-09-23')
+    extract_embc_one(docs_content, issues_data, EMBC_2004_ALL[1], 1, 18,
+                     '0EMB.%02d', '2004-11-15')
+    extract_embc_one(docs_content, issues_data, EMBC_2004_ALL[2], 19, 22,
+                     '0EMB.%02d', '2005-03-03')
+    extract_embc_one(docs_content, issues_data, EMBC_2004_ALL[3], 1, 22,
+                     '0EMB.%02d', '2006-09-25')
 
 
 def extract_crossrefs(issues_data):
