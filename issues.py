@@ -2979,11 +2979,13 @@ def process_issue(issue_num, issue_content):
     for k in html_keys:
         k_md = k[:-len('-html')] + '-md'
         issue_content[k_md] = convert_to_md(issue_content[k])
+        del issue_content[k]
     for c in issue_content['comments']:
         html_keys = [k for k in c if k.endswith('-html')]
         for k in html_keys:
             k_md = k[:-len('-html')] + '-md'
             c[k_md] = convert_to_md(c[k])
+            del c[k]
         c['filename'] = c['filename'][:-len('.html')] + '.md'
     issue_json = issue_content.copy()
     del issue_json['content-md']
