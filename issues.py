@@ -2895,6 +2895,10 @@ class CMarkdownConverter(MarkdownConverter):
         heading_style = ATX
         code_language = 'c'
         wrap = True
+        sub_symbol = '<sub>'
+        sub_symbol_after = '</sub>'
+        sup_symbol = '<sup>'
+        sup_symbol_after = '</sup>'
 
 
 def convert_to_md(content):
