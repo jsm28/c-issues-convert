@@ -2409,6 +2409,17 @@ def extract_c99_issues(docs_content, issues_data):
                 raise ValueError('C99 DR #%d: cannot parse %s status %s'
                                  % (last_dr, status_class, status_text))
             issues_data[full_issue_num]['x-status-date'] = m.group(1)
+            if last_dr in (315, 326, 327, 328, 329, 330, 336, 338, 339, 340,
+                           341, 342, 343, 344, 345):
+                # These DRs were not fixed in a TC, but have some form
+                # of TC or similar fix text in the DR that was applied
+                # for C11.  (In the case of DR #339, the fix text is
+                # in DR #328, and in the case of DR #342, the fix text
+                # is in DR #340.)
+                issues_data[full_issue_num]['status'] = 'fixed'
+                issues_data[full_issue_num]['fixed-in'] = ['c11']
+            else:
+                issues_data[full_issue_num]['status'] = 'closed'
     for dr_num in range(C99_FIRST, C99_LAST + 1):
         dr_doc = 'dr_%03d.htm' % dr_num
         dr_body = docs_content[dr_doc]
