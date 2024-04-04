@@ -2534,7 +2534,8 @@ DR_DATE_MAP = {
 
 def extract_single_doc_issues(docs_content, issues_data, doc_name,
                               submitted_against, first_num_expected,
-                              last_num_expected, issue_num_format):
+                              last_num_expected, issue_num_format,
+                              closed_issue_fix_vers):
     """Extract issue data from a single-document list."""
     all_drs = docs_content[doc_name]
     m = re.fullmatch(
@@ -2602,6 +2603,13 @@ def extract_single_doc_issues(docs_content, issues_data, doc_name,
                 else:
                     fixed_in = 'cscr2013tc1'
             issues_data[full_issue_num]['fixed-in'] = [fixed_in]
+        elif closed_issue_fix_vers is not None:
+            if prev_dr in closed_issue_fix_vers:
+                issues_data[full_issue_num]['status'] = 'fixed'
+                issues_data[full_issue_num]['fixed-in'] = \
+                    closed_issue_fix_vers[prev_dr]
+            else:
+                issues_data[full_issue_num]['status'] = 'closed'
     prev_dr = first_num_expected - 1
     while all_drs.startswith('<!-- DRNUM -->'):
         m = re.match('(<!-- DRNUM -->.*?)<!-- DRNUM -->',
@@ -2686,20 +2694,28 @@ def extract_single_doc_issues(docs_content, issues_data, doc_name,
 
 def extract_c11_issues(docs_content, issues_data):
     """Extract C11 issue data from the source documents."""
-    extract_single_doc_issues(docs_content, issues_data, C11_ALL, 'c11c17',
-                              400, 503, '%04d')
+    extract_single_doc_issues(
+        docs_content, issues_data, C11_ALL, 'c11c17',
+        400, 503, '%04d',
+        # A version of the example from DR#413 was added in C17,
+        # despite the issue being listed as closed.
+        # DR#424 was addressed in C17 together with DR#416.
+        # DR#440 was addressed as a new feature in C23; DRs addressed
+        # as new features are listed here as closed not fixed.
+        # DR#467 was addressed as a new feature in C23.
+        {413: ['c17'], 424: ['c17']})
 
 
 def extract_cfp_issues(docs_content, issues_data):
     """Extract CFP issue data from the source documents."""
     extract_single_doc_issues(docs_content, issues_data, CFP_ALL, 'cfp-c11',
-                              1, 25, '0CFP.%02d')
+                              1, 25, '0CFP.%02d', {18: ['c23', 'cfp4-c23']})
 
 
 def extract_cscr_issues(docs_content, issues_data):
     """Extract C Secure Coding Rules issue data from the source documents."""
     extract_single_doc_issues(docs_content, issues_data, CSCR_ALL, 'cscr2013',
-                              1, 2, '0SCR.%02d')
+                              1, 2, '0SCR.%02d', {2: ['cscr202y']})
 
 
 def extract_embc_one(docs_content, issues_data, doc_name,
@@ -2802,7 +2818,6 @@ def extract_embc_one(docs_content, issues_data, doc_name,
         else:
             issues_data[full_issue_num] = {
                 'submitted-against': 'embc2004',
-                'status': 'unknown',
                 'conversion-src': [doc_name],
                 'crossref': [],
                 'summary-html': summary,
@@ -2810,6 +2825,11 @@ def extract_embc_one(docs_content, issues_data, doc_name,
                 'comments': [],
                 'author-html': 'WG14',
                 'date': doc_date}
+            if prev_dr == 10:
+                issues_data[full_issue_num]['status'] = 'closed'
+            else:
+                issues_data[full_issue_num]['status'] = 'fixed'
+                issues_data[full_issue_num]['fixed-in'] = ['embc2008']
             if email_data:
                 issues_data[full_issue_num]['reference-doc-html'] = \
                     'Embedded-c email list %s' % email_data[str(prev_dr)]
@@ -2900,10 +2920,14 @@ def process_issue(issue_num, issue_content):
                          % (issue_num, issue_content['submitted-against']))
     if issue_content['status'] not in ('fixed', 'closed', 'unknown'):
         # fixed = there has been a change in a subsequent document (as
-        # specified in fixed-in) to address the issue.
+        # specified in fixed-in) to address the issue as a defect fix.
         #
         # closed = resolved without any textual change (answered with
-        # interpretation given, not a defect, etc.)
+        # interpretation given, not a defect, etc.; it's possible
+        # there was also a subsequent textual change, considered a
+        # feature change rather than a defect fix, that addressed the
+        # issue, but such feature changes are not tracked in issue
+        # status)
         #
         # unknown = not classified yet into fixed or closed (applies
         # to many past issues where the issue list doesn't give the
