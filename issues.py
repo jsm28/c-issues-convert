@@ -2962,7 +2962,7 @@ class CMarkdownConverter(MarkdownConverter):
 def convert_to_md(content):
     """Convert some HTML content to Markdown."""
     soup = BeautifulSoup(content, 'html5lib')
-    return CMarkdownConverter().convert_soup(soup)
+    return CMarkdownConverter().convert_soup(soup).strip()
 
 
 def process_issue(issue_num, issue_content):
@@ -3053,12 +3053,12 @@ def process_issue(issue_num, issue_content):
         json.dump(issue_json, f, indent=4, sort_keys=True)
     with open(os.path.join(out_dir_md, 'issue.md'), 'w',
               encoding='utf-8') as f:
-        f.write(issue_content['content-md'])
+        f.write(issue_content['content-md'] + '\n')
     for c in issue_content['comments']:
         os.makedirs(os.path.join(out_dir_md, 'comments'), exist_ok=True)
         with open(os.path.join(out_dir_md, 'comments', c['filename']), 'w',
                   encoding='utf-8') as f:
-            f.write(c['content-md'])
+            f.write(c['content-md'] + '\n')
 
 
 def action_convert():
