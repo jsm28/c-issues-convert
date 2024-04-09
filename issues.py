@@ -2967,6 +2967,54 @@ def clean_headers(issue_num, text):
             text = text.replace('</h3>', '</h4>')
             text = text.replace('<h2>', '<h3>')
             text = text.replace('</h2>', '</h3>')
+    # Convert headers handled through bold text to proper headers.
+    text = re.sub(
+        r'<p>\s*(Response|Suggested\s+Future\s+Change)\s*</p>',
+        r'<p><b>\1</b></p>',
+        text)
+    text = re.sub(
+        r'<p>\s*<b>((?:'
+        r'Committee\s+[dD]iscussion'
+        r'|Response'
+        r'|Committee\s+Response'
+        r'|(?:Suggested|Proposed)\s+Committee\s+Response'
+        r'|Summary'
+        r'|Details'
+        r'|Problem'
+        r'|Suggested\s+Correction'
+        r'|Suggested\s+Changes?'
+        r'|Correction'
+        r'|Future\s+Change'
+        r'|Suggested\s+Future\s+Change'
+        r'|Proposed\s+Change'
+        r'|(?:Suggested\s+|Proposed\s+)?Technical\s+Corrigendum(?:[^<]*)'
+        r'):?)</b>\s*<br>',
+        r'<p><b>\1</b></p><p>',
+        text)
+    text = re.sub(
+        r'<p>\s*<b>((?:'
+        r'Committee\s+[dD]iscussion'
+        r'|Response'
+        r'|Committee\s+Response'
+        r'|(?:Suggested|Proposed)\s+Committee\s+Response'
+        r'|Summary'
+        r'|Details'
+        r'|Problem'
+        r'|Suggested\s+Correction'
+        r'|Suggested\s+Changes?'
+        r'|Correction'
+        r'|Future\s+Change'
+        r'|Suggested\s+Future\s+Change'
+        r'|Proposed\s+Change'
+        r'|(?:Suggested\s+|Proposed\s+)?Technical\s+Corrigendum(?:[^<]*)'
+        r'):?)</b>\s*</p>',
+        r'<h3>\1</h3>',
+        text)
+    text = re.sub(
+        r'<p>\s*<b>(Committee\s+Discussion)</b>'
+        r'\s+(\(for\s+history\s+only\))\s*</p>',
+        r'<h3>\1 \2</h3>',
+        text)
     # Validate that the text is still properly nested HTML.
     ProcessNesting(issue_num, text).run()
     return text
