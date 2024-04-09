@@ -773,9 +773,9 @@ KNOWN_TAGS = {
     'html', 'head', 'title', 'body', 'style',
     # Tags with some handling by markdownify that should be more or
     # less OK (possibly with some customization needed).
-    'h1', 'h2', 'h3', 'h4', 'p', 'ol', 'ul', 'li', 'blockquote', 'pre', 'br',
-    'a', 'code', 'b', 'i', 'del', 'sup', 'sub', 'table', 'tr', 'td', 'th',
-    'hr',
+    'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'ol', 'ul', 'li', 'blockquote',
+    'pre', 'br', 'a', 'code', 'b', 'i', 'del', 'sup', 'sub', 'table', 'tr',
+    'td', 'th', 'hr',
     # Tags markdownify handles as aliases (but we canonicalize to
     # simplify subsequent processing).
     'strong', 'em',
@@ -815,7 +815,7 @@ KNOWN_TAGS_INLINE = {'br', 'a', 'code', 'b', 'i', 'del', 'sup', 'sub', 'u',
 
 
 # Known non-inline tags that should not contain other non-inline tags.
-KNOWN_TAGS_LEAF = {'p', 'pre'}
+KNOWN_TAGS_LEAF = {'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'pre'}
 
 
 # Attributes to discard on certain tags (regardless of the attribute
@@ -2945,6 +2945,33 @@ def extract_crossrefs(issues_data):
         issue_content['crossref'] = sorted(issue_content['crossref'])
 
 
+def clean_headers(issue_num, text):
+    """Clean up header levels."""
+    # This is run on issue and comment bodies, not full HTML input
+    # files, so that the changes can depend on the header levels used
+    # for a given issue.
+    # Reserve <h1> and <h2> for issue-list and whole-issue headers
+    # rather than using them in individual issue data.
+    if '<h1>' in text or '<h2>' in text:
+        if '<h4>' in text or '<h5>' in text or '<h6>' in text:
+            raise ValueError('unexpected header levels for %s' % issue_num)
+        if '<h1>' in text:
+            text = text.replace('<h3>', '<h5>')
+            text = text.replace('</h3>', '</h5>')
+            text = text.replace('<h2>', '<h4>')
+            text = text.replace('</h2>', '</h4>')
+            text = text.replace('<h1>', '<h3>')
+            text = text.replace('</h1>', '</h3>')
+        else:
+            text = text.replace('<h3>', '<h4>')
+            text = text.replace('</h3>', '</h4>')
+            text = text.replace('<h2>', '<h3>')
+            text = text.replace('</h2>', '</h3>')
+    # Validate that the text is still properly nested HTML.
+    ProcessNesting(issue_num, text).run()
+    return text
+
+
 class CMarkdownConverter(MarkdownConverter):
 
     """Convert HTML to Markdown for C issues."""
@@ -3019,15 +3046,15 @@ def process_issue(issue_num, issue_content):
         json.dump(issue_json, f, indent=4, sort_keys=True)
     with open(os.path.join(out_dir_html, 'issue.html'), 'w',
               encoding='utf-8') as f:
-        # Validate that the content is still properly nested HTML.
-        ProcessNesting(issue_num, issue_content['content-html']).run()
+        issue_content['content-html'] = clean_headers(
+            issue_num, issue_content['content-html'])
         f.write(issue_content['content-html'])
     for c in issue_content['comments']:
         os.makedirs(os.path.join(out_dir_html, 'comments'), exist_ok=True)
         with open(os.path.join(out_dir_html, 'comments', c['filename']), 'w',
                   encoding='utf-8') as f:
-            # Validate that the comment is still properly nested HTML.
-            ProcessNesting(issue_num, c['content-html']).run()
+            c['content-html'] = clean_headers(
+                issue_num, c['content-html'])
             f.write(c['content-html'])
     out_dir_md = os.path.join('out', issue_num)
     os.makedirs(out_dir_md, exist_ok=True)
