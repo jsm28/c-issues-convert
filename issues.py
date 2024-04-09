@@ -2140,6 +2140,39 @@ def clean_for_metadata(text):
     return re.sub(r'(\s|&nbsp;)+', ' ', text).strip()
 
 
+# C90 issues fixed in C90 itself.
+C90_FIXED_IN_C90 = {'0004'}
+
+
+# C90 issues fixed in C90 TC1.  Includes duplicates of issues that
+# give the actual TC: 0017.12, 0017.15, 0017.26, 0017.29, 0034.01,
+# 0040.01, 0100, 0105.
+C90_FIXED_IN_TC1 = {
+    '0001', '0009', '0011.01', '0011.02', '0011.04', '0013.01', '0013.04',
+    '0013.05', '0014.02', '0016.02', '0017.01', '0017.02', '0017.03',
+    '0017.06', '0017.09', '0017.12', '0017.14', '0017.15', '0017.16',
+    '0017.17', '0017.19', '0017.22', '0017.24', '0017.26', '0017.29',
+    '0017.30', '0017.37', '0017.38', '0017.39', '0021', '0022', '0027',
+    '0034.01', '0040.01', '0040.02', '0043.01', '0052.01', '0052.02', '0053',
+    '0054', '0055', '0100', '0105'}
+
+
+# C90 issues fixed in C90 TC2.
+C90_FIXED_IN_TC2 = {
+    '0060', '0065', '0071', '0080', '0082', '0083', '0085', '0089', '0093',
+    '0101', '0118', '0124', '0131', '0138', '0139'}
+
+
+# C90 issues fixed (apparently as defects rather than new features) in
+# C99.  Includes cases where the C90 issue did not provide specific
+# wording or where the C99 wording was significantly different but
+# still appears intended to address the issue.
+C90_FIXED_IN_C99 = {
+    '0142', '0143', '0144', '0145', '0146', '0147', '0149', '0150', '0155',
+    '0156', '0157', '0158', '0159', '0160', '0162', '0165', '0166', '0167',
+    '0168', '0170', '0171', '0172', '0174', '0175', '0177'}
+
+
 def extract_c90_issues(docs_content, issues_data):
     """Extract C90 issue data from the source documents."""
     dr_index = docs_content[C90_INDEX]
@@ -2209,6 +2242,20 @@ def extract_c90_issues(docs_content, issues_data):
                 'status': 'unknown',
                 'conversion-src': [C90_INDEX],
                 'crossref': []}
+            fix_vers = None
+            if full_issue_num in C90_FIXED_IN_C90:
+                fix_vers = 'c90'
+            elif full_issue_num in C90_FIXED_IN_TC1:
+                fix_vers = 'c90tc1'
+            elif full_issue_num in C90_FIXED_IN_TC2:
+                fix_vers = 'c90tc2'
+            elif full_issue_num in C90_FIXED_IN_C99:
+                fix_vers = 'c99'
+            if fix_vers is None:
+                issues_data[full_issue_num]['status'] = 'closed'
+            else:
+                issues_data[full_issue_num]['status'] = 'fixed'
+                issues_data[full_issue_num]['fixed-in'] = [fix_vers]
             c90_issues.add(full_issue_num)
     for dr_num in range(C90_FIRST, C90_LAST + 1):
         dr_doc = 'dr_%03d.html' % dr_num
@@ -2933,7 +2980,7 @@ def process_issue(issue_num, issue_content):
             'c90', 'c99', 'c11c17', 'cfp-c11', 'cscr2013', 'embc2004'):
         raise ValueError('issue %s bad submitted-against %s'
                          % (issue_num, issue_content['submitted-against']))
-    if issue_content['status'] not in ('fixed', 'closed', 'unknown'):
+    if issue_content['status'] not in ('fixed', 'closed'):
         # fixed = there has been a change in a subsequent document (as
         # specified in fixed-in) to address the issue as a defect fix.
         #
@@ -2943,12 +2990,6 @@ def process_issue(issue_num, issue_content):
         # feature change rather than a defect fix, that addressed the
         # issue, but such feature changes are not tracked in issue
         # status)
-        #
-        # unknown = not classified yet into fixed or closed (applies
-        # to many past issues where the issue list doesn't give the
-        # required information and so it needs adding manually,
-        # including where issue lists only identified issues fixed in
-        # TCs and not those later fixed in a future standard revision)
         raise ValueError('issue %s bad status %s'
                          % (issue_num, issue_content['status']))
     if issue_content['status'] == 'fixed':
@@ -2956,9 +2997,9 @@ def process_issue(issue_num, issue_content):
             raise ValueError('issue %s missing key fixed-in' % issue_num)
         for c in issue_content['fixed-in']:
             if c not in (
-                    'c90tc1', 'c90tc2', 'c99', 'c99tc1', 'c99tc2', 'c99tc3',
-                    'c11', 'c11tc1', 'c17', 'c23', 'cfp4-c23', 'cscr2013tc1',
-                    'cscr202y', 'embc2008'):
+                    'c90', 'c90tc1', 'c90tc2', 'c99', 'c99tc1', 'c99tc2',
+                    'c99tc3', 'c11', 'c11tc1', 'c17', 'c23', 'cfp4-c23',
+                    'cscr2013tc1', 'cscr202y', 'embc2008'):
                 raise ValueError('issue %s bad fixed-in %s'
                                  % (issue_num, issue_content['fixed-in']))
     for c in issue_content['comments']:
