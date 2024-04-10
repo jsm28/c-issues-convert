@@ -2100,12 +2100,86 @@ def clean_blockquote(doc, text):
         return clean_blockquote(doc, text)
 
 
+class OLLetterToP(ProcessNesting):
+
+    """Replace <ol type="a"> and <ol type="A"> with plain paragraphs."""
+
+    def __init__(self, doc, text):
+        super().__init__(doc, text)
+        self.ol_values = []
+
+    def handle_start_tag(self, tag_name, tag_attrs):
+        """Handle a start tag."""
+        replace_tag = None
+        ol_type = None
+        ol_start = None
+        existing_li_p = False
+        if tag_name == 'ol' and tag_attrs:
+            for attr_name, value in tag_attrs:
+                if attr_name == 'type':
+                    ol_type = value[1:-1]
+                if attr_name == 'start':
+                    ol_start = value[1:-1]
+            if ol_type == '1':
+                ol_type = None
+            if ol_type is not None and ol_start is not None:
+                raise ValueError('<ol> with both type and start in %s'
+                                 % self.doc)
+            if ol_type is not None:
+                replace_tag = ''
+                if ol_type not in ('a', 'A'):
+                    raise ValueError('unknown <ol> type %s in %s'
+                                     % (ol_type, self.doc))
+        if (tag_name == 'li'
+            and self.ol_values
+            and self.ol_values[-1] is not None):
+            replace_tag = ''
+            self.new_text_list.append('<p>%s. ' % self.ol_values[-1])
+            self.ol_values[-1] = chr(ord(self.ol_values[-1]) + 1)
+            self.rtext = self.rtext.lstrip()
+            if self.rtext.startswith('<p>'):
+                self.rtext = self.rtext[len('<p>'):]
+                existing_li_p = True
+        super().handle_start_tag(tag_name, tag_attrs, replace_tag)
+        self.ol_values.append(ol_type)
+        if existing_li_p:
+            self.push_tag('p')
+            self.ol_values.append(None)
+
+    def handle_end_tag(self, tag_name):
+        """Handle an end tag."""
+        super().handle_end_tag(tag_name)
+        self.ol_values = self.ol_values[:-1]
+
+
+def clean_for_md(doc, text):
+    """Rewrite HTML constructs not represented in Markdown."""
+    # Markdown does not have equivalents to <dl> <dt> <dd>.  Represent
+    # <dt> as a paragraph and <dd> as a blockquote, with the whole
+    # list inside a blockquote.
+    text = text.replace('<dt>', '<p>')
+    text = text.replace('</dt>', '</p>')
+    text = text.replace('<dd>', '<blockquote>')
+    text = text.replace('</dd>', '</blockquote>')
+    text = text.replace('<dl>', '<blockquote>')
+    text = text.replace('</dl>', '</blockquote>')
+    text = FixParagraphs(doc, text).run()
+    text = re.sub(r'</blockquote>\s*<blockquote>', '', text)
+    text = clean_blockquote(doc, text)
+    # Markdown does not have equivalents to <ol type="a"> and <ol
+    # type="A">.  Represent those using hardcoded letters at the start
+    # of paragraphs.
+    text = OLLetterToP(doc, text).run()
+    text = FixParagraphs(doc, text).run()
+    return text
+
+
 # List of functions for cleaning HTML issue lists.
 CLEAN_FUNCS_LIST = (
     clean_amp, clean_ltgt, clean_chars, clean_per_file, clean_tags,
     clean_nesting, clean_class, clean_color, clean_font, clean_margin_left,
     clean_redundant_tags, clean_general, clean_code_to_pre, clean_pre,
-    clean_br, clean_quotes, clean_blockquote)
+    clean_br, clean_quotes, clean_blockquote, clean_for_md)
 
 
 def clean_doc(doc):
