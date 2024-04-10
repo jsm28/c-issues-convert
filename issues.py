@@ -11,7 +11,7 @@ import urllib.parse
 import urllib.request
 
 from bs4 import BeautifulSoup
-from markdownify import ATX, MarkdownConverter
+from markdownify import ATX, abstract_inline_conversion, MarkdownConverter
 
 
 # Filenames for DR lists and indices, and numbers of C90 and C99 DRs.
@@ -3132,6 +3132,10 @@ class CMarkdownConverter(MarkdownConverter):
         sub_symbol_after = '</sub>'
         sup_symbol = '<sup>'
         sup_symbol_after = '</sup>'
+
+    convert_u = abstract_inline_conversion(
+        lambda self: '<u>',
+        lambda self: '</u>')
 
 
 def convert_to_md(content):
