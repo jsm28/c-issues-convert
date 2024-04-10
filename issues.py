@@ -1884,7 +1884,7 @@ class MoveCodeIn(ProcessNesting):
     def handle_start_tag(self, tag_name, tag_attrs):
         """Handle a start tag."""
         wrap_num = 0
-        if (tag_name in ('b', 'i', 'del', 'u', 'sub', 'sup')
+        if (tag_name in ('a', 'b', 'i', 'del', 'u', 'sub', 'sup')
             and self.open_tags[-1] == 'code'):
             wrap_num = 1
         if wrap_num:
@@ -2152,6 +2152,29 @@ class OLLetterToP(ProcessNesting):
         self.ol_values = self.ol_values[:-1]
 
 
+class CheckPreInline(ProcessNesting):
+
+    """Check for inline markup inside preformatted text."""
+
+    def handle_start_tag(self, tag_name, tag_attrs):
+        """Handle a start tag."""
+        if tag_name in ('a', 'sub', 'sup', 'i', 'del', 'u', 'b'):
+            if 'pre' in self.open_tags:
+                if tag_name in ('b', 'i'):
+                    # Ignore bold and italics inside <pre> (will be
+                    # lost in Markdown conversion, but that's fairly
+                    # harmless).  Most bold was already removed, but
+                    # some remains in conjunction with italics.
+                    pass
+                else:
+                    print('%s has <%s> inside <pre>' % (self.doc, tag_name))
+            if 'code' in self.open_tags:
+                # These should all have been fixed earlier.
+                raise ValueError(
+                    '%s has <%s> inside <code>' % (self.doc, tag_name))
+        super().handle_start_tag(tag_name, tag_attrs)
+
+
 def clean_for_md(doc, text):
     """Rewrite HTML constructs not represented in Markdown."""
     # Markdown does not have equivalents to <dl> <dt> <dd>.  Represent
@@ -2171,6 +2194,8 @@ def clean_for_md(doc, text):
     # of paragraphs.
     text = OLLetterToP(doc, text).run()
     text = FixParagraphs(doc, text).run()
+    # Check for unsupported markup inside <pre>.
+    CheckPreInline(doc, text).run()
     return text
 
 
