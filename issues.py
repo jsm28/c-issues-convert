@@ -2928,7 +2928,8 @@ def extract_embc_one(docs_content, issues_data, doc_name,
             compare_content = re.sub(r'(\s|<p>|</p>)', '', content_html)
             compare_last_content = re.sub(r'(\s|<p>|</p>)', '',
                                           last_content_html)
-            issues_data[full_issue_num]['conversion-src'].append(doc_name)
+            issues_data[full_issue_num]['conversion-src'].append(
+                doc_name.replace('.html', '.pdf'))
             if compare_content == compare_last_content:
                 # No non-whitespace differences from the previous
                 # version; prefer the whitespace in this version in
@@ -2950,7 +2951,7 @@ def extract_embc_one(docs_content, issues_data, doc_name,
         else:
             issues_data[full_issue_num] = {
                 'submitted-against': 'embc2004',
-                'conversion-src': [doc_name],
+                'conversion-src': [doc_name.replace('.html', '.pdf')],
                 'crossref': [],
                 'summary-html': summary,
                 'content-html': '<html><body>%s</body></html>' % content,
