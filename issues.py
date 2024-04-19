@@ -3129,13 +3129,10 @@ class CMarkdownConverter(MarkdownConverter):
         code_language = 'c'
         wrap = True
         sub_symbol = '<sub>'
-        sub_symbol_after = '</sub>'
         sup_symbol = '<sup>'
-        sup_symbol_after = '</sup>'
 
     convert_u = abstract_inline_conversion(
-        lambda self: '<u>',
-        lambda self: '</u>')
+        lambda self: '<u>')
 
 
 def convert_to_md(content):
