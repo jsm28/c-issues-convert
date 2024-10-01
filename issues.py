@@ -268,7 +268,9 @@ TEXT_REPLACE = {'dr.htm': (('<BR>\nQ15: When do array parameters',
                            ('<A HREF="dr_014.html#Question14"> Defect '
                             'Report #014, Question 2</A>',
                             '<A HREF="dr_014.html#Question2"> Defect '
-                            'Report #014, Question 2</A>')),
+                            'Report #014, Question 2</A>'),
+                           ('<I>Type categories</I>',
+                            '``<I>Type categories</I>')),
                 'dr_001.html': (('str\nucture', 'structure'),
                                 ('structur\ne', 'structure'),
                                 ('toan', 'to an')),
@@ -281,6 +283,8 @@ TEXT_REPLACE = {'dr.htm': (('<BR>\nQ15: When do array parameters',
                                 ('lif e', 'life'),
                                 ('responees', 'responses'),
                                 ('withou ', 'without '),
+                                ('#el se', '#else'),
+                                (' b e ', ' be '),
                                 ('\n<A HREF="dr_002.html">',
                                  '\n<BR>\n<A HREF="dr_002.html">')),
                 'dr_006.html': (('<B>Question</B> 1   ',
@@ -310,6 +314,7 @@ TEXT_REPLACE = {'dr.htm': (('<BR>\nQ15: When do array parameters',
                                  '<A HREF="dr_013.html#Question1">Defect '
                                  'Report #013, Question 1</A>'),),
                 'dr_019.html': (('Defect Report #XXX', 'Defect Report #019'),),
+                'dr_033.html': ((' `shall', ' &lsquo;shall'),),
                 'dr_034.html': (('<A HREF="dr_011.html">Defect '
                                  'Report #011</A>',
                                  '<A HREF="dr_011.html#Question1">Defect '
@@ -397,6 +402,28 @@ TEXT_REPLACE = {'dr.htm': (('<BR>\nQ15: When do array parameters',
                                 '<ol start="4">\n      <li>'),),
                 'dr_282.htm': (('<br>\n     <b>Summary</b>',
                                 '\n     <p><b>Summary</b>'),),
+                'dr_289.htm': (('<tt><i>direct-abstract-declarator</i></tt>',
+                                '<i>direct-abstract-declarator</i>'),
+                               ('<tt><i>direct-abstract-declarator'
+                                '<sub>opt</sub></i> ',
+                                '<i>direct-abstract-declarator'
+                                '<sub>opt</sub></i> <tt>'),
+                               ('<i>type-qualifier-list<sub>opt</sub>\n      '
+                                'assignment-expression<sub>opt</sub></i>',
+                                '</tt><i>type-qualifier-list<sub>opt</sub>\n'
+                                '      assignment-expression<sub>opt</sub>'
+                                '</i><tt>'),
+                               ('<i>type-qualifier-list<sub>opt</sub>\n      '
+                                'assignment-expression</i>',
+                                '</tt><i>type-qualifier-list<sub>opt</sub>\n'
+                                '      assignment-expression</i><tt>'),
+                               ('<i>type-qualifier-list</i>',
+                                '</tt><i>type-qualifier-list</i><tt>'),
+                               ('<i>assignment-expression</i>',
+                                '</tt><i>assignment-expression</i><tt>')),
+                'dr_307.htm': (('<var>', '</code><var>'),
+                               ('</var>', '</var><code>')),
+                'dr_311.htm': (('Commitee', 'Committee'),),
                 'dr_315.htm': (('<br>\n    <a href="dr_314.htm">',
                                 '</blockquote>\n    <p><a href="dr_314.htm">'),
                                ('</blockquote>\n</body>', '</body>')),
@@ -432,7 +459,22 @@ TEXT_REPLACE = {'dr.htm': (('<BR>\nQ15: When do array parameters',
                                '<b>Submission Date:</b> 2012-09-13<br>'),
                               ('<b>Submission Date:</b> 2013/07/21<br>',
                                '<b>Submission Date:</b> 2013-07-21<br>'),
-                              ('can not be cyclic', 'cannot be cyclic')),
+                              ('can not be cyclic', 'cannot be cyclic'),
+                              ('<pre>\n        <dfn>struct-declaration:\n'
+                               '               specifier-qualifier-list '
+                               'struct-declarator-list<sub>opt</sub> ;\n'
+                               '               static_assert-declaration'
+                               '</dfn>\n</pre>',
+                               '<blockquote>\n<dfn>struct-declaration:\n<br>'
+                               '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
+                               'specifier-qualifier-list&nbsp;'
+                               'struct-declarator-list<sub>opt</sub></dfn>'
+                               '&nbsp;<code>;</code><dfn>\n<br>'
+                               '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
+                               'static_assert-declaration'
+                               '</dfn>\n</blockquote>'),
+                              ('a href="#dr_493">CR 479</a>',
+                               'a href="#dr_493">CR 493</a>')),
                 'n2397.htm': (('macro-\nreplacement', 'macro-replacement'),
                               ('macro- replacement', 'macro-replacement'))}
 
