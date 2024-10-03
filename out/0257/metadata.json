@@ -1,0 +1,29 @@
+{
+    "author-md": "Clive D.W. Feather \\<clive@demon.net\\>",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2002-10-17",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_257.htm"
+    ],
+    "crossref": [
+        "0236",
+        "0283"
+    ],
+    "date": "2001-09-07",
+    "status": "closed",
+    "submitted-against": "c99",
+    "submitter-md": "UK C Panel",
+    "summary-md": "common initial sequences and related issues with unions",
+    "x-dr-version": "1.4",
+    "x-dr-version-date": "2002-10-17",
+    "x-index-summary-md": "Q1: Common initial sequences and related issues with unions.",
+    "x-orig-status-class": "closed",
+    "x-status-date": "2002-10-18",
+    "x-summary-author-md": "UK C Panel"
+}

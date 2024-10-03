@@ -1,0 +1,26 @@
+{
+    "author-md": "Clive D.W. Feather \\<clive@demon.net\\>",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2002-03-06",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_254.htm"
+    ],
+    "crossref": [],
+    "date": "2001-09-07",
+    "status": "closed",
+    "submitted-against": "c99",
+    "submitter-md": "UK C Panel",
+    "summary-md": "`mbtowc` and partial characters",
+    "x-dr-version": "1.1",
+    "x-dr-version-date": "2002-03-06",
+    "x-index-summary-md": "Q1: `mbtowc` and partial characters.",
+    "x-orig-status-class": "closed",
+    "x-status-date": "2002-04-18",
+    "x-summary-author-md": "UK C Panel"
+}

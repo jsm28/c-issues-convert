@@ -1,0 +1,23 @@
+{
+    "author-md": "Fred Tydeman",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_024.html"
+    ],
+    "crossref": [],
+    "date": "1992-12-10",
+    "reference-doc-md": "X3J11/91-004",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "For `strtod`, what does `\"C\"` locale mean?",
+    "x-orig-summary-md": "For `strtod`, what does `\"C\"` locale mean?",
+    "x-summary-author-md": "Fred Tydeman"
+}

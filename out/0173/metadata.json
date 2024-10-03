@@ -1,0 +1,16 @@
+{
+    "author-md": "Clive D.W. Feather",
+    "comments": [],
+    "conversion-src": [
+        "dr.htm",
+        "dr_173.html"
+    ],
+    "crossref": [],
+    "date": "1995-10-16",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "BSI",
+    "summary-md": "What is the meaning of *line number* when a token is split over more than one physical source line?",
+    "x-orig-summary-md": "What is the meaning of *line number* when a token is split over more than one physical source line?",
+    "x-summary-author-md": "Clive Feather"
+}

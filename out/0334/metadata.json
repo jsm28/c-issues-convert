@@ -1,0 +1,27 @@
+{
+    "author-md": "WG 14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2008-04-16",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_334.htm"
+    ],
+    "crossref": [],
+    "date": "2006-12-12",
+    "reference-doc-md": "[ISO/IEC WG14 N1203](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1203.htm)",
+    "status": "closed",
+    "submitted-against": "c99",
+    "submitter-md": "Fred Tydeman (USA)",
+    "summary-md": "Missing semantics of comparison macros",
+    "x-dr-version": "1.3",
+    "x-dr-version-date": "2008-04-16",
+    "x-index-summary-md": "Q1: Missing semantics of comparision macros",
+    "x-orig-status-class": "review",
+    "x-status-date": "2008-09-10",
+    "x-summary-author-md": "Tydeman (US)"
+}

@@ -1,0 +1,19 @@
+{
+    "author-md": "Frank Farance",
+    "comments": [],
+    "conversion-src": [
+        "dr.htm",
+        "dr_178.html"
+    ],
+    "crossref": [
+        "0051",
+        "0073"
+    ],
+    "date": "1996-02-06",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "Why does [Defect Report #051](issue:0051) and [Defect Report #073](issue:0073) answer the same question differently?",
+    "x-orig-summary-md": "Why does [Defect Report #051](issue:0051) and [Defect Report #073](issue:0073) answer the same question differently?",
+    "x-summary-author-md": "Frank Farance"
+}

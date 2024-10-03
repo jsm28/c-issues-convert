@@ -1,0 +1,27 @@
+{
+    "author-md": "Ron Guilmette",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_105.html"
+    ],
+    "crossref": [
+        "0017.03"
+    ],
+    "date": "1993-12-03",
+    "fixed-in": [
+        "c90tc1"
+    ],
+    "status": "fixed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "Does a constraint violation win over undefined behavior?",
+    "x-orig-summary-md": "Does a constraint violation win over undefined behavior? See [Defect Report #17, Question #3](issue:0017.03).",
+    "x-summary-author-md": "Ron Gulmette"
+}

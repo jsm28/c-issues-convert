@@ -1,0 +1,25 @@
+{
+    "author-md": "Loren Schall",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_055.html"
+    ],
+    "crossref": [],
+    "date": "1993-04-14",
+    "fixed-in": [
+        "c90tc1"
+    ],
+    "status": "fixed",
+    "submitted-against": "c90",
+    "submitter-md": "Project Editor (P.J. Plauger)",
+    "summary-md": "Must the `SIG*` macros have distinct values?",
+    "x-orig-summary-md": "Must the `SIG*` macros have distinct values?",
+    "x-summary-author-md": "Loren Schall"
+}

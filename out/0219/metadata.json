@@ -1,0 +1,26 @@
+{
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2006-04-04",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_219.htm"
+    ],
+    "crossref": [],
+    "date": "2000-04-04",
+    "status": "closed",
+    "submitted-against": "c99",
+    "submitter-md": "Clive Feather (UK)",
+    "summary-md": "Effective types",
+    "x-dr-version": "1.4",
+    "x-dr-version-date": "2006-04-04",
+    "x-index-summary-md": "Q1: Effective types.",
+    "x-orig-status-class": "closed",
+    "x-status-date": "2006-03-30",
+    "x-summary-author-md": "Feather (UK)",
+    "x-summary-date": "2000-04-04"
+}

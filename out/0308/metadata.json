@@ -1,0 +1,29 @@
+{
+    "author-md": "WG21",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2006-03-05",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_308.htm"
+    ],
+    "crossref": [],
+    "date": "2004-10-26",
+    "fixed-in": [
+        "c99tc3"
+    ],
+    "reference-doc-md": "[ISO/IEC WG14 N1068](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1068.htm)",
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "WG21",
+    "summary-md": "Clarify that source files et al. need not be \"files\"",
+    "x-dr-version": "1.0",
+    "x-dr-version-date": "2006-03-05",
+    "x-index-summary-md": "Q1: Clarify that source files et al. need not be \"files\"",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "Clark Nelson (US)"
+}

@@ -1,0 +1,28 @@
+{
+    "author-md": "Clive D.W. Feather \\<clive@demon.net\\>",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2002-05-15",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_269.htm"
+    ],
+    "crossref": [],
+    "date": "2001-09-07",
+    "fixed-in": [
+        "c99tc2"
+    ],
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "UK C Panel",
+    "summary-md": "lacunae in exact-width integer types",
+    "x-dr-version": "1.2",
+    "x-dr-version-date": "2002-05-15",
+    "x-index-summary-md": "Q1: Lacunae in exact-width integer types.",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "UK C Panel"
+}

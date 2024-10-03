@@ -1,0 +1,29 @@
+{
+    "author-md": "WG 14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2017-11-03",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "n2396.htm"
+    ],
+    "crossref": [
+        "0428"
+    ],
+    "date": "2013-03-12",
+    "fixed-in": [
+        "c17"
+    ],
+    "reference-doc-md": "[N1683](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1683.htm) [N1771](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1771.htm)",
+    "status": "fixed",
+    "submitted-against": "c11c17",
+    "submitter-md": "Douglas Walls",
+    "summary-md": "Issue with constraints for wide character function arguments involving **RSIZE\\_MAX**",
+    "x-dr-summary-md": "Issue with constraints for wide character function arguments involving **RSIZE\\_MAX**",
+    "x-dr-version-date": "10/2017",
+    "x-orig-status-class": "c17",
+    "x-table-summary-md": "Issue with constraints for wide character function"
+}

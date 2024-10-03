@@ -1,0 +1,23 @@
+{
+    "author-md": "Yasushi Nakahara",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_018.html"
+    ],
+    "crossref": [],
+    "date": "1992-12-10",
+    "reference-doc-md": "X3J11/90-066",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "Does `fscanf` recognize literal multibyte characters properly?",
+    "x-orig-summary-md": "Does `fscanf` recognize literal multibyte characters properly?",
+    "x-summary-author-md": "Yasushi Nakahara"
+}

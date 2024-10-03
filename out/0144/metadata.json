@@ -1,0 +1,25 @@
+{
+    "author-md": "Clive D.W. Feather",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_144.html"
+    ],
+    "crossref": [],
+    "date": "1995-02-23",
+    "fixed-in": [
+        "c99"
+    ],
+    "status": "fixed",
+    "submitted-against": "c90",
+    "submitter-md": "BSI",
+    "summary-md": "Can the white space preceeding the initial `#` of a preprocessing directive be derived from macro expansion?",
+    "x-orig-summary-md": "Can the white space preceeding the initial `#` of a preprocessing directive be derived from macro expansion?",
+    "x-summary-author-md": "Clive Feather"
+}

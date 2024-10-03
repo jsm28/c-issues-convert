@@ -1,0 +1,27 @@
+{
+    "author-md": "David F. Prosser",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_012.html"
+    ],
+    "crossref": [
+        "0076",
+        "0106",
+        "0125"
+    ],
+    "date": "1992-12-10",
+    "reference-doc-md": "X3J11/90-046",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "Can one take the address of a void expression?",
+    "x-orig-summary-md": "Can one take the address of a void expression?",
+    "x-summary-author-md": "David F. Prosser"
+}

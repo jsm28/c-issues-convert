@@ -1,0 +1,24 @@
+{
+    "author-md": "WG 14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2015-04-17",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "n2396.htm"
+    ],
+    "crossref": [],
+    "date": "2013-07-21",
+    "reference-doc-md": "[N1730](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1730.pdf)",
+    "status": "closed",
+    "submitted-against": "c11c17",
+    "submitter-md": "Joseph Myers",
+    "summary-md": "Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 3",
+    "x-dr-summary-md": "Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 3",
+    "x-dr-version-date": "04/2015",
+    "x-orig-status-class": "closed",
+    "x-table-summary-md": "Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 3"
+}

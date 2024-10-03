@@ -1,0 +1,28 @@
+{
+    "author-md": "Larry Jones",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_139.html"
+    ],
+    "crossref": [
+        "0059",
+        "0088"
+    ],
+    "date": "1994-06-13",
+    "fixed-in": [
+        "c90tc2"
+    ],
+    "status": "fixed",
+    "submitted-against": "c90",
+    "submitter-md": "Project Editor (P.J. Plauger)",
+    "summary-md": "Is an incomplete type compatible with the completed type?",
+    "x-orig-summary-md": "Is an incomplete type compatible with the completed type? See [Defect Report #059](issue:0059)",
+    "x-summary-author-md": "Larry Jones"
+}

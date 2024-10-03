@@ -1,0 +1,22 @@
+{
+    "author-md": "Project Editor (P.J. Plauger)",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_133.html"
+    ],
+    "crossref": [],
+    "date": "1993-12-03",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "Undefined behavior not previously listed in subclause G2",
+    "x-orig-summary-md": "Undefined behavior not previously listed in subclause G2.",
+    "x-summary-author-md": "P. J. Plauger"
+}

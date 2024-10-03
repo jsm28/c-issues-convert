@@ -1,0 +1,29 @@
+{
+    "author-md": "WG 14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2001-01-22",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_210.htm"
+    ],
+    "crossref": [],
+    "date": "1999-10-20",
+    "fixed-in": [
+        "c99tc1"
+    ],
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "Fred Tydeman (US)",
+    "summary-md": "`fprintf %a` and `%A` conversions recommended practice",
+    "x-dr-version": "1.2",
+    "x-dr-version-date": "2001-01-22 03:49:35",
+    "x-index-summary-md": "Q1: `fprintf %a` and `%A` conversions recommended practice.  \n Q2: Hexadecimal conversion using the `strtod` family.",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "Tydeman (US)",
+    "x-summary-date": "1999-10-19"
+}

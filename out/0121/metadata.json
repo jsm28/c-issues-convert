@@ -1,0 +1,22 @@
+{
+    "author-md": "Ron Guilmette",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_121.html"
+    ],
+    "crossref": [],
+    "date": "1993-12-03",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "What is ment by *size required* when convering a ponter value to an integral type?",
+    "x-orig-summary-md": "What is ment by *size required* when convering a ponter value to an integral type?",
+    "x-summary-author-md": "Ron Gulmette"
+}

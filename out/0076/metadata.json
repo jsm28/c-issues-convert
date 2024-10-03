@@ -1,0 +1,25 @@
+{
+    "author-md": "Clive Feather",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_076.html"
+    ],
+    "crossref": [
+        "0012",
+        "0166"
+    ],
+    "date": "1993-12-03",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "A set of pointers to the end of arrays questions",
+    "x-orig-summary-md": "A set of pointers to the end of arrays questions.",
+    "x-summary-author-md": "Clive Feather"
+}

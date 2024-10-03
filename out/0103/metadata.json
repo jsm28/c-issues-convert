@@ -1,0 +1,22 @@
+{
+    "author-md": "Ron Guilmette",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_103.html"
+    ],
+    "crossref": [],
+    "date": "1993-12-03",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "Is a diagnostic required when formal parameters for functions are incomplete types?",
+    "x-orig-summary-md": "Is a diagnostic required when formal parameters for functions are incomplete types?",
+    "x-summary-author-md": "Ron Gulmette"
+}

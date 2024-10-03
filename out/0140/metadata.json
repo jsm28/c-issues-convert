@@ -1,0 +1,22 @@
+{
+    "author-md": "Andy Pepperdine",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_140.html"
+    ],
+    "crossref": [],
+    "date": "1994-07-27",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "BSI",
+    "summary-md": "What does *performed* and *other operation* mean?",
+    "x-orig-summary-md": "What does *performed* and *other operation* mean?",
+    "x-summary-author-md": "Andy Pepperdine"
+}

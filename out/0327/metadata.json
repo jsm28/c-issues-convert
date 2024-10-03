@@ -1,0 +1,29 @@
+{
+    "author-md": "Rich Peterson \\<Rich.Peterson@hp.com\\>",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2007-09-06",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_327.htm"
+    ],
+    "crossref": [],
+    "date": "2006-03-29",
+    "fixed-in": [
+        "c11"
+    ],
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "J11",
+    "summary-md": "Italicize definition of variable length array type, add forward references",
+    "x-dr-version": "1.4",
+    "x-dr-version-date": "2007-09-06",
+    "x-index-summary-md": "Q1: Italicize definition of variable length array type.",
+    "x-orig-status-class": "closed",
+    "x-status-date": "2007-04-25",
+    "x-summary-author-md": "Peterson (US)"
+}

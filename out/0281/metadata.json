@@ -1,0 +1,29 @@
+{
+    "author-md": "Convener",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2003-03-06",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_281.htm"
+    ],
+    "crossref": [],
+    "date": "2002-06-06",
+    "fixed-in": [
+        "c99tc2"
+    ],
+    "reference-doc-md": "[ISO/IEC WG14 N982](https://www.open-std.org/jtc1/sc22/wg14/www/docs/)",
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "J. Benito (convener)",
+    "summary-md": "CLOCKS\\_PER\\_SEC should not be a constant expression",
+    "x-dr-version": "1.1",
+    "x-dr-version-date": "2003-03-06",
+    "x-index-summary-md": "Q1: `CLOCKS_PER_SEC` should not be a constant expression.",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "Convener (US)"
+}

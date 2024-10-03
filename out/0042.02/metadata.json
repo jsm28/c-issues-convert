@@ -1,0 +1,23 @@
+{
+    "author-md": "Tom MacDonald",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_042.html"
+    ],
+    "crossref": [],
+    "date": "1992-12-10",
+    "reference-doc-md": "X3J11/92-001",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "If so, how big is the object defined by `memcpy`?",
+    "x-orig-summary-md": "If so, how big is the object defined by `memcpy`?",
+    "x-summary-author-md": "Tom MacDonald"
+}

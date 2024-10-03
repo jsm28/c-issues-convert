@@ -1,0 +1,31 @@
+{
+    "author-md": "Donald W. Cragun \\<don.cragun@sun.com\\>",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2006-10-25",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_322.htm"
+    ],
+    "crossref": [
+        "0276"
+    ],
+    "date": "2005-09-28",
+    "fixed-in": [
+        "c99tc3"
+    ],
+    "reference-doc-md": "[Defect Report #276](issue:0276)",
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "Cragun (US)",
+    "summary-md": "Problem with TC2 Change #67 (Add `perror` to the list defining byte input/output functions.)",
+    "x-dr-version": "1.3",
+    "x-dr-version-date": "2006-10-25",
+    "x-index-summary-md": "Q1: Problem with TC2 Change #67",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "Cragun (US)"
+}

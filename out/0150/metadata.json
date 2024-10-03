@@ -1,0 +1,25 @@
+{
+    "author-md": "Jutta Degener",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_150.html"
+    ],
+    "crossref": [],
+    "date": "1995-06-11",
+    "fixed-in": [
+        "c99"
+    ],
+    "status": "fixed",
+    "submitted-against": "c90",
+    "submitter-md": "DIN",
+    "summary-md": "Are programs containing `char array[] = \"Hello, World\";` strictly conforming?",
+    "x-orig-summary-md": "Are programs containing `char array[] = \"Hello, World\";` strictly conforming?",
+    "x-summary-author-md": "Jutta Degener"
+}

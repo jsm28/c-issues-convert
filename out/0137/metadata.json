@@ -1,0 +1,22 @@
+{
+    "author-md": "Larry Jones",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_137.html"
+    ],
+    "crossref": [],
+    "date": "1994-04-30",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "Project Editor (P.J. Plauger)",
+    "summary-md": "Is `printf(\"%.1f\", -0.01)` required to produce `0.0` , `-0.0`, or are both acceptable?",
+    "x-orig-summary-md": "Is `printf(\"%.1f\", -0.01)` required to produce `0.0` , `-0.0`, or are both acceptable?",
+    "x-summary-author-md": "Larry Jones"
+}

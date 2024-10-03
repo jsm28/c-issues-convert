@@ -1,0 +1,26 @@
+{
+    "author-md": "WG14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2018-04-26",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "n2396.htm"
+    ],
+    "crossref": [
+        "0499"
+    ],
+    "date": "2016-09-18",
+    "reference-doc-md": "[N2080](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2080.htm)",
+    "status": "closed",
+    "submitted-against": "c11c17",
+    "submitter-md": "Martin Sebor",
+    "summary-md": "Flexible array member in an anonymous struct",
+    "x-dr-summary-md": "Flexible array member in an anonymous struct",
+    "x-dr-version-date": "04/2018",
+    "x-orig-status-class": "closed",
+    "x-table-summary-md": "Flexible array member in an anonymous struct"
+}

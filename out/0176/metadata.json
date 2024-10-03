@@ -1,0 +1,16 @@
+{
+    "author-md": "Clive D.W. Feather",
+    "comments": [],
+    "conversion-src": [
+        "dr.htm",
+        "dr_176.html"
+    ],
+    "crossref": [],
+    "date": "1995-10-16",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "BSI",
+    "summary-md": "Are rules concerning whether `#error` generates a diagnostic contradictory?",
+    "x-orig-summary-md": "Are rules concerning whether `#error` generates a diagnostic contradictory?",
+    "x-summary-author-md": "Clive Feather"
+}

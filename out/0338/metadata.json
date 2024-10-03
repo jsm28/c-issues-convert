@@ -1,0 +1,30 @@
+{
+    "author-md": "Rich Peterson \\<Rich.Peterson@hp.com\\>",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2008-09-12",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_338.htm"
+    ],
+    "crossref": [],
+    "date": "2007-03-09",
+    "fixed-in": [
+        "c11"
+    ],
+    "reference-doc-md": "[WG14 N1124](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1124.pdf)",
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "Rich Peterson (US)",
+    "summary-md": "C99 seems to exclude **indeterminate value** from being an uninitialized register",
+    "x-dr-version": "1.4",
+    "x-dr-version-date": "2008-09-12",
+    "x-index-summary-md": "Q1: C99 seems to exclude **indeterminate value** from being an uninitialized register",
+    "x-orig-status-class": "closed",
+    "x-status-date": "2008-09-10",
+    "x-summary-author-md": "Peterson (US)"
+}

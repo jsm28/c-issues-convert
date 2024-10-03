@@ -1,0 +1,27 @@
+{
+    "author-md": "BSI",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2004-09-28",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_288.htm"
+    ],
+    "crossref": [],
+    "date": "2003-10-21",
+    "reference-doc-md": "[N1012](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1012.txt)",
+    "status": "closed",
+    "submitted-against": "c99",
+    "submitter-md": "Clive Feather",
+    "summary-md": "deficiency on multibyte conversions",
+    "x-dr-version": "1.2",
+    "x-dr-version-date": "2004-09-28",
+    "x-index-summary-md": "Q1: deficiency on multibyte conversions",
+    "x-orig-status-class": "closed",
+    "x-status-date": "2004-10-28",
+    "x-summary-author-md": "UK C Panel"
+}

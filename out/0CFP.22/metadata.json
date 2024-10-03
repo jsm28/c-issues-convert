@@ -1,0 +1,29 @@
+{
+    "author-md": "WG14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2019-05-03",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "n2397.htm"
+    ],
+    "crossref": [
+        "0CFP.20"
+    ],
+    "date": "2018-03-16",
+    "fixed-in": [
+        "c23"
+    ],
+    "reference-doc-md": "[N2211](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2211.pdf)",
+    "status": "fixed",
+    "submitted-against": "cfp-c11",
+    "submitter-md": "C Floating Point Group",
+    "summary-md": "P3: changes for obsolescing DECIMAL\\_DIG",
+    "x-dr-summary-md": "P2: changes for obsolescing DECIMAL\\_DIG",
+    "x-dr-version-date": "04/2019",
+    "x-orig-status-class": "c2x",
+    "x-table-summary-md": "P3: changes for obsolescing DECIMAL\\_DIG"
+}

@@ -1,0 +1,22 @@
+{
+    "author-md": "Clive Feather",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_074.html"
+    ],
+    "crossref": [],
+    "date": "1993-12-03",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "Can the alignment of an object that is a member of a structure be different from the alignment of an object of the same type that is not a member of a structure?",
+    "x-orig-summary-md": "Can the alignment of an object that is a member of a structure be different from the alignment of an object of the same type that is not a member of a structure?",
+    "x-summary-author-md": "Clive Feather"
+}

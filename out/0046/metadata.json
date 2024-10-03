@@ -1,0 +1,23 @@
+{
+    "author-md": "Neal Weidenhofer",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_046.html"
+    ],
+    "crossref": [],
+    "date": "1992-12-10",
+    "reference-doc-md": "X3J11/92-041",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "May a typedef be redeclared as a parameter outside an old-style function parameter list?",
+    "x-orig-summary-md": "May a typedef be redeclared as a parameter outside an old-style function parameter list?",
+    "x-summary-author-md": "Neal Weidenhofer"
+}

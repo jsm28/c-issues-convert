@@ -1,0 +1,26 @@
+{
+    "author-md": "Robert Paul Corbett",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_043.html"
+    ],
+    "crossref": [],
+    "date": "1992-12-10",
+    "fixed-in": [
+        "c90tc1"
+    ],
+    "reference-doc-md": "X3J11/92-004",
+    "status": "fixed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "Can `NULL` be defined as `4-4`?",
+    "x-orig-summary-md": "Can `NULL` be defined as `4-4`?",
+    "x-summary-author-md": "Robert Paul Corbett"
+}

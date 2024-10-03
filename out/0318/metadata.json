@@ -1,0 +1,28 @@
+{
+    "author-md": "WG 14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2006-03-05",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_318.htm"
+    ],
+    "crossref": [],
+    "date": "2004-10-27",
+    "fixed-in": [
+        "c99tc3"
+    ],
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "Fred Tydeman (USA)",
+    "summary-md": "`(double)0.1f` with `FLT_EVAL_METHOD` being 2",
+    "x-dr-version": "1.2",
+    "x-dr-version-date": "2006-03-05",
+    "x-index-summary-md": "Q1: `(double)0.1f` with `FLT_EVAL_METHOD` being 2",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "Tydeman (US)"
+}

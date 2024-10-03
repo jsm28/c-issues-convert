@@ -1,0 +1,27 @@
+{
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2003-03-06",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_245.htm"
+    ],
+    "crossref": [],
+    "date": "2001-09-21",
+    "fixed-in": [
+        "c99tc2"
+    ],
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "WG14",
+    "summary-md": "Missing paragraph numbers",
+    "x-dr-version": "1.2",
+    "x-dr-version-date": "2003-03-06",
+    "x-index-summary-md": "Q1: In F.9.8.4, the second paragraph is missing a paragraph number.  \n Q2: In 7.20.7.2, the first paragraph of the Returns section is missing a paragraph number.  \n Q3: In 7.18.2.1, the first paragraph is missing a paragraph number.  \n Q4: In 7.18.2.2, the first paragraph is missing a paragraph number.  \n Q5: In 7.18.2.3, the first paragraph is missing a paragraph number.  \n Q6: In 7.18.2.4, the first paragraph is missing a paragraph number.  \n Q7: In 7.18.2.5, the first paragraph is missing a paragraph number.  \n Q8: In 7.19.4.3 Recommended Practice, the first paragraph is missing a paragraph number.  \n Q9: In 7.21.4.3 Description, the first paragraph is missing a paragraph number.  \n Q10: In G.3, the first paragraph is missing a paragraph number.  \n Q11: In G.6.2.2, the first paragraph is missing a paragraph number.",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "WG14"
+}

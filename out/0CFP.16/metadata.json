@@ -1,0 +1,27 @@
+{
+    "author-md": "WG14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2019-05-03",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "n2397.htm"
+    ],
+    "crossref": [],
+    "date": "2017-10-25",
+    "fixed-in": [
+        "c23"
+    ],
+    "reference-doc-md": "[N2178](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2178.pdf)",
+    "status": "fixed",
+    "submitted-against": "cfp-c11",
+    "submitter-md": "Jim Thomas",
+    "summary-md": "P1: tgmath cbrt macro",
+    "x-dr-summary-md": "P1: tgmath cbrt macro",
+    "x-dr-version-date": "04/2019",
+    "x-orig-status-class": "c2x",
+    "x-table-summary-md": "P1: tgmath cbrt macro"
+}

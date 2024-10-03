@@ -1,0 +1,28 @@
+{
+    "author-md": "J11",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2004-03-06",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_282.htm"
+    ],
+    "crossref": [],
+    "date": "2002-06-11",
+    "fixed-in": [
+        "c99tc2"
+    ],
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "Douglas Walls (US)",
+    "summary-md": "flexible array members \\& struct padding",
+    "x-dr-version": "1.4",
+    "x-dr-version-date": "2004-03-06",
+    "x-index-summary-md": "Q1: flexible array members \\& struct padding.",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "Walls (US)"
+}

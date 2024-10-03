@@ -1,0 +1,28 @@
+{
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2001-09-18",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_231.htm"
+    ],
+    "crossref": [
+        "0448"
+    ],
+    "date": "2000-04-14",
+    "status": "closed",
+    "submitted-against": "c99",
+    "submitter-md": "Makoto Noda (Japan)",
+    "summary-md": "Semantics of *text-line* and *non-directive*",
+    "x-dr-version": "1.3",
+    "x-dr-version-date": "2001-09-18 16:15:47",
+    "x-index-summary-md": "Q1: Semantics of *text-line* and *non-directive*.",
+    "x-orig-status-class": "closed",
+    "x-status-date": "2001-09-25",
+    "x-summary-author-md": "Noda (Japan)",
+    "x-summary-date": "2000-04-14"
+}

@@ -1,0 +1,23 @@
+{
+    "author-md": "Bruce Lambert",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_020.html"
+    ],
+    "crossref": [],
+    "date": "1992-12-10",
+    "reference-doc-md": "X3J11/91-006",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "Is the relaxed Ref/Def linkage model conforming?",
+    "x-orig-summary-md": "Is the relaxed Ref/Def linkage model conforming?",
+    "x-summary-author-md": "Bruce Lambert"
+}

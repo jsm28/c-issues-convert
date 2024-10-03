@@ -1,0 +1,22 @@
+{
+    "author-md": "Clive Feather",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_068.html"
+    ],
+    "crossref": [],
+    "date": "1993-12-03",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "When are values of the type `char` treated as `signed`or `nonnegative` integers",
+    "x-orig-summary-md": "When are values of the type `char` treated as `signed`or `nonnegative` integers.",
+    "x-summary-author-md": "Clive Feather"
+}

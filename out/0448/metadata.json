@@ -1,0 +1,30 @@
+{
+    "author-md": "WG 14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2017-11-03",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "n2396.htm"
+    ],
+    "crossref": [
+        "0231",
+        "0250"
+    ],
+    "date": "2013-08-20",
+    "fixed-in": [
+        "c17"
+    ],
+    "reference-doc-md": "[N1740,](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1740.htm) [DR 231](issue:0231), [DR 250](issue:0250)",
+    "status": "fixed",
+    "submitted-against": "c11c17",
+    "submitter-md": "Fred J. Tydeman",
+    "summary-md": "What are the semantics of a **\\# non-directive**?",
+    "x-dr-summary-md": "What are the semantics of a **\\# non-directive**?",
+    "x-dr-version-date": "10/2017",
+    "x-orig-status-class": "c17",
+    "x-table-summary-md": "What are the semantics of a **\\# non-directive**?"
+}

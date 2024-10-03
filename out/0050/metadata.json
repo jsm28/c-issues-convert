@@ -1,0 +1,24 @@
+{
+    "author-md": "C. Breeus",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_050.html"
+    ],
+    "crossref": [
+        "0017.07"
+    ],
+    "date": "1993-02-24",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "Project Editor (P.J. Plauger)",
+    "summary-md": "Does a proper definition of `wchar_t` need to be in scope to write a wide-character literal?",
+    "x-orig-summary-md": "Does a proper definition of `wchar_t` need to be in scope to write a wide-character literal?",
+    "x-summary-author-md": "C. Breeus"
+}

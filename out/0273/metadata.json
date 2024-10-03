@@ -1,0 +1,28 @@
+{
+    "author-md": "Clive D.W. Feather \\<clive@demon.net\\>",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2002-03-07",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_273.htm"
+    ],
+    "crossref": [],
+    "date": "2001-09-07",
+    "fixed-in": [
+        "c99tc2"
+    ],
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "UK C Panel",
+    "summary-md": "meaning of `__STDC_ISO_10646__`",
+    "x-dr-version": "1.1",
+    "x-dr-version-date": "2002-03-07",
+    "x-index-summary-md": "Q1: Meaning of `__STDC_ISO_10646__`.",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "UK C Panel"
+}

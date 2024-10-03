@@ -1,0 +1,30 @@
+{
+    "author-md": "J11",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2004-09-28",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_283.htm"
+    ],
+    "crossref": [
+        "0257"
+    ],
+    "date": "2002-09-18",
+    "fixed-in": [
+        "c99tc3"
+    ],
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "Clark Nelson",
+    "summary-md": "Accessing a non-current union member (\"type punning\")",
+    "x-dr-version": "1.2",
+    "x-dr-version-date": "2004-09-28",
+    "x-index-summary-md": "Q1: Accessing a non-current union member, *type punning*.",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "Nelson (US)"
+}

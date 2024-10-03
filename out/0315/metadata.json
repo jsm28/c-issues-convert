@@ -1,0 +1,32 @@
+{
+    "author-md": "Joseph Myers \\<joseph@codesourcery.com\\>",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2007-10-10",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_315.htm"
+    ],
+    "crossref": [
+        "0335"
+    ],
+    "date": "2005-03-04",
+    "fixed-in": [
+        "c11"
+    ],
+    "reference-doc-md": "[ISO/IEC WG14 N1103](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1103.htm)",
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "UK C Panel",
+    "summary-md": "Implementation-defined bit-field types",
+    "x-dr-version": "1.5",
+    "x-dr-version-date": "2007-10-10",
+    "x-index-summary-md": "Q1: Implementation-defined bit-field types",
+    "x-orig-status-class": "closed",
+    "x-status-date": "2007-10-10",
+    "x-summary-author-md": "Myers (UK)"
+}

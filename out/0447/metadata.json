@@ -1,0 +1,29 @@
+{
+    "author-md": "WG 14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2017-11-03",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "n2396.htm"
+    ],
+    "crossref": [
+        "0285"
+    ],
+    "date": "2013-08-20",
+    "fixed-in": [
+        "c17"
+    ],
+    "reference-doc-md": "[N1739,](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1739.htm) [DR 285](issue:0285)",
+    "status": "fixed",
+    "submitted-against": "c11c17",
+    "submitter-md": "Fred J. Tydeman",
+    "summary-md": "Boolean from complex",
+    "x-dr-summary-md": "Boolean from complex",
+    "x-dr-version-date": "10/2017",
+    "x-orig-status-class": "c17",
+    "x-table-summary-md": "Boolean from complex"
+}

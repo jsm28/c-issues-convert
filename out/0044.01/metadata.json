@@ -1,0 +1,25 @@
+{
+    "author-md": "Steve M. Hoxey",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_044.html"
+    ],
+    "crossref": [
+        "0072"
+    ],
+    "date": "1992-12-10",
+    "reference-doc-md": "X3J11/92-010",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "What does it mean to say that the type of `offsetof` is `size_t`?",
+    "x-orig-summary-md": "What does it mean to say that the type of `offsetof` is `size_t`?",
+    "x-summary-author-md": "Steve M. Hoxey"
+}

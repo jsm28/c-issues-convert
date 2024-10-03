@@ -1,0 +1,26 @@
+{
+    "author-md": "Randall Meyers",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_027.html"
+    ],
+    "crossref": [],
+    "date": "1992-12-10",
+    "fixed-in": [
+        "c90tc1"
+    ],
+    "reference-doc-md": "X3J11/91-008",
+    "status": "fixed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "May a standard conforming implementation add identifier characters?",
+    "x-orig-summary-md": "May a standard conforming implementation add identifier characters?",
+    "x-summary-author-md": "Randall Meyers"
+}

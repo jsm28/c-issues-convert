@@ -1,0 +1,26 @@
+{
+    "author-md": "Project Editor (Larry Jones)",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2017-11-03",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "n2396.htm"
+    ],
+    "crossref": [],
+    "date": "2012-01-18",
+    "fixed-in": [
+        "c17"
+    ],
+    "status": "fixed",
+    "submitted-against": "c11c17",
+    "submitter-md": "Edward Diener (comp.std.c)",
+    "summary-md": "`#elif`",
+    "x-dr-summary-md": "`#elif`",
+    "x-dr-version-date": "10/2017",
+    "x-orig-status-class": "c17",
+    "x-table-summary-md": "`#elif`"
+}

@@ -1,0 +1,29 @@
+{
+    "author-md": "Derek M. Jones",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_017.html"
+    ],
+    "crossref": [
+        "0013.01",
+        "0110"
+    ],
+    "date": "1992-12-10",
+    "fixed-in": [
+        "c90tc1"
+    ],
+    "reference-doc-md": "X3J11/90-056",
+    "status": "fixed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "When do array parameters get converted to pointers?",
+    "x-orig-summary-md": "When do array parameters get converted to pointers?",
+    "x-summary-author-md": "Derek M. Jones"
+}

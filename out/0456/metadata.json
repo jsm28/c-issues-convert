@@ -1,0 +1,24 @@
+{
+    "author-md": "WG14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2015-10-29",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "n2396.htm"
+    ],
+    "crossref": [],
+    "date": "2014-03-05",
+    "reference-doc-md": "[N1798](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1798.htm)",
+    "status": "closed",
+    "submitted-against": "c11c17",
+    "submitter-md": "Rajan Bhakta",
+    "summary-md": "Compile time definition of `UINT`*`N`*`_C(`*`value`*`)`",
+    "x-dr-summary-md": "Compile time definition of `UINT`*`N`*`_C(`*`value`*`)`",
+    "x-dr-version-date": "10/2015",
+    "x-orig-status-class": "closed",
+    "x-table-summary-md": "Compile time definition of `UINT`*`N`*`_C(`*`value`*`)`"
+}

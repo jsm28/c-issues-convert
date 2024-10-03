@@ -1,0 +1,23 @@
+{
+    "author-md": "Walter J. Murray",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_005.html"
+    ],
+    "crossref": [],
+    "date": "1992-12-10",
+    "reference-doc-md": "X3J11/90-020",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "May a conforming implementation define and recognize a pragma which would change the semantics of the language?",
+    "x-orig-summary-md": "May a conforming implementation define and recognize a pragma which would change the semantics of the language?",
+    "x-summary-author-md": "Walter J. Murray"
+}

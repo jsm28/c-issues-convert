@@ -1,0 +1,25 @@
+{
+    "author-md": "Ron Guilmette",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_124.html"
+    ],
+    "crossref": [],
+    "date": "1993-12-03",
+    "fixed-in": [
+        "c90tc2"
+    ],
+    "status": "fixed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "What is the difference between casts to *a void type* versus casts to the `void` type?",
+    "x-orig-summary-md": "What is the difference between casts to *a void type* versus casts to the `void` type?",
+    "x-summary-author-md": "Ron Gulmette"
+}

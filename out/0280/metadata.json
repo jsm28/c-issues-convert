@@ -1,0 +1,26 @@
+{
+    "author-md": "Emmanuel Ruffin (ruffin@besancon.sema.slb.com) via ANSI",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2003-10-06",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_280.htm"
+    ],
+    "crossref": [],
+    "date": "2002-09-26",
+    "status": "closed",
+    "submitted-against": "c99",
+    "submitter-md": "Randy Meyers (US)",
+    "summary-md": "`struct tm`, member `tm_isdst`, and `mktime()` in `<time.h>`",
+    "x-dr-version": "1.2",
+    "x-dr-version-date": "2003-10-06 15:10",
+    "x-index-summary-md": "Q1: Missing specification for daylight savings time when `tm_isdst` is set to `-1`.",
+    "x-orig-status-class": "closed",
+    "x-status-date": "2003-04-04",
+    "x-summary-author-md": "ANSI (US)"
+}

@@ -1,0 +1,22 @@
+{
+    "author-md": "Ron Guilmette",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_117.html"
+    ],
+    "crossref": [],
+    "date": "1993-12-03",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "Abstract semantics, sequence points, and expression evaluation question",
+    "x-orig-summary-md": "Abstract semantics, sequence points, and expression evaluation question.",
+    "x-summary-author-md": "Ron Gulmette"
+}

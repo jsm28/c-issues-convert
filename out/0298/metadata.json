@@ -1,0 +1,29 @@
+{
+    "author-md": "Convener",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2007-09-06",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_298.htm"
+    ],
+    "crossref": [],
+    "date": "2004-03-31",
+    "fixed-in": [
+        "c99tc3"
+    ],
+    "reference-doc-md": "[N1046](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1046.txt)",
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "J. Stephen Adamczyk",
+    "summary-md": "Validity of constant in `unsigned long long` range",
+    "x-dr-version": "1.4",
+    "x-dr-version-date": "2007-09-06",
+    "x-index-summary-md": "Q1: Validity of constant in unsigned long long range",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "J. Stephen Adamczyk (US)"
+}

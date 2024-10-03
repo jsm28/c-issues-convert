@@ -1,0 +1,28 @@
+{
+    "author-md": "WG 14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2006-04-04",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_299.htm"
+    ],
+    "crossref": [],
+    "date": "2004-08-13",
+    "fixed-in": [
+        "c99tc3"
+    ],
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "Fred Tydeman (USA)",
+    "summary-md": "Is `cabs()` a type-generic macro?",
+    "x-dr-version": "1.2",
+    "x-dr-version-date": "2006-04-04",
+    "x-index-summary-md": "Q1: Is `cabs()` a type-generic macro?",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "Fred Tydeman (US)"
+}

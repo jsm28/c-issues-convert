@@ -1,0 +1,22 @@
+{
+    "author-md": "Sheng Yu",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_130.html"
+    ],
+    "crossref": [],
+    "date": "1993-12-03",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "When is data read from a text stream guaranteed to match what was written to the stream?",
+    "x-orig-summary-md": "When is data read from a text stream guaranteed to match what was written to the stream?",
+    "x-summary-author-md": "Sheng Yu"
+}

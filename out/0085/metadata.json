@@ -1,0 +1,25 @@
+{
+    "author-md": "Clive Feather",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_085.html"
+    ],
+    "crossref": [],
+    "date": "1993-12-03",
+    "fixed-in": [
+        "c90tc2"
+    ],
+    "status": "fixed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "Is the return from `main` equivalent to calling `exit`?",
+    "x-orig-summary-md": "Is the return from `main` equivalent to calling `exit`?",
+    "x-summary-author-md": "Clive Feather"
+}

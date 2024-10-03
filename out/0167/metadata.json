@@ -1,0 +1,21 @@
+{
+    "author-md": "Clive D.W. Feather",
+    "comments": [],
+    "conversion-src": [
+        "dr.htm",
+        "dr_167.html"
+    ],
+    "crossref": [
+        "0014.02"
+    ],
+    "date": "1995-10-16",
+    "fixed-in": [
+        "c99"
+    ],
+    "status": "fixed",
+    "submitted-against": "c90",
+    "submitter-md": "BSI",
+    "summary-md": "The `n` conversion specifier in subclause 7.9.6.2 made by TC1, [Defect Report #014, Question 2](issue:0014.02), should be applied to subclause 7.9.6.1",
+    "x-orig-summary-md": "The `n` conversion specifier in subclause 7.9.6.2 made by TC1, [Defect Report #014, Question 2](issue:0014.02), should be applied to subclause 7.9.6.1.",
+    "x-summary-author-md": "Clive Feather"
+}

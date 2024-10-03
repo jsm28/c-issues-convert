@@ -1,0 +1,27 @@
+{
+    "author-md": "WG14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2018-10-18",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "n2396.htm"
+    ],
+    "crossref": [],
+    "date": "2016-03-17",
+    "fixed-in": [
+        "c23"
+    ],
+    "reference-doc-md": "[N2027](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2025.htm)",
+    "status": "fixed",
+    "submitted-against": "c11c17",
+    "submitter-md": "Clark Nelson",
+    "summary-md": "Part 1: Alignment specifier expression evaluation",
+    "x-dr-summary-md": "Part 1: Alignment specifier expression evaluation",
+    "x-dr-version-date": "10/2018",
+    "x-orig-status-class": "c2x",
+    "x-table-summary-md": "Part 1: Alignment specifier expression evaluation"
+}

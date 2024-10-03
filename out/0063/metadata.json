@@ -1,0 +1,24 @@
+{
+    "author-md": "Thomas Plum",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_063.html"
+    ],
+    "crossref": [
+        "0056"
+    ],
+    "date": "1993-12-01",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "Project Editor (P.J. Plauger)",
+    "summary-md": "This is [Defect Report 056](issue:0056)",
+    "x-orig-summary-md": "This is [Defect Report 056](issue:0056).",
+    "x-summary-author-md": "Thomas Plum"
+}

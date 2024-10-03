@@ -1,0 +1,30 @@
+{
+    "author-md": "Canada C Working Group",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2000-11-02",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_204.htm"
+    ],
+    "crossref": [],
+    "date": "1999-09-15",
+    "fixed-in": [
+        "c99tc1"
+    ],
+    "reference-doc-md": "[ISO/IEC WG14 N893](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n893.htm)",
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "Raymond Mak (Canada C Working Group)",
+    "summary-md": "`size_t` and `ptrdiff_t` as a `long long` type",
+    "x-dr-version": "1.3",
+    "x-dr-version-date": "2000-11-02 13:45:31",
+    "x-index-summary-md": "Q1: `size_t` and `ptrdiff_t` as a `long long` type.",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "Mak (Canada)",
+    "x-summary-date": "1999-09-15"
+}

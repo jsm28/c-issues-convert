@@ -1,0 +1,24 @@
+{
+    "author-md": "WG14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2018-10-18",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "n2396.htm"
+    ],
+    "crossref": [],
+    "date": "2016-04-11",
+    "reference-doc-md": "[N2037](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2037.htm)",
+    "status": "closed",
+    "submitted-against": "c11c17",
+    "submitter-md": "Philipp Klaus Krause",
+    "summary-md": "`mblen`, `mbtowc`, and `wctomb` thread-safety",
+    "x-dr-summary-md": "`mblen`, `mbtowc`, and `wctomb` thread-safety",
+    "x-dr-version-date": "10/2018",
+    "x-orig-status-class": "closed",
+    "x-table-summary-md": "`mblen`, `mbtowc`, and `wctomb` thread-safety"
+}

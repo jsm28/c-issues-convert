@@ -1,0 +1,23 @@
+{
+    "author-md": "Derek M. Jones",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_017.html"
+    ],
+    "crossref": [],
+    "date": "1992-12-10",
+    "reference-doc-md": "X3J11/90-056",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "When is a physical source line created?",
+    "x-orig-summary-md": "When is a physical source line created?",
+    "x-summary-author-md": "Derek M. Jones"
+}

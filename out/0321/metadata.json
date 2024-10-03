@@ -1,0 +1,32 @@
+{
+    "author-md": "Austin Group",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2006-04-04",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_321.htm"
+    ],
+    "crossref": [
+        "0279",
+        "0333"
+    ],
+    "date": "2005-04-26",
+    "fixed-in": [
+        "c99tc3"
+    ],
+    "reference-doc-md": "[DR\\_279](issue:0279), [Austin Group Aardvark comment XBD ERN 53](http://www.opengroup.org/austin/aardvark/latest/xbdbug2.txt)",
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "Nick Stoughton (US)",
+    "summary-md": "Wide character code values for members of the basic character set",
+    "x-dr-version": "1.4",
+    "x-dr-version-date": "2006-04-04",
+    "x-index-summary-md": "Q1: Wide character code values for members of the basic character set.",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "Stoughton (US)"
+}

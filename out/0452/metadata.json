@@ -1,0 +1,27 @@
+{
+    "author-md": "WG 14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2017-11-03",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "n2396.htm"
+    ],
+    "crossref": [],
+    "date": "2013-09-29",
+    "fixed-in": [
+        "c17"
+    ],
+    "reference-doc-md": "[N1762](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1762.htm)",
+    "status": "fixed",
+    "submitted-against": "c11c17",
+    "submitter-md": "Shao Miller",
+    "summary-md": "Effective Type in Loop Invariant",
+    "x-dr-summary-md": "Effective Type in Loop Invariant",
+    "x-dr-version-date": "10/2017",
+    "x-orig-status-class": "c17",
+    "x-table-summary-md": "Effective Type in Loop Invariant"
+}

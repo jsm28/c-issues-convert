@@ -1,0 +1,27 @@
+{
+    "author-md": "WG 14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2016-10-21",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "n2396.htm"
+    ],
+    "crossref": [
+        "0423",
+        "0454"
+    ],
+    "date": "2013-01-24",
+    "reference-doc-md": "[N1671](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1671.htm)",
+    "status": "closed",
+    "submitted-against": "c11c17",
+    "submitter-md": "Shao Miller \\<sha0.miller@gmail.com\\>",
+    "summary-md": "Function Parameter and Return Value Assignments",
+    "x-dr-summary-md": "Function Parameter and Return Value Assignments",
+    "x-dr-version-date": "10/2016",
+    "x-orig-status-class": "closed",
+    "x-table-summary-md": "Function Parameter and Return Value Assignments"
+}

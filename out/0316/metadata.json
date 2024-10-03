@@ -1,0 +1,29 @@
+{
+    "author-md": "Joseph Myers \\<joseph@codesourcery.com\\>",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2006-03-05",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_316.htm"
+    ],
+    "crossref": [
+        "0255"
+    ],
+    "date": "2005-03-04",
+    "reference-doc-md": "[ISO/IEC WG14 N1104](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1104.htm)",
+    "status": "closed",
+    "submitted-against": "c99",
+    "submitter-md": "UK C Panel",
+    "summary-md": "Unprototyped function types",
+    "x-dr-version": "1.2",
+    "x-dr-version-date": "2006-03-05",
+    "x-index-summary-md": "Q1: Unprototyped function types",
+    "x-orig-status-class": "closed",
+    "x-status-date": "2005-09-28",
+    "x-summary-author-md": "Myers (UK)"
+}

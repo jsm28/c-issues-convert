@@ -1,0 +1,23 @@
+{
+    "author-md": "Paul Eggert",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_007.html"
+    ],
+    "crossref": [],
+    "date": "1992-12-10",
+    "reference-doc-md": "X3J11/90-043",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "Are declarations of the form `struct` *`tag`* permitted after *`tag`* has already been declared?",
+    "x-orig-summary-md": "Are declarations of the form `struct` *`tag`* permitted after *`tag`* has already been declared?",
+    "x-summary-author-md": "Paul Eggert"
+}

@@ -1,0 +1,31 @@
+{
+    "author-md": "Austin Group",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2007-09-06",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_333.htm"
+    ],
+    "crossref": [
+        "0321"
+    ],
+    "date": "2006-10-24",
+    "fixed-in": [
+        "c99tc3"
+    ],
+    "reference-doc-md": "[DR\\_321](issue:0321),",
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "Nick Stoughton (US)",
+    "summary-md": "Missing Predefined Macro Name",
+    "x-dr-version": "1.4",
+    "x-dr-version-date": "2007-09-06",
+    "x-index-summary-md": "Q1: Missing Predefined Macro Name",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "Stoughton (US)"
+}

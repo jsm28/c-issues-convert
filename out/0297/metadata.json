@@ -1,0 +1,29 @@
+{
+    "author-md": "WG 14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2004-09-28",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_297.htm"
+    ],
+    "crossref": [],
+    "date": "2003-11-29",
+    "fixed-in": [
+        "c99tc3"
+    ],
+    "reference-doc-md": "[N1045](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1045.htm)",
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "Fred Tydeman (USA)",
+    "summary-md": "May `FE_*` floating-point exception flags have bits in common?",
+    "x-dr-version": "1.1",
+    "x-dr-version-date": "2004-09-28",
+    "x-index-summary-md": "Q1: May `FE_*` floating-point exception flags have bits in common?",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "INCITS (US)"
+}

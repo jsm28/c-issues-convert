@@ -1,0 +1,23 @@
+{
+    "author-md": "Kuo-Wei Lee",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_038.html"
+    ],
+    "crossref": [],
+    "date": "1992-12-10",
+    "reference-doc-md": "X3J11/91-046",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "What happens when macro replacement creates adjacent tokens that can be taken as a single token?",
+    "x-orig-summary-md": "What happens when macro replacement creates adjacent tokens that can be taken as a single token?",
+    "x-summary-author-md": "Kuo-Wei Lee"
+}

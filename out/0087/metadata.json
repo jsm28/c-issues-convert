@@ -1,0 +1,24 @@
+{
+    "author-md": "Clive Feather",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_087.html"
+    ],
+    "crossref": [
+        "0287"
+    ],
+    "date": "1993-12-03",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "Is the order of evaluation when there are no sequence points well defined?",
+    "x-orig-summary-md": "Is the order of evaluation when there are no sequence points well defined?",
+    "x-summary-author-md": "Clive Feather"
+}

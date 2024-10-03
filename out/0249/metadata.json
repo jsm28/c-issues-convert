@@ -1,0 +1,28 @@
+{
+    "author-md": "Clive D.W. Feather \\<clive@demon.net\\>",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2002-03-06",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_249.htm"
+    ],
+    "crossref": [],
+    "date": "2001-09-07",
+    "fixed-in": [
+        "c99tc2"
+    ],
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "UK C Panel",
+    "summary-md": "Lacuna applying C89:TC1 to C99",
+    "x-dr-version": "1.0",
+    "x-dr-version-date": "2002-03-06",
+    "x-index-summary-md": "Q1: Lacuna applying C89:TC1 to C99.",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "UK C Panel"
+}

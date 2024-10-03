@@ -1,0 +1,26 @@
+{
+    "author-md": "Austin Group",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2007-10-30",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_337.htm"
+    ],
+    "crossref": [],
+    "date": "2007-02-28",
+    "status": "closed",
+    "submitted-against": "c99",
+    "submitter-md": "Nick Stoughton (US)",
+    "summary-md": "`stdio.h` macro definition problems",
+    "x-dr-version": "1.4",
+    "x-dr-version-date": "2007-10-30",
+    "x-index-summary-md": "Q1: `stdio.h` macro definition problems.",
+    "x-orig-status-class": "closed",
+    "x-status-date": "2007-10-10",
+    "x-summary-author-md": "Stoughton (US)"
+}

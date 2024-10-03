@@ -1,0 +1,26 @@
+{
+    "author-md": "WG 14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2006-03-05",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_301.htm"
+    ],
+    "crossref": [],
+    "date": "2004-08-27",
+    "status": "closed",
+    "submitted-against": "c99",
+    "submitter-md": "Fred Tydeman (USA)",
+    "summary-md": "Meaning of FE\\_\\* macros in \\<fenv.h\\>",
+    "x-dr-version": "1.1",
+    "x-dr-version-date": "2006-03-05",
+    "x-index-summary-md": "Q1: Meaning of `FE_*` macros in \\<fenv.h\\>",
+    "x-orig-status-class": "closed",
+    "x-status-date": "2005-09-28",
+    "x-summary-author-md": "Fred Tydeman (US)"
+}

@@ -1,0 +1,31 @@
+{
+    "author-md": "J11",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2002-05-15",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_279.htm"
+    ],
+    "crossref": [
+        "0321"
+    ],
+    "date": "2001-10-18",
+    "fixed-in": [
+        "c99tc2"
+    ],
+    "reference-doc-md": "[ISO/IEC WG14 N956](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n956.htm)",
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "Raymond Mak (US)",
+    "summary-md": "Wide character code values for members of the basic character set",
+    "x-dr-version": "1.2",
+    "x-dr-version-date": "2002-05-15",
+    "x-index-summary-md": "Q1: Wide character code values for members of the basic character set.",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "Mak (US)"
+}

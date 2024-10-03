@@ -1,0 +1,28 @@
+{
+    "author-md": "WG14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2018-10-18",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "n2397.htm"
+    ],
+    "crossref": [],
+    "date": "2018-02-22",
+    "fixed-in": [
+        "c23",
+        "cfp4-c23"
+    ],
+    "reference-doc-md": "[N2204](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2204.pdf)",
+    "status": "fixed",
+    "submitted-against": "cfp-c11",
+    "submitter-md": "C Floating Point Group",
+    "summary-md": "P4: missing specification of preferred quantum exponents",
+    "x-dr-summary-md": "P4: missing specification of preferred quantum exponents",
+    "x-dr-version-date": "10/2018",
+    "x-orig-status-class": "closed",
+    "x-table-summary-md": "P4: missing specification of preferred quantum exponents"
+}

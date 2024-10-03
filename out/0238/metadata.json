@@ -1,0 +1,29 @@
+{
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2003-10-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_238.htm"
+    ],
+    "crossref": [],
+    "date": "2001-02-25",
+    "fixed-in": [
+        "c99tc2"
+    ],
+    "reference-doc-md": "[ISO/IEC WG14 N943](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n943.txt)",
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "Fred Tydeman (US)",
+    "summary-md": "Decriptions of `fma()` overflow and underflow errors are missing",
+    "x-dr-version": "1.2",
+    "x-dr-version-date": "2003-10-23 09:40:00",
+    "x-index-summary-md": "Q1: `fma()` overflow and underflow errors descriptions are missing.",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "Tydeman (US)",
+    "x-summary-date": "2001-04-25"
+}

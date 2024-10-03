@@ -1,0 +1,29 @@
+{
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2000-11-02",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_213.htm"
+    ],
+    "crossref": [],
+    "date": "1999-10-20",
+    "fixed-in": [
+        "c99tc1"
+    ],
+    "reference-doc-md": "[ISO/IEC WG14 N900](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n900.htm)",
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "Clive Feather",
+    "summary-md": "Lacuna in `mbrtowc`",
+    "x-dr-version": "1.2",
+    "x-dr-version-date": "2000-11-02 13:50:06",
+    "x-index-summary-md": "Q1: Lacuna in `mbrtowc`.",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "Feather (UK)",
+    "x-summary-date": "1999-10-21"
+}

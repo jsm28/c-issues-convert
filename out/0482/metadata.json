@@ -1,0 +1,24 @@
+{
+    "author-md": "WG14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2017-04-07",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "n2396.htm"
+    ],
+    "crossref": [],
+    "date": "2015-06-23",
+    "reference-doc-md": "[N1942](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1942.htm)",
+    "status": "closed",
+    "submitted-against": "c11c17",
+    "submitter-md": "Fred J. Tydeman",
+    "summary-md": "Macro invocation split over many files",
+    "x-dr-summary-md": "Macro invocation split over many files",
+    "x-dr-version-date": "04/2017",
+    "x-orig-status-class": "closed",
+    "x-table-summary-md": "Macro invocation split over many files"
+}

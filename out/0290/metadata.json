@@ -1,0 +1,28 @@
+{
+    "author-md": "WG 14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2003-03-06",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_290.htm"
+    ],
+    "crossref": [],
+    "date": "2003-08-29",
+    "fixed-in": [
+        "c99tc3"
+    ],
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "Fred Tydeman (USA)",
+    "summary-md": "`FLT_EVAL_METHOD` and extra precision and/or range",
+    "x-dr-version": "1.2",
+    "x-dr-version-date": "2003-03-06",
+    "x-index-summary-md": "Q1: `FLT_EVAL_METHOD` and extra precision and/or",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "Tydeman (US)"
+}

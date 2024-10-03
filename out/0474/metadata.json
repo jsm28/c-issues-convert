@@ -1,0 +1,26 @@
+{
+    "author-md": "WG14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2016-04-14",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "n2396.htm"
+    ],
+    "crossref": [
+        "0431"
+    ],
+    "date": "2014-11-11",
+    "reference-doc-md": "[N1909](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1909.htm)",
+    "status": "closed",
+    "submitted-against": "c11c17",
+    "submitter-md": "Blaine Garst",
+    "summary-md": "NOTE 1 Clarification for `atomic_compare_exchange`",
+    "x-dr-summary-md": "NOTE 1 Clarification for `atomic_compare_exchange`",
+    "x-dr-version-date": "04/2016",
+    "x-orig-status-class": "closed",
+    "x-table-summary-md": "NOTE 1 Clarification for `atomic_compare_exchange`"
+}

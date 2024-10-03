@@ -1,0 +1,28 @@
+{
+    "author-md": "Douglas A. Gwyn \\<gwyn@arl.army.mil\\>",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2007-09-06",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_332.htm"
+    ],
+    "crossref": [],
+    "date": "2006-10-17",
+    "fixed-in": [
+        "c99tc3"
+    ],
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "Gwyn (US)",
+    "summary-md": "`gets` is generally unsafe",
+    "x-dr-version": "1.1",
+    "x-dr-version-date": "2007-09-06",
+    "x-index-summary-md": "Q1: `gets` is generally unsafe.",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "Gwyn (US)"
+}

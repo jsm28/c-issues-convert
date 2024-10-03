@@ -1,0 +1,29 @@
+{
+    "author-md": "WG21",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2007-07-21",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_344.htm"
+    ],
+    "crossref": [],
+    "date": "2007-04-23",
+    "fixed-in": [
+        "c11"
+    ],
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "Clark Nelson",
+    "summary-md": "Casts in preprocessor conditional expressions",
+    "x-dr-version": "1.2",
+    "x-dr-version-date": "2007-07-21",
+    "x-index-summary-md": "Q1: Casts in preprocessor conditional expressions",
+    "x-orig-status-class": "closed",
+    "x-status-date": "2008-04-16",
+    "x-summary-author-md": "Nelson (US)"
+}

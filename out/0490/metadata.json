@@ -1,0 +1,24 @@
+{
+    "author-md": "WG14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2017-04-07",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "n2396.htm"
+    ],
+    "crossref": [],
+    "date": "2016-01-18",
+    "reference-doc-md": "[N1995](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1995.htm)",
+    "status": "closed",
+    "submitted-against": "c11c17",
+    "submitter-md": "Fred J. Tydeman",
+    "summary-md": "Unwritten Assumptions About if-then",
+    "x-dr-summary-md": "Unwritten Assumptions About if-then",
+    "x-dr-version-date": "04/2017",
+    "x-orig-status-class": "closed",
+    "x-table-summary-md": "Unwritten Assumptions About if-then"
+}

@@ -1,0 +1,27 @@
+{
+    "author-md": "J11",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2004-03-05",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_284.htm"
+    ],
+    "crossref": [],
+    "date": "2003-02-11",
+    "reference-doc-md": "[ISO/IEC WG14 N995](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n995.htm)",
+    "status": "closed",
+    "submitted-against": "c99",
+    "submitter-md": "Douglas Walls (US)",
+    "summary-md": "Does \\<math.h\\> define `INT_MIN` and `INT_MAX`?",
+    "x-dr-version": "1.2",
+    "x-dr-version-date": "2004-03-05",
+    "x-index-summary-md": "Q1: Does \\<math.h\\> define `INT_MIN` and `INT_MAX`?",
+    "x-orig-status-class": "closed",
+    "x-status-date": "2004-03-31",
+    "x-summary-author-md": "Walls (US)"
+}

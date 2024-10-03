@@ -1,0 +1,22 @@
+{
+    "author-md": "Ed Bendickson",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_061.html"
+    ],
+    "crossref": [],
+    "date": "1993-08-19",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "X3 Secretariat (USA)",
+    "summary-md": "Interpretation of white space in the format string of a scan statement",
+    "x-orig-summary-md": "Interpretation of white space in the format string of a scan statement.",
+    "x-summary-author-md": "Ed Bendickson"
+}

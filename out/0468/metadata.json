@@ -1,0 +1,27 @@
+{
+    "author-md": "WG14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2017-11-03",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "n2396.htm"
+    ],
+    "crossref": [],
+    "date": "2014-09-19",
+    "fixed-in": [
+        "c17"
+    ],
+    "reference-doc-md": "[N1872](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1872.htm)",
+    "status": "fixed",
+    "submitted-against": "c11c17",
+    "submitter-md": "Martin Sebor",
+    "summary-md": "`strncpy_s` clobbers buffer past `null`",
+    "x-dr-summary-md": "`strncpy_s` clobbers buffer past `null`",
+    "x-dr-version-date": "10/2017",
+    "x-orig-status-class": "c17",
+    "x-table-summary-md": "`strncpy_s` clobbers buffer past `null`"
+}

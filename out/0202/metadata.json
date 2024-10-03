@@ -1,0 +1,29 @@
+{
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2001-01-22",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_202.htm"
+    ],
+    "crossref": [],
+    "date": "1999-07-06",
+    "fixed-in": [
+        "c99tc1"
+    ],
+    "reference-doc-md": "[ISO/IEC WG14 N883](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n883.htm)",
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "Clive Feather (UK)",
+    "summary-md": "Change return type of certain `<fenv.h>` functions",
+    "x-dr-version": "1.4",
+    "x-dr-version-date": "2001-01-22 03:06:02",
+    "x-index-summary-md": "Q1: Change return type of certain `<fenv.h>` functions.",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "Feather (UK)",
+    "x-summary-date": "1999-06-22"
+}

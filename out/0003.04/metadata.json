@@ -1,0 +1,23 @@
+{
+    "author-md": "Terence David Carroll",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_003.html"
+    ],
+    "crossref": [],
+    "date": "1992-12-10",
+    "reference-doc-md": "X3J11/90-011",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "Should preprocessing directives be permitted within macro invokations?",
+    "x-orig-summary-md": "Should preprocessing directives be permitted within macro invokations?",
+    "x-summary-author-md": "Terence David Carroll"
+}

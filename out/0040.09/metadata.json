@@ -1,0 +1,25 @@
+{
+    "author-md": "Derek M. Jones",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_040.html"
+    ],
+    "crossref": [
+        "0017.27"
+    ],
+    "date": "1992-12-10",
+    "reference-doc-md": "X3J11/91-062",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "Should the response to [Defect Report #017, Q27](issue:0017.27) be reconsidered?",
+    "x-orig-summary-md": "Should the response to [Defect Report #017, Q27](issue:0017.27) be reconsidered?",
+    "x-summary-author-md": "Derek M. Jones"
+}

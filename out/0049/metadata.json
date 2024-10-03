@@ -1,0 +1,22 @@
+{
+    "author-md": "David Metsky",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_049.html"
+    ],
+    "crossref": [],
+    "date": "1993-01-10",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "Project Editor (P.J. Plauger)",
+    "summary-md": "Can `strxfrm` produce a longer translation string?",
+    "x-orig-summary-md": "Can `strxfrm` produce a longer translation string?",
+    "x-summary-author-md": "David Metsky"
+}

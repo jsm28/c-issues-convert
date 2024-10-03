@@ -1,0 +1,29 @@
+{
+    "author-md": "Joseph Myers \\<joseph@codesourcery.com\\>",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2006-04-04",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_312.htm"
+    ],
+    "crossref": [],
+    "date": "2005-03-04",
+    "fixed-in": [
+        "c99tc3"
+    ],
+    "reference-doc-md": "[ISO/IEC WG14 N1100](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1100.htm)",
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "UK C Panel",
+    "summary-md": "Meaning of \"known constant size\"",
+    "x-dr-version": "1.2",
+    "x-dr-version-date": "2006-04-04",
+    "x-index-summary-md": "Q1: Meaning of \"known constant size\"",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "Myers (UK)"
+}

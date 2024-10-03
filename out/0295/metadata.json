@@ -1,0 +1,28 @@
+{
+    "author-md": "Neil Booth",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2004-09-28",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_295.htm"
+    ],
+    "crossref": [],
+    "date": "2004-03-19",
+    "fixed-in": [
+        "c99tc3"
+    ],
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "Project Editor (Larry Jones)",
+    "summary-md": "Incomplete types for function parameters",
+    "x-dr-version": "1.1",
+    "x-dr-version-date": "2004-09-28",
+    "x-index-summary-md": "Q1: Is a function parameter permitted to have an incomplete type?",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "INCITS (US)"
+}

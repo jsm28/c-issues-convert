@@ -1,0 +1,26 @@
+{
+    "author-md": "Clive D.W. Feather \\<clive@demon.net\\>",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2003-10-06",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_261.htm"
+    ],
+    "crossref": [],
+    "date": "2001-09-07",
+    "status": "closed",
+    "submitted-against": "c99",
+    "submitter-md": "UK C Panel",
+    "summary-md": "constant expressions",
+    "x-dr-version": "1.2",
+    "x-dr-version-date": "2003-10-06",
+    "x-index-summary-md": "Q1: Constant expressions.",
+    "x-orig-status-class": "closed",
+    "x-status-date": "2004-03-31",
+    "x-summary-author-md": "UK C Panel"
+}

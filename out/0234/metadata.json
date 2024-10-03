@@ -1,0 +1,28 @@
+{
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2001-01-22",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_234.htm"
+    ],
+    "crossref": [],
+    "date": "2000-09-26",
+    "fixed-in": [
+        "c99tc1"
+    ],
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "WG14 Convener (John Benito)",
+    "summary-md": "Miscellaneous Typos",
+    "x-dr-version": "1.5",
+    "x-dr-version-date": "2001-01-22 03:22:43",
+    "x-index-summary-md": "Q1: \"arguments\" used instead of \"parameters\" in 6.10.3, Macro Replacement.  \n Q2: `VA_COPY` used instead of `va_copy` in Forward.  \n Q3: `int_currency_symbol` used instead of `int_curr_symbol` in 7.11.2.1 The `localeconv` function.  \n Q4: `vscanf` used instead of `vsscanf` in 7.19.6.14, The `vsscanf` function.  \n Q5: `vsnprintf` function synopsis is missing the `n`.  \n Q6: Reference typo in 7.4.1.12, paragraph #2.",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "WG14 convener (US)",
+    "x-summary-date": "2000-09-26"
+}

@@ -1,0 +1,22 @@
+{
+    "author-md": "Doug McIlroy",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_141.html"
+    ],
+    "crossref": [],
+    "date": "1994-09-10",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "Project Editor (P.J. Plauger)",
+    "summary-md": "What does `EOF` mean in `<stdio.h>`?",
+    "x-orig-summary-md": "What does `EOF` mean in `<stdio.h>`?",
+    "x-summary-author-md": "Doug McIlroy"
+}

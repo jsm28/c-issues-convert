@@ -1,0 +1,27 @@
+{
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2001-09-18",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_206.htm"
+    ],
+    "crossref": [],
+    "date": "1999-09-13",
+    "reference-doc-md": "[ISO/IEC WG14 N892](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n892.htm)",
+    "status": "closed",
+    "submitted-against": "c99",
+    "submitter-md": "Clive Feather (UK)",
+    "summary-md": "Default argument conversion of `float _Complex`",
+    "x-dr-version": "1.4",
+    "x-dr-version-date": "2001-09-18 14:47:00",
+    "x-index-summary-md": "Q1: Default argument conversion of `float _Complex`.",
+    "x-orig-status-class": "closed",
+    "x-status-date": "2001-09-25",
+    "x-summary-author-md": "Feather (UK)",
+    "x-summary-date": "1999-09-13"
+}

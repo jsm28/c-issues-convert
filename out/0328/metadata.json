@@ -1,0 +1,31 @@
+{
+    "author-md": "\\<whyglinux@gmail.com\\>",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2007-10-10",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_328.htm"
+    ],
+    "crossref": [
+        "0339"
+    ],
+    "date": "2006-06-03",
+    "fixed-in": [
+        "c11"
+    ],
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "Project Editor (Larry Jones)",
+    "summary-md": "String literals in compound literal initialization",
+    "x-dr-version": "1.2",
+    "x-dr-version-date": "2007-10-10",
+    "x-index-summary-md": "Q1: String literals in compound literal initialization.",
+    "x-orig-status-class": "closed",
+    "x-status-date": "2007-10-10",
+    "x-summary-author-md": "Jones (Project Editor)"
+}

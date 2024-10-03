@@ -1,0 +1,21 @@
+{
+    "author-md": "Clive D.W. Feather",
+    "comments": [],
+    "conversion-src": [
+        "dr.htm",
+        "dr_165.html"
+    ],
+    "crossref": [
+        "0013.05"
+    ],
+    "date": "1995-10-16",
+    "fixed-in": [
+        "c99"
+    ],
+    "status": "fixed",
+    "submitted-against": "c90",
+    "submitter-md": "BSI",
+    "summary-md": "Is the wording of subclause 6.5.2.3 concerning tags defective?",
+    "x-orig-summary-md": "Is the wording of subclause 6.5.2.3 concerning tags defective?",
+    "x-summary-author-md": "Clive Feather"
+}

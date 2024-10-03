@@ -1,0 +1,34 @@
+{
+    "author-md": "Chris Torek",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2007-09-07",
+            "filename": "1.md"
+        },
+        {
+            "author-md": "WG14",
+            "date": "2007-09-07",
+            "filename": "2.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_233.htm"
+    ],
+    "crossref": [],
+    "date": "2000-04-24",
+    "fixed-in": [
+        "c99tc2"
+    ],
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "Project Editor (Larry Jones)",
+    "summary-md": "`%g`, `%G` precision specification",
+    "x-dr-version": "1.5",
+    "x-dr-version-date": "2007-09-07",
+    "x-index-summary-md": "Q1: `%g`, `%G` precision specification.",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "Jones (US)",
+    "x-summary-date": "2000-04-14"
+}

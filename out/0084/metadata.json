@@ -1,0 +1,24 @@
+{
+    "author-md": "Clive Feather",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_084.html"
+    ],
+    "crossref": [
+        "0104"
+    ],
+    "date": "1993-12-03",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "When is an incomplete type in function declaration a parameter?",
+    "x-orig-summary-md": "When is an incomplete type in function declaration a parameter?",
+    "x-summary-author-md": "Clive Feather"
+}

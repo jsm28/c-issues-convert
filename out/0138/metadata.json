@@ -1,0 +1,25 @@
+{
+    "author-md": "John Max Skaller",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_138.html"
+    ],
+    "crossref": [],
+    "date": "1994-06-02",
+    "fixed-in": [
+        "c90tc2"
+    ],
+    "status": "fixed",
+    "submitted-against": "c90",
+    "submitter-md": "Project Editor (P.J. Plauger)",
+    "summary-md": "What are the storage durations?",
+    "x-orig-summary-md": "What are the storage durations?",
+    "x-summary-author-md": "John Max Skaller"
+}

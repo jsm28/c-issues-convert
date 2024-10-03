@@ -1,0 +1,22 @@
+{
+    "author-md": "Paul Edwards",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_052.html"
+    ],
+    "crossref": [],
+    "date": "1993-03-21",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "Project Editor (P.J. Plauger)",
+    "summary-md": "Does the C Standard come with a Rationale, as indicated in Footnote 1?",
+    "x-orig-summary-md": "Does the C Standard come with a Rationale, as indicated in Footnote 1?",
+    "x-summary-author-md": "Paul Edwards"
+}

@@ -1,0 +1,23 @@
+{
+    "author-md": "Pawel Molenda",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_030.html"
+    ],
+    "crossref": [],
+    "date": "1992-12-10",
+    "reference-doc-md": "X3J11/91-017",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "May `sin(DBL_MAX)` set `errno` to `EDOM`?",
+    "x-orig-summary-md": "May `sin(DBL_MAX)` set `errno` to `EDOM`?",
+    "x-summary-author-md": "Pawel Molenda"
+}

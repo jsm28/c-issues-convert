@@ -1,0 +1,33 @@
+{
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2001-09-18",
+            "filename": "1.md"
+        },
+        {
+            "author-md": "WG14",
+            "date": "2001-09-18",
+            "filename": "2.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_222.htm"
+    ],
+    "crossref": [],
+    "date": "2000-04-04",
+    "fixed-in": [
+        "c99tc2"
+    ],
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "Clive Feather (UK)",
+    "summary-md": "Partially initialized structures",
+    "x-dr-version": "1.4",
+    "x-dr-version-date": "2001-09-18 16:03:01",
+    "x-index-summary-md": "Q1: Partially initialized structures.",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "Feather (UK)",
+    "x-summary-date": "2000-04-04"
+}

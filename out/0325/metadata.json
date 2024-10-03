@@ -1,0 +1,26 @@
+{
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2006-10-25",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_325.htm"
+    ],
+    "crossref": [],
+    "date": "2006-03-20",
+    "reference-doc-md": "[XSH Aardvark, ERN 137](http://www.opengroup.org/austin/aardvark/latest/xshbug2.txt)",
+    "status": "closed",
+    "submitted-against": "c99",
+    "submitter-md": "Stoughton (US)",
+    "summary-md": "`strerror()`",
+    "x-dr-version": "1.4",
+    "x-dr-version-date": "2006-10-25",
+    "x-index-summary-md": "Q1: Is an implementation permitted to return an empty string for `strerror()`?",
+    "x-orig-status-class": "closed",
+    "x-status-date": "2007-04-25",
+    "x-summary-author-md": "Stoughton (US)"
+}

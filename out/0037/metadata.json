@@ -1,0 +1,23 @@
+{
+    "author-md": "Isai Scheinberg",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_037.html"
+    ],
+    "crossref": [],
+    "date": "1992-12-10",
+    "reference-doc-md": "X3J11/91-043",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "Can UNICODE or ISO 10646 be used as a multibyte code?",
+    "x-orig-summary-md": "Can UNICODE or ISO 10646 be used as a multibyte code?",
+    "x-summary-author-md": "Isai Scheinberg"
+}

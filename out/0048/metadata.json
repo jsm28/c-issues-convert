@@ -1,0 +1,23 @@
+{
+    "author-md": "David F. Prosser",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_048.html"
+    ],
+    "crossref": [],
+    "date": "1992-12-10",
+    "reference-doc-md": "X3J11/92-043",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "Is `abort` compatible with POSIX?",
+    "x-orig-summary-md": "Is `abort` compatible with POSIX?",
+    "x-summary-author-md": "David F. Prosser"
+}

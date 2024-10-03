@@ -1,0 +1,21 @@
+{
+    "author-md": "Clive D.W. Feather",
+    "comments": [],
+    "conversion-src": [
+        "dr.htm",
+        "dr_168.html"
+    ],
+    "crossref": [
+        "0053"
+    ],
+    "date": "1995-10-16",
+    "fixed-in": [
+        "c99"
+    ],
+    "status": "fixed",
+    "submitted-against": "c90",
+    "submitter-md": "BSI",
+    "summary-md": "The change to subclause 6.3 made by TC1, [Defect Report #053, Question 1](issue:0053), should also be applied in Annex .2 (page 200\\)",
+    "x-orig-summary-md": "The change to subclause 6.3 made by TC1, [Defect Report #053, Question 1](issue:0053), should also be applied in Annex .2 (page 200).",
+    "x-summary-author-md": "Clive Feather"
+}

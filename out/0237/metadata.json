@@ -1,0 +1,26 @@
+{
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2003-10-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_237.htm"
+    ],
+    "crossref": [],
+    "date": "2001-04-25",
+    "status": "closed",
+    "submitted-against": "c99",
+    "submitter-md": "WG14 Convener (J. Benito)",
+    "summary-md": "Declarations using `[static]`",
+    "x-dr-version": "1.2",
+    "x-dr-version-date": "2003-10-23 00:12:00",
+    "x-index-summary-md": "Q1: Declarations using `[static]`.",
+    "x-orig-status-class": "closed",
+    "x-status-date": "2002-10-18",
+    "x-summary-author-md": "Benito (US)",
+    "x-summary-date": "2001-04-25"
+}

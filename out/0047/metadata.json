@@ -1,0 +1,26 @@
+{
+    "author-md": "Randall Meyers",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_047.html"
+    ],
+    "crossref": [
+        "0017.07",
+        "0110"
+    ],
+    "date": "1992-12-10",
+    "reference-doc-md": "X3J11/92-040",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "Can an array parameter have elements of incomplete type?",
+    "x-orig-summary-md": "Can an array parameter have elements of incomplete type?",
+    "x-summary-author-md": "Randall Meyers"
+}

@@ -1,0 +1,23 @@
+{
+    "author-md": "Robert Paul Corbett",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_043.html"
+    ],
+    "crossref": [],
+    "date": "1992-12-10",
+    "reference-doc-md": "X3J11/92-004",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "Can an identifier that starts with an underscore be defined as a macro in a source file that includes at least one standard header?",
+    "x-orig-summary-md": "Can an identifier that starts with an underscore be defined as a macro in a source file that includes at least one standard header?",
+    "x-summary-author-md": "Robert Paul Corbett"
+}

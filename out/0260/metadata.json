@@ -1,0 +1,28 @@
+{
+    "author-md": "Clive D.W. Feather \\<clive@demon.net\\>",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2004-09-28",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_260.htm"
+    ],
+    "crossref": [
+        "0451"
+    ],
+    "date": "2001-09-07",
+    "status": "closed",
+    "submitted-against": "c99",
+    "submitter-md": "UK C Panel",
+    "summary-md": "indeterminate values and identical representations",
+    "x-dr-version": "1.1",
+    "x-dr-version-date": "2004-09-28",
+    "x-index-summary-md": "Q1: Indeterminate values and identical representations.",
+    "x-orig-status-class": "closed",
+    "x-status-date": "2004-10-28",
+    "x-summary-author-md": "UK C Panel"
+}

@@ -1,0 +1,23 @@
+{
+    "author-md": "Tom MacDonald",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_042.html"
+    ],
+    "crossref": [],
+    "date": "1992-12-10",
+    "reference-doc-md": "X3J11/92-001",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "How big is a string object defined by the `str*` functions?",
+    "x-orig-summary-md": "How big is a string object defined by the `str*` functions?",
+    "x-summary-author-md": "Tom MacDonald"
+}

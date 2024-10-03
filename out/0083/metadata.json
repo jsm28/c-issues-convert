@@ -1,0 +1,25 @@
+{
+    "author-md": "Clive Feather",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_083.html"
+    ],
+    "crossref": [],
+    "date": "1993-12-03",
+    "fixed-in": [
+        "c90tc2"
+    ],
+    "status": "fixed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "A use of library functions question",
+    "x-orig-summary-md": "A use of library functions question.",
+    "x-summary-author-md": "Clive Feather"
+}

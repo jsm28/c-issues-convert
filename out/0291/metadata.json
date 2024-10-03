@@ -1,0 +1,29 @@
+{
+    "author-md": "WG 14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2004-09-28",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_291.htm"
+    ],
+    "crossref": [],
+    "date": "2003-08-29",
+    "fixed-in": [
+        "c99tc3"
+    ],
+    "reference-doc-md": "[ISO/IEC WG14 N1024](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1024.txt)",
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "P.J. Plauger",
+    "summary-md": "corrections to requirements on inexact floating-point exceptions",
+    "x-dr-version": "1.2",
+    "x-dr-version-date": "2004-09-28",
+    "x-index-summary-md": "Q1: corrections to requirements on inexact",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "P. J. Plauger (US)"
+}

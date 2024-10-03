@@ -1,0 +1,23 @@
+{
+    "author-md": "Derek M. Jones",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_035.html"
+    ],
+    "crossref": [],
+    "date": "1992-12-10",
+    "reference-doc-md": "X3J11/91-039",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "Can one declare an enumeration or struct tag as part of an old-style parameter declaration?",
+    "x-orig-summary-md": "Can one declare an enumeration or struct tag as part of an old-style parameter declaration?",
+    "x-summary-author-md": "Derek M. Jones"
+}

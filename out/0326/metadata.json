@@ -1,0 +1,32 @@
+{
+    "author-md": "The Austin Group",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2007-09-06",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_326.htm"
+    ],
+    "crossref": [
+        "0217"
+    ],
+    "date": "2006-03-28",
+    "fixed-in": [
+        "c11"
+    ],
+    "reference-doc-md": "[AI-053.txt](http://www.opengroup.org/austin/interps/protected/uploads/20/9920/AI-053.txt), [DR 217](issue:0217)",
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "Stoughton (US)",
+    "summary-md": "`asctime()`",
+    "x-dr-version": "1.3",
+    "x-dr-version-date": "2007-09-06",
+    "x-index-summary-md": "Q1: `asctime() tm_year gt 9999`",
+    "x-orig-status-class": "closed",
+    "x-status-date": "2007-04-25",
+    "x-summary-author-md": "Stoughton (US)"
+}

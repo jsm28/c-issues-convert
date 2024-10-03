@@ -1,0 +1,29 @@
+{
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2001-10-16",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_241.htm"
+    ],
+    "crossref": [],
+    "date": "2001-02-25",
+    "fixed-in": [
+        "c99tc2"
+    ],
+    "reference-doc-md": "[ISO/IEC WG14 N943](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n943.txt)",
+    "status": "fixed",
+    "submitted-against": "c99",
+    "submitter-md": "Fred Tydeman (US)",
+    "summary-md": "Make the base standard and Annex F consistent for `pow(0, <0)`",
+    "x-dr-version": "1.1",
+    "x-dr-version-date": "2001-10-16 09:56:00",
+    "x-index-summary-md": "Q1: 7.12.7.4 `pow` is not consistent with description in Annex F.",
+    "x-orig-status-class": "published",
+    "x-summary-author-md": "Tydeman (US)",
+    "x-summary-date": "2001-04-25"
+}

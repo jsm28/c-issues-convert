@@ -1,0 +1,22 @@
+{
+    "author-md": "Clive D.W. Feather",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_161.html"
+    ],
+    "crossref": [],
+    "date": "1995-10-16",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "BSI",
+    "summary-md": "Is the wording of subclause 7.13 unclear?",
+    "x-orig-summary-md": "Is the wording of subclause 7.13 unclear?",
+    "x-summary-author-md": "Clive Feather"
+}

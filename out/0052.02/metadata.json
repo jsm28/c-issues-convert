@@ -1,0 +1,25 @@
+{
+    "author-md": "Paul Edwards",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_052.html"
+    ],
+    "crossref": [],
+    "date": "1993-03-21",
+    "fixed-in": [
+        "c90tc1"
+    ],
+    "status": "fixed",
+    "submitted-against": "c90",
+    "submitter-md": "Project Editor (P.J. Plauger)",
+    "summary-md": "Is the index entry for static correct?",
+    "x-orig-summary-md": "Is the index entry for static correct?",
+    "x-summary-author-md": "Paul Edwards"
+}

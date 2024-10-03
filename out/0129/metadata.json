@@ -1,0 +1,22 @@
+{
+    "author-md": "Ron Guilmette",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_129.html"
+    ],
+    "crossref": [],
+    "date": "1993-12-03",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "WG14",
+    "summary-md": "When is name spaces of tags are shared?",
+    "x-orig-summary-md": "When is name spaces of tags are shared?",
+    "x-summary-author-md": "Ron Gulmette"
+}

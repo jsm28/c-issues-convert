@@ -1,0 +1,30 @@
+{
+    "author-md": "WG14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2017-11-03",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "n2396.htm"
+    ],
+    "crossref": [
+        "0469",
+        "0493"
+    ],
+    "date": "2012-03-20",
+    "fixed-in": [
+        "c17"
+    ],
+    "reference-doc-md": "[N1614](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1614.htm)",
+    "status": "fixed",
+    "submitted-against": "c11c17",
+    "submitter-md": "Tom Plum",
+    "summary-md": "Typos in 6.27 Threads `<threads.h>`",
+    "x-dr-summary-md": "Typos in 6.27 Threads `<threads.h>`",
+    "x-dr-version-date": "10/2017",
+    "x-orig-status-class": "c17",
+    "x-table-summary-md": "typos in 6.27 `threads.h`"
+}

@@ -1,0 +1,24 @@
+{
+    "author-md": "WG14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2017-11-03",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "n2396.htm"
+    ],
+    "crossref": [],
+    "date": "2016-09-13",
+    "reference-doc-md": "[N2082](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2082.htm)",
+    "status": "closed",
+    "submitted-against": "c11c17",
+    "submitter-md": "Clark Nelson",
+    "summary-md": "Hexadecimal floating-point and `strtod`",
+    "x-dr-summary-md": "Hexadecimal floating-point and `strtod`",
+    "x-dr-version-date": "10/2017",
+    "x-orig-status-class": "closed",
+    "x-table-summary-md": "Hexadecimal floating-point and `strtod`"
+}

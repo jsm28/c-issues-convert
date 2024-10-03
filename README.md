@@ -8,6 +8,10 @@ into JSON + Markdown for use in a new issue tracker.
 version of
 python-markdownify](https://github.com/jsm28/python-markdownify/tree/c-issues-convert).
 
+`out/` - a copy of the output data from the script, committed for user
+convenience in viewing that data (and in comparing the result of
+changes to the conversion process).
+
 The layout and JSON schema of the output are subject to change to
 match whatever ends up being used by the new issue tracker, and may
 not currently have any resemblance to what is used there.  The JSON

@@ -1,0 +1,30 @@
+{
+    "author-md": "WG14",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2017-11-03",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "n2396.htm"
+    ],
+    "crossref": [
+        "0423",
+        "0474"
+    ],
+    "date": "2013-02-21",
+    "fixed-in": [
+        "c17"
+    ],
+    "reference-doc-md": "[N1675](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1675.htm)",
+    "status": "fixed",
+    "submitted-against": "c11c17",
+    "submitter-md": "Douglas Walls",
+    "summary-md": "`atomic_compare_exchange`: What does it mean to say two structs compare equal?",
+    "x-dr-summary-md": "atomic\\_compare\\_exchange: What does it mean to say two structs compare equal?",
+    "x-dr-version-date": "10/2017",
+    "x-orig-status-class": "c17",
+    "x-table-summary-md": "`atomic_compare_exchange`: What does it mean to say two structs compare equal?"
+}

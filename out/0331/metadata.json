@@ -1,0 +1,27 @@
+{
+    "author-md": "P. J. Plauger",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "2007-10-10",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "summary-c99.htm",
+        "dr_331.htm"
+    ],
+    "crossref": [],
+    "date": "2006-08-01",
+    "reference-doc-md": "[N1184](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1184.htm)",
+    "status": "closed",
+    "submitted-against": "c99",
+    "submitter-md": "J11",
+    "summary-md": "permit `FE_DIVBYZERO` when `errno` says `EDOM`",
+    "x-dr-version": "1.3",
+    "x-dr-version-date": "2007-10-10",
+    "x-index-summary-md": "Q1: permit `FE_DIVBYZERO` when `errno` says `EDOM`",
+    "x-orig-status-class": "closed",
+    "x-status-date": "2007-10-10",
+    "x-summary-author-md": "Plum (US)"
+}

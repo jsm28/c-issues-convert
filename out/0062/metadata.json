@@ -1,0 +1,22 @@
+{
+    "author-md": "David J. Hendricksen",
+    "comments": [
+        {
+            "author-md": "WG14",
+            "date": "1997-09-23",
+            "filename": "1.md"
+        }
+    ],
+    "conversion-src": [
+        "dr.htm",
+        "dr_062.html"
+    ],
+    "crossref": [],
+    "date": "1993-08-19",
+    "status": "closed",
+    "submitted-against": "c90",
+    "submitter-md": "X3 Secretariat (USA)",
+    "summary-md": "Can the `rename` function alway return a failure?",
+    "x-orig-summary-md": "Can the `rename` function alway return a failure?",
+    "x-summary-author-md": "David J. Hendricksen"
+}
