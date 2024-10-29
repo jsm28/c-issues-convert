@@ -17,7 +17,7 @@
     "fixed-in": [
         "embc2008"
     ],
-    "reference-doc-md": "Embedded-c email list 208, 210",
+    "reference-doc-md": "Embedded-c email list [208](https://www.open-std.org/jtc1/sc22/wg14/embedded-c/208), [210](https://www.open-std.org/jtc1/sc22/wg14/embedded-c/210)",
     "status": "fixed",
     "submitted-against": "embc2004",
     "summary-md": "Diagnostic required on named-register constraint violation?"

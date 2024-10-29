@@ -14,7 +14,7 @@
     ],
     "crossref": [],
     "date": "2004-09-23",
-    "reference-doc-md": "Embedded-c email list 208, 210",
+    "reference-doc-md": "Embedded-c email list [208](https://www.open-std.org/jtc1/sc22/wg14/embedded-c/208), [210](https://www.open-std.org/jtc1/sc22/wg14/embedded-c/210)",
     "status": "closed",
     "submitted-against": "embc2004",
     "summary-md": "The relationship beween named-registers and external object definitions"

@@ -17,7 +17,7 @@
     "fixed-in": [
         "embc2008"
     ],
-    "reference-doc-md": "Embedded-c email list 184, 195, 199, 207",
+    "reference-doc-md": "Embedded-c email list [184](https://www.open-std.org/jtc1/sc22/wg14/embedded-c/184), [195](https://www.open-std.org/jtc1/sc22/wg14/embedded-c/195), [199](https://www.open-std.org/jtc1/sc22/wg14/embedded-c/199), [207](https://www.open-std.org/jtc1/sc22/wg14/embedded-c/207)",
     "status": "fixed",
     "submitted-against": "embc2004",
     "summary-md": "Effective type definition (aka US-40)"

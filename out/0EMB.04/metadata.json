@@ -17,7 +17,7 @@
     "fixed-in": [
         "embc2008"
     ],
-    "reference-doc-md": "Embedded-c email list 211",
+    "reference-doc-md": "Embedded-c email list [211](https://www.open-std.org/jtc1/sc22/wg14/embedded-c/211)",
     "status": "fixed",
     "submitted-against": "embc2004",
     "summary-md": "Type generic macro's"

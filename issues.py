@@ -2952,7 +2952,11 @@ def extract_embc_one(docs_content, issues_data, doc_name,
             if int(m.group(1)) != prev_dr:
                 raise ValueError('unexpected email list entry: %s != %d'
                                  % (m.group(1), prev_dr))
-            email_data[m.group(1)] = clean_for_metadata(m.group(2))
+            email_data[m.group(1)] = re.sub(
+                '([1-9][0-9]*)',
+                r'<a href="https://www.open-std.org/jtc1/sc22/wg14/embedded-c/'
+                r'\1">\1</a>',
+                clean_for_metadata(m.group(2)))
             email_list = email_list[m.end(0):]
         if prev_dr != last_num_expected:
             raise ValueError('email list unexpected ending: %d %d'
