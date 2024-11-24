@@ -3179,6 +3179,7 @@ class CMarkdownConverter(MarkdownConverter):
         wrap = True
         sub_symbol = '<sub>'
         sup_symbol = '<sup>'
+        escape_misc = True
 
     convert_u = abstract_inline_conversion(
         lambda self: '<u>')
