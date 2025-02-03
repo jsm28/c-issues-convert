@@ -4,7 +4,7 @@ This is about the issue raised by Joseph Myers in email SC22WG14.14328:
 
 > TS 18661-1 says, for `fetestexceptflag`, "The value of `*flagp` shall have been
 > set by a previous call to `fegetexceptflag`.".
-> 
+>
 > This contrasts with the C11 wording for `fesetexceptflag`, "The value of
 > `*flagp` shall have been set by a previous call to `fegetexceptflag` whose
 > second argument represented at least those floating-point exceptions represented
@@ -12,7 +12,7 @@ This is about the issue raised by Joseph Myers in email SC22WG14.14328:
 > in the call to `fetestexceptflag` than were specified in the call to
 > `fegetexceptflag`?  Then `fegetexceptflag` may or may not have stored any
 > meaningful representation of the state of the extra exceptions being tested.
-> 
+>
 > I think `fetestexceptflag` should have the same wording for this issue as
 > `fesetexceptflag`: "whose second argument represented at least those
 > floating-point exceptions represented by the argument `excepts`".

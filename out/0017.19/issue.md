@@ -13,7 +13,7 @@ it should be defined whether this results in:
 1. ```c
    2*f(9)
    ```
-   
+
    or
 2. `2*9*g`
 

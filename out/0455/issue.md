@@ -32,17 +32,17 @@ Is the state of guide1 the same as what guide6 has? If yes, does
 same object with the same value?
 
 * (Issue 5 from N1777)
-  
+
   Zero initialization of static atomic objects in C requires more than in C\+\+.
-  
+
   I have been told that C's 7.17.2.1#2:
-  
+
   > ...; however, the default (zero) initialization for objects with static or
   > thread-local storage duration is guaranteed to produce a valid state.
-  
+
   is not in C\+\+. If true and assuming that the two languages should be the
   "same" here, should this be deleted from C? Added to C\+\+?
-  
+
   DR 422 is somewhat related to this issue.
 
 ### Suggested Technical Corrigendum

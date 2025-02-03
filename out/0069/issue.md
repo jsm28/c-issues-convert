@@ -5,84 +5,84 @@ being in a “pure binary numeration system,” and defines this further in Foot
 18\. On the other hand, the wording of ISO 2382 is:
 
 > 05.03.15
-> 
+>
 > **binary (numeration) system**
-> 
+>
 > The *fixed radix numeration system* that uses the *bits* 0 and 1 and the *radix*
 > two.
-> 
+>
 > Example: In this *numeration system,* the numeral 110,01 represents the number
 > "6,25"; that is 1 x 2-2 \+ 1 x 2-1 \+ 1 x 2-2.
-> 
+>
 > 05.03.11
-> 
+>
 > **fixed radix (numeration) system**
-> 
+>
 > **fixed radix notation**
-> 
+>
 > A *radix numeration system* in which all the *digit places,* except perhaps the
 > one with the highest *weight,* have the same *radix.*
-> 
+>
 > NOTES
-> 
+>
 > 1\. The weights of successive digit places are successive integral powers of a
 > single radix, each multiplied by the same factor. Negative integral powers of
 > the radix are used in the representation of factors.
-> 
+>
 > 2\. A fixed radix numeration system is a particular case of a *mixed radix
 > numeration system*; see also Note 2 to 05.03.19.
-> 
+>
 > 05.03.08
-> 
+>
 > **radix**
-> 
+>
 > **base (deprecated in this sense)**
-> 
+>
 > In a *radix numeration system,* the positive *integer* by which the *weight* of
 > any *digit place* is multiplied to obtain the weight of the digit place with the
 > next higher weight.
-> 
+>
 > Example: In the *decimal numeration system* the radix of each digit place is
 > 10\.
-> 
+>
 > NOTE \- The term base is deprecated in this sense because of its mathematical
 > use (see definition in 05.02.01).
-> 
+>
 > 05.03.07
-> 
+>
 > **radix (numeration) system**
-> 
+>
 > A *positional representation system* in which the ratio of the *weight* of any
 > one *digit place* to the weight of the digit place with the next lower weight is
 > a positive *integer.*
-> 
+>
 > NOTE \- The permissible values of the *character* in any digit place range from
 > zero to one less than the *radix* of that digit place.
-> 
+>
 > 05.03.04
-> 
+>
 > **weight**
-> 
+>
 > In a *positional representation system,* the factor by which the value
 > represented by a *character* in a *digit place* is multiplied to obtain its
 > additive contribution in the representation of a number.
-> 
+>
 > 05.03.03
-> 
+>
 > **digit place**
-> 
+>
 > **digit position**
-> 
+>
 > In a *positional representation system,* each site that may be occupied by a
 > *character* and that may be identified by an ordinal number or by an equivalent
 > identifier.
-> 
+>
 > 05.03.01
-> 
+>
 > **positional (representation) system**
-> 
+>
 > **positional notation**
-> 
+>
 > Any *numeration system* in which a number is represented by an *ordered* set of
 > *characters* in such a way that the value contributed by a character depends
 > upon its position as well as upon its value.

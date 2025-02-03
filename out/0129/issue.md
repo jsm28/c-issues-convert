@@ -22,9 +22,9 @@ Subclause 6.1.2.3 says:
 
 > Thus, there are separate *name spaces* for various categories of identifiers, as
 > follows:
-> 
+>
 > ...
-> 
+>
 > \- the *tags* of structures, unions, and enumerations (disambiguated by
 > following any of the keywords `struct`, `union`, or `enum`);...
 

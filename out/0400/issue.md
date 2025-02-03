@@ -6,18 +6,18 @@ implementations set `errno` to `ENOMEM` when returning `NULL`, even though that
 is not required by C99).
 
 > **AIX**
-> 
+>
 > > `realloc(NULL,0)` always returns NULL, errno is EINVAL  
 > > `realloc(ptr,0)` always returns NULL, ptr freed, errno is EINVAL
-> 
+>
 > **BSD**
-> 
+>
 > > `realloc(NULL,0)` only gives NULL on alloc failure, errno is ENOMEM  
 > > `realloc(ptr,0)` only gives NULL on alloc failure, ptr unchanged, errno is
 > > ENOMEM
-> 
+>
 > **glibc**
-> 
+>
 > > `realloc(NULL,0)` only gives NULL on alloc failure, errno is ENOMEM  
 > > `realloc(ptr,0)` always returns NULL, ptr freed, errno unchanged
 

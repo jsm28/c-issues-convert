@@ -11,13 +11,13 @@ more realistic example (possibly even more realistic than this example).
 Add new example paragraph before 5.2.1.1p2:
 
 > EXAMPLE 1:
-> 
+>
 > > ```c
 > > ??=define arraycheck(a,b) a??(b??) ??!??! b??(a??)
 > > ```
-> 
+>
 > becomes
-> 
+>
 > > ```c
 > > #define arraycheck(a,b) a[b] || b[a]
 > > ```

@@ -3,11 +3,11 @@ When a structure is incomplete
 Reference subclause 6.5.2.3, page 62, lines 25-28:
 
 > If a type specifier of the form
-> 
+>
 > ```c
 > struct-or-union  identifier
 > ```
-> 
+>
 > occurs prior to the declaration that defines the content, the structure or union
 > is an incomplete type.
 

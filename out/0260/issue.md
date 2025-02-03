@@ -170,7 +170,7 @@ Change 3.17.2 to:
 > \[#1] *indeterminate value*  
 > a value which, at any given moment, could be either an unspecified value or a
 > trap representation.
-> 
+>
 > \[#2] While an object holds an indeterminate value it is *indeterminate*.
 > Successive reads from an object that is indeterminate might return different
 > results. Storing a value in an object, other than an indeterminate value, means

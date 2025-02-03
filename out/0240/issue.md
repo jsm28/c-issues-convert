@@ -11,7 +11,7 @@
 > in the result's format, an invalid operation has occurred. This is currently
 > mostly reflected in C99's Annex F. This condition corresponds to C's domain
 > error.
-> 
+>
 > `ilogb` does not discuss (in either 7.12.6.5 or annex F) what should happen if
 > the expected result cannot be represented as an **int**. It should be treated as
 > a domain error (because it is an invalid operation to IEC 60559). The "correct"
@@ -19,10 +19,10 @@
 > should be treated as a domain error). `ilogb(NaN)` does not follow the normal
 > convention of NaN in implies NaN out, so this unusual case needs to be
 > discussed.
-> 
+>
 > `lrint` and `llrint` are inconsistent on how large arguments are treated between
 > 7.12.9.5 (range error) and Annex F (domain error).
-> 
+>
 > `lround` and `llround` are inconsistent on how large arguments are treated
 > between 7.12.9.7 (range error) and Annex F (domain error).
 

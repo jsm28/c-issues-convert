@@ -5,7 +5,7 @@ This is about an issue raised by Joseph Myers in SC22WG14.14450:
 > The specification for `setpayload` (and likewise `setpayloadsig`) says "If `pl`
 > is not a positive floating-point integer representing a valid payload, `*res` is
 > set to positive zero."
-> 
+>
 > Does "positive" as applied to "floating-point integer" here mean "with sign bit
 > 0" (the list of definitions in IEEE 754 doesn't include "positive")?  In the
 > preferred encodings for binary interchange formats, 0 is a valid payload for

@@ -4,8 +4,9 @@ The concept of "type category" is defined but is never used in a useful way; it
 is also used inconsistently. The term and its cognates appear in only six
 places:
 
-| 6.2.5#24: | defines the term; |
+|  |  |
 | --- | --- |
+| 6.2.5#24: | defines the term; |
 | 6.2.5#25: | qualified and unqualified versions of types belong to the same category; |
 | 6.2.5#27: | example: `(float *)` has category "pointer"; |
 | 6.2.5#28: | example: `(struct tag (*[5])(float))` has category "array"; |

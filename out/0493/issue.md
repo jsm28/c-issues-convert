@@ -16,15 +16,15 @@ follows:
 
 > -2- The `mtx_init` function creates a mutex object with properties indicated by
 > `type`, which must have one of the six values:
-> 
+>
 > * `mtx_plain` for a simple non-recursive mutex,
 > * `mtx_timed` for a non-recursive mutex that supports timeout,
 > * `mtx_plain | mtx_recursive` for a simple recursive mutex, or
 > * `mtx_timed | mtx_recursive` for a recursive mutex that supports timeout.
-> 
+>
 > -3- If the `mtx_init` function succeeds, it sets the mutex pointed to by `mtx`
 > to a value that uniquely identifies the newly created mutex.
-> 
+>
 > **Returns**  
 > -4- The mtx\_init function returns `thrd_success` on success, or `thrd_error` if
 > the request could not be honored.

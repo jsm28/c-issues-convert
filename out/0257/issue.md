@@ -14,6 +14,7 @@ Two possible reasons have been suggested for this rule.
 
 1. The implementation may put padding between structure members. This rule is necessary to ensure that the common initial sequence uses the same padding in both places, so that the corresponding members occupy the same location.
 2. If we consider part of the second example in 6.5.2.3#8:
+
    ```c
       struct t1 { int m; };
        struct t2 { int m; };
@@ -24,6 +25,7 @@ Two possible reasons have been suggested for this rule.
            return p1->m;
        }
    ```
+
    the rule is necessary for an implementation to realize that `p1` and `p2` might refer the same location.
 
 If (1) is the reason, then the example is a bad one because the two members are
@@ -108,7 +110,7 @@ second part of #5 to read:
 > Two structures share a common initial sequence if corresponding members have
 > matching types for a sequence of one or more initial members. Two types, in
 > turn, are matching if they are
-> 
+>
 > * compatible types (and, for bit-fields, the same widths)
 > * signed and unsigned versions of the same integer type
 > * qualified or unqualified versions of matching types, or

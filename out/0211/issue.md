@@ -24,7 +24,7 @@ For each of those basic cases, there are two generic sub-cases: base 10 to base
 
 > Paragraph 8 on "`f,F`" and "`e,E`" conversion specifiers says: The value is
 > rounded to the appropriate number of digits.
-> 
+>
 > Does that mean round to nearest, round by truncating, round by add 0.5 and
 > truncate, round as per the current rounding direction, or something else? Must
 > the rounding used for `f,F` match the rounding used for `e,E`? Since there is no
@@ -32,7 +32,7 @@ For each of those basic cases, there are two generic sub-cases: base 10 to base
 > constants), must the value produced be as if the infinitely precise value were
 > rounded (and the rounding produce an error less than or equal to 0.5 units in
 > the last place (ulp) for nearest and less than 1.0 ulp otherwise)?
-> 
+>
 > For round to nearest, IEEE-754 (IEC-60559) requires that the maximum error be
 > 0.5 ulp for a large subset of its values and 0.97 ulp for all values. For the
 > other roundings, the maximum error allowed by IEEE-754 is 1.47 ulp. The fourth
@@ -45,7 +45,7 @@ For each of those basic cases, there are two generic sub-cases: base 10 to base
 > Paragraph 10 discusses conversion. Paragraph 12 on "`a,e,f,g`" conversion
 > specifiers discusses format. Neither discuss accuracy of the decimal to binary
 > conversion, e.g., it is not specified.
-> 
+>
 > What is the accuracy of floating-point string to internal representation
 > conversions? Is it the same as translation time? Is it the same as `strtod`? Is
 > it undefined behavior if the value is not exactly representable? Is it round to

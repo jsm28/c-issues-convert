@@ -63,12 +63,12 @@ There are several ways this basic issue can be addressed.
 1. Add 'carriage return' to the definition of white-space in 6.4. However, this only makes 6.4 and **isspace** match for the "C" locale.
 2. Add '(as specified by the **isspace** function)' to 'white-space characters' throughout clause 7 of the standard. Add '(as specified by the **iswspace** function)' to 'white-space wide characters' throughout clause 7\.
 3. Throughout clauses 5 and 6 (except for 5.1.1.2#7 which is execution), change 'white-space characters' to 'source white-space characters'. There might be an issue with 'non-white-space character' being changed to 'non-source-white-space character'.
-   
+
    In clause 7.1.1, add definitions of 'execution white-space character' and
    'execution white-space wide character'. Change 'white-space character' to
    'execution white-space character' throughout clause 7\. Change 'white-space wide
    character' to 'execution white-space wide character' throughout clause 7\.
-   
+
    Throughout clause 7, remove '(as specified by the **isspace** function)' and
    '(as specified by the **iswspace** function)'.
 4. In (perhaps) 7.1.1, add something along the lines of:
@@ -76,7 +76,7 @@ There are several ways this basic issue can be addressed.
    > white-space character as defined by **isspace()**. References to "white-space
    > wide character" refer to execution white-space wide character as defined by
    > **iswspace()**.
-   
+
    Throughout clause 7, remove '(as specified by the **isspace** function)' and
    '(as specified by the **iswspace** function)'.
 

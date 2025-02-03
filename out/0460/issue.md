@@ -67,9 +67,9 @@ an implementation. For example:
 > ```c
 > _Bool alignment_is_valid (size_t alignment);
 > ```
-> 
+>
 > **Returns**
-> 
+>
 > The `alignment_is_valid` function returns non-zero if the value specified by
 > `alignment` is a valid alignment argument to the `aligned_alloc` function, and
 > zero otherwise.

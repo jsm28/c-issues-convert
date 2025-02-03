@@ -13,17 +13,17 @@ Consider the code:
 I can see nothing that forbids this code. In particular, 6.7.2.3#8 reads:
 
 > \[#8] If a type specifier of the form
-> 
+>
 > ```c
 >         struct-or-union identifier
 > ```
-> 
+>
 > or
-> 
+>
 > ```c
 >         enum identifier
 > ```
-> 
+>
 > occurs other than as part of one of the above forms, and a declaration of the
 > identifier as a tag is visible, then it specifies the same type as that other
 > declaration, and does not redeclare the tag.

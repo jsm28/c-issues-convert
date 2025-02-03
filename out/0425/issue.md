@@ -20,6 +20,6 @@ Add to 7.26.1p3:
 > ```c
 > __STDC_THREAD_TEMPORARY_VISIBLE__
 > ```
-> 
+>
 > which expands to 1 if objects of temporary lifetime are visible to other threads
 > and to 0 otherwise.

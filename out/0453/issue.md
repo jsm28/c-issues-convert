@@ -5,12 +5,12 @@ It appears to me that there is a wording problem in 7.17.8.\*
 > 7.17.8 Atomic flag type and operations  
 > #1: The **atomic\_flag** type provides the classic test-and-set functionality.
 > It has two states, set and clear.
-> 
+>
 > 7.17.8.1 The atomic\_flag\_test\_and\_set functions  
 > #2: Atomically sets the value pointed to by **object** to true.
-> 
+>
 > #3: Atomically, the value of the object immediately before the effects.
-> 
+>
 > 7.17.8.2 The atomic\_flag\_clear functions  
 > #2: Atomically sets the value pointed to by **object** to false.
 
@@ -45,9 +45,9 @@ Replace
 
 > 7.17.8.1 The atomic\_flag\_test\_and\_set functions  
 > #2: Atomically sets the value pointed to by **object** to true.
-> 
+>
 > #3: Atomically, the value of the object immediately before the effects.
-> 
+>
 > 7.17.8.2 The atomic\_flag\_clear functions  
 > #2: Atomically sets the value pointed to by **object** to false.
 
@@ -56,9 +56,9 @@ with:
 > 7.17.8.1 The atomic\_flag\_test\_and\_set functions  
 > #2: Tests the state of the flag pointed to by **object** and then sets the flag,
 > as a single atomic operation.
-> 
+>
 > #3: Returns true if the flag was set when tested or false otherwise.
-> 
+>
 > 7.17.8.2 The atomic\_flag\_clear functions  
 > #2: Atomically clears the flag pointed to by **object**.
 

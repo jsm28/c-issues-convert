@@ -23,7 +23,7 @@ Subclause 6.5.2.2 says:
 Subclause 6.1.2.6 says:
 
 > A *composite type* can be constructed from two types that are compatible; ...
-> 
+>
 > For an identifier with external or internal linkage declared in the same scope
 > as another declaration for that identifier, the type of the identifier becomes
 > the composite type.

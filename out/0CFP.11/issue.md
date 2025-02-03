@@ -99,14 +99,14 @@ to:
 > present (and nonzero) and less than the precision *p* of the decimal floating
 > type, the conversion first obtains an intermediate result as follows, where *n*
 > is the number of significant digits in the coefficient:
-> 
+>
 > > If *n* \<\= *P*, set the intermediate result to the input.
-> > 
+> >
 > > If *n* \> *P*, round the input value, according to the current rounding
 > > direction for decimal floating-point operations, to *P* decimal digits, with
 > > unbounded exponent range, representing the result with a *P*-digit integer
 > > coefficient when in the form (*s*, *c*, *q*).
-> 
+>
 > Convert the intermediate result in the manner described above for the case where
 > the precision is missing.
 
@@ -115,17 +115,17 @@ results:
 
 > ```c
 > 9.54321e+93
-> 
+>
 > 9.5432e+93
-> 
+>
 > 9.543e+93
-> 
+>
 > 9.540e+93
-> 
+>
 > 9.500e+93
-> 
+>
 > 1.0000e+94
-> 
+>
 > inf
 > ```
 
@@ -133,16 +133,16 @@ to:
 
 > ```c
 > 9.54321e+93
-> 
+>
 > 9.5432e+93
-> 
+>
 > 9.543e+93
-> 
+>
 > 9.54e+93
-> 
+>
 > 9.5e+93
-> 
+>
 > 1e+94
-> 
+>
 > 1e+97
 > ```

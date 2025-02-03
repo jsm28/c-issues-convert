@@ -19,7 +19,7 @@ Subclause 6.2.1.1 states:
 > may be used. If an `int` can represent all values of the original type, the
 > value is converted to an `int`; otherwise it is converted to an `unsigned
 > int`...
-> 
+>
 > The integral promotions preserve value including sign.
 
 Tracing this through, then, the type of any promoted plain `int` bit-field is

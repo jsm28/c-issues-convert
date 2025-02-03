@@ -7,7 +7,7 @@ its way into C11. In order to fix this, the following sentence (taken from C\+\+
 
 > The implementation shall ensure that no program execution demonstrates a cycle
 > in the "happens before" relation.  
-> 
+>
 > NOTE: This cycle would otherwise be possible only through the use of consume
 > operations.
 

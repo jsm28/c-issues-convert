@@ -26,13 +26,13 @@ Subclause 6.2.2.3:
 Subclause 6.3.16.1 (**Constraints**):
 
 > One of the following shall hold:
-> 
+>
 > ...
-> 
+>
 > \- both operands are pointers to qualified or unqualified versions of compatible
 > types, and the type pointed to by the left has all the qualifiers of the type
 > pointed to by the right;
-> 
+>
 > \- one operand is a pointer to an object or incomplete type and the other is a
 > pointer to a qualified or unqualified version of `void`, and the type pointed to
 > by the left has all the qualifiers of the type pointed to by the right; ...

@@ -32,7 +32,7 @@ The C Rationale in its discussion of 5.2.4.2.2 has:
 > Note that the floating-point model adopted permits all common representations,
 > including sign-magnitude and two's-complement, but precludes a logarithmic
 > implementation.
-> 
+>
 > The C89 Committee also endeavored to accommodate the IEEE 754 floating-point
 > standard by not adopting any constraints on floating-point which were contrary
 > to that standard.

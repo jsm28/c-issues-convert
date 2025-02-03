@@ -6,7 +6,7 @@ limits** on page 13, line 1, is not defined by the standard.
 Is it:
 
 1. A `for` loop header excluding its body, e.g. `for (;;)`,
-   
+
    or
 2. A `for` loop header plus its body, e.g. `for (;;) {}`?
 

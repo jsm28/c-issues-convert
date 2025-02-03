@@ -40,10 +40,11 @@ There are various problems with the above:
 * A "valid alignment" may not be a "fundamental alignment". Thus, whatever interpretation is adopted for "fundamental type", nothing in the standard requires the alignment of a "fundamental type" to be a "fundamental alignment". For example, say "long double" is a "fundamental type"; it would seem nonsensical if declaring "long double" objects (in any context) failed to work, but nothing seems to require malloc to return objects sufficiently aligned for long double.
 * Given these gaps in the definition, nothing in the normative text appears to imply footnote 57 "Every over-aligned type is, or contains, a structure or union type with a member to which an extended alignment has been applied.", although no doubt it reflects the intent.
 * If "fundamental type" is interpreted to mean "basic type", that is not sufficient to resolve these lacunae. For example, if
+
   ```c
   struct s { long double ld; }
   ```
-  
+
   has an alignment requirement bigger than long double, it should still be
   possible to allocate memory for it with malloc, and the same applies to any
   typedef from a standard header that might also have a bigger alignment

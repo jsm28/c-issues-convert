@@ -20,12 +20,12 @@ The current definition of `wint_t` is in 7.24.1#2:
 > ```c
 > wint_t
 > ```
-> 
+>
 > which is an integer type unchanged by default argument promotions that can hold
 > any value corresponding to members of the extended character set, as well as at
 > least one value that does not correspond to any member of the extended character
 > set (see `WEOF` below);<sup>269\)</sup> and
-> 
+>
 > <sup>269</sup>`wchar_t` and `wint_t` can be the same integer type.
 
 Three possible solutions are:
@@ -55,8 +55,9 @@ Change the cited portion of 7.24.1#2 to:
 
 Change 7.19.6.1#7 and 7.24.2.1#7, l modifier, to:
 
-> | `l` (ell) | Specifies that a following `d`, `i`, `o`, `u`, `x`, or `X` conversion specifier applies to a `long int` or `unsigned long int` argument; that a following `n` conversion specifier applies to a pointer to a `long int` argument; that a following `c` conversion specifier applies to *an argument whose type is that resulting when the default argument conversions are applied to the type `wchar_t`*; that a following `s` conversion specifier applies to a pointer to a `wchar_t` argument; or has no effect on a following `a`, `A`, `e`, `E`, `f`, `F`, `g`, or `G` conversion specifier. |
+> |  |  |
 > | --- | --- |
+> | `l` (ell) | Specifies that a following `d`, `i`, `o`, `u`, `x`, or `X` conversion specifier applies to a `long int` or `unsigned long int` argument; that a following `n` conversion specifier applies to a pointer to a `long int` argument; that a following `c` conversion specifier applies to *an argument whose type is that resulting when the default argument conversions are applied to the type `wchar_t`*; that a following `s` conversion specifier applies to a pointer to a `wchar_t` argument; or has no effect on a following `a`, `A`, `e`, `E`, `f`, `F`, `g`, or `G` conversion specifier. |
 
 Change 7.19.6.1#8, `c` specifier, second paragraph, to:
 

@@ -7,11 +7,11 @@ This is about the issue raised by Joseph Myers in email SC22WG14.14285:
 > *p<sub>max</sub>* radix *b* digits can be rounded to a floating-point number
 > with *n* decimal digits and back again without change to the value," and then
 > gives a formula.
-> 
+>
 > Is it OK for the value of `DECIMAL_DIG` to be larger than given by the formula?
 >  Such a value would still seem to meet the textual description, though being
 > suboptimal.
-> 
+>
 > This is an issue for implementing TS 18661-3 when that involves types wider than
 > `long double`.  In C11, "real floating type" means `float`, `double` or `long
 > double` (6.2.5#10) (and then those types plus the three complex types are
@@ -53,7 +53,7 @@ In 5.2.4.2.2#11, change the bullet defining `DECIMAL_DIG` from:
 > widest supported floating type with *p<sub>max</sub>* radix *b* digits can be
 > rounded to a floating-point number with n decimal digits and back again without
 > change to the value,
-> 
+>
 > > \< … formula … \>
 
 to:
@@ -62,5 +62,5 @@ to:
 > widest supported floating type with *p<sub>max</sub>* radix *b* digits can be
 > rounded to a floating-point number with n decimal digits and back again without
 > change to the value, at least
-> 
+>
 > > \< … formula … \>

@@ -23,9 +23,9 @@ Subclause 5.1.1.3 reads:
 Subclause 6.8.5 reads:
 
 > **Semantics**
-> 
+>
 > A preprocessing directive of the form
-> 
+>
 > ```c
 >           # error pp-tokens    new-line                   opt
 > ```

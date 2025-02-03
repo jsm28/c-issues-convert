@@ -6,7 +6,7 @@ qualified type:
 
 > ```c
 >           #include <stdatomic.h>
-> 
+>
 >           C atomic_load(volatile A *object);
 >           C atomic_load_explicit(volatile A *object,
 >                                  memory_order order);
@@ -29,7 +29,7 @@ In section 7.17.7.2, paragraph 1, **Synopsis**, modify the declarations of the
 
 > ```c
 >           #include <stdatomic.h>
-> 
+>
 >           C atomic_load(const volatile A *object);
 >           C atomic_load_explicit(const volatile A *object,
 >                                  memory_order order);

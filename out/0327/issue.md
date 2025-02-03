@@ -35,9 +35,9 @@ Similarly, a forward reference "variably modified type (6.7.5)" is desirable inÂ
 > > If the size is \* instead of being an expression, the array type is a variable
 > > length array type of unspecified size, which can only be used in declarations
 > > with function prototype scope; such arrays are nonetheless complete types.
-> 
+>
 > to
-> 
+>
 > > If the size is \* instead of being an expression, the array type is a *variable
 > > length array type* of unspecified size, which can only be used in declarations
 > > with function prototype scope; such arrays are nonetheless complete types.
@@ -47,9 +47,9 @@ It might also be desirable to change the second sentence (adding italics) from:
 > > If the size is an integer constant expression and the element type has a known
 > > constant size, the array type is not a variable length array type; otherwise,
 > > the array type is a variable length array type.
-> 
+>
 > to
-> 
+>
 > > If the size is an integer constant expression and the element type has a known
 > > constant size, the array type is not a variable length array type; otherwise,
 > > the array type is a *variable length array type.*

@@ -10,7 +10,7 @@ number of digits in the coefficient for the type. This might be misread,
 particularly since 5.2.4.2.2a says
 
 > number of digits in the coefficient
-> 
+>
 > ```c
 > DEC32_MANT_DIG                 7
 > ```
@@ -18,6 +18,7 @@ particularly since 5.2.4.2.2a says
 ```c
 DEC64_MANT_DIG                 16
 ```
+
 > ```c
 > DEC128_MANT_DIG                34
 > ```

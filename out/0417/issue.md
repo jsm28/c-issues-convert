@@ -5,7 +5,7 @@ The following unspecified behaviors are incomplete in Annex J.1,
 
 > — The order and contiguity of storage allocated by successive calls to the
 > `calloc`, `malloc`, and `realloc` functions (7.22.3).   
-> 
+>
 > — The amount of storage allocated by a successful call to the `calloc`,
 > `malloc`, or `realloc` function when 0 bytes was requested (7.22.3).
 

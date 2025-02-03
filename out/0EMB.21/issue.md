@@ -1,10 +1,10 @@
 Problem: the text on the countls function in 4.1.7.3 and 7.18a.6.4 reads:
 
 > The integer return value of the above functions is defined as follows:
-> 
+>
 > * if the value of the fixed-point argument f is non-zero, the return value is the largest integer k for which the expression f\<\<k does not overflow;
 > * if the value of the fixed-point argument is zero, an integer value is returned that is at least as large as N-1, where N is the total number of (nonpadding) bits of the fixed-point type of the argument.
-> 
+>
 > Note: if the value of the fixed-point argument is zero, the recommended return
 > value is exactly N-1.
 
@@ -35,6 +35,6 @@ Solution: change in 4.1.7.3 and 7.18a.6.4 the text of the 2nd bullet and the
 Note as follows:
 
 > * if the value of the fixed-point argument is zero, an integer value is returned that is at least as large as N, where N is the total number of value bits of the fixed-point type of the argument.
-> 
+>
 > Note: if the value of the fixed-point argument is zero, the recommended return
 > value is exactly N.

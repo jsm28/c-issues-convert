@@ -196,7 +196,7 @@ objects explicitly declared with the qualifier:
 > The C89 Committee added to C two type qualifiers, `const` and `volatile`; ....
 > Individually and in combination they specify the assumptions a compiler can and
 > must make when accessing an object through an lvalue.
-> 
+>
 > .... `volatile` and `restrict` are inventions of the Committee; and both follow
 > the syntactic model of `const`.
 
@@ -255,7 +255,7 @@ In §J.3.10, Qualifiers, p1:
 In §L.2.1, p1:
 
 > out-of-bounds store
-> 
+>
 > an (attempted) access (3.1) that, at run time, for a given computational state,
 > would modify (or, for an ~~object declared~~<u>lvalue of</u>
 > volatile<u>-qualified type</u>, fetch) one or more bytes that lie outside the

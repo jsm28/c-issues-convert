@@ -3,11 +3,11 @@
 `FE_ALL_EXCEPT` is defined in 7.6#6 as:
 
 > \[#6] The macro
-> 
+>
 > ```c
 >             FE_ALL_EXCEPT
 > ```
-> 
+>
 > is simply the bitwise OR of all floating-point exception macros defined by the
 > implementation.
 

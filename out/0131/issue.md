@@ -33,7 +33,7 @@ Subclause 6.2.2.1 **Lvalues and function designators**:
 Subclause 6.3.16 **Assignment operators**:
 
 > **Constraints**:
-> 
+>
 > An assignment operator shall have a modifiable lvalue as its left operand.
 
 Subclause 6.5.3 **Type qualifiers**:

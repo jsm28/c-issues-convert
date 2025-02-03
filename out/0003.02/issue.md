@@ -8,7 +8,7 @@ following paragraphs (possibly placed after paragraph 1 of subclause 6.8.3.1):
 > an additional space token being inserted before and after the replacement token
 > sequence where such a space token is not already present and there is a
 > corresponding preceding or subsequent token in the target token sequence.
-> 
+>
 > The last token of every macro argument has no subsequent token at the time of
 > its initial macro argument expansion, and similarly a macro parameter that is
 > the last token of a replacement token list has no subsequent token at the time

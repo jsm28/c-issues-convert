@@ -12,27 +12,27 @@ following paragraphs in section 5.1.2.4 (Taken from C\+\+
 > If an operation `A` that modifies an atomic object `M` happens before an
 > operation `B` that modifies `M` , then `A` shall be earlier than `B` in the
 > modification order of `M` .
-> 
+>
 > *NOTE:* The requirement above is known as write-write coherence.
-> 
+>
 > If a value computation `A` of an atomic object `M` happens before a value
 > computation `B` of `M` , and `A` takes its value from a side effect `X` on `M`,
 > then the value computed by `B` shall either be the value stored by `X` or the
 > value stored by a side effect `Y` on `M`, where `Y` follows `X` in the
 > modification order of `M`.
-> 
+>
 > *NOTE:* The requirement above is known as read-read coherence.
-> 
+>
 > If a value computation `A` of an atomic object `M` happens before an operation
 > `B` on `M`, then `A` shall take its value from a side effect `X` on `M`, where
 > `X` precedes `B` in the modification order of `M`.
-> 
+>
 > *NOTE:* The requirement above is known as read-write coherence.
-> 
+>
 > If a side effect `X` on an atomic object `M` happens before a value computation
 > `B` of `M`, then the evaluation `B` shall take its value from `X` or from a side
 > effect `Y` that follows `X` in the modification order of `M`.
-> 
+>
 > *NOTE:* The requirement above is known as write-read coherence.
 
 ### Suggested Technical Corrigendum

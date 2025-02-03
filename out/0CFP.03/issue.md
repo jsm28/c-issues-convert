@@ -47,7 +47,7 @@ WANT macros.
 Page 5: At the end of 5.3, insert:
 
 > After 7.1.2#4, insert:
-> 
+>
 > > \[4a] Some standard headers define or declare identifiers contingent on whether
 > > certain macros whose names begin with **\_STDC\_WANT\_IEC\_60559\_** and end
 > > with **\_EXT\_** are defined (by the user) at the point in the code where the

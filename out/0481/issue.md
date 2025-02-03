@@ -94,37 +94,46 @@ that was written with one of choices in mind to the other choice is in general
 not straight forward and probably can't be automated.
 
 * Code that was written with *choice 1* in mind (enforced lvalue and array conversion) when translated to *choice 2* has to enforce such conversions. E.g as long as we know that the type of `X` is only a wide integer type or an array or pointer type, a macro such as
+
   ```c
           #define bla(X) _Generic((X), ... something ... )
   ```
+
   would have to become
+
   ```c
           #define bla(X) _Generic((X)+0, ... something ... )
   ```
+
   Writing code that takes care of narrow integer types is a bit more difficult, but can be done with 48 extra case selections, taking care of all narrow types (6) and all their possible qualifications (8, `restrict` is not possible, here). Code that uses `struct` or `union` types must use bizarre things like `1 ? (X) : (X)` to enforce lvalue conversion.
+
   ```c
           #define blaOther((X),                                  \
             char: blub, char const: blub, ...,                   \
             short: ...,                                          \
             default: _Generic(1 ? (X) : (X), struct toto: ... )
-  
+
           #define bla(X) _Generic((X)+0, ... something ... ,     \
             default: blaOther(X))
   ```
 * Code that was written with *choice 2* in mind (no lvalue or array conversion) when translated to *choice 1* has to pass to a setting where qualifiers and arrays are preserved in the type. The only such setting is the address-of operator `&`.
+
   ```c
           #define blu(X) _Generic((X), \
              char const: blub,         \
              char[4]: blob,            \
              ...)
   ```
+
   has to be changed to something like
+
   ```c
           #define blu(X) _Generic(&(X),\
             char const*: blub,         \
             char(*)[4]: blob,          \
             ...)
   ```
+
   That is each individual type selection has to be transformed, and the syntactical change that is to be apply is no simple textual replacement.
 
 ### Application work around
@@ -219,6 +228,7 @@ according to different array size, we can use the `&` operator:
     ...                              \
     )(X)
 ```
+
 ### Possible solutions
 
 The above discussion describes what can be read from the text of C11, alone, and

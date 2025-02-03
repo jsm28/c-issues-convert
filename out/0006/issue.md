@@ -4,7 +4,7 @@ subclause 7.10.1.6, which contains the following statements.
 
 > If the subject sequence begins with a minus sign, the value resulting from the
 > conversion is negated.
-> 
+>
 > If the correct value is outside the range of representable values, `ULONG_MAX`
 > is returned, and the value of the macro `ERANGE` is stored in `errno`.
 

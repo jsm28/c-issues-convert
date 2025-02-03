@@ -30,9 +30,9 @@ Background:
 Subclause 6.5.2.3 says:
 
 > If a type specifier of the form
-> 
+>
 > > *struct-or-union identifier*
-> 
+>
 > occurs prior to the declaration that defines the content, the structure or union
 > is an incomplete type. It declares a tag that specifies a type that may be used
 > only when the size of an object of the specified type is not needed.
@@ -42,9 +42,9 @@ quoted above should be rephrased to take scope issues into account, perhaps as
 follows:
 
 > If a type specifier of the form
-> 
+>
 > > *struct-or-union identifier*
-> 
+>
 > occurs within a given scope prior to another declaration (in the same scope) of
 > the same identifier (which also declares the identifier to be a struct or union
 > tag) or if such a type specifier occurs at some point within a given scope where

@@ -16,6 +16,6 @@ While 7.12.6.5 The ilogb functions has:
 I believe that the following changes to C11 should be done.
 
 1. 7.12.6.5 The ilogb functions:
-   
+
    Change to: If the correct value is outside the range of the return type, the
    numeric result is unspecified and a domain error or range error may occur.

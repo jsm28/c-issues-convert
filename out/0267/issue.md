@@ -11,11 +11,11 @@
 > 2. In 7.24.4.4.5, paragraph #1 remove the space following the `*` for `s1` and `s2`.
 > 3. In 7.24.6.1.1, paragraph #3 change:
 >    > "The `btowc` returns"
->    
+>
 >    to
 >    > "The `btowc` function returns"
 > 4. In 7.24.6.1.2, paragraph #3 change:
 >    > "The `wctob` returns"
->    
+>
 >    to
 >    > The `wctob` function returns"

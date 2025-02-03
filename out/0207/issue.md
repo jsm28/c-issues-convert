@@ -57,35 +57,35 @@ Add a new paragraph before G.2p1:
 Add a new subclause G.4.4
 
 > **G.4.4 Interchangeable values**
-> 
+>
 > Though imaginary types are not compatible with the corresponding real type,
 > values of one may be used where the other is expected in the following cases. In
 > each case the value is converted to the value of the other type that has the
 > same representation (that is, by multiplying by the imaginary unit when
 > converting to an imaginary type, and by dividing by the imaginary unit when
 > converting to a real type).
-> 
+>
 > * one type is the type of the parameter, and the other type the type of the argument, when a function is called without a prototype in scope; \[\*]
 > * one type is the type of an argument corresponding to a trailing ellipsis in a function call and the other is specified as the type argument of an invocation of the `va_arg` macro;
 > * one type is the type of an argument to a function such as `fprintf` or the type pointed to by an argument to a function such as `fscanf`, and the other is the type implied by the corresponding conversion specifier.
-> 
+>
 > \[\*] If a prototype is in scope, conversion is as if by assignment and the
 > value will be converted to zero.
 
 Replace G.6p1 with:
 
 > The macros
-> 
+>
 > > ```c
 > > imaginary
 > > ```
-> 
+>
 > and
-> 
+>
 > > ```c
 > > _Imaginary_I
 > > ```
-> 
+>
 > are defined, respectively, as `_Imaginary` and a constant expression of type
 > `const float _Imaginary` with the value of the imaginary unit. The macro `I` is
 > defined to be `_Imaginary_I` (not `_Complex_I` as stated in 7.3).

@@ -8,7 +8,7 @@ flexible array member:
 > considered to be members of the containing structure or union, `struct s` in the
 > following example has more than one named member and thus the use of a flexible
 > array member is valid.
-> 
+>
 > ```c
 >     struct s {
 >         struct { int i; };
@@ -95,7 +95,7 @@ with the following text.
 > defined in the anonymous struct is considered a member of the enclosing `struct
 > t` that declares a preceding named member and no subsequent members, the use of
 > the flexible array member is valid:
-> 
+>
 > ```c
 >     struct t {
 >         int i;

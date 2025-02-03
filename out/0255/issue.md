@@ -33,7 +33,7 @@ Now, 6.5.2.2#6 reads:
 > prototype, and the types of the arguments after promotion are not compatible
 > with those of the parameters after promotion, the behavior is undefined, except
 > for the following cases:
-> 
+>
 > * one promoted type is a signed integer type, the other promoted type is the corresponding unsigned integer type, and the value is representable in both types;
 > * both types are pointers to qualified or unqualified versions of a character type or `void`.
 
@@ -57,14 +57,14 @@ Change the part of 6.5.2.2#6 after the omission to:
 > If the types of the arguments after promotion are not compatible with those of
 > the parameters after promotion 78A), the behavior is undefined, except for the
 > following cases:
-> 
+>
 > * one promoted type is a signed integer type, the other promoted type is the corresponding unsigned integer type, and the value is representable in both types;
 > * both types are pointers to qualified or unqualified versions of a character type or `void`.
-> 
+>
 > If the function is defined with a type that includes a prototype, and either any
 > parameter has a type which is altered by the default argument promotions or the
 > prototype ends with an ellipsis (, ...), the behavior is undefined.
-> 
+>
 > 78A) Because of the rule later in this paragraph, it is only necessary to check
 > whether the parameter type undergoes promotion when the function is not defined
 > using a prototype.

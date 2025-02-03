@@ -35,7 +35,7 @@ parameter, because:
 
 > The properties associated with qualified types are meaningful only for
 > expressions that are lvalues.132)
-> 
+>
 > 132\) The implementation may place a const object that is not volatile in a
 > read-only region of storage. Moreover, the implementation need not allocate
 > storage for such an object if its address is never used.
@@ -64,7 +64,7 @@ considerations.)
 > expression. If the expression has a type different from the return type of the
 > function in which it appears, the value is converted as if by assignment to an
 > object having the return type of the function.160)
-> 
+>
 > 160\) The return statement is not an assignment. The overlap restriction of
 > subclause 6.5.16.1 does not apply to the case of function return. The
 > representation of floating-point values may have wider range or precision than

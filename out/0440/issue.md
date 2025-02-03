@@ -21,6 +21,6 @@ sufficient fix would be:
 > In 5.2.4.2.2, insert a new paragraph after paragraph 10: Whether a type matches
 > an IEC 60559 type is characterized by the implementation-defined values of
 > FLT\_IS\_IEC\_60559, DBL\_IS\_IEC\_60559, and LDBL\_IS\_IEC\_60559:
-> 
+>
 > * 0 type does not match an IEC 60559 format
 > * 1 type's values and operations are those of an IEC 60559 basic, interchange or extended type

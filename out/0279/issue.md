@@ -13,11 +13,11 @@ restriction*.
 C99 7.17 paragraph 2 specifies in part:
 
 > "...
-> 
+>
 > ```c
 >    wchar_t
 > ```
-> 
+>
 > which is an integer type whose range of values can represent distinct codes for
 > all members of the largest extended character set specified among the supported
 > locales; the null character shall have the code value zero and each member of
@@ -49,11 +49,11 @@ process Unicode using C.
 Change the last part of 7.17 paragraph 2 as follows:
 
 > "...
-> 
+>
 > ```c
 >    wchar_t
 > ```
-> 
+>
 > which is an integer type whose range of values can represent distinct codes for
 > all members of the largest extended character set specified among the supported
 > locales; the null character shall have the code value zero. Each member of the
@@ -72,11 +72,11 @@ This change removes the restriction altogether.
 Change the last part of 7.17 paragraph 2 as follows:
 
 > "...
-> 
+>
 > ```c
 >    wchar_t
 > ```
-> 
+>
 > which is an integer type whose range of values can represent distinct codes for
 > all members of the largest extended character set specified among the supported
 > locales; the null character shall have the code value zero."
@@ -94,11 +94,11 @@ same disregard of the mapping of the basic character set because of
 Change the last part of 7.17 paragraph 2 as follows:
 
 > "...
-> 
+>
 > ```c
 >    wchar_t
 > ```
-> 
+>
 > which is an integer type whose range of values can represent distinct codesfor
 > all members of the largest extended character set specified among thesupported
 > locales; the null character shall have the code value zero."

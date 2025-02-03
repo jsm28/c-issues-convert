@@ -12,18 +12,18 @@
 > result's sign is independent of the direction of the limit. It is believed to be
 > true that it still is a pole error if the sign of the infinite result depends
 > upon the direction of the limit.
-> 
+>
 > Some symbolic math packages support the concept of \+/-infinity in addition to
 > \+infinity and -infinity, and in those, `tgamma(zero or negative integer)` is
 > \+/-infinity.
-> 
+>
 > Since \+/-infinity cannot be represented in most (all?) floating-point formats,
 > return \+infinity for that value.
-> 
+>
 > LIA-2 treats similar cases (math function with exact non-zero integer argument
 > and a result of \+/-infinity, such as tan(90 degrees)) as a pole error with the
 > result of signed infinity.
-> 
+>
 > <u>Counter-argument</u>: For `0.0` we have the luxury of `+0.0` and `-0.0`.
 > Non-zero integers don't have "sides". There is no concept of \+/-infinity in IEC
 > 60559 (nor any other hardware floating-point representation), just \+infinity

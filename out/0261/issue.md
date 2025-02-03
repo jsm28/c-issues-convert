@@ -60,12 +60,12 @@ Replace 6.6#2 with the following:
 > \[#2] A constant expression is one which is evaluated during translation rather
 > than runtime, usually because the precise value will affect the translation in
 > some way.
-> 
+>
 > \[#2a] Where the implementation is required to provide a constant expression,
 > that expression shall be one that, if included in the appropriate context, would
 > meet the requirements of this subclause and whose evaluation would not involve
 > undefined behaviour.
-> 
+>
 > \[#2b] An expression has a *translation-time value* if it meets the requirements
 > of this subclause and evaluation would not involve undefined behaviour. If the
 > expression fails to meet these requirements (for example, an integer expression
@@ -103,10 +103,10 @@ and add a new example:
 
 > \[#11] EXAMPLE 5: an expression that contains only constants but breaks one or
 > more of the rules of 6.6 does not have a translation-time value. Therefore, in:
-> 
+>
 > ```c
 >      int fla [5];       // not a VLA, "5" has a translation-time value      int vla [(0, 5)];  // VLA, 6.6 forbids comma operators
 > ```
-> 
+>
 > This can be used to force an array to have a constant size but still be variably
 > modified.

@@ -25,11 +25,11 @@ meaning. To clarify matters, I suggest in subclause 6.5.2.3 appending to page
 62, line 35:
 
 > A type specifier of the form
-> 
+>
 > ```c
 > enum identifier
 > ```
-> 
+>
 > shall not occur prior to the end of the `enumerator-list` that defines the
 > content.
 

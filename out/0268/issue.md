@@ -49,7 +49,7 @@ editorial changes):
 
 > \[#6] EXAMPLE: A jump into a `for` statement does not execute *clause-1* at all
 > or *expr-2* during the jump:
-> 
+>
 > ```c
 >   int i = 5;
 >         if (condition) goto body;
@@ -61,15 +61,15 @@ editorial changes):
 >         }
 >         printf ("\n");
 > ```
-> 
+>
 > If `condition` is true, this prints:
-> 
+>
 > ```c
 >   5 7 9
 > ```
-> 
+>
 > while if it is false it prints:
-> 
+>
 > ```c
 >   0 1 2 4 6 8 10
 > ```

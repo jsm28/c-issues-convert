@@ -32,7 +32,7 @@ Subclause 6.2.2.1 contains the following rules:
 
 > An *lvalue* is an expression (with an object type or an incomplete type other
 > than `void`) ...
-> 
+>
 > Except when it is the operand of the `sizeof` operator, the unary `&` operator,
 > the `++` operator, the `--` operator, or the left operand of the `.` operator or
 > an assignment operator, an lvalue that does not have array type is converted to

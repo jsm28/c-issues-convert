@@ -21,6 +21,7 @@ model. For example, most linkers will flatly refuse to link the following
 ```c
 x.c:
 ```
+
 > ```c
 > int F() {return 0;}
 >      int G(int i) {return i;}

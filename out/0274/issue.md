@@ -21,7 +21,7 @@ and that of "character" is in 3.7:
 > 3.7 \[#1] character  
 > \<abstract\> member of a set of elements used for the organization, control, or
 > representation of data
-> 
+>
 > 3.7.1 \[#1] character single-byte character  
 > \<C\> bit representation that fits in a byte
 

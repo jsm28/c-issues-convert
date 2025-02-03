@@ -15,13 +15,13 @@ There is a confusion of contextual levels in subclause 6.4. Subclause 6.4 lists
 four possible forms for a constant expression in an initializer:
 
 > Such a constant expression shall evaluate to one of the following:
-> 
+>
 > an arithmetic constant expression,
-> 
+>
 > a null pointer constant,
-> 
+>
 > an address constant, or
-> 
+>
 > an address constant for an object type plus or minus an integral constant
 > expression.
 
@@ -59,12 +59,12 @@ In the second subsequent paragraph, change:
 to:
 
 > An address constant expression shall have pointer type, and shall evaluate to:
-> 
+>
 > a null pointer,
-> 
+>
 > the address of a function, or
-> 
+>
 > the address of an object of static storage duration plus or minus some integer.
-> 
+>
 > The address may be created explicitly, using the unary `&` operator, or
 > implicitly ...

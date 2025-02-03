@@ -4,18 +4,18 @@ The `offsetof` macro is specified in the normative text of the C11 standard in
 **§7.19 Common Definitions `<stddef.h>`** as follows:
 
 > The macros \[defined in the header `<stddef.h>`] are...
-> 
+>
 > > `offsetof(`*type*`,` *member-designator*`)`
-> 
+>
 > which expands to an integer constant expression that has type `size_t`, the
 > value of which is the offset in bytes, to the structure member (designated by
 > *member-designator*), from the beginning of its structure (designated by
 > *type*). The type and member designator shall be such that given
-> 
+>
 > > ```c
 > > static type t;
 > > ```
-> 
+>
 > then the expression `&(t.`*member-designator*`)` evaluates to an address
 > constant. (If the specified member is a bit-field, the behavior is undefined.)
 
@@ -43,7 +43,7 @@ For example, given the following code:
 > ```c
 > struct A { int n, a [2]; };
 > struct B { struct A a; };
-> 
+>
 > int noff = offsetof (struct B, a.n);
 > int aoff = offsetof (struct B, a.a [1]);
 > ```
@@ -66,7 +66,7 @@ context.
 > ```c
 > struct A { int i; };
 > struct B { struct A a [1]; };
-> 
+>
 > int ioff = offsetof (struct B, a->i);
 > ```
 
@@ -84,7 +84,7 @@ list.
 * Does C intend to permit defining a new type as the *type* operand? For example,
   is the following a well-formed expression? (No implementation has been observed
   to reject such operands.)
-  
+
   > ```c
   > offsetof (struct A { int i; }, i)
   > ```
@@ -98,7 +98,7 @@ list.
   about whether it would be worthwhile to do so but rather about whether the
   standard text can be interpreted so as to require implementers to accept this
   admittedly unusual case.)
-  
+
   > ```c
   > offsetof (struct A { struct B { int i, j; } b [1]; }, b->j)
   > ```

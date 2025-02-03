@@ -8,19 +8,19 @@
 > whose range and precision may be greater than required by the type. The use of
 > evaluation formats is characterized by the implementation-defined value
 > of `FLT_EVAL_METHOD`:
-> 
+>
 > `-1` indeterminable;
-> 
+>
 > `0` evaluate all operations and constants just to the range and precision of the
 > type;
-> 
+>
 > `1` evaluate operations and constants of type `float` and `double` to the range
 > and precision of the `double` type, evaluate `long double` operations and
 > constants to the range and precision of the `long double` type;
-> 
+>
 > `2` evaluate all operations and constants to the range and precision of the
 > `long double` type.
-> 
+>
 > All other negative values for `FLT_EVAL_METHOD` characterize
 > implementation-defined behavior
 
@@ -67,37 +67,37 @@ Recently, this issue came up again as underlying the issue raised by Joseph
 Myers in email SC22WG14.14278:
 
 > Suppose that with an implementation of C11 \+ TS 18661-1, that defines
-> 
+>
 > `FLT_EVAL_METHOD` to `2`, you have:
-> 
+>
 > > ```c
 > > static volatile double x = SNAN;
-> > 
+> >
 > > (void) x;
 > > ```
-> 
+>
 > Suppose also that the implementation defines the "`(void) x;`" statement to
-> 
+>
 > constitute an access to volatile-qualified `x`.
-> 
+>
 > May the implementation define that access to convert `x` from the format of
-> 
+>
 > `double` to the format of `long double`, with greater range and precision,
-> 
+>
 > that format being used to represent `double` operands in accordance with the
-> 
+>
 > setting of `FLT_EVAL_METHOD`, and thereby to raise the "invalid" exception?
-> 
+>
 > That is, may a convertFormat operation be applied as part of
-> 
+>
 > lvalue-to-rvalue conversion where `FLT_EVAL_METHOD` implies that a wider
-> 
+>
 > evaluation format is in use?
-> 
+>
 > Even without signaling NaNs, the issue can apply to the case of exact
-> 
+>
 > underflow, which can be detected using pragmas from TS 18661-5, if the
-> 
+>
 > wider format has extra precision but not extra range and so exact underflow
 > occurs on converting a subnormal value to the wider format.
 

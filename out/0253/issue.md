@@ -85,7 +85,7 @@ If `x` and `y` are supposed to have the same effect, change 6.7.8#19 to:
 and add a new paragraph at the end:
 
 > \[#39] To illustrate the rules for implicit initialization, in:
-> 
+>
 > ```c
 >        struct fred
 >         {
@@ -95,7 +95,7 @@ and add a new paragraph at the end:
 >         struct fred x [] = { { { "abc" }, 1 }, [0].s[0] = 'q'        };
 >         struct fred y [] = { { { "abc" }, 1 }, [0] = { .s[0] = 'q' } };
 > ```
-> 
+>
 > the definitions of `x` and `y` result in identical objects. Each will be an
 > array with one element; within that element, the members `s[4]` and `s[5]` are
 > implicitly initialized to zero.
@@ -114,7 +114,7 @@ If `x` and `y` are supposed to be different, change 6.7.8#19 to:
 and add a new paragraph at the end:
 
 > \[#39] To illustrate the rules for implicit initialization, in:
-> 
+>
 > ```c
 >        struct fred
 >         {
@@ -124,7 +124,7 @@ and add a new paragraph at the end:
 >         struct fred x [] = { { { "abc" }, 1 }, [0] = { .s[0] = 'q' } };
 >         struct fred y [] = { { .s[0] = 'q' } };
 > ```
-> 
+>
 > the definitions of `x` and `y` result in identical objects. Each will be an
 > array with one element; within that element, all the members are implicitly
 > initialized to zero except for `s[0]`. In the definition of `x` the first

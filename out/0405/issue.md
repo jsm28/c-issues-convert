@@ -22,7 +22,7 @@ that matches C\+\+11:
 > For purposes of determining the existence of a data race, mutex calls behave as
 > atomic operations. The lock and unlock operations on a single mutex shall appear
 > to occur in a single total order.
-> 
+>
 > *NOTE:* This can be viewed as the modification order of the mutex.
 
 ### Suggested Technical Corrigendum

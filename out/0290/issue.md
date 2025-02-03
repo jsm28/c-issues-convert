@@ -15,22 +15,22 @@ register variables.
 > whose range and precision may be greater than required by the type. The use of
 > evaluation formats is characterized by the implementation-defined value of
 > `FLT_EVAL_METHOD`:<sup>19\)</sup>
-> 
+>
 > -1 indeterminable;
-> 
+>
 > 0 evaluate all operations and constants just to the range and precision of the
 > type;
-> 
+>
 > 1 evaluate operations and constants of type float and double to the range and
 > precision of the double type, evaluate long double operations and constants to
 > the range and precision of the long double type;
-> 
+>
 > 2 evaluate all operations and constants to the range and precision of the long
 > double type.
-> 
+>
 > All other negative values for `FLT_EVAL_METHOD` characterize
 > implementation-defined behavior.
-> 
+>
 > 19\) The evaluation method determines evaluation formats of expressions
 > involving all floating types, not just real types. For example, if
 > `FLT_EVAL_METHOD` is `1`, then the product of two `float _Complex` operands is
@@ -52,6 +52,7 @@ register variables.
                 d1 = f = expression;
                 d2 = (float)expressions;
 ```
+
 > the values assigned to `d1` and `d2` are required to have been converted to
 > `float`.
 
@@ -68,7 +69,7 @@ register variables.
 
 > 1 When a `float` is promoted to `double` or `long double`, or a `double` is
 > promoted to `long double`, its value is unchanged.
-> 
+>
 > 2 When a `double` is demoted to `float`, a `long double` is demoted to `double`
 > or `float`, or a value being represented in greater precision and range than
 > required by its semantic type (see 6.3.1.8) is explicitly converted to its
@@ -84,7 +85,7 @@ register variables.
 > 2 The values of floating operands and of the results of floating expressions may
 > be represented in greater precision and range than that required by the type;
 > the types are not changed thereby.<sup>52\)</sup>
-> 
+>
 > 52\) The cast and assignment operators are still required to perform their
 > specified conversions as described in 6.3.1.4 and 6.3.1.5.
 
@@ -96,7 +97,7 @@ Semantics
 > expression to the named type. This construction is called a cast.<sup>85\)</sup>
 > A cast that specifies no conversion has no effect on the type or value of an
 > expression.<sup>86\)</sup>
-> 
+>
 > 86\) If the value of the expression is represented with greater precision or
 > range than required by the type named by the cast (6.3.1.8), then the cast
 > specifies a conversion even if the type of the expression is the same as the
@@ -129,7 +130,7 @@ Semantics
 > expression. If the expression has a type different from the return type of the
 > function in which it appears, the value is converted as if by assignment to an
 > object having the return type of the function.<sup>136\)</sup>
-> 
+>
 > 136\) The return statement is not an assignment. The overlap restriction of
 > subclause 6.5.16.1 does not apply to the case of function return.
 
@@ -141,7 +142,7 @@ Semantics
 > register suggests that access to the object be as fast as possible. The extent
 > to which such suggestions are effective is
 > implementation-defined.<sup>100\)</sup>
-> 
+>
 > 100\) The implementation may treat any register declaration simply as an auto
 > declaration. However, whether or not addressable storage is actually used, the
 > address of any part of an object declared with storage-class specifier register

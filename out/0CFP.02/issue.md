@@ -30,10 +30,10 @@ narrower type ... \[3] These functions return the square root of x, rounded to
 the type of the function.”, insert the following:
 
 > In 7.12.13a #1, attach a footnote to the wording:
-> 
+>
 > > typically narrower
-> 
+>
 > where the footnote is:
-> 
+>
 > > \*) In some cases the destination type might not be narrower than the parameter
 > > types. For example, **double** might not be narrower than **long double**.

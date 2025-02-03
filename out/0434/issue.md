@@ -21,6 +21,6 @@ Add to 6.7.3 Type qualifiers, a new paragraph after paragraph 3,
 Add to 7.16.6 Atomic integer types, a new paragraph before paragraph 1:
 
 > Constraints
-> 
+>
 > Atomic type names shall not be used if the implementation does not support
 > atomic types (see 6.10.8.3).

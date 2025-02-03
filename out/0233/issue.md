@@ -3,7 +3,7 @@
 7.19.6.1 (and similarly in 7.24.2.1):
 
 > `g,G`
-> 
+>
 > > A `double` argument representing a floating-point number is converted in style
 > > `f` or `e` (or in style `F` or `E` in the case of a `G` conversion specifier),
 > > with the precision specifying the number of significant digits. If the precision
@@ -12,7 +12,7 @@
 > > less than -4 or greater than or equal to the precision. Trailing zeros are
 > > removed from the fractional portion of the result unless the `#` flag is
 > > specified; a decimal-point character appears only if it is followed by a digit.
-> > 
+> >
 > > A `double` argument representing an infinity or NaN is converted in the style of
 > > an `f` or `F` conversion specifier.
 

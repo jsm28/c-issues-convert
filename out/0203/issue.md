@@ -12,13 +12,13 @@ In subclause 7.23.3.5, paragraph 7, page 345, change the definitions of `%c`,
 `%p`, and `%x` to:
 
 > `%c`
-> 
+>
 > > equivalent to "`%a %b %e %T %Y`".
-> 
+>
 > `%p`
-> 
+>
 > > one of "`AM`" or "`PM`".
-> 
+>
 > `%x`
-> 
+>
 > > equivalent to "`%m/%d/%y`".

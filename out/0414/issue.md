@@ -3,11 +3,11 @@
 In 7.26.1 paragraph 5
 
 > The enumeration constants are
-> 
+>
 > > ```c
 > > mtx_plain
 > > ```
-> 
+>
 > which is passed to `mtx_init` to create a mutex object that supports neither
 > timeout nor test and return;
 
@@ -31,11 +31,11 @@ There are not **six** values listed, "six" should be changed to "these".
 Change 7.26.1 paragraph 5 to
 
 > The enumeration constants are
-> 
+>
 > > ```c
 > > mtx_plain
 > > ```
-> 
+>
 > which is passed to `mtx_init` to create a mutex object that does not support
 > timeout;
 

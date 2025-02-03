@@ -23,54 +23,57 @@ the type qualifier `volatile`, but it is rather compelling, having the following
 advantages:
 
 1. It solves the described problem in a general way that can be used with functions not necessarily named “`setjmp`.” Implementations defining `setjmp` as a function in `setjmp.h` would simply declare
+
    ```c
    int volatile setjmp(jmp_buf env);
    ```
 2. It utilizes an existing keyword and gives meaning to its use in a context which would be otherwise meaningless.
 3. It is consistent with the type specifier syntax to distinguish between volatile pointers and pointers to volatile objects. For example,
+
    ```c
    int volatile setjmp();
    ```
-   
+
    defines `setjmp` to be a volatile function (i.e., a function whose invocation
    must inhibit certain optimizations).
-   
+
    ```c
    int volatile (*maybe_setjmp_ptr)();
    ```
-   
+
    defines a pointer to such a function, while
-   
+
    ```c
    int (*mustnotbe_setjmp_ptr)();
    ```
-   
+
    defines a pointer to a normal function.
-   
+
    ```c
    int (* volatile vol_mustnotbe_setjmp_ptr)();
    ```
-   
+
    defines a volatile pointer to a normal function.
-   
+
    ```c
    int volatile (* volatile vol_maybe_setjmp_ptr)();
    ```
-   
+
    defines a volatile pointer to a volatile function, and so on ...
 4. Type consistency rules are already in place and make sense. For example,
+
    ```c
    maybe_setjmp_ptr = mustnotbe_setjmp_ptr;
    ```
-   
+
    is okay with no type-checking violation, whereas
-   
+
    ```c
    mustnotbe_setjmp_ptr = maybe_setjmp_ptr;
    ```
-   
+
    is diagnosed. It would require casting such as
-   
+
    ```c
    mustnotbe_setjmp_ptr = (int (*)())maybe_setjmp_ptr;
    ```

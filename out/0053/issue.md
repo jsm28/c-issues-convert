@@ -21,23 +21,23 @@ problem: Subclause 6.3 **Expressions**, page 38, says:
 
 > An object shall have its stored value accessed only by an lvalue expression that
 > has one of the following types:**36**
-> 
+>
 > \- the declared type of the object,
-> 
+>
 > \- a qualified version of the declared type of the object,
-> 
+>
 > \- a type that is the signed or unsigned type corresponding to the declared type
 > of the object,
-> 
+>
 > \- a type that is the signed or unsigned type corresponding to a qualified
 > version of the declared type of the object,
-> 
+>
 > \- an aggregate or union type that includes one of the aforementioned types
 > among its members (including, recursively, a member of a subaggregate or
 > contained union), or
-> 
+>
 > \- a character type.
-> 
+>
 > \[Footnote 36: The intent of this list is to specify those circumstances in
 > which an object may or may not be aliased.]
 

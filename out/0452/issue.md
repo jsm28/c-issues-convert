@@ -24,10 +24,10 @@ Given the following code:
 > int x;  
 > long y;  
 > };  
-> 
+>
 > int func1(void) {  
 > union u1 o1 \= { 42 };  
-> 
+>
 > return (0, o1).x;  
 > }
 
@@ -50,7 +50,7 @@ exactly "stored." `o1.x` is an lvalue, but `(0, o1).x` is not.
 
 > An object shall have its stored value accessed only by an lvalue expression that
 > has one of the following types:88)
-> 
+>
 > * a type compatible with the effective type of the object,
 > * a qualified version of a type compatible with the effective type of the object,
 > * a type that is the signed or unsigned type corresponding to the effective type of the object,
@@ -65,10 +65,10 @@ Given:
 > long y;  
 > char ca\[2];  
 > };  
-> 
+>
 > int func2(void) {  
 > union u2 o2 \= { 42 };  
-> 
+>
 > return (0, o2).x;  
 > }
 
@@ -84,10 +84,10 @@ following code:
 > int x;  
 > long y;  
 > };  
-> 
+>
 > long func3(void) {  
 > union u3 o3;  
-> 
+>
 > o3.x \= 42;  
 > return (0, o3).y;  
 > }
@@ -106,10 +106,10 @@ in the following code:
 > int x;  
 > float f;  
 > };  
-> 
+>
 > void func4(long \* lp, struct s4 \* s4p) {  
 > int c;  
-> 
+>
 > for (c \= 0; c \< (0, \*s4p).i; \+\+c)  
 > --\*lp;  
 > }

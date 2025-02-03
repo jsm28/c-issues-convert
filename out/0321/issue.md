@@ -18,11 +18,11 @@ response to DR 279\.
 C99 7.17 paragraph 2 specified (before TC2) in part:
 
 > "...
-> 
+>
 > ```c
 >    wchar_t
 > ```
-> 
+>
 > which is an integer type whose range of values can represent distinct codes for
 > all members of the largest extended character set specified among the supported
 > locales; the null character shall have the code value zero and each member of
@@ -37,11 +37,11 @@ TC2 altered this text, removing the phrase:
 In the committee discussion for TC2, an alternative approach was proposed:
 
 > "...
-> 
+>
 > ```c
 >    wchar_t
 > ```
-> 
+>
 > which is an integer type whose range of values can represent distinct codes for
 > all members of the largest extended character set specified among the supported
 > locales; the null character shall have the code value zero. Each member of the
@@ -57,7 +57,7 @@ performance and efficiency impacts in order to maintain portability. The ISO/IEC
 standard:
 
 > **wchar\_t**
-> 
+>
 > Integer type whose range of values can represent distinct wide-character codes
 > for all members of the largest character set specified among the locales
 > supported by the compilation environment: the null character has the code value
@@ -67,7 +67,7 @@ standard:
 In order to align with TC2, the Austin Group is proposing to change this to:
 
 > **wchar\_t**
-> 
+>
 > Integer type whose range of values can represent distinct wide-character codes
 > for all members of the largest character set specified among the locales
 > supported by the compilation environment: the null character has the code value
@@ -94,11 +94,11 @@ process Unicode using C.
 Change the last part of 7.17 paragraph 2 as follows:
 
 > "...
-> 
+>
 > ```c
 >    wchar_t
 > ```
-> 
+>
 > which is an integer type whose range of values can represent distinct codes for
 > all members of the largest extended character set specified among the supported
 > locales; the null character shall have the code value zero. Each member of the

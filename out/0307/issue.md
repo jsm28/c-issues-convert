@@ -14,12 +14,12 @@ Perhaps it would be clearer yet to say something like, "a function-like macro
 Change 6.10.3p10:
 
 > A preprocessing directive of the form
-> 
+>
 > > `# define` *identifier lparen identifier-list<sub>opt</sub>* `)`
 > > *replacement-list new-line*  
 > > `# define` *identifier lparen* `... )` *replacement-list new-line*  
 > > `# define` *identifier lparen identifier-list* `, ... )` *replacement-list
 > > new-line*
-> 
+>
 > defines a function-like macro with ~~arguments~~ <u>parameters</u>, similar
 > syntactically to a function call.

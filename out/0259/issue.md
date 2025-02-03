@@ -28,8 +28,9 @@ while 6.10.3#4 reads:
 
 Now:
 
-| **EITHER:** | the invocation of `m0` has a single argument, |
+|  |  |
 | --- | --- |
+| **EITHER:** | the invocation of `m0` has a single argument, |
 | **OR:** | the invocation of `m1` has no arguments, |
 
 and in either case the requirement of 6.10.3#4 is violated.

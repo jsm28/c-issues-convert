@@ -3,13 +3,13 @@
 This is about the issue raised by Joseph Myers in email SC22WG14.14358:
 
 > TS 18661-1 gives the declaration of `fesetmode` as:
-> 
+>
 > ```c
 > int fesetmode(const fenv_t *modep);
 > ```
-> 
+>
 > The argument should be of type `const femode_t *`, not `const fenv_t *`.
-> 
+>
 > \--
 
 This was an editorial cut-and-past error. The Description says the argument

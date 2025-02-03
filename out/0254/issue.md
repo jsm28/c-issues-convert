@@ -8,8 +8,9 @@ Consider an implementation where the character `'\xE'` starts an alternate shift
 state and `'\xF'` returns to the initial shift state. The wide character
 encodings are:
 
-|  | initial shift state: | 'x' maps to ASCII codes |
+|  |  |  |
 | --- | --- | --- |
+|  | initial shift state: | 'x' maps to ASCII codes |
 |  | alternate shift state: | 'x' maps to ASCII codes \+ 0x100 |
 
 Starting in the initial shift state,
@@ -43,9 +44,10 @@ the main part (see *the previous DR*) of 7.20.7.2#3 to read:
 > state-dependent encodings. If `s` is not a null pointer, the `mbtowc` function
 > returns the first of the following that applies (given the current conversion
 > state):
-> 
-> | 0 | if `s` points to the null character |
+>
+> |  |  |
 > | --- | --- |
+> | 0 | if `s` points to the null character |
 > | between 1 and `n` inclusive | if the next `n` or fewer bytes complete a valid multibyte character (which is the value stored); the value returned is the number of bytes that complete the multibyte character. The value returned will not be greater than that of the `MB_CUR_MAX` macro. |
 > | `(size_t)(-2)` | if the next `n` bytes contribute to an incomplete (but potentially valid) multibyte character, and all `n` bytes have been processed (no value is stored). |
 > | `(size_t)(-1)` | if an encoding error occurs, in which case the next `n` or fewer bytes do not contribute to a complete and valid multibyte character (no value is stored); the value of the macro `EILSEQ` is stored in `errno`, and the conversion state is unspecified. |

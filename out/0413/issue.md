@@ -8,14 +8,14 @@ Consider the following code:
 > int l;
 > int a[2];
 > } T;
-> 
+>
 > typedef struct {
 > int i;
 > T t;
 > } S;
-> 
+>
 > T x = {.l = 43, .k = 42, .a[1] = 19, .a[0] = 18 };
-> 
+>
 > void f(void)
 > {
 > S l = { 1, .t = x, .t.l = 41, .t.a[1] = 17};

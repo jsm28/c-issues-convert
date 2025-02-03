@@ -7,9 +7,9 @@ This is about the issue raised by Joseph Myers in email SC22WG14.14280:
 > TS 18661-1 says "Whether C assignment (6.5.16) (and conversion as if by
 > assignment) to the same format is an IEC 60559 convertFormat or copy operation
 > is implementation-defined, even if `<fenv.h>` defines the macro
-> 
+>
 > `FE_SNANS_ALWAYS_SIGNAL` (F.2.1).".
-> 
+>
 > Does this apply to function return, where the return type of the function is the
 > same as the type of the expression passed to the return statement and no wider
 > evaluation format is in use \- that is, may this act as either convertFormat or
@@ -47,12 +47,12 @@ append the sentence:
 At the end of Clause 8, add:
 
 > In F.3#3, attach a footnote to the wording:
-> 
+>
 > > Whether C assignment (6.5.16) (and conversion as if by assignment) to the same
 > > format is an IEC 60559 convertFormat or copy operation
-> 
+>
 > where the footnote is:
-> 
+>
 > \*) Where the source and destination formats are the same, convertFormat
 > operations differ from copy operations in that convertFormat operations raise
 > the “invalid” floating-point exception on signaling NaN inputs and do not

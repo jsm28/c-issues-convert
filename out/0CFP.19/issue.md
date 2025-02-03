@@ -5,7 +5,7 @@ C11 7.12.1 says
 > The result underflows if the magnitude of the mathematical result is so small
 > that the mathematical result cannot be represented, without extraordinary
 > roundoff error, in an object of the specified type.232)
-> 
+>
 > 232\) The term underflow here is intended to encompass both ‘‘gradual
 > underflow’’ as in IEC 60559 and also ‘‘flush-to-zero’’ underflow
 

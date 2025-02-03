@@ -15,7 +15,7 @@ derivatives of this rule:
 > `memory_order_seq_cst fence X` such that `A` is sequenced before `X`, and `X`
 > precedes `B` in `S`, then `B` occurs later than `A` in the modification order of
 > `M`.
-> 
+>
 > For atomic modifications `A` and `B` of an atomic object `M`, if there is a
 > `memory_order_seq_cst` fence `Y` such that `Y` is sequenced before `B`, and `A`
 > precedes `Y` in `S`, then `B` occurs later than `A` in the modification order of

@@ -13,13 +13,13 @@ conversion specifiers, replace the bullets:
 
 > —    if −(*n*\+5) ≤ *q* ≤ 0, use style `f` formatting with formatting precision
 > equal to −*q*,
-> 
+>
 > —    otherwise, use style `e` formatting with …
 
 with:
 
 > —    if −(*n*\+5) ≤ *q* ≤ 0, use style `f` (or style `F` in the case of an `A`
 > conversion specifier) with formatting precision equal to −*q*,
-> 
+>
 > —    otherwise, use style `e` (or style `E` in the case of an `A` conversion
 > specifier) with …

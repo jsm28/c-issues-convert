@@ -10,6 +10,6 @@ to existing (32-bit) code.
 In 7.17 at the end of p2, add the following:
 
 > **Recommended Practice**
-> 
+>
 > The `long long` type should be used only if no other integer types can represent
 > the value range required by the implementation.

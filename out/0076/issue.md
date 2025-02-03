@@ -38,16 +38,16 @@ situation described in the following extract from the response to [Defect Report
 #012](issue:0012)?
 
 > Given the following declaration:
-> 
+>
 > ```c
 > void *p;
 > ```
-> 
+>
 > the expression `&*p` is invalid. This is because `*p` is of type `void` and so
 > is not an lvalue, as discussed in the quote from subclause 6.2.2.1 above.
 > Therefore, as discussed in the quote from subclause 6.3.3.2 above, the operand
 > of the `&` operator in the expression `&*p` is invalid because it is neither a
 > function designator nor an lvalue.
-> 
+>
 > This is a constraint violation and the translator must issue a diagnostic
 > message.

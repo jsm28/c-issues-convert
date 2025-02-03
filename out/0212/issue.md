@@ -63,7 +63,7 @@ Change 7.24.6 paragraph 3 to:
 > an mbstate\_t object is assigned such a value it it becomes unbound. All unbound
 > `mbstate_t` objects are in the initial conversion state (but the converse is not
 > necessarily true).
-> 
+>
 > \[#3a] An unbound object can be used to initiate conversion involving any
 > multibyte character sequence, in any `LC_CTYPE` category setting, in either
 > direction; once used for a conversion, it becomes bound to that sequence,
@@ -90,28 +90,28 @@ to:
 Change 7.24.6.3.2 paragraph 2 to:
 
 > \[#2] If s is a null pointer, the `mbrtowc` function is equivalent to the call:
-> 
+>
 > > ```c
 > > mbrtowc(NULL, "", 1, ps)
 > > ```
-> 
+>
 > except that the resulting state described is unbound even if an encoding error
 > occurred.
-> 
+>
 > In this case, the values of the parameters `pwc` and `n` are ignored.
 
 Change 7.24.6.3.3 paragraph 2 to:
 
 > \[#2] If s is a null pointer, the `wcrtomb` function is equivalent to the call
-> 
+>
 > > ```c
 > > wcrtomb(buf, L'\0',ps)
 > > ```
-> 
+>
 > where `buf` is an internal buffer except that the resulting state described is
 > always unbound even if an encoding error occurred <sup>291a</sup>; the value of
 > `wc` is ignored.
-> 
+>
 > 291a) The effect is reliably to make `*ps` unbound.
 
 Append to 7.24.6.4 paragraph 2:

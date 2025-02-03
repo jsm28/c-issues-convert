@@ -4,7 +4,7 @@ Subclause 5.2.1.2 **Multibyte characters** states:
 > members of the extended character set. The execution character set may also
 > contain multibyte characters, which need not have the same encoding as for the
 > source character set. For both character sets, the following shall hold:
-> 
+>
 > \- The single-byte characters defined in 5.2.1 shall be present.
 
 and, a bit later on:

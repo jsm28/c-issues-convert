@@ -3,7 +3,7 @@ The description of `memcpy` in subclause 7.11.2.1 says:
 > ```c
 > void *memcpy(void *s1, const void *s2, size_t n);
 > ```
-> 
+>
 > The `memcpy` function copies `n` characters from the object pointed to by `s2`
 > to the object pointed to by `s1`. If copying takes place between objects that
 > overlap, the behavior is undefined.

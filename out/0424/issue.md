@@ -28,14 +28,14 @@ I think several paragraphs should be added after the one above:
 > The effect is that for each thread that has the thread specific storage
 > corresponding to `key` set to a value `x` that is not null, the destructor
 > function `*dtor` is called with `dtor(x)` before the thread exits.
-> 
+>
 > This call to `dtor` is executed in the context of the same thread; it is
 > sequenced after the `return` statement or the call to `thrd_exit` that
 > terminates the thread and before any return from `thrd_join` of a waiter for
 > this same thread. If there are several thread specific storages for the same
 > thread their destructor functions are called in an unspecific order but with a
 > sequence point between each of these function calls.
-> 
+>
 > If a destructor function for `key` issues calls to `tss_set`, `tss_get` or
 > `tss_delete` with the same `key` the behavior is undefined.  
 > `tss_set` can be used to set the value of a thread specific storage for a

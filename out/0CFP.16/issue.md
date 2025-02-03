@@ -22,7 +22,7 @@ The text in question is:
 > 7.6.1a is affected by constant rounding modes (7.6.2). Note that the
 > type-generic macro definition in the example in 6.5.1.1 does not conform to this
 > specification. A conforming macro could be implemented as follows:
-> 
+>
 > ```c
 > #define cbrt(X)     _Generic((X),                  \
 >                long double: cbrtl(X),         \
@@ -30,7 +30,7 @@ The text in question is:
 >                float: cbrtf(X)                \
 >                )
 > ```
-> 
+>
 > where `_Roundwise_cbrt()` is equivalent to `cbrt()` invoked without
 > macro-replacement suppression.
 
@@ -49,7 +49,7 @@ In TS 18661-1, clause 16, replace:
 >                float: cbrtf(X)                \
 >                )
 > ```
-> 
+>
 > where `_Roundwise_cbrt()` is equivalent to `cbrt()` invoked without
 > macro-replacement suppression.
 
@@ -62,7 +62,7 @@ with
 >                float: _Roundwise_cbrtf(X)               \
 >                )
 > ```
-> 
+>
 > where `_Roundwise_cbrtl()`, `_Roundwise_cbrt()`, and `_Roundwise_cbrtf()` are
 > equivalent to `cbrtl()`, `cbrt()`, and `cbrtf()`, respectively, invoked without
 > macro-replacement suppression.

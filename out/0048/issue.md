@@ -24,13 +24,13 @@ and (subclause 7.10.4.1, page 101 \[Rationale]):
 The POSIX.1 Standard states (subclause 3.2, page 46):
 
 > There are two kinds of process termination:
-> 
+>
 > (1) Normal termination occurs by a return from `main()` or when requested with
 > the `exit()` or `_exit()` functions.
-> 
+>
 > (2) Abnormal termination occurs when requested by the `abort()` function or when
 > some signals are received (see 3.3.1).
-> 
+>
 > The `exit()` and `abort()` functions shall be as described in the C Standard
 > {2}. Both `exit()` and `abort()` shall terminate a process with the consequences
 > specified in 3.2.2, except that the status made available to `wait()` or
@@ -53,12 +53,12 @@ and (subclause B.8.2.3.12, page 291 \[Rationale]):
 > return,” as defined by the C Standard {2}. This processing includes at least the
 > effect of `fclose()` on all open streams, and the default actions defined for
 > `SIGABRT`.
-> 
+>
 > The `abort()` function will override blocking or ignoring the `SIGABRT` signal.
 > Catching the signal is intended to provide the application writer with a
 > portable means to abort processing, free from possible interference from any
 > implementation-provided library functions.
-> 
+>
 > Note that the term “program termination” in the C Standard {2} is equivalent to
 > “process termination” in POSIX.1.
 

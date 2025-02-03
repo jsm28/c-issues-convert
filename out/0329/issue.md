@@ -116,15 +116,15 @@ the Rationale.
 > C99 and `nextafter`). Note, even though `nextafter` and `nexttoward` can raise
 > underflow\+inexact and overflow\+inexact, they are not affected by the rounding
 > direction.
-> 
+>
 > Some are independent because they are exact: `frexp` (when radix is power of 2),
 > `logb`, `modf`, `ilogb`, `fabs`, `ceil`, `floor`, `trunc`, `fmod` (when
 > subnormal results are supported), `copysign`, `nan`, `fmax`, and `fmin`.
-> 
+>
 > There are several functions that are dependent on the current rounding
 > direction: `sqrt` (as per IEEE-754), `nearbyint`, `rint`, `lrint`, `llrint`, and
 > `fma`.
-> 
+>
 > There are many functions (it is implementation defined as to which ones) that
 > may honor the current rounding direction. First are functions that are inexact
 > for most arguments: `acos`, `asin`, `atan`, `atan2`, `cos`, `sin`, `tan`,
@@ -132,7 +132,7 @@ the Rationale.
 > `frexp` (when radix is not a power of 2), `ldexp` (when radix is not 2), `log`,
 > `log10`, `log1p`, `log2`, `hypot`, `pow`, `cbrt`, `erf`, `erfc`, `tgamma`,
 > `lgamma`, and `fdim`.
-> 
+>
 > Second are functions that are exact for most arguments (but are inexact when
 > they overflow or underflow): `ldexp` (when radix is 2), `scalbn`, `scalbln`,
 > `fmod` (when subnormal results are not supported), `remainder` (when subnormal

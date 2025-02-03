@@ -7,7 +7,7 @@
 > practical use. And it is rather difficult to avoid in writing math functions.
 > Requiring math functions to set, or not set, inexact is thus arguably of more
 > cost than benefit.
-> 
+>
 > What follows is a review of certain statements in the C99 Standard, with
 > suggestions for making them more sensible.
 

@@ -55,11 +55,11 @@ or change the first part of 7.17 paragraph 2 to:
 > \[#2] The types are `ptrdiff_t` which is the signed integer type of the result
 > of subtracting two pointers (the width of `ptrdiff_t` shall be no greater than
 > that of `signed long`);
-> 
+>
 > > ```c
 > > size_t
 > > ```
-> 
+>
 > which is the unsigned integer type of the result of the `sizeof` operator (the
 > width of `size_t` shall be no greater than that of unsigned long); or both (the
 > changes are equivalent in effect).
@@ -67,13 +67,13 @@ or change the first part of 7.17 paragraph 2 to:
 Possibly also add the following paragraph somewhere (perhaps in 6.3.1.3):
 
 > Recommended practice
-> 
+>
 > Implementations should provide a mode which will warn of conversions (including
 > those involving an explicit cast) where:
-> 
+>
 > * the original value was taken from an object whose type is derived from a typedef defined in a header provided by the implementation;
 > * that type has a conversion rank greater than that of signed long;
 > * the result type has a conversion rank equal to that of signed long.
-> 
+>
 > (Headers provided by the implementation are not limited to those defined by this
 > Standard, but explicitly excludes \<`stdint.h>`.)

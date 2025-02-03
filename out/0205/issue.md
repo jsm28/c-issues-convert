@@ -49,7 +49,7 @@ bind `__at_least` with `assignment-expr` in the syntax):
 > > D[ __at_least` *assignment-expr type-qualifier-list<sub>opt</sub>* `]  
 > > D[` *type-qualifier-list* `__at_least` *assignment-expr* `]  
 > > D[` *type-qualifier-list<sub>opt</sub>* `* ]`
-> 
+>
 > and the type specified for *ident* in the declaration "`T D`" is
 > "*derived-declarator-type-list T*", then the type specified for ident is
 > "*derived-declarator-type-list array of T*".<sup>121\)</sup> (See 6.7.5.3 for
@@ -66,16 +66,16 @@ Change 6.7.5.3p21 to (i.e. `static` to `__at_least`):
 
 > \[#21] EXAMPLE 5 The following are all compatible function prototype
 > declarators.
-> 
+>
 > ```c
 >        double maximum(int n, int m, double a[n][m]);
 >         double maximum(int n, int m, double a[*][*]);
 >         double maximum(int n, int m, double a[ ][*]);
 >         double maximum(int n, int m, double a[ ][m]);
 > ```
-> 
+>
 > as are:
-> 
+>
 > ```c
 >        void f(double (* restrict a)[5]);
 >         void f(double a[restrict][5]);

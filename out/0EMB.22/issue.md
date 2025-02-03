@@ -5,6 +5,7 @@ correct.
 Solution:
 
 * change the Synopsis section of 7.18a.6.6 to read:
+
   ```c
   #include <stdfix.h>
   short fract hrbits(int_hr_t n);
@@ -22,7 +23,7 @@ Solution:
   ```
 * remove from the of 7.18a.2 the words 'as return types'
 * change in 7.18a.2 the first sentence after the list to read:
-  
+
   The integer types **int\_*fx*\_t** and **uint\_*fx*\_t** are the return types of
   the corresponding **bits*fx*** functions and are chosen so that the return value
   can hold all the necessary bits; the ***fx*****bits** functions use these

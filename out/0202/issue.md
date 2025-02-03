@@ -53,9 +53,9 @@ For each of the following functions:
 change the return type to `int` and add the following:
 
 > **Returns**
-> 
+>
 > This function always returns zero. \[\*]
-> 
+>
 > \[\*] This may change in a future revision of this Standard, in which case a
 > zero return will mean success and a non-zero return will mean failure of some
 > kind.
@@ -99,7 +99,7 @@ In paragraph 2, replace "clears" with "attempt to clear".
 Add a new heading and paragraph 3:
 
 > **Returns**
-> 
+>
 > \[3] The `feclearexcept` function returns zero if the excepts argument is zero
 > or if all the specified exceptions were successfully cleared. Otherwise it
 > returns a nonzero value.

@@ -28,11 +28,11 @@ Subclause 6.5.2.1 (**Semantics**):
 CIB #1, RFI #13, response to question #5:
 
 > For the example:
-> 
+>
 > > ```c
 > > enum e { a = sizeof(enum e) };
 > > ```
-> 
+>
 > the relevant citations are subclause 6.1.2.1 starting on page 21, line 39,
 > indicating that the scope of the first `e` begins at the `{`, and subclause
 > 6.5.2.2, page 62, line 20, which attributes meaning to a later `enum e` *only

@@ -25,7 +25,7 @@ Similarly,
 > which expands to a non-zero, positive integer constant expression that is the
 > minimum number of files that the implementation guarantees can be open
 > simultaneously;
-> 
+>
 > FILENAME\_MAX  
 > which expands to a non-zero, positive integer constant expression that is the
 > size needed for an array of char large enough to hold the longest file name

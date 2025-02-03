@@ -18,7 +18,7 @@ removed by the cast conversion.
 > range and precision may be greater than required by the type. The use of
 > evaluation formats is characterized by the implementation-defined value of
 > `FLT_EVAL_METHOD`:<sup>19\)</sup>
-> 
+>
 > **2** evaluate all operations and constants to the range and precision of `long
 > double` type.
 
@@ -26,7 +26,7 @@ removed by the cast conversion.
 
 > When a `float` is promoted to `double` or `long double`, or a `double` is
 > promoted to `long double`, its value is unchanged.
-> 
+>
 > When a `double` is demoted to `float`, a `long double` is demoted to `double` or
 > `float`, or a value being represented in greater precision and range than
 > required by its semantic type (see 6.3.1.8) is explicitly converted to its
@@ -42,7 +42,7 @@ removed by the cast conversion.
 > The values of floating operands and of the results of floating expressions may
 > be represented in greater precision and range than that required by the type;
 > the types are not changed thereby. <sup>52\)</sup>
-> 
+>
 > 52\) The cast and assignment operators are still required to perform their
 > specified conversions as described in 6.3.1.4 and 6.3.1.5.
 
@@ -50,7 +50,7 @@ removed by the cast conversion.
 
 > ... A cast that specifies no conversion has no effect on the type or value of an
 > expression. <sup>86\)</sup>
-> 
+>
 > 86\) If the value of the expression is represented with greater precision or
 > range than required by the type named by the cast (6.3.1.8), then the cast
 > specifies a conversion even if the type of the expression is the same as the

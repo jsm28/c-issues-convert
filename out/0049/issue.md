@@ -20,6 +20,7 @@ Subclause 7.4.1.1 **The `setlocale` function**:
 ```c
 setlocale(LC_ALL, "C");
 ```
+
 > is executed.
 
 Subclause 7.11.4.3 **The `strcoll` function**:

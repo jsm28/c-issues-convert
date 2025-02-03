@@ -44,17 +44,17 @@ substitution.
 Change 6.10.1#1 to read:
 
 > \[...]
-> 
+>
 > ```c
 >      defined identifier
 > ```
-> 
+>
 > or
-> 
+>
 > ```c
 >      defined ( identifier )
 > ```
-> 
+>
 > which are replaced by the token `1` if the identifier is currently  
 > \[...]  
 > subject identifier), or the token `0` if it is not.
