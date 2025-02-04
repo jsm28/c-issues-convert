@@ -12,6 +12,12 @@ python-markdownify](https://github.com/jsm28/python-markdownify/tree/c-issues-co
 convenience in viewing that data (and in comparing the result of
 changes to the conversion process).
 
+`format.py` - a script to produce formatted Markdown files of the
+issues combining both data and metadata for convenient viewing
+
+`out_formatted/` - a copy of that formatted output, committed for user
+convenience in viewing that data
+
 The layout and JSON schema of the output are subject to change to
 match whatever ends up being used by the new issue tracker, and may
 not currently have any resemblance to what is used there.  The JSON
