@@ -4,110 +4,110 @@
 
 |Issue|Summary|Status|
 |-|-|-|
-|0400|[`realloc` with size zero problems](log_c11c17.md#issue0400)|Fixed in C17|
-|0401|["happens before" cannot be cyclic](log_c11c17.md#issue0401)|Fixed in C17|
-|0402|[memory model coherence is not aligned with C\+\+11](log_c11c17.md#issue0402)|Fixed in C17|
-|0403|[`malloc()` and `free()` in the memory model](log_c11c17.md#issue0403)|Fixed in C17|
-|0404|[joke fragment remains in a footnote](log_c11c17.md#issue0404)|Fixed in C17|
-|0405|[mutex specification not aligned with C\+\+11 on total order](log_c11c17.md#issue0405)|Fixed in C17|
-|0406|[Visible sequences of side effects are redundant](log_c11c17.md#issue0406)|Fixed in C17|
-|0407|[SC fences do not restrict modification order enough](log_c11c17.md#issue0407)|Fixed in C17|
-|0408|[Should locks provide intra-thread synchronization](log_c11c17.md#issue0408)|Closed|
-|0409|[`f(inf)` is `inf` being a range error](log_c11c17.md#issue0409)|Closed|
-|0410|[`ilogb` inconsistent with `lrint`, `lround`](log_c11c17.md#issue0410)|Fixed in C17|
-|0411|[Predefined macro values](log_c11c17.md#issue0411)|Fixed in C11 TC1|
-|0412|[`#elif`](log_c11c17.md#issue0412)|Fixed in C17|
-|0413|[initialization](log_c11c17.md#issue0413)|Fixed in C17|
-|0414|[Typos in 6.27 Threads `<threads.h>`](log_c11c17.md#issue0414)|Fixed in C17|
-|0415|[Missing divide by zero entry in Annex J.2](log_c11c17.md#issue0415)|Fixed in C17|
-|0416|[`tss_t` destruction unspecified](log_c11c17.md#issue0416)|Fixed in C17|
-|0417|[Annex J not updated with necessary `aligned_alloc` entries](log_c11c17.md#issue0417)|Fixed in C17|
-|0418|[`fmod(0.,Nan)` and `fmod(Nan, infinity)`](log_c11c17.md#issue0418)|Closed|
-|0419|[What the heck is a "generic function"?](log_c11c17.md#issue0419)|Fixed in C17|
-|0420|[syntax error in specification of for-statement](log_c11c17.md#issue0420)|Closed|
-|0421|[initialization of `atomic_flag`](log_c11c17.md#issue0421)|Closed|
-|0422|[initialization of atomic types](log_c11c17.md#issue0422)|Closed|
-|0423|[Defect Report relative to n1570: underspecification for qualified rvalues](log_c11c17.md#issue0423)|Fixed in C17|
-|0424|[underspecification of `tss_t`](log_c11c17.md#issue0424)|Fixed in C17|
-|0425|[no specification for the access to variables with temporary lifetime](log_c11c17.md#issue0425)|Closed|
-|0426|[G.5.1: `-yv` and `-x/v` are ambiguous](log_c11c17.md#issue0426)|Fixed in C17|
-|0427|[Function Parameter and Return Value Assignments](log_c11c17.md#issue0427)|Closed|
-|0428|[runtime-constraint issue with sprintf family of routines in Annex K](log_c11c17.md#issue0428)|Fixed in C17|
-|0429|[Should `gets_s` discard next input line when `(s == NULL)` ?](log_c11c17.md#issue0429)|Fixed in C17|
-|0430|[`getenv_s`, `maxsize` should be allowed to be zero](log_c11c17.md#issue0430)|Fixed in C17|
-|0431|[`atomic_compare_exchange`: What does it mean to say two structs compare equal?](log_c11c17.md#issue0431)|Fixed in C17|
-|0432|[Is `0.0` required to be a representable value?](log_c11c17.md#issue0432)|Closed|
-|0433|[Issue with constraints for wide character function arguments involving **RSIZE\_MAX**](log_c11c17.md#issue0433)|Fixed in C17|
-|0434|[Missing constraint w.r.t. Atomic](log_c11c17.md#issue0434)|Fixed in C17|
-|0435|[Missing constraint w.r.t. Imaginary](log_c11c17.md#issue0435)|Closed|
-|0436|[Request for interpretation of C11 6.8.5#6](log_c11c17.md#issue0436)|Fixed in C17|
-|0437|[`clock` overflow problems](log_c11c17.md#issue0437)|Fixed in C17|
-|0438|[`ungetc / ungetwc` and file position after discarding push back problems](log_c11c17.md#issue0438)|Fixed in C17|
-|0439|[Issues with the definition of “full expression”](log_c11c17.md#issue0439)|Fixed in C17|
-|0440|[Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 1](log_c11c17.md#issue0440)|Closed|
-|0441|[Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 2](log_c11c17.md#issue0441)|Fixed in C17|
-|0442|[Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 3](log_c11c17.md#issue0442)|Closed|
-|0443|[Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 4](log_c11c17.md#issue0443)|Closed|
-|0444|[Issues with alignment in C11, part 1](log_c11c17.md#issue0444)|Fixed in C17|
-|0445|[Issues with alignment in C11, part 2](log_c11c17.md#issue0445)|Fixed in C17|
-|0446|[Use byte instead of character for memcmp, memcpy](log_c11c17.md#issue0446)|Closed|
-|0447|[Boolean from complex](log_c11c17.md#issue0447)|Fixed in C17|
-|0448|[What are the semantics of a **\# non-directive**?](log_c11c17.md#issue0448)|Fixed in C17|
-|0449|[What is the value of TSS\_DTOR\_ITERATIONS for implementations with no maximum?](log_c11c17.md#issue0449)|Closed|
-|0450|[`tmpnam_s` clears `s[0]` when `maxsize > RSIZE_MAX`](log_c11c17.md#issue0450)|Fixed in C17|
-|0451|[Instability of uninitialized automatic variables](log_c11c17.md#issue0451)|Closed|
-|0452|[Effective Type in Loop Invariant](log_c11c17.md#issue0452)|Fixed in C17|
-|0453|[Atomic flag type and operations](log_c11c17.md#issue0453)|Fixed in C17|
-|0454|[ATOMIC\_VAR\_INIT (issues 3 and 4\)](log_c11c17.md#issue0454)|Closed|
-|0455|[ATOMIC\_VAR\_INIT issue 5](log_c11c17.md#issue0455)|Closed|
-|0456|[Compile time definition of `UINT`*`N`*`_C(`*`value`*`)`](log_c11c17.md#issue0456)|Closed|
-|0457|[The `ctime_s` function in Annex K defined incorrectly](log_c11c17.md#issue0457)|Fixed in C17|
-|0458|[ATOMIC\_XXX\_LOCK\_FREE macros not constant expressions](log_c11c17.md#issue0458)|Fixed in C17|
-|0459|[atomic\_load missing const qualifier](log_c11c17.md#issue0459)|Fixed in C17|
-|0460|[`aligned_alloc` underspecified](log_c11c17.md#issue0460)|Fixed in C17|
-|0461|[problems with references to objects in signal handlers](log_c11c17.md#issue0461)|Closed|
-|0462|[Clarifying objects accessed in signal handlers](log_c11c17.md#issue0462)|Fixed in C17|
-|0463|[Left-shifting into the sign bit](log_c11c17.md#issue0463)|Closed|
-|0464|[Clarifying the Behavior of the `#line` Directive](log_c11c17.md#issue0464)|Fixed in C17|
-|0465|[Fixing an inconsistency in `atomic_is_lock_free`](log_c11c17.md#issue0465)|Fixed in C17|
-|0466|[scope of a `for` loop control declaration](log_c11c17.md#issue0466)|Closed|
-|0467|[maximum representable finite description vs math](log_c11c17.md#issue0467)|Closed|
-|0468|[`strncpy_s` clobbers buffer past `null`](log_c11c17.md#issue0468)|Fixed in C17|
-|0469|[lock ownership vs. thread termination](log_c11c17.md#issue0469)|Closed|
-|0470|[mtx\_trylock should be allowed to fail spuriously](log_c11c17.md#issue0470)|Fixed in C17|
-|0471|[Complex math functions cacosh and ctanh](log_c11c17.md#issue0471)|Fixed in C17|
-|0472|[Introduction to complex arithmetic in 7.3.1p3 wrong due to CMPLX](log_c11c17.md#issue0472)|Fixed in C17|
-|0473|["A range error occurs if x is too large." is misleading](log_c11c17.md#issue0473)|Fixed in C17|
-|0474|[NOTE 1 Clarification for `atomic_compare_exchange`](log_c11c17.md#issue0474)|Closed|
-|0475|[Misleading Atomic library references to atomic types](log_c11c17.md#issue0475)|Fixed in C17|
-|0476|[volatile semantics for lvalues](log_c11c17.md#issue0476)|Fixed in C23|
-|0477|[`nan` should take a string argument](log_c11c17.md#issue0477)|Fixed in C17|
-|0478|[valid uses of the `main` function](log_c11c17.md#issue0478)|Closed|
-|0479|[unclear specification of `mtx_trylock` on non-recursive muteness](log_c11c17.md#issue0479)|Closed|
-|0480|[`cnd_wait` and `cnd_timewait` should allow spurious wake-ups](log_c11c17.md#issue0480)|Fixed in C17|
-|0481|[Controlling expression of `_Generic` primary expression](log_c11c17.md#issue0481)|Fixed in C17|
-|0482|[Macro invocation split over many files](log_c11c17.md#issue0482)|Closed|
-|0483|[`__LINE__` and `__FILE__` in macro replacement list](log_c11c17.md#issue0483)|Closed|
-|0484|[invalid characters in `strcoll()`](log_c11c17.md#issue0484)|Closed|
-|0485|[Problem with the specification of `ATOMIC_VAR_INIT`](log_c11c17.md#issue0485)|Fixed in C17|
-|0486|[Inconsistent specification for arithmetic on atomic objects](log_c11c17.md#issue0486)|Closed|
-|0487|[`timespec` vs. `tm`](log_c11c17.md#issue0487)|Fixed in C17|
-|0488|[`c16rtomb()` on wide characters encoded as multiple `char16_t`](log_c11c17.md#issue0488)|Fixed in C23|
-|0489|[Integer Constant Expression](log_c11c17.md#issue0489)|Closed|
-|0490|[Unwritten Assumptions About if-then](log_c11c17.md#issue0490)|Closed|
-|0491|[Concern with Keywords that Match Reserved Identifiers](log_c11c17.md#issue0491)|Fixed in C17|
-|0492|[Named Child struct-union with no Member](log_c11c17.md#issue0492)|Closed|
-|0493|[Mutex Initialization Underspecified](log_c11c17.md#issue0493)|Closed|
-|0494|[Part 1: Alignment specifier expression evaluation](log_c11c17.md#issue0494)|Fixed in C23|
-|0495|[Part 2: Atomic specifier expression evaluation](log_c11c17.md#issue0495)|Closed|
-|0496|[`offsetof` questions](log_c11c17.md#issue0496)|Fixed in C23|
-|0497|["white-space character" defined in two places](log_c11c17.md#issue0497)|Fixed in C23|
-|0498|[`mblen`, `mbtowc`, and `wctomb` thread-safety](log_c11c17.md#issue0498)|Closed|
-|0499|[Anonymous structure in union behavior](log_c11c17.md#issue0499)|Fixed in C23|
-|0500|[Ambiguous specification for **FLT\_EVAL\_METHOD**](log_c11c17.md#issue0500)|Fixed in C23|
-|0501|[Can **DECIMAL\_DIG** be larger than necessary?](log_c11c17.md#issue0501)|Fixed in C23|
-|0502|[Flexible array member in an anonymous struct](log_c11c17.md#issue0502)|Closed|
-|0503|[Hexadecimal floating-point and `strtod`](log_c11c17.md#issue0503)|Closed|
+|[0400](log_c11c17.md#issue0400)|`realloc` with size zero problems|Fixed in C17|
+|[0401](log_c11c17.md#issue0401)|"happens before" cannot be cyclic|Fixed in C17|
+|[0402](log_c11c17.md#issue0402)|memory model coherence is not aligned with C\+\+11|Fixed in C17|
+|[0403](log_c11c17.md#issue0403)|`malloc()` and `free()` in the memory model|Fixed in C17|
+|[0404](log_c11c17.md#issue0404)|joke fragment remains in a footnote|Fixed in C17|
+|[0405](log_c11c17.md#issue0405)|mutex specification not aligned with C\+\+11 on total order|Fixed in C17|
+|[0406](log_c11c17.md#issue0406)|Visible sequences of side effects are redundant|Fixed in C17|
+|[0407](log_c11c17.md#issue0407)|SC fences do not restrict modification order enough|Fixed in C17|
+|[0408](log_c11c17.md#issue0408)|Should locks provide intra-thread synchronization|Closed|
+|[0409](log_c11c17.md#issue0409)|`f(inf)` is `inf` being a range error|Closed|
+|[0410](log_c11c17.md#issue0410)|`ilogb` inconsistent with `lrint`, `lround`|Fixed in C17|
+|[0411](log_c11c17.md#issue0411)|Predefined macro values|Fixed in C11 TC1|
+|[0412](log_c11c17.md#issue0412)|`#elif`|Fixed in C17|
+|[0413](log_c11c17.md#issue0413)|initialization|Fixed in C17|
+|[0414](log_c11c17.md#issue0414)|Typos in 6.27 Threads `<threads.h>`|Fixed in C17|
+|[0415](log_c11c17.md#issue0415)|Missing divide by zero entry in Annex J.2|Fixed in C17|
+|[0416](log_c11c17.md#issue0416)|`tss_t` destruction unspecified|Fixed in C17|
+|[0417](log_c11c17.md#issue0417)|Annex J not updated with necessary `aligned_alloc` entries|Fixed in C17|
+|[0418](log_c11c17.md#issue0418)|`fmod(0.,Nan)` and `fmod(Nan, infinity)`|Closed|
+|[0419](log_c11c17.md#issue0419)|What the heck is a "generic function"?|Fixed in C17|
+|[0420](log_c11c17.md#issue0420)|syntax error in specification of for-statement|Closed|
+|[0421](log_c11c17.md#issue0421)|initialization of `atomic_flag`|Closed|
+|[0422](log_c11c17.md#issue0422)|initialization of atomic types|Closed|
+|[0423](log_c11c17.md#issue0423)|Defect Report relative to n1570: underspecification for qualified rvalues|Fixed in C17|
+|[0424](log_c11c17.md#issue0424)|underspecification of `tss_t`|Fixed in C17|
+|[0425](log_c11c17.md#issue0425)|no specification for the access to variables with temporary lifetime|Closed|
+|[0426](log_c11c17.md#issue0426)|G.5.1: `-yv` and `-x/v` are ambiguous|Fixed in C17|
+|[0427](log_c11c17.md#issue0427)|Function Parameter and Return Value Assignments|Closed|
+|[0428](log_c11c17.md#issue0428)|runtime-constraint issue with sprintf family of routines in Annex K|Fixed in C17|
+|[0429](log_c11c17.md#issue0429)|Should `gets_s` discard next input line when `(s == NULL)` ?|Fixed in C17|
+|[0430](log_c11c17.md#issue0430)|`getenv_s`, `maxsize` should be allowed to be zero|Fixed in C17|
+|[0431](log_c11c17.md#issue0431)|`atomic_compare_exchange`: What does it mean to say two structs compare equal?|Fixed in C17|
+|[0432](log_c11c17.md#issue0432)|Is `0.0` required to be a representable value?|Closed|
+|[0433](log_c11c17.md#issue0433)|Issue with constraints for wide character function arguments involving **RSIZE\_MAX**|Fixed in C17|
+|[0434](log_c11c17.md#issue0434)|Missing constraint w.r.t. Atomic|Fixed in C17|
+|[0435](log_c11c17.md#issue0435)|Missing constraint w.r.t. Imaginary|Closed|
+|[0436](log_c11c17.md#issue0436)|Request for interpretation of C11 6.8.5#6|Fixed in C17|
+|[0437](log_c11c17.md#issue0437)|`clock` overflow problems|Fixed in C17|
+|[0438](log_c11c17.md#issue0438)|`ungetc / ungetwc` and file position after discarding push back problems|Fixed in C17|
+|[0439](log_c11c17.md#issue0439)|Issues with the definition of “full expression”|Fixed in C17|
+|[0440](log_c11c17.md#issue0440)|Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 1|Closed|
+|[0441](log_c11c17.md#issue0441)|Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 2|Fixed in C17|
+|[0442](log_c11c17.md#issue0442)|Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 3|Closed|
+|[0443](log_c11c17.md#issue0443)|Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 4|Closed|
+|[0444](log_c11c17.md#issue0444)|Issues with alignment in C11, part 1|Fixed in C17|
+|[0445](log_c11c17.md#issue0445)|Issues with alignment in C11, part 2|Fixed in C17|
+|[0446](log_c11c17.md#issue0446)|Use byte instead of character for memcmp, memcpy|Closed|
+|[0447](log_c11c17.md#issue0447)|Boolean from complex|Fixed in C17|
+|[0448](log_c11c17.md#issue0448)|What are the semantics of a **\# non-directive**?|Fixed in C17|
+|[0449](log_c11c17.md#issue0449)|What is the value of TSS\_DTOR\_ITERATIONS for implementations with no maximum?|Closed|
+|[0450](log_c11c17.md#issue0450)|`tmpnam_s` clears `s[0]` when `maxsize > RSIZE_MAX`|Fixed in C17|
+|[0451](log_c11c17.md#issue0451)|Instability of uninitialized automatic variables|Closed|
+|[0452](log_c11c17.md#issue0452)|Effective Type in Loop Invariant|Fixed in C17|
+|[0453](log_c11c17.md#issue0453)|Atomic flag type and operations|Fixed in C17|
+|[0454](log_c11c17.md#issue0454)|ATOMIC\_VAR\_INIT (issues 3 and 4\)|Closed|
+|[0455](log_c11c17.md#issue0455)|ATOMIC\_VAR\_INIT issue 5|Closed|
+|[0456](log_c11c17.md#issue0456)|Compile time definition of `UINT`*`N`*`_C(`*`value`*`)`|Closed|
+|[0457](log_c11c17.md#issue0457)|The `ctime_s` function in Annex K defined incorrectly|Fixed in C17|
+|[0458](log_c11c17.md#issue0458)|ATOMIC\_XXX\_LOCK\_FREE macros not constant expressions|Fixed in C17|
+|[0459](log_c11c17.md#issue0459)|atomic\_load missing const qualifier|Fixed in C17|
+|[0460](log_c11c17.md#issue0460)|`aligned_alloc` underspecified|Fixed in C17|
+|[0461](log_c11c17.md#issue0461)|problems with references to objects in signal handlers|Closed|
+|[0462](log_c11c17.md#issue0462)|Clarifying objects accessed in signal handlers|Fixed in C17|
+|[0463](log_c11c17.md#issue0463)|Left-shifting into the sign bit|Closed|
+|[0464](log_c11c17.md#issue0464)|Clarifying the Behavior of the `#line` Directive|Fixed in C17|
+|[0465](log_c11c17.md#issue0465)|Fixing an inconsistency in `atomic_is_lock_free`|Fixed in C17|
+|[0466](log_c11c17.md#issue0466)|scope of a `for` loop control declaration|Closed|
+|[0467](log_c11c17.md#issue0467)|maximum representable finite description vs math|Closed|
+|[0468](log_c11c17.md#issue0468)|`strncpy_s` clobbers buffer past `null`|Fixed in C17|
+|[0469](log_c11c17.md#issue0469)|lock ownership vs. thread termination|Closed|
+|[0470](log_c11c17.md#issue0470)|mtx\_trylock should be allowed to fail spuriously|Fixed in C17|
+|[0471](log_c11c17.md#issue0471)|Complex math functions cacosh and ctanh|Fixed in C17|
+|[0472](log_c11c17.md#issue0472)|Introduction to complex arithmetic in 7.3.1p3 wrong due to CMPLX|Fixed in C17|
+|[0473](log_c11c17.md#issue0473)|"A range error occurs if x is too large." is misleading|Fixed in C17|
+|[0474](log_c11c17.md#issue0474)|NOTE 1 Clarification for `atomic_compare_exchange`|Closed|
+|[0475](log_c11c17.md#issue0475)|Misleading Atomic library references to atomic types|Fixed in C17|
+|[0476](log_c11c17.md#issue0476)|volatile semantics for lvalues|Fixed in C23|
+|[0477](log_c11c17.md#issue0477)|`nan` should take a string argument|Fixed in C17|
+|[0478](log_c11c17.md#issue0478)|valid uses of the `main` function|Closed|
+|[0479](log_c11c17.md#issue0479)|unclear specification of `mtx_trylock` on non-recursive muteness|Closed|
+|[0480](log_c11c17.md#issue0480)|`cnd_wait` and `cnd_timewait` should allow spurious wake-ups|Fixed in C17|
+|[0481](log_c11c17.md#issue0481)|Controlling expression of `_Generic` primary expression|Fixed in C17|
+|[0482](log_c11c17.md#issue0482)|Macro invocation split over many files|Closed|
+|[0483](log_c11c17.md#issue0483)|`__LINE__` and `__FILE__` in macro replacement list|Closed|
+|[0484](log_c11c17.md#issue0484)|invalid characters in `strcoll()`|Closed|
+|[0485](log_c11c17.md#issue0485)|Problem with the specification of `ATOMIC_VAR_INIT`|Fixed in C17|
+|[0486](log_c11c17.md#issue0486)|Inconsistent specification for arithmetic on atomic objects|Closed|
+|[0487](log_c11c17.md#issue0487)|`timespec` vs. `tm`|Fixed in C17|
+|[0488](log_c11c17.md#issue0488)|`c16rtomb()` on wide characters encoded as multiple `char16_t`|Fixed in C23|
+|[0489](log_c11c17.md#issue0489)|Integer Constant Expression|Closed|
+|[0490](log_c11c17.md#issue0490)|Unwritten Assumptions About if-then|Closed|
+|[0491](log_c11c17.md#issue0491)|Concern with Keywords that Match Reserved Identifiers|Fixed in C17|
+|[0492](log_c11c17.md#issue0492)|Named Child struct-union with no Member|Closed|
+|[0493](log_c11c17.md#issue0493)|Mutex Initialization Underspecified|Closed|
+|[0494](log_c11c17.md#issue0494)|Part 1: Alignment specifier expression evaluation|Fixed in C23|
+|[0495](log_c11c17.md#issue0495)|Part 2: Atomic specifier expression evaluation|Closed|
+|[0496](log_c11c17.md#issue0496)|`offsetof` questions|Fixed in C23|
+|[0497](log_c11c17.md#issue0497)|"white-space character" defined in two places|Fixed in C23|
+|[0498](log_c11c17.md#issue0498)|`mblen`, `mbtowc`, and `wctomb` thread-safety|Closed|
+|[0499](log_c11c17.md#issue0499)|Anonymous structure in union behavior|Fixed in C23|
+|[0500](log_c11c17.md#issue0500)|Ambiguous specification for **FLT\_EVAL\_METHOD**|Fixed in C23|
+|[0501](log_c11c17.md#issue0501)|Can **DECIMAL\_DIG** be larger than necessary?|Fixed in C23|
+|[0502](log_c11c17.md#issue0502)|Flexible array member in an anonymous struct|Closed|
+|[0503](log_c11c17.md#issue0503)|Hexadecimal floating-point and `strtod`|Closed|
 
 ---
 

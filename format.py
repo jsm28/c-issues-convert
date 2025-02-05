@@ -209,8 +209,8 @@ def action_format():
             else:
                 status = STATUSES[data['status']]
             table.append(
-                '|%s|[%s](issue:%s)|%s|\n'
-                % (num, data['summary-md'], num, status))
+                '|[%s](issue:%s)|%s|%s|\n'
+                % (num, num, data['summary-md'], status))
         table.append('\n')
         issues = [issues_data[n]['formatted-list-md'] for n in nums]
         write_md('summary_%s.md' % std, ''.join(summary_head + table),

@@ -4,151 +4,151 @@
 
 |Issue|Summary|Status|
 |-|-|-|
-|0201|[Integer types longer than `long`](log_c99.md#issue0201)|Closed|
-|0202|[Change return type of certain `<fenv.h>` functions](log_c99.md#issue0202)|Fixed in C99 TC1|
-|0203|[C locale conflict with ISO/IEC 9945-2](log_c99.md#issue0203)|Fixed in C99|
-|0204|[`size_t` and `ptrdiff_t` as a `long long` type](log_c99.md#issue0204)|Fixed in C99 TC1|
-|0205|[New keyword `__at_least`](log_c99.md#issue0205)|Closed|
-|0206|[Default argument conversion of `float _Complex`](log_c99.md#issue0206)|Closed|
-|0207|[Handling of imaginary types](log_c99.md#issue0207)|Fixed in C99 TC2|
-|0208|[Ambiguity in initialization](log_c99.md#issue0208)|Fixed in C99 TC1|
-|0209|[Problem implementing `INT`*N*`_C` macros](log_c99.md#issue0209)|Fixed in C99 TC1|
-|0210|[`fprintf %a` and `%A` conversions recommended practice](log_c99.md#issue0210)|Fixed in C99 TC1|
-|0211|[Accuracy of decimal string to/from "binary" (non-decimal) floating-point conversions](log_c99.md#issue0211)|Fixed in C99 TC2|
-|0212|[Binding of multibyte conversion state objects](log_c99.md#issue0212)|Closed|
-|0213|[Lacuna in `mbrtowc`](log_c99.md#issue0213)|Fixed in C99 TC1|
-|0214|[`atexit` function registration](log_c99.md#issue0214)|Closed|
-|0215|[Equality operators](log_c99.md#issue0215)|Fixed in C99 TC2|
-|0216|[Source character encodings](log_c99.md#issue0216)|Fixed in C99 TC1|
-|0217|[`asctime` limits](log_c99.md#issue0217)|Closed|
-|0218|[Signs of non-numeric floating point values](log_c99.md#issue0218)|Fixed in C99 TC2|
-|0219|[Effective types](log_c99.md#issue0219)|Closed|
-|0220|[Definition of "decimal integer"](log_c99.md#issue0220)|Fixed in C99 TC1|
-|0221|[Lacuna in pointer arithmetic](log_c99.md#issue0221)|Closed|
-|0222|[Partially initialized structures](log_c99.md#issue0222)|Fixed in C99 TC2|
-|0223|[`FP_FAST_FMAF` and `FP_FAST_FMAL` should be integer constant](log_c99.md#issue0223)|Fixed in C99 TC2|
-|0224|[`fpclassify` return is not defined](log_c99.md#issue0224)|Fixed in C99 TC2|
-|0225|[`strtod`, `strtof` and `strtold` expected form of the subject sequence](log_c99.md#issue0225)|Fixed in C99 TC2|
-|0226|[`strftime` references](log_c99.md#issue0226)|Closed|
-|0227|[`strftime %U`, `%V`, and `%W` conversion specifiers](log_c99.md#issue0227)|Closed|
-|0228|[`wmemcmp` declaration in Annex B](log_c99.md#issue0228)|Fixed in C99 TC1|
-|0229|[`localeconv() *_sep_by_space` table entries issues](log_c99.md#issue0229)|Fixed in C99 TC2|
-|0230|[Enumerated type rank](log_c99.md#issue0230)|Fixed in C99 TC2|
-|0231|[Semantics of *text-line* and *non-directive*](log_c99.md#issue0231)|Closed|
-|0232|[Typo in Annex I](log_c99.md#issue0232)|Fixed in C99 TC1|
-|0233|[`%g`, `%G` precision specification](log_c99.md#issue0233)|Fixed in C99 TC2|
-|0234|[Miscellaneous Typos](log_c99.md#issue0234)|Fixed in C99 TC1|
-|0235|["`C`" locale collating behaviour not defined](log_c99.md#issue0235)|Closed|
-|0236|[The interpretation of type based aliasing rule when applied to union objects or allocated objects](log_c99.md#issue0236)|Closed|
-|0237|[Declarations using `[static]`](log_c99.md#issue0237)|Closed|
-|0238|[Decriptions of `fma()` overflow and underflow errors are missing](log_c99.md#issue0238)|Fixed in C99 TC2|
-|0239|[Annex F `nexttoward` description is inconsistent with 7.12.11.4. and F.9.8.3](log_c99.md#issue0239)|Fixed in C99 TC2|
-|0240|[`lrint`, `llrint`, `lround`, `llround`, and `ilogb` descriptions are not consistent for unrepresentable results](log_c99.md#issue0240)|Fixed in C99 TC2|
-|0241|[Make the base standard and Annex F consistent for `pow(0, <0)`](log_c99.md#issue0241)|Fixed in C99 TC2|
-|0242|[Make the base standard and Annex F consistent for `logb(0)`](log_c99.md#issue0242)|Fixed in C99 TC2|
-|0243|[Make the base standard and Annex F consistent for `fmod()`, `remainder()`, and `remquo()` for a zero divisor](log_c99.md#issue0243)|Fixed in C99 TC2|
-|0244|[`tgamma(zero or negative integer)` should be considered a pole error](log_c99.md#issue0244)|Fixed in C99 TC2|
-|0245|[Missing paragraph numbers](log_c99.md#issue0245)|Fixed in C99 TC2|
-|0246|[completion of declarators](log_c99.md#issue0246)|Closed|
-|0247|[are values a form of behaviour ?](log_c99.md#issue0247)|Fixed in C99 TC2|
-|0248|[limits are required for optional types](log_c99.md#issue0248)|Fixed in C99 TC2|
-|0249|[Lacuna applying C89:TC1 to C99](log_c99.md#issue0249)|Fixed in C99 TC2|
-|0250|[non-directives within macro arguments](log_c99.md#issue0250)|Fixed in C99 TC2|
-|0251|[are `struct fred` and `union fred` the same type ?](log_c99.md#issue0251)|Fixed in C99 TC3|
-|0252|[incomplete argument types when calling non-prototyped functions](log_c99.md#issue0252)|Fixed in C99 TC3|
-|0253|["overriding" in designated initializers](log_c99.md#issue0253)|Closed|
-|0254|[`mbtowc` and partial characters](log_c99.md#issue0254)|Closed|
-|0255|[non-prototyped function calls and argument mismatches](log_c99.md#issue0255)|Closed|
-|0256|[multiple inclusion of headers](log_c99.md#issue0256)|Closed|
-|0257|[common initial sequences and related issues with unions](log_c99.md#issue0257)|Closed|
-|0258|[ordering of "defined" and macro replacement](log_c99.md#issue0258)|Closed|
-|0259|[macro invocations with no arguments](log_c99.md#issue0259)|Closed|
-|0260|[indeterminate values and identical representations](log_c99.md#issue0260)|Closed|
-|0261|[constant expressions](log_c99.md#issue0261)|Closed|
-|0262|[maximum size of bit fields](log_c99.md#issue0262)|Fixed in C99 TC2|
-|0263|[all-zero bits representations](log_c99.md#issue0263)|Fixed in C99 TC2|
-|0264|[graphic characters](log_c99.md#issue0264)|Closed|
-|0265|[preprocessor arithmetic](log_c99.md#issue0265)|Fixed in C99 TC2|
-|0266|[overflow of `sizeof`](log_c99.md#issue0266)|Closed|
-|0267|[Typos in 5.1.2.3, 7.24.4.4.5, 7.24.6.1, 7.24.6.1](log_c99.md#issue0267)|Fixed in C99 TC2|
-|0268|[jumps into iteration statements](log_c99.md#issue0268)|Fixed in C99 TC3|
-|0269|[lacunae in exact-width integer types](log_c99.md#issue0269)|Fixed in C99 TC2|
-|0270|[`wint_t` is not the promoted version of `wchar_t`](log_c99.md#issue0270)|Fixed in C99 TC2|
-|0271|[lacuna in `iswctype` and `towctrans`](log_c99.md#issue0271)|Closed|
-|0272|[type category](log_c99.md#issue0272)|Fixed in C99 TC2|
-|0273|[meaning of `__STDC_ISO_10646__`](log_c99.md#issue0273)|Fixed in C99 TC2|
-|0274|[meaning of "character" in \<string,h\> functions](log_c99.md#issue0274)|Fixed in C99 TC2|
-|0275|[bitwise-OR of nothing](log_c99.md#issue0275)|Fixed in C99 TC2|
-|0276|[orientation of `perror`](log_c99.md#issue0276)|Fixed in C99 TC2|
-|0277|[declarations within iteration statements](log_c99.md#issue0277)|Closed|
-|0278|[lacuna in character encodings](log_c99.md#issue0278)|Fixed in C99 TC2|
-|0279|[Wide character code values for members of the basic character set](log_c99.md#issue0279)|Fixed in C99 TC2|
-|0280|[`struct tm`, member `tm_isdst`, and `mktime()` in `<time.h>`](log_c99.md#issue0280)|Closed|
-|0281|[CLOCKS\_PER\_SEC should not be a constant expression](log_c99.md#issue0281)|Fixed in C99 TC2|
-|0282|[flexible array members \& struct padding](log_c99.md#issue0282)|Fixed in C99 TC2|
-|0283|[Accessing a non-current union member ("type punning")](log_c99.md#issue0283)|Fixed in C99 TC3|
-|0284|[Does \<math.h\> define `INT_MIN` and `INT_MAX`?](log_c99.md#issue0284)|Closed|
-|0285|[Conversion of an `imaginary` type to `_Bool`](log_c99.md#issue0285)|Fixed in C99 TC2|
-|0286|[Correctly rounded and rounding direction/mode](log_c99.md#issue0286)|Fixed in C99 TC3|
-|0287|[Floating-point status flags and sequence points](log_c99.md#issue0287)|Fixed in C99 TC3|
-|0288|[deficiency on multibyte conversions](log_c99.md#issue0288)|Closed|
-|0289|[Function prototype with \[restrict\]](log_c99.md#issue0289)|Fixed in C99 TC3|
-|0290|[`FLT_EVAL_METHOD` and extra precision and/or range](log_c99.md#issue0290)|Fixed in C99 TC3|
-|0291|[corrections to requirements on inexact floating-point exceptions](log_c99.md#issue0291)|Fixed in C99 TC3|
-|0292|[Use of the word *variable*](log_c99.md#issue0292)|Fixed in C99 TC3|
-|0293|[Typo in Standard \- `double complex` instead of `complex` in an example](log_c99.md#issue0293)|Fixed in C99 TC3|
-|0294|[Technical question on C99 `restrict` keyword](log_c99.md#issue0294)|Closed|
-|0295|[Incomplete types for function parameters](log_c99.md#issue0295)|Fixed in C99 TC3|
-|0296|[Is `exp(INFINITY)` overflow? A range error? A divide-by-zero exception? `INFINITY` without any errors?](log_c99.md#issue0296)|Fixed in C99 TC3|
-|0297|[May `FE_*` floating-point exception flags have bits in common?](log_c99.md#issue0297)|Fixed in C99 TC3|
-|0298|[Validity of constant in `unsigned long long` range](log_c99.md#issue0298)|Fixed in C99 TC3|
-|0299|[Is `cabs()` a type-generic macro?](log_c99.md#issue0299)|Fixed in C99 TC3|
-|0300|[Translation-time expresssion evaluation](log_c99.md#issue0300)|Closed|
-|0301|[Meaning of FE\_\* macros in \<fenv.h\>](log_c99.md#issue0301)|Closed|
-|0302|[6.10.2p5: Adding underscore to portable include file name character set](log_c99.md#issue0302)|Fixed in C99 TC3|
-|0303|[6.10p2: Breaking up the very long sentence describing preprocessing directive](log_c99.md#issue0303)|Fixed in C99 TC3|
-|0304|[Clarifying illegal tokens in `#if` directives](log_c99.md#issue0304)|Fixed in C99 TC3|
-|0305|[6.10.1p3: Clarifying handling of keywords in `#if` directives](log_c99.md#issue0305)|Fixed in C99 TC3|
-|0306|[6.10.3p9: Clarifying that rescanning applies to object-like macros](log_c99.md#issue0306)|Fixed in C99 TC3|
-|0307|[6.10.3p10: Clarifiying arguments vs. parameters](log_c99.md#issue0307)|Fixed in C99 TC3|
-|0308|[Clarify that source files et al. need not be "files"](log_c99.md#issue0308)|Fixed in C99 TC3|
-|0309|[Clarifying trigraph substitution](log_c99.md#issue0309)|Fixed in C99 TC3|
-|0310|[Add non-corner case example of trigraphs](log_c99.md#issue0310)|Fixed in C99 TC3|
-|0311|[Definition of variably modified types](log_c99.md#issue0311)|Fixed in C99 TC3|
-|0312|[Meaning of "known constant size"](log_c99.md#issue0312)|Fixed in C99 TC3|
-|0313|[Incomplete arrays of VLAs](log_c99.md#issue0313)|Closed|
-|0314|[Cross-translation-unit tagged type compatibility](log_c99.md#issue0314)|Closed|
-|0315|[Implementation-defined bit-field types](log_c99.md#issue0315)|Fixed in C11|
-|0316|[Unprototyped function types](log_c99.md#issue0316)|Closed|
-|0317|[Function definitions with empty parentheses](log_c99.md#issue0317)|Closed|
-|0318|[`(double)0.1f` with `FLT_EVAL_METHOD` being 2](log_c99.md#issue0318)|Fixed in C99 TC3|
-|0319|[printf("%a", 1.0) and trailing zeros](log_c99.md#issue0319)|Closed|
-|0320|[Scope of variably modified type](log_c99.md#issue0320)|Fixed in C99 TC3|
-|0321|[Wide character code values for members of the basic character set](log_c99.md#issue0321)|Fixed in C99 TC3|
-|0322|[Problem with TC2 Change #67 (Add `perror` to the list defining byte input/output functions.)](log_c99.md#issue0322)|Fixed in C99 TC3|
-|0323|[Potential problems with TC2 #34, #35, and #36](log_c99.md#issue0323)|Fixed in C99 TC3|
-|0324|[Tokenization obscurities](log_c99.md#issue0324)|Fixed in C99 TC3|
-|0325|[`strerror()`](log_c99.md#issue0325)|Closed|
-|0326|[`asctime()`](log_c99.md#issue0326)|Fixed in C11|
-|0327|[Italicize definition of variable length array type, add forward references](log_c99.md#issue0327)|Fixed in C11|
-|0328|[String literals in compound literal initialization](log_c99.md#issue0328)|Fixed in C11|
-|0329|[Math functions and directed rounding](log_c99.md#issue0329)|Fixed in C11|
-|0330|[Externally visible exceptional conditions](log_c99.md#issue0330)|Fixed in C11|
-|0331|[permit `FE_DIVBYZERO` when `errno` says `EDOM`](log_c99.md#issue0331)|Closed|
-|0332|[`gets` is generally unsafe](log_c99.md#issue0332)|Fixed in C99 TC3|
-|0333|[Missing Predefined Macro Name](log_c99.md#issue0333)|Fixed in C99 TC3|
-|0334|[Missing semantics of comparison macros](log_c99.md#issue0334)|Closed|
-|0335|[\_Bool bit-fields](log_c99.md#issue0335)|Closed|
-|0336|[`TMP_MAX`](log_c99.md#issue0336)|Fixed in C11|
-|0337|[`stdio.h` macro definition problems](log_c99.md#issue0337)|Closed|
-|0338|[C99 seems to exclude **indeterminate value** from being an uninitialized register](log_c99.md#issue0338)|Fixed in C11|
-|0339|[Variably modified compound literals](log_c99.md#issue0339)|Fixed in C11|
-|0340|[Composite types for variable-length arrays](log_c99.md#issue0340)|Fixed in C11|
-|0341|[`[*]` in abstract declarators](log_c99.md#issue0341)|Fixed in C11|
-|0342|[VLAs and conditional expressions](log_c99.md#issue0342)|Fixed in C11|
-|0343|[Initializing qualified wchar\_t arrays](log_c99.md#issue0343)|Fixed in C11|
-|0344|[Casts in preprocessor conditional expressions](log_c99.md#issue0344)|Fixed in C11|
-|0345|[Where does parameter scope start?](log_c99.md#issue0345)|Fixed in C11|
+|[0201](log_c99.md#issue0201)|Integer types longer than `long`|Closed|
+|[0202](log_c99.md#issue0202)|Change return type of certain `<fenv.h>` functions|Fixed in C99 TC1|
+|[0203](log_c99.md#issue0203)|C locale conflict with ISO/IEC 9945-2|Fixed in C99|
+|[0204](log_c99.md#issue0204)|`size_t` and `ptrdiff_t` as a `long long` type|Fixed in C99 TC1|
+|[0205](log_c99.md#issue0205)|New keyword `__at_least`|Closed|
+|[0206](log_c99.md#issue0206)|Default argument conversion of `float _Complex`|Closed|
+|[0207](log_c99.md#issue0207)|Handling of imaginary types|Fixed in C99 TC2|
+|[0208](log_c99.md#issue0208)|Ambiguity in initialization|Fixed in C99 TC1|
+|[0209](log_c99.md#issue0209)|Problem implementing `INT`*N*`_C` macros|Fixed in C99 TC1|
+|[0210](log_c99.md#issue0210)|`fprintf %a` and `%A` conversions recommended practice|Fixed in C99 TC1|
+|[0211](log_c99.md#issue0211)|Accuracy of decimal string to/from "binary" (non-decimal) floating-point conversions|Fixed in C99 TC2|
+|[0212](log_c99.md#issue0212)|Binding of multibyte conversion state objects|Closed|
+|[0213](log_c99.md#issue0213)|Lacuna in `mbrtowc`|Fixed in C99 TC1|
+|[0214](log_c99.md#issue0214)|`atexit` function registration|Closed|
+|[0215](log_c99.md#issue0215)|Equality operators|Fixed in C99 TC2|
+|[0216](log_c99.md#issue0216)|Source character encodings|Fixed in C99 TC1|
+|[0217](log_c99.md#issue0217)|`asctime` limits|Closed|
+|[0218](log_c99.md#issue0218)|Signs of non-numeric floating point values|Fixed in C99 TC2|
+|[0219](log_c99.md#issue0219)|Effective types|Closed|
+|[0220](log_c99.md#issue0220)|Definition of "decimal integer"|Fixed in C99 TC1|
+|[0221](log_c99.md#issue0221)|Lacuna in pointer arithmetic|Closed|
+|[0222](log_c99.md#issue0222)|Partially initialized structures|Fixed in C99 TC2|
+|[0223](log_c99.md#issue0223)|`FP_FAST_FMAF` and `FP_FAST_FMAL` should be integer constant|Fixed in C99 TC2|
+|[0224](log_c99.md#issue0224)|`fpclassify` return is not defined|Fixed in C99 TC2|
+|[0225](log_c99.md#issue0225)|`strtod`, `strtof` and `strtold` expected form of the subject sequence|Fixed in C99 TC2|
+|[0226](log_c99.md#issue0226)|`strftime` references|Closed|
+|[0227](log_c99.md#issue0227)|`strftime %U`, `%V`, and `%W` conversion specifiers|Closed|
+|[0228](log_c99.md#issue0228)|`wmemcmp` declaration in Annex B|Fixed in C99 TC1|
+|[0229](log_c99.md#issue0229)|`localeconv() *_sep_by_space` table entries issues|Fixed in C99 TC2|
+|[0230](log_c99.md#issue0230)|Enumerated type rank|Fixed in C99 TC2|
+|[0231](log_c99.md#issue0231)|Semantics of *text-line* and *non-directive*|Closed|
+|[0232](log_c99.md#issue0232)|Typo in Annex I|Fixed in C99 TC1|
+|[0233](log_c99.md#issue0233)|`%g`, `%G` precision specification|Fixed in C99 TC2|
+|[0234](log_c99.md#issue0234)|Miscellaneous Typos|Fixed in C99 TC1|
+|[0235](log_c99.md#issue0235)|"`C`" locale collating behaviour not defined|Closed|
+|[0236](log_c99.md#issue0236)|The interpretation of type based aliasing rule when applied to union objects or allocated objects|Closed|
+|[0237](log_c99.md#issue0237)|Declarations using `[static]`|Closed|
+|[0238](log_c99.md#issue0238)|Decriptions of `fma()` overflow and underflow errors are missing|Fixed in C99 TC2|
+|[0239](log_c99.md#issue0239)|Annex F `nexttoward` description is inconsistent with 7.12.11.4. and F.9.8.3|Fixed in C99 TC2|
+|[0240](log_c99.md#issue0240)|`lrint`, `llrint`, `lround`, `llround`, and `ilogb` descriptions are not consistent for unrepresentable results|Fixed in C99 TC2|
+|[0241](log_c99.md#issue0241)|Make the base standard and Annex F consistent for `pow(0, <0)`|Fixed in C99 TC2|
+|[0242](log_c99.md#issue0242)|Make the base standard and Annex F consistent for `logb(0)`|Fixed in C99 TC2|
+|[0243](log_c99.md#issue0243)|Make the base standard and Annex F consistent for `fmod()`, `remainder()`, and `remquo()` for a zero divisor|Fixed in C99 TC2|
+|[0244](log_c99.md#issue0244)|`tgamma(zero or negative integer)` should be considered a pole error|Fixed in C99 TC2|
+|[0245](log_c99.md#issue0245)|Missing paragraph numbers|Fixed in C99 TC2|
+|[0246](log_c99.md#issue0246)|completion of declarators|Closed|
+|[0247](log_c99.md#issue0247)|are values a form of behaviour ?|Fixed in C99 TC2|
+|[0248](log_c99.md#issue0248)|limits are required for optional types|Fixed in C99 TC2|
+|[0249](log_c99.md#issue0249)|Lacuna applying C89:TC1 to C99|Fixed in C99 TC2|
+|[0250](log_c99.md#issue0250)|non-directives within macro arguments|Fixed in C99 TC2|
+|[0251](log_c99.md#issue0251)|are `struct fred` and `union fred` the same type ?|Fixed in C99 TC3|
+|[0252](log_c99.md#issue0252)|incomplete argument types when calling non-prototyped functions|Fixed in C99 TC3|
+|[0253](log_c99.md#issue0253)|"overriding" in designated initializers|Closed|
+|[0254](log_c99.md#issue0254)|`mbtowc` and partial characters|Closed|
+|[0255](log_c99.md#issue0255)|non-prototyped function calls and argument mismatches|Closed|
+|[0256](log_c99.md#issue0256)|multiple inclusion of headers|Closed|
+|[0257](log_c99.md#issue0257)|common initial sequences and related issues with unions|Closed|
+|[0258](log_c99.md#issue0258)|ordering of "defined" and macro replacement|Closed|
+|[0259](log_c99.md#issue0259)|macro invocations with no arguments|Closed|
+|[0260](log_c99.md#issue0260)|indeterminate values and identical representations|Closed|
+|[0261](log_c99.md#issue0261)|constant expressions|Closed|
+|[0262](log_c99.md#issue0262)|maximum size of bit fields|Fixed in C99 TC2|
+|[0263](log_c99.md#issue0263)|all-zero bits representations|Fixed in C99 TC2|
+|[0264](log_c99.md#issue0264)|graphic characters|Closed|
+|[0265](log_c99.md#issue0265)|preprocessor arithmetic|Fixed in C99 TC2|
+|[0266](log_c99.md#issue0266)|overflow of `sizeof`|Closed|
+|[0267](log_c99.md#issue0267)|Typos in 5.1.2.3, 7.24.4.4.5, 7.24.6.1, 7.24.6.1|Fixed in C99 TC2|
+|[0268](log_c99.md#issue0268)|jumps into iteration statements|Fixed in C99 TC3|
+|[0269](log_c99.md#issue0269)|lacunae in exact-width integer types|Fixed in C99 TC2|
+|[0270](log_c99.md#issue0270)|`wint_t` is not the promoted version of `wchar_t`|Fixed in C99 TC2|
+|[0271](log_c99.md#issue0271)|lacuna in `iswctype` and `towctrans`|Closed|
+|[0272](log_c99.md#issue0272)|type category|Fixed in C99 TC2|
+|[0273](log_c99.md#issue0273)|meaning of `__STDC_ISO_10646__`|Fixed in C99 TC2|
+|[0274](log_c99.md#issue0274)|meaning of "character" in \<string,h\> functions|Fixed in C99 TC2|
+|[0275](log_c99.md#issue0275)|bitwise-OR of nothing|Fixed in C99 TC2|
+|[0276](log_c99.md#issue0276)|orientation of `perror`|Fixed in C99 TC2|
+|[0277](log_c99.md#issue0277)|declarations within iteration statements|Closed|
+|[0278](log_c99.md#issue0278)|lacuna in character encodings|Fixed in C99 TC2|
+|[0279](log_c99.md#issue0279)|Wide character code values for members of the basic character set|Fixed in C99 TC2|
+|[0280](log_c99.md#issue0280)|`struct tm`, member `tm_isdst`, and `mktime()` in `<time.h>`|Closed|
+|[0281](log_c99.md#issue0281)|CLOCKS\_PER\_SEC should not be a constant expression|Fixed in C99 TC2|
+|[0282](log_c99.md#issue0282)|flexible array members \& struct padding|Fixed in C99 TC2|
+|[0283](log_c99.md#issue0283)|Accessing a non-current union member ("type punning")|Fixed in C99 TC3|
+|[0284](log_c99.md#issue0284)|Does \<math.h\> define `INT_MIN` and `INT_MAX`?|Closed|
+|[0285](log_c99.md#issue0285)|Conversion of an `imaginary` type to `_Bool`|Fixed in C99 TC2|
+|[0286](log_c99.md#issue0286)|Correctly rounded and rounding direction/mode|Fixed in C99 TC3|
+|[0287](log_c99.md#issue0287)|Floating-point status flags and sequence points|Fixed in C99 TC3|
+|[0288](log_c99.md#issue0288)|deficiency on multibyte conversions|Closed|
+|[0289](log_c99.md#issue0289)|Function prototype with \[restrict\]|Fixed in C99 TC3|
+|[0290](log_c99.md#issue0290)|`FLT_EVAL_METHOD` and extra precision and/or range|Fixed in C99 TC3|
+|[0291](log_c99.md#issue0291)|corrections to requirements on inexact floating-point exceptions|Fixed in C99 TC3|
+|[0292](log_c99.md#issue0292)|Use of the word *variable*|Fixed in C99 TC3|
+|[0293](log_c99.md#issue0293)|Typo in Standard \- `double complex` instead of `complex` in an example|Fixed in C99 TC3|
+|[0294](log_c99.md#issue0294)|Technical question on C99 `restrict` keyword|Closed|
+|[0295](log_c99.md#issue0295)|Incomplete types for function parameters|Fixed in C99 TC3|
+|[0296](log_c99.md#issue0296)|Is `exp(INFINITY)` overflow? A range error? A divide-by-zero exception? `INFINITY` without any errors?|Fixed in C99 TC3|
+|[0297](log_c99.md#issue0297)|May `FE_*` floating-point exception flags have bits in common?|Fixed in C99 TC3|
+|[0298](log_c99.md#issue0298)|Validity of constant in `unsigned long long` range|Fixed in C99 TC3|
+|[0299](log_c99.md#issue0299)|Is `cabs()` a type-generic macro?|Fixed in C99 TC3|
+|[0300](log_c99.md#issue0300)|Translation-time expresssion evaluation|Closed|
+|[0301](log_c99.md#issue0301)|Meaning of FE\_\* macros in \<fenv.h\>|Closed|
+|[0302](log_c99.md#issue0302)|6.10.2p5: Adding underscore to portable include file name character set|Fixed in C99 TC3|
+|[0303](log_c99.md#issue0303)|6.10p2: Breaking up the very long sentence describing preprocessing directive|Fixed in C99 TC3|
+|[0304](log_c99.md#issue0304)|Clarifying illegal tokens in `#if` directives|Fixed in C99 TC3|
+|[0305](log_c99.md#issue0305)|6.10.1p3: Clarifying handling of keywords in `#if` directives|Fixed in C99 TC3|
+|[0306](log_c99.md#issue0306)|6.10.3p9: Clarifying that rescanning applies to object-like macros|Fixed in C99 TC3|
+|[0307](log_c99.md#issue0307)|6.10.3p10: Clarifiying arguments vs. parameters|Fixed in C99 TC3|
+|[0308](log_c99.md#issue0308)|Clarify that source files et al. need not be "files"|Fixed in C99 TC3|
+|[0309](log_c99.md#issue0309)|Clarifying trigraph substitution|Fixed in C99 TC3|
+|[0310](log_c99.md#issue0310)|Add non-corner case example of trigraphs|Fixed in C99 TC3|
+|[0311](log_c99.md#issue0311)|Definition of variably modified types|Fixed in C99 TC3|
+|[0312](log_c99.md#issue0312)|Meaning of "known constant size"|Fixed in C99 TC3|
+|[0313](log_c99.md#issue0313)|Incomplete arrays of VLAs|Closed|
+|[0314](log_c99.md#issue0314)|Cross-translation-unit tagged type compatibility|Closed|
+|[0315](log_c99.md#issue0315)|Implementation-defined bit-field types|Fixed in C11|
+|[0316](log_c99.md#issue0316)|Unprototyped function types|Closed|
+|[0317](log_c99.md#issue0317)|Function definitions with empty parentheses|Closed|
+|[0318](log_c99.md#issue0318)|`(double)0.1f` with `FLT_EVAL_METHOD` being 2|Fixed in C99 TC3|
+|[0319](log_c99.md#issue0319)|printf("%a", 1.0) and trailing zeros|Closed|
+|[0320](log_c99.md#issue0320)|Scope of variably modified type|Fixed in C99 TC3|
+|[0321](log_c99.md#issue0321)|Wide character code values for members of the basic character set|Fixed in C99 TC3|
+|[0322](log_c99.md#issue0322)|Problem with TC2 Change #67 (Add `perror` to the list defining byte input/output functions.)|Fixed in C99 TC3|
+|[0323](log_c99.md#issue0323)|Potential problems with TC2 #34, #35, and #36|Fixed in C99 TC3|
+|[0324](log_c99.md#issue0324)|Tokenization obscurities|Fixed in C99 TC3|
+|[0325](log_c99.md#issue0325)|`strerror()`|Closed|
+|[0326](log_c99.md#issue0326)|`asctime()`|Fixed in C11|
+|[0327](log_c99.md#issue0327)|Italicize definition of variable length array type, add forward references|Fixed in C11|
+|[0328](log_c99.md#issue0328)|String literals in compound literal initialization|Fixed in C11|
+|[0329](log_c99.md#issue0329)|Math functions and directed rounding|Fixed in C11|
+|[0330](log_c99.md#issue0330)|Externally visible exceptional conditions|Fixed in C11|
+|[0331](log_c99.md#issue0331)|permit `FE_DIVBYZERO` when `errno` says `EDOM`|Closed|
+|[0332](log_c99.md#issue0332)|`gets` is generally unsafe|Fixed in C99 TC3|
+|[0333](log_c99.md#issue0333)|Missing Predefined Macro Name|Fixed in C99 TC3|
+|[0334](log_c99.md#issue0334)|Missing semantics of comparison macros|Closed|
+|[0335](log_c99.md#issue0335)|\_Bool bit-fields|Closed|
+|[0336](log_c99.md#issue0336)|`TMP_MAX`|Fixed in C11|
+|[0337](log_c99.md#issue0337)|`stdio.h` macro definition problems|Closed|
+|[0338](log_c99.md#issue0338)|C99 seems to exclude **indeterminate value** from being an uninitialized register|Fixed in C11|
+|[0339](log_c99.md#issue0339)|Variably modified compound literals|Fixed in C11|
+|[0340](log_c99.md#issue0340)|Composite types for variable-length arrays|Fixed in C11|
+|[0341](log_c99.md#issue0341)|`[*]` in abstract declarators|Fixed in C11|
+|[0342](log_c99.md#issue0342)|VLAs and conditional expressions|Fixed in C11|
+|[0343](log_c99.md#issue0343)|Initializing qualified wchar\_t arrays|Fixed in C11|
+|[0344](log_c99.md#issue0344)|Casts in preprocessor conditional expressions|Fixed in C11|
+|[0345](log_c99.md#issue0345)|Where does parameter scope start?|Fixed in C11|
 
 ---
 

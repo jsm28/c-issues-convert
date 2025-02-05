@@ -4,255 +4,255 @@
 
 |Issue|Summary|Status|
 |-|-|-|
-|0001|[Do functions return values by copying?](log_c90.md#issue0001)|Fixed in C90 TC1|
-|0002|[Should `\` be escaped within macro actual parameters?](log_c90.md#issue0002)|Closed|
-|0003.01|[Are preprocessing numbers too inclusive?](log_c90.md#issue0003.01)|Closed|
-|0003.02|[Should white space surround macro substitutions?](log_c90.md#issue0003.02)|Closed|
-|0003.03|[Is an empty macro argument a constraint violation?](log_c90.md#issue0003.03)|Closed|
-|0003.04|[Should preprocessing directives be permitted within macro invokations?](log_c90.md#issue0003.04)|Closed|
-|0004|[Are multiple definitions of unused identifiers with external linkage permitted?](log_c90.md#issue0004)|Fixed in C90|
-|0005|[May a conforming implementation define and recognize a pragma which would change the semantics of the language?](log_c90.md#issue0005)|Closed|
-|0006|[How does `strtoul` behave when presented with a subject sequence that begins with a minus sign?](log_c90.md#issue0006)|Closed|
-|0007|[Are declarations of the form `struct` *`tag`* permitted after *`tag`* has already been declared?](log_c90.md#issue0007)|Closed|
-|0008.01|[Is dead-store elimination permitted near `setjmp`?](log_c90.md#issue0008.01)|Closed|
-|0008.02|[Should volatile functions be added?](log_c90.md#issue0008.02)|Closed|
-|0009|[Are typedef names sometimes ambiguous in parameter declarations?](log_c90.md#issue0009)|Fixed in C90 TC1|
-|0010|[Is the typedef to an incomplete type valid?](log_c90.md#issue0010)|Closed|
-|0011.01|[When do the types of multiple external declarations get formed into a composite type?](log_c90.md#issue0011.01)|Fixed in C90 TC1|
-|0011.02|[Does `extern` link to a static declaration that is not visible?](log_c90.md#issue0011.02)|Fixed in C90 TC1|
-|0011.03|[Are implicit initializers for tentative array definitions syntactically valid?](log_c90.md#issue0011.03)|Closed|
-|0011.04|[Does an incomplete array get completed as a tentative definition?](log_c90.md#issue0011.04)|Fixed in C90 TC1|
-|0012|[Can one take the address of a void expression?](log_c90.md#issue0012)|Closed|
-|0013.01|[How does one form the composite type of mixed array and pointer parameter types?](log_c90.md#issue0013.01)|Fixed in C90 TC1|
-|0013.02|[Is compatible properly defined for recursive types?](log_c90.md#issue0013.02)|Closed|
-|0013.03|[What is the composite type of an enumeration and an integer?](log_c90.md#issue0013.03)|Closed|
-|0013.04|[When is a struct type complete?](log_c90.md#issue0013.04)|Fixed in C90 TC1|
-|0013.05|[When is the `sizeof` an enumeration type known?](log_c90.md#issue0013.05)|Fixed in C90 TC1|
-|0014.01|[Is `setjmp` a macro or a function?](log_c90.md#issue0014.01)|Closed|
-|0014.02|[How does `fscanf("%n")` behave on end-of-file?](log_c90.md#issue0014.02)|Fixed in C90 TC1|
-|0015|[How does an unsigned plain bitfield promote?](log_c90.md#issue0015)|Closed|
-|0016.01|[Can a tentative definition have an incomplete type initially?](log_c90.md#issue0016.01)|Closed|
-|0016.02|[Can you implicitly initialize a union when null pointers have nonzero bit patterns?](log_c90.md#issue0016.02)|Fixed in C90 TC1|
-|0017.01|[Are newlines permitted within macro invocations in preprocessing directives?](log_c90.md#issue0017.01)|Fixed in C90 TC1|
-|0017.02|[Should the absence of function `main` be explicitly undefined?](log_c90.md#issue0017.02)|Fixed in C90 TC1|
-|0017.03|[Does a constraint violation win over undefined behavior?](log_c90.md#issue0017.03)|Fixed in C90 TC1|
-|0017.04|[Do numeric escape sequences map from source to execution character sets?](log_c90.md#issue0017.04)|Closed|
-|0017.05|[When are character constants implementation defined?](log_c90.md#issue0017.05)|Closed|
-|0017.06|[Are register aggregates permitted?](log_c90.md#issue0017.06)|Fixed in C90 TC1|
-|0017.07|[What is the scope and uniqueness of `size_t`?](log_c90.md#issue0017.07)|Closed|
-|0017.08|[What types are compatible with pointer to `void`?](log_c90.md#issue0017.08)|Closed|
-|0017.09|[What is the type of an assignment expression?](log_c90.md#issue0017.09)|Fixed in C90 TC1|
-|0017.10|[When is the `sizeof` an object needed?](log_c90.md#issue0017.10)|Closed|
-|0017.11|[Is `struct t; struct t;` valid?](log_c90.md#issue0017.11)|Closed|
-|0017.12|[How do typedefs parse in function prototypes?](log_c90.md#issue0017.12)|Fixed in C90 TC1|
-|0017.13|[How does `register` affect compatibility of function parameters?](log_c90.md#issue0017.13)|Closed|
-|0017.14|[`const void` type as a parameter](log_c90.md#issue0017.14)|Fixed in C90 TC1|
-|0017.15|[When do array parameters get converted to pointers?](log_c90.md#issue0017.15)|Fixed in C90 TC1|
-|0017.16|[Are subarrays of arrays distinct objects?](log_c90.md#issue0017.16)|Fixed in C90 TC1|
-|0017.17|[How do you initialize the first member of a union if it has no name?](log_c90.md#issue0017.17)|Fixed in C90 TC1|
-|0017.18|[Are `f()` and `f(void)` compatible?](log_c90.md#issue0017.18)|Closed|
-|0017.19|[Are macro expansions ambiguous?](log_c90.md#issue0017.19)|Fixed in C90 TC1|
-|0017.20|[Is the scope of macro parameters defined in the right place?](log_c90.md#issue0017.20)|Closed|
-|0017.21|[Is translation phase 4 defined unambiguously?](log_c90.md#issue0017.21)|Closed|
-|0017.22|[Does the rescan of a macro invocation also perform token pasting?](log_c90.md#issue0017.22)|Fixed in C90 TC1|
-|0017.23|[How long does `blue paint` persist on macro names?](log_c90.md#issue0017.23)|Closed|
-|0017.24|[Can subclause 7.1.2 be better expressed?](log_c90.md#issue0017.24)|Fixed in C90 TC1|
-|0017.25|[Should *must* appear in footnotes?](log_c90.md#issue0017.25)|Closed|
-|0017.26|[Are unnamed union members required to be initialized?](log_c90.md#issue0017.26)|Fixed in C90 TC1|
-|0017.27|[Does the `#` flag alter zero stripping of `%g` in `fprintf`?](log_c90.md#issue0017.27)|Closed|
-|0017.28|[Does `errno` get stored before library functions return?](log_c90.md#issue0017.28)|Closed|
-|0017.29|[When does conversion failure occur in floating-point `fscanf` input?](log_c90.md#issue0017.29)|Fixed in C90 TC1|
-|0017.30|[Do `fseek/fsetpos` require values from successful calls to `ftell/fgetpos`?](log_c90.md#issue0017.30)|Fixed in C90 TC1|
-|0017.31|[Are object sizes always in bytes?](log_c90.md#issue0017.31)|Closed|
-|0017.32|[Are `strcmp/strncmp` defined when `char` is signed?](log_c90.md#issue0017.32)|Closed|
-|0017.33|[Are `strcmp/strncmp` defined for strings of differing length](log_c90.md#issue0017.33)|Closed|
-|0017.34|[Is `strtok` described properly?](log_c90.md#issue0017.34)|Closed|
-|0017.35|[When is a physical source line created?](log_c90.md#issue0017.35)|Closed|
-|0017.36|[Is a function returning `const void` defined?](log_c90.md#issue0017.36)|Closed|
-|0017.37|[What is the type of a function call?](log_c90.md#issue0017.37)|Fixed in C90 TC1|
-|0017.38|[What is an iteration control structure or selection control structure?](log_c90.md#issue0017.38)|Fixed in C90 TC1|
-|0017.39|[Are header names tokens outside include directives?](log_c90.md#issue0017.39)|Fixed in C90 TC1|
-|0018|[Does `fscanf` recognize literal multibyte characters properly?](log_c90.md#issue0018)|Closed|
-|0019|[Are printing characters implementation defined?](log_c90.md#issue0019)|Closed|
-|0020|[Is the relaxed Ref/Def linkage model conforming?](log_c90.md#issue0020)|Closed|
-|0021|[What is the result of `printf("%#.4o", 345)`?](log_c90.md#issue0021)|Fixed in C90 TC1|
-|0022|[What is the result of `strtod("100ergs", &ptr)`?](log_c90.md#issue0022)|Fixed in C90 TC1|
-|0023|[If 99,999 is larger than `DBL_MAX_10_EXP`, what is the result of `strtod("0.0e99999", &ptr)`?](log_c90.md#issue0023)|Closed|
-|0024|[For `strtod`, what does `"C"` locale mean?](log_c90.md#issue0024)|Closed|
-|0025|[What is meant by *representable floating-point value?*](log_c90.md#issue0025)|Closed|
-|0026|[Can one use other than the basic C character set in a strictly conforming program?](log_c90.md#issue0026)|Closed|
-|0027|[May a standard conforming implementation add identifier characters?](log_c90.md#issue0027)|Fixed in C90 TC1|
-|0028|[What are the aliasing rules for dynamically allocated objects?](log_c90.md#issue0028)|Closed|
-|0029|[Must compatible structs/unions have the same tag in different translation units?](log_c90.md#issue0029)|Closed|
-|0030|[May `sin(DBL_MAX)` set `errno` to `EDOM`?](log_c90.md#issue0030)|Closed|
-|0031|[How are exceptions handled in constant expressions?](log_c90.md#issue0031)|Closed|
-|0032|[Can an implementation permit a comma operator in a constant expression?](log_c90.md#issue0032)|Closed|
-|0033|[Must a conforming implementation diagnose *shall* violations outside **Constraints**?](log_c90.md#issue0033)|Closed|
-|0034.01|[Does size information evaporate when a declaration goes out of scope, even for objects with external linkage?](log_c90.md#issue0034.01)|Fixed in C90 TC1|
-|0034.02|[If so, can one then write conflicting declarations in disjoint scopes?](log_c90.md#issue0034.02)|Closed|
-|0035.01|[Can one declare an enumeration or struct tag as part of an old-style parameter declaration?](log_c90.md#issue0035.01)|Closed|
-|0035.02|[If so, what is the scope of enumeration tags and constants declared in old-style parameter declarations?](log_c90.md#issue0035.02)|Closed|
-|0036|[May a floating-point constant be represented with more precision than implied by its type?](log_c90.md#issue0036)|Closed|
-|0037|[Can UNICODE or ISO 10646 be used as a multibyte code?](log_c90.md#issue0037)|Closed|
-|0038|[What happens when macro replacement creates adjacent tokens that can be taken as a single token?](log_c90.md#issue0038)|Closed|
-|0039.01|[Must `MB_CUR_MAX` be one in the `"C"` locale?](log_c90.md#issue0039.01)|Closed|
-|0039.02|[Should `setlocale(LC_ALL, NULL)` return `"C"` in the `"C"` locale?](log_c90.md#issue0039.02)|Closed|
-|0040.01|[What is the composite type of `f(int)` and `f(const int)`?](log_c90.md#issue0040.01)|Fixed in C90 TC1|
-|0040.02|[Is an implementation that fails to equal the value of an environmental limit conforming?](log_c90.md#issue0040.02)|Fixed in C90 TC1|
-|0040.03|[Is an **Environmental Constraint** a constraint?](log_c90.md#issue0040.03)|Closed|
-|0040.04|[Should the response to [Defect Report #017, Q39](log_c90.md#issue0017.39) be reconsidered?](log_c90.md#issue0040.04)|Closed|
-|0040.05|[Can a conforming implementation accept `long long`?](log_c90.md#issue0040.05)|Closed|
-|0040.06|[Can one use `offsetof(struct t1, mbr)` before `struct t1` is completely defined?](log_c90.md#issue0040.06)|Closed|
-|0040.07|[Can `sizeof` be applied to earlier parameter names in a prototype, or to earlier fields in a struct?](log_c90.md#issue0040.07)|Closed|
-|0040.08|[What arithmetic can be performed on a `char` holding a defined character literal value?](log_c90.md#issue0040.08)|Closed|
-|0040.09|[Should the response to [Defect Report #017, Q27](log_c90.md#issue0017.27) be reconsidered?](log_c90.md#issue0040.09)|Closed|
-|0041|[Are `'A'` through `'Z'` always `isupper` in all locales?](log_c90.md#issue0041)|Closed|
-|0042.01|[Does `memcpy` define a (sub)object?](log_c90.md#issue0042.01)|Closed|
-|0042.02|[If so, how big is the object defined by `memcpy`?](log_c90.md#issue0042.02)|Closed|
-|0042.03|[How big is a string object defined by the `str*` functions?](log_c90.md#issue0042.03)|Closed|
-|0043.01|[Can `NULL` be defined as `4-4`?](log_c90.md#issue0043.01)|Fixed in C90 TC1|
-|0043.02|[Can an identifier that starts with an underscore be defined as a macro in a source file that includes at least one standard header?](log_c90.md#issue0043.02)|Closed|
-|0044.01|[What does it mean to say that the type of `offsetof` is `size_t`?](log_c90.md#issue0044.01)|Closed|
-|0044.02|[Must the expansion of a standard header be a strictly conforming program?](log_c90.md#issue0044.02)|Closed|
-|0044.03|[Does expanding `offsetof` result in a non-strictly conforming program?](log_c90.md#issue0044.03)|Closed|
-|0044.04|[Can one use `offsetof` in a strictly conforming program?](log_c90.md#issue0044.04)|Closed|
-|0044.05|[Is `offsetof` the only standard macro that renders a program not strictly conforming?](log_c90.md#issue0044.05)|Closed|
-|0045|[Can one `freopen` an already closed file?](log_c90.md#issue0045)|Closed|
-|0046|[May a typedef be redeclared as a parameter outside an old-style function parameter list?](log_c90.md#issue0046)|Closed|
-|0047|[Can an array parameter have elements of incomplete type?](log_c90.md#issue0047)|Closed|
-|0048|[Is `abort` compatible with POSIX?](log_c90.md#issue0048)|Closed|
-|0049|[Can `strxfrm` produce a longer translation string?](log_c90.md#issue0049)|Closed|
-|0050|[Does a proper definition of `wchar_t` need to be in scope to write a wide-character literal?](log_c90.md#issue0050)|Closed|
-|0051|[Can one index beyond the declared end of an array if space is allocated for the extra elements?](log_c90.md#issue0051)|Closed|
-|0052.01|[Should the `mktime` example use `(time_t)-1` instead of `-1`?](log_c90.md#issue0052.01)|Fixed in C90 TC1|
-|0052.02|[Is the index entry for static correct?](log_c90.md#issue0052.02)|Fixed in C90 TC1|
-|0052.03|[Does the C Standard come with a Rationale, as indicated in Footnote 1?](log_c90.md#issue0052.03)|Closed|
-|0053|[Do the aliasing rules cover accesses to different function pointers properly?](log_c90.md#issue0053)|Fixed in C90 TC1|
-|0054|[What is the behavior of various string functions with a specified length of zero?](log_c90.md#issue0054)|Fixed in C90 TC1|
-|0055|[Must the `SIG*` macros have distinct values?](log_c90.md#issue0055)|Fixed in C90 TC1|
-|0056|[How accurate must floating-point arithmetic be?](log_c90.md#issue0056)|Closed|
-|0057|[Must there exist a user-accessible integral type for every pointer?](log_c90.md#issue0057)|Closed|
-|0058|[What is the number of digits in a number that can be processed by the `scanf` family and the `strtod` family?](log_c90.md#issue0058)|Closed|
-|0059|[Must an incomplete type be completed by the end of a translation unit?](log_c90.md#issue0059)|Closed|
-|0060|[When an array of `char` (or `wchar_t`) is initialized with a string literal that contains fewer characters than the array, are the remaining elements of the array initialized?](log_c90.md#issue0060)|Fixed in C90 TC2|
-|0061|[Interpretation of white space in the format string of a scan statement](log_c90.md#issue0061)|Closed|
-|0062|[Can the `rename` function alway return a failure?](log_c90.md#issue0062)|Closed|
-|0063|[This is [Defect Report 056](log_c90.md#issue0056)](log_c90.md#issue0063)|Closed|
-|0064|[What is a null pointer constant?](log_c90.md#issue0064)|Closed|
-|0065|[Can strictly conforming programs contain locales other that the 'C' locale?](log_c90.md#issue0065)|Fixed in C90 TC2|
-|0066|[A set of locale questions](log_c90.md#issue0066)|Closed|
-|0067|[Are the definitions of types clear?](log_c90.md#issue0067)|Closed|
-|0068|[When are values of the type `char` treated as `signed`or `nonnegative` integers](log_c90.md#issue0068)|Closed|
-|0069|[What is the meaning of *pure binary numeration system*?](log_c90.md#issue0069)|Closed|
-|0070|[Can non-compatible types be used interchangeabily for function arguments?](log_c90.md#issue0070)|Closed|
-|0071|[Are all enumerated types compatible with a single type?](log_c90.md#issue0071)|Fixed in C90 TC2|
-|0072|[What is the definition of an object?](log_c90.md#issue0072)|Closed|
-|0073|[Another definition of an object question](log_c90.md#issue0073)|Closed|
-|0074|[Can the alignment of an object that is a member of a structure be different from the alignment of an object of the same type that is not a member of a structure?](log_c90.md#issue0074)|Closed|
-|0075|[What is the alignment of allocated memory?](log_c90.md#issue0075)|Closed|
-|0076|[A set of pointers to the end of arrays questions](log_c90.md#issue0076)|Closed|
-|0077|[Is the address of an object constant throughout its lifetime?](log_c90.md#issue0077)|Closed|
-|0078|[May optimizer invoke the as-if rule to rearrange code?](log_c90.md#issue0078)|Closed|
-|0079|[Is the address of a standard library function the same in different translation units?](log_c90.md#issue0079)|Closed|
-|0080|[Questions on merging of string constants](log_c90.md#issue0080)|Fixed in C90 TC2|
-|0081|[What is the result of the left shift operator `E1 < E2`, when `E1` is signed?](log_c90.md#issue0081)|Closed|
-|0082|[Many varargs questions](log_c90.md#issue0082)|Fixed in C90 TC2|
-|0083|[A use of library functions question](log_c90.md#issue0083)|Fixed in C90 TC2|
-|0084|[When is an incomplete type in function declaration a parameter?](log_c90.md#issue0084)|Closed|
-|0085|[Is the return from `main` equivalent to calling `exit`?](log_c90.md#issue0085)|Fixed in C90 TC2|
-|0086|[At object-like macros in system headers conforming?](log_c90.md#issue0086)|Closed|
-|0087|[Is the order of evaluation when there are no sequence points well defined?](log_c90.md#issue0087)|Closed|
-|0088|[Are two incomplete structure types with a (lexically) identical tag always compatible?](log_c90.md#issue0088)|Closed|
-|0089|[When does multiple definitions of a macro require a diagnositc message?](log_c90.md#issue0089)|Fixed in C90 TC2|
-|0090|[Multibyte characters in formats question](log_c90.md#issue0090)|Closed|
-|0091|[Does a locale with multibye characters conform?](log_c90.md#issue0091)|Closed|
-|0092|[Are the remaining elements in a partially initalized string guaranteed to be zero?](log_c90.md#issue0092)|Closed|
-|0093|[Can a conforming freestanding implementation reserve identifiers?](log_c90.md#issue0093)|Fixed in C90 TC2|
-|0094|[Is there an inconsistency between the constraints on passing values versus returning values?](log_c90.md#issue0094)|Closed|
-|0095|[Are the initialization constraints clear?](log_c90.md#issue0095)|Closed|
-|0096|[Can the element type in an array declarator be a non-object type?](log_c90.md#issue0096)|Closed|
-|0097|[Can the `type` argument of the `offsetof` macro be an incomplete type?](log_c90.md#issue0097)|Closed|
-|0098|[Do function types and incomplete type have size?](log_c90.md#issue0098)|Closed|
-|0099|[What does the term *assignment operator* mean?](log_c90.md#issue0099)|Closed|
-|0100|[Do functions return values by copying?](log_c90.md#issue0100)|Fixed in C90 TC1|
-|0101|[Are mismatched qualifiers allowed?](log_c90.md#issue0101)|Fixed in C90 TC2|
-|0102|[Does a constraint violation win over undefined behavior?](log_c90.md#issue0102)|Closed|
-|0103|[Is a diagnostic required when formal parameters for functions are incomplete types?](log_c90.md#issue0103)|Closed|
-|0104|[When is an incomplete type in function declaration a parameter?](log_c90.md#issue0104)|Closed|
-|0105|[Does a constraint violation win over undefined behavior?](log_c90.md#issue0105)|Fixed in C90 TC1|
-|0106|[Can one take the address of a void expression?](log_c90.md#issue0106)|Closed|
-|0107|[Several `assert` questions](log_c90.md#issue0107)|Closed|
-|0108|[Is it conforming to allow macros to make keywords?](log_c90.md#issue0108)|Closed|
-|0109|[Does the C Standard draw any significant distinction between *undefined values* and *undefined behavior*?](log_c90.md#issue0109)|Closed|
-|0110|[When is a formal parameter having array-of-non-object type not conforming?](log_c90.md#issue0110)|Closed|
-|0111|[A question on conversion of *pointer-to-qualified* type values to type `(void*)` values](log_c90.md#issue0111)|Closed|
-|0112|[A Null pointer constants and relational comparison question](log_c90.md#issue0112)|Closed|
-|0113|[Return expressions in functions declared to return qualified `void` questions](log_c90.md#issue0113)|Closed|
-|0114|[Initialization of multi-dimensional `char` array object questions](log_c90.md#issue0114)|Closed|
-|0115|[What it means to *declare* a declarator?](log_c90.md#issue0115)|Closed|
-|0116|[Is a diagnostic required when the address of a `reigister` arry is implicitly taken?](log_c90.md#issue0116)|Closed|
-|0117|[Abstract semantics, sequence points, and expression evaluation question](log_c90.md#issue0117)|Closed|
-|0118|[When is the `sizeof` an enumeration type known?](log_c90.md#issue0118)|Fixed in C90 TC2|
-|0119|[Is a diagnostic required on an example of an initialization of multi-dimensional array objects](log_c90.md#issue0119)|Closed|
-|0120|[Semantics of assignment to (and initialization of) bit-fields question](log_c90.md#issue0120)|Closed|
-|0121|[What is ment by *size required* when convering a ponter value to an integral type?](log_c90.md#issue0121)|Closed|
-|0122|[Is the *type* of a bit-field totally independent from its *width*?](log_c90.md#issue0122)|Closed|
-|0123|[“*Type categories*” and qualified types question](log_c90.md#issue0123)|Closed|
-|0124|[What is the difference between casts to *a void type* versus casts to the `void` type?](log_c90.md#issue0124)|Fixed in C90 TC2|
-|0125|[When are declarations useing `extern` *(qualified)* `void` not conforming?](log_c90.md#issue0125)|Closed|
-|0126|[What does *synonym* mean with respect to typedef names?](log_c90.md#issue0126)|Closed|
-|0127|[What is the composite type of an enumeration and an integer?](log_c90.md#issue0127)|Closed|
-|0128|[Editorial issue relating to tag declarations in type specifiers](log_c90.md#issue0128)|Closed|
-|0129|[When is name spaces of tags are shared?](log_c90.md#issue0129)|Closed|
-|0130|[When is data read from a text stream guaranteed to match what was written to the stream?](log_c90.md#issue0130)|Closed|
-|0131|[What is the meaning of *const-qualification*?](log_c90.md#issue0131)|Fixed in C90 TC2|
-|0132|[Can undefined behavior occur at translation time, or only at run time?](log_c90.md#issue0132)|Closed|
-|0133|[Undefined behavior not previously listed in subclause G2](log_c90.md#issue0133)|Closed|
-|0134|[Is *error number* an undefined term?](log_c90.md#issue0134)|Closed|
-|0135|[Is the `SVR4 fwrite` different?](log_c90.md#issue0135)|Closed|
-|0136|[Does `mktime` yield a -1 in the *spring-forward* gap when `tm_isdst` is -1?](log_c90.md#issue0136)|Closed|
-|0137|[Is `printf("%.1f", -0.01)` required to produce `0.0` , `-0.0`, or are both acceptable?](log_c90.md#issue0137)|Closed|
-|0138|[What are the storage durations?](log_c90.md#issue0138)|Fixed in C90 TC2|
-|0139|[Is an incomplete type compatible with the completed type?](log_c90.md#issue0139)|Fixed in C90 TC2|
-|0140|[What does *performed* and *other operation* mean?](log_c90.md#issue0140)|Closed|
-|0141|[What does `EOF` mean in `<stdio.h>`?](log_c90.md#issue0141)|Closed|
-|0142|[Is it permitted to `#undef` a reserved macro name?](log_c90.md#issue0142)|Fixed in C99|
-|0143|[What are the definitions of file opening modes?](log_c90.md#issue0143)|Fixed in C99|
-|0144|[Can the white space preceeding the initial `#` of a preprocessing directive be derived from macro expansion?](log_c90.md#issue0144)|Fixed in C99|
-|0145|[The four possible forms for a constant expression are not consistent](log_c90.md#issue0145)|Fixed in C99|
-|0146|[Does the constraint of 6.1.2 serve a purpose?](log_c90.md#issue0146)|Fixed in C99|
-|0147|[Is there a requirement for a sequence point to occur within a library function?](log_c90.md#issue0147)|Fixed in C99|
-|0148|[Is it clear when it is permitted to declare a library function?](log_c90.md#issue0148)|Closed|
-|0149|[Is the term *variable* defiend?](log_c90.md#issue0149)|Fixed in C99|
-|0150|[Are programs containing `char array[] = "Hello, World";` strictly conforming?](log_c90.md#issue0150)|Fixed in C99|
-|0151|[Is the out from `printf("%#.0o", 0);` ambiguous?](log_c90.md#issue0151)|Closed|
-|0152|[Can `longjmp` be used to return from a signal handler invoked other than through `abort` or `raise`?](log_c90.md#issue0152)|Closed|
-|0153|[Is there a problem with empty arguments in macro calls?](log_c90.md#issue0153)|Closed|
-|0154|[What restrictions apply to implementation-defined entities?](log_c90.md#issue0154)|Closed|
-|0155|[Is the word *unique* in subclause 7.10.3 ambiguous?](log_c90.md#issue0155)|Fixed in C99|
-|0156|[Should calls to `fsetpos` with positions in closed and reopened streams be undefined?](log_c90.md#issue0156)|Fixed in C99|
-|0157|[Is it clearly indicated when the spelling of a type name is or is not significant?](log_c90.md#issue0157)|Fixed in C99|
-|0158|[Are the semantics for the explicit conversion of null pointer constants defined?](log_c90.md#issue0158)|Fixed in C99|
-|0159|[Is the introduction to the C Standard confusing?](log_c90.md#issue0159)|Fixed in C99|
-|0160|[It is unclear what applications can and cannot do with identifiers that are reserved?](log_c90.md#issue0160)|Fixed in C99|
-|0161|[Is the wording of subclause 7.13 unclear?](log_c90.md#issue0161)|Closed|
-|0162|[Is the description of the static objects used by `time.h` functions misleading?](log_c90.md#issue0162)|Fixed in C99|
-|0163|[Is it clear whether the use of an undeclared identifier as a primary expression requires a diagnostic message to be issued?](log_c90.md#issue0163)|Closed|
-|0164|[Is there a constraint to prevent declarations involving types not defined by subclause 6.1.2.5?](log_c90.md#issue0164)|Closed|
-|0165|[Is the wording of subclause 6.5.2.3 concerning tags defective?](log_c90.md#issue0165)|Fixed in C99|
-|0166|[Do constraints that require something to be an lvalue place an unacceptable burden on the implementation?](log_c90.md#issue0166)|Fixed in C99|
-|0167|[The `n` conversion specifier in subclause 7.9.6.2 made by TC1, [Defect Report #014, Question 2](log_c90.md#issue0014.02), should be applied to subclause 7.9.6.1](log_c90.md#issue0167)|Fixed in C99|
-|0168|[The change to subclause 6.3 made by TC1, [Defect Report #053, Question 1](log_c90.md#issue0053), should also be applied in Annex .2 (page 200\)](log_c90.md#issue0168)|Fixed in C99|
-|0169|[Is the description of the replacement of trigraphs contradictory?](log_c90.md#issue0169)|Closed|
-|0170|[Are the description of operators and punctuators is confusing, and are the constraints contradictory?](log_c90.md#issue0170)|Fixed in C99|
-|0171|[Is it possible to create implementations with unreasonable arrangements of integral types?](log_c90.md#issue0171)|Fixed in C99|
-|0172|[Does the description for the relational and equality operators contain defects?](log_c90.md#issue0172)|Fixed in C99|
-|0173|[What is the meaning of *line number* when a token is split over more than one physical source line?](log_c90.md#issue0173)|Closed|
-|0174|[Is there a number of errors in the usual arithmetic conversions section?](log_c90.md#issue0174)|Fixed in C99|
-|0175|[Is the `sscanf` example added by TC1 wrong?](log_c90.md#issue0175)|Fixed in C99|
-|0176|[Are rules concerning whether `#error` generates a diagnostic contradictory?](log_c90.md#issue0176)|Closed|
-|0177|[A Preprocessing directives question](log_c90.md#issue0177)|Fixed in C99|
-|0178|[Why does [Defect Report #051](log_c90.md#issue0051) and [Defect Report #073](log_c90.md#issue0073) answer the same question differently?](log_c90.md#issue0178)|Closed|
+|[0001](log_c90.md#issue0001)|Do functions return values by copying?|Fixed in C90 TC1|
+|[0002](log_c90.md#issue0002)|Should `\` be escaped within macro actual parameters?|Closed|
+|[0003.01](log_c90.md#issue0003.01)|Are preprocessing numbers too inclusive?|Closed|
+|[0003.02](log_c90.md#issue0003.02)|Should white space surround macro substitutions?|Closed|
+|[0003.03](log_c90.md#issue0003.03)|Is an empty macro argument a constraint violation?|Closed|
+|[0003.04](log_c90.md#issue0003.04)|Should preprocessing directives be permitted within macro invokations?|Closed|
+|[0004](log_c90.md#issue0004)|Are multiple definitions of unused identifiers with external linkage permitted?|Fixed in C90|
+|[0005](log_c90.md#issue0005)|May a conforming implementation define and recognize a pragma which would change the semantics of the language?|Closed|
+|[0006](log_c90.md#issue0006)|How does `strtoul` behave when presented with a subject sequence that begins with a minus sign?|Closed|
+|[0007](log_c90.md#issue0007)|Are declarations of the form `struct` *`tag`* permitted after *`tag`* has already been declared?|Closed|
+|[0008.01](log_c90.md#issue0008.01)|Is dead-store elimination permitted near `setjmp`?|Closed|
+|[0008.02](log_c90.md#issue0008.02)|Should volatile functions be added?|Closed|
+|[0009](log_c90.md#issue0009)|Are typedef names sometimes ambiguous in parameter declarations?|Fixed in C90 TC1|
+|[0010](log_c90.md#issue0010)|Is the typedef to an incomplete type valid?|Closed|
+|[0011.01](log_c90.md#issue0011.01)|When do the types of multiple external declarations get formed into a composite type?|Fixed in C90 TC1|
+|[0011.02](log_c90.md#issue0011.02)|Does `extern` link to a static declaration that is not visible?|Fixed in C90 TC1|
+|[0011.03](log_c90.md#issue0011.03)|Are implicit initializers for tentative array definitions syntactically valid?|Closed|
+|[0011.04](log_c90.md#issue0011.04)|Does an incomplete array get completed as a tentative definition?|Fixed in C90 TC1|
+|[0012](log_c90.md#issue0012)|Can one take the address of a void expression?|Closed|
+|[0013.01](log_c90.md#issue0013.01)|How does one form the composite type of mixed array and pointer parameter types?|Fixed in C90 TC1|
+|[0013.02](log_c90.md#issue0013.02)|Is compatible properly defined for recursive types?|Closed|
+|[0013.03](log_c90.md#issue0013.03)|What is the composite type of an enumeration and an integer?|Closed|
+|[0013.04](log_c90.md#issue0013.04)|When is a struct type complete?|Fixed in C90 TC1|
+|[0013.05](log_c90.md#issue0013.05)|When is the `sizeof` an enumeration type known?|Fixed in C90 TC1|
+|[0014.01](log_c90.md#issue0014.01)|Is `setjmp` a macro or a function?|Closed|
+|[0014.02](log_c90.md#issue0014.02)|How does `fscanf("%n")` behave on end-of-file?|Fixed in C90 TC1|
+|[0015](log_c90.md#issue0015)|How does an unsigned plain bitfield promote?|Closed|
+|[0016.01](log_c90.md#issue0016.01)|Can a tentative definition have an incomplete type initially?|Closed|
+|[0016.02](log_c90.md#issue0016.02)|Can you implicitly initialize a union when null pointers have nonzero bit patterns?|Fixed in C90 TC1|
+|[0017.01](log_c90.md#issue0017.01)|Are newlines permitted within macro invocations in preprocessing directives?|Fixed in C90 TC1|
+|[0017.02](log_c90.md#issue0017.02)|Should the absence of function `main` be explicitly undefined?|Fixed in C90 TC1|
+|[0017.03](log_c90.md#issue0017.03)|Does a constraint violation win over undefined behavior?|Fixed in C90 TC1|
+|[0017.04](log_c90.md#issue0017.04)|Do numeric escape sequences map from source to execution character sets?|Closed|
+|[0017.05](log_c90.md#issue0017.05)|When are character constants implementation defined?|Closed|
+|[0017.06](log_c90.md#issue0017.06)|Are register aggregates permitted?|Fixed in C90 TC1|
+|[0017.07](log_c90.md#issue0017.07)|What is the scope and uniqueness of `size_t`?|Closed|
+|[0017.08](log_c90.md#issue0017.08)|What types are compatible with pointer to `void`?|Closed|
+|[0017.09](log_c90.md#issue0017.09)|What is the type of an assignment expression?|Fixed in C90 TC1|
+|[0017.10](log_c90.md#issue0017.10)|When is the `sizeof` an object needed?|Closed|
+|[0017.11](log_c90.md#issue0017.11)|Is `struct t; struct t;` valid?|Closed|
+|[0017.12](log_c90.md#issue0017.12)|How do typedefs parse in function prototypes?|Fixed in C90 TC1|
+|[0017.13](log_c90.md#issue0017.13)|How does `register` affect compatibility of function parameters?|Closed|
+|[0017.14](log_c90.md#issue0017.14)|`const void` type as a parameter|Fixed in C90 TC1|
+|[0017.15](log_c90.md#issue0017.15)|When do array parameters get converted to pointers?|Fixed in C90 TC1|
+|[0017.16](log_c90.md#issue0017.16)|Are subarrays of arrays distinct objects?|Fixed in C90 TC1|
+|[0017.17](log_c90.md#issue0017.17)|How do you initialize the first member of a union if it has no name?|Fixed in C90 TC1|
+|[0017.18](log_c90.md#issue0017.18)|Are `f()` and `f(void)` compatible?|Closed|
+|[0017.19](log_c90.md#issue0017.19)|Are macro expansions ambiguous?|Fixed in C90 TC1|
+|[0017.20](log_c90.md#issue0017.20)|Is the scope of macro parameters defined in the right place?|Closed|
+|[0017.21](log_c90.md#issue0017.21)|Is translation phase 4 defined unambiguously?|Closed|
+|[0017.22](log_c90.md#issue0017.22)|Does the rescan of a macro invocation also perform token pasting?|Fixed in C90 TC1|
+|[0017.23](log_c90.md#issue0017.23)|How long does `blue paint` persist on macro names?|Closed|
+|[0017.24](log_c90.md#issue0017.24)|Can subclause 7.1.2 be better expressed?|Fixed in C90 TC1|
+|[0017.25](log_c90.md#issue0017.25)|Should *must* appear in footnotes?|Closed|
+|[0017.26](log_c90.md#issue0017.26)|Are unnamed union members required to be initialized?|Fixed in C90 TC1|
+|[0017.27](log_c90.md#issue0017.27)|Does the `#` flag alter zero stripping of `%g` in `fprintf`?|Closed|
+|[0017.28](log_c90.md#issue0017.28)|Does `errno` get stored before library functions return?|Closed|
+|[0017.29](log_c90.md#issue0017.29)|When does conversion failure occur in floating-point `fscanf` input?|Fixed in C90 TC1|
+|[0017.30](log_c90.md#issue0017.30)|Do `fseek/fsetpos` require values from successful calls to `ftell/fgetpos`?|Fixed in C90 TC1|
+|[0017.31](log_c90.md#issue0017.31)|Are object sizes always in bytes?|Closed|
+|[0017.32](log_c90.md#issue0017.32)|Are `strcmp/strncmp` defined when `char` is signed?|Closed|
+|[0017.33](log_c90.md#issue0017.33)|Are `strcmp/strncmp` defined for strings of differing length|Closed|
+|[0017.34](log_c90.md#issue0017.34)|Is `strtok` described properly?|Closed|
+|[0017.35](log_c90.md#issue0017.35)|When is a physical source line created?|Closed|
+|[0017.36](log_c90.md#issue0017.36)|Is a function returning `const void` defined?|Closed|
+|[0017.37](log_c90.md#issue0017.37)|What is the type of a function call?|Fixed in C90 TC1|
+|[0017.38](log_c90.md#issue0017.38)|What is an iteration control structure or selection control structure?|Fixed in C90 TC1|
+|[0017.39](log_c90.md#issue0017.39)|Are header names tokens outside include directives?|Fixed in C90 TC1|
+|[0018](log_c90.md#issue0018)|Does `fscanf` recognize literal multibyte characters properly?|Closed|
+|[0019](log_c90.md#issue0019)|Are printing characters implementation defined?|Closed|
+|[0020](log_c90.md#issue0020)|Is the relaxed Ref/Def linkage model conforming?|Closed|
+|[0021](log_c90.md#issue0021)|What is the result of `printf("%#.4o", 345)`?|Fixed in C90 TC1|
+|[0022](log_c90.md#issue0022)|What is the result of `strtod("100ergs", &ptr)`?|Fixed in C90 TC1|
+|[0023](log_c90.md#issue0023)|If 99,999 is larger than `DBL_MAX_10_EXP`, what is the result of `strtod("0.0e99999", &ptr)`?|Closed|
+|[0024](log_c90.md#issue0024)|For `strtod`, what does `"C"` locale mean?|Closed|
+|[0025](log_c90.md#issue0025)|What is meant by *representable floating-point value?*|Closed|
+|[0026](log_c90.md#issue0026)|Can one use other than the basic C character set in a strictly conforming program?|Closed|
+|[0027](log_c90.md#issue0027)|May a standard conforming implementation add identifier characters?|Fixed in C90 TC1|
+|[0028](log_c90.md#issue0028)|What are the aliasing rules for dynamically allocated objects?|Closed|
+|[0029](log_c90.md#issue0029)|Must compatible structs/unions have the same tag in different translation units?|Closed|
+|[0030](log_c90.md#issue0030)|May `sin(DBL_MAX)` set `errno` to `EDOM`?|Closed|
+|[0031](log_c90.md#issue0031)|How are exceptions handled in constant expressions?|Closed|
+|[0032](log_c90.md#issue0032)|Can an implementation permit a comma operator in a constant expression?|Closed|
+|[0033](log_c90.md#issue0033)|Must a conforming implementation diagnose *shall* violations outside **Constraints**?|Closed|
+|[0034.01](log_c90.md#issue0034.01)|Does size information evaporate when a declaration goes out of scope, even for objects with external linkage?|Fixed in C90 TC1|
+|[0034.02](log_c90.md#issue0034.02)|If so, can one then write conflicting declarations in disjoint scopes?|Closed|
+|[0035.01](log_c90.md#issue0035.01)|Can one declare an enumeration or struct tag as part of an old-style parameter declaration?|Closed|
+|[0035.02](log_c90.md#issue0035.02)|If so, what is the scope of enumeration tags and constants declared in old-style parameter declarations?|Closed|
+|[0036](log_c90.md#issue0036)|May a floating-point constant be represented with more precision than implied by its type?|Closed|
+|[0037](log_c90.md#issue0037)|Can UNICODE or ISO 10646 be used as a multibyte code?|Closed|
+|[0038](log_c90.md#issue0038)|What happens when macro replacement creates adjacent tokens that can be taken as a single token?|Closed|
+|[0039.01](log_c90.md#issue0039.01)|Must `MB_CUR_MAX` be one in the `"C"` locale?|Closed|
+|[0039.02](log_c90.md#issue0039.02)|Should `setlocale(LC_ALL, NULL)` return `"C"` in the `"C"` locale?|Closed|
+|[0040.01](log_c90.md#issue0040.01)|What is the composite type of `f(int)` and `f(const int)`?|Fixed in C90 TC1|
+|[0040.02](log_c90.md#issue0040.02)|Is an implementation that fails to equal the value of an environmental limit conforming?|Fixed in C90 TC1|
+|[0040.03](log_c90.md#issue0040.03)|Is an **Environmental Constraint** a constraint?|Closed|
+|[0040.04](log_c90.md#issue0040.04)|Should the response to [Defect Report #017, Q39](log_c90.md#issue0017.39) be reconsidered?|Closed|
+|[0040.05](log_c90.md#issue0040.05)|Can a conforming implementation accept `long long`?|Closed|
+|[0040.06](log_c90.md#issue0040.06)|Can one use `offsetof(struct t1, mbr)` before `struct t1` is completely defined?|Closed|
+|[0040.07](log_c90.md#issue0040.07)|Can `sizeof` be applied to earlier parameter names in a prototype, or to earlier fields in a struct?|Closed|
+|[0040.08](log_c90.md#issue0040.08)|What arithmetic can be performed on a `char` holding a defined character literal value?|Closed|
+|[0040.09](log_c90.md#issue0040.09)|Should the response to [Defect Report #017, Q27](log_c90.md#issue0017.27) be reconsidered?|Closed|
+|[0041](log_c90.md#issue0041)|Are `'A'` through `'Z'` always `isupper` in all locales?|Closed|
+|[0042.01](log_c90.md#issue0042.01)|Does `memcpy` define a (sub)object?|Closed|
+|[0042.02](log_c90.md#issue0042.02)|If so, how big is the object defined by `memcpy`?|Closed|
+|[0042.03](log_c90.md#issue0042.03)|How big is a string object defined by the `str*` functions?|Closed|
+|[0043.01](log_c90.md#issue0043.01)|Can `NULL` be defined as `4-4`?|Fixed in C90 TC1|
+|[0043.02](log_c90.md#issue0043.02)|Can an identifier that starts with an underscore be defined as a macro in a source file that includes at least one standard header?|Closed|
+|[0044.01](log_c90.md#issue0044.01)|What does it mean to say that the type of `offsetof` is `size_t`?|Closed|
+|[0044.02](log_c90.md#issue0044.02)|Must the expansion of a standard header be a strictly conforming program?|Closed|
+|[0044.03](log_c90.md#issue0044.03)|Does expanding `offsetof` result in a non-strictly conforming program?|Closed|
+|[0044.04](log_c90.md#issue0044.04)|Can one use `offsetof` in a strictly conforming program?|Closed|
+|[0044.05](log_c90.md#issue0044.05)|Is `offsetof` the only standard macro that renders a program not strictly conforming?|Closed|
+|[0045](log_c90.md#issue0045)|Can one `freopen` an already closed file?|Closed|
+|[0046](log_c90.md#issue0046)|May a typedef be redeclared as a parameter outside an old-style function parameter list?|Closed|
+|[0047](log_c90.md#issue0047)|Can an array parameter have elements of incomplete type?|Closed|
+|[0048](log_c90.md#issue0048)|Is `abort` compatible with POSIX?|Closed|
+|[0049](log_c90.md#issue0049)|Can `strxfrm` produce a longer translation string?|Closed|
+|[0050](log_c90.md#issue0050)|Does a proper definition of `wchar_t` need to be in scope to write a wide-character literal?|Closed|
+|[0051](log_c90.md#issue0051)|Can one index beyond the declared end of an array if space is allocated for the extra elements?|Closed|
+|[0052.01](log_c90.md#issue0052.01)|Should the `mktime` example use `(time_t)-1` instead of `-1`?|Fixed in C90 TC1|
+|[0052.02](log_c90.md#issue0052.02)|Is the index entry for static correct?|Fixed in C90 TC1|
+|[0052.03](log_c90.md#issue0052.03)|Does the C Standard come with a Rationale, as indicated in Footnote 1?|Closed|
+|[0053](log_c90.md#issue0053)|Do the aliasing rules cover accesses to different function pointers properly?|Fixed in C90 TC1|
+|[0054](log_c90.md#issue0054)|What is the behavior of various string functions with a specified length of zero?|Fixed in C90 TC1|
+|[0055](log_c90.md#issue0055)|Must the `SIG*` macros have distinct values?|Fixed in C90 TC1|
+|[0056](log_c90.md#issue0056)|How accurate must floating-point arithmetic be?|Closed|
+|[0057](log_c90.md#issue0057)|Must there exist a user-accessible integral type for every pointer?|Closed|
+|[0058](log_c90.md#issue0058)|What is the number of digits in a number that can be processed by the `scanf` family and the `strtod` family?|Closed|
+|[0059](log_c90.md#issue0059)|Must an incomplete type be completed by the end of a translation unit?|Closed|
+|[0060](log_c90.md#issue0060)|When an array of `char` (or `wchar_t`) is initialized with a string literal that contains fewer characters than the array, are the remaining elements of the array initialized?|Fixed in C90 TC2|
+|[0061](log_c90.md#issue0061)|Interpretation of white space in the format string of a scan statement|Closed|
+|[0062](log_c90.md#issue0062)|Can the `rename` function alway return a failure?|Closed|
+|[0063](log_c90.md#issue0063)|This is [Defect Report 056](log_c90.md#issue0056)|Closed|
+|[0064](log_c90.md#issue0064)|What is a null pointer constant?|Closed|
+|[0065](log_c90.md#issue0065)|Can strictly conforming programs contain locales other that the 'C' locale?|Fixed in C90 TC2|
+|[0066](log_c90.md#issue0066)|A set of locale questions|Closed|
+|[0067](log_c90.md#issue0067)|Are the definitions of types clear?|Closed|
+|[0068](log_c90.md#issue0068)|When are values of the type `char` treated as `signed`or `nonnegative` integers|Closed|
+|[0069](log_c90.md#issue0069)|What is the meaning of *pure binary numeration system*?|Closed|
+|[0070](log_c90.md#issue0070)|Can non-compatible types be used interchangeabily for function arguments?|Closed|
+|[0071](log_c90.md#issue0071)|Are all enumerated types compatible with a single type?|Fixed in C90 TC2|
+|[0072](log_c90.md#issue0072)|What is the definition of an object?|Closed|
+|[0073](log_c90.md#issue0073)|Another definition of an object question|Closed|
+|[0074](log_c90.md#issue0074)|Can the alignment of an object that is a member of a structure be different from the alignment of an object of the same type that is not a member of a structure?|Closed|
+|[0075](log_c90.md#issue0075)|What is the alignment of allocated memory?|Closed|
+|[0076](log_c90.md#issue0076)|A set of pointers to the end of arrays questions|Closed|
+|[0077](log_c90.md#issue0077)|Is the address of an object constant throughout its lifetime?|Closed|
+|[0078](log_c90.md#issue0078)|May optimizer invoke the as-if rule to rearrange code?|Closed|
+|[0079](log_c90.md#issue0079)|Is the address of a standard library function the same in different translation units?|Closed|
+|[0080](log_c90.md#issue0080)|Questions on merging of string constants|Fixed in C90 TC2|
+|[0081](log_c90.md#issue0081)|What is the result of the left shift operator `E1 < E2`, when `E1` is signed?|Closed|
+|[0082](log_c90.md#issue0082)|Many varargs questions|Fixed in C90 TC2|
+|[0083](log_c90.md#issue0083)|A use of library functions question|Fixed in C90 TC2|
+|[0084](log_c90.md#issue0084)|When is an incomplete type in function declaration a parameter?|Closed|
+|[0085](log_c90.md#issue0085)|Is the return from `main` equivalent to calling `exit`?|Fixed in C90 TC2|
+|[0086](log_c90.md#issue0086)|At object-like macros in system headers conforming?|Closed|
+|[0087](log_c90.md#issue0087)|Is the order of evaluation when there are no sequence points well defined?|Closed|
+|[0088](log_c90.md#issue0088)|Are two incomplete structure types with a (lexically) identical tag always compatible?|Closed|
+|[0089](log_c90.md#issue0089)|When does multiple definitions of a macro require a diagnositc message?|Fixed in C90 TC2|
+|[0090](log_c90.md#issue0090)|Multibyte characters in formats question|Closed|
+|[0091](log_c90.md#issue0091)|Does a locale with multibye characters conform?|Closed|
+|[0092](log_c90.md#issue0092)|Are the remaining elements in a partially initalized string guaranteed to be zero?|Closed|
+|[0093](log_c90.md#issue0093)|Can a conforming freestanding implementation reserve identifiers?|Fixed in C90 TC2|
+|[0094](log_c90.md#issue0094)|Is there an inconsistency between the constraints on passing values versus returning values?|Closed|
+|[0095](log_c90.md#issue0095)|Are the initialization constraints clear?|Closed|
+|[0096](log_c90.md#issue0096)|Can the element type in an array declarator be a non-object type?|Closed|
+|[0097](log_c90.md#issue0097)|Can the `type` argument of the `offsetof` macro be an incomplete type?|Closed|
+|[0098](log_c90.md#issue0098)|Do function types and incomplete type have size?|Closed|
+|[0099](log_c90.md#issue0099)|What does the term *assignment operator* mean?|Closed|
+|[0100](log_c90.md#issue0100)|Do functions return values by copying?|Fixed in C90 TC1|
+|[0101](log_c90.md#issue0101)|Are mismatched qualifiers allowed?|Fixed in C90 TC2|
+|[0102](log_c90.md#issue0102)|Does a constraint violation win over undefined behavior?|Closed|
+|[0103](log_c90.md#issue0103)|Is a diagnostic required when formal parameters for functions are incomplete types?|Closed|
+|[0104](log_c90.md#issue0104)|When is an incomplete type in function declaration a parameter?|Closed|
+|[0105](log_c90.md#issue0105)|Does a constraint violation win over undefined behavior?|Fixed in C90 TC1|
+|[0106](log_c90.md#issue0106)|Can one take the address of a void expression?|Closed|
+|[0107](log_c90.md#issue0107)|Several `assert` questions|Closed|
+|[0108](log_c90.md#issue0108)|Is it conforming to allow macros to make keywords?|Closed|
+|[0109](log_c90.md#issue0109)|Does the C Standard draw any significant distinction between *undefined values* and *undefined behavior*?|Closed|
+|[0110](log_c90.md#issue0110)|When is a formal parameter having array-of-non-object type not conforming?|Closed|
+|[0111](log_c90.md#issue0111)|A question on conversion of *pointer-to-qualified* type values to type `(void*)` values|Closed|
+|[0112](log_c90.md#issue0112)|A Null pointer constants and relational comparison question|Closed|
+|[0113](log_c90.md#issue0113)|Return expressions in functions declared to return qualified `void` questions|Closed|
+|[0114](log_c90.md#issue0114)|Initialization of multi-dimensional `char` array object questions|Closed|
+|[0115](log_c90.md#issue0115)|What it means to *declare* a declarator?|Closed|
+|[0116](log_c90.md#issue0116)|Is a diagnostic required when the address of a `reigister` arry is implicitly taken?|Closed|
+|[0117](log_c90.md#issue0117)|Abstract semantics, sequence points, and expression evaluation question|Closed|
+|[0118](log_c90.md#issue0118)|When is the `sizeof` an enumeration type known?|Fixed in C90 TC2|
+|[0119](log_c90.md#issue0119)|Is a diagnostic required on an example of an initialization of multi-dimensional array objects|Closed|
+|[0120](log_c90.md#issue0120)|Semantics of assignment to (and initialization of) bit-fields question|Closed|
+|[0121](log_c90.md#issue0121)|What is ment by *size required* when convering a ponter value to an integral type?|Closed|
+|[0122](log_c90.md#issue0122)|Is the *type* of a bit-field totally independent from its *width*?|Closed|
+|[0123](log_c90.md#issue0123)|“*Type categories*” and qualified types question|Closed|
+|[0124](log_c90.md#issue0124)|What is the difference between casts to *a void type* versus casts to the `void` type?|Fixed in C90 TC2|
+|[0125](log_c90.md#issue0125)|When are declarations useing `extern` *(qualified)* `void` not conforming?|Closed|
+|[0126](log_c90.md#issue0126)|What does *synonym* mean with respect to typedef names?|Closed|
+|[0127](log_c90.md#issue0127)|What is the composite type of an enumeration and an integer?|Closed|
+|[0128](log_c90.md#issue0128)|Editorial issue relating to tag declarations in type specifiers|Closed|
+|[0129](log_c90.md#issue0129)|When is name spaces of tags are shared?|Closed|
+|[0130](log_c90.md#issue0130)|When is data read from a text stream guaranteed to match what was written to the stream?|Closed|
+|[0131](log_c90.md#issue0131)|What is the meaning of *const-qualification*?|Fixed in C90 TC2|
+|[0132](log_c90.md#issue0132)|Can undefined behavior occur at translation time, or only at run time?|Closed|
+|[0133](log_c90.md#issue0133)|Undefined behavior not previously listed in subclause G2|Closed|
+|[0134](log_c90.md#issue0134)|Is *error number* an undefined term?|Closed|
+|[0135](log_c90.md#issue0135)|Is the `SVR4 fwrite` different?|Closed|
+|[0136](log_c90.md#issue0136)|Does `mktime` yield a -1 in the *spring-forward* gap when `tm_isdst` is -1?|Closed|
+|[0137](log_c90.md#issue0137)|Is `printf("%.1f", -0.01)` required to produce `0.0` , `-0.0`, or are both acceptable?|Closed|
+|[0138](log_c90.md#issue0138)|What are the storage durations?|Fixed in C90 TC2|
+|[0139](log_c90.md#issue0139)|Is an incomplete type compatible with the completed type?|Fixed in C90 TC2|
+|[0140](log_c90.md#issue0140)|What does *performed* and *other operation* mean?|Closed|
+|[0141](log_c90.md#issue0141)|What does `EOF` mean in `<stdio.h>`?|Closed|
+|[0142](log_c90.md#issue0142)|Is it permitted to `#undef` a reserved macro name?|Fixed in C99|
+|[0143](log_c90.md#issue0143)|What are the definitions of file opening modes?|Fixed in C99|
+|[0144](log_c90.md#issue0144)|Can the white space preceeding the initial `#` of a preprocessing directive be derived from macro expansion?|Fixed in C99|
+|[0145](log_c90.md#issue0145)|The four possible forms for a constant expression are not consistent|Fixed in C99|
+|[0146](log_c90.md#issue0146)|Does the constraint of 6.1.2 serve a purpose?|Fixed in C99|
+|[0147](log_c90.md#issue0147)|Is there a requirement for a sequence point to occur within a library function?|Fixed in C99|
+|[0148](log_c90.md#issue0148)|Is it clear when it is permitted to declare a library function?|Closed|
+|[0149](log_c90.md#issue0149)|Is the term *variable* defiend?|Fixed in C99|
+|[0150](log_c90.md#issue0150)|Are programs containing `char array[] = "Hello, World";` strictly conforming?|Fixed in C99|
+|[0151](log_c90.md#issue0151)|Is the out from `printf("%#.0o", 0);` ambiguous?|Closed|
+|[0152](log_c90.md#issue0152)|Can `longjmp` be used to return from a signal handler invoked other than through `abort` or `raise`?|Closed|
+|[0153](log_c90.md#issue0153)|Is there a problem with empty arguments in macro calls?|Closed|
+|[0154](log_c90.md#issue0154)|What restrictions apply to implementation-defined entities?|Closed|
+|[0155](log_c90.md#issue0155)|Is the word *unique* in subclause 7.10.3 ambiguous?|Fixed in C99|
+|[0156](log_c90.md#issue0156)|Should calls to `fsetpos` with positions in closed and reopened streams be undefined?|Fixed in C99|
+|[0157](log_c90.md#issue0157)|Is it clearly indicated when the spelling of a type name is or is not significant?|Fixed in C99|
+|[0158](log_c90.md#issue0158)|Are the semantics for the explicit conversion of null pointer constants defined?|Fixed in C99|
+|[0159](log_c90.md#issue0159)|Is the introduction to the C Standard confusing?|Fixed in C99|
+|[0160](log_c90.md#issue0160)|It is unclear what applications can and cannot do with identifiers that are reserved?|Fixed in C99|
+|[0161](log_c90.md#issue0161)|Is the wording of subclause 7.13 unclear?|Closed|
+|[0162](log_c90.md#issue0162)|Is the description of the static objects used by `time.h` functions misleading?|Fixed in C99|
+|[0163](log_c90.md#issue0163)|Is it clear whether the use of an undeclared identifier as a primary expression requires a diagnostic message to be issued?|Closed|
+|[0164](log_c90.md#issue0164)|Is there a constraint to prevent declarations involving types not defined by subclause 6.1.2.5?|Closed|
+|[0165](log_c90.md#issue0165)|Is the wording of subclause 6.5.2.3 concerning tags defective?|Fixed in C99|
+|[0166](log_c90.md#issue0166)|Do constraints that require something to be an lvalue place an unacceptable burden on the implementation?|Fixed in C99|
+|[0167](log_c90.md#issue0167)|The `n` conversion specifier in subclause 7.9.6.2 made by TC1, [Defect Report #014, Question 2](log_c90.md#issue0014.02), should be applied to subclause 7.9.6.1|Fixed in C99|
+|[0168](log_c90.md#issue0168)|The change to subclause 6.3 made by TC1, [Defect Report #053, Question 1](log_c90.md#issue0053), should also be applied in Annex .2 (page 200\)|Fixed in C99|
+|[0169](log_c90.md#issue0169)|Is the description of the replacement of trigraphs contradictory?|Closed|
+|[0170](log_c90.md#issue0170)|Are the description of operators and punctuators is confusing, and are the constraints contradictory?|Fixed in C99|
+|[0171](log_c90.md#issue0171)|Is it possible to create implementations with unreasonable arrangements of integral types?|Fixed in C99|
+|[0172](log_c90.md#issue0172)|Does the description for the relational and equality operators contain defects?|Fixed in C99|
+|[0173](log_c90.md#issue0173)|What is the meaning of *line number* when a token is split over more than one physical source line?|Closed|
+|[0174](log_c90.md#issue0174)|Is there a number of errors in the usual arithmetic conversions section?|Fixed in C99|
+|[0175](log_c90.md#issue0175)|Is the `sscanf` example added by TC1 wrong?|Fixed in C99|
+|[0176](log_c90.md#issue0176)|Are rules concerning whether `#error` generates a diagnostic contradictory?|Closed|
+|[0177](log_c90.md#issue0177)|A Preprocessing directives question|Fixed in C99|
+|[0178](log_c90.md#issue0178)|Why does [Defect Report #051](log_c90.md#issue0051) and [Defect Report #073](log_c90.md#issue0073) answer the same question differently?|Closed|
 
 ---
 

@@ -4,31 +4,31 @@
 
 |Issue|Summary|Status|
 |-|-|-|
-|0CFP.01|[Part 1: Typos](log_cfp-c11.md#issue0CFP.01)|Fixed in C23|
-|0CFP.02|[Part 1: Functions that round result to narrower type don't always](log_cfp-c11.md#issue0CFP.02)|Fixed in C23|
-|0CFP.03|[Part 1: feature macros and header file inclusions](log_cfp-c11.md#issue0CFP.03)|Fixed in C23|
-|0CFP.04|[Part 3: Error in function name](log_cfp-c11.md#issue0CFP.04)|Fixed in C23|
-|0CFP.05|[Part 1: Is return of same type convertFormat or copy?](log_cfp-c11.md#issue0CFP.05)|Fixed in C23|
-|0CFP.06|[Part 1: **fetestexceptflag** and exceptions passed to **fegetexceptflag**](log_cfp-c11.md#issue0CFP.06)|Fixed in C23|
-|0CFP.07|[Part 1: Editorial changes](log_cfp-c11.md#issue0CFP.07)|Fixed in C23|
-|0CFP.08|[Part 2: Editorial clarification about number digits in the coefficient](log_cfp-c11.md#issue0CFP.08)|Fixed in C23|
-|0CFP.09|[Part 2,3: Missing specification for usual arithmetic conversions, tgmath](log_cfp-c11.md#issue0CFP.09)|Fixed in C23|
-|0CFP.10|[Part 1: wrong type for **fesetmode** parameter](log_cfp-c11.md#issue0CFP.10)|Fixed in C23|
-|0CFP.11|[Part 2: a-style formatting not IEC 60559 conformant](log_cfp-c11.md#issue0CFP.11)|Fixed in C23|
-|0CFP.12|[P1: Zero payloads and `set payload` function](log_cfp-c11.md#issue0CFP.12)|Fixed in C23|
-|0CFP.13|[P3: Type-generic macros for functions that round result to narrower type](log_cfp-c11.md#issue0CFP.13)|Fixed in C23|
-|0CFP.14|[P2: Effect of `%a` vs `%A` conversion specifiers](log_cfp-c11.md#issue0CFP.14)|Fixed in C23|
-|0CFP.15|[P3: Characteristic macros for non-arithmetic formats](log_cfp-c11.md#issue0CFP.15)|Fixed in C23|
-|0CFP.16|[P1: tgmath cbrt macro](log_cfp-c11.md#issue0CFP.16)|Fixed in C23|
-|0CFP.17|[P3: incommensurate arguments for comparison macros](log_cfp-c11.md#issue0CFP.17)|Fixed in C23|
-|0CFP.18|[P4: missing specification of preferred quantum exponents](log_cfp-c11.md#issue0CFP.18)|Fixed in C23, Floating-point TS 18661-4:2025|
-|0CFP.19|[P1: updating underflow definition](log_cfp-c11.md#issue0CFP.19)|Fixed in C23|
-|0CFP.20|[P1: changes for obsolescing DECIMAL\_DIG](log_cfp-c11.md#issue0CFP.20)|Fixed in C23|
-|0CFP.21|[P1: printf of one-digit character string](log_cfp-c11.md#issue0CFP.21)|Fixed in C23|
-|0CFP.22|[P3: changes for obsolescing DECIMAL\_DIG](log_cfp-c11.md#issue0CFP.22)|Fixed in C23|
-|0CFP.23|[P2: llquantexp invalid case](log_cfp-c11.md#issue0CFP.23)|Fixed in C23|
-|0CFP.24|[P1 remainder NaN case](log_cfp-c11.md#issue0CFP.24)|Fixed in C23|
-|0CFP.25|[P1 totalorder parameters](log_cfp-c11.md#issue0CFP.25)|Fixed in C23|
+|[0CFP.01](log_cfp-c11.md#issue0CFP.01)|Part 1: Typos|Fixed in C23|
+|[0CFP.02](log_cfp-c11.md#issue0CFP.02)|Part 1: Functions that round result to narrower type don't always|Fixed in C23|
+|[0CFP.03](log_cfp-c11.md#issue0CFP.03)|Part 1: feature macros and header file inclusions|Fixed in C23|
+|[0CFP.04](log_cfp-c11.md#issue0CFP.04)|Part 3: Error in function name|Fixed in C23|
+|[0CFP.05](log_cfp-c11.md#issue0CFP.05)|Part 1: Is return of same type convertFormat or copy?|Fixed in C23|
+|[0CFP.06](log_cfp-c11.md#issue0CFP.06)|Part 1: **fetestexceptflag** and exceptions passed to **fegetexceptflag**|Fixed in C23|
+|[0CFP.07](log_cfp-c11.md#issue0CFP.07)|Part 1: Editorial changes|Fixed in C23|
+|[0CFP.08](log_cfp-c11.md#issue0CFP.08)|Part 2: Editorial clarification about number digits in the coefficient|Fixed in C23|
+|[0CFP.09](log_cfp-c11.md#issue0CFP.09)|Part 2,3: Missing specification for usual arithmetic conversions, tgmath|Fixed in C23|
+|[0CFP.10](log_cfp-c11.md#issue0CFP.10)|Part 1: wrong type for **fesetmode** parameter|Fixed in C23|
+|[0CFP.11](log_cfp-c11.md#issue0CFP.11)|Part 2: a-style formatting not IEC 60559 conformant|Fixed in C23|
+|[0CFP.12](log_cfp-c11.md#issue0CFP.12)|P1: Zero payloads and `set payload` function|Fixed in C23|
+|[0CFP.13](log_cfp-c11.md#issue0CFP.13)|P3: Type-generic macros for functions that round result to narrower type|Fixed in C23|
+|[0CFP.14](log_cfp-c11.md#issue0CFP.14)|P2: Effect of `%a` vs `%A` conversion specifiers|Fixed in C23|
+|[0CFP.15](log_cfp-c11.md#issue0CFP.15)|P3: Characteristic macros for non-arithmetic formats|Fixed in C23|
+|[0CFP.16](log_cfp-c11.md#issue0CFP.16)|P1: tgmath cbrt macro|Fixed in C23|
+|[0CFP.17](log_cfp-c11.md#issue0CFP.17)|P3: incommensurate arguments for comparison macros|Fixed in C23|
+|[0CFP.18](log_cfp-c11.md#issue0CFP.18)|P4: missing specification of preferred quantum exponents|Fixed in C23, Floating-point TS 18661-4:2025|
+|[0CFP.19](log_cfp-c11.md#issue0CFP.19)|P1: updating underflow definition|Fixed in C23|
+|[0CFP.20](log_cfp-c11.md#issue0CFP.20)|P1: changes for obsolescing DECIMAL\_DIG|Fixed in C23|
+|[0CFP.21](log_cfp-c11.md#issue0CFP.21)|P1: printf of one-digit character string|Fixed in C23|
+|[0CFP.22](log_cfp-c11.md#issue0CFP.22)|P3: changes for obsolescing DECIMAL\_DIG|Fixed in C23|
+|[0CFP.23](log_cfp-c11.md#issue0CFP.23)|P2: llquantexp invalid case|Fixed in C23|
+|[0CFP.24](log_cfp-c11.md#issue0CFP.24)|P1 remainder NaN case|Fixed in C23|
+|[0CFP.25](log_cfp-c11.md#issue0CFP.25)|P1 totalorder parameters|Fixed in C23|
 
 ---
 
