@@ -29,7 +29,7 @@ The question is exactly how it is modified.
 
 6.7.8#19 reads:
 
-> \[#19] The initialization shall occur in initializer list order, each
+> \[#19\] The initialization shall occur in initializer list order, each
 > initializer provided for a particular subobject overriding any previously listed
 > initializer for the same subobject; all subobjects that are not initialized
 > explicitly shall be initialized implicitly the same as objects that have static
@@ -86,7 +86,7 @@ Which of these is correct ?
 
 If `x` and `y` are supposed to have the same effect, change 6.7.8#19 to:
 
-> \[#19] The initialization shall occur in initializer list order, each
+> \[#19\] The initialization shall occur in initializer list order, each
 > initializer provided for a particular subobject overriding any previously listed
 > initializer for the same subobject. When all initializers have been applied, any
 > subobjects of the overall object being initialized that have not been
@@ -95,7 +95,7 @@ If `x` and `y` are supposed to have the same effect, change 6.7.8#19 to:
 
 and add a new paragraph at the end:
 
-> \[#39] To illustrate the rules for implicit initialization, in:
+> \[#39\] To illustrate the rules for implicit initialization, in:
 >
 > ```c
 >        struct fred
@@ -115,7 +115,7 @@ and add a new paragraph at the end:
 
 If `x` and `y` are supposed to be different, change 6.7.8#19 to:
 
-> \[#19] The initialization shall occur in initializer list order, each
+> \[#19\] The initialization shall occur in initializer list order, each
 > initializer provided for a particular subobject overriding any previously listed
 > initializer for the same subobject; for each brace-enclosed list, all subobjects
 > within the object that that list initializes that are not initialized explicitly
@@ -124,7 +124,7 @@ If `x` and `y` are supposed to be different, change 6.7.8#19 to:
 
 and add a new paragraph at the end:
 
-> \[#39] To illustrate the rules for implicit initialization, in:
+> \[#39\] To illustrate the rules for implicit initialization, in:
 >
 > ```c
 >        struct fred

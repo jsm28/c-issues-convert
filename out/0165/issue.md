@@ -111,13 +111,13 @@ complete.
 **Semantics**
 
 All declarations of structure, union, or enumerated types that have the same
-scope and use the same tag declare the same type. The type is incomplete \[63]
+scope and use the same tag declare the same type. The type is incomplete \[63\]
 until the closing brace of the list defining the content, and complete
 thereafter. \[Footnote 63: An incomplete type may only be used when the size of
-an object of that type is not needed.]
+an object of that type is not needed.\]
 
 \[Append the present wording, or see Defect Report CA-2-09 \- submitted
-independently \- for alternative wording.]
+independently \- for alternative wording.\]
 
 Two declarations of structure, union, or enumerated types which are in different
 scopes or use different tags declare distinct types. Each declaration of a
@@ -135,12 +135,12 @@ A type specifier of the form
 
 declares a structure, union, or enumerated type. The list defines the *structure
 content, union content,* or *enumeration content.* If an identifier is provided
-\[64], the type specifier also declares the identifier to be the tag of that
+\[64\], the type specifier also declares the identifier to be the tag of that
 type. \[Footnote 64: If there is no identifier, the type can, within the
 translation unit, only be referred to by the declaration of which it is a part.
 Of course, when the declaration is of a typedef name, subsequent declarations
 can make use of that typedef name to declare objects having the specified
-structure, union, or enumerated type.]
+structure, union, or enumerated type.\]
 
 A declaration of the form
 
@@ -149,8 +149,8 @@ A declaration of the form
 ```
 
 specifies a structure or union type and declares the identifier as the tag of
-that type \[62]. \[Footnote 62: A similar construction with `enum` does not
-exist.]
+that type \[62\]. \[Footnote 62: A similar construction with `enum` does not
+exist.\]
 
 If a type specifier of the form
 
@@ -161,7 +161,7 @@ If a type specifier of the form
 occurs other than as part of one of the above constructions, and no other
 declaration of the identifier as a tag is visible, then it declares a structure
 or union type which is incomplete at this point, and declares the identifier as
-the tag of that type \[62].
+the tag of that type \[62\].
 
 If a type specifier of the form
 

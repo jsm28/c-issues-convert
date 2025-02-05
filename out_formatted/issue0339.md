@@ -23,10 +23,10 @@ Consider the code:
 Does such a variably modified compound literal at file scope violate any
 constraint? 6.7.5.2#2 says:
 
-> \[#2] Only an ordinary identifier (as defined in 6.2.3) with both block scope or
-> function prototype scope and no linkage shall have a variably modified type. If
-> an identifier is declared to be an object with static storage duration, it shall
-> not have a variable length array type.
+> \[#2\] Only an ordinary identifier (as defined in 6.2.3) with both block scope
+> or function prototype scope and no linkage shall have a variably modified type.
+> If an identifier is declared to be an object with static storage duration, it
+> shall not have a variable length array type.
 
 However, this only seems to constrain declarations of identifiers, not any other
 expression with variably modified type (such as a compound literal, inside or

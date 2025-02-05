@@ -30,7 +30,7 @@ it should be defined whether this results in:
 2. `2*9*g`
 
 X3J11 previously said, “The behavior in this case could have been specified, but
-the Committee has decided more than once not to do so. \[They] do not wish to
+the Committee has decided more than once not to do so. \[They\] do not wish to
 promote this sort of macro replacement usage.”
 
 I interpret this as saying, in other words, “If we don't define the behavior

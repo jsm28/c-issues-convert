@@ -63,7 +63,7 @@ Append a new paragraph to 7.18.3:
 
 or change the first part of 7.17 paragraph 2 to:
 
-> \[#2] The types are `ptrdiff_t` which is the signed integer type of the result
+> \[#2\] The types are `ptrdiff_t` which is the signed integer type of the result
 > of subtracting two pointers (the width of `ptrdiff_t` shall be no greater than
 > that of `signed long`);
 >

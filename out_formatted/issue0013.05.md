@@ -24,9 +24,9 @@ enum strange1 {
  };
 ```
 
-The respective tags are visible on lines \[2] and \[5] (according to subclause
+The respective tags are visible on lines \[2\] and \[5\] (according to subclause
 6.1.2.1, page 20, lines 39-40, but there is no rule in subclause 6.5.2.3,
-**Semantics** (page 62\) that governs their meaning on lines \[2] and \[5].
+**Semantics** (page 62\) that governs their meaning on lines \[2\] and \[5\].
 Footnote 62 on page 62 seems to be written without taking this case into
 account.
 

@@ -52,9 +52,9 @@ a. Regions 2, 5 and 8 (\+/- normals and zero)
 
 b. Regions 2, 3, 5, 7, and 8 (\+/- normals, denormals, and zero)
 
-c. Regions 2 through 8 \[`-DBL_MAX` ... `+DBL_MAX`]
+c. Regions 2 through 8 \[`-DBL_MAX` ... `+DBL_MAX`\]
 
-d. Regions 1 through 9 \[-INF ... \+INF]
+d. Regions 1 through 9 \[-INF ... \+INF\]
 
 e. Regions 1 through 10 (reals and non-reals)
 

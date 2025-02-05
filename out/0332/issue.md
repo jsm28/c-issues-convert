@@ -61,7 +61,7 @@ that the existing usage of `BUFSIZ` be legitimatized, as follows.
 ### Suggested Technical Corrigendum
 
 Add the following sentence to the **Description** in subclause 7.19.7.7 (The
-`gets` function)], between the two existing sentences:
+`gets` function)\], between the two existing sentences:
 
 > At most `BUFSIZ-1` characters are copied to the array; excessive characters are
 > discarded.

@@ -16,16 +16,16 @@
 |0EMB.10|[The relationship beween named-registers and external object definitions](log_embc2004.md#issue0EMB.10)|Closed|
 |0EMB.11|[Initialization of global named-registers](log_embc2004.md#issue0EMB.11)|Fixed in Embedded C TR 18037:2008|
 |0EMB.12|[Address space qualifier in specifier-qualifier-list](log_embc2004.md#issue0EMB.12)|Fixed in Embedded C TR 18037:2008|
-|0EMB.13|[\[Embedded C 2004 DR#13]](log_embc2004.md#issue0EMB.13)|Fixed in Embedded C TR 18037:2008|
-|0EMB.14|[\[Embedded C 2004 DR#14]](log_embc2004.md#issue0EMB.14)|Fixed in Embedded C TR 18037:2008|
-|0EMB.15|[\[Embedded C 2004 DR#15]](log_embc2004.md#issue0EMB.15)|Fixed in Embedded C TR 18037:2008|
-|0EMB.16|[\[Embedded C 2004 DR#16]](log_embc2004.md#issue0EMB.16)|Fixed in Embedded C TR 18037:2008|
-|0EMB.17|[\[Embedded C 2004 DR#17]](log_embc2004.md#issue0EMB.17)|Fixed in Embedded C TR 18037:2008|
-|0EMB.18|[\[Embedded C 2004 DR#18]](log_embc2004.md#issue0EMB.18)|Fixed in Embedded C TR 18037:2008|
-|0EMB.19|[\[Embedded C 2004 DR#19]](log_embc2004.md#issue0EMB.19)|Fixed in Embedded C TR 18037:2008|
-|0EMB.20|[\[Embedded C 2004 DR#20]](log_embc2004.md#issue0EMB.20)|Fixed in Embedded C TR 18037:2008|
-|0EMB.21|[\[Embedded C 2004 DR#21]](log_embc2004.md#issue0EMB.21)|Fixed in Embedded C TR 18037:2008|
-|0EMB.22|[\[Embedded C 2004 DR#22]](log_embc2004.md#issue0EMB.22)|Fixed in Embedded C TR 18037:2008|
+|0EMB.13|[\[Embedded C 2004 DR#13\]](log_embc2004.md#issue0EMB.13)|Fixed in Embedded C TR 18037:2008|
+|0EMB.14|[\[Embedded C 2004 DR#14\]](log_embc2004.md#issue0EMB.14)|Fixed in Embedded C TR 18037:2008|
+|0EMB.15|[\[Embedded C 2004 DR#15\]](log_embc2004.md#issue0EMB.15)|Fixed in Embedded C TR 18037:2008|
+|0EMB.16|[\[Embedded C 2004 DR#16\]](log_embc2004.md#issue0EMB.16)|Fixed in Embedded C TR 18037:2008|
+|0EMB.17|[\[Embedded C 2004 DR#17\]](log_embc2004.md#issue0EMB.17)|Fixed in Embedded C TR 18037:2008|
+|0EMB.18|[\[Embedded C 2004 DR#18\]](log_embc2004.md#issue0EMB.18)|Fixed in Embedded C TR 18037:2008|
+|0EMB.19|[\[Embedded C 2004 DR#19\]](log_embc2004.md#issue0EMB.19)|Fixed in Embedded C TR 18037:2008|
+|0EMB.20|[\[Embedded C 2004 DR#20\]](log_embc2004.md#issue0EMB.20)|Fixed in Embedded C TR 18037:2008|
+|0EMB.21|[\[Embedded C 2004 DR#21\]](log_embc2004.md#issue0EMB.21)|Fixed in Embedded C TR 18037:2008|
+|0EMB.22|[\[Embedded C 2004 DR#22\]](log_embc2004.md#issue0EMB.22)|Fixed in Embedded C TR 18037:2008|
 
 ---
 
@@ -642,7 +642,7 @@ qualifier.'
 
 <div id="issue0EMB.13">
 
-## Issue 0EMB.13: \[Embedded C 2004 DR#13]
+## Issue 0EMB.13: \[Embedded C 2004 DR#13\]
 
 Authors: WG14  
 Date: 2004-11-15  
@@ -670,7 +670,7 @@ are the immediate operand of casts'
 
 <div id="issue0EMB.14">
 
-## Issue 0EMB.14: \[Embedded C 2004 DR#14]
+## Issue 0EMB.14: \[Embedded C 2004 DR#14\]
 
 Authors: WG14  
 Date: 2004-11-15  
@@ -699,7 +699,7 @@ overlap.'
 
 <div id="issue0EMB.15">
 
-## Issue 0EMB.15: \[Embedded C 2004 DR#15]
+## Issue 0EMB.15: \[Embedded C 2004 DR#15\]
 
 Authors: WG14  
 Date: 2004-11-15  
@@ -725,7 +725,7 @@ Change: Modify 4.1.6.2.1 para 5 third sentence accordingly.
 
 <div id="issue0EMB.16">
 
-## Issue 0EMB.16: \[Embedded C 2004 DR#16]
+## Issue 0EMB.16: \[Embedded C 2004 DR#16\]
 
 Authors: WG14  
 Date: 2004-11-15  
@@ -756,7 +756,7 @@ always a fixed-point type.'
 
 <div id="issue0EMB.17">
 
-## Issue 0EMB.17: \[Embedded C 2004 DR#17]
+## Issue 0EMB.17: \[Embedded C 2004 DR#17\]
 
 Authors: WG14  
 Date: 2004-11-15  
@@ -785,7 +785,7 @@ and A.4).
 
 <div id="issue0EMB.18">
 
-## Issue 0EMB.18: \[Embedded C 2004 DR#18]
+## Issue 0EMB.18: \[Embedded C 2004 DR#18\]
 
 Authors: WG14  
 Date: 2004-11-15  
@@ -815,7 +815,7 @@ respectively, ...'.
 
 <div id="issue0EMB.19">
 
-## Issue 0EMB.19: \[Embedded C 2004 DR#19]
+## Issue 0EMB.19: \[Embedded C 2004 DR#19\]
 
 Authors: WG14  
 Date: 2005-03-03  
@@ -851,7 +851,7 @@ uint_ulk_t bitsulk(unsigned long accum f);
 
 <div id="issue0EMB.20">
 
-## Issue 0EMB.20: \[Embedded C 2004 DR#20]
+## Issue 0EMB.20: \[Embedded C 2004 DR#20\]
 
 Authors: WG14  
 Date: 2005-03-03  
@@ -889,7 +889,7 @@ Solution: in 4.1.7.3 and 7.18a.6.4, replace in the 2nd bullet '(nonpadding)' by
 
 <div id="issue0EMB.21">
 
-## Issue 0EMB.21: \[Embedded C 2004 DR#21]
+## Issue 0EMB.21: \[Embedded C 2004 DR#21\]
 
 Authors: WG14  
 Date: 2005-03-03  
@@ -948,7 +948,7 @@ Note as follows:
 
 <div id="issue0EMB.22">
 
-## Issue 0EMB.22: \[Embedded C 2004 DR#22]
+## Issue 0EMB.22: \[Embedded C 2004 DR#22\]
 
 Authors: WG14  
 Date: 2005-03-03  

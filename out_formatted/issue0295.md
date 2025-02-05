@@ -24,7 +24,7 @@ But 6.7p7 says:
 
 > If an identifier for an object is declared with no linkage, the type for the
 > object shall be complete by the end of its declarator...; in the case of
-> function arguments \[n.b., that should be *parameters*, not *arguments*]
+> function arguments \[n.b., that should be *parameters*, not *arguments*\]
 > (including in prototypes), it is the adjusted type (see 6.7.5.3) that is
 > required to be complete.
 

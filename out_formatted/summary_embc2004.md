@@ -16,14 +16,14 @@
 |0EMB.10|[The relationship beween named-registers and external object definitions](issue0EMB.10.md)|Closed|
 |0EMB.11|[Initialization of global named-registers](issue0EMB.11.md)|Fixed in Embedded C TR 18037:2008|
 |0EMB.12|[Address space qualifier in specifier-qualifier-list](issue0EMB.12.md)|Fixed in Embedded C TR 18037:2008|
-|0EMB.13|[\[Embedded C 2004 DR#13]](issue0EMB.13.md)|Fixed in Embedded C TR 18037:2008|
-|0EMB.14|[\[Embedded C 2004 DR#14]](issue0EMB.14.md)|Fixed in Embedded C TR 18037:2008|
-|0EMB.15|[\[Embedded C 2004 DR#15]](issue0EMB.15.md)|Fixed in Embedded C TR 18037:2008|
-|0EMB.16|[\[Embedded C 2004 DR#16]](issue0EMB.16.md)|Fixed in Embedded C TR 18037:2008|
-|0EMB.17|[\[Embedded C 2004 DR#17]](issue0EMB.17.md)|Fixed in Embedded C TR 18037:2008|
-|0EMB.18|[\[Embedded C 2004 DR#18]](issue0EMB.18.md)|Fixed in Embedded C TR 18037:2008|
-|0EMB.19|[\[Embedded C 2004 DR#19]](issue0EMB.19.md)|Fixed in Embedded C TR 18037:2008|
-|0EMB.20|[\[Embedded C 2004 DR#20]](issue0EMB.20.md)|Fixed in Embedded C TR 18037:2008|
-|0EMB.21|[\[Embedded C 2004 DR#21]](issue0EMB.21.md)|Fixed in Embedded C TR 18037:2008|
-|0EMB.22|[\[Embedded C 2004 DR#22]](issue0EMB.22.md)|Fixed in Embedded C TR 18037:2008|
+|0EMB.13|[\[Embedded C 2004 DR#13\]](issue0EMB.13.md)|Fixed in Embedded C TR 18037:2008|
+|0EMB.14|[\[Embedded C 2004 DR#14\]](issue0EMB.14.md)|Fixed in Embedded C TR 18037:2008|
+|0EMB.15|[\[Embedded C 2004 DR#15\]](issue0EMB.15.md)|Fixed in Embedded C TR 18037:2008|
+|0EMB.16|[\[Embedded C 2004 DR#16\]](issue0EMB.16.md)|Fixed in Embedded C TR 18037:2008|
+|0EMB.17|[\[Embedded C 2004 DR#17\]](issue0EMB.17.md)|Fixed in Embedded C TR 18037:2008|
+|0EMB.18|[\[Embedded C 2004 DR#18\]](issue0EMB.18.md)|Fixed in Embedded C TR 18037:2008|
+|0EMB.19|[\[Embedded C 2004 DR#19\]](issue0EMB.19.md)|Fixed in Embedded C TR 18037:2008|
+|0EMB.20|[\[Embedded C 2004 DR#20\]](issue0EMB.20.md)|Fixed in Embedded C TR 18037:2008|
+|0EMB.21|[\[Embedded C 2004 DR#21\]](issue0EMB.21.md)|Fixed in Embedded C TR 18037:2008|
+|0EMB.22|[\[Embedded C 2004 DR#22\]](issue0EMB.22.md)|Fixed in Embedded C TR 18037:2008|
 

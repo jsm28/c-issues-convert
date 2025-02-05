@@ -15,13 +15,13 @@ Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/do
 
 C99 6.7.2#2 lists the valid combinations of type specifiers. 6.7.2#5 says:
 
-> \[#5] Each of the comma-separated sets designates the same type, except that for
-> bit-fields, it is implementation-defined whether the specifier `int` designates
-> the same type as `signed int` or the same type as `unsigned int`.
+> \[#5\] Each of the comma-separated sets designates the same type, except that
+> for bit-fields, it is implementation-defined whether the specifier `int`
+> designates the same type as `signed int` or the same type as `unsigned int`.
 
 6.7.2.1#4 says:
 
-> \[#4] A bit-field shall have a type that is a qualified or unqualified version
+> \[#4\] A bit-field shall have a type that is a qualified or unqualified version
 > of `_Bool`, `signed int`, `unsigned int`, or some other implementation-defined
 > type.
 

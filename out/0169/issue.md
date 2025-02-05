@@ -16,7 +16,7 @@ The C Standard's description of the replacement of trigraphs is contradictory.
 Subclause 5.2.1.1 reads in part:
 
 All occurrences in a source file of the following sequences of three characters
-(called trigraph sequences \[7]) are replaced with the corresponding single
+(called trigraph sequences \[7\]) are replaced with the corresponding single
 character... Each `?` that does not begin one of the trigraphs listed above is
 not changed.
 

@@ -48,4 +48,4 @@ diagnostic message generated because of the violation of this constraint
 \[Footnote: The intent of this subclause is that `#error` indicates that
 translation should fail. As stated in subclause 5.1.1.3, a translation unit
 excludes lines within the *false* side of `#if` ... `#else` ... `#endif`
-groups.] shall include the sequence of preprocessing tokens in the directive.
+groups.\] shall include the sequence of preprocessing tokens in the directive.

@@ -20,7 +20,7 @@ its output depends on an unspecified value.
 
 Add a new paragraph 4#2a after 4#2:
 
-> \[#2a] An evaluation that makes use of an unspecified or implementation-defined
+> \[#2a\] An evaluation that makes use of an unspecified or implementation-defined
 > value is a form of unspecified or implementation-defined behaviour respectively.
 
 ---

@@ -23,7 +23,7 @@ should not be assumed to be those of any person other than myself.*
 
 Defect Report UK 030: Nugatory constraint
 
-*\[BSI characterize this issue as minor.]*
+*\[BSI characterize this issue as minor.\]*
 
 The constraint of 6.1.2 serves no purpose. Subclause 6.1.2 states in part:
 
@@ -39,7 +39,7 @@ sequence of characters as a keyword.
 identifier, it is converted to a keyword.
 
 Given the latter text \[added in Technical Corrigendum 1, reference [DR 017
-Q39](issue0017.39.md)], the constraint can never be violated.
+Q39](issue0017.39.md)\], the constraint can never be violated.
 
 ### Suggested Technical Corrigendum:
 

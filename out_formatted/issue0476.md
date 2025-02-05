@@ -21,7 +21,7 @@ into harmony with both, as well as with C\+\+.
 #### Motivation For Volatile
 
 The use case that motivated the introduction of the `volatile` keyword into C
-was a variant of the following snippet copied from early UNIX sources \[1]:
+was a variant of the following snippet copied from early UNIX sources \[1\]:
 
 ```c
     #define KL 0177560
@@ -88,7 +88,7 @@ The difference between the two forms of the rewritten loop is of historical
 interest: Early C compilers are said to have recognized the first pattern
 (without the `volatile` keyword) where the address used to access the register
 was a constant, and avoided the undesirable optimization for such accesses
-\[11]. However, they did not have the same ability when the access was through
+\[11\]. However, they did not have the same ability when the access was through
 pointer variable in which the address had been stored, especially not when the
 use of such a variable was far removed from the last assignment to it. The
 `volatile` keyword was intended to allow both forms of the loop to work as
@@ -113,12 +113,12 @@ are implemented. Each of the macros prevents the compiler optimization by
 casting the address of its argument to a `volatile T*` and accessing the
 variable via an lvalue of the `volatile`-qualified type `T` (where `T` is one of
 the standard scalar types). Other primitives gurantee memory synchronization and
-visibility but those are orthogonal to the subject of this paper. See \[3].
+visibility but those are orthogonal to the subject of this paper. See \[3\].
 
 Similar examples can be found in other system or embedded programs as well as in
 many other pre-C11 and pre-C\+\+11 code bases that don't rely on the Atomic
 types and operations newly inroduced in those standards. They are often cited in
-programming books \[4] and in online articles \[5, 6, 7, 8].
+programming books \[4\] and in online articles \[5, 6, 7, 8\].
 
 #### The Trouble With Volatile
 
@@ -162,8 +162,8 @@ to behave in an unexpected way.
 
 Although the problem with the C specification of volatile isn't well known, it
 isn't new. It was pointed out in the past, for example in *The trouble with
-volatile* \[9], Jonathan Corbet quotes Linus Torvalds, the author and maintainer
-of the Linux kernel, as saying:
+volatile* \[9\], Jonathan Corbet quotes Linus Torvalds, the author and
+maintainer of the Linux kernel, as saying:
 
 > Also, more importantly, "`volatile`" is on the wrong <u>part</u> of the whole
 > system. In C, it's "data" that is volatile, but that is insane. Data isn't
@@ -200,7 +200,7 @@ existing practice, there is also indication beyond the informative note in the
 C\+\+ standard that the words most likely do not reflect the original intent of
 the committee at the time they were crafted.
 
-The C99 Rationale \[10], in §6.7.3 makes it clear that the committee's intent
+The C99 Rationale \[10\], in §6.7.3 makes it clear that the committee's intent
 when introducing `volatile` was to specify semantics that apply to accesses to
 non-volatile objects via volatile-qualified lvalues and not just to accesses to
 objects explicitly declared with the qualifier:

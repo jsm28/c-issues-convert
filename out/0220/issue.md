@@ -1,9 +1,9 @@
 ### Summary
 
-7.19.6.1\[#4] reads in part:
+7.19.6.1\[#4\] reads in part:
 
-> * An optional minimum field width. \[...] The field width takes the form of an asterisk `*` (described later) or a decimal integer<sup>.232)</sup>
-> * An optional precision \[...] The precision takes the form of a period `.` followed either by an asterisk `*` (described later) or by an optional decimal integer; \[...]
+> * An optional minimum field width. \[...\] The field width takes the form of an asterisk `*` (described later) or a decimal integer<sup>.232)</sup>
+> * An optional precision \[...\] The precision takes the form of a period `.` followed either by an asterisk `*` (described later) or by an optional decimal integer; \[...\]
 
 7.19.6.2 #3 reads in part:
 
@@ -22,7 +22,7 @@ Therefore it is not possible to tell whether, in each case:
 
 Add a new paragraph to 7.1.1:
 
-> \[#x] A *decimal integer* is a sequence of digits which may begin with one or
+> \[#x\] A *decimal integer* is a sequence of digits which may begin with one or
 > more zeros, but is nonetheless interpreted as decimal, not octal.
 
 Append to the first cited text in 7.19.6.1:

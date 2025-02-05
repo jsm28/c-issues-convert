@@ -19,7 +19,7 @@ Consider the code:
 
 7.1.2 says:
 
-> \[#4] Standard headers may be included in any order; each may be included more
+> \[#4\] Standard headers may be included in any order; each may be included more
 > than once in a given scope, with no effect different from being included only
 > once, except that the effect of including `<assert.h>` depends on the definition
 > of `NDEBUG` (see 7.2).
@@ -55,7 +55,7 @@ well.
 
 Change the first sentence of 7.1.2#4 to:
 
-> \[#4] Standard headers may be included in any order; each may be included any
+> \[#4\] Standard headers may be included in any order; each may be included any
 > number of times in a preprocessing translation unit. The second and subsequent
 > occurrences of a given header shall be ignored, except in the case of
 > `<assert.h>` (where the behaviour is defined in subclause 7.2).

@@ -1,4 +1,4 @@
-*\[This report isolates one of the points from [DR257](issue:0257).]*
+*\[This report isolates one of the points from [DR257](issue:0257).\]*
 
 ### Problem
 
@@ -28,7 +28,7 @@ C89 words.
 
 ### Suggested Technical Corrigendum
 
-*\[Essentially verbatim from [DR257](issue:0257)]*
+*\[Essentially verbatim from [DR257](issue:0257)\]*
 
 Attach a new footnote 78a to the words "named member" in 6.5.2.3#3:
 

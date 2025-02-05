@@ -112,11 +112,11 @@ from having an inconsistent set of documents.
 
 Page 38: After the C 7.12.13a subclause heading, insert the following paragraph:
 
-> \[1] The functions in this subclause round their results to a type typically
+> \[1\] The functions in this subclause round their results to a type typically
 > narrower than the parameter types.
 
 Page 40: After the change to C ending with “7.12.13a.6 Square root rounded to
-narrower type ... \[3] These functions return the square root of x, rounded to
+narrower type ... \[3\] These functions return the square root of x, rounded to
 the type of the function.”, insert the following:
 
 > In 7.12.13a #1, attach a footnote to the wording:
@@ -143,11 +143,11 @@ Corrigendum
 
 Page 38: After the C 7.12.13a subclause heading, insert the following paragraph:
 
-> \[1] The functions in this subclause round their results to a type typically
+> \[1\] The functions in this subclause round their results to a type typically
 > narrower than the parameter types.
 
 Page 40: After the change to C ending with “7.12.13a.6 Square root rounded to
-narrower type ... \[3] These functions return the square root of x, rounded to
+narrower type ... \[3\] These functions return the square root of x, rounded to
 the type of the function.”, insert the following:
 
 > In 7.12.13a #1, attach a footnote to the wording:
@@ -228,7 +228,7 @@ Page 5: At the end of 5.3, insert:
 
 > After 7.1.2#4, insert:
 >
-> > \[4a] Some standard headers define or declare identifiers contingent on whether
+> > \[4a\] Some standard headers define or declare identifiers contingent on whether
 > > certain macros whose names begin with **\_STDC\_WANT\_IEC\_60559\_** and end
 > > with **\_EXT\_** are defined (by the user) at the point in the code where the
 > > header is first included. Within a preprocessing translation unit, the same set
@@ -251,7 +251,7 @@ Page 5: At the end of 5.3, insert:
 
 > After 7.1.2#4, insert:
 >
-> > \[4a] Some standard headers define or declare identifiers contingent on whether
+> > \[4a\] Some standard headers define or declare identifiers contingent on whether
 > > certain macros whose names begin with **\_STDC\_WANT\_IEC\_60559\_** and end
 > > with **\_EXT\_** are defined (by the user) at the point in the code where the
 > > header is first included. Within a preprocessing translation unit, the same set
@@ -358,7 +358,7 @@ that a program would depend on convertFormat not being used.
 
 In Clause 8, to the text for C F.3#3:
 
-> \[3] Whether C assignment (6.5.16) (and conversion as if by assignment) to the
+> \[3\] Whether C assignment (6.5.16) (and conversion as if by assignment) to the
 > same format is an IEC 60559 convertFormat or copy operation is
 > implementation-defined, even if `<fenv.h>` defines the macro
 > `FE_SNANS_ALWAYS_SIGNAL` (F.2.1).
@@ -398,7 +398,7 @@ Corrigendum
 
 In Clause 8, to the text for C F.3#3:
 
-> \[3] Whether C assignment (6.5.16) (and conversion as if by assignment) to the
+> \[3\] Whether C assignment (6.5.16) (and conversion as if by assignment) to the
 > same format is an IEC 60559 convertFormat or copy operation is
 > implementation-defined, even if `<fenv.h>` defines the macro
 > `FE_SNANS_ALWAYS_SIGNAL` (F.2.1).
@@ -686,13 +686,13 @@ This is about the issue raised by Joseph Myers in email SC22WG14.14282:
 > and `<tgmath.h>` chooses `long double`), and since rules that are the same in
 > most cases but subtly different in obscure cases tend to be confusing, I wonder
 > if it might be better to specify much simpler rules for `<tgmath.h>`: take the
-> type resulting from the usual arithmetic conversions\[\*], where integer
+> type resulting from the usual arithmetic conversions\[\*\], where integer
 > arguments are replaced by `_Decimal64` if there are any decimal arguments and
 > `double` otherwise.  (That's different from the present rules for e.g.
 > (`_Float32x`, `int`), but it's a lot simpler, and seems unlikely in practice to
 > choose a type with a different set of values from the present choice.)
 >
-> \[\*] Meaningful for more than two arguments as long as the usual arithmetic
+> \[\*\] Meaningful for more than two arguments as long as the usual arithmetic
 > conversions are commutative and associative as an operation on pairs of types.
 
 Though substantive, the suggested change to the usual arithmetic conversions is
@@ -871,7 +871,7 @@ with:
 
 > In 7.25#3c, replace the first sentence and bullets:
 >
-> > \[3c] Except for the macros for functions that round result to a narrower type
+> > \[3c\] Except for the macros for functions that round result to a narrower type
 > > (7.12.13a), use of a type-generic macro invokes a function whose generic
 > > parameters have the corresponding real type determined by the corresponding real
 > > types of the arguments as follows:
@@ -900,7 +900,7 @@ with:
 >
 > with:
 >
-> > \[3c] Except for the macros for functions that round result to a narrower type
+> > \[3c\] Except for the macros for functions that round result to a narrower type
 > > (7.12.13a), use of a type-generic macro invokes a function whose generic
 > > parameters have the corresponding real type determined by the types of the
 > > arguments for the generic parameters as follows:
@@ -1050,9 +1050,9 @@ to:
 
 In TS 18661-2
 
-In 12.9, change the introduced \[3c] from:
+In 12.9, change the introduced \[3c\] from:
 
-> \[3c] Except for the macros for functions that round result to a narrower type
+> \[3c\] Except for the macros for functions that round result to a narrower type
 > (7.12.13a), use of a type-generic macro invokes a function whose generic
 > parameters have the corresponding real type determined by the corresponding real
 > types of the arguments as follows:
@@ -1081,7 +1081,7 @@ In 12.9, change the introduced \[3c] from:
 
 to:
 
-> \[3c] Except for the macros for functions that round result to a narrower type
+> \[3c\] Except for the macros for functions that round result to a narrower type
 > (7.12.13a), use of a type-generic macro invokes a function whose generic
 > parameters have the corresponding real type determined by the types of the
 > arguments for the generic parameters as follows:
@@ -1692,7 +1692,7 @@ In clause 15, after the change to 7.25#6, add:
 
 > Change 7.25#6a from:
 >
-> > \[6a] The functions that round result to a narrower type have type-generic
+> > \[6a\] The functions that round result to a narrower type have type-generic
 > > macros whose names are obtained by omitting any suffix from the function names.
 > > Thus, the macros with `f` or `d` prefix are:
 > >
@@ -1737,7 +1737,7 @@ In clause 15, after the change to 7.25#6, add:
 >
 > to:
 >
-> > \[6a] The functions that round result to a narrower type have type-generic
+> > \[6a\] The functions that round result to a narrower type have type-generic
 > > macros whose names are obtained by omitting any suffix from the function names.
 > > Thus, the macros with `f` or `d` prefix are:
 > >
@@ -1818,7 +1818,7 @@ In clause 15, after the change to 7.25#6, add:
 
 > Change 7.25#6a from:
 >
-> > \[6a] The functions that round result to a narrower type have type-generic
+> > \[6a\] The functions that round result to a narrower type have type-generic
 > > macros whose names are obtained by omitting any suffix from the function names.
 > > Thus, the macros with `f` or `d` prefix are:
 > >
@@ -1863,7 +1863,7 @@ In clause 15, after the change to 7.25#6, add:
 >
 > to:
 >
-> > \[6a] The functions that round result to a narrower type have type-generic
+> > \[6a\] The functions that round result to a narrower type have type-generic
 > > macros whose names are obtained by omitting any suffix from the function names.
 > > Thus, the macros with `f` or `d` prefix are:
 > >
@@ -2185,23 +2185,23 @@ Converted from: [n2397.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n23
 This DR addresses a problem noted by Joseph Myers in emails SC22WG14.14743 and
 14744:
 
-> … the example \[in TS 18661-1 clause 16, for 7.25#6b – see below] implies that
+> … the example \[in TS 18661-1 clause 16, for 7.25#6b – see below\] implies that
 > "#undef cbrtl" before calling the cbrt type-generic macro would mean it's not
 > affected by constant rounding modes, but the actual normative text says "is
 > affected by constant rounding modes" with no such caveat.
 
 and
 
-> … neither example definition \[in C11 or TS 18661-1] is valid because they might
-> call a block-scope cbrtf / cbrtl; they need to avoid such a block-scope
+> … neither example definition \[in C11 or TS 18661-1\] is valid because they
+> might call a block-scope cbrtf / cbrtl; they need to avoid such a block-scope
 > identifier, or a macro defined by the user, while still depending on whether
 > expansion of the    
 > standard header cbrtf / cbrtl macros has been suppressed at that point.
 
 The text in question is:
 
-> \[6b] A type-generic macro corresponding to a function indicated in the table in
-> 7.6.1a is affected by constant rounding modes (7.6.2). Note that the
+> \[6b\] A type-generic macro corresponding to a function indicated in the table
+> in 7.6.1a is affected by constant rounding modes (7.6.2). Note that the
 > type-generic macro definition in the example in 6.5.1.1 does not conform to this
 > specification. A conforming macro could be implemented as follows:
 >
@@ -2520,13 +2520,13 @@ IEC 60559 gradual underflow, as is its stated intention (see C11 footnote 232).
 
 Change the first sentence in 7.12.1#6 from:
 
-> \[6] The result underflows if the magnitude of the mathematical result is so
+> \[6\] The result underflows if the magnitude of the mathematical result is so
 > small that the mathematical result cannot be represented, without extraordinary
 > roundoff error, in an object of the specified type.232) …
 
 to:
 
-> \[6] The result underflows if the magnitude of the mathematical result is
+> \[6\] The result underflows if the magnitude of the mathematical result is
 > nonzero and less than the minimum normal number in the type.232) …
 
 ---
@@ -2553,13 +2553,13 @@ IEC 60559 gradual underflow, as is its stated intention (see C11 footnote 232).
 
 Change the first sentence in 7.12.1#6 from:
 
-> \[6] The result underflows if the magnitude of the mathematical result is so
+> \[6\] The result underflows if the magnitude of the mathematical result is so
 > small that the mathematical result cannot be represented, without extraordinary
 > roundoff error, in an object of the specified type.232) …
 
 to:
 
-> \[6] The result underflows if the magnitude of the mathematical result is
+> \[6\] The result underflows if the magnitude of the mathematical result is
 > nonzero and less than the minimum normal number in the type.232) …
 
 
@@ -2615,7 +2615,7 @@ In 10.1, change:
 
 > After F.5#2, insert:
 >
-> > \[2a] The `<float.h>` header defines the macro
+> > \[2a\] The `<float.h>` header defines the macro
 > >
 > > ```c
 > > CR_DECIMAL_DIG
@@ -2631,11 +2631,11 @@ In 10.1, change:
 > > the implementation correctly rounds for all numbers of significant decimal
 > > digits, then `CR_DECIMAL_DIG` shall have the value of the macro `UINTMAX_MAX`.
 > >
-> > \[2b] Conversions of types with IEC 60559 binary formats to character sequences
+> > \[2b\] Conversions of types with IEC 60559 binary formats to character sequences
 > > with more than `CR_DECIMAL_DIG` significant decimal digits shall correctly round
 > > to `CR_DECIMAL_DIG` significant digits and pad zeros on the right.
 > >
-> > \[2c] Conversions from character sequences with more than `CR_DECIMAL_DIG`
+> > \[2c\] Conversions from character sequences with more than `CR_DECIMAL_DIG`
 > > significant decimal digits to types with IEC 60559 binary formats shall
 > > correctly round to an intermediate character sequence with `CR_DECIMAL_DIG`
 > > significant decimal digits, according to the applicable rounding direction, and
@@ -2658,7 +2658,7 @@ In 10.1, change:
 >
 > Replace the content of F.5 with:
 >
-> > \[1] The `<float.h>` header defines the macro
+> > \[1\] The `<float.h>` header defines the macro
 > >
 > > ```c
 > > CR_DECIMAL_DIG
@@ -2675,11 +2675,11 @@ In 10.1, change:
 > > implementation correctly rounds for all numbers of significant decimal digits,
 > > then `CR_DECIMAL_DIG` shall have the value of the macro `UINTMAX_MAX`.
 > >
-> > \[2] Conversions of types with IEC 60559 binary formats to character sequences
+> > \[2\] Conversions of types with IEC 60559 binary formats to character sequences
 > > with more than `CR_DECIMAL_DIG` significant decimal digits shall correctly round
 > > to `CR_DECIMAL_DIG` significant digits and pad zeros on the right.
 > >
-> > \[3] Conversions from character sequences with more than `CR_DECIMAL_DIG`
+> > \[3\] Conversions from character sequences with more than `CR_DECIMAL_DIG`
 > > significant decimal digits to types with IEC 60559 binary formats shall
 > > correctly round to an intermediate character sequence with `CR_DECIMAL_DIG`
 > > significant decimal digits, according to the applicable rounding direction, and
@@ -2688,14 +2688,14 @@ In 10.1, change:
 > > is raised (once) if either conversion is inexact. (The second conversion may
 > > raise the “overflow” or “underflow” floating-point exception.)
 > >
-> > \[4] The specification in this subclause assures conversion between IEC 60559
+> > \[4\] The specification in this subclause assures conversion between IEC 60559
 > > binary format and decimal character sequence follows all pertinent recommended
 > > practice. It also assures conversion from IEC 60559 format to decimal character
 > > sequence with at least *T*`_DECIMAL_DIG` digits and back, using to-nearest
 > > rounding, is the identity function, where *T* is the macro prefix for the
 > > format.
 > >
-> > \[5] Functions such as `strtod` that convert character sequences to floating
+> > \[5\] Functions such as `strtod` that convert character sequences to floating
 > > types honor the rounding direction. Hence, if the rounding direction might be
 > > upward or downward, the implementation cannot convert a minus-signed sequence by
 > > negating the converted unsigned sequence.
@@ -2760,7 +2760,7 @@ In 10.1, change:
 
 > After F.5#2, insert:
 >
-> > \[2a] The `<float.h>` header defines the macro
+> > \[2a\] The `<float.h>` header defines the macro
 > >
 > > ```c
 > > CR_DECIMAL_DIG
@@ -2776,11 +2776,11 @@ In 10.1, change:
 > > the implementation correctly rounds for all numbers of significant decimal
 > > digits, then `CR_DECIMAL_DIG` shall have the value of the macro `UINTMAX_MAX`.
 > >
-> > \[2b] Conversions of types with IEC 60559 binary formats to character sequences
+> > \[2b\] Conversions of types with IEC 60559 binary formats to character sequences
 > > with more than `CR_DECIMAL_DIG` significant decimal digits shall correctly round
 > > to `CR_DECIMAL_DIG` significant digits and pad zeros on the right.
 > >
-> > \[2c] Conversions from character sequences with more than `CR_DECIMAL_DIG`
+> > \[2c\] Conversions from character sequences with more than `CR_DECIMAL_DIG`
 > > significant decimal digits to types with IEC 60559 binary formats shall
 > > correctly round to an intermediate character sequence with `CR_DECIMAL_DIG`
 > > significant decimal digits, according to the applicable rounding direction, and
@@ -2803,7 +2803,7 @@ In 10.1, change:
 >
 > Replace the content of F.5 with:
 >
-> > \[1] The `<float.h>` header defines the macro
+> > \[1\] The `<float.h>` header defines the macro
 > >
 > > ```c
 > > CR_DECIMAL_DIG
@@ -2820,11 +2820,11 @@ In 10.1, change:
 > > implementation correctly rounds for all numbers of significant decimal digits,
 > > then `CR_DECIMAL_DIG` shall have the value of the macro `UINTMAX_MAX`.
 > >
-> > \[2] Conversions of types with IEC 60559 binary formats to character sequences
+> > \[2\] Conversions of types with IEC 60559 binary formats to character sequences
 > > with more than `CR_DECIMAL_DIG` significant decimal digits shall correctly round
 > > to `CR_DECIMAL_DIG` significant digits and pad zeros on the right.
 > >
-> > \[3] Conversions from character sequences with more than `CR_DECIMAL_DIG`
+> > \[3\] Conversions from character sequences with more than `CR_DECIMAL_DIG`
 > > significant decimal digits to types with IEC 60559 binary formats shall
 > > correctly round to an intermediate character sequence with `CR_DECIMAL_DIG`
 > > significant decimal digits, according to the applicable rounding direction, and
@@ -2833,14 +2833,14 @@ In 10.1, change:
 > > is raised (once) if either conversion is inexact. (The second conversion may
 > > raise the “overflow” or “underflow” floating-point exception.)
 > >
-> > \[4] The specification in this subclause assures conversion between IEC 60559
+> > \[4\] The specification in this subclause assures conversion between IEC 60559
 > > binary format and decimal character sequence follows all pertinent recommended
 > > practice. It also assures conversion from IEC 60559 format to decimal character
 > > sequence with at least *T*`_DECIMAL_DIG` digits and back, using to-nearest
 > > rounding, is the identity function, where *T* is the macro prefix for the
 > > format.
 > >
-> > \[5] Functions such as `strtod` that convert character sequences to floating
+> > \[5\] Functions such as `strtod` that convert character sequences to floating
 > > types honor the rounding direction. Hence, if the rounding direction might be
 > > upward or downward, the implementation cannot convert a minus-signed sequence by
 > > negating the converted unsigned sequence.
@@ -3219,7 +3219,7 @@ In F.10.12.1 (TS 18661-1), change:
 
 > **Description**  
 >
-> \[2] The `totalorder` functions determine whether the total order relationship,
+> \[2\] The `totalorder` functions determine whether the total order relationship,
 > defined by IEC 60559, is true for the ordered pair of its arguments `x`, `y`.
 > These functions are fully specified in IEC 60559\. These functions are
 > independent of the current rounding direction mode and raise no floating-point
@@ -3227,14 +3227,14 @@ In F.10.12.1 (TS 18661-1), change:
 >
 > **Returns**  
 >
-> \[3] The `totalorder` functions return nonzero if and only if the total order
+> \[3\] The `totalorder` functions return nonzero if and only if the total order
 > relation is true for the ordered pair of its arguments `x`, `y`.
 
 to:
 
 > **Description**  
 >
-> \[2] The `totalorder` functions determine whether the total order relationship,
+> \[2\] The `totalorder` functions determine whether the total order relationship,
 > defined by IEC 60559, is true for the ordered pair `*x`, `*y`. These functions
 > are fully specified in IEC 60559\. These functions are independent of the
 > current rounding direction mode and raise no floating-point exceptions, even if
@@ -3242,7 +3242,7 @@ to:
 >
 > **Returns**  
 >
-> \[3] The `totalorder` functions return nonzero if and only if the total order
+> \[3\] The `totalorder` functions return nonzero if and only if the total order
 > relation is true for the ordered pair `*x`, `*y`.
 
 and similarly for F.10.12.2.
@@ -3278,7 +3278,7 @@ In F.10.12.1 (TS 18661-1), change:
 
 > **Description**  
 >
-> \[2] The `totalorder` functions determine whether the total order relationship,
+> \[2\] The `totalorder` functions determine whether the total order relationship,
 > defined by IEC 60559, is true for the ordered pair of its arguments `x`, `y`.
 > These functions are fully specified in IEC 60559\. These functions are
 > independent of the current rounding direction mode and raise no floating-point
@@ -3286,14 +3286,14 @@ In F.10.12.1 (TS 18661-1), change:
 >
 > **Returns**  
 >
-> \[3] The `totalorder` functions return nonzero if and only if the total order
+> \[3\] The `totalorder` functions return nonzero if and only if the total order
 > relation is true for the ordered pair of its arguments `x`, `y`.
 
 to:
 
 > **Description**  
 >
-> \[2] The `totalorder` functions determine whether the total order relationship,
+> \[2\] The `totalorder` functions determine whether the total order relationship,
 > defined by IEC 60559, is true for the ordered pair `*x`, `*y`. These functions
 > are fully specified in IEC 60559\. These functions are independent of the
 > current rounding direction mode and raise no floating-point exceptions, even if
@@ -3301,7 +3301,7 @@ to:
 >
 > **Returns**  
 >
-> \[3] The `totalorder` functions return nonzero if and only if the total order
+> \[3\] The `totalorder` functions return nonzero if and only if the total order
 > relation is true for the ordered pair `*x`, `*y`.
 
 and similarly for F.10.12.2.

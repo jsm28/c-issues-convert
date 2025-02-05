@@ -133,7 +133,7 @@ operations, but it applies only to IEEE-754.
 > * dividing zero by zero and infinity by infinity,
 > * remainder (x REM y), where x is infinite or y is zero,
 > * square root of a negative number (excluding -0.0),
-> * converting a too large to represent floating value to an integer \[both signed and unsigned], e.g., int i \= INFINITY; unsigned int ui \= -1.0;
+> * converting a too large to represent floating value to an integer \[both signed and unsigned\], e.g., int i \= INFINITY; unsigned int ui \= -1.0;
 > * comparison with a relational operator (\<, \<\=, \>\=, \>) when (at least) one of the operands is a NaN.
 >
 > `FE_DIVBYZERO` should be a side-effect of dividing a non-zero finite number by

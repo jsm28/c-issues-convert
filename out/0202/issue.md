@@ -54,9 +54,9 @@ change the return type to `int` and add the following:
 
 > **Returns**
 >
-> This function always returns zero. \[\*]
+> This function always returns zero. \[\*\]
 >
-> \[\*] This may change in a future revision of this Standard, in which case a
+> \[\*\] This may change in a future revision of this Standard, in which case a
 > zero return will mean success and a non-zero return will mean failure of some
 > kind.
 
@@ -74,7 +74,7 @@ In 7.6 paragraph 5, attach a footnote to the wording:
 
 where the footnote is:
 
-> \[\*] The implementation supports an exception if there are circumstances where
+> \[\*\] The implementation supports an exception if there are circumstances where
 > a call to at least one of the functions in 7.6.2, using the macro as the
 > appropriate argument, will succeed. It is not necessary for all the functions to
 > succeed all the time.
@@ -100,11 +100,11 @@ Add a new heading and paragraph 3:
 
 > **Returns**
 >
-> \[3] The `feclearexcept` function returns zero if the excepts argument is zero
+> \[3\] The `feclearexcept` function returns zero if the excepts argument is zero
 > or if all the specified exceptions were successfully cleared. Otherwise it
 > returns a nonzero value.
 
 Optional additional change: replace 7.6.3.2p3 by:
 
-> \[3] The `fesetround` function returns zero if and only if the requested
+> \[3\] The `fesetround` function returns zero if and only if the requested
 > rounding direction was established.

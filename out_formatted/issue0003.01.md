@@ -21,8 +21,8 @@ description. Under the grammar given for a `pp-number`
 are preprocessing numbers and as such a conforming C compiler would be required
 to generate an error when it failed to successfully convert them to actual C
 language number tokens. The solution is simply to restrict the inclusion of
-\[`eE`]\[`+-`] within a *`pp-number`* to situations where the `e` or `E` is the
-first *`non-digit`* in the character sequence composing the preprocessing
+\[`eE`\]\[`+-`\] within a *`pp-number`* to situations where the `e` or `E` is
+the first *`non-digit`* in the character sequence composing the preprocessing
 number. This can be easily implemented in a variety of methods; the informal
 description above gives perhaps a better guide to efficient implementation than
 the following revised grammar:
@@ -125,8 +125,8 @@ identifiers, and/or constants must be separated by white space.” \[As “impro
 for the May 1, 1986 draft proposed standard, subclause 6.1 **Constraints**
 consisted of the single sentence: “Each keyword, identifier, or constant shall
 be separated by some white space from any otherwise adjacent keyword,
-identifier, or constant.”] As you can see, this constraint neither presented the
-intent of the Committee nor caused implementations to behave in any sort of
+identifier, or constant.”\] As you can see, this constraint neither presented
+the intent of the Committee nor caused implementations to behave in any sort of
 consistent manner with respect to tokenization. Finally a letter writer
 understood the issue well enough to suggest a grammar along the lines of the
 current subclause 6.1.8. It, contrary to your opening remarks on this topic, is

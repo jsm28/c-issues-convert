@@ -15,9 +15,9 @@ result of this discussion and vote that the draft was changed to allow the
 above.
 
 Anyway, I wrote back that the expression was valid. This was eventually followed
-by a letter from Dennis \[Ritchie] pointing out the mistake I made. As it turns
+by a letter from Dennis \[Ritchie\] pointing out the mistake I made. As it turns
 out, the definition of lvalue makes at least the unary `&` part of the above a
-constraint violation. (As Bill \[Plauger] would say, “I know what the standard
+constraint violation. (As Bill \[Plauger\] would say, “I know what the standard
 was *supposed* to specify.”)
 
 This would be just another, “Oops, well I guess I can live with it” surprise in
@@ -48,7 +48,7 @@ my original interpretation. The indented parts are from Dennis's mail.
 
 > I don't agree with Dave P's answer about “`void *vp; &*vp;`.” There is not a
 > constraint on `*`, but the subclause 6.3.3.2 semantics say, “... if it \[the
-> operand of `*`] points to an object, the result is an lvalue designating the
+> operand of `*`\] points to an object, the result is an lvalue designating the
 > object.” Does `vp` point to an object? An object is “a region of data storage
 > ... the contents of which can represent values” (clause 3). Dicey at best.
 

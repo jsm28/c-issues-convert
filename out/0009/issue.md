@@ -47,4 +47,4 @@ requirement may be changed to something similar to:
 > shall not be redundantly parenthesized.
 
 Of course, parentheses must not be disallowed entirely... \[The original had
-more, but this will suffice.]
+more, but this will suffice.\]

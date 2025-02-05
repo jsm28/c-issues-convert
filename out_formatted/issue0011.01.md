@@ -94,4 +94,4 @@ declaration specifies internal or external linkage, the type of the identifier
 at the latter declaration becomes the composite type.
 
 \[Footnote \*: As specified in 6.1.2.1, the latter declaration might hide the
-prior declaration.]
+prior declaration.\]

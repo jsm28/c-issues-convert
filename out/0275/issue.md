@@ -2,7 +2,7 @@
 
 `FE_ALL_EXCEPT` is defined in 7.6#6 as:
 
-> \[#6] The macro
+> \[#6\] The macro
 >
 > ```c
 >             FE_ALL_EXCEPT
@@ -17,7 +17,7 @@ If no floating-point exception macros are defined, is `FE_ALL_EXCEPT`:
 * required to be undefined
 * unspecified whether it is either of the above ?
 
-\[This appears to be the only case of its kind.]
+\[This appears to be the only case of its kind.\]
 
 ### Suggested Technical Corrigendum
 

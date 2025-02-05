@@ -7,7 +7,7 @@ value is also copied. This question becomes an issue in the assignment statement
 `s` overlaps the structure that `f` obtained the returned value from?
 
 I ask this question because the GNU C compiler does not copy the structure in
-this case. When I filed the enclosed bug report \[omitted from this document],
+this case. When I filed the enclosed bug report \[omitted from this document\],
 Richard Stallman, the author of GNU C, replied that he didn't think that
 Standard C required the extra copy. I sympathize with Stallman's desire for
 efficient code, and I also would prefer that the C Standard did not require the

@@ -20,10 +20,10 @@
     "status": "fixed",
     "submitted-against": "c99",
     "submitter-md": "Andrew Josey via Fred Tydeman",
-    "summary-md": "Function prototype with \\[restrict]",
+    "summary-md": "Function prototype with \\[restrict\\]",
     "x-dr-version": "1.2",
     "x-dr-version-date": "2004-03-03",
-    "x-index-summary-md": "Q1: Function prototype with \\[restrict]",
+    "x-index-summary-md": "Q1: Function prototype with \\[restrict\\]",
     "x-orig-status-class": "published",
     "x-summary-author-md": "The Open Group"
 }

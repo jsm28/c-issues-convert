@@ -33,7 +33,7 @@ that a program would depend on convertFormat not being used.
 
 In Clause 8, to the text for C F.3#3:
 
-> \[3] Whether C assignment (6.5.16) (and conversion as if by assignment) to the
+> \[3\] Whether C assignment (6.5.16) (and conversion as if by assignment) to the
 > same format is an IEC 60559 convertFormat or copy operation is
 > implementation-defined, even if `<fenv.h>` defines the macro
 > `FE_SNANS_ALWAYS_SIGNAL` (F.2.1).

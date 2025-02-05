@@ -35,7 +35,7 @@ technique is well-known, it ought to be well-defined.
 
 Add a new paragraph after 6.8.5#4:
 
-> \[#4a] If the loop body is reached by a jump from outside the iteration
+> \[#4a\] If the loop body is reached by a jump from outside the iteration
 > statement, the behavior is as if the body were entered in the normal way. That
 > is, when the end of the body is reached the controlling expression is evaluated
 > (and, in the case of a `for` statement, *expr-3* is evaluated first) and the
@@ -47,7 +47,7 @@ Add a new paragraph after 6.8.5#4:
 Possibly also add an example either as 6.8.5#6 or 6.8.6.1#5 (with appropriate
 editorial changes):
 
-> \[#6] EXAMPLE: A jump into a `for` statement does not execute *clause-1* at all
+> \[#6\] EXAMPLE: A jump into a `for` statement does not execute *clause-1* at all
 > or *expr-2* during the jump:
 >
 > ```c

@@ -63,4 +63,4 @@ directive:
 ```
 
 as defining a function-like macro `THIS$AND$THAT`, rather than an object-like
-macro `THIS`. Whichever choice it makes, it must also issue a diagnostic.]
+macro `THIS`. Whichever choice it makes, it must also issue a diagnostic.\]

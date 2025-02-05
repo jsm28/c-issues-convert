@@ -53,7 +53,7 @@ In 6.7.2.1 paragraph 16, replace the second and third sentences ("With two ...
 >
 > Replace the examples (paragraphs 17 to 20\) with:
 >
-> \[#17] EXAMPLE After the declaration:
+> \[#17\] EXAMPLE After the declaration:
 >
 > ```c
 >             struct s { int n; double d[]; };
@@ -77,7 +77,7 @@ In 6.7.2.1 paragraph 16, replace the second and third sentences ("With two ...
 > (there are circumstances in which this equivalence is broken; in particular, the
 > offsets of member `d` might not be the same).
 >
-> \[#18] Following the above declaration:
+> \[#18\] Following the above declaration:
 >
 > ```c
 >             struct s t1 = { 0 };           // valid
@@ -97,7 +97,7 @@ In 6.7.2.1 paragraph 16, replace the second and third sentences ("With two ...
 > in which case the assignment would be legitimate. Nevertheless it cannot appear
 > in strictly conforming code.
 >
-> \[#19] After the further declaration:
+> \[#19\] After the further declaration:
 >
 > ```c
 >             struct ss { int n; };
@@ -112,7 +112,7 @@ In 6.7.2.1 paragraph 16, replace the second and third sentences ("With two ...
 >
 > are always equal to 1\.
 >
-> \[#20] If `sizeof (double)` is 8, then after the following code is executed:
+> \[#20\] If `sizeof (double)` is 8, then after the following code is executed:
 >
 > ```c
 >             struct s *s1;
@@ -129,7 +129,7 @@ In 6.7.2.1 paragraph 16, replace the second and third sentences ("With two ...
 >             struct { int n; double d[5]; } *s2;
 > ```
 >
-> \[#21] Following the further successful assignments:
+> \[#21\] Following the further successful assignments:
 >
 > ```c
 >             s1 = malloc(sizeof (struct s) + 10);
@@ -152,7 +152,7 @@ In 6.7.2.1 paragraph 16, replace the second and third sentences ("With two ...
 >             *dp = 42;               // undefined behavior
 > ```
 >
-> \[#22] The assignment:
+> \[#22\] The assignment:
 >
 > ```c
 >             *s1 = *s2;

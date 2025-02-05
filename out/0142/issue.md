@@ -51,7 +51,7 @@ identifier `EASTER`). There is also a good reason to forbid it: the macro
 `ERANGE` might actually be defined as (`__ERRNO_BASE + 42`). This leads to the
 conclusion that it might be best to permit it for some names but not others.
 
-A further example \[inserted at the request of BSI] is the translation unit:
+A further example \[inserted at the request of BSI\] is the translation unit:
 
 ```c
 #include <stdlib.h>

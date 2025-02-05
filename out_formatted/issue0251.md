@@ -23,7 +23,7 @@ Consider the code:
 
 I can see nothing that forbids this code. In particular, 6.7.2.3#8 reads:
 
-> \[#8] If a type specifier of the form
+> \[#8\] If a type specifier of the form
 >
 > ```c
 >         struct-or-union identifier
@@ -55,7 +55,7 @@ Append to 6.7.2.1#6:
 
 Add a new paragraph following 6.7.2.3#1:
 
-> \[#1a] Where two declarations that use the same tag declare the same type, they
+> \[#1a\] Where two declarations that use the same tag declare the same type, they
 > shall both use the same choice of `struct`, `union`, or `enum`.
 
 ---
@@ -76,5 +76,5 @@ Append to 6.7.2.1#6:
 
 Add a new paragraph following 6.7.2.3#1:
 
-> \[#1a] Where two declarations that use the same tag declare the same type, they
+> \[#1a\] Where two declarations that use the same tag declare the same type, they
 > shall both use the same choice of `struct`, `union`, or `enum`.

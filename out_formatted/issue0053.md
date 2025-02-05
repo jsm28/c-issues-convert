@@ -51,7 +51,7 @@ problem: Subclause 6.3 **Expressions**, page 38, says:
 > \- a character type.
 >
 > \[Footnote 36: The intent of this list is to specify those circumstances in
-> which an object may or may not be aliased.]
+> which an object may or may not be aliased.\]
 
 This would appear to render the final call undefined since the stored value of
 `fp1` is being accessed by an lvalue that does not match its declared type:

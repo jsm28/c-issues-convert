@@ -67,7 +67,7 @@ unbound state.
 (*Changes concerning explicit* `mbstate_t` *objects.*)  
 Change 7.24.6 paragraph 3 to:
 
-> \[#3] The initial conversion state corresponds, for a conversion in either
+> \[#3\] The initial conversion state corresponds, for a conversion in either
 > direction, to the beginning of a new multibyte character in the initial shift
 > state. An `mbstate_t` object may be "unbound" or "bound". A zero-valued
 > `mbstate_t` object is (at least) one way to describe an unbound object, and if
@@ -75,7 +75,7 @@ Change 7.24.6 paragraph 3 to:
 > `mbstate_t` objects are in the initial conversion state (but the converse is not
 > necessarily true).
 >
-> \[#3a] An unbound object can be used to initiate conversion involving any
+> \[#3a\] An unbound object can be used to initiate conversion involving any
 > multibyte character sequence, in any `LC_CTYPE` category setting, in either
 > direction; once used for a conversion, it becomes bound to that sequence,
 > category setting, and direction. If a bound `mbstate_t` object is used with a
@@ -91,16 +91,16 @@ Append to footnote 290:
 
 Change 7.24.6.3 paragraph 1 and 7.24.6.4 paragraph 1 from:
 
-> \[...] which is initialized at program startup to the initial conversion state.
-> \[...]
+> \[...\] which is initialized at program startup to the initial conversion state.
+> \[...\]
 
 to:
 
-> \[...] which is initialized at program startup to the unbound state. \[...]
+> \[...\] which is initialized at program startup to the unbound state. \[...\]
 
 Change 7.24.6.3.2 paragraph 2 to:
 
-> \[#2] If s is a null pointer, the `mbrtowc` function is equivalent to the call:
+> \[#2\] If s is a null pointer, the `mbrtowc` function is equivalent to the call:
 >
 > > ```c
 > > mbrtowc(NULL, "", 1, ps)
@@ -113,7 +113,7 @@ Change 7.24.6.3.2 paragraph 2 to:
 
 Change 7.24.6.3.3 paragraph 2 to:
 
-> \[#2] If s is a null pointer, the `wcrtomb` function is equivalent to the call
+> \[#2\] If s is a null pointer, the `wcrtomb` function is equivalent to the call
 >
 > > ```c
 > > wcrtomb(buf, L'\0',ps)
@@ -145,9 +145,9 @@ Append to the last sentence of 7.19.9.2 paragraph 5:
 
 In 7.24.3.1 paragraph 2, change: to:
 
-> \[...] If the stream is at end-of-file, the end-of-file indicator for the stream
-> is set, the `mbstate_t` object associated with the stream is unbound, and
-> `fgetwc` returns `WEOF`. \[...]
+> \[...\] If the stream is at end-of-file, the end-of-file indicator for the
+> stream is set, the `mbstate_t` object associated with the stream is unbound, and
+> `fgetwc` returns `WEOF`. \[...\]
 
 ---
 

@@ -10,7 +10,7 @@ Fixed in: C99 TC3
 Cross-references: [0257](issue0257.md)  
 Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm), [dr_283.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_283.htm)
 
-*\[This report isolates one of the points from [DR257](issue0257.md).]*
+*\[This report isolates one of the points from [DR257](issue0257.md).\]*
 
 ### Problem
 
@@ -40,7 +40,7 @@ C89 words.
 
 ### Suggested Technical Corrigendum
 
-*\[Essentially verbatim from [DR257](issue0257.md)]*
+*\[Essentially verbatim from [DR257](issue0257.md)\]*
 
 Attach a new footnote 78a to the words "named member" in 6.5.2.3#3:
 

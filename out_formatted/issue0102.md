@@ -19,7 +19,7 @@ the same name space, except for tags as specified in 6.5.2.3.
 
 Subclause 6.5.2.3, **Semantics** section says:
 
-Subsequent declarations \[of a tag] in the same scope shall omit the bracketed
+Subsequent declarations \[of a tag\] in the same scope shall omit the bracketed
 list.
 
 Given that one of the above two rules appears in a **Constraints** section,

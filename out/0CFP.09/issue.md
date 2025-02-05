@@ -29,13 +29,13 @@ This is about the issue raised by Joseph Myers in email SC22WG14.14282:
 > and `<tgmath.h>` chooses `long double`), and since rules that are the same in
 > most cases but subtly different in obscure cases tend to be confusing, I wonder
 > if it might be better to specify much simpler rules for `<tgmath.h>`: take the
-> type resulting from the usual arithmetic conversions\[\*], where integer
+> type resulting from the usual arithmetic conversions\[\*\], where integer
 > arguments are replaced by `_Decimal64` if there are any decimal arguments and
 > `double` otherwise.  (That's different from the present rules for e.g.
 > (`_Float32x`, `int`), but it's a lot simpler, and seems unlikely in practice to
 > choose a type with a different set of values from the present choice.)
 >
-> \[\*] Meaningful for more than two arguments as long as the usual arithmetic
+> \[\*\] Meaningful for more than two arguments as long as the usual arithmetic
 > conversions are commutative and associative as an operation on pairs of types.
 
 Though substantive, the suggested change to the usual arithmetic conversions is
@@ -214,7 +214,7 @@ with:
 
 > In 7.25#3c, replace the first sentence and bullets:
 >
-> > \[3c] Except for the macros for functions that round result to a narrower type
+> > \[3c\] Except for the macros for functions that round result to a narrower type
 > > (7.12.13a), use of a type-generic macro invokes a function whose generic
 > > parameters have the corresponding real type determined by the corresponding real
 > > types of the arguments as follows:
@@ -243,7 +243,7 @@ with:
 >
 > with:
 >
-> > \[3c] Except for the macros for functions that round result to a narrower type
+> > \[3c\] Except for the macros for functions that round result to a narrower type
 > > (7.12.13a), use of a type-generic macro invokes a function whose generic
 > > parameters have the corresponding real type determined by the types of the
 > > arguments for the generic parameters as follows:

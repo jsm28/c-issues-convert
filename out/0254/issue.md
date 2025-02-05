@@ -32,7 +32,7 @@ the second returns 1 and sets `wc2` to 0x5A. However, is it permitted for the
 second to set `wc2` to 0x15A ? If so, how is an application meant to use
 `mbtowc` ?
 
-\[The newer function `mbrtowc` does not have this problem.]
+\[The newer function `mbrtowc` does not have this problem.\]
 
 ### Suggested Technical Corrigendum
 

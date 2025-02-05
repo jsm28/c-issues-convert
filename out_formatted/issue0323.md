@@ -84,7 +84,7 @@ DR 207 in TC2.
 
 In 7.3.1 of C99\+TC1\+TC2, replace paragraphs 3 and 4 with:
 
-> \[#3] The macros
+> \[#3\] The macros
 >
 > > ```c
 > > imaginary
@@ -101,7 +101,7 @@ In 7.3.1 of C99\+TC1\+TC2, replace paragraphs 3 and 4 with:
 > expression of type `const float _Imaginary` with the value of the imaginary
 > unit.
 >
-> \[#4] The macro
+> \[#4\] The macro
 >
 > > ```c
 > > I
@@ -110,7 +110,7 @@ In 7.3.1 of C99\+TC1\+TC2, replace paragraphs 3 and 4 with:
 > expands to `_Imaginary_I` or `_Complex_I`. If `_Imaginary_I` is not defined, `I`
 > shall expand to `_Complex_I`.
 >
-> \[#5] Notwithstanding the provisions of subclause 7.1.3, a program may undefine
+> \[#5\] Notwithstanding the provisions of subclause 7.1.3, a program may undefine
 > and perhaps then redefine the macros `complex`, `imaginary` and `I`.
 >
 > <sup>165</sup>A specification for imaginary types is in informative annex G.

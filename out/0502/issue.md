@@ -29,7 +29,7 @@ version of the same example. Is it also valid?
 Paragraph 13 of the section referenced above specifies that:
 
 > An unnamed member whose type specifier is a structure specifier with no tag is
-> called an anonymous structure; \[...]. The members of an anonymous structure or
+> called an anonymous structure; \[...\]. The members of an anonymous structure or
 > union are considered to be members of the containing structure or union. This
 > applies recursively if the containing structure or union is also anonymous.
 
@@ -49,7 +49,7 @@ However, another possible interpretation (offered in reflector message
 [SC22WG14.14299](https://www.open-std.org/jtc1/sc22/wg14/14299 "flexible array
 member in an anonymous struct")) is that:
 
-> *...the layout \[of a struct containing an anonymous struct] is exactly as if
+> *...the layout \[of a struct containing an anonymous struct\] is exactly as if
 > the contained anonymous structure or union had a name (so it acts like a
 > structure is declared as such even if contained in a union, or like a union if
 > declared as such even if contained in a structure), with all the usual

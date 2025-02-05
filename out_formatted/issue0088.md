@@ -9,7 +9,7 @@ Status: Closed
 Cross-references: [0139](issue0139.md)  
 Converted from: [dr.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm), [dr_088.html](https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_088.html)
 
-*\[Question was revised in Dec 94]*
+*\[Question was revised in Dec 94\]*
 
 Item 25 \- compatibility of incomplete types
 

@@ -4,8 +4,8 @@ The Standard uses the terms "printing character", "graphic character", and
 "nongraphic character". The first is discussed in 5.2.2#1 and defined formally
 in 7.4#3:
 
-> \[#3] The term printing character refers to a member of a locale-specific set of
-> characters, each of which occupies one printing position on a display device;
+> \[#3\] The term printing character refers to a member of a locale-specific set
+> of characters, each of which occupies one printing position on a display device;
 
 A "nongraphic character" is clearly a character which is not a graphic
 character, but "graphic character" is nowhere defined. It is used only in

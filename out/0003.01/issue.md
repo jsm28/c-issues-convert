@@ -10,8 +10,8 @@ description. Under the grammar given for a `pp-number`
 are preprocessing numbers and as such a conforming C compiler would be required
 to generate an error when it failed to successfully convert them to actual C
 language number tokens. The solution is simply to restrict the inclusion of
-\[`eE`]\[`+-`] within a *`pp-number`* to situations where the `e` or `E` is the
-first *`non-digit`* in the character sequence composing the preprocessing
+\[`eE`\]\[`+-`\] within a *`pp-number`* to situations where the `e` or `E` is
+the first *`non-digit`* in the character sequence composing the preprocessing
 number. This can be easily implemented in a variety of methods; the informal
 description above gives perhaps a better guide to efficient implementation than
 the following revised grammar:

@@ -21,7 +21,7 @@ removed by the cast conversion.
 ### Details
 
 5.2.4.2.2 Characteristics of floating types \<float.h\>; Paragraph 7 \[after DR
-290]
+290\]
 
 > Except for assignment and cast (which remove all extra range and precision), the
 > values of operations with floating operands and values subject to the usual

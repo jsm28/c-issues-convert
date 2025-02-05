@@ -9,7 +9,7 @@ Status: Closed
 Cross-references: [0056](issue0056.md)  
 Converted from: [dr.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm), [dr_063.html](https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_063.html)
 
-\[This is Defect Report #056, resubmitted for administrative reasons.]
+\[This is Defect Report #056, resubmitted for administrative reasons.\]
 
 The following requirement is implied in several places, but not explicitly
 stated. It should be explicitly affirmed, or alternative wording adopted.

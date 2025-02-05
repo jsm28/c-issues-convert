@@ -11,7 +11,7 @@ should not be assumed to be those of any person other than myself.*
 
 Defect Report UK 027: fopen modes
 
-*\[BSI characterize this issue as minor.]*
+*\[BSI characterize this issue as minor.\]*
 
 The definition of file opening modes is self-contradictory.
 

@@ -40,7 +40,7 @@ In F.10.12.1 (TS 18661-1), change:
 
 > **Description**  
 >
-> \[2] The `totalorder` functions determine whether the total order relationship,
+> \[2\] The `totalorder` functions determine whether the total order relationship,
 > defined by IEC 60559, is true for the ordered pair of its arguments `x`, `y`.
 > These functions are fully specified in IEC 60559\. These functions are
 > independent of the current rounding direction mode and raise no floating-point
@@ -48,14 +48,14 @@ In F.10.12.1 (TS 18661-1), change:
 >
 > **Returns**  
 >
-> \[3] The `totalorder` functions return nonzero if and only if the total order
+> \[3\] The `totalorder` functions return nonzero if and only if the total order
 > relation is true for the ordered pair of its arguments `x`, `y`.
 
 to:
 
 > **Description**  
 >
-> \[2] The `totalorder` functions determine whether the total order relationship,
+> \[2\] The `totalorder` functions determine whether the total order relationship,
 > defined by IEC 60559, is true for the ordered pair `*x`, `*y`. These functions
 > are fully specified in IEC 60559\. These functions are independent of the
 > current rounding direction mode and raise no floating-point exceptions, even if
@@ -63,7 +63,7 @@ to:
 >
 > **Returns**  
 >
-> \[3] The `totalorder` functions return nonzero if and only if the total order
+> \[3\] The `totalorder` functions return nonzero if and only if the total order
 > relation is true for the ordered pair `*x`, `*y`.
 
 and similarly for F.10.12.2.
@@ -99,7 +99,7 @@ In F.10.12.1 (TS 18661-1), change:
 
 > **Description**  
 >
-> \[2] The `totalorder` functions determine whether the total order relationship,
+> \[2\] The `totalorder` functions determine whether the total order relationship,
 > defined by IEC 60559, is true for the ordered pair of its arguments `x`, `y`.
 > These functions are fully specified in IEC 60559\. These functions are
 > independent of the current rounding direction mode and raise no floating-point
@@ -107,14 +107,14 @@ In F.10.12.1 (TS 18661-1), change:
 >
 > **Returns**  
 >
-> \[3] The `totalorder` functions return nonzero if and only if the total order
+> \[3\] The `totalorder` functions return nonzero if and only if the total order
 > relation is true for the ordered pair of its arguments `x`, `y`.
 
 to:
 
 > **Description**  
 >
-> \[2] The `totalorder` functions determine whether the total order relationship,
+> \[2\] The `totalorder` functions determine whether the total order relationship,
 > defined by IEC 60559, is true for the ordered pair `*x`, `*y`. These functions
 > are fully specified in IEC 60559\. These functions are independent of the
 > current rounding direction mode and raise no floating-point exceptions, even if
@@ -122,7 +122,7 @@ to:
 >
 > **Returns**  
 >
-> \[3] The `totalorder` functions return nonzero if and only if the total order
+> \[3\] The `totalorder` functions return nonzero if and only if the total order
 > relation is true for the ordered pair `*x`, `*y`.
 
 and similarly for F.10.12.2.

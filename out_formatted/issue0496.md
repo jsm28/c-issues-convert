@@ -15,7 +15,7 @@ Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n23
 The `offsetof` macro is specified in the normative text of the C11 standard in
 **§7.19 Common Definitions `<stddef.h>`** as follows:
 
-> The macros \[defined in the header `<stddef.h>`] are...
+> The macros \[defined in the header `<stddef.h>`\] are...
 >
 > > `offsetof(`*type*`,` *member-designator*`)`
 >

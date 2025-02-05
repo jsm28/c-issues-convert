@@ -44,7 +44,7 @@ Change the syntax under 6.7.5 to (the two occurrences of `static` to
 
 Change 6.7.5.2p1 to (i.e. the two occurrences of `static` to `__at_least`):
 
-> \[#1] In addition to optional type qualifiers and the keyword `__at_least`, the
+> \[#1\] In addition to optional type qualifiers and the keyword `__at_least`, the
 > `[` and `]` may delimit an expression or `*`. If they delimit an expression
 > (which specifies the size of an array), the expression shall have an integer
 > type. If the expression is a constant expression, it shall have a value greater
@@ -68,14 +68,14 @@ bind `__at_least` with `assignment-expr` in the syntax):
 
 Change 6.7.5.3p7 to (i.e. `static` to `__at_least`):
 
-> \[#7] A declaration of a parameter as "array of *type*" shall be adjusted to
+> \[#7\] A declaration of a parameter as "array of *type*" shall be adjusted to
 > "qualified pointer to *type*", where the type qualifiers (if any) are those
 > specified within the `[` and `]` of the array type derivation. If the keyword
 > `__at_least` ...
 
 Change 6.7.5.3p21 to (i.e. `static` to `__at_least`):
 
-> \[#21] EXAMPLE 5 The following are all compatible function prototype
+> \[#21\] EXAMPLE 5 The following are all compatible function prototype
 > declarators.
 >
 > ```c

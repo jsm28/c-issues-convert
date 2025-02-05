@@ -3,23 +3,23 @@
 This DR addresses a problem noted by Joseph Myers in emails SC22WG14.14743 and
 14744:
 
-> … the example \[in TS 18661-1 clause 16, for 7.25#6b – see below] implies that
+> … the example \[in TS 18661-1 clause 16, for 7.25#6b – see below\] implies that
 > "#undef cbrtl" before calling the cbrt type-generic macro would mean it's not
 > affected by constant rounding modes, but the actual normative text says "is
 > affected by constant rounding modes" with no such caveat.
 
 and
 
-> … neither example definition \[in C11 or TS 18661-1] is valid because they might
-> call a block-scope cbrtf / cbrtl; they need to avoid such a block-scope
+> … neither example definition \[in C11 or TS 18661-1\] is valid because they
+> might call a block-scope cbrtf / cbrtl; they need to avoid such a block-scope
 > identifier, or a macro defined by the user, while still depending on whether
 > expansion of the    
 > standard header cbrtf / cbrtl macros has been suppressed at that point.
 
 The text in question is:
 
-> \[6b] A type-generic macro corresponding to a function indicated in the table in
-> 7.6.1a is affected by constant rounding modes (7.6.2). Note that the
+> \[6b\] A type-generic macro corresponding to a function indicated in the table
+> in 7.6.1a is affected by constant rounding modes (7.6.2). Note that the
 > type-generic macro definition in the example in 6.5.1.1 does not conform to this
 > specification. A conforming macro could be implemented as follows:
 >

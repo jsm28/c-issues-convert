@@ -2,7 +2,7 @@
 
 7.20.4.2 reads:
 
-> \[#3] The implementation shall support the registration of at least 32
+> \[#3\] The implementation shall support the registration of at least 32
 > functions.
 
 This does not require registration of a valid function to succeed. The
@@ -15,7 +15,7 @@ in a different translation unit.
 
 Change the cited wording to:
 
-> \[#3] The implementation shall not reject the registration of a valid function
+> \[#3\] The implementation shall not reject the registration of a valid function
 > if less than 32 functions are already registered (multiple registrations of the
 > same function counting multiple times).
 

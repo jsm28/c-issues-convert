@@ -8,7 +8,7 @@ Submitted against: C90
 Status: Closed  
 Converted from: [dr.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm), [dr_109.html](https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_109.html)
 
-\[Question was revised in Jun 94.]
+\[Question was revised in Jun 94.\]
 
 ANSI/ISO C Defect Report #rfg16:
 
@@ -30,7 +30,7 @@ Subclause 6.3.8 **Relational operators**:
 
 Subclause 7.5.2.1 **The `acos` function**:
 
-> A domain error occurs for arguments not in the range \[-1,\+1].
+> A domain error occurs for arguments not in the range \[-1,\+1\].
 
 The issue of “undefined values” versus “undefined behavior” has great
 significance and importance to people doing compiler testing. It is generally

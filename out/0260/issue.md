@@ -31,7 +31,7 @@ between points X and Y ?
 
 It is suggested that this is implied by 6.2.4#2:
 
-> An object \[...] retains its last-stored value throughout its lifetime.
+> An object \[...\] retains its last-stored value throughout its lifetime.
 
 particularly if each byte of an object is also an object.
 
@@ -42,7 +42,7 @@ as an example of a debugging opportunity, `p` could be set to a null pointer or
 to a detectable value).
 
 \[Note that where an object contains padding, 6.2.6.1#6 and #7 allows the value
-of padding bits and bytes to change whenever the object changes.]
+of padding bits and bytes to change whenever the object changes.\]
 
 If an implementation *is* allowed to change the value of `p`, then consider the
 code:
@@ -167,11 +167,11 @@ requirements.
 
 Change 3.17.2 to:
 
-> \[#1] *indeterminate value*  
+> \[#1\] *indeterminate value*  
 > a value which, at any given moment, could be either an unspecified value or a
 > trap representation.
 >
-> \[#2] While an object holds an indeterminate value it is *indeterminate*.
+> \[#2\] While an object holds an indeterminate value it is *indeterminate*.
 > Successive reads from an object that is indeterminate might return different
 > results. Storing a value in an object, other than an indeterminate value, means
 > that the object is no longer indeterminate.
@@ -188,11 +188,11 @@ to:
 > indeterminate.
 
 \[Various uses of the word "indeterminate" could be tidied up, but this is the
-only one where the meaning needs to change.]
+only one where the meaning needs to change.\]
 
 Add a new paragraph to 6.5.3.2:
 
-> \[#5] The implementation is permitted to use the derivation of a pointer value
+> \[#5\] The implementation is permitted to use the derivation of a pointer value
 > in determining whether or not access through that pointer is undefined
 > behaviour, even if the pointer compares equal to, or has the same representation
 > as, a different pointer for which the access would be permitted. For example, if
@@ -200,4 +200,4 @@ Add a new paragraph to 6.5.3.2:
 > occupy the same address, a pointer to one cannot be used to access the other.
 
 \[The `*` operator seems a reasonable place to put this. However, it could
-equally be elsewhere.]
+equally be elsewhere.\]

@@ -19,8 +19,8 @@ The change should be reinstated.
 
 Change 6.7.5.3#11 to:
 
-> \[#11] If, in a parameter declaration, an identifier can be treated as a typedef
-> name or as a parameter name, it shall be taken as a typedef name.
+> \[#11\] If, in a parameter declaration, an identifier can be treated as a
+> typedef name or as a parameter name, it shall be taken as a typedef name.
 
 ---
 

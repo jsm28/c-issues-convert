@@ -24,10 +24,10 @@ and the code:
 
 6.10.1#3 says:
 
-> \[#3] Prior to evaluation, macro invocations in the list of preprocessing tokens
-> that will become the controlling constant expression are replaced (except for
-> those macro names modified by the `defined` unary operator), just as in normal
-> text. If the token `defined` is generated as a result of this replacement
+> \[#3\] Prior to evaluation, macro invocations in the list of preprocessing
+> tokens that will become the controlling constant expression are replaced (except
+> for those macro names modified by the `defined` unary operator), just as in
+> normal text. If the token `defined` is generated as a result of this replacement
 > process or use of the `defined` unary operator does not match one of the two
 > specified forms prior to macro replacement, the behavior is undefined.
 
@@ -53,7 +53,7 @@ substitution.
 
 Change 6.10.1#1 to read:
 
-> \[...]
+> \[...\]
 >
 > ```c
 >      defined identifier
@@ -66,18 +66,18 @@ Change 6.10.1#1 to read:
 > ```
 >
 > which are replaced by the token `1` if the identifier is currently  
-> \[...]  
+> \[...\]  
 > subject identifier), or the token `0` if it is not.
 
 and #3 to read:
 
-> \[#3] Prior to evaluation, the list of preprocessing tokens that will become the
-> controlling constant expression is examined. Firstly all expressions using the
-> `defined` operator are replaced as described above, and then macro invocations
-> are replaced, just as in normal text. If the token `defined` appears in the list
-> after the replacement process, or the use of the `defined` unary operator does
-> not match one of the two specified forms prior to macro replacement, the
-> behavior is undefined. After all \[...]
+> \[#3\] Prior to evaluation, the list of preprocessing tokens that will become
+> the controlling constant expression is examined. Firstly all expressions using
+> the `defined` operator are replaced as described above, and then macro
+> invocations are replaced, just as in normal text. If the token `defined` appears
+> in the list after the replacement process, or the use of the `defined` unary
+> operator does not match one of the two specified forms prior to macro
+> replacement, the behavior is undefined. After all \[...\]
 
 ---
 

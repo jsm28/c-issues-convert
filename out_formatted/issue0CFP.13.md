@@ -75,7 +75,7 @@ In clause 15, after the change to 7.25#6, add:
 
 > Change 7.25#6a from:
 >
-> > \[6a] The functions that round result to a narrower type have type-generic
+> > \[6a\] The functions that round result to a narrower type have type-generic
 > > macros whose names are obtained by omitting any suffix from the function names.
 > > Thus, the macros with `f` or `d` prefix are:
 > >
@@ -120,7 +120,7 @@ In clause 15, after the change to 7.25#6, add:
 >
 > to:
 >
-> > \[6a] The functions that round result to a narrower type have type-generic
+> > \[6a\] The functions that round result to a narrower type have type-generic
 > > macros whose names are obtained by omitting any suffix from the function names.
 > > Thus, the macros with `f` or `d` prefix are:
 > >
@@ -201,7 +201,7 @@ In clause 15, after the change to 7.25#6, add:
 
 > Change 7.25#6a from:
 >
-> > \[6a] The functions that round result to a narrower type have type-generic
+> > \[6a\] The functions that round result to a narrower type have type-generic
 > > macros whose names are obtained by omitting any suffix from the function names.
 > > Thus, the macros with `f` or `d` prefix are:
 > >
@@ -246,7 +246,7 @@ In clause 15, after the change to 7.25#6, add:
 >
 > to:
 >
-> > \[6a] The functions that round result to a narrower type have type-generic
+> > \[6a\] The functions that round result to a narrower type have type-generic
 > > macros whose names are obtained by omitting any suffix from the function names.
 > > Thus, the macros with `f` or `d` prefix are:
 > >

@@ -92,7 +92,7 @@
 |0286|[Correctly rounded and rounding direction/mode](issue0286.md)|Fixed in C99 TC3|
 |0287|[Floating-point status flags and sequence points](issue0287.md)|Fixed in C99 TC3|
 |0288|[deficiency on multibyte conversions](issue0288.md)|Closed|
-|0289|[Function prototype with \[restrict]](issue0289.md)|Fixed in C99 TC3|
+|0289|[Function prototype with \[restrict\]](issue0289.md)|Fixed in C99 TC3|
 |0290|[`FLT_EVAL_METHOD` and extra precision and/or range](issue0290.md)|Fixed in C99 TC3|
 |0291|[corrections to requirements on inexact floating-point exceptions](issue0291.md)|Fixed in C99 TC3|
 |0292|[Use of the word *variable*](issue0292.md)|Fixed in C99 TC3|

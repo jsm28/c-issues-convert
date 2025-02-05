@@ -20,8 +20,8 @@ Subclause 6.3.3.4 (**Constraints**):
 
 Subclause 6.5.2.1 (**Semantics**):
 
-> The \[structure or union] type is incomplete until after the `}` that terminates
-> the list \[of member declarations].”
+> The \[structure or union\] type is incomplete until after the `}` that
+> terminates the list \[of member declarations\].”
 
 (Bracketed portions added for clarity.)
 

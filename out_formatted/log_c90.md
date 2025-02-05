@@ -277,7 +277,7 @@ value is also copied. This question becomes an issue in the assignment statement
 `s` overlaps the structure that `f` obtained the returned value from?
 
 I ask this question because the GNU C compiler does not copy the structure in
-this case. When I filed the enclosed bug report \[omitted from this document],
+this case. When I filed the enclosed bug report \[omitted from this document\],
 Richard Stallman, the author of GNU C, replied that he didn't think that
 Standard C required the extra copy. I sympathize with Stallman's desire for
 efficient code, and I also would prefer that the C Standard did not require the
@@ -302,7 +302,7 @@ the return type of the function.**\***
 
 \[Footnote \*: The `return` statement is not an assignment. The overlap
 restriction in subclause 6.3.16.1 does not apply to the case of function
-return.]
+return.\]
 
 ***Add to subclause 6.6.6.4, page 80:***
 
@@ -448,8 +448,8 @@ description. Under the grammar given for a `pp-number`
 are preprocessing numbers and as such a conforming C compiler would be required
 to generate an error when it failed to successfully convert them to actual C
 language number tokens. The solution is simply to restrict the inclusion of
-\[`eE`]\[`+-`] within a *`pp-number`* to situations where the `e` or `E` is the
-first *`non-digit`* in the character sequence composing the preprocessing
+\[`eE`\]\[`+-`\] within a *`pp-number`* to situations where the `e` or `E` is
+the first *`non-digit`* in the character sequence composing the preprocessing
 number. This can be easily implemented in a variety of methods; the informal
 description above gives perhaps a better guide to efficient implementation than
 the following revised grammar:
@@ -552,8 +552,8 @@ identifiers, and/or constants must be separated by white space.” \[As “impro
 for the May 1, 1986 draft proposed standard, subclause 6.1 **Constraints**
 consisted of the single sentence: “Each keyword, identifier, or constant shall
 be separated by some white space from any otherwise adjacent keyword,
-identifier, or constant.”] As you can see, this constraint neither presented the
-intent of the Committee nor caused implementations to behave in any sort of
+identifier, or constant.”\] As you can see, this constraint neither presented
+the intent of the Committee nor caused implementations to behave in any sort of
 consistent manner with respect to tokenization. Finally a letter writer
 understood the issue well enough to suggest a grammar along the lines of the
 current subclause 6.1.8. It, contrary to your opening remarks on this topic, is
@@ -990,7 +990,7 @@ representable values, `ULONG_MAX` is returned, and the value of the macro
 `ERANGE` is stored in `errno`. The Committee believes that there is only one
 sensible interpretation of a subject sequence with a minus sign: If the subject
 sequence (neglecting the possible minus sign) is outside the range \[0,
-`ULONG_MAX`], then the range error is reported. Otherwise, the value is
+`ULONG_MAX`\], then the range error is reported. Otherwise, the value is
 negated(as an `unsigned long int`). The answers to your numeric questions are:
 
 Case 1: 2,147,483,649
@@ -1349,7 +1349,7 @@ requirement may be changed to something similar to:
 > shall not be redundantly parenthesized.
 
 Of course, parentheses must not be disallowed entirely... \[The original had
-more, but this will suffice.]
+more, but this will suffice.\]
 
 ---
 
@@ -1416,7 +1416,7 @@ A typedef of an incomplete type is permitted.
 Regarding objects `one` and `two`, refer to the standard subclause 6.1.2.5, page
 24, lines 8-9: “An array of unknown size is an incomplete type. It is completed,
 *for an identifier of that type,* by specifying the size in a later declaration
-...” \[emphasis added]. The types of objects `one` and `two` are completed but
+...” \[emphasis added\]. The types of objects `one` and `two` are completed but
 the type `table` itself is *never* completed. Hence, `sizeof(table)` is not
 permitted.
 
@@ -1526,7 +1526,7 @@ declaration specifies internal or external linkage, the type of the identifier
 at the latter declaration becomes the composite type.
 
 \[Footnote \*: As specified in 6.1.2.1, the latter declaration might hide the
-prior declaration.]
+prior declaration.\]
 
 
 </div>
@@ -1593,7 +1593,7 @@ identifier at the latter declaration becomes the linkage specified at the prior
 declaration. If no prior declaration is visible, or if the prior declaration
 specifies no linkage, then the identifier has external linkage. \[Footnote \*:
 As specified in 6.1.2.1, the latter declaration might hide the prior
-declaration.]
+declaration.\]
 
 
 </div>
@@ -1754,9 +1754,9 @@ result of this discussion and vote that the draft was changed to allow the
 above.
 
 Anyway, I wrote back that the expression was valid. This was eventually followed
-by a letter from Dennis \[Ritchie] pointing out the mistake I made. As it turns
+by a letter from Dennis \[Ritchie\] pointing out the mistake I made. As it turns
 out, the definition of lvalue makes at least the unary `&` part of the above a
-constraint violation. (As Bill \[Plauger] would say, “I know what the standard
+constraint violation. (As Bill \[Plauger\] would say, “I know what the standard
 was *supposed* to specify.”)
 
 This would be just another, “Oops, well I guess I can live with it” surprise in
@@ -1787,7 +1787,7 @@ my original interpretation. The indented parts are from Dennis's mail.
 
 > I don't agree with Dave P's answer about “`void *vp; &*vp;`.” There is not a
 > constraint on `*`, but the subclause 6.3.3.2 semantics say, “... if it \[the
-> operand of `*`] points to an object, the result is an lvalue designating the
+> operand of `*`\] points to an object, the result is an lvalue designating the
 > object.” Does `vp` point to an object? An object is “a region of data storage
 > ... the contents of which can represent values” (clause 3). Dicey at best.
 
@@ -1967,7 +1967,7 @@ to the first paragraph of subclause 6.1.2.6 (page 25, line 8):
 
 > If two types declared in separate translation units admit the possibility of
 > being either compatible or incompatible, the two types shall be
-> compatible.**\*** \[Footnote \*: This case occurs with recursive types.]
+> compatible.**\*** \[Footnote \*: This case occurs with recursive types.\]
 
 This sentence is not satisfactory; perhaps another Committee member can state
 this rule better.
@@ -2150,9 +2150,9 @@ enum strange1 {
  };
 ```
 
-The respective tags are visible on lines \[2] and \[5] (according to subclause
+The respective tags are visible on lines \[2\] and \[5\] (according to subclause
 6.1.2.1, page 20, lines 39-40, but there is no rule in subclause 6.5.2.3,
-**Semantics** (page 62\) that governs their meaning on lines \[2] and \[5].
+**Semantics** (page 62\) that governs their meaning on lines \[2\] and \[5\].
 Footnote 62 on page 62 seems to be written without taking this case into
 account.
 
@@ -3566,7 +3566,7 @@ it should be defined whether this results in:
 2. `2*9*g`
 
 X3J11 previously said, “The behavior in this case could have been specified, but
-the Committee has decided more than once not to do so. \[They] do not wish to
+the Committee has decided more than once not to do so. \[They\] do not wish to
 promote this sort of macro replacement usage.”
 
 I interpret this as saying, in other words, “If we don't define the behavior
@@ -4693,7 +4693,7 @@ Comment from WG14 on 1997-09-23:
 ### Response
 
 Subclause 7.9.6.2 says, “A directive that is an ordinary multibyte character is
-executed by reading the next *characters* ...” \[emphasis added]. Consistently
+executed by reading the next *characters* ...” \[emphasis added\]. Consistently
 throughout the standard, plain “characters” refers to one-byte characters. (See
 subclause 3.5 for the definition of “character.”)
 
@@ -4949,7 +4949,7 @@ If conversion terminates on a conflicting input character, the offending input
 character is left unread in the input stream.\* \[Footnote \*: `fscanf` pushes
 back at most one input character onto the input stream. Therefore, some
 sequences that are acceptable to `strtod`, `strtol`, or `strtoul` are
-unacceptable to `fscanf`.]
+unacceptable to `fscanf`.\]
 
 
 </div>
@@ -5178,9 +5178,9 @@ a. Regions 2, 5 and 8 (\+/- normals and zero)
 
 b. Regions 2, 3, 5, 7, and 8 (\+/- normals, denormals, and zero)
 
-c. Regions 2 through 8 \[`-DBL_MAX` ... `+DBL_MAX`]
+c. Regions 2 through 8 \[`-DBL_MAX` ... `+DBL_MAX`\]
 
-d. Regions 1 through 9 \[-INF ... \+INF]
+d. Regions 1 through 9 \[-INF ... \+INF\]
 
 e. Regions 1 through 10 (reals and non-reals)
 
@@ -5493,7 +5493,7 @@ directive:
 ```
 
 as defining a function-like macro `THIS$AND$THAT`, rather than an object-like
-macro `THIS`. Whichever choice it makes, it must also issue a diagnostic.]
+macro `THIS`. Whichever choice it makes, it must also issue a diagnostic.\]
 
 
 </div>
@@ -8110,7 +8110,7 @@ and (subclause 7.10.4.3, page 156):
 
 > The `exit` function causes normal program termination to occur.
 
-and (subclause 7.10.4.1, page 101 \[Rationale]):
+and (subclause 7.10.4.1, page 101 \[Rationale\]):
 
 > The Committee vacillated over whether a call to `abort` should return if the
 > signal `SIGABRT` is caught or ignored. To minimize astonishment, the final
@@ -8141,7 +8141,7 @@ and (subclause 8.2.3.12, page 161):
 > does not cause process termination. For the purposes of that specification, a
 > signal that is blocked shall not be considered caught.
 
-and (subclause B.8.2.3.12, page 291 \[Rationale]):
+and (subclause B.8.2.3.12, page 291 \[Rationale\]):
 
 > POSIX.1 intends that processing related to the `abort()` function will occur
 > unless “the signal `SIGABRT` is being caught, and the signal handler does not
@@ -8618,7 +8618,7 @@ problem: Subclause 6.3 **Expressions**, page 38, says:
 > \- a character type.
 >
 > \[Footnote 36: The intent of this list is to specify those circumstances in
-> which an object may or may not be aliased.]
+> which an object may or may not be aliased.\]
 
 This would appear to render the final call undefined since the stored value of
 `fp1` is being accessed by an lvalue that does not match its declared type:
@@ -8858,7 +8858,7 @@ Subclause 6.3.4, **Cast operators**, page 45, lines 30-34 and Footnote 45:
 > An arbitrary integer may be converted to a pointer. The result is
 > implementation-defined.**45** \[Footnote 45: The mapping functions for
 > converting a pointer to an integer or an integer to a pointer are intended to be
-> consistent with the addressing structure of the execution environment.]
+> consistent with the addressing structure of the execution environment.\]
 
 ---
 
@@ -9138,7 +9138,7 @@ Status: Closed
 Cross-references: [0056](log_c90.md#issue0056)  
 Converted from: [dr.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm), [dr_063.html](https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_063.html)
 
-\[This is Defect Report #056, resubmitted for administrative reasons.]
+\[This is Defect Report #056, resubmitted for administrative reasons.\]
 
 The following requirement is implied in several places, but not explicitly
 stated. It should be explicitly affirmed, or alternative wording adopted.
@@ -11433,7 +11433,7 @@ Status: Closed
 Cross-references: [0139](log_c90.md#issue0139)  
 Converted from: [dr.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm), [dr_088.html](https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_088.html)
 
-*\[Question was revised in Dec 94]*
+*\[Question was revised in Dec 94\]*
 
 Item 25 \- compatibility of incomplete types
 
@@ -12144,7 +12144,7 @@ phrases “equivalent behavior” or “as if” will generate a diagnostic.
 
 Both subclauses 6.3.2.4 and 6.3.3.1 state in their respective **Semantics**
 sections, “See the discussions of additive operators and compound assignment for
-information on constraints, types, \[side effects,] and conversions and the
+information on constraints, types, \[side effects,\] and conversions and the
 effects of operations on pointers.”
 
 The **Semantics** section of subclause 6.3.16.2 states, “A *compound assignment*
@@ -12420,7 +12420,7 @@ the same name space, except for tags as specified in 6.5.2.3.
 
 Subclause 6.5.2.3, **Semantics** section says:
 
-Subsequent declarations \[of a tag] in the same scope shall omit the bracketed
+Subsequent declarations \[of a tag\] in the same scope shall omit the bracketed
 list.
 
 Given that one of the above two rules appears in a **Constraints** section,
@@ -12910,7 +12910,7 @@ Date: 1993-12-03
 Status: Closed  
 Converted from: [dr.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm), [dr_109.html](https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_109.html)
 
-\[Question was revised in Jun 94.]
+\[Question was revised in Jun 94.\]
 
 ANSI/ISO C Defect Report #rfg16:
 
@@ -12932,7 +12932,7 @@ Subclause 6.3.8 **Relational operators**:
 
 Subclause 7.5.2.1 **The `acos` function**:
 
-> A domain error occurs for arguments not in the range \[-1,\+1].
+> A domain error occurs for arguments not in the range \[-1,\+1\].
 
 The issue of “undefined values” versus “undefined behavior” has great
 significance and importance to people doing compiler testing. It is generally
@@ -13049,7 +13049,7 @@ the necessary check that the type of the formal parameter is in fact a valid
 type) was determined *explicitly* to be undefined by the Committee, but there is
 no record of this in the CIB #1 document I have. \[CIB #1 is X3J11's earlier
 attempt to respond to Defect Reports #001-#035, then called Requests for
-Interpretation #001-#035.]
+Interpretation #001-#035.\]
 
 References: CIB #1, [RFI #13, question #1](log_c90.md#issue0013.01); CIB #1, [RFI #17,
 question #14](log_c90.md#issue0017.14); CIB #1, [RFI #17, question #15](log_c90.md#issue0017.15)
@@ -13690,8 +13690,8 @@ Subclause 6.3.3.4 (**Constraints**):
 
 Subclause 6.5.2.1 (**Semantics**):
 
-> The \[structure or union] type is incomplete until after the `}` that terminates
-> the list \[of member declarations].”
+> The \[structure or union\] type is incomplete until after the `}` that
+> terminates the list \[of member declarations\].”
 
 (Bracketed portions added for clarity.)
 
@@ -15243,7 +15243,7 @@ buffer size would fail.
 
 In the Rationale, it states “The general principle is to provide portable code
 with a means of requesting the most appropriate popular buffering style, but not
-to *require* an implementation to support these styles.” \[Emphasis added.]
+to *require* an implementation to support these styles.” \[Emphasis added.\]
 
 I interpret this as saying that `setvbuf` is an advisory call and need not be
 acted on. However, my questions above still stand as there seems to be no way of
@@ -15402,7 +15402,7 @@ identifier `EASTER`). There is also a good reason to forbid it: the macro
 `ERANGE` might actually be defined as (`__ERRNO_BASE + 42`). This leads to the
 conclusion that it might be best to permit it for some names but not others.
 
-A further example \[inserted at the request of BSI] is the translation unit:
+A further example \[inserted at the request of BSI\] is the translation unit:
 
 ```c
 #include <stdlib.h>
@@ -15462,7 +15462,7 @@ should not be assumed to be those of any person other than myself.*
 
 Defect Report UK 027: fopen modes
 
-*\[BSI characterize this issue as minor.]*
+*\[BSI characterize this issue as minor.\]*
 
 The definition of file opening modes is self-contradictory.
 
@@ -15734,7 +15734,7 @@ should not be assumed to be those of any person other than myself.*
 
 Defect Report UK 030: Nugatory constraint
 
-*\[BSI characterize this issue as minor.]*
+*\[BSI characterize this issue as minor.\]*
 
 The constraint of 6.1.2 serves no purpose. Subclause 6.1.2 states in part:
 
@@ -15750,7 +15750,7 @@ sequence of characters as a keyword.
 identifier, it is converted to a keyword.
 
 Given the latter text \[added in Technical Corrigendum 1, reference [DR 017
-Q39](log_c90.md#issue0017.39)], the constraint can never be violated.
+Q39](log_c90.md#issue0017.39)\], the constraint can never be violated.
 
 ### Suggested Technical Corrigendum:
 
@@ -15953,7 +15953,7 @@ should not be assumed to be those of any person other than myself.*
 
 Defect Report UK 033: The term "variable"
 
-*\[BSI characterize this issue as minor.]*
+*\[BSI characterize this issue as minor.\]*
 
 The term "variable" is used in subclause 7.7.1.1, but is never defined in the C
 Standard.
@@ -16534,7 +16534,7 @@ case, if the returned pointer is not a null pointer and is used as an operand of
 the unary `*` operator, or of a `+` or `-` operator except one whose other
 operand has integral type and value zero, the behavior is undefined.
 
-\[See also [Defect Report #158](log_c90.md#issue0158).]
+\[See also [Defect Report #158](log_c90.md#issue0158).\]
 
 ---
 
@@ -16839,7 +16839,7 @@ the last two paragraphs of subclause 6.2.2.3 with:
 > compares unequal to any other value of the same pointer type. For each pointer
 > type, one particular undereferenceable pointer value is called the *null
 > pointer.* \[Footnote: Since there is only one such value, all null pointers of
-> the same type compare equal.]
+> the same type compare equal.\]
 >
 > An integral constant expression with the value 0, or such an expression cast to
 > type `void *`, is called a *null pointer constant.* If a null pointer constant
@@ -16858,8 +16858,8 @@ with:
 > undereferenceable pointer. Any pointer value returned by an allocation can be
 > passed to the free function; if the value is not a null pointer, it becomes
 > indeterminate. \[Footnote: A subsequent allocation may return a pointer value
-> with the same bit pattern, but a strictly conforming program can't detect this.]
-> The value of a pointer that refers to any part of a freed object is also
+> with the same bit pattern, but a strictly conforming program can't detect
+> this.\] The value of a pointer that refers to any part of a freed object is also
 > indeterminate.
 
 ---
@@ -17550,13 +17550,13 @@ complete.
 **Semantics**
 
 All declarations of structure, union, or enumerated types that have the same
-scope and use the same tag declare the same type. The type is incomplete \[63]
+scope and use the same tag declare the same type. The type is incomplete \[63\]
 until the closing brace of the list defining the content, and complete
 thereafter. \[Footnote 63: An incomplete type may only be used when the size of
-an object of that type is not needed.]
+an object of that type is not needed.\]
 
 \[Append the present wording, or see Defect Report CA-2-09 \- submitted
-independently \- for alternative wording.]
+independently \- for alternative wording.\]
 
 Two declarations of structure, union, or enumerated types which are in different
 scopes or use different tags declare distinct types. Each declaration of a
@@ -17574,12 +17574,12 @@ A type specifier of the form
 
 declares a structure, union, or enumerated type. The list defines the *structure
 content, union content,* or *enumeration content.* If an identifier is provided
-\[64], the type specifier also declares the identifier to be the tag of that
+\[64\], the type specifier also declares the identifier to be the tag of that
 type. \[Footnote 64: If there is no identifier, the type can, within the
 translation unit, only be referred to by the declaration of which it is a part.
 Of course, when the declaration is of a typedef name, subsequent declarations
 can make use of that typedef name to declare objects having the specified
-structure, union, or enumerated type.]
+structure, union, or enumerated type.\]
 
 A declaration of the form
 
@@ -17588,8 +17588,8 @@ A declaration of the form
 ```
 
 specifies a structure or union type and declares the identifier as the tag of
-that type \[62]. \[Footnote 62: A similar construction with `enum` does not
-exist.]
+that type \[62\]. \[Footnote 62: A similar construction with `enum` does not
+exist.\]
 
 If a type specifier of the form
 
@@ -17600,7 +17600,7 @@ If a type specifier of the form
 occurs other than as part of one of the above constructions, and no other
 declaration of the identifier as a tag is visible, then it declares a structure
 or union type which is incomplete at this point, and declares the identifier as
-the tag of that type \[62].
+the tag of that type \[62\].
 
 If a type specifier of the form
 
@@ -17805,7 +17805,7 @@ The C Standard's description of the replacement of trigraphs is contradictory.
 Subclause 5.2.1.1 reads in part:
 
 All occurrences in a source file of the following sequences of three characters
-(called trigraph sequences \[7]) are replaced with the corresponding single
+(called trigraph sequences \[7\]) are replaced with the corresponding single
 character... Each `?` that does not begin one of the trigraphs listed above is
 not changed.
 
@@ -18545,7 +18545,7 @@ diagnostic message generated because of the violation of this constraint
 \[Footnote: The intent of this subclause is that `#error` indicates that
 translation should fail. As stated in subclause 5.1.1.3, a translation unit
 excludes lines within the *false* side of `#if` ... `#else` ... `#endif`
-groups.] shall include the sequence of preprocessing tokens in the directive.
+groups.\] shall include the sequence of preprocessing tokens in the directive.
 
 
 </div>

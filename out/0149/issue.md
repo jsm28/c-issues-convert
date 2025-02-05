@@ -11,7 +11,7 @@ should not be assumed to be those of any person other than myself.*
 
 Defect Report UK 033: The term "variable"
 
-*\[BSI characterize this issue as minor.]*
+*\[BSI characterize this issue as minor.\]*
 
 The term "variable" is used in subclause 7.7.1.1, but is never defined in the C
 Standard.

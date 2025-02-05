@@ -33,7 +33,7 @@ to the first paragraph of subclause 6.1.2.6 (page 25, line 8):
 
 > If two types declared in separate translation units admit the possibility of
 > being either compatible or incompatible, the two types shall be
-> compatible.**\*** \[Footnote \*: This case occurs with recursive types.]
+> compatible.**\*** \[Footnote \*: This case occurs with recursive types.\]
 
 This sentence is not satisfactory; perhaps another Committee member can state
 this rule better.

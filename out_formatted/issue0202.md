@@ -66,9 +66,9 @@ change the return type to `int` and add the following:
 
 > **Returns**
 >
-> This function always returns zero. \[\*]
+> This function always returns zero. \[\*\]
 >
-> \[\*] This may change in a future revision of this Standard, in which case a
+> \[\*\] This may change in a future revision of this Standard, in which case a
 > zero return will mean success and a non-zero return will mean failure of some
 > kind.
 
@@ -86,7 +86,7 @@ In 7.6 paragraph 5, attach a footnote to the wording:
 
 where the footnote is:
 
-> \[\*] The implementation supports an exception if there are circumstances where
+> \[\*\] The implementation supports an exception if there are circumstances where
 > a call to at least one of the functions in 7.6.2, using the macro as the
 > appropriate argument, will succeed. It is not necessary for all the functions to
 > succeed all the time.
@@ -112,13 +112,13 @@ Add a new heading and paragraph 3:
 
 > **Returns**
 >
-> \[3] The `feclearexcept` function returns zero if the excepts argument is zero
+> \[3\] The `feclearexcept` function returns zero if the excepts argument is zero
 > or if all the specified exceptions were successfully cleared. Otherwise it
 > returns a nonzero value.
 
 Optional additional change: replace 7.6.3.2p3 by:
 
-> \[3] The `fesetround` function returns zero if and only if the requested
+> \[3\] The `fesetround` function returns zero if and only if the requested
 > rounding direction was established.
 
 ---
@@ -134,7 +134,7 @@ In 7.6 paragraph 5, attach a footnote to the wording:
 
 where the footnote is:
 
-> \[\*] The implementation supports an exception if there are circumstances where
+> \[\*\] The implementation supports an exception if there are circumstances where
 > a call to at least one of the functions in 7.6.2, using the macro as the
 > appropriate argument, will succeed. It is not necessary for all the functions to
 > succeed all the time.
@@ -147,7 +147,7 @@ In 7.6.2.1 add a new heading and paragraph 3:
 
 > **Returns**
 >
-> \[#3] The `feclearexcept` function returns zero if the excepts argument is zero
+> \[#3\] The `feclearexcept` function returns zero if the excepts argument is zero
 > or if all the specified exceptions were successfully cleared. Otherwise it
 > returns a nonzero value.
 
@@ -159,7 +159,7 @@ In 7.6.2.2 add a new heading and paragraph 3:
 
 > **Returns**
 >
-> \[#3] The `fegetexceptflag` function returns zero if the representation was
+> \[#3\] The `fegetexceptflag` function returns zero if the representation was
 > successfully stored. Otherwise it returns a nonzero value.
 
 In 7.6.2.3 paragraph 1, change the result type from `void` to `int`.
@@ -170,7 +170,7 @@ In 7.6.2.3 add a new heading and paragraph 3:
 
 > **Returns**
 >
-> \[#3] The `feraiseexcept` function returns zero if the excepts argument is zero
+> \[#3\] The `feraiseexcept` function returns zero if the excepts argument is zero
 > or if all the specified exceptions were successfully raised. Otherwise it
 > returns a nonzero value.
 
@@ -182,13 +182,13 @@ In 7.6.2.4 add a new heading and paragraph 3:
 
 > **Returns**
 >
-> \[#3] The `fesetexceptflag` function returns zero if the excepts argument is
+> \[#3\] The `fesetexceptflag` function returns zero if the excepts argument is
 > zero or if all the specified flags were successfully set to the appropriate
 > state. Otherwise it returns a nonzero value.
 
 In 7.6.3.2 replace paragraph 3 by:
 
-> \[#3] The `fesetround` function returns zero if and only if the requested
+> \[#3\] The `fesetround` function returns zero if and only if the requested
 > rounding direction was established.
 
 In 7.6.4.1 paragraph 1, change the result type from `void` to `int`.
@@ -199,7 +199,7 @@ In 7.6.4.1 add a new heading and paragraph 3:
 
 > **Returns**
 >
-> \[#3] The `fegetenv` function returns zero if representation was successfully
+> \[#3\] The `fegetenv` function returns zero if representation was successfully
 > stored. Otherwise it returns a nonzero value.
 
 In 7.6.4.3 paragraph 1, change the result type from `void` to `int`.
@@ -210,7 +210,7 @@ In 7.6.4.3 add a new heading and paragraph 3:
 
 > **Returns**
 >
-> \[#3] The `fesetenv` function returns zero if the environment was successfully
+> \[#3\] The `fesetenv` function returns zero if the environment was successfully
 > established. Otherwise it returns a nonzero value.
 
 In 7.6.4.4 paragraph 1, change the result type from `void` to `int`.
@@ -222,12 +222,12 @@ In 7.6.4.4 add a new heading and paragraph 3:
 
 > **Returns**
 >
-> \[#3] The `feupdateenv` function returns zero if all the actions were
+> \[#3\] The `feupdateenv` function returns zero if all the actions were
 > successfully carried out. Otherwise it returns a nonzero value.
 
 In 7.6.4.4 change to existing paragraph 3, also renumbering it as 4:
 
-> \[#3] EXAMPLE Hide spurious underflow floating-point exceptions:
+> \[#3\] EXAMPLE Hide spurious underflow floating-point exceptions:
 
 ```c
        #include <fenv.h>

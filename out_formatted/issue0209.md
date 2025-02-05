@@ -32,7 +32,7 @@ specification reflects the actual intent:
 
 **Suggested Technical Correction**  
 In subclause 7.18.4.1 paragraph 2, change the two occurrences of "and type" to
-"and \[un]signed integer type at least as wide as".
+"and \[un\]signed integer type at least as wide as".
 
 ---
 
@@ -42,22 +42,22 @@ Comment from WG14 on 2000-11-02:
 
 7.18.4 Macros for integer constants
 
-> \[#1] The following function-like macros<sup>220</sup> expand to integer
+> \[#1\] The following function-like macros<sup>220</sup> expand to integer
 > constant expressions suitable for initializing objects that have integer types
 > corresponding to types defined in \<`stdint.h`\>. Each macro name corresponds to
 > a similar type name in 7.18.1.2 or 7.18.1.5.
 >
-> \[#2] The argument in any instance of these macros shall be a decimal, octal, or
-> hexadecimal constant (as defined in 6.4.4.1) with a value that does not exceed
-> the limits for the corresponding type.
+> \[#2\] The argument in any instance of these macros shall be a decimal, octal,
+> or hexadecimal constant (as defined in 6.4.4.1) with a value that does not
+> exceed the limits for the corresponding type.
 
 Add:
 
-> \[#3] Each invocation of one of these macros shall expand to an integer constant
-> expression suitable for use in `#if` preprocessing directives. The type of the
-> expression shall have the same type as would an expression that is an object of
-> the corresponding type converted according to the integer promotions. The value
-> of the expression shall be that of the argument.
+> \[#3\] Each invocation of one of these macros shall expand to an integer
+> constant expression suitable for use in `#if` preprocessing directives. The type
+> of the expression shall have the same type as would an expression that is an
+> object of the corresponding type converted according to the integer promotions.
+> The value of the expression shall be that of the argument.
 
 *Most of the following wording is taken almost exactly from* `<limits.h>`
 
@@ -65,16 +65,16 @@ Add:
 
 Remove:
 
-> \[#1] Each of the following macros expands to an integer constant having the
+> \[#1\] Each of the following macros expands to an integer constant having the
 > value specified by its argument and a type with at least the specified
 > width.<sup>221</sup>)
 >
 > <sup>221</sup> For each name described in 7.18.1.2 that the implementation
 > provides, the corresponding macro in this subclause is required.
 
-Change \[#2] to:
+Change \[#2\] to:
 
-> \[#2] The macro `INT`*N*`_C(`*value* `)` shall expand to an integer constant
+> \[#2\] The macro `INT`*N*`_C(`*value* `)` shall expand to an integer constant
 > expression corresponding to the type `int_least`*N*`_t`. The macro
 > `UINT`*N*`_C(`*value* `)` shall expand to an integer constant expression
 > corresponding to the type `uint_least`*N*`_t`. For example, if `uint_least64_t`
@@ -83,7 +83,7 @@ Change \[#2] to:
 
 7.18.4.2 Macros for greatest-width integer constants
 
-> \[#1] The following macro expands to an integer constant expression having the
+> \[#1\] The following macro expands to an integer constant expression having the
 > value specified by its argument and the type `intmax_t`:
 >
 > > `INTMAX_C(`*value*`)`

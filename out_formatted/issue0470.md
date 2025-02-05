@@ -19,7 +19,7 @@ lock if it is not acquired by any thread), but C\+\+11 does (see 30.4.1.1/16):
 > An implementation may fail to obtain the lock even if it is not held by any
 > other thread. \[ Note: This spurious failure is normally uncommon, but allows
 > interesting implementations based on a simple compare and exchange (Clause 29).
-> \-- end note ] An implementation should ensure that try\_lock() does not
+> \-- end note \] An implementation should ensure that try\_lock() does not
 > consistently return false in the absence of contending mutex acquisitions.
 
 It might be better to point out explicitly that programmers should treat

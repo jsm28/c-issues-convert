@@ -45,7 +45,7 @@ representable values, `ULONG_MAX` is returned, and the value of the macro
 `ERANGE` is stored in `errno`. The Committee believes that there is only one
 sensible interpretation of a subject sequence with a minus sign: If the subject
 sequence (neglecting the possible minus sign) is outside the range \[0,
-`ULONG_MAX`], then the range error is reported. Otherwise, the value is
+`ULONG_MAX`\], then the range error is reported. Otherwise, the value is
 negated(as an `unsigned long int`). The answers to your numeric questions are:
 
 Case 1: 2,147,483,649

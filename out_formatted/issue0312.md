@@ -22,7 +22,7 @@ is used in the definition of composite types, 6.2.7#3:
 and in an example in 6.5.6#11 (where it doesn't cause problems), and in
 6.7.5.2#4 to define VLAs:
 
-> \[#4] If the size is not present, the array type is an incomplete type. If the
+> \[#4\] If the size is not present, the array type is an incomplete type. If the
 > size is `*` instead of being an expression, the array type is a variable length
 > array type of unspecified size, which can only be used in declarations with
 > function prototype scope;122) such arrays are nonetheless complete types. If the

@@ -56,4 +56,4 @@ identifier at the latter declaration becomes the linkage specified at the prior
 declaration. If no prior declaration is visible, or if the prior declaration
 specifies no linkage, then the identifier has external linkage. \[Footnote \*:
 As specified in 6.1.2.1, the latter declaration might hide the prior
-declaration.]
+declaration.\]

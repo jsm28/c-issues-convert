@@ -1,4 +1,4 @@
-*\[Question was revised in Dec 94]*
+*\[Question was revised in Dec 94\]*
 
 Item 25 \- compatibility of incomplete types
 

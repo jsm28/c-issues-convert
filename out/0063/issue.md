@@ -1,4 +1,4 @@
-\[This is Defect Report #056, resubmitted for administrative reasons.]
+\[This is Defect Report #056, resubmitted for administrative reasons.\]
 
 The following requirement is implied in several places, but not explicitly
 stated. It should be explicitly affirmed, or alternative wording adopted.

@@ -110,7 +110,7 @@ These changes have been proposed for the C\+\+ working draft:
   > > visible sequence of side effects of a value computation is unique given~~ <u>The
   > > set of side effects that a given evaluation might take its value from is also
   > > restricted by the rest of the rules described here, and in particular, by</u>
-  > > the coherence requirements below. —*end note*]
+  > > the coherence requirements below. —*end note*\]
 * For C 5.1.2.4 paragraph 24, the following C\+\+ discussion is relevant:
   > 1.10p20 should be changed as follows:
   >
@@ -120,7 +120,7 @@ These changes have been proposed for the C\+\+ working draft:
   > > intended reading is that there must exist an association of atomic loads with
   > > modifications they observe that, together with suitably chosen modification
   > > orders and the "happens before" relation derived as described above, satisfy the
-  > > resulting constraints as imposed here. —*end note* ]
+  > > resulting constraints as imposed here. —*end note* \]
 * For C 5.1.2.4 paragraph 27, the following C\+\+ discussion is relevant:
   > I think 1.10p22 should be changed as follows:
   >
@@ -132,7 +132,7 @@ These changes have been proposed for the C\+\+ working draft:
   > > of data member assignment that overwrite adjacent members in separate memory
   > > locations. Reordering of atomic loads in cases in which the atomics in question
   > > may alias is also generally precluded, since this may violate the ~~"visible
-  > > sequence"~~<u>coherence</u> rules. —*end note* ]
+  > > sequence"~~<u>coherence</u> rules. —*end note* \]
 * For C 7.17.3 paragraph 6, the following C\+\+ discussion is relevant:
   > I believe the 29.3p3 wording should change as follows:
   >
@@ -169,7 +169,7 @@ Oct 2014 meeting
    > visible sequence of side effects of a value computation is unique given~~ <u>The
    > set of side effects that a given evaluation might take its value from is also
    > restricted by the rest of the rules described here, and in particular, by</u>
-   > the coherence requirements below. —*end note*]
+   > the coherence requirements below. —*end note*\]
 2. Change 5.1.2.4 paragraph 24 as follows:
 
    > \[*Note:* The ~~visible sequence of side effects~~ <u>value observed by a load
@@ -178,7 +178,7 @@ Oct 2014 meeting
    > intended reading is that there must exist an association of atomic loads with
    > modifications they observe that, together with suitably chosen modification
    > orders and the “happens before” relation derived as described above, satisfy the
-   > resulting constraints as imposed here. —*end note*]
+   > resulting constraints as imposed here. —*end note*\]
 3. Change 5.1.2.4 paragraph 27 as follows:
 
    > \[*Note:* Compiler transformations that introduce assignments to a potentially
@@ -189,7 +189,7 @@ Oct 2014 meeting
    > of data member assignment that overwrite adjacent members in separate memory
    > locations. Reordering of atomic loads in cases in which the atomics in question
    > may alias is also generally precluded, since this may violate the ~~“visible
-   > sequence”~~ <u>coherence</u> rules. —*end note*]
+   > sequence”~~ <u>coherence</u> rules. —*end note*\]
 4. Change 7.17.3 paragraph 6 as follows:
 
    > There shall be a single total order *S* on all `memory_order_seq_cst`

@@ -2,7 +2,7 @@
 
 Variably modified types are defined by 6.7.5#3:
 
-> \[#3] A *full declarator* is a declarator that is not part of another
+> \[#3\] A *full declarator* is a declarator that is not part of another
 > declarator. The end of a full declarator is a sequence point. If the nested
 > sequence of declarators in a full declarator contains a variable length array
 > type, the type specified by the full declarator is said to be *variably

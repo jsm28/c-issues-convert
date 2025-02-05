@@ -1,14 +1,14 @@
 **Problem** 7.18.1.1 reads:
 
-> \[#1] The typedef name `int`*`N`*`_t` designates a signed integer type with
+> \[#1\] The typedef name `int`*`N`*`_t` designates a signed integer type with
 > width *N*, no padding bits, and a two's complement representation. Thus,
 > `int8_t` denotes a signed integer type with a width of exactly 8 bits.
 >
-> \[#2] The typedef name `uint`*`N`*`_t` designates an unsigned integer type with
+> \[#2\] The typedef name `uint`*`N`*`_t` designates an unsigned integer type with
 > width *N*. Thus, `uint24_t` denotes an unsigned integer type with a width of
 > exactly 24 bits.
 >
-> \[#3] These types are optional. However, if an implementation provides integer
+> \[#3\] These types are optional. However, if an implementation provides integer
 > types with widths of 8, 16, 32, or 64 bits, it shall define the corresponding
 > typedef names.
 
@@ -24,22 +24,22 @@ particular:
 
 Change this section to read:
 
-> \[#1] The typedef name `int`*`N`*`_t` designates a signed integer type with
+> \[#1\] The typedef name `int`*`N`*`_t` designates a signed integer type with
 > width *N*, no padding bits, and a two's complement representation. Thus,
 > `int8_t` denotes a signed integer type with a width of exactly 8 bits and those
 > other properties.
 >
-> \[#2] The typedef name `uint`*`N`*`_t` designates an unsigned integer type with
+> \[#2\] The typedef name `uint`*`N`*`_t` designates an unsigned integer type with
 > width *N* and no padding bits. Thus, `uint24_t` denotes an unsigned integer type
 > with a width of exactly 24 bits and no padding bits.
 >
-> \[#3] These types are optional. However, if an implementation provides integer
+> \[#3\] These types are optional. However, if an implementation provides integer
 > types with widths of 8, 16, 32, or 64 bits, no padding bits, and (for the signed
 > types) that have a two's complement representation, it shall define the
 > corresponding typedef names.
 
 Or, alternatively:
 
-> \[#3] These types are optional. However, if an implementation has a type with
+> \[#3\] These types are optional. However, if an implementation has a type with
 > width 8, 16, 32, or 64 bits that meet the above requirements, it shall define
 > the corresponding typedef names.

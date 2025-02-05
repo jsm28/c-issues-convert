@@ -92,7 +92,7 @@
 |0286|[Correctly rounded and rounding direction/mode](log_c99.md#issue0286)|Fixed in C99 TC3|
 |0287|[Floating-point status flags and sequence points](log_c99.md#issue0287)|Fixed in C99 TC3|
 |0288|[deficiency on multibyte conversions](log_c99.md#issue0288)|Closed|
-|0289|[Function prototype with \[restrict]](log_c99.md#issue0289)|Fixed in C99 TC3|
+|0289|[Function prototype with \[restrict\]](log_c99.md#issue0289)|Fixed in C99 TC3|
 |0290|[`FLT_EVAL_METHOD` and extra precision and/or range](log_c99.md#issue0290)|Fixed in C99 TC3|
 |0291|[corrections to requirements on inexact floating-point exceptions](log_c99.md#issue0291)|Fixed in C99 TC3|
 |0292|[Use of the word *variable*](log_c99.md#issue0292)|Fixed in C99 TC3|
@@ -216,7 +216,7 @@ Append a new paragraph to 7.18.3:
 
 or change the first part of 7.17 paragraph 2 to:
 
-> \[#2] The types are `ptrdiff_t` which is the signed integer type of the result
+> \[#2\] The types are `ptrdiff_t` which is the signed integer type of the result
 > of subtracting two pointers (the width of `ptrdiff_t` shall be no greater than
 > that of `signed long`);
 >
@@ -325,9 +325,9 @@ change the return type to `int` and add the following:
 
 > **Returns**
 >
-> This function always returns zero. \[\*]
+> This function always returns zero. \[\*\]
 >
-> \[\*] This may change in a future revision of this Standard, in which case a
+> \[\*\] This may change in a future revision of this Standard, in which case a
 > zero return will mean success and a non-zero return will mean failure of some
 > kind.
 
@@ -345,7 +345,7 @@ In 7.6 paragraph 5, attach a footnote to the wording:
 
 where the footnote is:
 
-> \[\*] The implementation supports an exception if there are circumstances where
+> \[\*\] The implementation supports an exception if there are circumstances where
 > a call to at least one of the functions in 7.6.2, using the macro as the
 > appropriate argument, will succeed. It is not necessary for all the functions to
 > succeed all the time.
@@ -371,13 +371,13 @@ Add a new heading and paragraph 3:
 
 > **Returns**
 >
-> \[3] The `feclearexcept` function returns zero if the excepts argument is zero
+> \[3\] The `feclearexcept` function returns zero if the excepts argument is zero
 > or if all the specified exceptions were successfully cleared. Otherwise it
 > returns a nonzero value.
 
 Optional additional change: replace 7.6.3.2p3 by:
 
-> \[3] The `fesetround` function returns zero if and only if the requested
+> \[3\] The `fesetround` function returns zero if and only if the requested
 > rounding direction was established.
 
 ---
@@ -393,7 +393,7 @@ In 7.6 paragraph 5, attach a footnote to the wording:
 
 where the footnote is:
 
-> \[\*] The implementation supports an exception if there are circumstances where
+> \[\*\] The implementation supports an exception if there are circumstances where
 > a call to at least one of the functions in 7.6.2, using the macro as the
 > appropriate argument, will succeed. It is not necessary for all the functions to
 > succeed all the time.
@@ -406,7 +406,7 @@ In 7.6.2.1 add a new heading and paragraph 3:
 
 > **Returns**
 >
-> \[#3] The `feclearexcept` function returns zero if the excepts argument is zero
+> \[#3\] The `feclearexcept` function returns zero if the excepts argument is zero
 > or if all the specified exceptions were successfully cleared. Otherwise it
 > returns a nonzero value.
 
@@ -418,7 +418,7 @@ In 7.6.2.2 add a new heading and paragraph 3:
 
 > **Returns**
 >
-> \[#3] The `fegetexceptflag` function returns zero if the representation was
+> \[#3\] The `fegetexceptflag` function returns zero if the representation was
 > successfully stored. Otherwise it returns a nonzero value.
 
 In 7.6.2.3 paragraph 1, change the result type from `void` to `int`.
@@ -429,7 +429,7 @@ In 7.6.2.3 add a new heading and paragraph 3:
 
 > **Returns**
 >
-> \[#3] The `feraiseexcept` function returns zero if the excepts argument is zero
+> \[#3\] The `feraiseexcept` function returns zero if the excepts argument is zero
 > or if all the specified exceptions were successfully raised. Otherwise it
 > returns a nonzero value.
 
@@ -441,13 +441,13 @@ In 7.6.2.4 add a new heading and paragraph 3:
 
 > **Returns**
 >
-> \[#3] The `fesetexceptflag` function returns zero if the excepts argument is
+> \[#3\] The `fesetexceptflag` function returns zero if the excepts argument is
 > zero or if all the specified flags were successfully set to the appropriate
 > state. Otherwise it returns a nonzero value.
 
 In 7.6.3.2 replace paragraph 3 by:
 
-> \[#3] The `fesetround` function returns zero if and only if the requested
+> \[#3\] The `fesetround` function returns zero if and only if the requested
 > rounding direction was established.
 
 In 7.6.4.1 paragraph 1, change the result type from `void` to `int`.
@@ -458,7 +458,7 @@ In 7.6.4.1 add a new heading and paragraph 3:
 
 > **Returns**
 >
-> \[#3] The `fegetenv` function returns zero if representation was successfully
+> \[#3\] The `fegetenv` function returns zero if representation was successfully
 > stored. Otherwise it returns a nonzero value.
 
 In 7.6.4.3 paragraph 1, change the result type from `void` to `int`.
@@ -469,7 +469,7 @@ In 7.6.4.3 add a new heading and paragraph 3:
 
 > **Returns**
 >
-> \[#3] The `fesetenv` function returns zero if the environment was successfully
+> \[#3\] The `fesetenv` function returns zero if the environment was successfully
 > established. Otherwise it returns a nonzero value.
 
 In 7.6.4.4 paragraph 1, change the result type from `void` to `int`.
@@ -481,12 +481,12 @@ In 7.6.4.4 add a new heading and paragraph 3:
 
 > **Returns**
 >
-> \[#3] The `feupdateenv` function returns zero if all the actions were
+> \[#3\] The `feupdateenv` function returns zero if all the actions were
 > successfully carried out. Otherwise it returns a nonzero value.
 
 In 7.6.4.4 change to existing paragraph 3, also renumbering it as 4:
 
-> \[#3] EXAMPLE Hide spurious underflow floating-point exceptions:
+> \[#3\] EXAMPLE Hide spurious underflow floating-point exceptions:
 
 ```c
        #include <fenv.h>
@@ -616,7 +616,7 @@ Add to the end of 7.17:
 
 > **Recommended Practice**
 >
-> \[#4] The types used for `size_t` and `ptrdiff_t` should not have an integer
+> \[#4\] The types used for `size_t` and `ptrdiff_t` should not have an integer
 > conversion rank greater than that of `signed long` unless the implementation
 > supports objects large enough to make this necessary.
 
@@ -673,7 +673,7 @@ Change the syntax under 6.7.5 to (the two occurrences of `static` to
 
 Change 6.7.5.2p1 to (i.e. the two occurrences of `static` to `__at_least`):
 
-> \[#1] In addition to optional type qualifiers and the keyword `__at_least`, the
+> \[#1\] In addition to optional type qualifiers and the keyword `__at_least`, the
 > `[` and `]` may delimit an expression or `*`. If they delimit an expression
 > (which specifies the size of an array), the expression shall have an integer
 > type. If the expression is a constant expression, it shall have a value greater
@@ -697,14 +697,14 @@ bind `__at_least` with `assignment-expr` in the syntax):
 
 Change 6.7.5.3p7 to (i.e. `static` to `__at_least`):
 
-> \[#7] A declaration of a parameter as "array of *type*" shall be adjusted to
+> \[#7\] A declaration of a parameter as "array of *type*" shall be adjusted to
 > "qualified pointer to *type*", where the type qualifiers (if any) are those
 > specified within the `[` and `]` of the array type derivation. If the keyword
 > `__at_least` ...
 
 Change 6.7.5.3p21 to (i.e. `static` to `__at_least`):
 
-> \[#21] EXAMPLE 5 The following are all compatible function prototype
+> \[#21\] EXAMPLE 5 The following are all compatible function prototype
 > declarators.
 >
 > ```c
@@ -941,11 +941,11 @@ Add a new subclause G.4.4
 > converting to an imaginary type, and by dividing by the imaginary unit when
 > converting to a real type).
 >
-> * one type is the type of the parameter, and the other type the type of the argument, when a function is called without a prototype in scope; \[\*]
+> * one type is the type of the parameter, and the other type the type of the argument, when a function is called without a prototype in scope; \[\*\]
 > * one type is the type of an argument corresponding to a trailing ellipsis in a function call and the other is specified as the type argument of an invocation of the `va_arg` macro;
 > * one type is the type of an argument to a function such as `fprintf` or the type pointed to by an argument to a function such as `fscanf`, and the other is the type implied by the corresponding conversion specifier.
 >
-> \[\*] If a prototype is in scope, conversion is as if by assignment and the
+> \[\*\] If a prototype is in scope, conversion is as if by assignment and the
 > value will be converted to zero.
 
 Replace G.6p1 with:
@@ -1002,8 +1002,8 @@ In 6.7.2 delete "`_Imaginary`" from paragraph 1, delete the cases:
 
 from paragraph 2, and change paragraph 3 to read:
 
-> \[#3] The type specifier `_Complex` shall not be used if the implementation does
-> not provide complex types.<sup>101</sup>
+> \[#3\] The type specifier `_Complex` shall not be used if the implementation
+> does not provide complex types.<sup>101</sup>
 
 Change footnote 101 to read:
 
@@ -1012,7 +1012,7 @@ Change footnote 101 to read:
 
 In 7.3.1 replace paragraphs 3 to 5 with:
 
-> \[#3] The macro
+> \[#3\] The macro
 >
 > > ```c
 > > I
@@ -1020,18 +1020,18 @@ In 7.3.1 replace paragraphs 3 to 5 with:
 >
 > expands to `_Complex_I`.<sup>162</sup>
 >
-> \[#4] Notwithstanding the provisions of subclause 7.1.3, a program may undefine
+> \[#4\] Notwithstanding the provisions of subclause 7.1.3, a program may undefine
 > and perhaps then redefine the macros `complex` and `I`.
 
 Add a new paragraph to the start of G.2:
 
-> \[#0] There is a new keyword `_Imaginary`, which is used to specify imaginary
+> \[#0\] There is a new keyword `_Imaginary`, which is used to specify imaginary
 > types. It is used as a type-specifier within declaration-specifiers in the same
 > way as `_Complex` is (thus "`_Imaginary float`" is a valid type name).
 
 Replace G.6 paragraph 1 with:
 
-> \[#1] The macro
+> \[#1\] The macro
 >
 > > ```c
 > > imaginary
@@ -1145,7 +1145,7 @@ should be taken to only apply to those side effects which actually occur.
 
 In 6.7.8 paragraph 19, attach a footnote to "the same subobject":
 
-> \[\*] Any initializer for the subobject which is overridden and so not used to
+> \[\*\] Any initializer for the subobject which is overridden and so not used to
 > initialize that subobject might not be evaluated at all.
 
 
@@ -1189,7 +1189,7 @@ specification reflects the actual intent:
 
 **Suggested Technical Correction**  
 In subclause 7.18.4.1 paragraph 2, change the two occurrences of "and type" to
-"and \[un]signed integer type at least as wide as".
+"and \[un\]signed integer type at least as wide as".
 
 ---
 
@@ -1199,22 +1199,22 @@ Comment from WG14 on 2000-11-02:
 
 7.18.4 Macros for integer constants
 
-> \[#1] The following function-like macros<sup>220</sup> expand to integer
+> \[#1\] The following function-like macros<sup>220</sup> expand to integer
 > constant expressions suitable for initializing objects that have integer types
 > corresponding to types defined in \<`stdint.h`\>. Each macro name corresponds to
 > a similar type name in 7.18.1.2 or 7.18.1.5.
 >
-> \[#2] The argument in any instance of these macros shall be a decimal, octal, or
-> hexadecimal constant (as defined in 6.4.4.1) with a value that does not exceed
-> the limits for the corresponding type.
+> \[#2\] The argument in any instance of these macros shall be a decimal, octal,
+> or hexadecimal constant (as defined in 6.4.4.1) with a value that does not
+> exceed the limits for the corresponding type.
 
 Add:
 
-> \[#3] Each invocation of one of these macros shall expand to an integer constant
-> expression suitable for use in `#if` preprocessing directives. The type of the
-> expression shall have the same type as would an expression that is an object of
-> the corresponding type converted according to the integer promotions. The value
-> of the expression shall be that of the argument.
+> \[#3\] Each invocation of one of these macros shall expand to an integer
+> constant expression suitable for use in `#if` preprocessing directives. The type
+> of the expression shall have the same type as would an expression that is an
+> object of the corresponding type converted according to the integer promotions.
+> The value of the expression shall be that of the argument.
 
 *Most of the following wording is taken almost exactly from* `<limits.h>`
 
@@ -1222,16 +1222,16 @@ Add:
 
 Remove:
 
-> \[#1] Each of the following macros expands to an integer constant having the
+> \[#1\] Each of the following macros expands to an integer constant having the
 > value specified by its argument and a type with at least the specified
 > width.<sup>221</sup>)
 >
 > <sup>221</sup> For each name described in 7.18.1.2 that the implementation
 > provides, the corresponding macro in this subclause is required.
 
-Change \[#2] to:
+Change \[#2\] to:
 
-> \[#2] The macro `INT`*N*`_C(`*value* `)` shall expand to an integer constant
+> \[#2\] The macro `INT`*N*`_C(`*value* `)` shall expand to an integer constant
 > expression corresponding to the type `int_least`*N*`_t`. The macro
 > `UINT`*N*`_C(`*value* `)` shall expand to an integer constant expression
 > corresponding to the type `uint_least`*N*`_t`. For example, if `uint_least64_t`
@@ -1240,7 +1240,7 @@ Change \[#2] to:
 
 7.18.4.2 Macros for greatest-width integer constants
 
-> \[#1] The following macro expands to an integer constant expression having the
+> \[#1\] The following macro expands to an integer constant expression having the
 > value specified by its argument and the type `intmax_t`:
 >
 > > `INTMAX_C(`*value*`)`
@@ -1598,7 +1598,7 @@ unbound state.
 (*Changes concerning explicit* `mbstate_t` *objects.*)  
 Change 7.24.6 paragraph 3 to:
 
-> \[#3] The initial conversion state corresponds, for a conversion in either
+> \[#3\] The initial conversion state corresponds, for a conversion in either
 > direction, to the beginning of a new multibyte character in the initial shift
 > state. An `mbstate_t` object may be "unbound" or "bound". A zero-valued
 > `mbstate_t` object is (at least) one way to describe an unbound object, and if
@@ -1606,7 +1606,7 @@ Change 7.24.6 paragraph 3 to:
 > `mbstate_t` objects are in the initial conversion state (but the converse is not
 > necessarily true).
 >
-> \[#3a] An unbound object can be used to initiate conversion involving any
+> \[#3a\] An unbound object can be used to initiate conversion involving any
 > multibyte character sequence, in any `LC_CTYPE` category setting, in either
 > direction; once used for a conversion, it becomes bound to that sequence,
 > category setting, and direction. If a bound `mbstate_t` object is used with a
@@ -1622,16 +1622,16 @@ Append to footnote 290:
 
 Change 7.24.6.3 paragraph 1 and 7.24.6.4 paragraph 1 from:
 
-> \[...] which is initialized at program startup to the initial conversion state.
-> \[...]
+> \[...\] which is initialized at program startup to the initial conversion state.
+> \[...\]
 
 to:
 
-> \[...] which is initialized at program startup to the unbound state. \[...]
+> \[...\] which is initialized at program startup to the unbound state. \[...\]
 
 Change 7.24.6.3.2 paragraph 2 to:
 
-> \[#2] If s is a null pointer, the `mbrtowc` function is equivalent to the call:
+> \[#2\] If s is a null pointer, the `mbrtowc` function is equivalent to the call:
 >
 > > ```c
 > > mbrtowc(NULL, "", 1, ps)
@@ -1644,7 +1644,7 @@ Change 7.24.6.3.2 paragraph 2 to:
 
 Change 7.24.6.3.3 paragraph 2 to:
 
-> \[#2] If s is a null pointer, the `wcrtomb` function is equivalent to the call
+> \[#2\] If s is a null pointer, the `wcrtomb` function is equivalent to the call
 >
 > > ```c
 > > wcrtomb(buf, L'\0',ps)
@@ -1676,9 +1676,9 @@ Append to the last sentence of 7.19.9.2 paragraph 5:
 
 In 7.24.3.1 paragraph 2, change: to:
 
-> \[...] If the stream is at end-of-file, the end-of-file indicator for the stream
-> is set, the `mbstate_t` object associated with the stream is unbound, and
-> `fgetwc` returns `WEOF`. \[...]
+> \[...\] If the stream is at end-of-file, the end-of-file indicator for the
+> stream is set, the `mbstate_t` object associated with the stream is unbound, and
+> `fgetwc` returns `WEOF`. \[...\]
 
 ---
 
@@ -1784,7 +1784,7 @@ Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/do
 
 7.20.4.2 reads:
 
-> \[#3] The implementation shall support the registration of at least 32
+> \[#3\] The implementation shall support the registration of at least 32
 > functions.
 
 This does not require registration of a valid function to succeed. The
@@ -1797,7 +1797,7 @@ in a different translation unit.
 
 Change the cited wording to:
 
-> \[#3] The implementation shall not reject the registration of a valid function
+> \[#3\] The implementation shall not reject the registration of a valid function
 > if less than 32 functions are already registered (multiple registrations of the
 > same function counting multiple times).
 
@@ -1846,8 +1846,8 @@ Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/do
 
 When discussing the comparison operators, 6.5.8 says:
 
-> \[#4] For the purposes of these operators, a pointer to an object that is not an
-> element of an array behaves the same as a pointer to the first element of an
+> \[#4\] For the purposes of these operators, a pointer to an object that is not
+> an element of an array behaves the same as a pointer to the first element of an
 > array of length one with the type of the object as its element type.
 
 Given that the restrictions on the arguments for pointer comparison and pointer
@@ -1892,13 +1892,13 @@ all positive, there is no such requirement on the former:
 
 6.2.5:
 
-> \[#3] \[...] If a member of the basic execution character set is stored in a
+> \[#3\] \[...\] If a member of the basic execution character set is stored in a
 > char object, its value is guaranteed to be positive.
 
 6.10.1:
 
-> \[#3] \[...] Whether the numeric value for these character constants matches the
-> value obtained when an identical character constant occurs in an expression
+> \[#3\] \[...\] Whether the numeric value for these character constants matches
+> the value obtained when an identical character constant occurs in an expression
 > (other than within a `#if` or `#elif` directive) is
 > implementation-defined.<sup>141\)</sup> Also, whether a single-character
 > character constant may have a negative value is implementation-defined.
@@ -1908,7 +1908,7 @@ conflicts with the definition of the basic execution character set:
 
 5.2.1:
 
-> \[#2] \[...] A byte with all bits set to 0, called the *null character*, shall
+> \[#2\] \[...\] A byte with all bits set to 0, called the *null character*, shall
 > exist in the basic execution character set; it is used to terminate a character
 > string.
 
@@ -1927,12 +1927,13 @@ reach the `#error` directive ?
 
 Change the cited wording in 6.2.5 to:
 
-> #3] \[...] If a member of the basic execution character set (other than the null
-> character) is stored in a char object, its value is guaranteed to be positive.
+> #3\] \[...\] If a member of the basic execution character set (other than the
+> null character) is stored in a char object, its value is guaranteed to be
+> positive.
 
 and the last part of the cited wording in 6.10.1 to:
 
-> \[#3] \[...] Also, whether a single-character character constant may have a
+> \[#3\] \[...\] Also, whether a single-character character constant may have a
 > negative value is implementation-defined (nevertheless, it may not be zero).
 
 ---
@@ -1973,7 +1974,7 @@ conforming implementation.
 
 Change the cited wording in 6.2.5 to:
 
-> \[#3] \[...] If a member of the basic execution character set is stored in a
+> \[#3\] \[...\] If a member of the basic execution character set is stored in a
 > char object, its value is guaranteed to be non-negative.
 
 
@@ -1998,7 +1999,7 @@ Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/do
 
 The definition of the `asctime` function involves a `sprintf` call writing into
 a buffer of size 26\. This call will have undefined behaviour if the year being
-represented falls outside the range \[-999, 9999]. Since applications may have
+represented falls outside the range \[-999, 9999\]. Since applications may have
 relied on the size of 26, this should not be corrected by allowing the
 implementation to generate a longer string. This is a defect because the
 specification is not self-consistent and does not restrict the domain of the
@@ -2006,10 +2007,10 @@ argument.
 
 ### Suggested Technical Corrigendum
 
-Append to 7.23.3.1\[#2]:
+Append to 7.23.3.1\[#2\]:
 
 > except that if the value of `timeptr->tm_year` is outside the range \[-2899,
-> 8099] (and thus the represented year will not fit into four characters) it is
+> 8099\] (and thus the represented year will not fit into four characters) it is
 > replaced by up to 4 implementation-defined characters.
 
 ---
@@ -2067,9 +2068,9 @@ implementations, and this needs to be allowed for.
 
 ### Suggested Technical Corrigendum
 
-Add a new paragraph to 5.2.4.2.2, preferably after \[#3]:
+Add a new paragraph to 5.2.4.2.2, preferably after \[#3\]:
 
-> \[#3a] An implementation may give zero and non-numeric values (such as
+> \[#3a\] An implementation may give zero and non-numeric values (such as
 > infinities and `NaNs`) a sign or may leave them unsigned. Wherever such values
 > are unsigned, any requirement in this International Standard to retrieve the
 > sign shall act as if the value were positive, and any requirement to set the
@@ -2077,7 +2078,7 @@ Add a new paragraph to 5.2.4.2.2, preferably after \[#3]:
 
 or:
 
-> \[...]  
+> \[...\]  
 > to retrieve the sign shall produce an unspecified sign, and any requirement to
 > set the sign shall be ignored.
 
@@ -2121,9 +2122,9 @@ that discusses 5.2.4.2.2 of the C Standard:
 
 ### Technical Corrigendum
 
-Add a new paragraph to 5.2.4.2.2, after \[#3]:
+Add a new paragraph to 5.2.4.2.2, after \[#3\]:
 
-> \[#3a] An implementation may give zero and non-numeric values (such as
+> \[#3a\] An implementation may give zero and non-numeric values (such as
 > infinities and NaNs) a sign or may leave them unsigned. Wherever such values are
 > unsigned, any requirement in this International Standard to retrieve the sign
 > shall produce an unspecified sign, and any requirement to set the sign shall be
@@ -2150,7 +2151,7 @@ Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/do
 
 6.5 reads:
 
-> \[#6] \[...] If a value is copied into an object having no declared type using
+> \[#6\] \[...\] If a value is copied into an object having no declared type using
 > `memcpy` or `memmove`, or is copied as an array of character type, then the
 > effective type of the modified object for that access and for subsequent
 > accesses that do not modify the value is the effective type of the object from
@@ -2276,10 +2277,10 @@ Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/do
 
 ### Summary
 
-7.19.6.1\[#4] reads in part:
+7.19.6.1\[#4\] reads in part:
 
-> * An optional minimum field width. \[...] The field width takes the form of an asterisk `*` (described later) or a decimal integer<sup>.232)</sup>
-> * An optional precision \[...] The precision takes the form of a period `.` followed either by an asterisk `*` (described later) or by an optional decimal integer; \[...]
+> * An optional minimum field width. \[...\] The field width takes the form of an asterisk `*` (described later) or a decimal integer<sup>.232)</sup>
+> * An optional precision \[...\] The precision takes the form of a period `.` followed either by an asterisk `*` (described later) or by an optional decimal integer; \[...\]
 
 7.19.6.2 #3 reads in part:
 
@@ -2298,7 +2299,7 @@ Therefore it is not possible to tell whether, in each case:
 
 Add a new paragraph to 7.1.1:
 
-> \[#x] A *decimal integer* is a sequence of digits which may begin with one or
+> \[#x\] A *decimal integer* is a sequence of digits which may begin with one or
 > more zeros, but is nonetheless interpreted as decimal, not octal.
 
 Append to the first cited text in 7.19.6.1:
@@ -2313,10 +2314,10 @@ Comment from WG14 on 2000-11-02:
 
 In 7.19.6.1P4, which reads in part:
 
-> An optional minimum field width. \[...] The field width takes the form of an
-> asterisk `*` (described later) or a decimal integer.\[232] An optional precision
-> \[...] The precision takes the form of a period `.` followed either by an
-> asterisk `*` (described later) or by an optional decimal integer; \[...]
+> An optional minimum field width. \[...\] The field width takes the form of an
+> asterisk `*` (described later) or a decimal integer.\[232\] An optional
+> precision \[...\] The precision takes the form of a period `.` followed either
+> by an asterisk `*` (described later) or by an optional decimal integer; \[...\]
 
 change "decimal integer" to "non-negative decimal integer".
 
@@ -3165,8 +3166,8 @@ Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/do
 
 In 6.10.3 Macro Replacement the text:
 
-> \[#5] The identifier `__VA_ARGS__` shall occur only in the replacement-list of a
-> function-like macro that uses the ellipsis notation in the arguments.
+> \[#5\] The identifier `__VA_ARGS__` shall occur only in the replacement-list of
+> a function-like macro that uses the ellipsis notation in the arguments.
 
 The word "arguments" should be "parameters".
 
@@ -4344,7 +4345,7 @@ its output depends on an unspecified value.
 
 Add a new paragraph 4#2a after 4#2:
 
-> \[#2a] An evaluation that makes use of an unspecified or implementation-defined
+> \[#2a\] An evaluation that makes use of an unspecified or implementation-defined
 > value is a form of unspecified or implementation-defined behaviour respectively.
 
 ---
@@ -4433,8 +4434,8 @@ The change should be reinstated.
 
 Change 6.7.5.3#11 to:
 
-> \[#11] If, in a parameter declaration, an identifier can be treated as a typedef
-> name or as a parameter name, it shall be taken as a typedef name.
+> \[#11\] If, in a parameter declaration, an identifier can be treated as a
+> typedef name or as a parameter name, it shall be taken as a typedef name.
 
 ---
 
@@ -4552,7 +4553,7 @@ Consider the code:
 
 I can see nothing that forbids this code. In particular, 6.7.2.3#8 reads:
 
-> \[#8] If a type specifier of the form
+> \[#8\] If a type specifier of the form
 >
 > ```c
 >         struct-or-union identifier
@@ -4584,7 +4585,7 @@ Append to 6.7.2.1#6:
 
 Add a new paragraph following 6.7.2.3#1:
 
-> \[#1a] Where two declarations that use the same tag declare the same type, they
+> \[#1a\] Where two declarations that use the same tag declare the same type, they
 > shall both use the same choice of `struct`, `union`, or `enum`.
 
 ---
@@ -4605,7 +4606,7 @@ Append to 6.7.2.1#6:
 
 Add a new paragraph following 6.7.2.3#1:
 
-> \[#1a] Where two declarations that use the same tag declare the same type, they
+> \[#1a\] Where two declarations that use the same tag declare the same type, they
 > shall both use the same choice of `struct`, `union`, or `enum`.
 
 
@@ -4641,7 +4642,7 @@ Line A violates the constraint of 6.5.2.2#2, that requires the argument to have
 a type that can be assigned to the parameter type. But line B doesn't because
 that constraint only applies to prototyped functions. 6.5.2.2#4 reads in part:
 
-> \[#4] An argument may be an expression of any object type.
+> \[#4\] An argument may be an expression of any object type.
 
 but this is not a constraint. Should it not be ? After all, the compiler has to
 know the type of the argument in order to compile the function call, so it can
@@ -4651,7 +4652,7 @@ check at that point that the argument has a complete object type.
 
 Add a new paragraph #1a following 6.5.2.2#1:
 
-> \[#1a] Each argument shall have a type which is a completed object type.
+> \[#1a\] Each argument shall have a type which is a completed object type.
 
 ---
 
@@ -4699,7 +4700,7 @@ The question is exactly how it is modified.
 
 6.7.8#19 reads:
 
-> \[#19] The initialization shall occur in initializer list order, each
+> \[#19\] The initialization shall occur in initializer list order, each
 > initializer provided for a particular subobject overriding any previously listed
 > initializer for the same subobject; all subobjects that are not initialized
 > explicitly shall be initialized implicitly the same as objects that have static
@@ -4756,7 +4757,7 @@ Which of these is correct ?
 
 If `x` and `y` are supposed to have the same effect, change 6.7.8#19 to:
 
-> \[#19] The initialization shall occur in initializer list order, each
+> \[#19\] The initialization shall occur in initializer list order, each
 > initializer provided for a particular subobject overriding any previously listed
 > initializer for the same subobject. When all initializers have been applied, any
 > subobjects of the overall object being initialized that have not been
@@ -4765,7 +4766,7 @@ If `x` and `y` are supposed to have the same effect, change 6.7.8#19 to:
 
 and add a new paragraph at the end:
 
-> \[#39] To illustrate the rules for implicit initialization, in:
+> \[#39\] To illustrate the rules for implicit initialization, in:
 >
 > ```c
 >        struct fred
@@ -4785,7 +4786,7 @@ and add a new paragraph at the end:
 
 If `x` and `y` are supposed to be different, change 6.7.8#19 to:
 
-> \[#19] The initialization shall occur in initializer list order, each
+> \[#19\] The initialization shall occur in initializer list order, each
 > initializer provided for a particular subobject overriding any previously listed
 > initializer for the same subobject; for each brace-enclosed list, all subobjects
 > within the object that that list initializes that are not initialized explicitly
@@ -4794,7 +4795,7 @@ If `x` and `y` are supposed to be different, change 6.7.8#19 to:
 
 and add a new paragraph at the end:
 
-> \[#39] To illustrate the rules for implicit initialization, in:
+> \[#39\] To illustrate the rules for implicit initialization, in:
 >
 > ```c
 >        struct fred
@@ -4893,7 +4894,7 @@ the second returns 1 and sets `wc2` to 0x5A. However, is it permitted for the
 second to set `wc2` to 0x15A ? If so, how is an application meant to use
 `mbtowc` ?
 
-\[The newer function `mbrtowc` does not have this problem.]
+\[The newer function `mbrtowc` does not have this problem.\]
 
 ### Suggested Technical Corrigendum
 
@@ -4971,11 +4972,11 @@ Consider the code:
 
 Now, 6.5.2.2#6 reads:
 
-> \[#6] If the expression that denotes the called function has a type that does
+> \[#6\] If the expression that denotes the called function has a type that does
 > not include a prototype, the integer promotions are performed on each argument,
 > and arguments that have type float are promoted to double. These are called the
 > default argument promotions.  
-> \[...]  
+> \[...\]  
 > If the function is defined with a type that includes a prototype, and either the
 > prototype ends with an ellipsis (, ...) or the types of the arguments after
 > promotion are not compatible with the types of the parameters, the behavior is
@@ -5057,7 +5058,7 @@ Consider the code:
 
 7.1.2 says:
 
-> \[#4] Standard headers may be included in any order; each may be included more
+> \[#4\] Standard headers may be included in any order; each may be included more
 > than once in a given scope, with no effect different from being included only
 > once, except that the effect of including `<assert.h>` depends on the definition
 > of `NDEBUG` (see 7.2).
@@ -5093,7 +5094,7 @@ well.
 
 Change the first sentence of 7.1.2#4 to:
 
-> \[#4] Standard headers may be included in any order; each may be included any
+> \[#4\] Standard headers may be included in any order; each may be included any
 > number of times in a preprocessing translation unit. The second and subsequent
 > occurrences of a given header shall be ignored, except in the case of
 > `<assert.h>` (where the behaviour is defined in subclause 7.2).
@@ -5129,8 +5130,8 @@ Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/do
 
 6.5.2.3#5 reads:
 
-> \[#5] One special guarantee is made in order to simplify the use of unions: if a
-> union contains several structures that share a common initial sequence (see
+> \[#5\] One special guarantee is made in order to simplify the use of unions: if
+> a union contains several structures that share a common initial sequence (see
 > below), and if the union object currently contains one of these structures, it
 > is permitted to inspect the common initial part of any of them anywhere that a
 > declaration of the complete type of the union is visible. Two structures share a
@@ -5224,7 +5225,7 @@ to:
 To address the wider point about visibility, change the first part of 6.5.2.3#5
 to read:
 
-> \[#5] One special guarantee is made in order to simplify the use of unions: if
+> \[#5\] One special guarantee is made in order to simplify the use of unions: if
 > several structure types share a common initial sequence (see below), then
 > corresponding members are required to lie at the same offset from the start of
 > the union. Therefore if a union contains two or more such structures, the common
@@ -5304,10 +5305,10 @@ and the code:
 
 6.10.1#3 says:
 
-> \[#3] Prior to evaluation, macro invocations in the list of preprocessing tokens
-> that will become the controlling constant expression are replaced (except for
-> those macro names modified by the `defined` unary operator), just as in normal
-> text. If the token `defined` is generated as a result of this replacement
+> \[#3\] Prior to evaluation, macro invocations in the list of preprocessing
+> tokens that will become the controlling constant expression are replaced (except
+> for those macro names modified by the `defined` unary operator), just as in
+> normal text. If the token `defined` is generated as a result of this replacement
 > process or use of the `defined` unary operator does not match one of the two
 > specified forms prior to macro replacement, the behavior is undefined.
 
@@ -5333,7 +5334,7 @@ substitution.
 
 Change 6.10.1#1 to read:
 
-> \[...]
+> \[...\]
 >
 > ```c
 >      defined identifier
@@ -5346,18 +5347,18 @@ Change 6.10.1#1 to read:
 > ```
 >
 > which are replaced by the token `1` if the identifier is currently  
-> \[...]  
+> \[...\]  
 > subject identifier), or the token `0` if it is not.
 
 and #3 to read:
 
-> \[#3] Prior to evaluation, the list of preprocessing tokens that will become the
-> controlling constant expression is examined. Firstly all expressions using the
-> `defined` operator are replaced as described above, and then macro invocations
-> are replaced, just as in normal text. If the token `defined` appears in the list
-> after the replacement process, or the use of the `defined` unary operator does
-> not match one of the two specified forms prior to macro replacement, the
-> behavior is undefined. After all \[...]
+> \[#3\] Prior to evaluation, the list of preprocessing tokens that will become
+> the controlling constant expression is examined. Firstly all expressions using
+> the `defined` operator are replaced as described above, and then macro
+> invocations are replaced, just as in normal text. If the token `defined` appears
+> in the list after the replacement process, or the use of the `defined` unary
+> operator does not match one of the two specified forms prior to macro
+> replacement, the behavior is undefined. After all \[...\]
 
 ---
 
@@ -5397,15 +5398,15 @@ Consider the code:
 
 The number of arguments in a macro invocation is defined by 6.10.3#11:
 
-> \[#11] The sequence of preprocessing tokens bounded by the outside-most matching
-> parentheses forms the list of arguments for the function-like macro. The
-> individual arguments within the list are separated by comma preprocessing
+> \[#11\] The sequence of preprocessing tokens bounded by the outside-most
+> matching parentheses forms the list of arguments for the function-like macro.
+> The individual arguments within the list are separated by comma preprocessing
 > tokens, but comma preprocessing tokens between matching inner parentheses do not
 > separate arguments.
 
 while 6.10.3#4 reads:
 
-> \[#4] If the identifier-list in the macro definition does not end with an
+> \[#4\] If the identifier-list in the macro definition does not end with an
 > ellipsis, the number of arguments (including those arguments consisting of no
 > preprocessing tokens) in an invocation of a function-like macro shall equal the
 > number of parameters in the macro definition. Otherwise, there shall be more
@@ -5491,7 +5492,7 @@ between points X and Y ?
 
 It is suggested that this is implied by 6.2.4#2:
 
-> An object \[...] retains its last-stored value throughout its lifetime.
+> An object \[...\] retains its last-stored value throughout its lifetime.
 
 particularly if each byte of an object is also an object.
 
@@ -5502,7 +5503,7 @@ as an example of a debugging opportunity, `p` could be set to a null pointer or
 to a detectable value).
 
 \[Note that where an object contains padding, 6.2.6.1#6 and #7 allows the value
-of padding bits and bytes to change whenever the object changes.]
+of padding bits and bytes to change whenever the object changes.\]
 
 If an implementation *is* allowed to change the value of `p`, then consider the
 code:
@@ -5627,11 +5628,11 @@ requirements.
 
 Change 3.17.2 to:
 
-> \[#1] *indeterminate value*  
+> \[#1\] *indeterminate value*  
 > a value which, at any given moment, could be either an unspecified value or a
 > trap representation.
 >
-> \[#2] While an object holds an indeterminate value it is *indeterminate*.
+> \[#2\] While an object holds an indeterminate value it is *indeterminate*.
 > Successive reads from an object that is indeterminate might return different
 > results. Storing a value in an object, other than an indeterminate value, means
 > that the object is no longer indeterminate.
@@ -5648,11 +5649,11 @@ to:
 > indeterminate.
 
 \[Various uses of the word "indeterminate" could be tidied up, but this is the
-only one where the meaning needs to change.]
+only one where the meaning needs to change.\]
 
 Add a new paragraph to 6.5.3.2:
 
-> \[#5] The implementation is permitted to use the derivation of a pointer value
+> \[#5\] The implementation is permitted to use the derivation of a pointer value
 > in determining whether or not access through that pointer is undefined
 > behaviour, even if the pointer compares equal to, or has the same representation
 > as, a different pointer for which the access would be permitted. For example, if
@@ -5660,7 +5661,7 @@ Add a new paragraph to 6.5.3.2:
 > occupy the same address, a pointer to one cannot be used to access the other.
 
 \[The `*` operator seems a reasonable place to put this. However, it could
-equally be elsewhere.]
+equally be elsewhere.\]
 
 ---
 
@@ -5795,30 +5796,31 @@ that there are only two situations:
 
 Replace 6.6#2 with the following:
 
-> \[#2] A constant expression is one which is evaluated during translation rather
+> \[#2\] A constant expression is one which is evaluated during translation rather
 > than runtime, usually because the precise value will affect the translation in
 > some way.
 >
-> \[#2a] Where the implementation is required to provide a constant expression,
+> \[#2a\] Where the implementation is required to provide a constant expression,
 > that expression shall be one that, if included in the appropriate context, would
 > meet the requirements of this subclause and whose evaluation would not involve
 > undefined behaviour.
 >
-> \[#2b] An expression has a *translation-time value* if it meets the requirements
-> of this subclause and evaluation would not involve undefined behaviour. If the
-> expression fails to meet these requirements (for example, an integer expression
-> includes a comma operator or a cast to a floating type), the expression does not
-> have a translation-time value but nevertheless is not necessarily invalid.
+> \[#2b\] An expression has a *translation-time value* if it meets the
+> requirements of this subclause and evaluation would not involve undefined
+> behaviour. If the expression fails to meet these requirements (for example, an
+> integer expression includes a comma operator or a cast to a floating type), the
+> expression does not have a translation-time value but nevertheless is not
+> necessarily invalid.
 
 Change 6.3.2.3#3 to begin:
 
-> \[#3] An integer expression with the translation-time value 0, or such an
+> \[#3\] An integer expression with the translation-time value 0, or such an
 > expression cast to type `void *`, is called a *null pointer constant*.55)
 
 Change 6.7.5.2#1 to read, in part:
 
-> \[...] an integer type. If the expression has a translation-time value, it shall
-> be greater than zero. The element type \[...]
+> \[...\] an integer type. If the expression has a translation-time value, it
+> shall be greater than zero. The element type \[...\]
 
 the last part of #4 to read:
 
@@ -5828,18 +5830,18 @@ the last part of #4 to read:
 
 #5 to begin:
 
-> \[#5] If the size is an expression that does not have a translation-time value:
-> if it occurs \[...]
+> \[#5\] If the size is an expression that does not have a translation-time value:
+> if it occurs \[...\]
 
 #6 to begin:
 
-> \[#6] For two array types to be compatible, both shall have compatible element
+> \[#6\] For two array types to be compatible, both shall have compatible element
 > types, and if both size specifiers are present and have translation-time values,
 > then both size specifiers shall have the same value.
 
 and add a new example:
 
-> \[#11] EXAMPLE 5: an expression that contains only constants but breaks one or
+> \[#11\] EXAMPLE 5: an expression that contains only constants but breaks one or
 > more of the rules of 6.6 does not have a translation-time value. Therefore, in:
 >
 > ```c
@@ -5919,10 +5921,10 @@ Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/do
 
 6.7.2.1#3 reads, in part:
 
-> \[#3] The expression that specifies the width of a bit-field shall be an integer
-> constant expression that has nonnegative value that shall not exceed the number
-> of bits in an object of the type that is specified if the colon and expression
-> are omitted.
+> \[#3\] The expression that specifies the width of a bit-field shall be an
+> integer constant expression that has nonnegative value that shall not exceed the
+> number of bits in an object of the type that is specified if the colon and
+> expression are omitted.
 
 Is "the number of bits of the type ..." the width or is it the number of bits in
 the object representation ?
@@ -5934,10 +5936,10 @@ the former would be more sensible.
 
 Change the cited text to read:
 
-> \[#3] The expression that specifies the width of a bit-field shall be an integer
-> constant expression that has nonnegative value that shall not exceed **the width
-> of an object** of the type that is specified if the colon and expression are
-> omitted.
+> \[#3\] The expression that specifies the width of a bit-field shall be an
+> integer constant expression that has nonnegative value that shall not exceed
+> **the width of an object** of the type that is specified if the colon and
+> expression are omitted.
 
 (bold type shows the changed words)
 
@@ -6038,8 +6040,8 @@ The Standard uses the terms "printing character", "graphic character", and
 "nongraphic character". The first is discussed in 5.2.2#1 and defined formally
 in 7.4#3:
 
-> \[#3] The term printing character refers to a member of a locale-specific set of
-> characters, each of which occupies one printing position on a display device;
+> \[#3\] The term printing character refers to a member of a locale-specific set
+> of characters, each of which occupies one printing position on a display device;
 
 A "nongraphic character" is clearly a character which is not a graphic
 character, but "graphic character" is nowhere defined. It is used only in
@@ -6222,8 +6224,8 @@ following is, or should be, the case ?
 
 6.5.3.4#2 says in part:
 
-> \[#2] The `sizeof` operator yields the size (in bytes) of its operand, which may
-> be an expression or the parenthesized name of a type. The size is determined
+> \[#2\] The `sizeof` operator yields the size (in bytes) of its operand, which
+> may be an expression or the parenthesized name of a type. The size is determined
 > from the type of the operand. The result is an integer.
 
 Note that there is no indication that the result may be other than the correct
@@ -6240,14 +6242,14 @@ One of:
    > If the size is too large to fit in an object of type `size_t`, it is replaced by
    > an implementation-defined value.
 3. Add a new constraint paragraph after 6.5.3.4#1:
-   > \[#1a] The `sizeof` operator shall not be applied to an operand whose size, in
+   > \[#1a\] The `sizeof` operator shall not be applied to an operand whose size, in
    > bytes, is larger than the maximum value of the type `size_t`.
 4. Append to 6.5.3.4#4:
    > The implementation shall ensure that the type `size_t` is large enough to hold
    > the result of all uses of the `sizeof` operator.
 
 \[Some of these are less than wonderful, and consideration should also be given
-to the interaction with VLAs.]
+to the interaction with VLAs.\]
 
 ---
 
@@ -6391,7 +6393,7 @@ technique is well-known, it ought to be well-defined.
 
 Add a new paragraph after 6.8.5#4:
 
-> \[#4a] If the loop body is reached by a jump from outside the iteration
+> \[#4a\] If the loop body is reached by a jump from outside the iteration
 > statement, the behavior is as if the body were entered in the normal way. That
 > is, when the end of the body is reached the controlling expression is evaluated
 > (and, in the case of a `for` statement, *expr-3* is evaluated first) and the
@@ -6403,7 +6405,7 @@ Add a new paragraph after 6.8.5#4:
 Possibly also add an example either as 6.8.5#6 or 6.8.6.1#5 (with appropriate
 editorial changes):
 
-> \[#6] EXAMPLE: A jump into a `for` statement does not execute *clause-1* at all
+> \[#6\] EXAMPLE: A jump into a `for` statement does not execute *clause-1* at all
 > or *expr-2* during the jump:
 >
 > ```c
@@ -6472,15 +6474,15 @@ Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/do
 
 **Problem** 7.18.1.1 reads:
 
-> \[#1] The typedef name `int`*`N`*`_t` designates a signed integer type with
+> \[#1\] The typedef name `int`*`N`*`_t` designates a signed integer type with
 > width *N*, no padding bits, and a two's complement representation. Thus,
 > `int8_t` denotes a signed integer type with a width of exactly 8 bits.
 >
-> \[#2] The typedef name `uint`*`N`*`_t` designates an unsigned integer type with
+> \[#2\] The typedef name `uint`*`N`*`_t` designates an unsigned integer type with
 > width *N*. Thus, `uint24_t` denotes an unsigned integer type with a width of
 > exactly 24 bits.
 >
-> \[#3] These types are optional. However, if an implementation provides integer
+> \[#3\] These types are optional. However, if an implementation provides integer
 > types with widths of 8, 16, 32, or 64 bits, it shall define the corresponding
 > typedef names.
 
@@ -6496,23 +6498,23 @@ particular:
 
 Change this section to read:
 
-> \[#1] The typedef name `int`*`N`*`_t` designates a signed integer type with
+> \[#1\] The typedef name `int`*`N`*`_t` designates a signed integer type with
 > width *N*, no padding bits, and a two's complement representation. Thus,
 > `int8_t` denotes a signed integer type with a width of exactly 8 bits and those
 > other properties.
 >
-> \[#2] The typedef name `uint`*`N`*`_t` designates an unsigned integer type with
+> \[#2\] The typedef name `uint`*`N`*`_t` designates an unsigned integer type with
 > width *N* and no padding bits. Thus, `uint24_t` denotes an unsigned integer type
 > with a width of exactly 24 bits and no padding bits.
 >
-> \[#3] These types are optional. However, if an implementation provides integer
+> \[#3\] These types are optional. However, if an implementation provides integer
 > types with widths of 8, 16, 32, or 64 bits, no padding bits, and (for the signed
 > types) that have a two's complement representation, it shall define the
 > corresponding typedef names.
 
 Or, alternatively:
 
-> \[#3] These types are optional. However, if an implementation has a type with
+> \[#3\] These types are optional. However, if an implementation has a type with
 > width 8, 16, 32, or 64 bits that meet the above requirements, it shall define
 > the corresponding typedef names.
 
@@ -6610,7 +6612,7 @@ Change the cited portion of 7.24.1#2 to:
 
 ### Suggested Technical Corrigendum 3
 
-*\[Italics are used to show the changed text.]*
+*\[Italics are used to show the changed text.\]*
 
 Change 7.19.6.1#7 and 7.24.2.1#7, l modifier, to:
 
@@ -6894,27 +6896,27 @@ Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/do
 
 7.21.2.1#2 defines the operation of `memcpy` as:
 
-> \[#2] The `memcpy` function copies n characters from the object pointed to by
+> \[#2\] The `memcpy` function copies n characters from the object pointed to by
 > `s2` into the object pointed to by `s1`.
 
 7.21.2.3#2 defines the operation of `strcpy` as:
 
-> \[#2] The `strcpy` function copies the string pointed to by `s2` (including the
+> \[#2\] The `strcpy` function copies the string pointed to by `s2` (including the
 > terminating null character) into the array pointed to by `s1`.
 
 Other functions in 7.21 refer to either a string or a set of characters in the
 same way. The definition of "string" is in 7.1.1#1:
 
-> \[#1] A *string* is a contiguous sequence of characters terminated by and
+> \[#1\] A *string* is a contiguous sequence of characters terminated by and
 > including the first null character.
 
 and that of "character" is in 3.7:
 
-> 3.7 \[#1] character  
+> 3.7 \[#1\] character  
 > \<abstract\> member of a set of elements used for the organization, control, or
 > representation of data
 >
-> 3.7.1 \[#1] character single-byte character  
+> 3.7.1 \[#1\] character single-byte character  
 > \<C\> bit representation that fits in a byte
 
 However, none of this makes it clear whether "character" is to be interpreted as
@@ -6932,7 +6934,7 @@ as if they were plain `char`.
 
 Append a new paragraph to 7.21.1:
 
-> \[#3] Where a block of characters is accessed through a parameter of type `void
+> \[#3\] Where a block of characters is accessed through a parameter of type `void
 > *`, each character shall be interpreted as if it had type `unsigned char` (and
 > therefore every object representation is valid and has a different value). Where
 > it is accessed through a parameter of type `char *`, each character shall be
@@ -6979,7 +6981,7 @@ Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/do
 
 `FE_ALL_EXCEPT` is defined in 7.6#6 as:
 
-> \[#6] The macro
+> \[#6\] The macro
 >
 > ```c
 >             FE_ALL_EXCEPT
@@ -6994,7 +6996,7 @@ If no floating-point exception macros are defined, is `FE_ALL_EXCEPT`:
 * required to be undefined
 * unspecified whether it is either of the above ?
 
-\[This appears to be the only case of its kind.]
+\[This appears to be the only case of its kind.\]
 
 ### Suggested Technical Corrigendum
 
@@ -7078,7 +7080,7 @@ Consider the code:
 
 6.8.5#3 reads:
 
-> \[#3] The declaration part of a `for` statement shall only declare identifiers
+> \[#3\] The declaration part of a `for` statement shall only declare identifiers
 > for objects having storage class `auto` or `register`.
 
 Does this wording forbid the declaration of tag `fred` \- since it is not an
@@ -7088,13 +7090,13 @@ object \- or is `fred` not covered by that wording because it is not an object ?
 
 Change 6.8.5#3 to one of:
 
-> \[#3] The declaration part of a `for` statement shall only declare identifiers
+> \[#3\] The declaration part of a `for` statement shall only declare identifiers
 > for objects; any object so declared shall have storage class `auto` or
 > `register`.
 
 or:
 
-> \[#3] Any object whose identifier is declarared in the declaration part of a
+> \[#3\] Any object whose identifier is declarared in the declaration part of a
 > `for` statement shall have storage class `auto` or `register`.
 
 ---
@@ -7473,7 +7475,7 @@ In 6.7.2.1 paragraph 16, replace the second and third sentences ("With two ...
 >
 > Replace the examples (paragraphs 17 to 20\) with:
 >
-> \[#17] EXAMPLE After the declaration:
+> \[#17\] EXAMPLE After the declaration:
 >
 > ```c
 >             struct s { int n; double d[]; };
@@ -7497,7 +7499,7 @@ In 6.7.2.1 paragraph 16, replace the second and third sentences ("With two ...
 > (there are circumstances in which this equivalence is broken; in particular, the
 > offsets of member `d` might not be the same).
 >
-> \[#18] Following the above declaration:
+> \[#18\] Following the above declaration:
 >
 > ```c
 >             struct s t1 = { 0 };           // valid
@@ -7517,7 +7519,7 @@ In 6.7.2.1 paragraph 16, replace the second and third sentences ("With two ...
 > in which case the assignment would be legitimate. Nevertheless it cannot appear
 > in strictly conforming code.
 >
-> \[#19] After the further declaration:
+> \[#19\] After the further declaration:
 >
 > ```c
 >             struct ss { int n; };
@@ -7532,7 +7534,7 @@ In 6.7.2.1 paragraph 16, replace the second and third sentences ("With two ...
 >
 > are always equal to 1\.
 >
-> \[#20] If `sizeof (double)` is 8, then after the following code is executed:
+> \[#20\] If `sizeof (double)` is 8, then after the following code is executed:
 >
 > ```c
 >             struct s *s1;
@@ -7549,7 +7551,7 @@ In 6.7.2.1 paragraph 16, replace the second and third sentences ("With two ...
 >             struct { int n; double d[5]; } *s2;
 > ```
 >
-> \[#21] Following the further successful assignments:
+> \[#21\] Following the further successful assignments:
 >
 > ```c
 >             s1 = malloc(sizeof (struct s) + 10);
@@ -7572,7 +7574,7 @@ In 6.7.2.1 paragraph 16, replace the second and third sentences ("With two ...
 >             *dp = 42;               // undefined behavior
 > ```
 >
-> \[#22] The assignment:
+> \[#22\] The assignment:
 >
 > ```c
 >             *s1 = *s2;
@@ -7601,7 +7603,7 @@ Fixed in: C99 TC3
 Cross-references: [0257](log_c99.md#issue0257)  
 Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm), [dr_283.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_283.htm)
 
-*\[This report isolates one of the points from [DR257](log_c99.md#issue0257).]*
+*\[This report isolates one of the points from [DR257](log_c99.md#issue0257).\]*
 
 ### Problem
 
@@ -7631,7 +7633,7 @@ C89 words.
 
 ### Suggested Technical Corrigendum
 
-*\[Essentially verbatim from [DR257](log_c99.md#issue0257)]*
+*\[Essentially verbatim from [DR257](log_c99.md#issue0257)\]*
 
 Attach a new footnote 78a to the words "named member" in 6.5.2.3#3:
 
@@ -8289,7 +8291,7 @@ future release of the C Standard.
 
 <div id="issue0289">
 
-## Issue 0289: Function prototype with \[restrict]
+## Issue 0289: Function prototype with \[restrict\]
 
 Authors: The Open Group, Andrew Josey via Fred Tydeman  
 Date: 2003-08-15  
@@ -9199,7 +9201,7 @@ different (activation of a) block. In the example, the address of lvalue
 
 \[Note that there would be undefined behavior if there were also a reference to
 `a[i]` within the body of `copy()`, because the address of that lvalue would not
-be based on `dest`.]
+be based on `dest`.\]
 
 **Question 2\)**
 
@@ -9248,7 +9250,7 @@ translator would have to prove that there were no such assignments before taking
 advantage of `restrict` qualifiers.
 
 \[The assignments that are allowed are necessary to allow pointer values based
-on restricted pointers to be used in argument and return expressions.]
+on restricted pointers to be used in argument and return expressions.\]
 
 
 </div>
@@ -9283,7 +9285,7 @@ But 6.7p7 says:
 
 > If an identifier for an object is declared with no linkage, the type for the
 > object shall be complete by the end of its declarator...; in the case of
-> function arguments \[n.b., that should be *parameters*, not *arguments*]
+> function arguments \[n.b., that should be *parameters*, not *arguments*\]
 > (including in prototypes), it is the adjusted type (see 6.7.5.3) that is
 > required to be complete.
 
@@ -10100,7 +10102,7 @@ operations, but it applies only to IEEE-754.
 > * dividing zero by zero and infinity by infinity,
 > * remainder (x REM y), where x is infinite or y is zero,
 > * square root of a negative number (excluding -0.0),
-> * converting a too large to represent floating value to an integer \[both signed and unsigned], e.g., int i \= INFINITY; unsigned int ui \= -1.0;
+> * converting a too large to represent floating value to an integer \[both signed and unsigned\], e.g., int i \= INFINITY; unsigned int ui \= -1.0;
 > * comparison with a relational operator (\<, \<\=, \>\=, \>) when (at least) one of the operands is a NaN.
 >
 > `FE_DIVBYZERO` should be a side-effect of dividing a non-zero finite number by
@@ -10356,7 +10358,7 @@ Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/do
 
 ### Summary
 
-According to 6.10.1p3, "each preprocessing token \[in a #if directive] is
+According to 6.10.1p3, "each preprocessing token \[in a #if directive\] is
 converted into a token." But what if, for example, the line contains an
 unmatched quote mark, or a preprocessing number like 4hello? How is such a
 preprocessing token converted into a token? No indication is given that the
@@ -10753,7 +10755,7 @@ Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/do
 
 Variably modified types are defined by 6.7.5#3:
 
-> \[#3] A *full declarator* is a declarator that is not part of another
+> \[#3\] A *full declarator* is a declarator that is not part of another
 > declarator. The end of a full declarator is a sequence point. If the nested
 > sequence of declarators in a full declarator contains a variable length array
 > type, the type specified by the full declarator is said to be *variably
@@ -10824,7 +10826,7 @@ variably modified.
 ### Technical Corrigendum
 
 \[**Note**, these are relative to wg14's
-[N1124](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1124.pdf).]
+[N1124](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1124.pdf).\]
 
 Change 3rd sentence in 6.7.5p3 from:
 
@@ -10871,7 +10873,7 @@ is used in the definition of composite types, 6.2.7#3:
 and in an example in 6.5.6#11 (where it doesn't cause problems), and in
 6.7.5.2#4 to define VLAs:
 
-> \[#4] If the size is not present, the array type is an incomplete type. If the
+> \[#4\] If the size is not present, the array type is an incomplete type. If the
 > size is `*` instead of being an expression, the array type is a variable length
 > array type of unspecified size, which can only be used in declarations with
 > function prototype scope;122) such arrays are nonetheless complete types. If the
@@ -11193,13 +11195,13 @@ Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/do
 
 C99 6.7.2#2 lists the valid combinations of type specifiers. 6.7.2#5 says:
 
-> \[#5] Each of the comma-separated sets designates the same type, except that for
-> bit-fields, it is implementation-defined whether the specifier `int` designates
-> the same type as `signed int` or the same type as `unsigned int`.
+> \[#5\] Each of the comma-separated sets designates the same type, except that
+> for bit-fields, it is implementation-defined whether the specifier `int`
+> designates the same type as `signed int` or the same type as `unsigned int`.
 
 6.7.2.1#4 says:
 
-> \[#4] A bit-field shall have a type that is a qualified or unqualified version
+> \[#4\] A bit-field shall have a type that is a qualified or unqualified version
 > of `_Bool`, `signed int`, `unsigned int`, or some other implementation-defined
 > type.
 
@@ -11587,7 +11589,7 @@ removed by the cast conversion.
 ### Details
 
 5.2.4.2.2 Characteristics of floating types \<float.h\>; Paragraph 7 \[after DR
-290]
+290\]
 
 > Except for assignment and cast (which remove all extra range and precision), the
 > values of operations with floating operands and values subject to the usual
@@ -12167,7 +12169,7 @@ DR 207 in TC2.
 
 In 7.3.1 of C99\+TC1\+TC2, replace paragraphs 3 and 4 with:
 
-> \[#3] The macros
+> \[#3\] The macros
 >
 > > ```c
 > > imaginary
@@ -12184,7 +12186,7 @@ In 7.3.1 of C99\+TC1\+TC2, replace paragraphs 3 and 4 with:
 > expression of type `const float _Imaginary` with the value of the imaginary
 > unit.
 >
-> \[#4] The macro
+> \[#4\] The macro
 >
 > > ```c
 > > I
@@ -12193,7 +12195,7 @@ In 7.3.1 of C99\+TC1\+TC2, replace paragraphs 3 and 4 with:
 > expands to `_Imaginary_I` or `_Complex_I`. If `_Imaginary_I` is not defined, `I`
 > shall expand to `_Complex_I`.
 >
-> \[#5] Notwithstanding the provisions of subclause 7.1.3, a program may undefine
+> \[#5\] Notwithstanding the provisions of subclause 7.1.3, a program may undefine
 > and perhaps then redefine the macros `complex`, `imaginary` and `I`.
 >
 > <sup>165</sup>A specification for imaginary types is in informative annex G.
@@ -12221,11 +12223,11 @@ Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/do
 
 5.1.1.2 #2 ("Translation phases") says:
 
-> \[#2] ...2. Each instance of a backslash character (`\`) immediately followed by
-> a new-line character is deleted, splicing physical source lines to form logical
-> source lines. Only the last backslash on any physical source line shall be
-> eligible for being part of such a splice. A source file that is not empty shall
-> end in a new-line character, which shall not be immediately preceded by a
+> \[#2\] ...2. Each instance of a backslash character (`\`) immediately followed
+> by a new-line character is deleted, splicing physical source lines to form
+> logical source lines. Only the last backslash on any physical source line shall
+> be eligible for being part of such a splice. A source file that is not empty
+> shall end in a new-line character, which shall not be immediately preceded by a
 > backslash character before any such splicing takes place.
 >
 > 3\. The source file is decomposed into preprocessing tokens<sup>6\)</sup> and
@@ -12243,21 +12245,21 @@ the file? And, generally, what the partial preprocessing tokens are?
 
 6.4.4.4 ("Character constants") says:
 
-> \[#3] The single-quote `'`, the double-quote `"`, the question-mark `?`, the
+> \[#3\] The single-quote `'`, the double-quote `"`, the question-mark `?`, the
 > backslash `\`, and arbitrary integer values are representable according to the
 > following table of escape sequences...
 >
-> \[#5] The octal digits that follow the backslash in an octal escape sequence are
-> taken to be part of the construction of a single character for an integer
+> \[#5\] The octal digits that follow the backslash in an octal escape sequence
+> are taken to be part of the construction of a single character for an integer
 > character constant or of a single wide character for a wide character
 > constant...
 >
-> \[#6] The hexadecimal digits that follow the backslash and the letter `x` in a
+> \[#6\] The hexadecimal digits that follow the backslash and the letter `x` in a
 > hexadecimal escape sequence are taken to be part of the construction of a single
 > character for an integer character constant or of a single wide character for a
 > wide character constant...
 >
-> \[#8] In addition, characters not in the basic character set are representable
+> \[#8\] In addition, characters not in the basic character set are representable
 > by universal character names and certain nongraphic characters are representable
 > by escape sequences consisting of the backslash `\` followed by a lowercase
 > letter: `\a`, `\b`, `\f`, `\n`, `\r`, `\t`, and `\v`.<sup>64\)</sup>
@@ -12268,7 +12270,7 @@ the file? And, generally, what the partial preprocessing tokens are?
 
 6.4 #3 ("Lexical elements") says:
 
-> \[#3] ...The categories of preprocessing tokens are: header names, identifiers,
+> \[#3\] ...The categories of preprocessing tokens are: header names, identifiers,
 > preprocessing numbers, character constants, string literals, punctuators, and
 > single non-white-space characters that do not lexically match the other
 > preprocessing token categories.<sup>58\)</sup> If a `'` or a `"` character
@@ -12285,7 +12287,7 @@ result is?
 
 6.10.9 #2 ("Pragma operator") gives the following example:
 
-> \[#2] EXAMPLE A directive of the form:
+> \[#2\] EXAMPLE A directive of the form:
 >
 > ```c
 > #pragma listing on "..\listing.dir"
@@ -13332,7 +13334,7 @@ that the existing usage of `BUFSIZ` be legitimatized, as follows.
 ### Suggested Technical Corrigendum
 
 Add the following sentence to the **Description** in subclause 7.19.7.7 (The
-`gets` function)], between the two existing sentences:
+`gets` function)\], between the two existing sentences:
 
 > At most `BUFSIZ-1` characters are copied to the array; excessive characters are
 > discarded.
@@ -13976,10 +13978,10 @@ Consider the code:
 Does such a variably modified compound literal at file scope violate any
 constraint? 6.7.5.2#2 says:
 
-> \[#2] Only an ordinary identifier (as defined in 6.2.3) with both block scope or
-> function prototype scope and no linkage shall have a variably modified type. If
-> an identifier is declared to be an object with static storage duration, it shall
-> not have a variable length array type.
+> \[#2\] Only an ordinary identifier (as defined in 6.2.3) with both block scope
+> or function prototype scope and no linkage shall have a variably modified type.
+> If an identifier is declared to be an object with static storage duration, it
+> shall not have a variable length array type.
 
 However, this only seems to constrain declarations of identifiers, not any other
 expression with variably modified type (such as a compound literal, inside or
@@ -14314,8 +14316,8 @@ Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/do
 
 6.7.8 paragraph 15 says:
 
-> \[#15] An array with element type compatible with `wchar_t` may be initialized
-> by a wide string literal, optionally enclosed in braces. \[...]
+> \[#15\] An array with element type compatible with `wchar_t` may be initialized
+> by a wide string literal, optionally enclosed in braces. \[...\]
 
 What of arrays with element type a qualified version of `wchar_t`? Is
 
@@ -14446,8 +14448,8 @@ Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/do
 
 The wording in 6.2.1p7:
 
-> Any other identifier \[except a struct/union tag or an enumeration constant] has
-> scope that begins just after the completion of its declarator.
+> Any other identifier \[except a struct/union tag or an enumeration constant\]
+> has scope that begins just after the completion of its declarator.
 
 permits the use of `q` in the following declaration of the parameter `r`.
 

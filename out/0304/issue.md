@@ -1,6 +1,6 @@
 ### Summary
 
-According to 6.10.1p3, "each preprocessing token \[in a #if directive] is
+According to 6.10.1p3, "each preprocessing token \[in a #if directive\] is
 converted into a token." But what if, for example, the line contains an
 unmatched quote mark, or a preprocessing number like 4hello? How is such a
 preprocessing token converted into a token? No indication is given that the

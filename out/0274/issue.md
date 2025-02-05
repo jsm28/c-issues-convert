@@ -2,27 +2,27 @@
 
 7.21.2.1#2 defines the operation of `memcpy` as:
 
-> \[#2] The `memcpy` function copies n characters from the object pointed to by
+> \[#2\] The `memcpy` function copies n characters from the object pointed to by
 > `s2` into the object pointed to by `s1`.
 
 7.21.2.3#2 defines the operation of `strcpy` as:
 
-> \[#2] The `strcpy` function copies the string pointed to by `s2` (including the
+> \[#2\] The `strcpy` function copies the string pointed to by `s2` (including the
 > terminating null character) into the array pointed to by `s1`.
 
 Other functions in 7.21 refer to either a string or a set of characters in the
 same way. The definition of "string" is in 7.1.1#1:
 
-> \[#1] A *string* is a contiguous sequence of characters terminated by and
+> \[#1\] A *string* is a contiguous sequence of characters terminated by and
 > including the first null character.
 
 and that of "character" is in 3.7:
 
-> 3.7 \[#1] character  
+> 3.7 \[#1\] character  
 > \<abstract\> member of a set of elements used for the organization, control, or
 > representation of data
 >
-> 3.7.1 \[#1] character single-byte character  
+> 3.7.1 \[#1\] character single-byte character  
 > \<C\> bit representation that fits in a byte
 
 However, none of this makes it clear whether "character" is to be interpreted as
@@ -40,7 +40,7 @@ as if they were plain `char`.
 
 Append a new paragraph to 7.21.1:
 
-> \[#3] Where a block of characters is accessed through a parameter of type `void
+> \[#3\] Where a block of characters is accessed through a parameter of type `void
 > *`, each character shall be interpreted as if it had type `unsigned char` (and
 > therefore every object representation is valid and has a different value). Where
 > it is accessed through a parameter of type `char *`, each character shall be

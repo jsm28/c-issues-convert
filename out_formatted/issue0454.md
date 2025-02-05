@@ -99,8 +99,8 @@ same object with the same value?
 * Add to 7.17.2.1 as a constraint or a new paragraph between 3 and 4:
 
   > If **ATOMIC\_VAR\_INIT** is used in a context other than initialization \[or
-  > assignment] of an atomic object of a compatible type of the value, the behaviour
-  > is undefined.
+  > assignment\] of an atomic object of a compatible type of the value, the
+  > behaviour is undefined.
 
 ---
 

@@ -72,7 +72,7 @@ the last two paragraphs of subclause 6.2.2.3 with:
 > compares unequal to any other value of the same pointer type. For each pointer
 > type, one particular undereferenceable pointer value is called the *null
 > pointer.* \[Footnote: Since there is only one such value, all null pointers of
-> the same type compare equal.]
+> the same type compare equal.\]
 >
 > An integral constant expression with the value 0, or such an expression cast to
 > type `void *`, is called a *null pointer constant.* If a null pointer constant
@@ -91,8 +91,8 @@ with:
 > undereferenceable pointer. Any pointer value returned by an allocation can be
 > passed to the free function; if the value is not a null pointer, it becomes
 > indeterminate. \[Footnote: A subsequent allocation may return a pointer value
-> with the same bit pattern, but a strictly conforming program can't detect this.]
-> The value of a pointer that refers to any part of a freed object is also
+> with the same bit pattern, but a strictly conforming program can't detect
+> this.\] The value of a pointer that refers to any part of a freed object is also
 > indeterminate.
 
 ---

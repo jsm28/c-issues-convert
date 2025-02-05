@@ -46,7 +46,7 @@ the necessary check that the type of the formal parameter is in fact a valid
 type) was determined *explicitly* to be undefined by the Committee, but there is
 no record of this in the CIB #1 document I have. \[CIB #1 is X3J11's earlier
 attempt to respond to Defect Reports #001-#035, then called Requests for
-Interpretation #001-#035.]
+Interpretation #001-#035.\]
 
 References: CIB #1, [RFI #13, question #1](issue0013.01.md); CIB #1, [RFI #17,
 question #14](issue0017.14.md); CIB #1, [RFI #17, question #15](issue0017.15.md)

@@ -21,11 +21,11 @@ Consider the code:
 
 Now, 6.5.2.2#6 reads:
 
-> \[#6] If the expression that denotes the called function has a type that does
+> \[#6\] If the expression that denotes the called function has a type that does
 > not include a prototype, the integer promotions are performed on each argument,
 > and arguments that have type float are promoted to double. These are called the
 > default argument promotions.  
-> \[...]  
+> \[...\]  
 > If the function is defined with a type that includes a prototype, and either the
 > prototype ends with an ellipsis (, ...) or the types of the arguments after
 > promotion are not compatible with the types of the parameters, the behavior is

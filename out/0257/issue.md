@@ -2,8 +2,8 @@
 
 6.5.2.3#5 reads:
 
-> \[#5] One special guarantee is made in order to simplify the use of unions: if a
-> union contains several structures that share a common initial sequence (see
+> \[#5\] One special guarantee is made in order to simplify the use of unions: if
+> a union contains several structures that share a common initial sequence (see
 > below), and if the union object currently contains one of these structures, it
 > is permitted to inspect the common initial part of any of them anywhere that a
 > declaration of the complete type of the union is visible. Two structures share a
@@ -97,7 +97,7 @@ to:
 To address the wider point about visibility, change the first part of 6.5.2.3#5
 to read:
 
-> \[#5] One special guarantee is made in order to simplify the use of unions: if
+> \[#5\] One special guarantee is made in order to simplify the use of unions: if
 > several structure types share a common initial sequence (see below), then
 > corresponding members are required to lie at the same offset from the start of
 > the union. Therefore if a union contains two or more such structures, the common

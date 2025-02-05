@@ -20,4 +20,4 @@ specification reflects the actual intent:
 
 **Suggested Technical Correction**  
 In subclause 7.18.4.1 paragraph 2, change the two occurrences of "and type" to
-"and \[un]signed integer type at least as wide as".
+"and \[un\]signed integer type at least as wide as".

@@ -75,7 +75,7 @@ Given:
 > union u2 {  
 > int x;  
 > long y;  
-> char ca\[2];  
+> char ca\[2\];  
 > };  
 >
 > int func2(void) {  

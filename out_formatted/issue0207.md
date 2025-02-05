@@ -77,11 +77,11 @@ Add a new subclause G.4.4
 > converting to an imaginary type, and by dividing by the imaginary unit when
 > converting to a real type).
 >
-> * one type is the type of the parameter, and the other type the type of the argument, when a function is called without a prototype in scope; \[\*]
+> * one type is the type of the parameter, and the other type the type of the argument, when a function is called without a prototype in scope; \[\*\]
 > * one type is the type of an argument corresponding to a trailing ellipsis in a function call and the other is specified as the type argument of an invocation of the `va_arg` macro;
 > * one type is the type of an argument to a function such as `fprintf` or the type pointed to by an argument to a function such as `fscanf`, and the other is the type implied by the corresponding conversion specifier.
 >
-> \[\*] If a prototype is in scope, conversion is as if by assignment and the
+> \[\*\] If a prototype is in scope, conversion is as if by assignment and the
 > value will be converted to zero.
 
 Replace G.6p1 with:
@@ -138,8 +138,8 @@ In 6.7.2 delete "`_Imaginary`" from paragraph 1, delete the cases:
 
 from paragraph 2, and change paragraph 3 to read:
 
-> \[#3] The type specifier `_Complex` shall not be used if the implementation does
-> not provide complex types.<sup>101</sup>
+> \[#3\] The type specifier `_Complex` shall not be used if the implementation
+> does not provide complex types.<sup>101</sup>
 
 Change footnote 101 to read:
 
@@ -148,7 +148,7 @@ Change footnote 101 to read:
 
 In 7.3.1 replace paragraphs 3 to 5 with:
 
-> \[#3] The macro
+> \[#3\] The macro
 >
 > > ```c
 > > I
@@ -156,18 +156,18 @@ In 7.3.1 replace paragraphs 3 to 5 with:
 >
 > expands to `_Complex_I`.<sup>162</sup>
 >
-> \[#4] Notwithstanding the provisions of subclause 7.1.3, a program may undefine
+> \[#4\] Notwithstanding the provisions of subclause 7.1.3, a program may undefine
 > and perhaps then redefine the macros `complex` and `I`.
 
 Add a new paragraph to the start of G.2:
 
-> \[#0] There is a new keyword `_Imaginary`, which is used to specify imaginary
+> \[#0\] There is a new keyword `_Imaginary`, which is used to specify imaginary
 > types. It is used as a type-specifier within declaration-specifiers in the same
 > way as `_Complex` is (thus "`_Imaginary float`" is a valid type name).
 
 Replace G.6 paragraph 1 with:
 
-> \[#1] The macro
+> \[#1\] The macro
 >
 > > ```c
 > > imaginary

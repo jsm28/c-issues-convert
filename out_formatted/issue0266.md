@@ -28,8 +28,8 @@ following is, or should be, the case ?
 
 6.5.3.4#2 says in part:
 
-> \[#2] The `sizeof` operator yields the size (in bytes) of its operand, which may
-> be an expression or the parenthesized name of a type. The size is determined
+> \[#2\] The `sizeof` operator yields the size (in bytes) of its operand, which
+> may be an expression or the parenthesized name of a type. The size is determined
 > from the type of the operand. The result is an integer.
 
 Note that there is no indication that the result may be other than the correct
@@ -46,14 +46,14 @@ One of:
    > If the size is too large to fit in an object of type `size_t`, it is replaced by
    > an implementation-defined value.
 3. Add a new constraint paragraph after 6.5.3.4#1:
-   > \[#1a] The `sizeof` operator shall not be applied to an operand whose size, in
+   > \[#1a\] The `sizeof` operator shall not be applied to an operand whose size, in
    > bytes, is larger than the maximum value of the type `size_t`.
 4. Append to 6.5.3.4#4:
    > The implementation shall ensure that the type `size_t` is large enough to hold
    > the result of all uses of the `sizeof` operator.
 
 \[Some of these are less than wonderful, and consideration should also be given
-to the interaction with VLAs.]
+to the interaction with VLAs.\]
 
 ---
 

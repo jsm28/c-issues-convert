@@ -20,15 +20,15 @@ Consider the code:
 
 The number of arguments in a macro invocation is defined by 6.10.3#11:
 
-> \[#11] The sequence of preprocessing tokens bounded by the outside-most matching
-> parentheses forms the list of arguments for the function-like macro. The
-> individual arguments within the list are separated by comma preprocessing
+> \[#11\] The sequence of preprocessing tokens bounded by the outside-most
+> matching parentheses forms the list of arguments for the function-like macro.
+> The individual arguments within the list are separated by comma preprocessing
 > tokens, but comma preprocessing tokens between matching inner parentheses do not
 > separate arguments.
 
 while 6.10.3#4 reads:
 
-> \[#4] If the identifier-list in the macro definition does not end with an
+> \[#4\] If the identifier-list in the macro definition does not end with an
 > ellipsis, the number of arguments (including those arguments consisting of no
 > preprocessing tokens) in an invocation of a function-like macro shall equal the
 > number of parameters in the macro definition. Otherwise, there shall be more

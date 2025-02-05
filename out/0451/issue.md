@@ -39,7 +39,7 @@ to the standard text was deemed necessary at the time, and all relevant text in
 the C11 standard is identical to that in the C99 standard.) The relevant quote
 from the committee response to Defect Report #260 is:
 
-> In the case of an indeterminate value \[...] the actual bit-pattern may change
+> In the case of an indeterminate value \[...\] the actual bit-pattern may change
 > without direct action of the program.
 
 A subtlety is that Defect Report #260 talks about bit-patterns and not about
@@ -61,7 +61,7 @@ anymore.
 Another argument against "instability" is that 6.8p3 states that "the values are
 stored in the objects (including *storing* an indeterminate value in objects
 without an initializer) each time the declaration is reached in the order of
-execution", and that 6.2.4p2 states that "An object \[...] retains its
+execution", and that 6.2.4p2 states that "An object \[...\] retains its
 last-*stored* value throughout its lifetime." The only way that one could read
 this in light of Defect Report #260 is if "retaining an indeterminate value" is
 read as meaning that the indeterminateness of the value is retained, without the

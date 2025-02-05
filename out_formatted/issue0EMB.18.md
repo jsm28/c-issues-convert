@@ -1,4 +1,4 @@
-## Issue 0EMB.18: \[Embedded C 2004 DR#18]
+## Issue 0EMB.18: \[Embedded C 2004 DR#18\]
 
 **This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.**
 

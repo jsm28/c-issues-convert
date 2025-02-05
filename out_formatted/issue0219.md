@@ -12,7 +12,7 @@ Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/do
 
 6.5 reads:
 
-> \[#6] \[...] If a value is copied into an object having no declared type using
+> \[#6\] \[...\] If a value is copied into an object having no declared type using
 > `memcpy` or `memmove`, or is copied as an array of character type, then the
 > effective type of the modified object for that access and for subsequent
 > accesses that do not modify the value is the effective type of the object from

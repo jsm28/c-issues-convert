@@ -62,7 +62,7 @@ Change the cited portion of 7.24.1#2 to:
 
 ### Suggested Technical Corrigendum 3
 
-*\[Italics are used to show the changed text.]*
+*\[Italics are used to show the changed text.\]*
 
 Change 7.19.6.1#7 and 7.24.2.1#7, l modifier, to:
 

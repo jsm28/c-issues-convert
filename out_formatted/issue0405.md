@@ -20,7 +20,7 @@ on a particular mutex. This is present in C\+\+11. The following is from
 > For purposes of determining the existence of a data race, these behave as atomic
 > operations (1.10). The lock and unlock operations on a single mutex shall appear
 > to occur in a single total order. \[ Note: this can be viewed as the
-> modification order (1.10) of the mutex. — end note ]
+> modification order (1.10) of the mutex. — end note \]
 
 The synchronisation in 7.26.4 is defined in terms of some order over these
 calls, even though none is specified, for instance 7.26.4.4p2 reads:

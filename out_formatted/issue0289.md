@@ -1,4 +1,4 @@
-## Issue 0289: Function prototype with \[restrict]
+## Issue 0289: Function prototype with \[restrict\]
 
 **This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.**
 

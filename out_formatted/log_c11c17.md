@@ -556,7 +556,7 @@ on a particular mutex. This is present in C\+\+11. The following is from
 > For purposes of determining the existence of a data race, these behave as atomic
 > operations (1.10). The lock and unlock operations on a single mutex shall appear
 > to occur in a single total order. \[ Note: this can be viewed as the
-> modification order (1.10) of the mutex. — end note ]
+> modification order (1.10) of the mutex. — end note \]
 
 The synchronisation in 7.26.4 is defined in terms of some order over these
 calls, even though none is specified, for instance 7.26.4.4p2 reads:
@@ -742,7 +742,7 @@ These changes have been proposed for the C\+\+ working draft:
   > > visible sequence of side effects of a value computation is unique given~~ <u>The
   > > set of side effects that a given evaluation might take its value from is also
   > > restricted by the rest of the rules described here, and in particular, by</u>
-  > > the coherence requirements below. —*end note*]
+  > > the coherence requirements below. —*end note*\]
 * For C 5.1.2.4 paragraph 24, the following C\+\+ discussion is relevant:
   > 1.10p20 should be changed as follows:
   >
@@ -752,7 +752,7 @@ These changes have been proposed for the C\+\+ working draft:
   > > intended reading is that there must exist an association of atomic loads with
   > > modifications they observe that, together with suitably chosen modification
   > > orders and the "happens before" relation derived as described above, satisfy the
-  > > resulting constraints as imposed here. —*end note* ]
+  > > resulting constraints as imposed here. —*end note* \]
 * For C 5.1.2.4 paragraph 27, the following C\+\+ discussion is relevant:
   > I think 1.10p22 should be changed as follows:
   >
@@ -764,7 +764,7 @@ These changes have been proposed for the C\+\+ working draft:
   > > of data member assignment that overwrite adjacent members in separate memory
   > > locations. Reordering of atomic loads in cases in which the atomics in question
   > > may alias is also generally precluded, since this may violate the ~~"visible
-  > > sequence"~~<u>coherence</u> rules. —*end note* ]
+  > > sequence"~~<u>coherence</u> rules. —*end note* \]
 * For C 7.17.3 paragraph 6, the following C\+\+ discussion is relevant:
   > I believe the 29.3p3 wording should change as follows:
   >
@@ -801,7 +801,7 @@ Oct 2014 meeting
    > visible sequence of side effects of a value computation is unique given~~ <u>The
    > set of side effects that a given evaluation might take its value from is also
    > restricted by the rest of the rules described here, and in particular, by</u>
-   > the coherence requirements below. —*end note*]
+   > the coherence requirements below. —*end note*\]
 2. Change 5.1.2.4 paragraph 24 as follows:
 
    > \[*Note:* The ~~visible sequence of side effects~~ <u>value observed by a load
@@ -810,7 +810,7 @@ Oct 2014 meeting
    > intended reading is that there must exist an association of atomic loads with
    > modifications they observe that, together with suitably chosen modification
    > orders and the “happens before” relation derived as described above, satisfy the
-   > resulting constraints as imposed here. —*end note*]
+   > resulting constraints as imposed here. —*end note*\]
 3. Change 5.1.2.4 paragraph 27 as follows:
 
    > \[*Note:* Compiler transformations that introduce assignments to a potentially
@@ -821,7 +821,7 @@ Oct 2014 meeting
    > of data member assignment that overwrite adjacent members in separate memory
    > locations. Reordering of atomic loads in cases in which the atomics in question
    > may alias is also generally precluded, since this may violate the ~~“visible
-   > sequence”~~ <u>coherence</u> rules. —*end note*]
+   > sequence”~~ <u>coherence</u> rules. —*end note*\]
 4. Change 7.17.3 paragraph 6 as follows:
 
    > There shall be a single total order *S* on all `memory_order_seq_cst`
@@ -1037,9 +1037,9 @@ Oct 2013 meeting
 * The corresponding words in proposed working draft for C\+\+ have changed, and the proposal above is no longer appropriate.
 * The corresponding paragraph reference for C is still 7.13.3 paragraph 11\.
 * The following change has been applied to the C\+\+ working draft:
-  > Change 29.3 \[atomics.order] paragraph 7 as indicated: *\[Drafting note: Note
+  > Change 29.3 \[atomics.order\] paragraph 7 as indicated: *\[Drafting note: Note
   > that the wording change intentionally does also replace the term atomic
-  > operation by atomic modification]*
+  > operation by atomic modification\]*
   >
   > -7- ~~For atomic operations *A* and *B* on an atomic object *M*, if there are
   > `memory_order_seq_cst` fences *X* and *Y* such that *A* is sequenced before *X*,
@@ -1069,11 +1069,11 @@ Oct 2014 meeting
 > does provide insight as to the necessary direction for a resolution to this DR.
 
 1. *\[Drafting note: The project editor is kindly asked to consider to replace in
-   1.10 \[intro.multithread] p17 the phrase "before an operation B on M" by "before
-   a modification B of M".]*
+   1.10 \[intro.multithread\] p17 the phrase "before an operation B on M" by
+   "before a modification B of M".\]*
 2. Change 7.17.3 paragraph 11 as indicated: *\[Drafting note: Note that the wording
    change intentionally does also replace the term atomic operation by atomic
-   modification]*
+   modification\]*
 
    ~~For atomic operations *A* and *B* on an atomic object *M*, if there are
    `memory_order_seq_cst` fences *X* and *Y* such that *A* is sequenced before *X*,
@@ -1092,7 +1092,7 @@ Oct 2014 meeting
    extreme care is used. In particular, `memory_order_seq_cst` fences ensure a
    total order only for the fences themselves. Fences cannot, in general, be used
    to restore sequential consistency for atomic operations with weaker ordering
-   specifications. —*end note* ]
+   specifications. —*end note* \]
 
 Apr 2015 meeting
 
@@ -1626,7 +1626,7 @@ Oct 2012 meeting
 > * 6.7.9 paragraphs 17-18 specify that each designator list affects only the smallest subobject to which the designator list refers. As a result, the second clause of paragraph 19 occurs once for the greater object as a whole, filling in only those parts of the whole object that were never initialized explicitly.
 > * **gcc** and some IBM compilers give the result as 0, although it is not believed that there is code dependent on this interpretation.
 > * David Keaton proposed [N1659](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1659.pdf).
-> * This, however, does not clarify the interpreted conflict of paragraph 19 "subobjects that are not initialized explicitly \[shall be set to zero]" applied "recursively to subaggregates" (paragraph 20).
+> * This, however, does not clarify the interpreted conflict of paragraph 19 "subobjects that are not initialized explicitly \[shall be set to zero\]" applied "recursively to subaggregates" (paragraph 20).
 > * Adding the example is a desired outcome.
 
 Apr 2013 meeting
@@ -3567,7 +3567,7 @@ This is clear. However the next paragraph K.3.5.3.5p3, says this about "s":
 
 "If there is a runtime-constraint violation, then if s is not a null  
 pointer and n is greater than zero and less than RSIZE\_MAX, then the  
-snprintf\_s function sets s\[0] to the null character."  
+snprintf\_s function sets s\[0\] to the null character."  
 
 So, it takes action when (n \< RSIZE\_MAX)
 
@@ -3577,7 +3577,7 @@ So, it takes action when (n \< RSIZE\_MAX)
 ```
 
 Question here is, what if n equals RSIZE\_MAX? Should we still reset  
-s\[0]?  
+s\[0\]?  
 
 If I were to say this looks like a typo, would WG14 agree with me?  
 
@@ -3585,7 +3585,7 @@ That is the text of K.3.5.3.5p3 should be:
 
 If there is a runtime-constraint violation, then if s is not a null  
 pointer and n is greater than zero and not greater than RSIZE\_MAX, then the  
-snprintf\_s function sets s\[0] to the null character.  
+snprintf\_s function sets s\[0\] to the null character.  
 
 This issue applies to all the sprintf family of routines in Annex K
 
@@ -3596,28 +3596,28 @@ Replace K.3.5.3.5p3 with:
 
 If there is a runtime-constraint violation, then if s is not a null  
 pointer and n is greater than zero and not greater than RSIZE\_MAX, then the  
-snprintf\_s function sets s\[0] to the null character.  
+snprintf\_s function sets s\[0\] to the null character.  
 
 sprintf\_s  
 Replace K.3.5.3.6p3 with:  
 
 If there is a runtime-constraint violation, then if s is not a null  
 pointer and n is greater than zero and not greater than RSIZE\_MAX, then the  
-sprintf\_s function sets s\[0] to the null character.  
+sprintf\_s function sets s\[0\] to the null character.  
 
 vsnprintf\_s  
 Replace K.3.5.3.12p3 with:  
 
 If there is a runtime-constraint violation, then if s is not a null  
 pointer and n is greater than zero and not greater than RSIZE\_MAX, then the  
-vsnprintf\_s function sets s\[0] to the null character.  
+vsnprintf\_s function sets s\[0\] to the null character.  
 
 vsprintf\_s  
 Replace K.3.5.3.13p3 with:  
 
 If there is a runtime-constraint violation, then if s is not a null  
 pointer and n is greater than zero and not greater than RSIZE\_MAX, then the  
-vsprintf\_s function sets s\[0] to the null character.
+vsprintf\_s function sets s\[0\] to the null character.
 
 ---
 
@@ -3653,28 +3653,28 @@ Replace K.3.5.3.5p3 with:
 
 If there is a runtime-constraint violation, then if s is not a null   pointer
 and n is greater than zero and not greater than RSIZE\_MAX, then the  
-snprintf\_s function sets s\[0] to the null character.
+snprintf\_s function sets s\[0\] to the null character.
 
 sprintf\_s  
 Replace K.3.5.3.6p3 with:  
 
 If there is a runtime-constraint violation, then if s is not a null pointer and
 n is greater than zero and not greater than RSIZE\_MAX, then the sprintf\_s
-function sets s\[0] to the null character.
+function sets s\[0\] to the null character.
 
 vsnprintf\_s  
 Replace K.3.5.3.12p3 with:  
 
 If there is a runtime-constraint violation, then if s is not a null pointer and
 n is greater than zero and not greater than RSIZE\_MAX, then the   vsnprintf\_s
-function sets s\[0] to the null character.
+function sets s\[0\] to the null character.
 
 vsprintf\_s  
 Replace K.3.5.3.13p3 with:  
 
 If there is a runtime-constraint violation, then if s is not a null   pointer
 and n is greater than zero and not greater than RSIZE\_MAX, then the  
-vsprintf\_s function sets s\[0] to the null character.
+vsprintf\_s function sets s\[0\] to the null character.
 
 
 </div>
@@ -3699,7 +3699,7 @@ Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n23
 
 gets\_s Annex K.3.5.4.1p2 says:  
 
-"If there is a runtime-constraint violation, s\[0] is set to the null  
+"If there is a runtime-constraint violation, s\[0\] is set to the null  
 character, and characters are read and discarded from stdin until a  
 new-line character is read, or end-of-file or a read error occurs."  
 
@@ -3707,7 +3707,7 @@ The runtime-constraint violation here can be caused by a null "s"
 pointer.  Should we discard the next input line even if `(s == NULL)` ?  
 
 The way it is written, it looks like the answer is yes.  However it is  
-not clear to us that that was the intent.  Note also that s\[0] cannot be  
+not clear to us that that was the intent.  Note also that s\[0\] cannot be  
 set to the null character when `s==NULL`.
 
 ### Suggested Technical Corrigendum
@@ -6299,7 +6299,7 @@ to the standard text was deemed necessary at the time, and all relevant text in
 the C11 standard is identical to that in the C99 standard.) The relevant quote
 from the committee response to Defect Report #260 is:
 
-> In the case of an indeterminate value \[...] the actual bit-pattern may change
+> In the case of an indeterminate value \[...\] the actual bit-pattern may change
 > without direct action of the program.
 
 A subtlety is that Defect Report #260 talks about bit-patterns and not about
@@ -6321,7 +6321,7 @@ anymore.
 Another argument against "instability" is that 6.8p3 states that "the values are
 stored in the objects (including *storing* an indeterminate value in objects
 without an initializer) each time the declaration is reached in the order of
-execution", and that 6.2.4p2 states that "An object \[...] retains its
+execution", and that 6.2.4p2 states that "An object \[...\] retains its
 last-*stored* value throughout its lifetime." The only way that one could read
 this in light of Defect Report #260 is if "retaining an indeterminate value" is
 read as meaning that the indeterminateness of the value is retained, without the
@@ -6583,7 +6583,7 @@ Given:
 > union u2 {  
 > int x;  
 > long y;  
-> char ca\[2];  
+> char ca\[2\];  
 > };  
 >
 > int func2(void) {  
@@ -6770,7 +6770,7 @@ Another issue is: While the test is atomic, and the set is atomic, it is not
 clear that both test and set are part of the same atomic operation.
 
 I have been told that the same issues exists in the C\+\+ standard (29.7
-\[atomics.flag]).
+\[atomics.flag\]).
 
 There was discussion of these topics on the WG14 reflector (around messages
 13067 to 13073\)
@@ -7014,8 +7014,8 @@ same object with the same value?
 * Add to 7.17.2.1 as a constraint or a new paragraph between 3 and 4:
 
   > If **ATOMIC\_VAR\_INIT** is used in a context other than initialization \[or
-  > assignment] of an atomic object of a compatible type of the value, the behaviour
-  > is undefined.
+  > assignment\] of an atomic object of a compatible type of the value, the
+  > behaviour is undefined.
 
 ---
 
@@ -8512,12 +8512,12 @@ Oct 2015 meeting
 >
 > > In 5.2.4.2.2#12, first item change the phrase
 > >
-> > maximum representable finite floating-point number, \[math formula]
+> > maximum representable finite floating-point number, \[math formula\]
 > >
 > > to
 > >
 > > maximum representable finite floating-point number; if that value is normalized,
-> > its value is \[math formula]
+> > its value is \[math formula\]
 
 Apr 2016 meeting
 
@@ -8561,12 +8561,12 @@ to:
 
 In 5.2.4.2.2#12, first item change the phrase
 
-> maximum representable finite floating-point number, \[ math formula ]
+> maximum representable finite floating-point number, \[ math formula \]
 
 to
 
 > maximum representable finite floating-point number; if that value is normalized,
-> its value is \[ math formula ],
+> its value is \[ math formula \],
 
 In 5.2.4.2.2#13, first item change the phrase
 
@@ -8855,7 +8855,7 @@ lock if it is not acquired by any thread), but C\+\+11 does (see 30.4.1.1/16):
 > An implementation may fail to obtain the lock even if it is not held by any
 > other thread. \[ Note: This spurious failure is normally uncommon, but allows
 > interesting implementations based on a simple compare and exchange (Clause 29).
-> \-- end note ] An implementation should ensure that try\_lock() does not
+> \-- end note \] An implementation should ensure that try\_lock() does not
 > consistently return false in the absence of contending mutex acquisitions.
 
 It might be better to point out explicitly that programmers should treat
@@ -9497,7 +9497,7 @@ into harmony with both, as well as with C\+\+.
 #### Motivation For Volatile
 
 The use case that motivated the introduction of the `volatile` keyword into C
-was a variant of the following snippet copied from early UNIX sources \[1]:
+was a variant of the following snippet copied from early UNIX sources \[1\]:
 
 ```c
     #define KL 0177560
@@ -9564,7 +9564,7 @@ The difference between the two forms of the rewritten loop is of historical
 interest: Early C compilers are said to have recognized the first pattern
 (without the `volatile` keyword) where the address used to access the register
 was a constant, and avoided the undesirable optimization for such accesses
-\[11]. However, they did not have the same ability when the access was through
+\[11\]. However, they did not have the same ability when the access was through
 pointer variable in which the address had been stored, especially not when the
 use of such a variable was far removed from the last assignment to it. The
 `volatile` keyword was intended to allow both forms of the loop to work as
@@ -9589,12 +9589,12 @@ are implemented. Each of the macros prevents the compiler optimization by
 casting the address of its argument to a `volatile T*` and accessing the
 variable via an lvalue of the `volatile`-qualified type `T` (where `T` is one of
 the standard scalar types). Other primitives gurantee memory synchronization and
-visibility but those are orthogonal to the subject of this paper. See \[3].
+visibility but those are orthogonal to the subject of this paper. See \[3\].
 
 Similar examples can be found in other system or embedded programs as well as in
 many other pre-C11 and pre-C\+\+11 code bases that don't rely on the Atomic
 types and operations newly inroduced in those standards. They are often cited in
-programming books \[4] and in online articles \[5, 6, 7, 8].
+programming books \[4\] and in online articles \[5, 6, 7, 8\].
 
 #### The Trouble With Volatile
 
@@ -9638,8 +9638,8 @@ to behave in an unexpected way.
 
 Although the problem with the C specification of volatile isn't well known, it
 isn't new. It was pointed out in the past, for example in *The trouble with
-volatile* \[9], Jonathan Corbet quotes Linus Torvalds, the author and maintainer
-of the Linux kernel, as saying:
+volatile* \[9\], Jonathan Corbet quotes Linus Torvalds, the author and
+maintainer of the Linux kernel, as saying:
 
 > Also, more importantly, "`volatile`" is on the wrong <u>part</u> of the whole
 > system. In C, it's "data" that is volatile, but that is insane. Data isn't
@@ -9676,7 +9676,7 @@ existing practice, there is also indication beyond the informative note in the
 C\+\+ standard that the words most likely do not reflect the original intent of
 the committee at the time they were crafted.
 
-The C99 Rationale \[10], in §6.7.3 makes it clear that the committee's intent
+The C99 Rationale \[10\], in §6.7.3 makes it clear that the committee's intent
 when introducing `volatile` was to specify semantics that apply to accesses to
 non-volatile objects via volatile-qualified lvalues and not just to accesses to
 objects explicitly declared with the qualifier:
@@ -12514,7 +12514,7 @@ Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n23
 The `offsetof` macro is specified in the normative text of the C11 standard in
 **§7.19 Common Definitions `<stddef.h>`** as follows:
 
-> The macros \[defined in the header `<stddef.h>`] are...
+> The macros \[defined in the header `<stddef.h>`\] are...
 >
 > > `offsetof(`*type*`,` *member-designator*`)`
 >
@@ -13550,12 +13550,12 @@ where the footnote is:
 
 In 5.2.4.2.2#14, change:
 
-> \[14] Conversion from (at least) `double` to decimal with `DECIMAL_DIG` digits
+> \[14\] Conversion from (at least) `double` to decimal with `DECIMAL_DIG` digits
 > and back should be the identity function.
 
 to:
 
-> \[14] Conversion between real floating type and decimal character sequence with
+> \[14\] Conversion between real floating type and decimal character sequence with
 > at most *T*`_DECIMAL_DIG` digits should be correctly rounded, where *T* is the
 > macro prefix for the type. This assures conversion from real floating type to
 > decimal character sequence with *T*`_DECIMAL_DIG` digits and back, using
@@ -13576,7 +13576,7 @@ In 5.2.4.2.2#16, at the end of EXAMPLE 2, omit:
 
 In 7.21.6.1#13 and 7.29.2.1#13, change:
 
-> \[13] For `e`, `E`, `f`, `F`, `g`, and `G` conversions, if the number of
+> \[13\] For `e`, `E`, `f`, `F`, `g`, and `G` conversions, if the number of
 > significant decimal digits is at most `DECIMAL_DIG`, then the result should be
 > correctly rounded.283) If the number of significant decimal digits is more than
 > `DECIMAL_DIG` but the source value is exactly representable with `DECIMAL_DIG`
@@ -13588,7 +13588,7 @@ In 7.21.6.1#13 and 7.29.2.1#13, change:
 
 to:
 
-> \[13] For `e`, `E`, `f`, `F`, `g`, and `G` conversions, if the number of
+> \[13\] For `e`, `E`, `f`, `F`, `g`, and `G` conversions, if the number of
 > significant decimal digits is at most the maximum value *M* of the
 > *T*`_DECIMAL_DIG` macros (defined in `<float.h>`), then the result should be
 > correctly rounded.283) If the number of significant decimal digits is more than
@@ -13601,7 +13601,7 @@ to:
 
 In 7.22.1.3#9 and 7.29.4.1.1#9, change:
 
-> \[9] If the subject sequence has the decimal form and at most `DECIMAL_DIG`
+> \[9\] If the subject sequence has the decimal form and at most `DECIMAL_DIG`
 > (defined in `<float.h>`) significant digits, the result should be correctly
 > rounded. If the subject sequence *D* has the decimal form and more than
 > `DECIMAL_DIG` significant digits, consider the two bounding, adjacent decimal
@@ -13614,7 +13614,7 @@ In 7.22.1.3#9 and 7.29.4.1.1#9, change:
 
 to:
 
-> \[9] If the subject sequence has the decimal form and at most *M* significant
+> \[9\] If the subject sequence has the decimal form and at most *M* significant
 > digits, where *M* is the maximum value of the *T*`_DECIMAL_DIG` macros (defined
 > in `<float.h>`), the result should be correctly rounded. If the subject sequence
 > *D* has the decimal form and more than *M* digits, consider the two bounding,
@@ -13650,10 +13650,10 @@ incorporated into C.
 
 In F.5, replace::
 
-> \[1] Conversion from the widest supported IEC 60559 format to decimal with
+> \[1\] Conversion from the widest supported IEC 60559 format to decimal with
 > **DECIMAL\_DIG** digits and back is the identity function.361)
 >
-> \[2] Conversions involving IEC 60559 formats follow all pertinent recommended
+> \[2\] Conversions involving IEC 60559 formats follow all pertinent recommended
 > practice. In particular, conversion between any supported IEC 60559 format and
 > decimal with `DECIMAL_DIG` or fewer significant digits is correctly rounded
 > (honoring the current rounding mode), which assures that conversion from the
@@ -13662,7 +13662,7 @@ In F.5, replace::
 
 with:
 
-> \[1] Conversions involving IEC 60559 formats follow all pertinent recommended
+> \[1\] Conversions involving IEC 60559 formats follow all pertinent recommended
 > practice. Conversion between any supported IEC 60559 format and decimal
 > character sequence with *M* or fewer significant digits is correctly rounded
 > (honoring the current rounding mode), where *M* is the maximum value of the
@@ -13723,7 +13723,7 @@ version of the same example. Is it also valid?
 Paragraph 13 of the section referenced above specifies that:
 
 > An unnamed member whose type specifier is a structure specifier with no tag is
-> called an anonymous structure; \[...]. The members of an anonymous structure or
+> called an anonymous structure; \[...\]. The members of an anonymous structure or
 > union are considered to be members of the containing structure or union. This
 > applies recursively if the containing structure or union is also anonymous.
 
@@ -13743,7 +13743,7 @@ However, another possible interpretation (offered in reflector message
 [SC22WG14.14299](https://www.open-std.org/jtc1/sc22/wg14/14299 "flexible array
 member in an anonymous struct")) is that:
 
-> *...the layout \[of a struct containing an anonymous struct] is exactly as if
+> *...the layout \[of a struct containing an anonymous struct\] is exactly as if
 > the contained anonymous structure or union had a name (so it acts like a
 > structure is declared as such even if contained in a union, or like a union if
 > declared as such even if contained in a structure), with all the usual

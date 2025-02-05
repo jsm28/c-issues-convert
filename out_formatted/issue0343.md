@@ -14,8 +14,8 @@ Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/do
 
 6.7.8 paragraph 15 says:
 
-> \[#15] An array with element type compatible with `wchar_t` may be initialized
-> by a wide string literal, optionally enclosed in braces. \[...]
+> \[#15\] An array with element type compatible with `wchar_t` may be initialized
+> by a wide string literal, optionally enclosed in braces. \[...\]
 
 What of arrays with element type a qualified version of `wchar_t`? Is
 

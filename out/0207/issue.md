@@ -65,11 +65,11 @@ Add a new subclause G.4.4
 > converting to an imaginary type, and by dividing by the imaginary unit when
 > converting to a real type).
 >
-> * one type is the type of the parameter, and the other type the type of the argument, when a function is called without a prototype in scope; \[\*]
+> * one type is the type of the parameter, and the other type the type of the argument, when a function is called without a prototype in scope; \[\*\]
 > * one type is the type of an argument corresponding to a trailing ellipsis in a function call and the other is specified as the type argument of an invocation of the `va_arg` macro;
 > * one type is the type of an argument to a function such as `fprintf` or the type pointed to by an argument to a function such as `fscanf`, and the other is the type implied by the corresponding conversion specifier.
 >
-> \[\*] If a prototype is in scope, conversion is as if by assignment and the
+> \[\*\] If a prototype is in scope, conversion is as if by assignment and the
 > value will be converted to zero.
 
 Replace G.6p1 with:

@@ -20,7 +20,7 @@ value is also copied. This question becomes an issue in the assignment statement
 `s` overlaps the structure that `f` obtained the returned value from?
 
 I ask this question because the GNU C compiler does not copy the structure in
-this case. When I filed the enclosed bug report \[omitted from this document],
+this case. When I filed the enclosed bug report \[omitted from this document\],
 Richard Stallman, the author of GNU C, replied that he didn't think that
 Standard C required the extra copy. I sympathize with Stallman's desire for
 efficient code, and I also would prefer that the C Standard did not require the
@@ -45,7 +45,7 @@ the return type of the function.**\***
 
 \[Footnote \*: The `return` statement is not an assignment. The overlap
 restriction in subclause 6.3.16.1 does not apply to the case of function
-return.]
+return.\]
 
 ***Add to subclause 6.6.6.4, page 80:***
 

@@ -57,30 +57,31 @@ that there are only two situations:
 
 Replace 6.6#2 with the following:
 
-> \[#2] A constant expression is one which is evaluated during translation rather
+> \[#2\] A constant expression is one which is evaluated during translation rather
 > than runtime, usually because the precise value will affect the translation in
 > some way.
 >
-> \[#2a] Where the implementation is required to provide a constant expression,
+> \[#2a\] Where the implementation is required to provide a constant expression,
 > that expression shall be one that, if included in the appropriate context, would
 > meet the requirements of this subclause and whose evaluation would not involve
 > undefined behaviour.
 >
-> \[#2b] An expression has a *translation-time value* if it meets the requirements
-> of this subclause and evaluation would not involve undefined behaviour. If the
-> expression fails to meet these requirements (for example, an integer expression
-> includes a comma operator or a cast to a floating type), the expression does not
-> have a translation-time value but nevertheless is not necessarily invalid.
+> \[#2b\] An expression has a *translation-time value* if it meets the
+> requirements of this subclause and evaluation would not involve undefined
+> behaviour. If the expression fails to meet these requirements (for example, an
+> integer expression includes a comma operator or a cast to a floating type), the
+> expression does not have a translation-time value but nevertheless is not
+> necessarily invalid.
 
 Change 6.3.2.3#3 to begin:
 
-> \[#3] An integer expression with the translation-time value 0, or such an
+> \[#3\] An integer expression with the translation-time value 0, or such an
 > expression cast to type `void *`, is called a *null pointer constant*.55)
 
 Change 6.7.5.2#1 to read, in part:
 
-> \[...] an integer type. If the expression has a translation-time value, it shall
-> be greater than zero. The element type \[...]
+> \[...\] an integer type. If the expression has a translation-time value, it
+> shall be greater than zero. The element type \[...\]
 
 the last part of #4 to read:
 
@@ -90,18 +91,18 @@ the last part of #4 to read:
 
 #5 to begin:
 
-> \[#5] If the size is an expression that does not have a translation-time value:
-> if it occurs \[...]
+> \[#5\] If the size is an expression that does not have a translation-time value:
+> if it occurs \[...\]
 
 #6 to begin:
 
-> \[#6] For two array types to be compatible, both shall have compatible element
+> \[#6\] For two array types to be compatible, both shall have compatible element
 > types, and if both size specifiers are present and have translation-time values,
 > then both size specifiers shall have the same value.
 
 and add a new example:
 
-> \[#11] EXAMPLE 5: an expression that contains only constants but breaks one or
+> \[#11\] EXAMPLE 5: an expression that contains only constants but breaks one or
 > more of the rules of 6.6 does not have a translation-time value. Therefore, in:
 >
 > ```c

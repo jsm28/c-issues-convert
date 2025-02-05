@@ -26,7 +26,7 @@ and (subclause 7.10.4.3, page 156):
 
 > The `exit` function causes normal program termination to occur.
 
-and (subclause 7.10.4.1, page 101 \[Rationale]):
+and (subclause 7.10.4.1, page 101 \[Rationale\]):
 
 > The Committee vacillated over whether a call to `abort` should return if the
 > signal `SIGABRT` is caught or ignored. To minimize astonishment, the final
@@ -57,7 +57,7 @@ and (subclause 8.2.3.12, page 161):
 > does not cause process termination. For the purposes of that specification, a
 > signal that is blocked shall not be considered caught.
 
-and (subclause B.8.2.3.12, page 291 \[Rationale]):
+and (subclause B.8.2.3.12, page 291 \[Rationale\]):
 
 > POSIX.1 intends that processing related to the `abort()` function will occur
 > unless “the signal `SIGABRT` is being caught, and the signal handler does not

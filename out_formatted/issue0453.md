@@ -37,7 +37,7 @@ Another issue is: While the test is atomic, and the set is atomic, it is not
 clear that both test and set are part of the same atomic operation.
 
 I have been told that the same issues exists in the C\+\+ standard (29.7
-\[atomics.flag]).
+\[atomics.flag\]).
 
 There was discussion of these topics on the WG14 reflector (around messages
 13067 to 13073\)

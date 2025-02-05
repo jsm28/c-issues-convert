@@ -13,8 +13,8 @@ Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/do
 
 In 6.10.3 Macro Replacement the text:
 
-> \[#5] The identifier `__VA_ARGS__` shall occur only in the replacement-list of a
-> function-like macro that uses the ellipsis notation in the arguments.
+> \[#5\] The identifier `__VA_ARGS__` shall occur only in the replacement-list of
+> a function-like macro that uses the ellipsis notation in the arguments.
 
 The word "arguments" should be "parameters".
 

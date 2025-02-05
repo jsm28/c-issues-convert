@@ -82,5 +82,5 @@ should be taken to only apply to those side effects which actually occur.
 
 In 6.7.8 paragraph 19, attach a footnote to "the same subobject":
 
-> \[\*] Any initializer for the subobject which is overridden and so not used to
+> \[\*\] Any initializer for the subobject which is overridden and so not used to
 > initialize that subobject might not be evaluated at all.

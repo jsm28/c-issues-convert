@@ -4,8 +4,8 @@
 
 The wording in 6.2.1p7:
 
-> Any other identifier \[except a struct/union tag or an enumeration constant] has
-> scope that begins just after the completion of its declarator.
+> Any other identifier \[except a struct/union tag or an enumeration constant\]
+> has scope that begins just after the completion of its declarator.
 
 permits the use of `q` in the following declaration of the parameter `r`.
 

@@ -107,7 +107,7 @@ case, if the returned pointer is not a null pointer and is used as an operand of
 the unary `*` operator, or of a `+` or `-` operator except one whose other
 operand has integral type and value zero, the behavior is undefined.
 
-\[See also [Defect Report #158](issue0158.md).]
+\[See also [Defect Report #158](issue0158.md).\]
 
 ---
 

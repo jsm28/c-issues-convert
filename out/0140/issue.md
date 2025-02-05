@@ -38,7 +38,7 @@ buffer size would fail.
 
 In the Rationale, it states “The general principle is to provide portable code
 with a means of requesting the most appropriate popular buffering style, but not
-to *require* an implementation to support these styles.” \[Emphasis added.]
+to *require* an implementation to support these styles.” \[Emphasis added.\]
 
 I interpret this as saying that `setvbuf` is an advisory call and need not be
 acted on. However, my questions above still stand as there seems to be no way of
