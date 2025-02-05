@@ -16,7 +16,7 @@ characters is many times the size of a char.  On Solaris it is 4 time the size.
 1 The header **\<stdint.h\>** defines a macro.  
 2 The macro is  
 
-**RSIZE\_MAX**  
+      **RSIZE\_MAX**  
 
 which expands to a value 386\) of type **size\_t**. Functions that have
 parameters of type **rsize\_t** consider it a runtime-constraint violation if
@@ -85,8 +85,8 @@ sizes.  And thus very different object sizes.  Maybe the constraint error for
 **wcsncpy\_s()** arguments **smax1** and **n** should be rewritten as something
 like:  
 
-Neither **(s1max \* sizeof(wchar\_t))** nor **(n \* sizeof(wchar\_t))** shall be
-greater than **RSIZE\_MAX**.  
+  Neither **(s1max \* sizeof(wchar\_t))** nor **(n \* sizeof(wchar\_t))** shall
+be greater than **RSIZE\_MAX**.  
 
 Other functions where max argument represent the number of  
 wchar\_t or multi-byte characters and may need similar changes  

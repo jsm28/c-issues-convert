@@ -84,16 +84,12 @@ state; *however, the default (zero) initialization for objects with static or
 thread-local storage duration initializes an `atomic_flag` to the clear state.*   
 EXAMPLE</ins>
 
-```c
-atomic_flag guard = { 0 };
-```
+<ins>`atomic_flag guard = { 0 };`</ins>
 
 If the committee would want to keep the macro `ATOMIC_FLAG_INIT` arround, a
 partial alternative to the above text would be to modify the text in 7.17.1
 
-```c
-ATOMIC_FLAG_INIT
-```
+<ins>`ATOMIC_FLAG_INIT`</ins>
 
 <ins>which expands to a default initializer (`{ 0 }` or equivalent) for an
 object of type `atomic_flag`.</ins>

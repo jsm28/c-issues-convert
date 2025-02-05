@@ -52,11 +52,11 @@ attribute syntax recognized by the compiler.
 
 Replace the first two bullets under 7.1.3p1 with:
 
-— All identifiers that begin with an underscore and either an uppercase letter
+  — All identifiers that begin with an underscore and either an uppercase letter
 or another underscore are always reserved for any use<ins>, except those
 identifiers which are lexically identical to keywords</ins>.
 <ins><sup>footnote)</sup></ins>  
-— All identifiers that begin with an underscore are always reserved for use as
+  — All identifiers that begin with an underscore are always reserved for use as
 identifiers with file scope in both the ordinary and tag name spaces<ins>,
 except those identifiers which are lexically identical to keywords</ins>.
 
@@ -79,12 +79,12 @@ Apr 2016 meeting
 
 Change §7.1.3.p1 first bullet from:
 
-> — All identifiers that begin with an underscore and either an uppercase letter
+>   — All identifiers that begin with an underscore and either an uppercase letter
 > or another underscore are always reserved for any use.
 
 to
 
-> — All identifiers that begin with an underscore and either an uppercase letter
+>   — All identifiers that begin with an underscore and either an uppercase letter
 > or another underscore are always reserved for any use, except those identifiers
 > which are lexically identical to keywords. <sup>footnote)</sup>
 >

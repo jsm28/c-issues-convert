@@ -41,8 +41,8 @@ does not declare an anonymous structure or anonymous union shall contain a
 *struct-declarator-list*". The syntax fragment its referring to is:
 
 > *struct-declaration:   
-> specifier-qualifier-list struct-declarator-list<sub>opt</sub>* `;`   
-> *static\_assert-declaration*
+>        specifier-qualifier-list struct-declarator-list<sub>opt</sub>* `;`   
+>        *static\_assert-declaration*
 
 In parsing the above code “`union U11 {int m11; float m12;} ;`” is a
 *struct-declaration*. It is believed that the intended reading is:

@@ -42,7 +42,8 @@ Similarly, a forward reference "variably modified type (6.7.5)" is desirable in�
 > > length array type* of unspecified size, which can only be used in declarations
 > > with function prototype scope; such arrays are nonetheless complete types.
 
-It might also be desirable to change the second sentence (adding italics) from:
+     It might also be desirable to change the second sentence (adding italics)
+from:
 
 > > If the size is an integer constant expression and the element type has a known
 > > constant size, the array type is not a variable length array type; otherwise,
@@ -59,7 +60,7 @@ It might also be desirable to change the second sentence (adding italics) from:
 > **Forward references:** statements (6.8), function calls (6.5.2.2), declarators
 > (6.7.5), array declarators (6.7.5.2), initialization (6.7.8).
 
-to
+    to
 
 > **Forward references:** statements (6.8), function calls (6.5.2.2), declarators
 > (6.7.5), array declarators (6.7.5.2), variable length array type (6.7.5.2),
@@ -75,7 +76,7 @@ to
 > (6.7), structure and union specifiers (6.7.2.1), type names (6.7.6), array
 > declarators (6.7.5.2).
 
-to
+    to
 
 > **Forward references:** common definitions `<stddef.h>` (7.17), declarations
 > (6.7), structure and union specifiers (6.7.2.1), type names (6.7.6), array
@@ -85,6 +86,6 @@ to
 
 > **Forward references:** tags (6.7.2.3).
 
-to
+    to
 
 > **Forward references:** tags (6.7.2.3), variably modified type (6.7.5).

@@ -1830,12 +1830,15 @@ class FixParagraphs(ProcessNesting):
         super().handle_end_tag(tag_name)
 
 
-def clean_general(doc, text, multiline_code_converted=False):
+def clean_general(doc, text, multiline_code_converted=False,
+                  combine_code=True):
     """Apply various general local cleanups.  If multiline_code_converted
     is False (the default), some whitespace-related cleanups are not
     applied to <code> in some places because whitespace may be
     significant there until multiline <code> has been turned into
-    <pre>."""
+    <pre>.  If combine_code is False, adjacent <code> are not combined;
+    this is for when <pre> needs to be split into <code> for each line because
+    of <u> contained therein."""
     clean_code_whitespace = multiline_code_converted or not is_c90_dr(doc)
     # Applying some of these cleanups may open opportunities for
     # applying further instances of the same or another cleanup, so
@@ -1859,6 +1862,8 @@ def clean_general(doc, text, multiline_code_converted=False):
     # Combine adjacent copies of the same inline tag (preserving
     # whitespace between those copies).
     for tag in ('b', 'code', 'i', 'u', 'del'):
+        if tag == 'code' and not combine_code:
+            continue
         text = re.sub(r'</%s>((?:\s|<br>|&nbsp;)*)<%s>' % (tag, tag), r'\1',
                       text)
     # Migrate whitespace at the start or end of an inline tag outside
@@ -1892,7 +1897,8 @@ def clean_general(doc, text, multiline_code_converted=False):
     if text == orig_text:
         return text
     else:
-        return clean_general(doc, text, multiline_code_converted)
+        return clean_general(doc, text, multiline_code_converted,
+                             combine_code)
 
 
 class MoveCodeOut(ProcessNesting):
@@ -1940,6 +1946,35 @@ class MoveCodeIn(ProcessNesting):
         if wrap_num:
             self.wrap_text_in[-1] = wrap_tags
             self.end_wrap[-1] = wrap_tags
+
+
+class MoveBrOutsideCode(ProcessNesting):
+
+    """Move <br> outside <code> (for cases where <pre> can't be used)."""
+
+    def handle_empty_tag(self, tag_name, end_tag, tag_attrs):
+        """Handle an empty tag."""
+        if tag_name != 'br':
+            super().handle_empty_tag(tag_name, end_tag, tag_attrs)
+            return
+        num_inlines = 0
+        seen_code = False
+        for outer_tag in reversed(self.open_tags):
+            if outer_tag in ('b', 'code', 'i', 'del', 'u'):
+                num_inlines += 1
+                if outer_tag == 'code':
+                    seen_code = True
+                    break
+            else:
+                break
+        if seen_code:
+            inline_tags = self.open_tags[-num_inlines:]
+            for t in reversed(inline_tags):
+                self.handle_end_tag(t)
+        super().handle_empty_tag(tag_name, end_tag, tag_attrs)
+        if seen_code:
+            for t in inline_tags:
+                self.handle_start_tag(t, [])
 
 
 def code_to_pre(text, is_c90):
@@ -2001,11 +2036,12 @@ def clean_code_to_pre(doc, text):
     return clean_general(doc, text, True)
 
 
-def clean_pre(doc, text, insert_blank_line=True):
+def clean_pre(doc, text, insert_blank_line=True, to_code_for_u=False):
     """Clean up <pre> contents and combine consecutive <pre> blocks.  If
     insert_blank_line is True (the default), a blank line is inserted
     between such blocks being combined unless the first ends with a
-    backslash."""
+    backslash.  If to_code_for_u is True, convert such a block to <code>
+    if it contains <u> tags, to avoid those tags being lost in Markdown."""
     rtext = text
     new_text_list = []
     while rtext:
@@ -2020,8 +2056,11 @@ def clean_pre(doc, text, insert_blank_line=True):
         pre_content = pre_content.rstrip()
         pre_content = re.sub(r'^\s*\n', '', pre_content)
         pre_lines = []
+        have_u = False
         for line in pre_content.split('\n'):
             line = line.rstrip()
+            if '<u>' in line:
+                have_u = True
             line_chars = []
             num_cols = 0
             while line:
@@ -2041,7 +2080,16 @@ def clean_pre(doc, text, insert_blank_line=True):
                     line = line[m.end(0):]
             line_chars.append(line)
             pre_lines.append(''.join(line_chars))
-        new_text_list.append('<pre>%s</pre>' % '\n'.join(pre_lines))
+        if to_code_for_u and have_u:
+            # At this point, there are no <a href> or other cases
+            # where replacing a space would be inappropriate.
+            code_lines = [line.replace(' ', '&nbsp;') for line in pre_lines]
+            code_lines = ['&nbsp;' if line == '' else line
+                          for line in code_lines]
+            new_text_list.append('<p><code>%s</code></p>'
+                                 % '<br>\n'.join(code_lines))
+        else:
+            new_text_list.append('<pre>%s</pre>' % '\n'.join(pre_lines))
     new_text_list.append(rtext)
     text = ''.join(new_text_list)
     text = re.sub(r'\\</pre>\s*<pre>', r'\\' '\n', text)
@@ -2239,7 +2287,12 @@ def clean_for_md(doc, text):
     # of paragraphs.
     text = OLLetterToP(doc, text).run()
     text = FixParagraphs(doc, text).run()
-    # Check for unsupported markup inside <pre>.
+    # Convert <pre> containing <u> to <code>, then check for
+    # unsupported markup inside <pre>.
+    text = clean_pre(doc, text, False, True)
+    text = MoveCodeIn(doc, text).run()
+    text = MoveBrOutsideCode(doc, text).run()
+    text = clean_general(doc, text, True, False)
     CheckPreInline(doc, text).run()
     return text
 

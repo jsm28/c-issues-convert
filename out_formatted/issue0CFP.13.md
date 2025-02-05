@@ -118,7 +118,7 @@ In clause 15, after the change to 7.25#6, add:
 > > >
 > > > —    Otherwise, the function invoked has the name of the macro (with no suffix).
 >
-> to:
+>  to:
 >
 > > \[6a\] The functions that round result to a narrower type have type-generic
 > > macros whose names are obtained by omitting any suffix from the function names.
@@ -244,7 +244,7 @@ In clause 15, after the change to 7.25#6, add:
 > > >
 > > > —    Otherwise, the function invoked has the name of the macro (with no suffix).
 >
-> to:
+>  to:
 >
 > > \[6a\] The functions that round result to a narrower type have type-generic
 > > macros whose names are obtained by omitting any suffix from the function names.

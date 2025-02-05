@@ -2,10 +2,10 @@
 
 getenv\_s, Annex K.3.6.2.1p2 under Runtime-constraints says:  
 
-**name** shall not be a null pointer. **maxsize** shall neither equal zero nor
+  **name** shall not be a null pointer. **maxsize** shall neither equal zero nor
 be greater than  
-**RSIZE\_MAX**. If **maxsize** is not equal to zero, then **value** shall not be
-a null pointer.  
+  **RSIZE\_MAX**. If **maxsize** is not equal to zero, then **value** shall not
+be a null pointer.  
 
 Question here is, if maxsize really cannot be 0\.  If it cannot be  
 zero, why does the 2nd sentence mention the condition that `(maxsize != 0)`?  
@@ -13,10 +13,10 @@ zero, why does the 2nd sentence mention the condition that `(maxsize != 0)`?
 If maxsize can be 0, it would allow the value to be a null pointer  
 which allows what is described in 6.6.2.1 of TR24731 (N1173) cleanly:  
 
-The **getenv\_s** function can also be used to get the size needed to  
-represent the result. This allows the programmer to first call  
-**getenv\_s** to get the size, then allocate a buffer to hold the result,  
-and then call **getenv\_s** again to actually obtain the result."  
+  The **getenv\_s** function can also be used to get the size needed to  
+  represent the result. This allows the programmer to first call  
+  **getenv\_s** to get the size, then allocate a buffer to hold the result,  
+  and then call **getenv\_s** again to actually obtain the result."  
 
 if maxsize can be zero, then I think we would get the length of string thusly:
 

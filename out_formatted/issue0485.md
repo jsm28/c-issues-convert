@@ -71,10 +71,8 @@ Change the beginning of the corresponding section, 7.17.2.1p2, to:
 <ins>7.17.2.1 The `ATOMIC_VAR_INIT` macro  
 **Synopsis**</ins>
 
-```c
-#include <stdatomic.h>
-#define ATOMIC_VAR_INIT(initializer)
-```
+<ins>`#include <stdatomic.h>`  
+`#define ATOMIC_VAR_INIT(initializer)`</ins>
 
 <ins>**Description**  
 The `ATOMIC_VAR_INIT` macro expands to a token sequence suitable for

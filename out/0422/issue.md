@@ -30,8 +30,6 @@ type.
 EXAMPLE All three of the following objects initially have an observable value of
 `0`.</ins>
 
-```c
-_Atomic(unsigned) A = { 0 };
-_Atomic(unsigned) B = ATOMIC_VAR_INIT(0u);
-static _Atomic(unsigned) C;
-```
+<ins>`_Atomic(unsigned) A = { 0 };`  
+`_Atomic(unsigned) B = ATOMIC_VAR_INIT(0u);`  
+`static _Atomic(unsigned) C;`</ins>

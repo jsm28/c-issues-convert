@@ -56,10 +56,10 @@ Change 6.7.5.2p1 to (i.e. the two occurrences of `static` to `__at_least`):
 Change 6.7.5.2p3 to (i.e. the three occurrences of `static` to `__at_least`, and
 bind `__at_least` with `assignment-expr` in the syntax):
 
-> > `D[` *type-qualifier-list<sub>opt</sub> assignment-expr<sub>opt</sub>* `]  
-> > D[ __at_least` *assignment-expr type-qualifier-list<sub>opt</sub>* `]  
-> > D[` *type-qualifier-list* `__at_least` *assignment-expr* `]  
-> > D[` *type-qualifier-list<sub>opt</sub>* `* ]`
+> > `D[` *type-qualifier-list<sub>opt</sub> assignment-expr<sub>opt</sub>* `]`  
+> > `D[ __at_least` *assignment-expr type-qualifier-list<sub>opt</sub>* `]`  
+> > `D[` *type-qualifier-list* `__at_least` *assignment-expr* `]`  
+> > `D[` *type-qualifier-list<sub>opt</sub>* `* ]`
 >
 > and the type specified for *ident* in the declaration "`T D`" is
 > "*derived-declarator-type-list T*", then the type specified for ident is
@@ -105,9 +105,9 @@ Change A.1.2 to add keyword:
 The new syntax groups '`__at_least` *assignment-expression*' together. For
 example:
 
-> `double a[restrict __at_least 3] /*` *ok* `*/  
-> double a[__at_least 3 restrict] /*` *ok* `*/  
-> double a[__at_least restrict 3] /*`*not ok* `*/`
+> `double a[restrict __at_least 3] /*` *ok* `*/`  
+> `double a[__at_least 3 restrict] /*` *ok* `*/`  
+> `double a[__at_least restrict 3] /*`*not ok* `*/`
 
 Conceptually, '`__at_least` *assignment-expression*' is a type qualifier. Even
 though we do not treat it as such in C9X, the potential is there for future

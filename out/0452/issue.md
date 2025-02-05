@@ -21,15 +21,15 @@ expressions. This can cause a behavioural difference, in loops.
 Given the following code:
 
 > union u1 {  
-> int x;  
-> long y;  
-> };  
+>     int x;  
+>     long y;  
+>   };  
 >
 > int func1(void) {  
-> union u1 o1 \= { 42 };  
+>     union u1 o1 \= { 42 };  
 >
-> return (0, o1).x;  
-> }
+>     return (0, o1).x;  
+>   }
 
 The `o1` sub-expression in the `return` statement's expression accesses the
 stored union value of the object. The comma operator's result has that value,
@@ -61,16 +61,16 @@ exactly "stored." `o1.x` is an lvalue, but `(0, o1).x` is not.
 Given:
 
 > union u2 {  
-> int x;  
-> long y;  
-> char ca\[2\];  
-> };  
+>     int x;  
+>     long y;  
+>     char ca\[2\];  
+>   };  
 >
 > int func2(void) {  
-> union u2 o2 \= { 42 };  
+>     union u2 o2 \= { 42 };  
 >
-> return (0, o2).x;  
-> }
+>     return (0, o2).x;  
+>   }
 
 We have a similar situation, even though `(0, o2)` yields an object with
 temporary lifetime. (Side question: Should the expression `(0, o2).ca == o2.ca`
@@ -81,16 +81,16 @@ representations of `int` and `long` are the same. If they are and if we have the
 following code:
 
 > union u3 {  
-> int x;  
-> long y;  
-> };  
+>     int x;  
+>     long y;  
+>   };  
 >
 > long func3(void) {  
-> union u3 o3;  
+>     union u3 o3;  
 >
-> o3.x \= 42;  
-> return (0, o3).y;  
-> }
+>     o3.x \= 42;  
+>     return (0, o3).y;  
+>   }
 
 Are we violating the effective type rules? We might expect type-punning to be
 relevant here and the membership operator to be accessing a member value of a
@@ -103,16 +103,16 @@ If the answer is no, then this can cause the loss of an optimization opportunity
 in the following code:
 
 > struct s4 {  
-> int x;  
-> float f;  
-> };  
+>     int x;  
+>     float f;  
+>   };  
 >
 > void func4(long \* lp, struct s4 \* s4p) {  
-> int c;  
+>     int c;  
 >
-> for (c \= 0; c \< (0, \*s4p).i; \+\+c)  
-> --\*lp;  
-> }
+>     for (c \= 0; c \< (0, \*s4p).i; \+\+c)  
+>       --\*lp;  
+>   }
 
 We do not expect `*lp` to alias into `*s4p`, so we might optimize this loop such
 that `(0, *s4p).i` is only computed once. If, in another translation unit, it

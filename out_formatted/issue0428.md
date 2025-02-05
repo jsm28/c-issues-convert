@@ -47,10 +47,10 @@ If I were to say this looks like a typo, would WG14 agree with me?
 
 That is the text of K.3.5.3.5p3 should be:  
 
-If there is a runtime-constraint violation, then if s is not a null  
-pointer and n is greater than zero and not greater than RSIZE\_MAX, then the  
-snprintf\_s function sets s\[0\] to the null character.  
-
+  If there is a runtime-constraint violation, then if s is not a null  
+  pointer and n is greater than zero and not greater than RSIZE\_MAX, then the  
+  snprintf\_s function sets s\[0\] to the null character.  
+    
 This issue applies to all the sprintf family of routines in Annex K
 
 ### Suggested Technical Corrigendum
@@ -58,30 +58,30 @@ This issue applies to all the sprintf family of routines in Annex K
 snprintf\_s  
 Replace K.3.5.3.5p3 with:  
 
-If there is a runtime-constraint violation, then if s is not a null  
-pointer and n is greater than zero and not greater than RSIZE\_MAX, then the  
-snprintf\_s function sets s\[0\] to the null character.  
+  If there is a runtime-constraint violation, then if s is not a null  
+  pointer and n is greater than zero and not greater than RSIZE\_MAX, then the  
+  snprintf\_s function sets s\[0\] to the null character.  
 
 sprintf\_s  
 Replace K.3.5.3.6p3 with:  
 
-If there is a runtime-constraint violation, then if s is not a null  
-pointer and n is greater than zero and not greater than RSIZE\_MAX, then the  
-sprintf\_s function sets s\[0\] to the null character.  
+  If there is a runtime-constraint violation, then if s is not a null  
+  pointer and n is greater than zero and not greater than RSIZE\_MAX, then the  
+  sprintf\_s function sets s\[0\] to the null character.  
 
 vsnprintf\_s  
 Replace K.3.5.3.12p3 with:  
 
-If there is a runtime-constraint violation, then if s is not a null  
-pointer and n is greater than zero and not greater than RSIZE\_MAX, then the  
-vsnprintf\_s function sets s\[0\] to the null character.  
+  If there is a runtime-constraint violation, then if s is not a null  
+  pointer and n is greater than zero and not greater than RSIZE\_MAX, then the  
+  vsnprintf\_s function sets s\[0\] to the null character.  
 
 vsprintf\_s  
 Replace K.3.5.3.13p3 with:  
 
-If there is a runtime-constraint violation, then if s is not a null  
-pointer and n is greater than zero and not greater than RSIZE\_MAX, then the  
-vsprintf\_s function sets s\[0\] to the null character.
+  If there is a runtime-constraint violation, then if s is not a null  
+  pointer and n is greater than zero and not greater than RSIZE\_MAX, then the  
+  vsprintf\_s function sets s\[0\] to the null character.
 
 ---
 

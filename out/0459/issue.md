@@ -27,10 +27,8 @@ overload of each function that takes a `const volatile` pointer.
 In section 7.17.7.2, paragraph 1, **Synopsis**, modify the declarations of the
 `atomic_load` pair of generic functions as indicated below:
 
-> ```c
->           #include <stdatomic.h>
->
->           C atomic_load(const volatile A *object);
->           C atomic_load_explicit(const volatile A *object,
->                                  memory_order order);
-> ```
+> `#include <stdatomic.h>`  
+>     
+>           *`C`* `atomic_load(`<ins>`const`</ins> `volatile` *`A`* `*object);`  
+>           *`C`* `atomic_load_explicit(`<ins>`const`</ins> `volatile` *`A`* `*object,`  
+>                                  `memory_order order);`

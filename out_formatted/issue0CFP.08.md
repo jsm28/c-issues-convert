@@ -46,7 +46,8 @@ In 12.5, change:
 
 to:
 
-> where *n* is the number of significant digits in the coefficient *c*
+>                   where *n* is the number of significant digits in the
+> coefficient *c*
 
 ---
 
@@ -67,4 +68,5 @@ In 12.5, change:
 
 to:
 
-> where *n* is the number of significant digits in the coefficient *c*
+>                   where *n* is the number of significant digits in the
+> coefficient *c*

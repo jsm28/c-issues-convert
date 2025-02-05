@@ -17,10 +17,10 @@ Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n23
 
 7.17.7.4p2 Description  
 
-Atomically, compares the value pointed to by **object** for equality with  
-that in **expected**, and if true, replaces the value pointed to by **object**  
-with **desired**, and if false, updates the value in expected with the  
-value pointed to by **object**.  
+  Atomically, compares the value pointed to by **object** for equality with  
+  that in **expected**, and if true, replaces the value pointed to by **object**  
+  with **desired**, and if false, updates the value in expected with the  
+  value pointed to by **object**.  
 
 When **object** is an atomic struct type and **expected** is the corresponding  
 non-atomic struct type.  What does it mean to compare two struct types  

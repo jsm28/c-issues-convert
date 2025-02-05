@@ -2420,16 +2420,12 @@ state; *however, the default (zero) initialization for objects with static or
 thread-local storage duration initializes an `atomic_flag` to the clear state.*   
 EXAMPLE</ins>
 
-```c
-atomic_flag guard = { 0 };
-```
+<ins>`atomic_flag guard = { 0 };`</ins>
 
 If the committee would want to keep the macro `ATOMIC_FLAG_INIT` arround, a
 partial alternative to the above text would be to modify the text in 7.17.1
 
-```c
-ATOMIC_FLAG_INIT
-```
+<ins>`ATOMIC_FLAG_INIT`</ins>
 
 <ins>which expands to a default initializer (`{ 0 }` or equivalent) for an
 object of type `atomic_flag`.</ins>
@@ -2504,11 +2500,9 @@ type.
 EXAMPLE All three of the following objects initially have an observable value of
 `0`.</ins>
 
-```c
-_Atomic(unsigned) A = { 0 };
-_Atomic(unsigned) B = ATOMIC_VAR_INIT(0u);
-static _Atomic(unsigned) C;
-```
+<ins>`_Atomic(unsigned) A = { 0 };`  
+`_Atomic(unsigned) B = ATOMIC_VAR_INIT(0u);`  
+`static _Atomic(unsigned) C;`</ins>
 
 ---
 
@@ -3587,10 +3581,10 @@ If I were to say this looks like a typo, would WG14 agree with me?
 
 That is the text of K.3.5.3.5p3 should be:  
 
-If there is a runtime-constraint violation, then if s is not a null  
-pointer and n is greater than zero and not greater than RSIZE\_MAX, then the  
-snprintf\_s function sets s\[0\] to the null character.  
-
+  If there is a runtime-constraint violation, then if s is not a null  
+  pointer and n is greater than zero and not greater than RSIZE\_MAX, then the  
+  snprintf\_s function sets s\[0\] to the null character.  
+    
 This issue applies to all the sprintf family of routines in Annex K
 
 ### Suggested Technical Corrigendum
@@ -3598,30 +3592,30 @@ This issue applies to all the sprintf family of routines in Annex K
 snprintf\_s  
 Replace K.3.5.3.5p3 with:  
 
-If there is a runtime-constraint violation, then if s is not a null  
-pointer and n is greater than zero and not greater than RSIZE\_MAX, then the  
-snprintf\_s function sets s\[0\] to the null character.  
+  If there is a runtime-constraint violation, then if s is not a null  
+  pointer and n is greater than zero and not greater than RSIZE\_MAX, then the  
+  snprintf\_s function sets s\[0\] to the null character.  
 
 sprintf\_s  
 Replace K.3.5.3.6p3 with:  
 
-If there is a runtime-constraint violation, then if s is not a null  
-pointer and n is greater than zero and not greater than RSIZE\_MAX, then the  
-sprintf\_s function sets s\[0\] to the null character.  
+  If there is a runtime-constraint violation, then if s is not a null  
+  pointer and n is greater than zero and not greater than RSIZE\_MAX, then the  
+  sprintf\_s function sets s\[0\] to the null character.  
 
 vsnprintf\_s  
 Replace K.3.5.3.12p3 with:  
 
-If there is a runtime-constraint violation, then if s is not a null  
-pointer and n is greater than zero and not greater than RSIZE\_MAX, then the  
-vsnprintf\_s function sets s\[0\] to the null character.  
+  If there is a runtime-constraint violation, then if s is not a null  
+  pointer and n is greater than zero and not greater than RSIZE\_MAX, then the  
+  vsnprintf\_s function sets s\[0\] to the null character.  
 
 vsprintf\_s  
 Replace K.3.5.3.13p3 with:  
 
-If there is a runtime-constraint violation, then if s is not a null  
-pointer and n is greater than zero and not greater than RSIZE\_MAX, then the  
-vsprintf\_s function sets s\[0\] to the null character.
+  If there is a runtime-constraint violation, then if s is not a null  
+  pointer and n is greater than zero and not greater than RSIZE\_MAX, then the  
+  vsprintf\_s function sets s\[0\] to the null character.
 
 ---
 
@@ -3766,10 +3760,10 @@ Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n23
 
 getenv\_s, Annex K.3.6.2.1p2 under Runtime-constraints says:  
 
-**name** shall not be a null pointer. **maxsize** shall neither equal zero nor
+  **name** shall not be a null pointer. **maxsize** shall neither equal zero nor
 be greater than  
-**RSIZE\_MAX**. If **maxsize** is not equal to zero, then **value** shall not be
-a null pointer.  
+  **RSIZE\_MAX**. If **maxsize** is not equal to zero, then **value** shall not
+be a null pointer.  
 
 Question here is, if maxsize really cannot be 0\.  If it cannot be  
 zero, why does the 2nd sentence mention the condition that `(maxsize != 0)`?  
@@ -3777,10 +3771,10 @@ zero, why does the 2nd sentence mention the condition that `(maxsize != 0)`?
 If maxsize can be 0, it would allow the value to be a null pointer  
 which allows what is described in 6.6.2.1 of TR24731 (N1173) cleanly:  
 
-The **getenv\_s** function can also be used to get the size needed to  
-represent the result. This allows the programmer to first call  
-**getenv\_s** to get the size, then allocate a buffer to hold the result,  
-and then call **getenv\_s** again to actually obtain the result."  
+  The **getenv\_s** function can also be used to get the size needed to  
+  represent the result. This allows the programmer to first call  
+  **getenv\_s** to get the size, then allocate a buffer to hold the result,  
+  and then call **getenv\_s** again to actually obtain the result."  
 
 if maxsize can be zero, then I think we would get the length of string thusly:
 
@@ -3863,10 +3857,10 @@ Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n23
 
 7.17.7.4p2 Description  
 
-Atomically, compares the value pointed to by **object** for equality with  
-that in **expected**, and if true, replaces the value pointed to by **object**  
-with **desired**, and if false, updates the value in expected with the  
-value pointed to by **object**.  
+  Atomically, compares the value pointed to by **object** for equality with  
+  that in **expected**, and if true, replaces the value pointed to by **object**  
+  with **desired**, and if false, updates the value in expected with the  
+  value pointed to by **object**.  
 
 When **object** is an atomic struct type and **expected** is the corresponding  
 non-atomic struct type.  What does it mean to compare two struct types  
@@ -4130,7 +4124,7 @@ characters is many times the size of a char.  On Solaris it is 4 time the size.
 1 The header **\<stdint.h\>** defines a macro.  
 2 The macro is  
 
-**RSIZE\_MAX**  
+      **RSIZE\_MAX**  
 
 which expands to a value 386\) of type **size\_t**. Functions that have
 parameters of type **rsize\_t** consider it a runtime-constraint violation if
@@ -4199,8 +4193,8 @@ sizes.  And thus very different object sizes.  Maybe the constraint error for
 **wcsncpy\_s()** arguments **smax1** and **n** should be rewritten as something
 like:  
 
-Neither **(s1max \* sizeof(wchar\_t))** nor **(n \* sizeof(wchar\_t))** shall be
-greater than **RSIZE\_MAX**.  
+  Neither **(s1max \* sizeof(wchar\_t))** nor **(n \* sizeof(wchar\_t))** shall
+be greater than **RSIZE\_MAX**.  
 
 Other functions where max argument represent the number of  
 wchar\_t or multi-byte characters and may need similar changes  
@@ -6546,15 +6540,15 @@ expressions. This can cause a behavioural difference, in loops.
 Given the following code:
 
 > union u1 {  
-> int x;  
-> long y;  
-> };  
+>     int x;  
+>     long y;  
+>   };  
 >
 > int func1(void) {  
-> union u1 o1 \= { 42 };  
+>     union u1 o1 \= { 42 };  
 >
-> return (0, o1).x;  
-> }
+>     return (0, o1).x;  
+>   }
 
 The `o1` sub-expression in the `return` statement's expression accesses the
 stored union value of the object. The comma operator's result has that value,
@@ -6586,16 +6580,16 @@ exactly "stored." `o1.x` is an lvalue, but `(0, o1).x` is not.
 Given:
 
 > union u2 {  
-> int x;  
-> long y;  
-> char ca\[2\];  
-> };  
+>     int x;  
+>     long y;  
+>     char ca\[2\];  
+>   };  
 >
 > int func2(void) {  
-> union u2 o2 \= { 42 };  
+>     union u2 o2 \= { 42 };  
 >
-> return (0, o2).x;  
-> }
+>     return (0, o2).x;  
+>   }
 
 We have a similar situation, even though `(0, o2)` yields an object with
 temporary lifetime. (Side question: Should the expression `(0, o2).ca == o2.ca`
@@ -6606,16 +6600,16 @@ representations of `int` and `long` are the same. If they are and if we have the
 following code:
 
 > union u3 {  
-> int x;  
-> long y;  
-> };  
+>     int x;  
+>     long y;  
+>   };  
 >
 > long func3(void) {  
-> union u3 o3;  
+>     union u3 o3;  
 >
-> o3.x \= 42;  
-> return (0, o3).y;  
-> }
+>     o3.x \= 42;  
+>     return (0, o3).y;  
+>   }
 
 Are we violating the effective type rules? We might expect type-punning to be
 relevant here and the membership operator to be accessing a member value of a
@@ -6628,16 +6622,16 @@ If the answer is no, then this can cause the loss of an optimization opportunity
 in the following code:
 
 > struct s4 {  
-> int x;  
-> float f;  
-> };  
+>     int x;  
+>     float f;  
+>   };  
 >
 > void func4(long \* lp, struct s4 \* s4p) {  
-> int c;  
+>     int c;  
 >
-> for (c \= 0; c \< (0, \*s4p).i; \+\+c)  
-> --\*lp;  
-> }
+>     for (c \= 0; c \< (0, \*s4p).i; \+\+c)  
+>       --\*lp;  
+>   }
 
 We do not expect `*lp` to alias into `*s4p`, so we might optimize this loop such
 that `(0, *s4p).i` is only computed once. If, in another translation unit, it
@@ -7435,13 +7429,11 @@ overload of each function that takes a `const volatile` pointer.
 In section 7.17.7.2, paragraph 1, **Synopsis**, modify the declarations of the
 `atomic_load` pair of generic functions as indicated below:
 
-> ```c
->           #include <stdatomic.h>
->
->           C atomic_load(const volatile A *object);
->           C atomic_load_explicit(const volatile A *object,
->                                  memory_order order);
-> ```
+> `#include <stdatomic.h>`  
+>     
+>           *`C`* `atomic_load(`<ins>`const`</ins> `volatile` *`A`* `*object);`  
+>           *`C`* `atomic_load_explicit(`<ins>`const`</ins> `volatile` *`A`* `*object,`  
+>                                  `memory_order order);`
 
 ---
 
@@ -7684,31 +7676,29 @@ non-`const` object is modied in the program while it's accessed via a
 
 The comments in the following example should make this distinction clear:
 
-> ```c
-> const int safe = (1 << SIGINT) | (1 << SIGQUIT);
->       int unsafe = (1 << SIGHUP) | (1 << SIGTERM);
->
-> volatile sig_atomic_t sigcount [2];
->
-> void handler (int signo) {
->
->     const int *pmask;   // pointer to const int
->
->     // taking the address of any object is safe and should be allowed
->     pmask = &safe;
->
->     // access to safe should be allowed since it's a const object
->     if ((1 << signo) & *pmask)
->         ++sigcount [0];
->
->     // safe and should be allowed
->     pmask = &unsafe;
->
->     // access to unsafe remains undefined since it's not a const object
->     if ((1 << signo) & *pmask)
->         ++sigcount [1];
-> }
-> ```
+> `const int safe = (1 << SIGINT) | (1 << SIGQUIT);`  
+>       `int unsafe = (1 << SIGHUP) | (1 << SIGTERM);`  
+>     
+> `volatile sig_atomic_t sigcount [2];`  
+>     
+> `void handler (int signo) {`  
+>     
+>     `const int *pmask;   // pointer to` <ins>`const`</ins> `int`  
+>     
+>     `// taking the address of any object is safe and should be allowed`  
+>     `pmask = &safe;`  
+>     
+>     `// access to safe should be allowed since it's a` <ins>`const object`</ins>  
+>     `if ((1 << signo) & *pmask)`  
+>         `++sigcount [0];`  
+>     
+>     `// safe and should be allowed`  
+>     `pmask = &unsafe;`  
+>     
+>     `// access to unsafe remains undefined since it's` <ins>`not a const object`</ins>  
+>     `if ((1 << signo) & *pmask)`  
+>         `++sigcount [1];`  
+> `}`
 
 **Missing restriction to access other functions' local objects**
 
@@ -11012,10 +11002,8 @@ Change the beginning of the corresponding section, 7.17.2.1p2, to:
 <ins>7.17.2.1 The `ATOMIC_VAR_INIT` macro  
 **Synopsis**</ins>
 
-```c
-#include <stdatomic.h>
-#define ATOMIC_VAR_INIT(initializer)
-```
+<ins>`#include <stdatomic.h>`  
+`#define ATOMIC_VAR_INIT(initializer)`</ins>
 
 <ins>**Description**  
 The `ATOMIC_VAR_INIT` macro expands to a token sequence suitable for
@@ -11865,11 +11853,11 @@ attribute syntax recognized by the compiler.
 
 Replace the first two bullets under 7.1.3p1 with:
 
-— All identifiers that begin with an underscore and either an uppercase letter
+  — All identifiers that begin with an underscore and either an uppercase letter
 or another underscore are always reserved for any use<ins>, except those
 identifiers which are lexically identical to keywords</ins>.
 <ins><sup>footnote)</sup></ins>  
-— All identifiers that begin with an underscore are always reserved for use as
+  — All identifiers that begin with an underscore are always reserved for use as
 identifiers with file scope in both the ordinary and tag name spaces<ins>,
 except those identifiers which are lexically identical to keywords</ins>.
 
@@ -11892,12 +11880,12 @@ Apr 2016 meeting
 
 Change §7.1.3.p1 first bullet from:
 
-> — All identifiers that begin with an underscore and either an uppercase letter
+>   — All identifiers that begin with an underscore and either an uppercase letter
 > or another underscore are always reserved for any use.
 
 to
 
-> — All identifiers that begin with an underscore and either an uppercase letter
+>   — All identifiers that begin with an underscore and either an uppercase letter
 > or another underscore are always reserved for any use, except those identifiers
 > which are lexically identical to keywords. <sup>footnote)</sup>
 >
@@ -11955,8 +11943,8 @@ does not declare an anonymous structure or anonymous union shall contain a
 *struct-declarator-list*". The syntax fragment its referring to is:
 
 > *struct-declaration:   
-> specifier-qualifier-list struct-declarator-list<sub>opt</sub>* `;`   
-> *static\_assert-declaration*
+>        specifier-qualifier-list struct-declarator-list<sub>opt</sub>* `;`   
+>        *static\_assert-declaration*
 
 In parsing the above code “`union U11 {int m11; float m12;} ;`” is a
 *struct-declaration*. It is believed that the intended reading is:
@@ -13560,7 +13548,7 @@ where the footnote is:
 
 In 5.2.4.2.2#14, change:
 
-> \[14\] Conversion from (at least) `double` to decimal with `DECIMAL_DIG` digits
+>  \[14\] Conversion from (at least) `double` to decimal with `DECIMAL_DIG` digits
 > and back should be the identity function.
 
 to:

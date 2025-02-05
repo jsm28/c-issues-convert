@@ -685,10 +685,10 @@ Change 6.7.5.2p1 to (i.e. the two occurrences of `static` to `__at_least`):
 Change 6.7.5.2p3 to (i.e. the three occurrences of `static` to `__at_least`, and
 bind `__at_least` with `assignment-expr` in the syntax):
 
-> > `D[` *type-qualifier-list<sub>opt</sub> assignment-expr<sub>opt</sub>* `]  
-> > D[ __at_least` *assignment-expr type-qualifier-list<sub>opt</sub>* `]  
-> > D[` *type-qualifier-list* `__at_least` *assignment-expr* `]  
-> > D[` *type-qualifier-list<sub>opt</sub>* `* ]`
+> > `D[` *type-qualifier-list<sub>opt</sub> assignment-expr<sub>opt</sub>* `]`  
+> > `D[ __at_least` *assignment-expr type-qualifier-list<sub>opt</sub>* `]`  
+> > `D[` *type-qualifier-list* `__at_least` *assignment-expr* `]`  
+> > `D[` *type-qualifier-list<sub>opt</sub>* `* ]`
 >
 > and the type specified for *ident* in the declaration "`T D`" is
 > "*derived-declarator-type-list T*", then the type specified for ident is
@@ -734,9 +734,9 @@ Change A.1.2 to add keyword:
 The new syntax groups '`__at_least` *assignment-expression*' together. For
 example:
 
-> `double a[restrict __at_least 3] /*` *ok* `*/  
-> double a[__at_least 3 restrict] /*` *ok* `*/  
-> double a[__at_least restrict 3] /*`*not ok* `*/`
+> `double a[restrict __at_least 3] /*` *ok* `*/`  
+> `double a[__at_least 3 restrict] /*` *ok* `*/`  
+> `double a[__at_least restrict 3] /*`*not ok* `*/`
 
 Conceptually, '`__at_least` *assignment-expression*' is a type qualifier. Even
 though we do not treat it as such in C9X, the potential is there for future
@@ -9177,8 +9177,8 @@ specification of the `restrict` qualifier.
 * `D` is the declaration for the identifier `a` and `T` is `char`
 * `P` is the object designated by `a`
 * `B` is the block of `main`, whose execution includes the call to `copy()`
-* `L` is the expression `dest[i]`in `copy()  
-   &L == dest+i` which is based on `a`, because `dest` gets its value from `a` upon entry to `copy()` \<-- Key point
+* `L` is the expression `dest[i]`in `copy()`  
+   `&L == dest+i` which is based on `a`, because `dest` gets its value from `a` upon entry to `copy()` \<-- Key point
 * `X` is the object designated by `dest[i]` (which is `a[i]`)
 * `X` is modified during the execution of `main`
 
@@ -12681,7 +12681,8 @@ Similarly, a forward reference "variably modified type (6.7.5)" is desirable in�
 > > length array type* of unspecified size, which can only be used in declarations
 > > with function prototype scope; such arrays are nonetheless complete types.
 
-It might also be desirable to change the second sentence (adding italics) from:
+     It might also be desirable to change the second sentence (adding italics)
+from:
 
 > > If the size is an integer constant expression and the element type has a known
 > > constant size, the array type is not a variable length array type; otherwise,
@@ -12698,7 +12699,7 @@ It might also be desirable to change the second sentence (adding italics) from:
 > **Forward references:** statements (6.8), function calls (6.5.2.2), declarators
 > (6.7.5), array declarators (6.7.5.2), initialization (6.7.8).
 
-to
+    to
 
 > **Forward references:** statements (6.8), function calls (6.5.2.2), declarators
 > (6.7.5), array declarators (6.7.5.2), variable length array type (6.7.5.2),
@@ -12714,7 +12715,7 @@ to
 > (6.7), structure and union specifiers (6.7.2.1), type names (6.7.6), array
 > declarators (6.7.5.2).
 
-to
+    to
 
 > **Forward references:** common definitions `<stddef.h>` (7.17), declarations
 > (6.7), structure and union specifiers (6.7.2.1), type names (6.7.6), array
@@ -12724,7 +12725,7 @@ to
 
 > **Forward references:** tags (6.7.2.3).
 
-to
+    to
 
 > **Forward references:** tags (6.7.2.3), variably modified type (6.7.5).
 
@@ -12763,7 +12764,7 @@ Comment from WG14 on 2007-09-06:
 > **Forward references:** statements (6.8), function calls (6.5.2.2), declarators
 > (6.7.5), array declarators (6.7.5.2), initialization (6.7.8).
 
-to
+    to
 
 > **Forward references:** statements (6.8), function calls (6.5.2.2), declarators
 > (6.7.5), array declarators (6.7.5.2), variable length array type (6.7.5.2),
@@ -12779,7 +12780,7 @@ to
 > (6.7), structure and union specifiers (6.7.2.1), type names (6.7.6), array
 > declarators (6.7.5.2).
 
-to
+    to
 
 > **Forward references:** common definitions `<stddef.h>` (7.17), declarations
 > (6.7), structure and union specifiers (6.7.2.1), type names (6.7.6), array
@@ -12789,7 +12790,7 @@ to
 
 > **Forward references:** tags (6.7.2.3).
 
-to
+    to
 
 > **Forward references:** tags (6.7.2.3), variably modified type (6.7.5).
 

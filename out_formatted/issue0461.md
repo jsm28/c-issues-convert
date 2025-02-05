@@ -65,31 +65,29 @@ non-`const` object is modied in the program while it's accessed via a
 
 The comments in the following example should make this distinction clear:
 
-> ```c
-> const int safe = (1 << SIGINT) | (1 << SIGQUIT);
->       int unsafe = (1 << SIGHUP) | (1 << SIGTERM);
->
-> volatile sig_atomic_t sigcount [2];
->
-> void handler (int signo) {
->
->     const int *pmask;   // pointer to const int
->
->     // taking the address of any object is safe and should be allowed
->     pmask = &safe;
->
->     // access to safe should be allowed since it's a const object
->     if ((1 << signo) & *pmask)
->         ++sigcount [0];
->
->     // safe and should be allowed
->     pmask = &unsafe;
->
->     // access to unsafe remains undefined since it's not a const object
->     if ((1 << signo) & *pmask)
->         ++sigcount [1];
-> }
-> ```
+> `const int safe = (1 << SIGINT) | (1 << SIGQUIT);`  
+>       `int unsafe = (1 << SIGHUP) | (1 << SIGTERM);`  
+>     
+> `volatile sig_atomic_t sigcount [2];`  
+>     
+> `void handler (int signo) {`  
+>     
+>     `const int *pmask;   // pointer to` <ins>`const`</ins> `int`  
+>     
+>     `// taking the address of any object is safe and should be allowed`  
+>     `pmask = &safe;`  
+>     
+>     `// access to safe should be allowed since it's a` <ins>`const object`</ins>  
+>     `if ((1 << signo) & *pmask)`  
+>         `++sigcount [0];`  
+>     
+>     `// safe and should be allowed`  
+>     `pmask = &unsafe;`  
+>     
+>     `// access to unsafe remains undefined since it's` <ins>`not a const object`</ins>  
+>     `if ((1 << signo) & *pmask)`  
+>         `++sigcount [1];`  
+> `}`
 
 **Missing restriction to access other functions' local objects**
 
