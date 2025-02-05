@@ -153,7 +153,7 @@ def write_md(filename, content, for_single, issue_data):
     else:
         content = re.sub(r'\(issue:([0-9][.A-Z0-9]*)\)',
                          lambda m: (
-                             '(log_%s.md#%s)'
+                             '(log_%s.md#issue%s)'
                              % (issue_data[m.group(1)]['submitted-against'],
                                 m.group(1))),
                          content)

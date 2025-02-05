@@ -4,8 +4,8 @@
 
 |Issue|Summary|Status|
 |-|-|-|
-|0SCR.01|[error in 5.21 example](log_cscr2013.md#0SCR.01)|Fixed in C Secure Coding Rules TS 17961:2013 TC1|
-|0SCR.02|[Missing formatted input/output functions in Rule 5.40](log_cscr2013.md#0SCR.02)|Fixed in C Secure Coding Rules TS 17961:202y|
+|0SCR.01|[error in 5.21 example](log_cscr2013.md#issue0SCR.01)|Fixed in C Secure Coding Rules TS 17961:2013 TC1|
+|0SCR.02|[Missing formatted input/output functions in Rule 5.40](log_cscr2013.md#issue0SCR.02)|Fixed in C Secure Coding Rules TS 17961:202y|
 
 ---
 

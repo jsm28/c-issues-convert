@@ -4,110 +4,110 @@
 
 |Issue|Summary|Status|
 |-|-|-|
-|0400|[`realloc` with size zero problems](log_c11c17.md#0400)|Fixed in C17|
-|0401|["happens before" cannot be cyclic](log_c11c17.md#0401)|Fixed in C17|
-|0402|[memory model coherence is not aligned with C\+\+11](log_c11c17.md#0402)|Fixed in C17|
-|0403|[`malloc()` and `free()` in the memory model](log_c11c17.md#0403)|Fixed in C17|
-|0404|[joke fragment remains in a footnote](log_c11c17.md#0404)|Fixed in C17|
-|0405|[mutex specification not aligned with C\+\+11 on total order](log_c11c17.md#0405)|Fixed in C17|
-|0406|[Visible sequences of side effects are redundant](log_c11c17.md#0406)|Fixed in C17|
-|0407|[SC fences do not restrict modification order enough](log_c11c17.md#0407)|Fixed in C17|
-|0408|[Should locks provide intra-thread synchronization](log_c11c17.md#0408)|Closed|
-|0409|[`f(inf)` is `inf` being a range error](log_c11c17.md#0409)|Closed|
-|0410|[`ilogb` inconsistent with `lrint`, `lround`](log_c11c17.md#0410)|Fixed in C17|
-|0411|[Predefined macro values](log_c11c17.md#0411)|Fixed in C11 TC1|
-|0412|[`#elif`](log_c11c17.md#0412)|Fixed in C17|
-|0413|[initialization](log_c11c17.md#0413)|Fixed in C17|
-|0414|[Typos in 6.27 Threads `<threads.h>`](log_c11c17.md#0414)|Fixed in C17|
-|0415|[Missing divide by zero entry in Annex J.2](log_c11c17.md#0415)|Fixed in C17|
-|0416|[`tss_t` destruction unspecified](log_c11c17.md#0416)|Fixed in C17|
-|0417|[Annex J not updated with necessary `aligned_alloc` entries](log_c11c17.md#0417)|Fixed in C17|
-|0418|[`fmod(0.,Nan)` and `fmod(Nan, infinity)`](log_c11c17.md#0418)|Closed|
-|0419|[What the heck is a "generic function"?](log_c11c17.md#0419)|Fixed in C17|
-|0420|[syntax error in specification of for-statement](log_c11c17.md#0420)|Closed|
-|0421|[initialization of `atomic_flag`](log_c11c17.md#0421)|Closed|
-|0422|[initialization of atomic types](log_c11c17.md#0422)|Closed|
-|0423|[Defect Report relative to n1570: underspecification for qualified rvalues](log_c11c17.md#0423)|Fixed in C17|
-|0424|[underspecification of `tss_t`](log_c11c17.md#0424)|Fixed in C17|
-|0425|[no specification for the access to variables with temporary lifetime](log_c11c17.md#0425)|Closed|
-|0426|[G.5.1: `-yv` and `-x/v` are ambiguous](log_c11c17.md#0426)|Fixed in C17|
-|0427|[Function Parameter and Return Value Assignments](log_c11c17.md#0427)|Closed|
-|0428|[runtime-constraint issue with sprintf family of routines in Annex K](log_c11c17.md#0428)|Fixed in C17|
-|0429|[Should `gets_s` discard next input line when `(s == NULL)` ?](log_c11c17.md#0429)|Fixed in C17|
-|0430|[`getenv_s`, `maxsize` should be allowed to be zero](log_c11c17.md#0430)|Fixed in C17|
-|0431|[`atomic_compare_exchange`: What does it mean to say two structs compare equal?](log_c11c17.md#0431)|Fixed in C17|
-|0432|[Is `0.0` required to be a representable value?](log_c11c17.md#0432)|Closed|
-|0433|[Issue with constraints for wide character function arguments involving **RSIZE\_MAX**](log_c11c17.md#0433)|Fixed in C17|
-|0434|[Missing constraint w.r.t. Atomic](log_c11c17.md#0434)|Fixed in C17|
-|0435|[Missing constraint w.r.t. Imaginary](log_c11c17.md#0435)|Closed|
-|0436|[Request for interpretation of C11 6.8.5#6](log_c11c17.md#0436)|Fixed in C17|
-|0437|[`clock` overflow problems](log_c11c17.md#0437)|Fixed in C17|
-|0438|[`ungetc / ungetwc` and file position after discarding push back problems](log_c11c17.md#0438)|Fixed in C17|
-|0439|[Issues with the definition of “full expression”](log_c11c17.md#0439)|Fixed in C17|
-|0440|[Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 1](log_c11c17.md#0440)|Closed|
-|0441|[Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 2](log_c11c17.md#0441)|Fixed in C17|
-|0442|[Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 3](log_c11c17.md#0442)|Closed|
-|0443|[Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 4](log_c11c17.md#0443)|Closed|
-|0444|[Issues with alignment in C11, part 1](log_c11c17.md#0444)|Fixed in C17|
-|0445|[Issues with alignment in C11, part 2](log_c11c17.md#0445)|Fixed in C17|
-|0446|[Use byte instead of character for memcmp, memcpy](log_c11c17.md#0446)|Closed|
-|0447|[Boolean from complex](log_c11c17.md#0447)|Fixed in C17|
-|0448|[What are the semantics of a **\# non-directive**?](log_c11c17.md#0448)|Fixed in C17|
-|0449|[What is the value of TSS\_DTOR\_ITERATIONS for implementations with no maximum?](log_c11c17.md#0449)|Closed|
-|0450|[`tmpnam_s` clears `s[0]` when `maxsize > RSIZE_MAX`](log_c11c17.md#0450)|Fixed in C17|
-|0451|[Instability of uninitialized automatic variables](log_c11c17.md#0451)|Closed|
-|0452|[Effective Type in Loop Invariant](log_c11c17.md#0452)|Fixed in C17|
-|0453|[Atomic flag type and operations](log_c11c17.md#0453)|Fixed in C17|
-|0454|[ATOMIC\_VAR\_INIT (issues 3 and 4\)](log_c11c17.md#0454)|Closed|
-|0455|[ATOMIC\_VAR\_INIT issue 5](log_c11c17.md#0455)|Closed|
-|0456|[Compile time definition of `UINT`*`N`*`_C(`*`value`*`)`](log_c11c17.md#0456)|Closed|
-|0457|[The `ctime_s` function in Annex K defined incorrectly](log_c11c17.md#0457)|Fixed in C17|
-|0458|[ATOMIC\_XXX\_LOCK\_FREE macros not constant expressions](log_c11c17.md#0458)|Fixed in C17|
-|0459|[atomic\_load missing const qualifier](log_c11c17.md#0459)|Fixed in C17|
-|0460|[`aligned_alloc` underspecified](log_c11c17.md#0460)|Fixed in C17|
-|0461|[problems with references to objects in signal handlers](log_c11c17.md#0461)|Closed|
-|0462|[Clarifying objects accessed in signal handlers](log_c11c17.md#0462)|Fixed in C17|
-|0463|[Left-shifting into the sign bit](log_c11c17.md#0463)|Closed|
-|0464|[Clarifying the Behavior of the `#line` Directive](log_c11c17.md#0464)|Fixed in C17|
-|0465|[Fixing an inconsistency in `atomic_is_lock_free`](log_c11c17.md#0465)|Fixed in C17|
-|0466|[scope of a `for` loop control declaration](log_c11c17.md#0466)|Closed|
-|0467|[maximum representable finite description vs math](log_c11c17.md#0467)|Closed|
-|0468|[`strncpy_s` clobbers buffer past `null`](log_c11c17.md#0468)|Fixed in C17|
-|0469|[lock ownership vs. thread termination](log_c11c17.md#0469)|Closed|
-|0470|[mtx\_trylock should be allowed to fail spuriously](log_c11c17.md#0470)|Fixed in C17|
-|0471|[Complex math functions cacosh and ctanh](log_c11c17.md#0471)|Fixed in C17|
-|0472|[Introduction to complex arithmetic in 7.3.1p3 wrong due to CMPLX](log_c11c17.md#0472)|Fixed in C17|
-|0473|["A range error occurs if x is too large." is misleading](log_c11c17.md#0473)|Fixed in C17|
-|0474|[NOTE 1 Clarification for `atomic_compare_exchange`](log_c11c17.md#0474)|Closed|
-|0475|[Misleading Atomic library references to atomic types](log_c11c17.md#0475)|Fixed in C17|
-|0476|[volatile semantics for lvalues](log_c11c17.md#0476)|Fixed in C23|
-|0477|[`nan` should take a string argument](log_c11c17.md#0477)|Fixed in C17|
-|0478|[valid uses of the `main` function](log_c11c17.md#0478)|Closed|
-|0479|[unclear specification of `mtx_trylock` on non-recursive muteness](log_c11c17.md#0479)|Closed|
-|0480|[`cnd_wait` and `cnd_timewait` should allow spurious wake-ups](log_c11c17.md#0480)|Fixed in C17|
-|0481|[Controlling expression of `_Generic` primary expression](log_c11c17.md#0481)|Fixed in C17|
-|0482|[Macro invocation split over many files](log_c11c17.md#0482)|Closed|
-|0483|[`__LINE__` and `__FILE__` in macro replacement list](log_c11c17.md#0483)|Closed|
-|0484|[invalid characters in `strcoll()`](log_c11c17.md#0484)|Closed|
-|0485|[Problem with the specification of `ATOMIC_VAR_INIT`](log_c11c17.md#0485)|Fixed in C17|
-|0486|[Inconsistent specification for arithmetic on atomic objects](log_c11c17.md#0486)|Closed|
-|0487|[`timespec` vs. `tm`](log_c11c17.md#0487)|Fixed in C17|
-|0488|[`c16rtomb()` on wide characters encoded as multiple `char16_t`](log_c11c17.md#0488)|Fixed in C23|
-|0489|[Integer Constant Expression](log_c11c17.md#0489)|Closed|
-|0490|[Unwritten Assumptions About if-then](log_c11c17.md#0490)|Closed|
-|0491|[Concern with Keywords that Match Reserved Identifiers](log_c11c17.md#0491)|Fixed in C17|
-|0492|[Named Child struct-union with no Member](log_c11c17.md#0492)|Closed|
-|0493|[Mutex Initialization Underspecified](log_c11c17.md#0493)|Closed|
-|0494|[Part 1: Alignment specifier expression evaluation](log_c11c17.md#0494)|Fixed in C23|
-|0495|[Part 2: Atomic specifier expression evaluation](log_c11c17.md#0495)|Closed|
-|0496|[`offsetof` questions](log_c11c17.md#0496)|Fixed in C23|
-|0497|["white-space character" defined in two places](log_c11c17.md#0497)|Fixed in C23|
-|0498|[`mblen`, `mbtowc`, and `wctomb` thread-safety](log_c11c17.md#0498)|Closed|
-|0499|[Anonymous structure in union behavior](log_c11c17.md#0499)|Fixed in C23|
-|0500|[Ambiguous specification for **FLT\_EVAL\_METHOD**](log_c11c17.md#0500)|Fixed in C23|
-|0501|[Can **DECIMAL\_DIG** be larger than necessary?](log_c11c17.md#0501)|Fixed in C23|
-|0502|[Flexible array member in an anonymous struct](log_c11c17.md#0502)|Closed|
-|0503|[Hexadecimal floating-point and `strtod`](log_c11c17.md#0503)|Closed|
+|0400|[`realloc` with size zero problems](log_c11c17.md#issue0400)|Fixed in C17|
+|0401|["happens before" cannot be cyclic](log_c11c17.md#issue0401)|Fixed in C17|
+|0402|[memory model coherence is not aligned with C\+\+11](log_c11c17.md#issue0402)|Fixed in C17|
+|0403|[`malloc()` and `free()` in the memory model](log_c11c17.md#issue0403)|Fixed in C17|
+|0404|[joke fragment remains in a footnote](log_c11c17.md#issue0404)|Fixed in C17|
+|0405|[mutex specification not aligned with C\+\+11 on total order](log_c11c17.md#issue0405)|Fixed in C17|
+|0406|[Visible sequences of side effects are redundant](log_c11c17.md#issue0406)|Fixed in C17|
+|0407|[SC fences do not restrict modification order enough](log_c11c17.md#issue0407)|Fixed in C17|
+|0408|[Should locks provide intra-thread synchronization](log_c11c17.md#issue0408)|Closed|
+|0409|[`f(inf)` is `inf` being a range error](log_c11c17.md#issue0409)|Closed|
+|0410|[`ilogb` inconsistent with `lrint`, `lround`](log_c11c17.md#issue0410)|Fixed in C17|
+|0411|[Predefined macro values](log_c11c17.md#issue0411)|Fixed in C11 TC1|
+|0412|[`#elif`](log_c11c17.md#issue0412)|Fixed in C17|
+|0413|[initialization](log_c11c17.md#issue0413)|Fixed in C17|
+|0414|[Typos in 6.27 Threads `<threads.h>`](log_c11c17.md#issue0414)|Fixed in C17|
+|0415|[Missing divide by zero entry in Annex J.2](log_c11c17.md#issue0415)|Fixed in C17|
+|0416|[`tss_t` destruction unspecified](log_c11c17.md#issue0416)|Fixed in C17|
+|0417|[Annex J not updated with necessary `aligned_alloc` entries](log_c11c17.md#issue0417)|Fixed in C17|
+|0418|[`fmod(0.,Nan)` and `fmod(Nan, infinity)`](log_c11c17.md#issue0418)|Closed|
+|0419|[What the heck is a "generic function"?](log_c11c17.md#issue0419)|Fixed in C17|
+|0420|[syntax error in specification of for-statement](log_c11c17.md#issue0420)|Closed|
+|0421|[initialization of `atomic_flag`](log_c11c17.md#issue0421)|Closed|
+|0422|[initialization of atomic types](log_c11c17.md#issue0422)|Closed|
+|0423|[Defect Report relative to n1570: underspecification for qualified rvalues](log_c11c17.md#issue0423)|Fixed in C17|
+|0424|[underspecification of `tss_t`](log_c11c17.md#issue0424)|Fixed in C17|
+|0425|[no specification for the access to variables with temporary lifetime](log_c11c17.md#issue0425)|Closed|
+|0426|[G.5.1: `-yv` and `-x/v` are ambiguous](log_c11c17.md#issue0426)|Fixed in C17|
+|0427|[Function Parameter and Return Value Assignments](log_c11c17.md#issue0427)|Closed|
+|0428|[runtime-constraint issue with sprintf family of routines in Annex K](log_c11c17.md#issue0428)|Fixed in C17|
+|0429|[Should `gets_s` discard next input line when `(s == NULL)` ?](log_c11c17.md#issue0429)|Fixed in C17|
+|0430|[`getenv_s`, `maxsize` should be allowed to be zero](log_c11c17.md#issue0430)|Fixed in C17|
+|0431|[`atomic_compare_exchange`: What does it mean to say two structs compare equal?](log_c11c17.md#issue0431)|Fixed in C17|
+|0432|[Is `0.0` required to be a representable value?](log_c11c17.md#issue0432)|Closed|
+|0433|[Issue with constraints for wide character function arguments involving **RSIZE\_MAX**](log_c11c17.md#issue0433)|Fixed in C17|
+|0434|[Missing constraint w.r.t. Atomic](log_c11c17.md#issue0434)|Fixed in C17|
+|0435|[Missing constraint w.r.t. Imaginary](log_c11c17.md#issue0435)|Closed|
+|0436|[Request for interpretation of C11 6.8.5#6](log_c11c17.md#issue0436)|Fixed in C17|
+|0437|[`clock` overflow problems](log_c11c17.md#issue0437)|Fixed in C17|
+|0438|[`ungetc / ungetwc` and file position after discarding push back problems](log_c11c17.md#issue0438)|Fixed in C17|
+|0439|[Issues with the definition of “full expression”](log_c11c17.md#issue0439)|Fixed in C17|
+|0440|[Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 1](log_c11c17.md#issue0440)|Closed|
+|0441|[Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 2](log_c11c17.md#issue0441)|Fixed in C17|
+|0442|[Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 3](log_c11c17.md#issue0442)|Closed|
+|0443|[Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 4](log_c11c17.md#issue0443)|Closed|
+|0444|[Issues with alignment in C11, part 1](log_c11c17.md#issue0444)|Fixed in C17|
+|0445|[Issues with alignment in C11, part 2](log_c11c17.md#issue0445)|Fixed in C17|
+|0446|[Use byte instead of character for memcmp, memcpy](log_c11c17.md#issue0446)|Closed|
+|0447|[Boolean from complex](log_c11c17.md#issue0447)|Fixed in C17|
+|0448|[What are the semantics of a **\# non-directive**?](log_c11c17.md#issue0448)|Fixed in C17|
+|0449|[What is the value of TSS\_DTOR\_ITERATIONS for implementations with no maximum?](log_c11c17.md#issue0449)|Closed|
+|0450|[`tmpnam_s` clears `s[0]` when `maxsize > RSIZE_MAX`](log_c11c17.md#issue0450)|Fixed in C17|
+|0451|[Instability of uninitialized automatic variables](log_c11c17.md#issue0451)|Closed|
+|0452|[Effective Type in Loop Invariant](log_c11c17.md#issue0452)|Fixed in C17|
+|0453|[Atomic flag type and operations](log_c11c17.md#issue0453)|Fixed in C17|
+|0454|[ATOMIC\_VAR\_INIT (issues 3 and 4\)](log_c11c17.md#issue0454)|Closed|
+|0455|[ATOMIC\_VAR\_INIT issue 5](log_c11c17.md#issue0455)|Closed|
+|0456|[Compile time definition of `UINT`*`N`*`_C(`*`value`*`)`](log_c11c17.md#issue0456)|Closed|
+|0457|[The `ctime_s` function in Annex K defined incorrectly](log_c11c17.md#issue0457)|Fixed in C17|
+|0458|[ATOMIC\_XXX\_LOCK\_FREE macros not constant expressions](log_c11c17.md#issue0458)|Fixed in C17|
+|0459|[atomic\_load missing const qualifier](log_c11c17.md#issue0459)|Fixed in C17|
+|0460|[`aligned_alloc` underspecified](log_c11c17.md#issue0460)|Fixed in C17|
+|0461|[problems with references to objects in signal handlers](log_c11c17.md#issue0461)|Closed|
+|0462|[Clarifying objects accessed in signal handlers](log_c11c17.md#issue0462)|Fixed in C17|
+|0463|[Left-shifting into the sign bit](log_c11c17.md#issue0463)|Closed|
+|0464|[Clarifying the Behavior of the `#line` Directive](log_c11c17.md#issue0464)|Fixed in C17|
+|0465|[Fixing an inconsistency in `atomic_is_lock_free`](log_c11c17.md#issue0465)|Fixed in C17|
+|0466|[scope of a `for` loop control declaration](log_c11c17.md#issue0466)|Closed|
+|0467|[maximum representable finite description vs math](log_c11c17.md#issue0467)|Closed|
+|0468|[`strncpy_s` clobbers buffer past `null`](log_c11c17.md#issue0468)|Fixed in C17|
+|0469|[lock ownership vs. thread termination](log_c11c17.md#issue0469)|Closed|
+|0470|[mtx\_trylock should be allowed to fail spuriously](log_c11c17.md#issue0470)|Fixed in C17|
+|0471|[Complex math functions cacosh and ctanh](log_c11c17.md#issue0471)|Fixed in C17|
+|0472|[Introduction to complex arithmetic in 7.3.1p3 wrong due to CMPLX](log_c11c17.md#issue0472)|Fixed in C17|
+|0473|["A range error occurs if x is too large." is misleading](log_c11c17.md#issue0473)|Fixed in C17|
+|0474|[NOTE 1 Clarification for `atomic_compare_exchange`](log_c11c17.md#issue0474)|Closed|
+|0475|[Misleading Atomic library references to atomic types](log_c11c17.md#issue0475)|Fixed in C17|
+|0476|[volatile semantics for lvalues](log_c11c17.md#issue0476)|Fixed in C23|
+|0477|[`nan` should take a string argument](log_c11c17.md#issue0477)|Fixed in C17|
+|0478|[valid uses of the `main` function](log_c11c17.md#issue0478)|Closed|
+|0479|[unclear specification of `mtx_trylock` on non-recursive muteness](log_c11c17.md#issue0479)|Closed|
+|0480|[`cnd_wait` and `cnd_timewait` should allow spurious wake-ups](log_c11c17.md#issue0480)|Fixed in C17|
+|0481|[Controlling expression of `_Generic` primary expression](log_c11c17.md#issue0481)|Fixed in C17|
+|0482|[Macro invocation split over many files](log_c11c17.md#issue0482)|Closed|
+|0483|[`__LINE__` and `__FILE__` in macro replacement list](log_c11c17.md#issue0483)|Closed|
+|0484|[invalid characters in `strcoll()`](log_c11c17.md#issue0484)|Closed|
+|0485|[Problem with the specification of `ATOMIC_VAR_INIT`](log_c11c17.md#issue0485)|Fixed in C17|
+|0486|[Inconsistent specification for arithmetic on atomic objects](log_c11c17.md#issue0486)|Closed|
+|0487|[`timespec` vs. `tm`](log_c11c17.md#issue0487)|Fixed in C17|
+|0488|[`c16rtomb()` on wide characters encoded as multiple `char16_t`](log_c11c17.md#issue0488)|Fixed in C23|
+|0489|[Integer Constant Expression](log_c11c17.md#issue0489)|Closed|
+|0490|[Unwritten Assumptions About if-then](log_c11c17.md#issue0490)|Closed|
+|0491|[Concern with Keywords that Match Reserved Identifiers](log_c11c17.md#issue0491)|Fixed in C17|
+|0492|[Named Child struct-union with no Member](log_c11c17.md#issue0492)|Closed|
+|0493|[Mutex Initialization Underspecified](log_c11c17.md#issue0493)|Closed|
+|0494|[Part 1: Alignment specifier expression evaluation](log_c11c17.md#issue0494)|Fixed in C23|
+|0495|[Part 2: Atomic specifier expression evaluation](log_c11c17.md#issue0495)|Closed|
+|0496|[`offsetof` questions](log_c11c17.md#issue0496)|Fixed in C23|
+|0497|["white-space character" defined in two places](log_c11c17.md#issue0497)|Fixed in C23|
+|0498|[`mblen`, `mbtowc`, and `wctomb` thread-safety](log_c11c17.md#issue0498)|Closed|
+|0499|[Anonymous structure in union behavior](log_c11c17.md#issue0499)|Fixed in C23|
+|0500|[Ambiguous specification for **FLT\_EVAL\_METHOD**](log_c11c17.md#issue0500)|Fixed in C23|
+|0501|[Can **DECIMAL\_DIG** be larger than necessary?](log_c11c17.md#issue0501)|Fixed in C23|
+|0502|[Flexible array member in an anonymous struct](log_c11c17.md#issue0502)|Closed|
+|0503|[Hexadecimal floating-point and `strtod`](log_c11c17.md#issue0503)|Closed|
 
 ---
 
@@ -324,7 +324,7 @@ Date: 2011-10-14
 Reference document: [N1584](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1584.pdf)  
 Status: Fixed  
 Fixed in: C17  
-Cross-references: [0406](log_c11c17.md#0406)  
+Cross-references: [0406](log_c11c17.md#issue0406)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 ### Summary
@@ -640,7 +640,7 @@ Date: 2011-10-14
 Reference document: [N1584](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1584.pdf)  
 Status: Fixed  
 Fixed in: C17  
-Cross-references: [0402](log_c11c17.md#0402)  
+Cross-references: [0402](log_c11c17.md#issue0402)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 ### Summary
@@ -699,7 +699,7 @@ Oct 2011 meeting
 ### Committee Discussion
 
 > * The changes seem reasonable, there is a concern about having C and C\+\+ differ.
-> * Should be contingent on [Defect 402](log_c11c17.md#0402).
+> * Should be contingent on [Defect 402](log_c11c17.md#issue0402).
 
 Feb 2012 meeting
 
@@ -1561,7 +1561,7 @@ Date: 2012-01-27
 Reference document: [N1601](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1601.htm)  
 Status: Fixed  
 Fixed in: C17  
-Cross-references: [0253](log_c99.md#0253)  
+Cross-references: [0253](log_c99.md#issue0253)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 ### Summary
@@ -1610,7 +1610,7 @@ Feb 2012 Meeting
 
 ### Committee Discussion
 
-> * It was noted that this is basically similar to [dr\_253](log_c99.md#0253).
+> * It was noted that this is basically similar to [dr\_253](log_c99.md#issue0253).
 > * The following was proposed, but there was no consensus for adoption.
 >   > The initialization shall occur in initializer list order, each initializer
 >   > provided for a particular subobject overriding any previously listed initializer
@@ -1702,7 +1702,7 @@ Date: 2012-03-20
 Reference document: [N1614](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1614.htm)  
 Status: Fixed  
 Fixed in: C17  
-Cross-references: [0469](log_c11c17.md#0469), [0493](log_c11c17.md#0493)  
+Cross-references: [0469](log_c11c17.md#issue0469), [0493](log_c11c17.md#issue0493)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 ### Summary
@@ -1846,7 +1846,7 @@ Date: 2012-08-12
 Reference document: [N1627](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1627.htm)  
 Status: Fixed  
 Fixed in: C17  
-Cross-references: [0424](log_c11c17.md#0424), [0469](log_c11c17.md#0469)  
+Cross-references: [0424](log_c11c17.md#issue0424), [0469](log_c11c17.md#issue0469)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 ### Summary
@@ -1927,7 +1927,7 @@ Oct 2012 meeting
 
 ### Committee Discussion
 
-> * This paper was discussed in conjunction with [DR424](log_c11c17.md#0424) which covers one additional related issue.
+> * This paper was discussed in conjunction with [DR424](log_c11c17.md#issue0424) which covers one additional related issue.
 > * The key observation is that these papers are about the deliberate underspecification of threads, since that allows the greatest opportunity for implementation on a variety of operating systems.
 > * Pete Becker, an implementor of the C11 threads library, was asked about these papers and replied in SC22/WG14 message 12813\.
 > * Based on that response the committee is concerned that there could be subtleties in adopting the Proposed Technical Corrigendum and that, as such, these changes are substantial enough to warrant a proposal and to not be considered a defect.
@@ -2467,7 +2467,7 @@ Authors: WG14, Jens Gustedt
 Date: 2012-10-08  
 Reference document: [N1649](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1649.htm)  
 Status: Closed  
-Cross-references: [0454](log_c11c17.md#0454)  
+Cross-references: [0454](log_c11c17.md#issue0454)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 ### Summary
@@ -2547,7 +2547,7 @@ Date: 2012-10-08
 Reference document: [N1650](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1650.htm)  
 Status: Fixed  
 Fixed in: C17  
-Cross-references: [0427](log_c11c17.md#0427), [0431](log_c11c17.md#0431)  
+Cross-references: [0427](log_c11c17.md#issue0427), [0431](log_c11c17.md#issue0431)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 ### Summary
@@ -2977,7 +2977,7 @@ Date: 2012-10-08
 Reference document: [N1651](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1651.htm)  
 Status: Fixed  
 Fixed in: C17  
-Cross-references: [0416](log_c11c17.md#0416)  
+Cross-references: [0416](log_c11c17.md#issue0416)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 ### Summary
@@ -3052,13 +3052,13 @@ Oct 2012 meeting
 
 ### Committee Discussion
 
-> These issues are covered under [DR 416](log_c11c17.md#0416). See discussion there.
+> These issues are covered under [DR 416](log_c11c17.md#issue0416). See discussion there.
 
 Apr 2013 meeting
 
 ### Committee Discussion
 
-> In addition to [DR 416](log_c11c17.md#0416) this report suggests defining as undefined
+> In addition to [DR 416](log_c11c17.md#issue0416) this report suggests defining as undefined
 > behavior the interaction of `thrd_exit` and `tss_delete`.
 
 Oct 2013 meeting
@@ -3066,7 +3066,7 @@ Oct 2013 meeting
 ### Proposed Committee Response
 
 > The issues raised herein have been considered in conjunction with [DR
-> 416](log_c11c17.md#0416) and are jointly resolved in that DR's Proposed Technical
+> 416](log_c11c17.md#issue0416) and are jointly resolved in that DR's Proposed Technical
 > Corrigendum.
 
 
@@ -3220,7 +3220,7 @@ Authors: WG 14, Shao Miller \<sha0.miller@gmail.com\>
 Date: 2013-01-24  
 Reference document: [N1671](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1671.htm)  
 Status: Closed  
-Cross-references: [0423](log_c11c17.md#0423), [0454](log_c11c17.md#0454)  
+Cross-references: [0423](log_c11c17.md#issue0423), [0454](log_c11c17.md#issue0454)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 ### Summary
@@ -3514,7 +3514,7 @@ Oct 2015 meeting
 
 * The committee no longer believes that any of the issues raised in this report warrant changes to the standard.
 * The difference in behavior on return value semantics cited in gcc has been resolved by a bug fix to gcc
-* Qualifiers on the return type of a function are superfluous since by resolution to [DR 423](log_c11c17.md#0423) the committee affirms that qualifiers are dropped as part of the evaluation of expressions including function calls.
+* Qualifiers on the return type of a function are superfluous since by resolution to [DR 423](log_c11c17.md#issue0423) the committee affirms that qualifiers are dropped as part of the evaluation of expressions including function calls.
 * The committee does agree that the use of “assignment” to describe the initialization of function parameters can be misleading, but that in fact there is not an implementation that has ever been misled. Careful reading of the Standard notes that initialization is described fundamentally “as if by assignment”, and that it would take a comprehensive review and edit of the Standard to possibly achieve a more consistent treatment of the topics. There is a danger of circularity that must be avoided as well.
 
 ### Proposed Committee Response
@@ -3522,7 +3522,7 @@ Oct 2015 meeting
 > The committee believes that the primary issue of return value semantics was a
 > consequence of a mistake in the implementation of `gcc` which has been
 > rectified, and that further the treatment of qualifiers has been clarified in
-> the Proposed Technical Corrigendum of [DR 423](log_c11c17.md#0423). The treatment of
+> the Proposed Technical Corrigendum of [DR 423](log_c11c17.md#issue0423). The treatment of
 > initialization in the Standard is clear enough that no errors have been observed
 > in implementations, and as such further clarification is unwarranted at this
 > time.
@@ -3544,7 +3544,7 @@ Date: 2013-02-11
 Reference document: [N1672](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1672.htm)  
 Status: Fixed  
 Fixed in: C17  
-Cross-references: [0433](log_c11c17.md#0433)  
+Cross-references: [0433](log_c11c17.md#issue0433)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 ### Summary
@@ -3634,7 +3634,7 @@ Oct 2013 meeting
 
 ### Committee Discussion
 
-* Further investigation confirmed that there were several other functions that also need similar corrections to their runtime constraints. All of these additional functions also need additional corrections as specified in [DR433,](log_c11c17.md#0433) and the full resolution of both this defect and the additional issue will be found in the Proposed Technical Corrigendum of [DR433.](log_c11c17.md#0433)
+* Further investigation confirmed that there were several other functions that also need similar corrections to their runtime constraints. All of these additional functions also need additional corrections as specified in [DR433,](log_c11c17.md#issue0433) and the full resolution of both this defect and the additional issue will be found in the Proposed Technical Corrigendum of [DR433.](log_c11c17.md#issue0433)
 * That list is:
   + K.3.9.1.3 The snwprintf\_s function
   + K.3.9.1.4 The swprintf\_s function
@@ -3644,7 +3644,7 @@ Oct 2013 meeting
   + K.3.9.3.2.2 The wcsrtombs\_s function
 * It is noted that with these changes that K.3.5.1.2 `tmpname_s` will have wording inconsistent with respect to these modifications.
 * Consistent wording would be, in K.3.5.1.2p2 replace "less than or equal to RSIZE\_MAX" with "not greater than RSIZE\_MAX".
-* As such, the committee continues to accept unchanged the Proposed Technical Corrigendum as partial fulfillment of this defect, and that full resolution of the other similar defects will be found in [DR433.](log_c11c17.md#0433)
+* As such, the committee continues to accept unchanged the Proposed Technical Corrigendum as partial fulfillment of this defect, and that full resolution of the other similar defects will be found in [DR433.](log_c11c17.md#issue0433)
 
 ### Proposed Technical Corrigendum
 
@@ -3850,7 +3850,7 @@ Date: 2013-02-21
 Reference document: [N1675](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1675.htm)  
 Status: Fixed  
 Fixed in: C17  
-Cross-references: [0423](log_c11c17.md#0423), [0474](log_c11c17.md#0474)  
+Cross-references: [0423](log_c11c17.md#issue0423), [0474](log_c11c17.md#issue0474)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 ### Summary
@@ -3910,7 +3910,7 @@ Oct 2013 meeting
 * There are several points that need addressing.
 * The original intention of the atomics design was to allow `memcmp` and `memcpy` (with suitable synchronization) be a common implementation for all \_Atomic objects.
 * This practice, however, would lead to undefined behavior for implementations that have padding bits for integer representations.
-* For implementations that choose larger representations for some \_Atomic types, there would need to be at least one larger type specific implementation of `atomic_compare_exchange` compared to what might be possible to implement in common for all types. This seems to imply that an implementation must supply something akin to a type generic implementation of `atomic_compare_exchange`. Type generic macros as applied to \_Atomic is the subject of [DR423.](log_c11c17.md#0423)
+* For implementations that choose larger representations for some \_Atomic types, there would need to be at least one larger type specific implementation of `atomic_compare_exchange` compared to what might be possible to implement in common for all types. This seems to imply that an implementation must supply something akin to a type generic implementation of `atomic_compare_exchange`. Type generic macros as applied to \_Atomic is the subject of [DR423.](log_c11c17.md#issue0423)
 * A proposal to address these issues has been solicited.
 
 Apr 2014 meeting
@@ -3987,7 +3987,7 @@ Authors: WG 14, Fred J. Tydeman (USA)
 Date: 2013-03-07  
 Reference document: [N1677](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1677.htm)  
 Status: Closed  
-Cross-references: [0467](log_c11c17.md#0467)  
+Cross-references: [0467](log_c11c17.md#issue0467)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 There are many places in C11 that assume a floating-point zero value, e.g., 0.0,
@@ -4073,7 +4073,7 @@ Apr 2017 meeting
 
 This is a necessary but not sufficient change to address the problem, and as
 such, it was considered more dangerous to have than to have not, and was
-reopened. Combining this PTC with that of [**<u>DR 467</u>**](log_c11c17.md#0467) should
+reopened. Combining this PTC with that of [**<u>DR 467</u>**](log_c11c17.md#issue0467) should
 resolve the issue completely.
 
 Oct 2018 meeting
@@ -4085,7 +4085,7 @@ Oct 2018 meeting
 > This issue was not resolved in that publication.
 >
 > The committee is now considering changes for the next revision of the standard,
-> and asks that this proposed change and that from [CR 467](log_c11c17.md#0467) be
+> and asks that this proposed change and that from [CR 467](log_c11c17.md#issue0467) be
 > combined in a new paper to completely resolve this issue.
 
 
@@ -4105,7 +4105,7 @@ Date: 2013-03-12
 Reference document: [N1683](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1683.htm) [N1771](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1771.htm)  
 Status: Fixed  
 Fixed in: C17  
-Cross-references: [0428](log_c11c17.md#0428)  
+Cross-references: [0428](log_c11c17.md#issue0428)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 ### Summary
@@ -4238,7 +4238,7 @@ Oct 2013 meeting
 ### Committee Discussion
 
 * The list of functions cited was not entirely correct, and upon further review the Suggested Technical Corrigendum from [N1771](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1771.htm) were adopted.
-* These changes also address, where noted, the defect reported in [DR428.](log_c11c17.md#0428)
+* These changes also address, where noted, the defect reported in [DR428.](log_c11c17.md#issue0428)
 
 Apr 2014 meeting
 
@@ -5892,10 +5892,10 @@ Oct 2013 meeting
 
 Authors: WG 14, Fred J. Tydeman  
 Date: 2013-08-20  
-Reference document: [N1739,](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1739.htm) [DR 285](log_c99.md#0285)  
+Reference document: [N1739,](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1739.htm) [DR 285](log_c99.md#issue0285)  
 Status: Fixed  
 Fixed in: C17  
-Cross-references: [0285](log_c99.md#0285)  
+Cross-references: [0285](log_c99.md#issue0285)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 ### Summary
@@ -5971,10 +5971,10 @@ Change 6.3.1.7, paragraph 2 to:
 
 Authors: WG 14, Fred J. Tydeman  
 Date: 2013-08-20  
-Reference document: [N1740,](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1740.htm) [DR 231](log_c99.md#0231), [DR 250](log_c99.md#0250)  
+Reference document: [N1740,](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1740.htm) [DR 231](log_c99.md#issue0231), [DR 250](log_c99.md#issue0250)  
 Status: Fixed  
 Fixed in: C17  
-Cross-references: [0231](log_c99.md#0231), [0250](log_c99.md#0250)  
+Cross-references: [0231](log_c99.md#issue0231), [0250](log_c99.md#issue0250)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 ### Summary
@@ -6055,12 +6055,12 @@ end of translation phase 4, these non-directives could act as comments.
 DRs 231 and 250 appear to contradict each other on what happens with a
 non-directive and neither refers to the other.
 
-[DR 231](log_c99.md#0231) Says that text-line and non-directive are not
+[DR 231](log_c99.md#issue0231) Says that text-line and non-directive are not
 implementation defined. They are placeholders in the phases of translation and
 are subject to normal processing in subsequent phases of translation. And that
 words were supposed to be added to the Rationale.
 
-[DR 250](log_c99.md#0250) Says that non-directive is a preprocessing directive. And,
+[DR 250](log_c99.md#issue0250) Says that non-directive is a preprocessing directive. And,
 it added that as a footnote in 6.10.3#11
 
 Neither DR added normative words.
@@ -6255,7 +6255,7 @@ Authors: WG 14, Freek Wiedijk and Robbert Krebbers (Radboud University Nijmegen,
 Date: 2013-08-30  
 Reference document: [N1747](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1747.htm)  
 Status: Closed  
-Cross-references: [0260](log_c99.md#0260)  
+Cross-references: [0260](log_c99.md#issue0260)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 ### Summary
@@ -6291,7 +6291,7 @@ behavior instead of having to print a reasonable number.
 
 The standard is unclear about these questions.
 
-On the one hand the committee response to [Defect Report #260](log_c99.md#0260)
+On the one hand the committee response to [Defect Report #260](log_c99.md#issue0260)
 strongly suggests that the committee decided that the standard implies the
 answer to question 1 to be "yes". (Although Defect Report #260 applies to the
 C99 standard and hence has been superseded by the C11 standard, no modification
@@ -6922,7 +6922,7 @@ Authors: WG14, Fred J. Tydeman (USA)
 Date: 2013-10-22  
 Reference document: [N1777](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1777.htm)  
 Status: Closed  
-Cross-references: [0422](log_c11c17.md#0422), [0427](log_c11c17.md#0427)  
+Cross-references: [0422](log_c11c17.md#issue0422), [0427](log_c11c17.md#issue0427)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 ### Summary
@@ -8439,7 +8439,7 @@ Authors: WG14, Fred J. Tydeman
 Date: 2014-09-26  
 Reference document: [N1870,](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1870.htm) [N1871](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1871.htm)  
 Status: Closed  
-Cross-references: [0432](log_c11c17.md#0432)  
+Cross-references: [0432](log_c11c17.md#issue0432)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 ### Summary
@@ -8533,7 +8533,7 @@ Apr 2017 meeting
 > by the committee from [DR 467
 > PTC](https://www.open-std.org/jtc1/sc22/wg14/14655).
 >
-> Further, after discussion, the change from [DR 432](log_c11c17.md#0432) is now viewed as
+> Further, after discussion, the change from [DR 432](log_c11c17.md#issue0432) is now viewed as
 > necessary but not sufficient, and so it will be further reviewed before being
 > incorporated into a future version of the standard along with these changes.
 
@@ -8585,7 +8585,7 @@ Oct 2018 meeting
 > This issue was not resolved in that publication.
 >
 > The committee is now considering changes for the next revision of the standard,
-> and asks that this proposed change and that from [CR 432](log_c11c17.md#0432) be
+> and asks that this proposed change and that from [CR 432](log_c11c17.md#issue0432) be
 > combined in a new paper to completely resolve this issue.
 
 
@@ -8689,7 +8689,7 @@ Authors: WG14, Torvald Riegel
 Date: 2014-10-07  
 Reference document: [N1881](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1881.htm)  
 Status: Closed  
-Cross-references: [0414](log_c11c17.md#0414), [0416](log_c11c17.md#0416), [0479](log_c11c17.md#0479), [0493](log_c11c17.md#0493)  
+Cross-references: [0414](log_c11c17.md#issue0414), [0416](log_c11c17.md#issue0416), [0479](log_c11c17.md#issue0479), [0493](log_c11c17.md#issue0493)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 ### Summary
@@ -8749,7 +8749,7 @@ Apr 2015 meeting
 > The paper [N1907](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1907.pdf)
 > was presented.
 >
-> Issue 1 from that paper has already been addressed in [DR414](log_c11c17.md#0414)
+> Issue 1 from that paper has already been addressed in [DR414](log_c11c17.md#issue0414)
 >
 > Issue 2, that recursive mutex behavior is essentially unspecified, needs
 > addressing, but the words provided are unclear about accounting for additional
@@ -8766,7 +8766,7 @@ Oct 2015 meeting
 ### Committee Discussion
 
 > No new papers were presented and a new paper was again solicited. It may be that
-> the resolution to [DR 414](log_c11c17.md#0414) be folded into any Suggested Technical
+> the resolution to [DR 414](log_c11c17.md#issue0414) be folded into any Suggested Technical
 > Corrigendum as well.
 
 Apr 2016 meeting
@@ -8782,10 +8782,10 @@ Apr 2016 meeting
 >
 > Section 2 from
 > [N2019](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2019.pdf) needs to be
-> reconciled with the first item from the PTC of [DR 416](log_c11c17.md#0416). It was also
+> reconciled with the first item from the PTC of [DR 416](log_c11c17.md#issue0416). It was also
 > suggested that “or through program termination” be added.
 >
-> [DR 479](log_c11c17.md#0479) and [DR 493](log_c11c17.md#0493) raise other issues that must be
+> [DR 479](log_c11c17.md#issue0479) and [DR 493](log_c11c17.md#issue0493) raise other issues that must be
 > found in any committee approved Proposed Technical Corrigendum to this DR.
 
 Oct 2016 meeting
@@ -8806,7 +8806,7 @@ Apr 2018 meeting
 ### Committee Discussion
 
 > The committee solicited a combined resolution for these issues with those raised
-> in [DR 479](log_c11c17.md#0479) and [DR 493](log_c11c17.md#0493).
+> in [DR 479](log_c11c17.md#issue0479) and [DR 493](log_c11c17.md#issue0493).
 >
 > It was noted that there may well be missing language to tie these operations to
 > the formal memory model, e.g. total memory order. It may also be the case that
@@ -8823,8 +8823,8 @@ Oct 2018 meeting
 > These issues were not resolved in that publication.
 >
 > The committee is now considering changes for the next revision of the standard,
-> and asks that issues from [CR 469](log_c11c17.md#0469), [CR 479](log_c11c17.md#0479), and [CR
-> 493](log_c11c17.md#0493), as well as potentially other small issues be combined in a new
+> and asks that issues from [CR 469](log_c11c17.md#issue0469), [CR 479](log_c11c17.md#issue0479), and [CR
+> 493](log_c11c17.md#issue0493), as well as potentially other small issues be combined in a new
 > paper to completely resolve this issue for the next revision of the standard.
 
 
@@ -9298,7 +9298,7 @@ Authors: WG14, Blaine Garst
 Date: 2014-11-11  
 Reference document: [N1909](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1909.htm)  
 Status: Closed  
-Cross-references: [0431](log_c11c17.md#0431)  
+Cross-references: [0431](log_c11c17.md#issue0431)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 ### Summary
@@ -9365,7 +9365,7 @@ Apr 2015 meeting
 
 ### Proposed Committee Response
 
-> This change, especially in light of [DR431](log_c11c17.md#0431), was thought to likely
+> This change, especially in light of [DR431](log_c11c17.md#issue0431), was thought to likely
 > add confusion rather than clarify matters, and no change is desired.
 
 
@@ -10091,7 +10091,7 @@ Authors: WG14, Torvald Riegel, Martin Sebor
 Date: 2015-09-25  
 Reference document: [N1963](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1963.htm)  
 Status: Closed  
-Cross-references: [0469](log_c11c17.md#0469), [0493](log_c11c17.md#0493)  
+Cross-references: [0469](log_c11c17.md#issue0469), [0493](log_c11c17.md#issue0493)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 ### Summary
@@ -10123,20 +10123,20 @@ Oct 2015 meeting
 ### Committee Discussion
 
 * The committee agrees that this clarification would be useful, that is, that `mtx_trylock` should fail if attempted on an already held non-recursive mutex. We did not agree that the Proposed Technical Corrigendum addressed this defect correctly.
-* Coordinated new wording is solicited from the authors to both this and the solicited author for the resolution of [DR 469](log_c11c17.md#0469) since it also is proposing potentially overlapping wording changes in this area.
+* Coordinated new wording is solicited from the authors to both this and the solicited author for the resolution of [DR 469](log_c11c17.md#issue0469) since it also is proposing potentially overlapping wording changes in this area.
 
 Apr 2016 meeting
 
 ### Committee Discussion
 
-> This resolution continues to be bound to [DR 469](log_c11c17.md#0469)
+> This resolution continues to be bound to [DR 469](log_c11c17.md#issue0469)
 
 Apr 2018 meeting
 
 ### Committee Discussion
 
 > The committee solicited a combined comprehensive resolution for these issues
-> with those raised in [DR 469](log_c11c17.md#0469) and [DR 493](log_c11c17.md#0493). The authors
+> with those raised in [DR 469](log_c11c17.md#issue0469) and [DR 493](log_c11c17.md#issue0493). The authors
 > will be invited to review and provide input to said paper.
 >
 > As discussed in committee, an approach for resolving copying that parallels FILE
@@ -10157,8 +10157,8 @@ Oct 2018 meeting
 > These issues were not resolved in that publication.
 >
 > The committee is now considering changes for the next revision of the standard,
-> and asks that issues from [CR 469](log_c11c17.md#0469), [CR 479](log_c11c17.md#0479), and [CR
-> 493](log_c11c17.md#0493), as well as potentially other small issues be combined in a new
+> and asks that issues from [CR 469](log_c11c17.md#issue0469), [CR 479](log_c11c17.md#issue0479), and [CR
+> 493](log_c11c17.md#issue0493), as well as potentially other small issues be combined in a new
 > paper to completely resolve this issue for the next revision of the standard.
 
 
@@ -11123,7 +11123,7 @@ Authors: WG14, Jens Gustedt
 Date: 2015-08-07  
 Reference document: [N1955](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1955.htm)  
 Status: Closed  
-Cross-references: [0495](log_c11c17.md#0495)  
+Cross-references: [0495](log_c11c17.md#issue0495)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 ### Summary
@@ -11387,7 +11387,7 @@ Apr 2018 meeting
 ### Committee Discussion
 
 > The committee solicited the author for a combined resolution for this issue with
-> that raised in [DR 495](log_c11c17.md#0495).
+> that raised in [DR 495](log_c11c17.md#issue0495).
 
 Oct 2018 meeting
 
@@ -11398,7 +11398,7 @@ Oct 2018 meeting
 > This issue was not resolved in that publication.
 >
 > The committee is now considering changes for the next revision of the standard,
-> and asks that this proposed change and that from [CR 495](log_c11c17.md#0495) be
+> and asks that this proposed change and that from [CR 495](log_c11c17.md#issue0495) be
 > combined in a new paper to completely resolve this issue.
 
 
@@ -12013,7 +12013,7 @@ Authors: WG14, Martin Sebor
 Date: 2016-01-21  
 Reference document: [N2025](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2025.htm)  
 Status: Closed  
-Cross-references: [0414](log_c11c17.md#0414), [0469](log_c11c17.md#0469), [0479](log_c11c17.md#0479)  
+Cross-references: [0414](log_c11c17.md#issue0414), [0469](log_c11c17.md#issue0469), [0479](log_c11c17.md#issue0479)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 ### Summary
@@ -12069,7 +12069,7 @@ standard doesn't provide clear answers.
 2. Similarly, what is the function's behavior when called with a pointer to an uninitialized mutex object (one whose value is indeterminate)? (Presumably, it should be to initialize the object to a valid state and not require the object to have been initialized to all zeros, but this is not specified.)
 3. What is the function's behavior when called with the same pointer more than once (without a call to `mtx_destroy()` in between)?
 4. What is the function's behavior when called with a pointer to a locked mutex object?
-5. The function description specifies that the `type` argument must have one of six values but lists only four. What are the remaining two values of the `type` argument? (Note: this problem is the subject of DR [479](log_c11c17.md#0479).)
+5. The function description specifies that the `type` argument must have one of six values but lists only four. What are the remaining two values of the `type` argument? (Note: this problem is the subject of DR [479](log_c11c17.md#issue0479).)
 6. What is the function's behavior when `type` argument does not have one of the listed values? (Note that since the argument is a plain `int`, choosing not to define the behavior will make the function more dangerous to use than alternatives such as POSIX threads. Choosing to require the function to detect invalid arguments and reject them with an error exposes a problem due to its binary return value's inability to indicate different kinds of errors.)
 7. If the function is required to fail when the `type` argument isn't valid, what is its required behavior in this case when the `mtx` argument is null?
 
@@ -12129,10 +12129,10 @@ Apr 2016 meeting
 ### Committee Discussion
 
 > This DR records the committee’s understanding of the intent of the standard. The
-> resolution to [DR 469](log_c11c17.md#0469) must include a Proposed Technical Corrigendum
+> resolution to [DR 469](log_c11c17.md#issue0469) must include a Proposed Technical Corrigendum
 > consistent with the answers provided below.
 >
-> As one example required to be resolved in [DR 469](log_c11c17.md#0469),
+> As one example required to be resolved in [DR 469](log_c11c17.md#issue0469),
 >
 > > change ‘creates’ to ‘initializes’ in `mtx_init` and `mtx_destroy`,
 
@@ -12156,13 +12156,13 @@ Apr 2018 meeting
 > There are similar and potentially interrelated issues with respect to `cnd_t`.
 >
 > The committee solicited a combined comprehensive resolution for these issues
-> with those raised in [DR 469](log_c11c17.md#0469) and [DR 479](log_c11c17.md#0479).
+> with those raised in [DR 469](log_c11c17.md#issue0469) and [DR 479](log_c11c17.md#issue0479).
 
 ### Proposed Committee Response
 
 > This document asks quite a number of questions, and they are answered according
 > to the section title in which they were asked. These answers rely on changes
-> made in [DR 469](log_c11c17.md#0469).
+> made in [DR 469](log_c11c17.md#issue0469).
 >
 > **Problems with `mtx_t`**
 >
@@ -12175,7 +12175,7 @@ Apr 2018 meeting
 > 2. `mtx_init` will attempt to initialize whatever memory is referenced by the pointer passed in, so it will initialize memory that has previously been used as a `mtx_t`.
 > 3. It is undefined behavior to call `mtx_init()` on memory without an intervening `mtx_destroy`.
 > 4. It is undefined behavior to call `mtx_init()` on memory without an intervening `mtx_destroy` regardless of the lock condition.
-> 5. See [DR 414](log_c11c17.md#0414) for the resolution to the miscounted variations of `mtx_init()` options.
+> 5. See [DR 414](log_c11c17.md#issue0414) for the resolution to the miscounted variations of `mtx_init()` options.
 > 6. Undefined behavior is the result of passing values other than those specified in the standard. The wording in the Standard shall change from ‘must’ to ‘shall’ in §7.26.4.2p2.
 > 7. The value returned by `mtx_init()` when passed a NULL pointer shall be unspecified.
 >
@@ -12183,7 +12183,7 @@ Apr 2018 meeting
 >
 > 1. It is undefined behavior to call `mtx_destroy()` with a pointer to an object that has not been initialized by a call to `mtx_init()`. In §7.26.4.1p2 the editor should consider changing ‘can’ to ‘shall’.
 > 2. It is undefined behavior to call `mtx_destroy()` with a pointer to an object that has not been initialized by a call to `mtx_init()`, so calling it twice without an intervening `mtx_init` results in undefined behavior.
-> 3. Calling `mtx_destroy()` while it is locked is intended to be undefined and will be resolved by [DR 469](log_c11c17.md#0469).
+> 3. Calling `mtx_destroy()` while it is locked is intended to be undefined and will be resolved by [DR 469](log_c11c17.md#issue0469).
 > 4. The memory that had been used as an `mtx_t` object has indeterminate value. Undefined behavior results if it is subsequently used as an argument to other `mtx` functions other than `mtx_init`.
 >
 > **Other Problems**
@@ -12202,8 +12202,8 @@ Oct 2018 meeting
 > These issues were not resolved in that publication.
 >
 > The committee is now considering changes for the next revision of the standard,
-> and asks that issues from [CR 469](log_c11c17.md#0469), [CR 479](log_c11c17.md#0479), and [CR
-> 493](log_c11c17.md#0493), as well as potentially other small issues be combined in a new
+> and asks that issues from [CR 469](log_c11c17.md#issue0469), [CR 479](log_c11c17.md#issue0479), and [CR
+> 493](log_c11c17.md#issue0493), as well as potentially other small issues be combined in a new
 > paper to completely resolve this issue for the next revision of the standard.
 
 
@@ -12369,7 +12369,7 @@ Authors: WG14, Clark Nelson
 Date: 2016-03-17  
 Reference document: [N2027](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2025.htm)  
 Status: Closed  
-Cross-references: [0486](log_c11c17.md#0486)  
+Cross-references: [0486](log_c11c17.md#issue0486)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 ### Summary
@@ -12476,7 +12476,7 @@ Apr 2018 meeting
 ### Committee Discussion
 
 > The committee solicited a combined resolution for this issue with those raised
-> in [DR 486](log_c11c17.md#0486).
+> in [DR 486](log_c11c17.md#issue0486).
 
 Oct 2018 meeting
 
@@ -12487,7 +12487,7 @@ Oct 2018 meeting
 > This issue was not resolved in that publication.
 >
 > The committee is now considering changes for the next revision of the standard,
-> and asks that this proposed change and that from [CR 486](log_c11c17.md#0486) be
+> and asks that this proposed change and that from [CR 486](log_c11c17.md#issue0486) be
 > combined in a new paper to completely resolve this issue.
 
 
@@ -13093,7 +13093,7 @@ Date: 2016-04-12
 Reference document: [N2038](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2038.htm)  
 Status: Fixed  
 Fixed in: C23  
-Cross-references: [0502](log_c11c17.md#0502)  
+Cross-references: [0502](log_c11c17.md#issue0502)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 ### Summary
@@ -13141,7 +13141,7 @@ Oct 2016 meeting
 
 > The storage does not overlap.
 >
-> A related issue is to be found in [DR 502](log_c11c17.md#0502) and both may be resolved
+> A related issue is to be found in [DR 502](log_c11c17.md#issue0502) and both may be resolved
 > with coordinated wording changes.
 
 Apr 2017 meeting
@@ -13689,7 +13689,7 @@ Authors: WG14, Martin Sebor
 Date: 2016-09-18  
 Reference document: [N2080](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2080.htm)  
 Status: Closed  
-Cross-references: [0499](log_c11c17.md#0499)  
+Cross-references: [0499](log_c11c17.md#issue0499)  
 Converted from: [n2396.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm)
 
 ### Summary
@@ -13762,7 +13762,7 @@ latter interpretation in existing practice, we don't know of any technical
 reason to disallow flexible arrays as sole members in anonymous structs.
 
 It is worth noting that the lack of clarity in this area has also given rise to
-DR [499](log_c11c17.md#0499).
+DR [499](log_c11c17.md#issue0499).
 
 As a separate issue, the definition of a flexible array member cited above
 refers to such a member as an *element* of a structure. This is unusual (and
@@ -13822,7 +13822,7 @@ Oct 2016 meeting
 > anonymous struct is permitted as long as the flexible array is not the sole
 > member of the enclosing object.
 >
-> This issue might also be resolved via [DR 499](log_c11c17.md#0499)
+> This issue might also be resolved via [DR 499](log_c11c17.md#issue0499)
 
 Apr 2017 meeting
 
