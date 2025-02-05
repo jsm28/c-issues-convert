@@ -68,15 +68,15 @@ one that omits the parenthesis and all works fine.
 
 Change the beginning of the corresponding section, 7.17.2.1p2, to:
 
-<u>7.17.2.1 The `ATOMIC_VAR_INIT` macro  
-**Synopsis**</u>
+<ins>7.17.2.1 The `ATOMIC_VAR_INIT` macro  
+**Synopsis**</ins>
 
 ```c
 #include <stdatomic.h>
 #define ATOMIC_VAR_INIT(initializer)
 ```
 
-<u>**Description**  
+<ins>**Description**  
 The `ATOMIC_VAR_INIT` macro expands to a token sequence suitable for
 initializing an atomic object `X`. For any invocation of this macro, the
 *initializer* argument shall expand to a token sequence that would be suitable
@@ -84,15 +84,15 @@ to initialize `X` if the atomic qualification would be dropped.**footnote**That
 is, it could be used to initialize an object `Y` of the same base type, storage
 duration and place of declaration as `X`, but without atomic qualification.**end
 footnote**  
-An atomic object with automatic storage duration ...</u>
+An atomic object with automatic storage duration ...</ins>
 
 Then append a new note after the actual para 4:
 
-<u>*Note:* Since *initializer* may be a token sequence that contains commas
+<ins>*Note:* Since *initializer* may be a token sequence that contains commas
 which are not protected by `()` it may constitute a variable number of arguments
 for the macro evaluation. Implementations should be able to deal with such
 situations by defining `ATOMIC_VAR_INIT` as accepting a variable argument
-list.</u>
+list.</ins>
 
 ---
 

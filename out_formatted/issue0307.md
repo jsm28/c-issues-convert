@@ -19,7 +19,7 @@ its definition. Clearly, there is confusion about whether this sentence is
 talking about the definition or an invocation.
 
 Perhaps it would be clearer yet to say something like, "a function-like macro
-<u>which takes</u> arguments, similarly syntactically to a function call".
+<ins>which takes</ins> arguments, similarly syntactically to a function call".
 
 ### Suggested Technical Corrigendum
 
@@ -33,8 +33,8 @@ Change 6.10.3p10:
 > > `# define` *identifier lparen identifier-list* `, ... )` *replacement-list
 > > new-line*
 >
-> defines a function-like macro with ~~arguments~~ <u>parameters</u>, similar
-> syntactically to a function call.
+> defines a function-like macro with <del>arguments</del> <ins>parameters</ins>,
+> similar syntactically to a function call.
 
 ---
 
@@ -52,5 +52,5 @@ Change 6.10.3p10:
 > > `# define` *identifier lparen identifier-list* `, ... )` *replacement-list
 > > new-line*
 >
-> defines a function-like macro with ~~arguments~~ <u>parameters</u>, <u>whose use
-> is</u> similar syntactically to a function call.
+> defines a function-like macro with <del>arguments</del> <ins>parameters</ins>,
+> <ins>whose use is</ins> similar syntactically to a function call.

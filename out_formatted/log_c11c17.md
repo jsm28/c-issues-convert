@@ -180,14 +180,14 @@ At 7.22.3, para 1, change:
 to
 
 > If the size of the space requested is zero, the behavior is
-> implementation-defined: either a null pointer is returned <u>and errno set to
-> indicate the error</u>, or the behavior is as if the size were some nonzero
+> implementation-defined: either a null pointer is returned <ins>and errno set to
+> indicate the error</ins>, or the behavior is as if the size were some nonzero
 > value, except that the returned pointer shall not be used to access an object.
 
 Add a footnote to this sentence stating:
 
-> <u>**Note** Memory allocated by these functions should be freed via a call to
-> `free`, and not by means of a `realoc(p, 0)`.</u>
+> <ins>**Note** Memory allocated by these functions should be freed via a call to
+> `free`, and not by means of a `realoc(p, 0)`.</ins>
 
 ---
 
@@ -731,28 +731,29 @@ These changes have been proposed for the C\+\+ working draft:
 * For C 5.1.2.4 paragraph 2, the following C\+\+ discussion is relevant:
   > Change 1.10 paragraph 14 as follows:
   >
-  > > ~~The *visible sequence of side effects* on an atomic object *M*, with respect
-  > > to a value computation *B* of *M*, is a maximal contiguous sub-sequence of side
-  > > effects in the modification order of M, where the first side effect is visible
-  > > with respect to *B*, and for every side effect, it is not the case that *B*
-  > > happens before it.~~ The value of an atomic object *M*, as determined by
-  > > evaluation *B*, shall be the value stored by some ~~operation in the visible
-  > > sequence of *M* with respect to *B*~~ <u>side effect *A* that modifies *M*,
-  > > where *B* does not happen before *A*</u>. \[*Note:* ~~It can be shown that the
-  > > visible sequence of side effects of a value computation is unique given~~ <u>The
-  > > set of side effects that a given evaluation might take its value from is also
-  > > restricted by the rest of the rules described here, and in particular, by</u>
-  > > the coherence requirements below. —*end note*\]
+  > > <del>The *visible sequence of side effects* on an atomic object *M*, with
+  > > respect to a value computation *B* of *M*, is a maximal contiguous sub-sequence
+  > > of side effects in the modification order of M, where the first side effect is
+  > > visible with respect to *B*, and for every side effect, it is not the case that
+  > > *B* happens before it.</del> The value of an atomic object *M*, as determined by
+  > > evaluation *B*, shall be the value stored by some <del>operation in the visible
+  > > sequence of *M* with respect to *B*</del> <ins>side effect *A* that modifies
+  > > *M*, where *B* does not happen before *A*</ins>. \[*Note:* <del>It can be shown
+  > > that the visible sequence of side effects of a value computation is unique
+  > > given</del> <ins>The set of side effects that a given evaluation might take its
+  > > value from is also restricted by the rest of the rules described here, and in
+  > > particular, by</ins> the coherence requirements below. —*end note*\]
 * For C 5.1.2.4 paragraph 24, the following C\+\+ discussion is relevant:
   > 1.10p20 should be changed as follows:
   >
-  > > \[ *Note:* The ~~visible sequence of side effects~~ <u>value observed by a load
-  > > of an atomic</u> depends on the "happens before" relation, which depends on the
-  > > values observed by loads of atomics~~, which we are restricting here~~. The
-  > > intended reading is that there must exist an association of atomic loads with
-  > > modifications they observe that, together with suitably chosen modification
-  > > orders and the "happens before" relation derived as described above, satisfy the
-  > > resulting constraints as imposed here. —*end note* \]
+  > > \[ *Note:* The <del>visible sequence of side effects</del> <ins>value observed
+  > > by a load of an atomic</ins> depends on the "happens before" relation, which
+  > > depends on the values observed by loads of atomics<del>, which we are
+  > > restricting here</del>. The intended reading is that there must exist an
+  > > association of atomic loads with modifications they observe that, together with
+  > > suitably chosen modification orders and the "happens before" relation derived as
+  > > described above, satisfy the resulting constraints as imposed here. —*end note*
+  > > \]
 * For C 5.1.2.4 paragraph 27, the following C\+\+ discussion is relevant:
   > I think 1.10p22 should be changed as follows:
   >
@@ -763,14 +764,14 @@ These changes have been proposed for the C\+\+ working draft:
   > > execution would not have encountered a data race. This includes implementations
   > > of data member assignment that overwrite adjacent members in separate memory
   > > locations. Reordering of atomic loads in cases in which the atomics in question
-  > > may alias is also generally precluded, since this may violate the ~~"visible
-  > > sequence"~~<u>coherence</u> rules. —*end note* \]
+  > > may alias is also generally precluded, since this may violate the <del>"visible
+  > > sequence"</del><ins>coherence</ins> rules. —*end note* \]
 * For C 7.17.3 paragraph 6, the following C\+\+ discussion is relevant:
   > I believe the 29.3p3 wording should change as follows:
   >
   > + the result of the last modification *A* of *M* that precedes *B* in *S*, if it exists, or
-  > + if *A* exists, the result of some modification of *M* ~~in the visible sequence of side effects with respect to *B*~~ that is not `memory_order_seq_cst` and that does not happen before *A*, or
-  > + if *A* does not exist, the result of some modification of *M* ~~in the visible sequence of side effects with respect to *B*~~ that is not `memory_order_seq_cst`.
+  > + if *A* exists, the result of some modification of *M* <del>in the visible sequence of side effects with respect to *B*</del> that is not `memory_order_seq_cst` and that does not happen before *A*, or
+  > + if *A* does not exist, the result of some modification of *M* <del>in the visible sequence of side effects with respect to *B*</del> that is not `memory_order_seq_cst`.
 
 Apr 2014 meeting
 
@@ -790,27 +791,28 @@ Oct 2014 meeting
 
 1. Change 5.1.2.4 paragraph 22 as follows:
 
-   > ~~The *visible sequence of side effects* on an atomic object *M*, with respect
-   > to a value computation *B* of *M*, is a maximal contiguous sub-sequence of side
-   > effects in the modification order of M, where the first side effect is visible
-   > with respect to *B*, and for every side effect, it is not the case that *B*
-   > happens before it.~~ The value of an atomic object *M*, as determined by
-   > evaluation *B*, shall be the value stored by some ~~operation in the visible
-   > sequence of *M* with respect to *B*~~ <u>side effect *A* that modifies *M*,
-   > where *B* does not happen before *A*</u>. \[*Note:* ~~It can be shown that the
-   > visible sequence of side effects of a value computation is unique given~~ <u>The
-   > set of side effects that a given evaluation might take its value from is also
-   > restricted by the rest of the rules described here, and in particular, by</u>
-   > the coherence requirements below. —*end note*\]
+   > <del>The *visible sequence of side effects* on an atomic object *M*, with
+   > respect to a value computation *B* of *M*, is a maximal contiguous sub-sequence
+   > of side effects in the modification order of M, where the first side effect is
+   > visible with respect to *B*, and for every side effect, it is not the case that
+   > *B* happens before it.</del> The value of an atomic object *M*, as determined by
+   > evaluation *B*, shall be the value stored by some <del>operation in the visible
+   > sequence of *M* with respect to *B*</del> <ins>side effect *A* that modifies
+   > *M*, where *B* does not happen before *A*</ins>. \[*Note:* <del>It can be shown
+   > that the visible sequence of side effects of a value computation is unique
+   > given</del> <ins>The set of side effects that a given evaluation might take its
+   > value from is also restricted by the rest of the rules described here, and in
+   > particular, by</ins> the coherence requirements below. —*end note*\]
 2. Change 5.1.2.4 paragraph 24 as follows:
 
-   > \[*Note:* The ~~visible sequence of side effects~~ <u>value observed by a load
-   > of an atomic</u> depends on the “happens before” relation, which depends on the
-   > values observed by loads of atomics~~, which we are restricting here~~. The
-   > intended reading is that there must exist an association of atomic loads with
-   > modifications they observe that, together with suitably chosen modification
-   > orders and the “happens before” relation derived as described above, satisfy the
-   > resulting constraints as imposed here. —*end note*\]
+   > \[*Note:* The <del>visible sequence of side effects</del> <ins>value observed by
+   > a load of an atomic</ins> depends on the “happens before” relation, which
+   > depends on the values observed by loads of atomics<del>, which we are
+   > restricting here</del>. The intended reading is that there must exist an
+   > association of atomic loads with modifications they observe that, together with
+   > suitably chosen modification orders and the “happens before” relation derived as
+   > described above, satisfy the resulting constraints as imposed here. —*end
+   > note*\]
 3. Change 5.1.2.4 paragraph 27 as follows:
 
    > \[*Note:* Compiler transformations that introduce assignments to a potentially
@@ -820,8 +822,8 @@ Oct 2014 meeting
    > execution would not have encountered a data race. This includes implementations
    > of data member assignment that overwrite adjacent members in separate memory
    > locations. Reordering of atomic loads in cases in which the atomics in question
-   > may alias is also generally precluded, since this may violate the ~~“visible
-   > sequence”~~ <u>coherence</u> rules. —*end note*\]
+   > may alias is also generally precluded, since this may violate the <del>“visible
+   > sequence”</del> <ins>coherence</ins> rules. —*end note*\]
 4. Change 7.17.3 paragraph 6 as follows:
 
    > There shall be a single total order *S* on all `memory_order_seq_cst`
@@ -832,11 +834,11 @@ Oct 2014 meeting
    >
    > * the result of the last modification *A* of *M* that precedes *B* in *S*, if it
    >   exists, or
-   > * if *A* exists, the result of some modification of *M* ~~in the visible sequence
-   >   of side effects with respect to *B*~~ that is not `memory_order_seq_cst` and
-   >   that does not happen before *A*, or
-   > * if *A* does not exist, the result of some modification of *M* ~~in the visible
-   >   sequence of side effects with respect to *B*~~ that is not
+   > * if *A* exists, the result of some modification of *M* <del>in the visible
+   >   sequence of side effects with respect to *B*</del> that is not
+   >   `memory_order_seq_cst` and that does not happen before *A*, or
+   > * if *A* does not exist, the result of some modification of *M* <del>in the
+   >   visible sequence of side effects with respect to *B*</del> that is not
    >   `memory_order_seq_cst`.
    >
    > \[*Note:*...
@@ -1041,16 +1043,16 @@ Oct 2013 meeting
   > that the wording change intentionally does also replace the term atomic
   > operation by atomic modification\]*
   >
-  > -7- ~~For atomic operations *A* and *B* on an atomic object *M*, if there are
+  > -7- <del>For atomic operations *A* and *B* on an atomic object *M*, if there are
   > `memory_order_seq_cst` fences *X* and *Y* such that *A* is sequenced before *X*,
   > *Y* is sequenced before *B*, and *X* precedes *Y* in *S*, then *B* occurs later
-  > than *A* in the modification order of *M*.~~ <u>For atomic modifications *A* and
-  > *B* of an atomic object *M*, *B* occurs later than *A* in the modification order
-  > of *M* if:</u>
+  > than *A* in the modification order of *M*.</del> <ins>For atomic modifications
+  > *A* and *B* of an atomic object *M*, *B* occurs later than *A* in the
+  > modification order of *M* if:</ins>
   >
-  > + <u>there is a `memory_order_seq_cst` fence *X* such that *A* is sequenced before *X*, and *X* precedes *B* in *S*, or</u>
-  > + <u>there is a `memory_order_seq_cst` fence *Y* such that *Y* is sequenced before *B*, and *A* precedes *Y* in *S*, or</u>
-  > + <u>there are `memory_order_seq_cst` fences *X* and *Y* such that *A* is sequenced before *X*, *Y* is sequenced before *B*, and *X* precedes *Y* in *S*.</u>
+  > + <ins>there is a `memory_order_seq_cst` fence *X* such that *A* is sequenced before *X*, and *X* precedes *B* in *S*, or</ins>
+  > + <ins>there is a `memory_order_seq_cst` fence *Y* such that *Y* is sequenced before *B*, and *A* precedes *Y* in *S*, or</ins>
+  > + <ins>there are `memory_order_seq_cst` fences *X* and *Y* such that *A* is sequenced before *X*, *Y* is sequenced before *B*, and *X* precedes *Y* in *S*.</ins>
 
 Apr 2014 meeting
 
@@ -1075,16 +1077,16 @@ Oct 2014 meeting
    change intentionally does also replace the term atomic operation by atomic
    modification\]*
 
-   ~~For atomic operations *A* and *B* on an atomic object *M*, if there are
+   <del>For atomic operations *A* and *B* on an atomic object *M*, if there are
    `memory_order_seq_cst` fences *X* and *Y* such that *A* is sequenced before *X*,
    *Y* is sequenced before *B*, and *X* precedes *Y* in *S*, then *B* occurs later
-   than *A* in the modification order of *M*.~~ <u>For atomic modifications *A* and
-   *B* of an atomic object *M*, *B* occurs later than *A* in the modification order
-   of *M* if:</u>
+   than *A* in the modification order of *M*.</del> <ins>For atomic modifications
+   *A* and *B* of an atomic object *M*, *B* occurs later than *A* in the
+   modification order of *M* if:</ins>
 
-   * <u>there is a `memory_order_seq_cst` fence *X* such that *A* is sequenced before *X*, and *X* precedes *B* in *S*, or</u>
-   * <u>there is a `memory_order_seq_cst` fence *Y* such that *Y* is sequenced before *B*, and *A* precedes *Y* in *S*, or</u>
-   * <u>there are `memory_order_seq_cst` fences *X* and *Y* such that *A* is sequenced before *X*, *Y* is sequenced before *B*, and *X* precedes *Y* in *S*.</u>
+   * <ins>there is a `memory_order_seq_cst` fence *X* such that *A* is sequenced before *X*, and *X* precedes *B* in *S*, or</ins>
+   * <ins>there is a `memory_order_seq_cst` fence *Y* such that *Y* is sequenced before *B*, and *A* precedes *Y* in *S*, or</ins>
+   * <ins>there are `memory_order_seq_cst` fences *X* and *Y* such that *A* is sequenced before *X*, *Y* is sequenced before *B*, and *X* precedes *Y* in *S*.</ins>
 
    \[ *Note*: `memory_order_seq_cst` ensures sequential consistency only for a
    program that is free of data races and uses exclusively `memory_order_seq_cst`
@@ -2411,12 +2413,12 @@ Eliminate the mention of `ATOMIC_FLAG_INIT` in 7.17.1p3, B.16 and the index.
 
 Proposed change for the initialization of `atomic_flag`, 7.17.8p4:
 
-<u>The default initializer `{ 0 }` may be used to initialize an `atomic_flag` to
-the clear state. An `atomic_flag` object with automatic storage duration that is
-not explicitly initialized using `{ 0 }` is initially in an indeterminate state;
-*however, the default (zero) initialization for objects with static or
+<ins>The default initializer `{ 0 }` may be used to initialize an `atomic_flag`
+to the clear state. An `atomic_flag` object with automatic storage duration that
+is not explicitly initialized using `{ 0 }` is initially in an indeterminate
+state; *however, the default (zero) initialization for objects with static or
 thread-local storage duration initializes an `atomic_flag` to the clear state.*   
-EXAMPLE</u>
+EXAMPLE</ins>
 
 ```c
 atomic_flag guard = { 0 };
@@ -2429,8 +2431,8 @@ partial alternative to the above text would be to modify the text in 7.17.1
 ATOMIC_FLAG_INIT
 ```
 
-<u>which expands to a default initializer (`{ 0 }` or equivalent) for an object
-of type `atomic_flag`.</u>
+<ins>which expands to a default initializer (`{ 0 }` or equivalent) for an
+object of type `atomic_flag`.</ins>
 
 ---
 
@@ -2493,14 +2495,14 @@ would have helped to make that explicit.
 
 Proposed change for the initialization of atomic objects, 7.17.2.1p2:
 
-<u>An atomic object with automatic storage duration that is not explicitly
+<ins>An atomic object with automatic storage duration that is not explicitly
 initialized using `ATOMIC_VAR_INIT` is initially in an indeterminate state;
 however, the default (zero) initialization for objects with static or
 thread-local storage duration is guaranteed to produce a valid state that
 corresponds to the value of a zero initialized object of the unqualified base
 type.   
 EXAMPLE All three of the following objects initially have an observable value of
-`0`.</u>
+`0`.</ins>
 
 ```c
 _Atomic(unsigned) A = { 0 };
@@ -2767,11 +2769,11 @@ expressions `(int const){0}` and `(int const)0` have different types.
 
 Some clarification should be added to the standard, though.
 
-<u>6.5.1.1, modify as follows:  
+<ins>6.5.1.1, modify as follows:  
 EXAMPLE The `cbrt` type-generic macro could be implemented as follows. Here the
 prefix operator `+` in the selection expression ensures that lvalue conversion
 on arithmetic types is performed such that e.g lvalues of type `float const`
-select `cbrtf` and not the default `cbrt`.</u>
+select `cbrtf` and not the default `cbrt`.</ins>
 
 ```c
 #define cbrt(X) _Generic(+(X), \
@@ -2781,14 +2783,15 @@ float: cbrtf                   \
 )(X)
 ```
 
-<u>6.5.2.2, add after p1: The type of a function call is the return type of the
-function without any qualifiers.</u>
+<ins>6.5.2.2, add after p1: The type of a function call is the return type of
+the function without any qualifiers.</ins>
 
-<u>6.5.4, add after p2: The type of a cast expression of a qualified scalar type
-is the scalar type without any qualifiers.</u>
+<ins>6.5.4, add after p2: The type of a cast expression of a qualified scalar
+type is the scalar type without any qualifiers.</ins>
 
-<u>6.7.63, change p15, first sentence: For two function types to be compatible,
-the unqualified versions of both return types shall be compatible.</u>
+<ins>6.7.63, change p15, first sentence: For two function types to be
+compatible, the unqualified versions of both return types shall be
+compatible.</ins>
 
 **C11:** When introduced like this, this will invalidate some valid C11
 programs, since some type generic expression might behave differently. The
@@ -2828,11 +2831,11 @@ to be used.
 
 The necessary changes to the standard would be something like:
 
-<u>6.5.1.1, modify as follows:  
+<ins>6.5.1.1, modify as follows:  
 EXAMPLE The `cbrt` type-generic macro could be implemented as follows. Here the
 prefix operator `+` in the selection expression ensures that lvalue conversion
 on arithmetic types is performed such that e.g lvalues of type `float` select
-`cbrtf` and not the default `cbrt`.</u>
+`cbrtf` and not the default `cbrt`.</ins>
 
 ```c
 #define cbrt(X) _Generic(+(X), \
@@ -2842,16 +2845,17 @@ float const: cbrtf             \
 )(X)
 ```
 
-<u>6.5.2.2, add after p1: The type of a function call is the `const`-qualified
-return type of the function without any other qualifiers.</u>
+<ins>6.5.2.2, add after p1: The type of a function call is the `const`-qualified
+return type of the function without any other qualifiers.</ins>
 
-<u>6.5.4, add after p2: The type of a cast expression of a qualified scalar type
-is the `const`-qualified scalar type without any other qualifiers.</u>
+<ins>6.5.4, add after p2: The type of a cast expression of a qualified scalar
+type is the `const`-qualified scalar type without any other qualifiers.</ins>
 
 The third addedum would be the same as in the previous case:
 
-<u>6.7.63, change p15, first sentence: For two function types to be compatible,
-the unqualified versions of both return types shall be compatible.</u>
+<ins>6.7.63, change p15, first sentence: For two function types to be
+compatible, the unqualified versions of both return types shall be
+compatible.</ins>
 
 **C11:** When introduced like this, this will invalidate some valid C11
 programs, since some type generic expression might behave differently. The
@@ -2887,7 +2891,7 @@ Apr 2013 meeting
 * The suggested changes to 6.5.1.1 are unnecessary. The controlling expression of a generic selection was very carefully *not* added to the list of contexts in which lvalue conversion is not done and type qualification is discarded; see 6.3.2.1p2. As such, the controlling expression of a generic selection can not have qualified type. It was thought that a note to that effect might be useful in 6.5.1.1p3.
 * The suggested addition to 6.5.4 is useful, but a better change would be to change 6.5.4p5 to:
   > Preceding an expression by a parenthesized type name converts the value of the
-  > expression to <u>the unqualified version</u> of the named type. This
+  > expression to <ins>the unqualified version</ins> of the named type. This
   > construction is called a cast. A cast that specifies no conversion has no effect
   > on the type or value of an expression.
 
@@ -2895,8 +2899,8 @@ Apr 2013 meeting
 * The suggested changes to 6.5.2.2 and 6.7.63p15 are desirable, but a simpler change would be to remove any qualifier from the declared return type of a function. So, in 6.7.6.3p5, change to:
   > and the type specified for *ident* in the declaration "`T D`" is
   > "*derived-declarator-type-list T*", then the type specified for *ident* is
-  > "*derived-declarator-type-list* function returning <u>the unqualified version
-  > of</u> *T*".
+  > "*derived-declarator-type-list* function returning <ins>the unqualified version
+  > of</ins> *T*".
 * Atomic types may or may not be subject to distinct generic selection and this needs to be resolved.
 
 Oct 2013 meeting
@@ -4073,8 +4077,8 @@ Apr 2017 meeting
 
 This is a necessary but not sufficient change to address the problem, and as
 such, it was considered more dangerous to have than to have not, and was
-reopened. Combining this PTC with that of [**<u>DR 467</u>**](log_c11c17.md#issue0467) should
-resolve the issue completely.
+reopened. Combining this PTC with that of [**<ins>DR 467</ins>**](log_c11c17.md#issue0467)
+should resolve the issue completely.
 
 Oct 2018 meeting
 
@@ -5453,7 +5457,7 @@ Apr 2015 meeting
 > > >
 > > > *type-qualifier specifier-qualifier-list<sub>opt</sub>*
 > > >
-> > > <u>*alignment-specifier specifier-qualifier-list<sub>opt</sub>*</u>
+> > > <ins>*alignment-specifier specifier-qualifier-list<sub>opt</sub>*</ins>
 >
 > where *specifier-qualifier-list* is used in the grammar in only two productions:
 > *struct-declaration* (which relates to the primary purpose of this DR), and
@@ -5821,46 +5825,47 @@ their count parameter `n` in terms of bytes.
 
 Change 7.24.2.1 p 2 first sentence from
 
-> The `memcpy` function copies `n` <u>characters</u> from the object pointed to by
-> `s2` into the object pointed to by `s1`.
+> The `memcpy` function copies `n` <ins>characters</ins> from the object pointed
+> to by `s2` into the object pointed to by `s1`.
 
 to
 
-> The `memcpy` function copies `n` <u>bytes</u> from the object pointed to by `s2`
-> into the object pointed to by `s1`.
+> The `memcpy` function copies `n` <ins>bytes</ins> from the object pointed to by
+> `s2` into the object pointed to by `s1`.
 
 **memmove**
 
 Change 7.24.2.2 p 2 from
 
-> The `memmove` function copies `n` <u>characters</u> from the object pointed to
-> by `s2` into the object pointed to by `s1`. Copying takes place as if the `n`
-> <u>characters</u> from the object pointed to by `s2` are first copied into a
-> temporary array of `n` <u>characters</u> that does not overlap the objects
-> pointed to by `s1` and `s2`, and then the `n` <u>characters</u> from the
+> The `memmove` function copies `n` <ins>characters</ins> from the object pointed
+> to by `s2` into the object pointed to by `s1`. Copying takes place as if the `n`
+> <ins>characters</ins> from the object pointed to by `s2` are first copied into a
+> temporary array of `n` <ins>characters</ins> that does not overlap the objects
+> pointed to by `s1` and `s2`, and then the `n` <ins>characters</ins> from the
 > temporary array are copied into the object pointed to by `s1`.
 
 to
 
-> The `memmove` function copies `n` <u>bytes</u> from the object pointed to by
+> The `memmove` function copies `n` <ins>bytes</ins> from the object pointed to by
 > `s2` into the object pointed to by `s1`. Copying takes place as if the `n`
-> <u>bytes</u> from the object pointed to by `s2` are first copied into a
-> temporary array of `n` <u>bytes</u> that does not overlap the objects pointed to
-> by `s1` and `s2`, and then the `n` <u>bytes</u> from the temporary array are
-> copied into the object pointed to by `s1`.
+> <ins>bytes</ins> from the object pointed to by `s2` are first copied into a
+> temporary array of `n` <ins>bytes</ins> that does not overlap the objects
+> pointed to by `s1` and `s2`, and then the `n` <ins>bytes</ins> from the
+> temporary array are copied into the object pointed to by `s1`.
 
 **memcmp**
 
 Change 7.24.4.1 p 2 from
 
-> The `memcmp` function compares the first `n` <u>characters</u> of the object
-> pointed to by `s1` to the first `n` <u>characters</u> of the object pointed to
-> by `s2`.
+> The `memcmp` function compares the first `n` <ins>characters</ins> of the object
+> pointed to by `s1` to the first `n` <ins>characters</ins> of the object pointed
+> to by `s2`.
 
 to
 
-> The `memcmp` function compares the first `n` <u>bytes</u> of the object pointed
-> to by `s1` to the first `n` <u>bytes</u> of the object pointed to by `s2`.
+> The `memcmp` function compares the first `n` <ins>bytes</ins> of the object
+> pointed to by `s1` to the first `n` <ins>bytes</ins> of the object pointed to by
+> `s2`.
 
 ---
 
@@ -7359,8 +7364,8 @@ the macros unsuitable for that purpose.
 
 In section 7.17.1, modify paragraph 3 as indicated below:
 
-> ...which <u>expand to constant expressions suitable for use in `#if`
-> preprocessing directives and which</u> indicate the lock-free property of the
+> ...which <ins>expand to constant expressions suitable for use in `#if`
+> preprocessing directives and which</ins> indicate the lock-free property of the
 > corresponding atomic types (both signed and unsigned); and
 
 ---
@@ -7536,16 +7541,17 @@ In section 7.22.3.1, modify paragraph 2 as indicated below:
 
 > The `aligned_alloc` function allocates space for an object whose alignment is
 > specified by `alignment`, whose size is specified by `size`, and whose value is
-> indeterminate. ~~T~~<u>If t</u>he value of `alignment` ~~shall be~~ <u>is
-> not</u> a valid alignment supported by the implementation ~~and~~<u>or</u> the
-> value of `size` ~~shall be~~<u>is not</u> an integral multiple of `alignment`
-> <u>the function shall fail by returning a null pointer</u>.
+> indeterminate. <del>T</del><ins>If t</ins>he value of `alignment` <del>shall
+> be</del> <ins>is not</ins> a valid alignment supported by the implementation
+> <del>and</del><ins>or</ins> the value of `size` <del>shall be</del><ins>is
+> not</ins> an integral multiple of `alignment` <ins>the function shall fail by
+> returning a null pointer</ins>.
 
 In addition, in section **J.2 Undefined behavior**, remove the following bullet:
 
-> ~~— The alignment requested of the aligned\_alloc function is not valid or not
-> supported by the implementation, or the size requested is not an integral
-> multiple of the alignment (7.22.3.1).~~
+> <del>— The alignment requested of the aligned\_alloc function is not valid or
+> not supported by the implementation, or the size requested is not an integral
+> multiple of the alignment (7.22.3.1).</del>
 
 If the proposal above isn't acceptable, then an alternative solution to consider
 that would allow `aligned_alloc` to be used even in strictly conforming programs
@@ -7636,13 +7642,14 @@ to objects with "static or thread storage duration" underscored in the text
 below.
 
 > If the signal occurs other than as the result of calling the `abort` or `raise`
-> function, the behavior is undefined if the signal handler <u>refers</u> to any
-> object with <u>static or thread storage duration</u> that is not a lock-free
-> atomic object other than by assigning a value to an object declared as `volatile
-> sig_atomic_t`, or the signal handler calls any function in the standard library
-> other than the abort function, the `_Exit` function, the `quick_exit` function,
-> or the `signal` function with the first argument equal to the signal number
-> corresponding to the signal that caused the invocation of the handler.
+> function, the behavior is undefined if the signal handler <ins>refers</ins> to
+> any object with <ins>static or thread storage duration</ins> that is not a
+> lock-free atomic object other than by assigning a value to an object declared as
+> `volatile sig_atomic_t`, or the signal handler calls any function in the
+> standard library other than the abort function, the `_Exit` function, the
+> `quick_exit` function, or the `signal` function with the first argument equal to
+> the signal number corresponding to the signal that caused the invocation of the
+> handler.
 
 **Underspecification of referring to objects**
 
@@ -7750,11 +7757,11 @@ In section 7.14.1.1, modify the first sentence of paragraph 5 as indicated
 below:
 
 > If the signal occurs other than as the result of calling the `abort` or `raise`
-> function, the behavior is undefined if the signal handler ~~refers
-> to~~<u>accesses</u> any <u>non-`const`</u> object with static or thread storage
-> duration<u>, or any non-`const` object with automatic storage duration whose
-> lifetime started before the signal handler has been entered,</u> that is not a
-> lock-free atomic object other than by...
+> function, the behavior is undefined if the signal handler <del>refers
+> to</del><ins>accesses</ins> any <ins>non-`const`</ins> object with static or
+> thread storage duration<ins>, or any non-`const` object with automatic storage
+> duration whose lifetime started before the signal handler has been
+> entered,</ins> that is not a lock-free atomic object other than by...
 
 In addition, make the corresponding change to section **J.2 Undefined
 behavior**.
@@ -7844,8 +7851,8 @@ with static or thread storage duration that is not a lock-free atomic object
 other than by assigning a value to an object declared as `volatile
 sig_atomic_t`, or the signal handler calls any function in the standard library
 other than the `abort` function, the `_Exit` function, the `quick_exit`
-function, <u>the `atomic_flag_test_and_set` functions, the `atomic_flag_clear`
-functions,</u> or the `signal` function with the first argument equal to the
+function, <ins>the `atomic_flag_test_and_set` functions, the `atomic_flag_clear`
+functions,</ins> or the `signal` function with the first argument equal to the
 signal number corresponding to the signal that caused the invocation of the
 handler. Furthermore, if such a call to the `signal` function results in a
 `SIG_ERR` return, the value of `errno` is indeterminate.<sup>252\)</sup>
@@ -7869,9 +7876,9 @@ function, and the signal handler refers to an object with static or thread
 storage duration that is not a lock-free atomic object other than by assigning a
 value to an object declared as `volatile sig_atomic_t`, or calls any function in
 the standard library other than the `abort` function, the `_Exit` function, the
-`quick_exit` function, <u>the `atomic_flag_test_and_set` functions, the
-`atomic_flag_clear` functions,</u> or the `signal` function (for the same signal
-number) (7.14.1.1).
+`quick_exit` function, <ins>the `atomic_flag_test_and_set` functions, the
+`atomic_flag_clear` functions,</ins> or the `signal` function (for the same
+signal number) (7.14.1.1).
 
 ---
 
@@ -8057,9 +8064,9 @@ properly.
 > are filled with zeros. If `E1` has an unsigned type, the value of the result is
 > `E1 x 2`<sup>`E2`</sup>, reduced modulo one more than the maximum value
 > representable in the result type. If `E1` has a signed type and nonnegative
-> value, and `E1 x 2`<sup>`E2`</sup> is representable in the <u>corresponding
-> unsigned type of the</u> result type, then that <u>value, converted to the
-> result type,</u> is the resulting value; otherwise, the behavior is undefined.
+> value, and `E1 x 2`<sup>`E2`</sup> is representable in the <ins>corresponding
+> unsigned type of the</ins> result type, then that <ins>value, converted to the
+> result type,</ins> is the resulting value; otherwise, the behavior is undefined.
 
 C\+\+ addressed this in C\+\+14 with DR1457 with identical wording
 modifications.
@@ -8397,9 +8404,9 @@ Therefore, the proposed corrigendum suggests to align the C rules with those of
 C\+\+ by adding a new paragraph to section **6.2.1 Scopes of identifiers** as
 follows.
 
-> <u>Names declared in *clause-1* of the `for` statement are local to the `for`
+> <ins>Names declared in *clause-1* of the `for` statement are local to the `for`
 > statement and shall not be redeclared in a subsequent condition of that
-> statement nor in the outermost block of the controlled statement.</u>
+> statement nor in the outermost block of the controlled statement.</ins>
 
 Note: the text of the paragraph is aligned with the corresponding paragraph 4 of
 section **3.3.3 Block scope** of ISO/IEC 14882:2014 (and section **3.3.2 Block
@@ -8650,7 +8657,7 @@ Modify K.3.7.1.4, p5 as indicated below:
 
 > All elements following the terminating null character (if any) written by
 > `strncpy_s` in the array of `s1max` characters pointed to by `s1` take
-> unspecified values when `strncpy_s` returns <u>a non-zero value</u>.
+> unspecified values when `strncpy_s` returns <ins>a non-zero value</ins>.
 > <sup>420\)</sup>
 
 ---
@@ -9613,8 +9620,8 @@ and p6:
 > Accesses to volatile objects are evaluated strictly according to the rules of
 > the abstract machine.
 
-Note in particular that the text refers to <u>volatile objects</u>, which are
-defined as regions of storage storing the representation of their values.
+Note in particular that the text refers to <ins>volatile objects</ins>, which
+are defined as regions of storage storing the representation of their values.
 Objects are distinct from expressions used to designate and access them. Such
 expressions are referred to as *lvalues*, and may but don't need to mention the
 name of the accessed object. However, since the words in the paragraphs above
@@ -9641,11 +9648,11 @@ isn't new. It was pointed out in the past, for example in *The trouble with
 volatile* \[9\], Jonathan Corbet quotes Linus Torvalds, the author and
 maintainer of the Linux kernel, as saying:
 
-> Also, more importantly, "`volatile`" is on the wrong <u>part</u> of the whole
-> system. In C, it's "data" that is volatile, but that is insane. Data isn't
-> volatile — <u>accesses</u> are volatile. So it may make sense to say "make this
-> particular <u>access</u> be careful", but not "make all accesses to this data
-> use some random strategy".
+> Also, more importantly, "`volatile`" is on the wrong <ins>part</ins> of the
+> whole system. In C, it's "data" that is volatile, but that is insane. Data isn't
+> volatile — <ins>accesses</ins> are volatile. So it may make sense to say "make
+> this particular <ins>access</ins> be careful", but not "make all accesses to
+> this data use some random strategy".
 
 #### Volatile In C\+\+
 
@@ -9706,48 +9713,50 @@ and also with the C\+\+ specification.
 
 In §5.1.2.3, Program execution, p2:
 
-> Accessing a<u>n object through the use of an lvalue of volatile-qualified
-> type</u>~~volatile object~~, modifying a file, or calling a function that does
-> any of those operations are all side effects...
+> Accessing a<ins>n object through the use of an lvalue of volatile-qualified
+> type</ins><del>volatile object</del>, modifying a file, or calling a function
+> that does any of those operations are all side effects...
 
 In §5.1.2.3, Program execution, p4:
 
 > An actual implementation need not evaluate part of an expression if it can
 > deduce that its value is not used and that no needed side effects are produced
-> (including any caused by calling a function or accessing a<u>n object through
-> the use of an lvalue of volatile-qualified type</u>~~volatile object~~).
+> (including any caused by calling a function or accessing a<ins>n object through
+> the use of an lvalue of volatile-qualified type</ins><del>volatile
+> object</del>).
 
 In §5.1.2.3, Program execution, p6, bullet 1:
 
-> Accesses to <u>objects through the use of lvalues of volatile-qualified
-> types</u>~~volatile objects~~ are evaluated strictly according to the rules of
-> the abstract machine.
+> Accesses to <ins>objects through the use of lvalues of volatile-qualified
+> types</ins><del>volatile objects</del> are evaluated strictly according to the
+> rules of the abstract machine.
 
 In §6.7.3, Type qualifiers, p7:
 
-> What constitutes an access to an object <u>through the use of an lvalue
-> of</u>~~that has~~ volatile-qualified type is implementation-defined.
+> What constitutes an access to an object <ins>through the use of an lvalue
+> of</ins><del>that has</del> volatile-qualified type is implementation-defined.
 
 In §6.8.5, Iteration statements, p6:
 
 > An iteration statement whose controlling expression is not a constant
 > expression,<sup>156\)</sup> that performs no input/output operations, does not
-> access <u>objects through the use of lvalues of volatile-qualified types</u>
-> ~~volatile objects~~, ... may be assumed by the implementation to terminate.
+> access <ins>objects through the use of lvalues of volatile-qualified types</ins>
+> <del>volatile objects</del>, ... may be assumed by the implementation to
+> terminate.
 
 In §J.3.10, Qualifiers, p1:
 
-> What constitutes an access to an object <u>through the use of an lvalue
-> of</u>~~that has~~ volatile-qualified type (6.7.3).
+> What constitutes an access to an object <ins>through the use of an lvalue
+> of</ins><del>that has</del> volatile-qualified type (6.7.3).
 
 In §L.2.1, p1:
 
 > out-of-bounds store
 >
 > an (attempted) access (3.1) that, at run time, for a given computational state,
-> would modify (or, for an ~~object declared~~<u>lvalue of</u>
-> volatile<u>-qualified type</u>, fetch) one or more bytes that lie outside the
-> bounds permitted by this Standard.
+> would modify (or, for an <del>object declared</del><ins>lvalue of</ins>
+> volatile<ins>-qualified type</ins>, fetch) one or more bytes that lie outside
+> the bounds permitted by this Standard.
 
 ### References
 
@@ -9934,8 +9943,8 @@ strings.
 
 Change §7.12.11.2 as follows:
 
-> <u>The `nan`, `nanf`, and `nanl` functions convert the string pointed to by
-> `tagp` according to the following rules.</u> The call
+> <ins>The `nan`, `nanf`, and `nanl` functions convert the string pointed to by
+> `tagp` according to the following rules.</ins> The call
 > `nan("`*n-char-sequence*`")` is equivalent to
 > `strtod("NAN(`*n-char-sequence*`)", (char**) NULL)`; the call `nan("")` is
 > equivalent to `strtod("NAN()", (char**) NULL)`. If `tagp` does not point to an
@@ -10039,16 +10048,16 @@ list discussion, we offer two proposals to clarify the text of the standard.
 
 Change §5.1.2.2.2 Program execution as follows:
 
-> In a hosted environment, a program may use <u>the function `main` as well as</u>
-> all the functions, macros, type definitions, and objects described in the
-> library clause (clause 7).
+> In a hosted environment, a program may use <ins>the function `main` as well
+> as</ins> all the functions, macros, type definitions, and objects described in
+> the library clause (clause 7).
 
 #### Proposal 2
 
 Add a footnote to the end of §5.1.2.2.2 Program execution, with the following
 text:
 
-> <u>A program may also use the function `main`.</u>
+> <ins>A program may also use the function `main`.</ins>
 
 ---
 
@@ -10545,29 +10554,29 @@ Amend the list in footnote 121 for objects with `register` storage class. Change
 > Thus, the only operators that can be applied to an array declared with
 > storage-class specifier `register` are `sizeof` and `_Alignof`.
 
-<u>Thus, an identifier with array type and declared with storage-class specifier
-`register` may only appear in primary expressions and as operand to `sizeof` and
-`_Alignof`.</u>
+<ins>Thus, an identifier with array type and declared with storage-class
+specifier `register` may only appear in primary expressions and as operand to
+`sizeof` and `_Alignof`.</ins>
 
 ### Suggested Technical Corrigendum (Choice 2\)
 
 Change 6.5.1.1 p3, first sentence
 
-> The controlling expression of a generic selection is not evaluated <u>and the
+> The controlling expression of a generic selection is not evaluated <ins>and the
 > type of that expression is used without applying any conversions described in
-> Section 6.3</u>.
+> Section 6.3</ins>.
 
 Add `_Generic` to the exception list in *6.3.2.1 p3* to make it clear that array
 to pointer conversion applies to none of the controlling or association
 expression if they are lvalues of array type.
 
-> Except when it is <u>the controlling expression or an association expression of
-> a `_Generic` primary expression, or is</u> the operand of the `sizeof` operator,
-> the `_Alignof` operator, or the unary `&` operator, or is a string literal used
-> to initialize an array, an expression that has type “array of type” is converted
-> to an expression with type “pointer to type” that points to the initial element
-> of the array object and is not an lvalue. If the array object has register
-> storage class, the behavior is undefined.
+> Except when it is <ins>the controlling expression or an association expression
+> of a `_Generic` primary expression, or is</ins> the operand of the `sizeof`
+> operator, the `_Alignof` operator, or the unary `&` operator, or is a string
+> literal used to initialize an array, an expression that has type “array of type”
+> is converted to an expression with type “pointer to type” that points to the
+> initial element of the array object and is not an lvalue. If the array object
+> has register storage class, the behavior is undefined.
 
 Also add a forward reference to `_Generic` in 6.3.2.
 
@@ -10585,8 +10594,8 @@ Also, add `_Generic` to the exception list in *6.3.2.1 p3* to make it clear that
 array to pointer conversion applies to none of the association expression if
 they are lvalues of array type.
 
-> Except when it is <u>an association expression of a `_Generic` expression, or
-> is</u> the operand of the `sizeof` operator, the `_Alignof` operator, or the
+> Except when it is <ins>an association expression of a `_Generic` expression, or
+> is</ins> the operand of the `sizeof` operator, the `_Alignof` operator, or the
 > unary `&` operator, or is a string literal used to initialize an array, an
 > expression that has type “array of type” is converted to an expression with type
 > “pointer to type” that points to the initial element of the array object and is
@@ -10598,9 +10607,9 @@ they are lvalues of array type.
 A third possibility would be to leave this leeway to implementations. I strongly
 object to that, but if so, I would suggest to add a phrase to 6.5.1.1 p3 like:
 
-> ... in the default generic association. <u>Whether or not the type of the
+> ... in the default generic association. <ins>Whether or not the type of the
 > controlling expression is determined as if any of conversions described in
-> Section 6.3 are applied is implementation defined.</u> None of the expressions
+> Section 6.3 are applied is implementation defined.</ins> None of the expressions
 > ...
 
 ---
@@ -11000,15 +11009,15 @@ one that omits the parenthesis and all works fine.
 
 Change the beginning of the corresponding section, 7.17.2.1p2, to:
 
-<u>7.17.2.1 The `ATOMIC_VAR_INIT` macro  
-**Synopsis**</u>
+<ins>7.17.2.1 The `ATOMIC_VAR_INIT` macro  
+**Synopsis**</ins>
 
 ```c
 #include <stdatomic.h>
 #define ATOMIC_VAR_INIT(initializer)
 ```
 
-<u>**Description**  
+<ins>**Description**  
 The `ATOMIC_VAR_INIT` macro expands to a token sequence suitable for
 initializing an atomic object `X`. For any invocation of this macro, the
 *initializer* argument shall expand to a token sequence that would be suitable
@@ -11016,15 +11025,15 @@ to initialize `X` if the atomic qualification would be dropped.**footnote**That
 is, it could be used to initialize an object `Y` of the same base type, storage
 duration and place of declaration as `X`, but without atomic qualification.**end
 footnote**  
-An atomic object with automatic storage duration ...</u>
+An atomic object with automatic storage duration ...</ins>
 
 Then append a new note after the actual para 4:
 
-<u>*Note:* Since *initializer* may be a token sequence that contains commas
+<ins>*Note:* Since *initializer* may be a token sequence that contains commas
 which are not protected by `()` it may constitute a variable number of arguments
 for the macro evaluation. Implementations should be able to deal with such
 situations by defining `ATOMIC_VAR_INIT` as accepting a variable argument
-list.</u>
+list.</ins>
 
 ---
 
@@ -11251,102 +11260,103 @@ that would make the approach internally consistent.
 
 Change the beginning of 5.1.2.4 p5:
 
-~~The library defines a number of atomic operations (7.17) and operations on
-mutexes (7.26.4) that are specially identified as synchronization operations.~~
+<del>The library defines a number of atomic operations (7.17) and operations on
+mutexes (7.26.4) that are specially identified as synchronization
+operations.</del>
 
 to
 
-<u>There are a number of operations that are specially identified as
+<ins>There are a number of operations that are specially identified as
 synchronization operations: if the implementation supports the atomics extension
 these are operators and generic functions that act on atomic objects (6.5 and
 7.17); if the implementation supports the thread extension these are operations
-on mutexes (7.26.4).</u>
+on mutexes (7.26.4).</ins>
 
 Replace paragraph 6.2.6.1 p9
 
-~~Loads and stores of objects with atomic types are done with
-memory\_order\_seq\_cst semantics.~~
+<del>Loads and stores of objects with atomic types are done with
+memory\_order\_seq\_cst semantics.</del>
 
 by the following
 
-<u>All operations that act on atomic objects that do not specify otherwise have
-`memory_order_seq_cst` memory consistency. If the operation with identical
+<ins>All operations that act on atomic objects that do not specify otherwise
+have `memory_order_seq_cst` memory consistency. If the operation with identical
 values on the unqualified type is erroneous it results in an unspecific object
 representation, that may or may not be an invalid value for the type, such as an
 invalid address or a floating point NaN. Thereby no such operation may by itself
 raise a signal, a trap, a floating point exception or result otherwise in an
-interruption of the control flow.FOOTNOTE</u>
+interruption of the control flow.FOOTNOTE</ins>
 
-<u>FOOTNOTE Whether or not an atomic operation may be interrupted by a signal
-depends on the lock-free property of the underlying type.</u>
+<ins>FOOTNOTE Whether or not an atomic operation may be interrupted by a signal
+depends on the lock-free property of the underlying type.</ins>
 
 Insert a new paragraph after 6.2.6.2 p2
 
-<u>Implementations that support the atomics extension, represent all signed
+<ins>Implementations that support the atomics extension, represent all signed
 integers with two's complement such that the object representation with sign bit
-1 and all value bits zero is a normal value.</u>
+1 and all value bits zero is a normal value.</ins>
 
 Insert a new paragraph after 6.5 p3
 
-<u>An operation on an lvalue with an atomic type, that consists of the
+<ins>An operation on an lvalue with an atomic type, that consists of the
 evaluation of the object, an optional arithmetic operation and a side effect for
-updating the stored value forms a single read-modify-write operation.</u>
+updating the stored value forms a single read-modify-write operation.</ins>
 
 Remove the following phrase in 6.5.2.4 p2:
 
-~~Postfix `++` on an object with atomic type is a read-modify-write operation
-with memory\_order\_seq\_cst memory order semantics.~~
+<del>Postfix `++` on an object with atomic type is a read-modify-write operation
+with memory\_order\_seq\_cst memory order semantics.</del>
 
 Remove the following phrase in 6.5.16.2 p3:
 
-~~If **E1** has an atomic type, compound assignment is a read-modify-write
-operation with memory\_order\_seq\_cst memory order semantic~~
+<del>If **E1** has an atomic type, compound assignment is a read-modify-write
+operation with memory\_order\_seq\_cst memory order semantic</del>
 
 Replace 7.17.7 p1
 
-~~There are only a few kinds of operations on atomic types, though there are
-many instances of those kinds. This subclause specifies each general kind.~~
+<del>There are only a few kinds of operations on atomic types, though there are
+many instances of those kinds. This subclause specifies each general kind.</del>
 
 by
 
-<u>In addition to the operations on atomic objects that are described by
+<ins>In addition to the operations on atomic objects that are described by
 operators, there are a few kinds of operations that are specified as generic
 functions. This subclause specifies each generic function. After evaluation of
 its arguments, each of these generic functions forms a single read, write or
 read-modify-write operation with same general properties as described in 6.2.6.1
-p9.</u>
+p9.</ins>
 
 Assuming that the intent of 7.17.7.5 has been to allow operations on atomic
 pointer types, in p1, change:
 
-~~... to an object of any atomic integer type. None of these operations is
-applicable to `atomic_bool`~~
+<del>... to an object of any atomic integer type. None of these operations is
+applicable to `atomic_bool`</del>
 
 to
 
-<u>... to an object of any atomic integer or pointer type, as long as the
+<ins>... to an object of any atomic integer or pointer type, as long as the
 unqualified type is valid as left operand of the corresponding operator
 `op=`.FOOTNOTE  
 
 FOOTNOTE: Thus these operations are not permitted for pointers to atomic
 `_Bool`, and only "add" and "sub" variants are permitted for atomic pointer
-types.</u>
+types.</ins>
 
 Since this topic is then covered already by a more general section, remove this
 sentence from p3:
 
-~~For address types, the result may be an undefined address, but the operations
-otherwise have no undefined behavior.~~
+<del>For address types, the result may be an undefined address, but the
+operations otherwise have no undefined behavior.</del>
 
 In 7.17.7.5 p 5 replace:
 
-~~... the compound assignment operators are not guaranteed to operate
-atomically, and ...~~
+<del>... the compound assignment operators are not guaranteed to operate
+atomically, and ...</del>
 
 by
 
-<u>... the `order` parameter may make the memory consistency less strict than
-`memory_order_seq_cst`, and that ...</u>
+<ins>... the `order` parameter may make the memory consistency less strict than
+`memory_order_seq_cst`, and that ...</ins>
 
 **Future Directions**
 
@@ -11856,16 +11866,16 @@ attribute syntax recognized by the compiler.
 Replace the first two bullets under 7.1.3p1 with:
 
 — All identifiers that begin with an underscore and either an uppercase letter
-or another underscore are always reserved for any use<u>, except those
-identifiers which are lexically identical to keywords</u>.
-<u><sup>footnote)</sup></u>  
+or another underscore are always reserved for any use<ins>, except those
+identifiers which are lexically identical to keywords</ins>.
+<ins><sup>footnote)</sup></ins>  
 — All identifiers that begin with an underscore are always reserved for use as
-identifiers with file scope in both the ordinary and tag name spaces<u>, except
-those identifiers which are lexically identical to keywords</u>.
+identifiers with file scope in both the ordinary and tag name spaces<ins>,
+except those identifiers which are lexically identical to keywords</ins>.
 
-<u><sup>footnote)</sup> Allows identifiers spelled with a leading underscore
+<ins><sup>footnote)</sup> Allows identifiers spelled with a leading underscore
 followed by an uppercase letter that match the spelling of a keyword to be used
-as macro names.</u>
+as macro names.</ins>
 
 ---
 
@@ -11979,7 +11989,7 @@ Hence, I'd argue that whether this code is legal or not is ambiguous and a DR is
 required, either to:
 
 > * Establish the principle that “whenever a constraint refers to elements of the syntax tree, it means those elements in the term currently being processed, and not any terms that maybe found by recursively traversing the tree”, or
-> * Reword the constraint in 6.7.2.1 para 2 to clarify that the above code is intended to be aconstraint error, for example by adding ‘shall contain a struct-declarator-list, <u>other than any that may be found in the interpretation of the *specifier-qualifier-list*</u>’
+> * Reword the constraint in 6.7.2.1 para 2 to clarify that the above code is intended to be aconstraint error, for example by adding ‘shall contain a struct-declarator-list, <ins>other than any that may be found in the interpretation of the *specifier-qualifier-list*</ins>’
 
 ---
 
@@ -13806,9 +13816,9 @@ elements of arrays).
 To that end, we propose to modify **§6.7.2.1 Structure and union specifiers**,
 paragraph 18, as indicated below:
 
-> –18–   As a special case, the last <u>member</u> ~~element~~ of a structure with
-> more than one named member may have an incomplete array type; this is called a
-> *flexible array member*. …
+> –18–   As a special case, the last <ins>member</ins> <del>element</del> of a
+> structure with more than one named member may have an incomplete array type;
+> this is called a *flexible array member*. …
 
 ---
 

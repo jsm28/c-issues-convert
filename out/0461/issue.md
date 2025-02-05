@@ -12,13 +12,14 @@ to objects with "static or thread storage duration" underscored in the text
 below.
 
 > If the signal occurs other than as the result of calling the `abort` or `raise`
-> function, the behavior is undefined if the signal handler <u>refers</u> to any
-> object with <u>static or thread storage duration</u> that is not a lock-free
-> atomic object other than by assigning a value to an object declared as `volatile
-> sig_atomic_t`, or the signal handler calls any function in the standard library
-> other than the abort function, the `_Exit` function, the `quick_exit` function,
-> or the `signal` function with the first argument equal to the signal number
-> corresponding to the signal that caused the invocation of the handler.
+> function, the behavior is undefined if the signal handler <ins>refers</ins> to
+> any object with <ins>static or thread storage duration</ins> that is not a
+> lock-free atomic object other than by assigning a value to an object declared as
+> `volatile sig_atomic_t`, or the signal handler calls any function in the
+> standard library other than the abort function, the `_Exit` function, the
+> `quick_exit` function, or the `signal` function with the first argument equal to
+> the signal number corresponding to the signal that caused the invocation of the
+> handler.
 
 **Underspecification of referring to objects**
 
@@ -126,11 +127,11 @@ In section 7.14.1.1, modify the first sentence of paragraph 5 as indicated
 below:
 
 > If the signal occurs other than as the result of calling the `abort` or `raise`
-> function, the behavior is undefined if the signal handler ~~refers
-> to~~<u>accesses</u> any <u>non-`const`</u> object with static or thread storage
-> duration<u>, or any non-`const` object with automatic storage duration whose
-> lifetime started before the signal handler has been entered,</u> that is not a
-> lock-free atomic object other than by...
+> function, the behavior is undefined if the signal handler <del>refers
+> to</del><ins>accesses</ins> any <ins>non-`const`</ins> object with static or
+> thread storage duration<ins>, or any non-`const` object with automatic storage
+> duration whose lifetime started before the signal handler has been
+> entered,</ins> that is not a lock-free atomic object other than by...
 
 In addition, make the corresponding change to section **J.2 Undefined
 behavior**.

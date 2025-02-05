@@ -41,13 +41,13 @@ attribute syntax recognized by the compiler.
 Replace the first two bullets under 7.1.3p1 with:
 
 — All identifiers that begin with an underscore and either an uppercase letter
-or another underscore are always reserved for any use<u>, except those
-identifiers which are lexically identical to keywords</u>.
-<u><sup>footnote)</sup></u>  
+or another underscore are always reserved for any use<ins>, except those
+identifiers which are lexically identical to keywords</ins>.
+<ins><sup>footnote)</sup></ins>  
 — All identifiers that begin with an underscore are always reserved for use as
-identifiers with file scope in both the ordinary and tag name spaces<u>, except
-those identifiers which are lexically identical to keywords</u>.
+identifiers with file scope in both the ordinary and tag name spaces<ins>,
+except those identifiers which are lexically identical to keywords</ins>.
 
-<u><sup>footnote)</sup> Allows identifiers spelled with a leading underscore
+<ins><sup>footnote)</sup> Allows identifiers spelled with a leading underscore
 followed by an uppercase letter that match the spelling of a keyword to be used
-as macro names.</u>
+as macro names.</ins>

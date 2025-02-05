@@ -41,5 +41,5 @@ Modify K.3.7.1.4, p5 as indicated below:
 
 > All elements following the terminating null character (if any) written by
 > `strncpy_s` in the array of `s1max` characters pointed to by `s1` take
-> unspecified values when `strncpy_s` returns <u>a non-zero value</u>.
+> unspecified values when `strncpy_s` returns <ins>a non-zero value</ins>.
 > <sup>420\)</sup>

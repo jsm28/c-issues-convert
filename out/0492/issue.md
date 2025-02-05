@@ -64,4 +64,4 @@ Hence, I'd argue that whether this code is legal or not is ambiguous and a DR is
 required, either to:
 
 > * Establish the principle that “whenever a constraint refers to elements of the syntax tree, it means those elements in the term currently being processed, and not any terms that maybe found by recursively traversing the tree”, or
-> * Reword the constraint in 6.7.2.1 para 2 to clarify that the above code is intended to be aconstraint error, for example by adding ‘shall contain a struct-declarator-list, <u>other than any that may be found in the interpretation of the *specifier-qualifier-list*</u>’
+> * Reword the constraint in 6.7.2.1 para 2 to clarify that the above code is intended to be aconstraint error, for example by adding ‘shall contain a struct-declarator-list, <ins>other than any that may be found in the interpretation of the *specifier-qualifier-list*</ins>’

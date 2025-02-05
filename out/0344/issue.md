@@ -31,6 +31,6 @@ syntactically and semantically valid.
 Change 6.10.1p1:
 
 > The expression that controls conditional inclusion shall be an integer constant
-> expression except that: ~~it shall not contain a cast;~~ identifiers (including
-> those lexically identical to keywords) are interpreted as described
+> expression except that: <del>it shall not contain a cast;</del> identifiers
+> (including those lexically identical to keywords) are interpreted as described
 > below;<sup>141\)</sup> and it may contain unary operator expressions of the form

@@ -66,12 +66,12 @@ Eliminate the mention of `ATOMIC_FLAG_INIT` in 7.17.1p3, B.16 and the index.
 
 Proposed change for the initialization of `atomic_flag`, 7.17.8p4:
 
-<u>The default initializer `{ 0 }` may be used to initialize an `atomic_flag` to
-the clear state. An `atomic_flag` object with automatic storage duration that is
-not explicitly initialized using `{ 0 }` is initially in an indeterminate state;
-*however, the default (zero) initialization for objects with static or
+<ins>The default initializer `{ 0 }` may be used to initialize an `atomic_flag`
+to the clear state. An `atomic_flag` object with automatic storage duration that
+is not explicitly initialized using `{ 0 }` is initially in an indeterminate
+state; *however, the default (zero) initialization for objects with static or
 thread-local storage duration initializes an `atomic_flag` to the clear state.*   
-EXAMPLE</u>
+EXAMPLE</ins>
 
 ```c
 atomic_flag guard = { 0 };
@@ -84,5 +84,5 @@ partial alternative to the above text would be to modify the text in 7.17.1
 ATOMIC_FLAG_INIT
 ```
 
-<u>which expands to a default initializer (`{ 0 }` or equivalent) for an object
-of type `atomic_flag`.</u>
+<ins>which expands to a default initializer (`{ 0 }` or equivalent) for an
+object of type `atomic_flag`.</ins>

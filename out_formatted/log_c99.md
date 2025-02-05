@@ -790,7 +790,7 @@ little or no support.
    > *assignment-expression* `]`
 5. Accept the suggestions of this DR.
 
-> *<u>Note:</u>*
+> *<ins>Note:</ins>*
 >
 > > There was a unanimous vote that the feature is *ugly*, and a good consensus that
 > > its incorporation into the standard at the 11<sup>th</sup> hour was an
@@ -4017,17 +4017,17 @@ Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/do
 > to be an invalid exception, e.g., domain error. In addition, nothing is said
 > about the quotient that is stored for this case.
 >
-> <u>Counter-argument</u>: These functions are discontinuous along the lines `y =
-> mx` or `y = (m+1/2)x` for integers **m**. We see no reason to "take the limit as
-> `y` approaches zero".
+> <ins>Counter-argument</ins>: These functions are discontinuous along the lines
+> `y = mx` or `y = (m+1/2)x` for integers **m**. We see no reason to "take the
+> limit as `y` approaches zero".
 >
 > Allowing two different behaviours for these functions for the same arguments,
 > will cause applications to be more complicated, with no real added benefit.
 >
-> <u>Counter-counter-argument</u>: By discontinuous, I assume you mean that they
-> are like saw-tooth shaped functions, e.g., a linear rise and a vertical fall. I
-> agree with that, but, as one approaches the line `y=0`, the height of the teeth
-> gets smaller and smaller.
+> <ins>Counter-counter-argument</ins>: By discontinuous, I assume you mean that
+> they are like saw-tooth shaped functions, e.g., a linear rise and a vertical
+> fall. I agree with that, but, as one approaches the line `y=0`, the height of
+> the teeth gets smaller and smaller.
 
 ### Suggested Technical Corrigendum
 
@@ -4164,7 +4164,7 @@ Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/do
 > and a result of \+/-infinity, such as tan(90 degrees)) as a pole error with the
 > result of signed infinity.
 >
-> <u>Counter-argument</u>: For `0.0` we have the luxury of `+0.0` and `-0.0`.
+> <ins>Counter-argument</ins>: For `0.0` we have the luxury of `+0.0` and `-0.0`.
 > Non-zero integers don't have "sides". There is no concept of \+/-infinity in IEC
 > 60559 (nor any other hardware floating-point representation), just \+infinity
 > and -infinity. If there is no one correct result for a given argument, then that
@@ -10253,11 +10253,12 @@ non-terminal symbols in this context may be considered an improvement in itself.
 Change 6.10.2p5:
 
 > The implementation shall provide unique mappings for sequences consisting of one
-> or more ~~letters or digits (as defined in 5.2.1)~~ <u>*nondigits* or *digits*
-> (6.4.2.1)</u> followed by a period (.) and a single ~~letter~~
-> <u>*nondigit*</u>. The first character shall ~~be a letter~~ <u>not be a
-> *digit*</u>. The implementation may ignore the distinctions of alphabetical case
-> and restrict the mapping to eight significant characters before the period.
+> or more <del>letters or digits (as defined in 5.2.1)</del> <ins>*nondigits* or
+> *digits* (6.4.2.1)</ins> followed by a period (.) and a single <del>letter</del>
+> <ins>*nondigit*</ins>. The first character shall <del>be a letter</del> <ins>not
+> be a *digit*</ins>. The implementation may ignore the distinctions of
+> alphabetical case and restrict the mapping to eight significant characters
+> before the period.
 
 ---
 
@@ -10268,11 +10269,12 @@ Comment from WG14 on 2006-03-05:
 Change 6.10.2p5:
 
 > The implementation shall provide unique mappings for sequences consisting of one
-> or more ~~letters or digits (as defined in 5.2.1)~~ <u>*nondigits* or *digits*
-> (6.4.2.1)</u> followed by a period (.) and a single ~~letter~~
-> <u>*nondigit*</u>. The first character shall ~~be a letter~~ <u>not be a
-> *digit*</u>. The implementation may ignore the distinctions of alphabetical case
-> and restrict the mapping to eight significant characters before the period.
+> or more <del>letters or digits (as defined in 5.2.1)</del> <ins>*nondigits* or
+> *digits* (6.4.2.1)</ins> followed by a period (.) and a single <del>letter</del>
+> <ins>*nondigit*</ins>. The first character shall <del>be a letter</del> <ins>not
+> be a *digit*</ins>. The implementation may ignore the distinctions of
+> alphabetical case and restrict the mapping to eight significant characters
+> before the period.
 
 
 </div>
@@ -10302,16 +10304,16 @@ The sentence describing a preprocessing directive is fearsomely long.
 
 Change 6.10p2:
 
-> A preprocessing directive consists of a sequence of preprocessing tokens ~~that
-> begins with~~ <u>. The first token in the sequence is</u> a `#` preprocessing
-> token that (at the start of translation phase 4\) is either the first character
-> in the source file (optionally after white space containing no new-line
-> characters) or that follows white space containing at least one new-line
-> character~~, and is ended by the next~~ <u>. The last token in the sequence is
-> the first</u> new-line character <u>that follows the first token in the
-> sequence</u>.<sup>140\)</sup> A new-line character ends the preprocessing
-> directive even if it occurs within what would otherwise be an invocation of a
-> function-like macro.
+> A preprocessing directive consists of a sequence of preprocessing tokens
+> <del>that begins with</del> <ins>. The first token in the sequence is</ins> a
+> `#` preprocessing token that (at the start of translation phase 4\) is either
+> the first character in the source file (optionally after white space containing
+> no new-line characters) or that follows white space containing at least one
+> new-line character<del>, and is ended by the next</del> <ins>. The last token in
+> the sequence is the first</ins> new-line character <ins>that follows the first
+> token in the sequence</ins>.<sup>140\)</sup> A new-line character ends the
+> preprocessing directive even if it occurs within what would otherwise be an
+> invocation of a function-like macro.
 
 ---
 
@@ -10327,15 +10329,16 @@ definition.
 Change 6.10p2:
 
 > A *preprocessing directive* consists of a sequence of preprocessing tokens
-> ~~that begins with~~ <u>that satisfies the following constraints. The first
-> token in the sequence is</u> a `#` preprocessing token that (at the start of
-> translation phase 4\) is either the first character in the source file
+> <del>that begins with</del> <ins>that satisfies the following constraints. The
+> first token in the sequence is</ins> a `#` preprocessing token that (at the
+> start of translation phase 4\) is either the first character in the source file
 > (optionally after white space containing no new-line characters) or that follows
-> white space containing at least one new-line character~~, and is ended by the
-> next~~ <u>. The last token in the sequence is the first</u> new-line character
-> <u>that follows the first token in the sequence</u>.<sup>140\)</sup> A new-line
-> character ends the preprocessing directive even if it occurs within what would
-> otherwise be an invocation of a function-like macro.
+> white space containing at least one new-line character<del>, and is ended by the
+> next</del> <ins>. The last token in the sequence is the first</ins> new-line
+> character <ins>that follows the first token in the
+> sequence</ins>.<sup>140\)</sup> A new-line character ends the preprocessing
+> directive even if it occurs within what would otherwise be an invocation of a
+> function-like macro.
 
 
 </div>
@@ -10414,9 +10417,9 @@ reasons which seem fairly obvious to me.)
 Change the following sentence in 6.10.1p3:
 
 > After all replacements due to macro expansion and the `defined` unary operator
-> have been performed, all remaining identifiers <u>and keywords</u> are replaced
-> with the pp-number `0`, and then each preprocessing token is converted into a
-> token.
+> have been performed, all remaining identifiers <ins>and keywords</ins> are
+> replaced with the pp-number `0`, and then each preprocessing token is converted
+> into a token.
 
 ---
 
@@ -10432,8 +10435,8 @@ there are not yet any keywords at the point in question.
 Change the following sentence in 6.10.1p3:
 
 > After all replacements due to macro expansion and the `defined` unary operator
-> have been performed, all remaining identifiers <u>(including those lexically
-> identical to keywords)</u> are replaced with the pp-number `0`, and then each
+> have been performed, all remaining identifiers <ins>(including those lexically
+> identical to keywords)</ins> are replaced with the pp-number `0`, and then each
 > preprocessing token is converted into a token.
 
 
@@ -10476,8 +10479,8 @@ Add a new sentence to the end of 6.10.3p9:
 >
 > defines an object-like macro that causes each subsequent instance of the macro
 > name<sup>145\)</sup> to be replaced by the replacement list of preprocessing
-> tokens that constitute the remainder of the directive. <u>The replacement list
-> is then rescanned for more macro names as specified below.</u>
+> tokens that constitute the remainder of the directive. <ins>The replacement list
+> is then rescanned for more macro names as specified below.</ins>
 
 ---
 
@@ -10495,8 +10498,8 @@ Add a new sentence to the end of 6.10.3p9:
 >
 > defines an object-like macro that causes each subsequent instance of the macro
 > name<sup>145\)</sup> to be replaced by the replacement list of preprocessing
-> tokens that constitute the remainder of the directive. <u>The replacement list
-> is then rescanned for more macro names as specified below.</u>
+> tokens that constitute the remainder of the directive. <ins>The replacement list
+> is then rescanned for more macro names as specified below.</ins>
 
 
 </div>
@@ -10526,7 +10529,7 @@ its definition. Clearly, there is confusion about whether this sentence is
 talking about the definition or an invocation.
 
 Perhaps it would be clearer yet to say something like, "a function-like macro
-<u>which takes</u> arguments, similarly syntactically to a function call".
+<ins>which takes</ins> arguments, similarly syntactically to a function call".
 
 ### Suggested Technical Corrigendum
 
@@ -10540,8 +10543,8 @@ Change 6.10.3p10:
 > > `# define` *identifier lparen identifier-list* `, ... )` *replacement-list
 > > new-line*
 >
-> defines a function-like macro with ~~arguments~~ <u>parameters</u>, similar
-> syntactically to a function call.
+> defines a function-like macro with <del>arguments</del> <ins>parameters</ins>,
+> similar syntactically to a function call.
 
 ---
 
@@ -10559,8 +10562,8 @@ Change 6.10.3p10:
 > > `# define` *identifier lparen identifier-list* `, ... )` *replacement-list
 > > new-line*
 >
-> defines a function-like macro with ~~arguments~~ <u>parameters</u>, <u>whose use
-> is</u> similar syntactically to a function call.
+> defines a function-like macro with <del>arguments</del> <ins>parameters</ins>,
+> <ins>whose use is</ins> similar syntactically to a function call.
 
 
 </div>
@@ -10599,11 +10602,11 @@ seem to be the ideal solution.
 Change footnote 5 (5.1.1.2p1):
 
 > Implementations shall behave as if these separate phases occur, even though many
-> are typically folded together in practice. <u>Source files, translation units
+> are typically folded together in practice. <ins>Source files, translation units
 > and translated translation units need not necessarily be stored as files, nor
 > need there be any one-to-one correspondence between these entities and any
 > external representation. The description is conceptual only, and does not
-> specify any particular implementation.</u>
+> specify any particular implementation.</ins>
 
 ---
 
@@ -10614,11 +10617,11 @@ Comment from WG14 on 2006-03-05:
 Change footnote 5 (5.1.1.2p1):
 
 > Implementations shall behave as if these separate phases occur, even though many
-> are typically folded together in practice. <u>Source files, translation units
+> are typically folded together in practice. <ins>Source files, translation units
 > and translated translation units need not necessarily be stored as files, nor
 > need there be any one-to-one correspondence between these entities and any
 > external representation. The description is conceptual only, and does not
-> specify any particular implementation.</u>
+> specify any particular implementation.</ins>
 
 
 </div>
@@ -10651,10 +10654,10 @@ the phrase "in a source file" is, as far as I can see, weak at best.
 
 Change 5.2.1.1p1:
 
-> ~~All occurrences in a source file~~ <u>Before any other processing takes place,
-> each occurrence of one</u> of the following sequences of three characters
-> (called *trigraph sequences*<sup>12\)</sup>) ~~are~~ <u>is</u> replaced with the
-> corresponding single character.
+> <del>All occurrences in a source file</del> <ins>Before any other processing
+> takes place, each occurrence of one</ins> of the following sequences of three
+> characters (called *trigraph sequences*<sup>12\)</sup>) <del>are</del>
+> <ins>is</ins> replaced with the corresponding single character.
 
 ---
 
@@ -10664,10 +10667,10 @@ Comment from WG14 on 2006-03-05:
 
 Change 5.2.1.1p1:
 
-> ~~All occurrences in a source file~~ <u>Before any other processing takes place,
-> each occurrence of one</u> of the following sequences of three characters
-> (called *trigraph sequences*<sup>12\)</sup>) ~~are~~ <u>is</u> replaced with the
-> corresponding single character.
+> <del>All occurrences in a source file</del> <ins>Before any other processing
+> takes place, each occurrence of one</ins> of the following sequences of three
+> characters (called *trigraph sequences*<sup>12\)</sup>) <del>are</del>
+> <ins>is</ins> replaced with the corresponding single character.
 
 
 </div>
@@ -14407,8 +14410,8 @@ syntactically and semantically valid.
 Change 6.10.1p1:
 
 > The expression that controls conditional inclusion shall be an integer constant
-> expression except that: ~~it shall not contain a cast;~~ identifiers (including
-> those lexically identical to keywords) are interpreted as described
+> expression except that: <del>it shall not contain a cast;</del> identifiers
+> (including those lexically identical to keywords) are interpreted as described
 > below;<sup>141\)</sup> and it may contain unary operator expressions of the form
 
 ---
@@ -14420,8 +14423,8 @@ Comment from WG14 on 2007-07-21:
 Change 6.10.1p1:
 
 > The expression that controls conditional inclusion shall be an integer constant
-> expression except that: ~~it shall not contain a cast;~~ identifiers (including
-> those lexically identical to keywords) are interpreted as described
+> expression except that: <del>it shall not contain a cast;</del> identifiers
+> (including those lexically identical to keywords) are interpreted as described
 > below;<sup>141\)</sup> and it may contain unary operator expressions of the form
 
 
@@ -14588,16 +14591,16 @@ So what the C\+\+ standard says, and what the C standard needs to say, about the
 scope of a parameter name is already covered in the C standard, outside of
 6.9.1p9. Therefore, I suggest modifying 6.9.1p9 as indicated:
 
-> Each parameter has automatic storage duration. Its identifier is an lvalue~~,
+> Each parameter has automatic storage duration. Its identifier is an lvalue<del>,
 > which is in effect declared at the head of the compound statement that
 > constitutes the function body (and therefore cannot be redeclared in the
-> function body except in an enclosed block)~~. The layout of the storage for
+> function body except in an enclosed block)</del>. The layout of the storage for
 > parameters is unspecified.
 
 Additionally, if desired, add a footnote at the point of the deletion:
 
-> <u>A parameter identifier cannot be redeclared in the function body except in an
-> enclosed block.</u>
+> <ins>A parameter identifier cannot be redeclared in the function body except in
+> an enclosed block.</ins>
 
 #### Question 2
 
@@ -14610,10 +14613,10 @@ technically correct. In 6.2.1p4:
 
 > ... If an identifier designates two different entities in the same name space,
 > the scopes might overlap. If so, the scope of one entity (the *inner scope*)
-> will ~~be a strict subset of~~ <u>end strictly before</u> the scope of the other
-> entity (the *outer scope*). Within the inner scope, the identifier designates
-> the entity declared in the inner scope; the entity declared in the outer scope
-> is *hidden* (and not visible) within the inner scope.
+> will <del>be a strict subset of</del> <ins>end strictly before</ins> the scope
+> of the other entity (the *outer scope*). Within the inner scope, the identifier
+> designates the entity declared in the inner scope; the entity declared in the
+> outer scope is *hidden* (and not visible) within the inner scope.
 
 **Change for C1X**
 

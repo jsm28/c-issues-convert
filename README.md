@@ -29,14 +29,16 @@ standard had fixes for each issue, including when that was not found
 in the source issue lists but had to be entered manually (e.g. for C90
 issues fixed in associated Technical Corrigenda).
 
-Certain extensions to CommonMark (all found in GFM) are used in the
-output: tables and strikethrough.  Raw HTML output is used for `<u>`,
-`<sub>` and `<sup>` as those are not supported in Markdown.  In
-addition, links between issues use `issue:` pseudo-URIs.  (If
-formatted output is generated from the data here, the appropriate
-handling of such links might depend on whether separate pages are
-generated for each issue, or a single long page with all issues
-against a given standard version.)  Soft line breaks in paragraphs are
-intended to be interpreted as spaces, not as line endings; the
-Markdown is wrapped purely for convenience in reading / editing it
-directly, not for any semantic significance.
+The tables extension to CommonMark (as found in GFM) is used in the
+output.  Raw HTML output is used for `<ins>`, `<sub>` and `<sup>` as
+those are not supported in Markdown, and also for `<del>` as the GFM
+strikethrough extension appears (at least as implemented on GitHub)
+not to cover all the cases of strikethrough used here.  In addition,
+links between issues use `issue:` pseudo-URIs.  (If formatted output
+is generated from the data here, the appropriate handling of such
+links might depend on whether separate pages are generated for each
+issue, or a single long page with all issues against a given standard
+version.)  Soft line breaks in paragraphs are intended to be
+interpreted as spaces, not as line endings; the Markdown is wrapped
+purely for convenience in reading / editing it directly, not for any
+semantic significance.

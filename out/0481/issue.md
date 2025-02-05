@@ -245,29 +245,29 @@ Amend the list in footnote 121 for objects with `register` storage class. Change
 > Thus, the only operators that can be applied to an array declared with
 > storage-class specifier `register` are `sizeof` and `_Alignof`.
 
-<u>Thus, an identifier with array type and declared with storage-class specifier
-`register` may only appear in primary expressions and as operand to `sizeof` and
-`_Alignof`.</u>
+<ins>Thus, an identifier with array type and declared with storage-class
+specifier `register` may only appear in primary expressions and as operand to
+`sizeof` and `_Alignof`.</ins>
 
 ### Suggested Technical Corrigendum (Choice 2\)
 
 Change 6.5.1.1 p3, first sentence
 
-> The controlling expression of a generic selection is not evaluated <u>and the
+> The controlling expression of a generic selection is not evaluated <ins>and the
 > type of that expression is used without applying any conversions described in
-> Section 6.3</u>.
+> Section 6.3</ins>.
 
 Add `_Generic` to the exception list in *6.3.2.1 p3* to make it clear that array
 to pointer conversion applies to none of the controlling or association
 expression if they are lvalues of array type.
 
-> Except when it is <u>the controlling expression or an association expression of
-> a `_Generic` primary expression, or is</u> the operand of the `sizeof` operator,
-> the `_Alignof` operator, or the unary `&` operator, or is a string literal used
-> to initialize an array, an expression that has type “array of type” is converted
-> to an expression with type “pointer to type” that points to the initial element
-> of the array object and is not an lvalue. If the array object has register
-> storage class, the behavior is undefined.
+> Except when it is <ins>the controlling expression or an association expression
+> of a `_Generic` primary expression, or is</ins> the operand of the `sizeof`
+> operator, the `_Alignof` operator, or the unary `&` operator, or is a string
+> literal used to initialize an array, an expression that has type “array of type”
+> is converted to an expression with type “pointer to type” that points to the
+> initial element of the array object and is not an lvalue. If the array object
+> has register storage class, the behavior is undefined.
 
 Also add a forward reference to `_Generic` in 6.3.2.
 
@@ -285,8 +285,8 @@ Also, add `_Generic` to the exception list in *6.3.2.1 p3* to make it clear that
 array to pointer conversion applies to none of the association expression if
 they are lvalues of array type.
 
-> Except when it is <u>an association expression of a `_Generic` expression, or
-> is</u> the operand of the `sizeof` operator, the `_Alignof` operator, or the
+> Except when it is <ins>an association expression of a `_Generic` expression, or
+> is</ins> the operand of the `sizeof` operator, the `_Alignof` operator, or the
 > unary `&` operator, or is a string literal used to initialize an array, an
 > expression that has type “array of type” is converted to an expression with type
 > “pointer to type” that points to the initial element of the array object and is
@@ -298,7 +298,7 @@ they are lvalues of array type.
 A third possibility would be to leave this leeway to implementations. I strongly
 object to that, but if so, I would suggest to add a phrase to 6.5.1.1 p3 like:
 
-> ... in the default generic association. <u>Whether or not the type of the
+> ... in the default generic association. <ins>Whether or not the type of the
 > controlling expression is determined as if any of conversions described in
-> Section 6.3 are applied is implementation defined.</u> None of the expressions
+> Section 6.3 are applied is implementation defined.</ins> None of the expressions
 > ...

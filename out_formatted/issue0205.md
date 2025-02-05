@@ -161,7 +161,7 @@ little or no support.
    > *assignment-expression* `]`
 5. Accept the suggestions of this DR.
 
-> *<u>Note:</u>*
+> *<ins>Note:</ins>*
 >
 > > There was a unanimous vote that the feature is *ugly*, and a good consensus that
 > > its incorporation into the standard at the 11<sup>th</sup> hour was an

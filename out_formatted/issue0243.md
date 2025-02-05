@@ -43,17 +43,17 @@ Converted from: [summary-c99.htm](https://www.open-std.org/jtc1/sc22/wg14/www/do
 > to be an invalid exception, e.g., domain error. In addition, nothing is said
 > about the quotient that is stored for this case.
 >
-> <u>Counter-argument</u>: These functions are discontinuous along the lines `y =
-> mx` or `y = (m+1/2)x` for integers **m**. We see no reason to "take the limit as
-> `y` approaches zero".
+> <ins>Counter-argument</ins>: These functions are discontinuous along the lines
+> `y = mx` or `y = (m+1/2)x` for integers **m**. We see no reason to "take the
+> limit as `y` approaches zero".
 >
 > Allowing two different behaviours for these functions for the same arguments,
 > will cause applications to be more complicated, with no real added benefit.
 >
-> <u>Counter-counter-argument</u>: By discontinuous, I assume you mean that they
-> are like saw-tooth shaped functions, e.g., a linear rise and a vertical fall. I
-> agree with that, but, as one approaches the line `y=0`, the height of the teeth
-> gets smaller and smaller.
+> <ins>Counter-counter-argument</ins>: By discontinuous, I assume you mean that
+> they are like saw-tooth shaped functions, e.g., a linear rise and a vertical
+> fall. I agree with that, but, as one approaches the line `y=0`, the height of
+> the teeth gets smaller and smaller.
 
 ### Suggested Technical Corrigendum
 

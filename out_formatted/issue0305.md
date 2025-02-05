@@ -23,9 +23,9 @@ reasons which seem fairly obvious to me.)
 Change the following sentence in 6.10.1p3:
 
 > After all replacements due to macro expansion and the `defined` unary operator
-> have been performed, all remaining identifiers <u>and keywords</u> are replaced
-> with the pp-number `0`, and then each preprocessing token is converted into a
-> token.
+> have been performed, all remaining identifiers <ins>and keywords</ins> are
+> replaced with the pp-number `0`, and then each preprocessing token is converted
+> into a token.
 
 ---
 
@@ -41,6 +41,6 @@ there are not yet any keywords at the point in question.
 Change the following sentence in 6.10.1p3:
 
 > After all replacements due to macro expansion and the `defined` unary operator
-> have been performed, all remaining identifiers <u>(including those lexically
-> identical to keywords)</u> are replaced with the pp-number `0`, and then each
+> have been performed, all remaining identifiers <ins>(including those lexically
+> identical to keywords)</ins> are replaced with the pp-number `0`, and then each
 > preprocessing token is converted into a token.

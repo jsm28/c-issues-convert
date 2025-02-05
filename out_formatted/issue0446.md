@@ -36,46 +36,47 @@ their count parameter `n` in terms of bytes.
 
 Change 7.24.2.1 p 2 first sentence from
 
-> The `memcpy` function copies `n` <u>characters</u> from the object pointed to by
-> `s2` into the object pointed to by `s1`.
+> The `memcpy` function copies `n` <ins>characters</ins> from the object pointed
+> to by `s2` into the object pointed to by `s1`.
 
 to
 
-> The `memcpy` function copies `n` <u>bytes</u> from the object pointed to by `s2`
-> into the object pointed to by `s1`.
+> The `memcpy` function copies `n` <ins>bytes</ins> from the object pointed to by
+> `s2` into the object pointed to by `s1`.
 
 **memmove**
 
 Change 7.24.2.2 p 2 from
 
-> The `memmove` function copies `n` <u>characters</u> from the object pointed to
-> by `s2` into the object pointed to by `s1`. Copying takes place as if the `n`
-> <u>characters</u> from the object pointed to by `s2` are first copied into a
-> temporary array of `n` <u>characters</u> that does not overlap the objects
-> pointed to by `s1` and `s2`, and then the `n` <u>characters</u> from the
+> The `memmove` function copies `n` <ins>characters</ins> from the object pointed
+> to by `s2` into the object pointed to by `s1`. Copying takes place as if the `n`
+> <ins>characters</ins> from the object pointed to by `s2` are first copied into a
+> temporary array of `n` <ins>characters</ins> that does not overlap the objects
+> pointed to by `s1` and `s2`, and then the `n` <ins>characters</ins> from the
 > temporary array are copied into the object pointed to by `s1`.
 
 to
 
-> The `memmove` function copies `n` <u>bytes</u> from the object pointed to by
+> The `memmove` function copies `n` <ins>bytes</ins> from the object pointed to by
 > `s2` into the object pointed to by `s1`. Copying takes place as if the `n`
-> <u>bytes</u> from the object pointed to by `s2` are first copied into a
-> temporary array of `n` <u>bytes</u> that does not overlap the objects pointed to
-> by `s1` and `s2`, and then the `n` <u>bytes</u> from the temporary array are
-> copied into the object pointed to by `s1`.
+> <ins>bytes</ins> from the object pointed to by `s2` are first copied into a
+> temporary array of `n` <ins>bytes</ins> that does not overlap the objects
+> pointed to by `s1` and `s2`, and then the `n` <ins>bytes</ins> from the
+> temporary array are copied into the object pointed to by `s1`.
 
 **memcmp**
 
 Change 7.24.4.1 p 2 from
 
-> The `memcmp` function compares the first `n` <u>characters</u> of the object
-> pointed to by `s1` to the first `n` <u>characters</u> of the object pointed to
-> by `s2`.
+> The `memcmp` function compares the first `n` <ins>characters</ins> of the object
+> pointed to by `s1` to the first `n` <ins>characters</ins> of the object pointed
+> to by `s2`.
 
 to
 
-> The `memcmp` function compares the first `n` <u>bytes</u> of the object pointed
-> to by `s1` to the first `n` <u>bytes</u> of the object pointed to by `s2`.
+> The `memcmp` function compares the first `n` <ins>bytes</ins> of the object
+> pointed to by `s1` to the first `n` <ins>bytes</ins> of the object pointed to by
+> `s2`.
 
 ---
 

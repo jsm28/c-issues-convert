@@ -52,9 +52,9 @@ Therefore, the proposed corrigendum suggests to align the C rules with those of
 C\+\+ by adding a new paragraph to section **6.2.1 Scopes of identifiers** as
 follows.
 
-> <u>Names declared in *clause-1* of the `for` statement are local to the `for`
+> <ins>Names declared in *clause-1* of the `for` statement are local to the `for`
 > statement and shall not be redeclared in a subsequent condition of that
-> statement nor in the outermost block of the controlled statement.</u>
+> statement nor in the outermost block of the controlled statement.</ins>
 
 Note: the text of the paragraph is aligned with the corresponding paragraph 4 of
 section **3.3.3 Block scope** of ISO/IEC 14882:2014 (and section **3.3.2 Block

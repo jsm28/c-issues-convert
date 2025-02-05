@@ -22,10 +22,10 @@ the phrase "in a source file" is, as far as I can see, weak at best.
 
 Change 5.2.1.1p1:
 
-> ~~All occurrences in a source file~~ <u>Before any other processing takes place,
-> each occurrence of one</u> of the following sequences of three characters
-> (called *trigraph sequences*<sup>12\)</sup>) ~~are~~ <u>is</u> replaced with the
-> corresponding single character.
+> <del>All occurrences in a source file</del> <ins>Before any other processing
+> takes place, each occurrence of one</ins> of the following sequences of three
+> characters (called *trigraph sequences*<sup>12\)</sup>) <del>are</del>
+> <ins>is</ins> replaced with the corresponding single character.
 
 ---
 
@@ -35,7 +35,7 @@ Comment from WG14 on 2006-03-05:
 
 Change 5.2.1.1p1:
 
-> ~~All occurrences in a source file~~ <u>Before any other processing takes place,
-> each occurrence of one</u> of the following sequences of three characters
-> (called *trigraph sequences*<sup>12\)</sup>) ~~are~~ <u>is</u> replaced with the
-> corresponding single character.
+> <del>All occurrences in a source file</del> <ins>Before any other processing
+> takes place, each occurrence of one</ins> of the following sequences of three
+> characters (called *trigraph sequences*<sup>12\)</sup>) <del>are</del>
+> <ins>is</ins> replaced with the corresponding single character.

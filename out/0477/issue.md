@@ -47,8 +47,8 @@ strings.
 
 Change §7.12.11.2 as follows:
 
-> <u>The `nan`, `nanf`, and `nanl` functions convert the string pointed to by
-> `tagp` according to the following rules.</u> The call
+> <ins>The `nan`, `nanf`, and `nanl` functions convert the string pointed to by
+> `tagp` according to the following rules.</ins> The call
 > `nan("`*n-char-sequence*`")` is equivalent to
 > `strtod("NAN(`*n-char-sequence*`)", (char**) NULL)`; the call `nan("")` is
 > equivalent to `strtod("NAN()", (char**) NULL)`. If `tagp` does not point to an

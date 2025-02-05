@@ -31,9 +31,9 @@ properly.
 > are filled with zeros. If `E1` has an unsigned type, the value of the result is
 > `E1 x 2`<sup>`E2`</sup>, reduced modulo one more than the maximum value
 > representable in the result type. If `E1` has a signed type and nonnegative
-> value, and `E1 x 2`<sup>`E2`</sup> is representable in the <u>corresponding
-> unsigned type of the</u> result type, then that <u>value, converted to the
-> result type,</u> is the resulting value; otherwise, the behavior is undefined.
+> value, and `E1 x 2`<sup>`E2`</sup> is representable in the <ins>corresponding
+> unsigned type of the</ins> result type, then that <ins>value, converted to the
+> result type,</ins> is the resulting value; otherwise, the behavior is undefined.
 
 C\+\+ addressed this in C\+\+14 with DR1457 with identical wording
 modifications.

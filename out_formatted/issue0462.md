@@ -43,8 +43,8 @@ with static or thread storage duration that is not a lock-free atomic object
 other than by assigning a value to an object declared as `volatile
 sig_atomic_t`, or the signal handler calls any function in the standard library
 other than the `abort` function, the `_Exit` function, the `quick_exit`
-function, <u>the `atomic_flag_test_and_set` functions, the `atomic_flag_clear`
-functions,</u> or the `signal` function with the first argument equal to the
+function, <ins>the `atomic_flag_test_and_set` functions, the `atomic_flag_clear`
+functions,</ins> or the `signal` function with the first argument equal to the
 signal number corresponding to the signal that caused the invocation of the
 handler. Furthermore, if such a call to the `signal` function results in a
 `SIG_ERR` return, the value of `errno` is indeterminate.<sup>252\)</sup>
@@ -68,9 +68,9 @@ function, and the signal handler refers to an object with static or thread
 storage duration that is not a lock-free atomic object other than by assigning a
 value to an object declared as `volatile sig_atomic_t`, or calls any function in
 the standard library other than the `abort` function, the `_Exit` function, the
-`quick_exit` function, <u>the `atomic_flag_test_and_set` functions, the
-`atomic_flag_clear` functions,</u> or the `signal` function (for the same signal
-number) (7.14.1.1).
+`quick_exit` function, <ins>the `atomic_flag_test_and_set` functions, the
+`atomic_flag_clear` functions,</ins> or the `signal` function (for the same
+signal number) (7.14.1.1).
 
 ---
 

@@ -215,11 +215,11 @@ expressions `(int const){0}` and `(int const)0` have different types.
 
 Some clarification should be added to the standard, though.
 
-<u>6.5.1.1, modify as follows:  
+<ins>6.5.1.1, modify as follows:  
 EXAMPLE The `cbrt` type-generic macro could be implemented as follows. Here the
 prefix operator `+` in the selection expression ensures that lvalue conversion
 on arithmetic types is performed such that e.g lvalues of type `float const`
-select `cbrtf` and not the default `cbrt`.</u>
+select `cbrtf` and not the default `cbrt`.</ins>
 
 ```c
 #define cbrt(X) _Generic(+(X), \
@@ -229,14 +229,15 @@ float: cbrtf                   \
 )(X)
 ```
 
-<u>6.5.2.2, add after p1: The type of a function call is the return type of the
-function without any qualifiers.</u>
+<ins>6.5.2.2, add after p1: The type of a function call is the return type of
+the function without any qualifiers.</ins>
 
-<u>6.5.4, add after p2: The type of a cast expression of a qualified scalar type
-is the scalar type without any qualifiers.</u>
+<ins>6.5.4, add after p2: The type of a cast expression of a qualified scalar
+type is the scalar type without any qualifiers.</ins>
 
-<u>6.7.63, change p15, first sentence: For two function types to be compatible,
-the unqualified versions of both return types shall be compatible.</u>
+<ins>6.7.63, change p15, first sentence: For two function types to be
+compatible, the unqualified versions of both return types shall be
+compatible.</ins>
 
 **C11:** When introduced like this, this will invalidate some valid C11
 programs, since some type generic expression might behave differently. The
@@ -276,11 +277,11 @@ to be used.
 
 The necessary changes to the standard would be something like:
 
-<u>6.5.1.1, modify as follows:  
+<ins>6.5.1.1, modify as follows:  
 EXAMPLE The `cbrt` type-generic macro could be implemented as follows. Here the
 prefix operator `+` in the selection expression ensures that lvalue conversion
 on arithmetic types is performed such that e.g lvalues of type `float` select
-`cbrtf` and not the default `cbrt`.</u>
+`cbrtf` and not the default `cbrt`.</ins>
 
 ```c
 #define cbrt(X) _Generic(+(X), \
@@ -290,16 +291,17 @@ float const: cbrtf             \
 )(X)
 ```
 
-<u>6.5.2.2, add after p1: The type of a function call is the `const`-qualified
-return type of the function without any other qualifiers.</u>
+<ins>6.5.2.2, add after p1: The type of a function call is the `const`-qualified
+return type of the function without any other qualifiers.</ins>
 
-<u>6.5.4, add after p2: The type of a cast expression of a qualified scalar type
-is the `const`-qualified scalar type without any other qualifiers.</u>
+<ins>6.5.4, add after p2: The type of a cast expression of a qualified scalar
+type is the `const`-qualified scalar type without any other qualifiers.</ins>
 
 The third addedum would be the same as in the previous case:
 
-<u>6.7.63, change p15, first sentence: For two function types to be compatible,
-the unqualified versions of both return types shall be compatible.</u>
+<ins>6.7.63, change p15, first sentence: For two function types to be
+compatible, the unqualified versions of both return types shall be
+compatible.</ins>
 
 **C11:** When introduced like this, this will invalidate some valid C11
 programs, since some type generic expression might behave differently. The

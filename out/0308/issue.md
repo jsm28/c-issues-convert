@@ -16,8 +16,8 @@ seem to be the ideal solution.
 Change footnote 5 (5.1.1.2p1):
 
 > Implementations shall behave as if these separate phases occur, even though many
-> are typically folded together in practice. <u>Source files, translation units
+> are typically folded together in practice. <ins>Source files, translation units
 > and translated translation units need not necessarily be stored as files, nor
 > need there be any one-to-one correspondence between these entities and any
 > external representation. The description is conceptual only, and does not
-> specify any particular implementation.</u>
+> specify any particular implementation.</ins>

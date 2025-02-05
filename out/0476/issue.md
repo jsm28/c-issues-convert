@@ -125,8 +125,8 @@ and p6:
 > Accesses to volatile objects are evaluated strictly according to the rules of
 > the abstract machine.
 
-Note in particular that the text refers to <u>volatile objects</u>, which are
-defined as regions of storage storing the representation of their values.
+Note in particular that the text refers to <ins>volatile objects</ins>, which
+are defined as regions of storage storing the representation of their values.
 Objects are distinct from expressions used to designate and access them. Such
 expressions are referred to as *lvalues*, and may but don't need to mention the
 name of the accessed object. However, since the words in the paragraphs above
@@ -153,11 +153,11 @@ isn't new. It was pointed out in the past, for example in *The trouble with
 volatile* \[9\], Jonathan Corbet quotes Linus Torvalds, the author and
 maintainer of the Linux kernel, as saying:
 
-> Also, more importantly, "`volatile`" is on the wrong <u>part</u> of the whole
-> system. In C, it's "data" that is volatile, but that is insane. Data isn't
-> volatile — <u>accesses</u> are volatile. So it may make sense to say "make this
-> particular <u>access</u> be careful", but not "make all accesses to this data
-> use some random strategy".
+> Also, more importantly, "`volatile`" is on the wrong <ins>part</ins> of the
+> whole system. In C, it's "data" that is volatile, but that is insane. Data isn't
+> volatile — <ins>accesses</ins> are volatile. So it may make sense to say "make
+> this particular <ins>access</ins> be careful", but not "make all accesses to
+> this data use some random strategy".
 
 #### Volatile In C\+\+
 
@@ -218,48 +218,50 @@ and also with the C\+\+ specification.
 
 In §5.1.2.3, Program execution, p2:
 
-> Accessing a<u>n object through the use of an lvalue of volatile-qualified
-> type</u>~~volatile object~~, modifying a file, or calling a function that does
-> any of those operations are all side effects...
+> Accessing a<ins>n object through the use of an lvalue of volatile-qualified
+> type</ins><del>volatile object</del>, modifying a file, or calling a function
+> that does any of those operations are all side effects...
 
 In §5.1.2.3, Program execution, p4:
 
 > An actual implementation need not evaluate part of an expression if it can
 > deduce that its value is not used and that no needed side effects are produced
-> (including any caused by calling a function or accessing a<u>n object through
-> the use of an lvalue of volatile-qualified type</u>~~volatile object~~).
+> (including any caused by calling a function or accessing a<ins>n object through
+> the use of an lvalue of volatile-qualified type</ins><del>volatile
+> object</del>).
 
 In §5.1.2.3, Program execution, p6, bullet 1:
 
-> Accesses to <u>objects through the use of lvalues of volatile-qualified
-> types</u>~~volatile objects~~ are evaluated strictly according to the rules of
-> the abstract machine.
+> Accesses to <ins>objects through the use of lvalues of volatile-qualified
+> types</ins><del>volatile objects</del> are evaluated strictly according to the
+> rules of the abstract machine.
 
 In §6.7.3, Type qualifiers, p7:
 
-> What constitutes an access to an object <u>through the use of an lvalue
-> of</u>~~that has~~ volatile-qualified type is implementation-defined.
+> What constitutes an access to an object <ins>through the use of an lvalue
+> of</ins><del>that has</del> volatile-qualified type is implementation-defined.
 
 In §6.8.5, Iteration statements, p6:
 
 > An iteration statement whose controlling expression is not a constant
 > expression,<sup>156\)</sup> that performs no input/output operations, does not
-> access <u>objects through the use of lvalues of volatile-qualified types</u>
-> ~~volatile objects~~, ... may be assumed by the implementation to terminate.
+> access <ins>objects through the use of lvalues of volatile-qualified types</ins>
+> <del>volatile objects</del>, ... may be assumed by the implementation to
+> terminate.
 
 In §J.3.10, Qualifiers, p1:
 
-> What constitutes an access to an object <u>through the use of an lvalue
-> of</u>~~that has~~ volatile-qualified type (6.7.3).
+> What constitutes an access to an object <ins>through the use of an lvalue
+> of</ins><del>that has</del> volatile-qualified type (6.7.3).
 
 In §L.2.1, p1:
 
 > out-of-bounds store
 >
 > an (attempted) access (3.1) that, at run time, for a given computational state,
-> would modify (or, for an ~~object declared~~<u>lvalue of</u>
-> volatile<u>-qualified type</u>, fetch) one or more bytes that lie outside the
-> bounds permitted by this Standard.
+> would modify (or, for an <del>object declared</del><ins>lvalue of</ins>
+> volatile<ins>-qualified type</ins>, fetch) one or more bytes that lie outside
+> the bounds permitted by this Standard.
 
 ### References
 

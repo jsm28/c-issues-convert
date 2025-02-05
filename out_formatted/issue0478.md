@@ -69,16 +69,16 @@ list discussion, we offer two proposals to clarify the text of the standard.
 
 Change §5.1.2.2.2 Program execution as follows:
 
-> In a hosted environment, a program may use <u>the function `main` as well as</u>
-> all the functions, macros, type definitions, and objects described in the
-> library clause (clause 7).
+> In a hosted environment, a program may use <ins>the function `main` as well
+> as</ins> all the functions, macros, type definitions, and objects described in
+> the library clause (clause 7).
 
 #### Proposal 2
 
 Add a footnote to the end of §5.1.2.2.2 Program execution, with the following
 text:
 
-> <u>A program may also use the function `main`.</u>
+> <ins>A program may also use the function `main`.</ins>
 
 ---
 

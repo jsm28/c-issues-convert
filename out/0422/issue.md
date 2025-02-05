@@ -21,14 +21,14 @@ would have helped to make that explicit.
 
 Proposed change for the initialization of atomic objects, 7.17.2.1p2:
 
-<u>An atomic object with automatic storage duration that is not explicitly
+<ins>An atomic object with automatic storage duration that is not explicitly
 initialized using `ATOMIC_VAR_INIT` is initially in an indeterminate state;
 however, the default (zero) initialization for objects with static or
 thread-local storage duration is guaranteed to produce a valid state that
 corresponds to the value of a zero initialized object of the unqualified base
 type.   
 EXAMPLE All three of the following objects initially have an observable value of
-`0`.</u>
+`0`.</ins>
 
 ```c
 _Atomic(unsigned) A = { 0 };

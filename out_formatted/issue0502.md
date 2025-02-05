@@ -124,9 +124,9 @@ elements of arrays).
 To that end, we propose to modify **§6.7.2.1 Structure and union specifiers**,
 paragraph 18, as indicated below:
 
-> –18–   As a special case, the last <u>member</u> ~~element~~ of a structure with
-> more than one named member may have an incomplete array type; this is called a
-> *flexible array member*. …
+> –18–   As a special case, the last <ins>member</ins> <del>element</del> of a
+> structure with more than one named member may have an incomplete array type;
+> this is called a *flexible array member*. …
 
 ---
 

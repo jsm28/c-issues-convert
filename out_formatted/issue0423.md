@@ -228,11 +228,11 @@ expressions `(int const){0}` and `(int const)0` have different types.
 
 Some clarification should be added to the standard, though.
 
-<u>6.5.1.1, modify as follows:  
+<ins>6.5.1.1, modify as follows:  
 EXAMPLE The `cbrt` type-generic macro could be implemented as follows. Here the
 prefix operator `+` in the selection expression ensures that lvalue conversion
 on arithmetic types is performed such that e.g lvalues of type `float const`
-select `cbrtf` and not the default `cbrt`.</u>
+select `cbrtf` and not the default `cbrt`.</ins>
 
 ```c
 #define cbrt(X) _Generic(+(X), \
@@ -242,14 +242,15 @@ float: cbrtf                   \
 )(X)
 ```
 
-<u>6.5.2.2, add after p1: The type of a function call is the return type of the
-function without any qualifiers.</u>
+<ins>6.5.2.2, add after p1: The type of a function call is the return type of
+the function without any qualifiers.</ins>
 
-<u>6.5.4, add after p2: The type of a cast expression of a qualified scalar type
-is the scalar type without any qualifiers.</u>
+<ins>6.5.4, add after p2: The type of a cast expression of a qualified scalar
+type is the scalar type without any qualifiers.</ins>
 
-<u>6.7.63, change p15, first sentence: For two function types to be compatible,
-the unqualified versions of both return types shall be compatible.</u>
+<ins>6.7.63, change p15, first sentence: For two function types to be
+compatible, the unqualified versions of both return types shall be
+compatible.</ins>
 
 **C11:** When introduced like this, this will invalidate some valid C11
 programs, since some type generic expression might behave differently. The
@@ -289,11 +290,11 @@ to be used.
 
 The necessary changes to the standard would be something like:
 
-<u>6.5.1.1, modify as follows:  
+<ins>6.5.1.1, modify as follows:  
 EXAMPLE The `cbrt` type-generic macro could be implemented as follows. Here the
 prefix operator `+` in the selection expression ensures that lvalue conversion
 on arithmetic types is performed such that e.g lvalues of type `float` select
-`cbrtf` and not the default `cbrt`.</u>
+`cbrtf` and not the default `cbrt`.</ins>
 
 ```c
 #define cbrt(X) _Generic(+(X), \
@@ -303,16 +304,17 @@ float const: cbrtf             \
 )(X)
 ```
 
-<u>6.5.2.2, add after p1: The type of a function call is the `const`-qualified
-return type of the function without any other qualifiers.</u>
+<ins>6.5.2.2, add after p1: The type of a function call is the `const`-qualified
+return type of the function without any other qualifiers.</ins>
 
-<u>6.5.4, add after p2: The type of a cast expression of a qualified scalar type
-is the `const`-qualified scalar type without any other qualifiers.</u>
+<ins>6.5.4, add after p2: The type of a cast expression of a qualified scalar
+type is the `const`-qualified scalar type without any other qualifiers.</ins>
 
 The third addedum would be the same as in the previous case:
 
-<u>6.7.63, change p15, first sentence: For two function types to be compatible,
-the unqualified versions of both return types shall be compatible.</u>
+<ins>6.7.63, change p15, first sentence: For two function types to be
+compatible, the unqualified versions of both return types shall be
+compatible.</ins>
 
 **C11:** When introduced like this, this will invalidate some valid C11
 programs, since some type generic expression might behave differently. The
@@ -348,7 +350,7 @@ Apr 2013 meeting
 * The suggested changes to 6.5.1.1 are unnecessary. The controlling expression of a generic selection was very carefully *not* added to the list of contexts in which lvalue conversion is not done and type qualification is discarded; see 6.3.2.1p2. As such, the controlling expression of a generic selection can not have qualified type. It was thought that a note to that effect might be useful in 6.5.1.1p3.
 * The suggested addition to 6.5.4 is useful, but a better change would be to change 6.5.4p5 to:
   > Preceding an expression by a parenthesized type name converts the value of the
-  > expression to <u>the unqualified version</u> of the named type. This
+  > expression to <ins>the unqualified version</ins> of the named type. This
   > construction is called a cast. A cast that specifies no conversion has no effect
   > on the type or value of an expression.
 
@@ -356,8 +358,8 @@ Apr 2013 meeting
 * The suggested changes to 6.5.2.2 and 6.7.63p15 are desirable, but a simpler change would be to remove any qualifier from the declared return type of a function. So, in 6.7.6.3p5, change to:
   > and the type specified for *ident* in the declaration "`T D`" is
   > "*derived-declarator-type-list T*", then the type specified for *ident* is
-  > "*derived-declarator-type-list* function returning <u>the unqualified version
-  > of</u> *T*".
+  > "*derived-declarator-type-list* function returning <ins>the unqualified version
+  > of</ins> *T*".
 * Atomic types may or may not be subject to distinct generic selection and this needs to be resolved.
 
 Oct 2013 meeting

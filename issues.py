@@ -3182,7 +3182,10 @@ class CMarkdownConverter(MarkdownConverter):
         escape_misc = True
 
     convert_u = abstract_inline_conversion(
-        lambda self: '<u>')
+        lambda self: '<ins>')
+
+    convert_del = abstract_inline_conversion(
+        lambda self: '<del>')
 
 
 def convert_to_md(content):

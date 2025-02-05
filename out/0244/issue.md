@@ -24,7 +24,7 @@
 > and a result of \+/-infinity, such as tan(90 degrees)) as a pole error with the
 > result of signed infinity.
 >
-> <u>Counter-argument</u>: For `0.0` we have the luxury of `+0.0` and `-0.0`.
+> <ins>Counter-argument</ins>: For `0.0` we have the luxury of `+0.0` and `-0.0`.
 > Non-zero integers don't have "sides". There is no concept of \+/-infinity in IEC
 > 60559 (nor any other hardware floating-point representation), just \+infinity
 > and -infinity. If there is no one correct result for a given argument, then that

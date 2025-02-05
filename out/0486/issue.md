@@ -123,102 +123,103 @@ that would make the approach internally consistent.
 
 Change the beginning of 5.1.2.4 p5:
 
-~~The library defines a number of atomic operations (7.17) and operations on
-mutexes (7.26.4) that are specially identified as synchronization operations.~~
+<del>The library defines a number of atomic operations (7.17) and operations on
+mutexes (7.26.4) that are specially identified as synchronization
+operations.</del>
 
 to
 
-<u>There are a number of operations that are specially identified as
+<ins>There are a number of operations that are specially identified as
 synchronization operations: if the implementation supports the atomics extension
 these are operators and generic functions that act on atomic objects (6.5 and
 7.17); if the implementation supports the thread extension these are operations
-on mutexes (7.26.4).</u>
+on mutexes (7.26.4).</ins>
 
 Replace paragraph 6.2.6.1 p9
 
-~~Loads and stores of objects with atomic types are done with
-memory\_order\_seq\_cst semantics.~~
+<del>Loads and stores of objects with atomic types are done with
+memory\_order\_seq\_cst semantics.</del>
 
 by the following
 
-<u>All operations that act on atomic objects that do not specify otherwise have
-`memory_order_seq_cst` memory consistency. If the operation with identical
+<ins>All operations that act on atomic objects that do not specify otherwise
+have `memory_order_seq_cst` memory consistency. If the operation with identical
 values on the unqualified type is erroneous it results in an unspecific object
 representation, that may or may not be an invalid value for the type, such as an
 invalid address or a floating point NaN. Thereby no such operation may by itself
 raise a signal, a trap, a floating point exception or result otherwise in an
-interruption of the control flow.FOOTNOTE</u>
+interruption of the control flow.FOOTNOTE</ins>
 
-<u>FOOTNOTE Whether or not an atomic operation may be interrupted by a signal
-depends on the lock-free property of the underlying type.</u>
+<ins>FOOTNOTE Whether or not an atomic operation may be interrupted by a signal
+depends on the lock-free property of the underlying type.</ins>
 
 Insert a new paragraph after 6.2.6.2 p2
 
-<u>Implementations that support the atomics extension, represent all signed
+<ins>Implementations that support the atomics extension, represent all signed
 integers with two's complement such that the object representation with sign bit
-1 and all value bits zero is a normal value.</u>
+1 and all value bits zero is a normal value.</ins>
 
 Insert a new paragraph after 6.5 p3
 
-<u>An operation on an lvalue with an atomic type, that consists of the
+<ins>An operation on an lvalue with an atomic type, that consists of the
 evaluation of the object, an optional arithmetic operation and a side effect for
-updating the stored value forms a single read-modify-write operation.</u>
+updating the stored value forms a single read-modify-write operation.</ins>
 
 Remove the following phrase in 6.5.2.4 p2:
 
-~~Postfix `++` on an object with atomic type is a read-modify-write operation
-with memory\_order\_seq\_cst memory order semantics.~~
+<del>Postfix `++` on an object with atomic type is a read-modify-write operation
+with memory\_order\_seq\_cst memory order semantics.</del>
 
 Remove the following phrase in 6.5.16.2 p3:
 
-~~If **E1** has an atomic type, compound assignment is a read-modify-write
-operation with memory\_order\_seq\_cst memory order semantic~~
+<del>If **E1** has an atomic type, compound assignment is a read-modify-write
+operation with memory\_order\_seq\_cst memory order semantic</del>
 
 Replace 7.17.7 p1
 
-~~There are only a few kinds of operations on atomic types, though there are
-many instances of those kinds. This subclause specifies each general kind.~~
+<del>There are only a few kinds of operations on atomic types, though there are
+many instances of those kinds. This subclause specifies each general kind.</del>
 
 by
 
-<u>In addition to the operations on atomic objects that are described by
+<ins>In addition to the operations on atomic objects that are described by
 operators, there are a few kinds of operations that are specified as generic
 functions. This subclause specifies each generic function. After evaluation of
 its arguments, each of these generic functions forms a single read, write or
 read-modify-write operation with same general properties as described in 6.2.6.1
-p9.</u>
+p9.</ins>
 
 Assuming that the intent of 7.17.7.5 has been to allow operations on atomic
 pointer types, in p1, change:
 
-~~... to an object of any atomic integer type. None of these operations is
-applicable to `atomic_bool`~~
+<del>... to an object of any atomic integer type. None of these operations is
+applicable to `atomic_bool`</del>
 
 to
 
-<u>... to an object of any atomic integer or pointer type, as long as the
+<ins>... to an object of any atomic integer or pointer type, as long as the
 unqualified type is valid as left operand of the corresponding operator
 `op=`.FOOTNOTE  
 
 FOOTNOTE: Thus these operations are not permitted for pointers to atomic
 `_Bool`, and only "add" and "sub" variants are permitted for atomic pointer
-types.</u>
+types.</ins>
 
 Since this topic is then covered already by a more general section, remove this
 sentence from p3:
 
-~~For address types, the result may be an undefined address, but the operations
-otherwise have no undefined behavior.~~
+<del>For address types, the result may be an undefined address, but the
+operations otherwise have no undefined behavior.</del>
 
 In 7.17.7.5 p 5 replace:
 
-~~... the compound assignment operators are not guaranteed to operate
-atomically, and ...~~
+<del>... the compound assignment operators are not guaranteed to operate
+atomically, and ...</del>
 
 by
 
-<u>... the `order` parameter may make the memory consistency less strict than
-`memory_order_seq_cst`, and that ...</u>
+<ins>... the `order` parameter may make the memory consistency less strict than
+`memory_order_seq_cst`, and that ...</ins>
 
 **Future Directions**
 

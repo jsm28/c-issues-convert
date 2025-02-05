@@ -48,16 +48,17 @@ In section 7.22.3.1, modify paragraph 2 as indicated below:
 
 > The `aligned_alloc` function allocates space for an object whose alignment is
 > specified by `alignment`, whose size is specified by `size`, and whose value is
-> indeterminate. ~~T~~<u>If t</u>he value of `alignment` ~~shall be~~ <u>is
-> not</u> a valid alignment supported by the implementation ~~and~~<u>or</u> the
-> value of `size` ~~shall be~~<u>is not</u> an integral multiple of `alignment`
-> <u>the function shall fail by returning a null pointer</u>.
+> indeterminate. <del>T</del><ins>If t</ins>he value of `alignment` <del>shall
+> be</del> <ins>is not</ins> a valid alignment supported by the implementation
+> <del>and</del><ins>or</ins> the value of `size` <del>shall be</del><ins>is
+> not</ins> an integral multiple of `alignment` <ins>the function shall fail by
+> returning a null pointer</ins>.
 
 In addition, in section **J.2 Undefined behavior**, remove the following bullet:
 
-> ~~— The alignment requested of the aligned\_alloc function is not valid or not
-> supported by the implementation, or the size requested is not an integral
-> multiple of the alignment (7.22.3.1).~~
+> <del>— The alignment requested of the aligned\_alloc function is not valid or
+> not supported by the implementation, or the size requested is not an integral
+> multiple of the alignment (7.22.3.1).</del>
 
 If the proposal above isn't acceptable, then an alternative solution to consider
 that would allow `aligned_alloc` to be used even in strictly conforming programs

@@ -68,14 +68,14 @@ At 7.22.3, para 1, change:
 to
 
 > If the size of the space requested is zero, the behavior is
-> implementation-defined: either a null pointer is returned <u>and errno set to
-> indicate the error</u>, or the behavior is as if the size were some nonzero
+> implementation-defined: either a null pointer is returned <ins>and errno set to
+> indicate the error</ins>, or the behavior is as if the size were some nonzero
 > value, except that the returned pointer shall not be used to access an object.
 
 Add a footnote to this sentence stating:
 
-> <u>**Note** Memory allocated by these functions should be freed via a call to
-> `free`, and not by means of a `realoc(p, 0)`.</u>
+> <ins>**Note** Memory allocated by these functions should be freed via a call to
+> `free`, and not by means of a `realoc(p, 0)`.</ins>
 
 ---
 

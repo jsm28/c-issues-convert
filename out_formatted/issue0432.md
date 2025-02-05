@@ -93,8 +93,8 @@ Apr 2017 meeting
 
 This is a necessary but not sufficient change to address the problem, and as
 such, it was considered more dangerous to have than to have not, and was
-reopened. Combining this PTC with that of [**<u>DR 467</u>**](issue0467.md) should
-resolve the issue completely.
+reopened. Combining this PTC with that of [**<ins>DR 467</ins>**](issue0467.md)
+should resolve the issue completely.
 
 Oct 2018 meeting
 

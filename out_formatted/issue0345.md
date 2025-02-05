@@ -155,16 +155,16 @@ So what the C\+\+ standard says, and what the C standard needs to say, about the
 scope of a parameter name is already covered in the C standard, outside of
 6.9.1p9. Therefore, I suggest modifying 6.9.1p9 as indicated:
 
-> Each parameter has automatic storage duration. Its identifier is an lvalue~~,
+> Each parameter has automatic storage duration. Its identifier is an lvalue<del>,
 > which is in effect declared at the head of the compound statement that
 > constitutes the function body (and therefore cannot be redeclared in the
-> function body except in an enclosed block)~~. The layout of the storage for
+> function body except in an enclosed block)</del>. The layout of the storage for
 > parameters is unspecified.
 
 Additionally, if desired, add a footnote at the point of the deletion:
 
-> <u>A parameter identifier cannot be redeclared in the function body except in an
-> enclosed block.</u>
+> <ins>A parameter identifier cannot be redeclared in the function body except in
+> an enclosed block.</ins>
 
 #### Question 2
 
@@ -177,10 +177,10 @@ technically correct. In 6.2.1p4:
 
 > ... If an identifier designates two different entities in the same name space,
 > the scopes might overlap. If so, the scope of one entity (the *inner scope*)
-> will ~~be a strict subset of~~ <u>end strictly before</u> the scope of the other
-> entity (the *outer scope*). Within the inner scope, the identifier designates
-> the entity declared in the inner scope; the entity declared in the outer scope
-> is *hidden* (and not visible) within the inner scope.
+> will <del>be a strict subset of</del> <ins>end strictly before</ins> the scope
+> of the other entity (the *outer scope*). Within the inner scope, the identifier
+> designates the entity declared in the inner scope; the entity declared in the
+> outer scope is *hidden* (and not visible) within the inner scope.
 
 **Change for C1X**
 

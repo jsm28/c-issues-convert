@@ -29,6 +29,6 @@ the macros unsuitable for that purpose.
 
 In section 7.17.1, modify paragraph 3 as indicated below:
 
-> ...which <u>expand to constant expressions suitable for use in `#if`
-> preprocessing directives and which</u> indicate the lock-free property of the
+> ...which <ins>expand to constant expressions suitable for use in `#if`
+> preprocessing directives and which</ins> indicate the lock-free property of the
 > corresponding atomic types (both signed and unsigned); and
