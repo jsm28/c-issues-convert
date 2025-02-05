@@ -10,8 +10,8 @@ requires cacos(0\+I\*NaN) to be pi/2\+I\*NAN, which along with the
 mathematically identity cacosh(z) \= \+/-I \* cacos(z), means cacosh(0.0 \+
 I\*NaN) is NaN \+ I\*pi/2.
 
-3. ctanh(\+0.0\+I\*NaN) should be 0.0 \+ I\*NaN (not NaN\+I\*NaN)
-4. ctanh(\+0.0\+I\*INF) should be 0.0 \+ I\*NaN w/ invalid (not NaN\+I\*NaN w/ invalid)
+2. ctanh(\+0.0\+I\*NaN) should be 0.0 \+ I\*NaN (not NaN\+I\*NaN)
+3. ctanh(\+0.0\+I\*INF) should be 0.0 \+ I\*NaN w/ invalid (not NaN\+I\*NaN w/ invalid)
 
 Reason for above two: Since ctanh(x\+I\*y) \= (sinh(2x) \+ I\*sin(2y)) /
 (cosh(2x) \+ cos(2y)), for any rational number y, cos(2y) cannot be exactly -1,
