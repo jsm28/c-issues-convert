@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 
 import argparse
+import collections
 import json
 import os
 import os.path
@@ -166,11 +167,57 @@ def action_format():
     """Format the issue lists.  The source data is in out/; the
     formatted output goes to out_formatted/."""
     issues_data = get_data('out')
+    by_submitted_against = collections.defaultdict(set)
+    by_submitted_against_converted = collections.defaultdict(bool)
     for num, data in issues_data.items():
+        by_submitted_against[data['submitted-against']].add(num)
+        if data['conversion-src']:
+            by_submitted_against_converted[data['submitted-against']] = True
         format_issue(num, data, False)
         format_issue(num, data, True)
-        write_md('issue%s.md' % num, data['formatted-single-md'], True, data)
-    # TODO combined issue lists and overall index.
+        write_md('issue%s.md' % num, data['formatted-single-md'], True,
+                 issues_data)
+    index_out_list = ['# C standard issues lists\n\n']
+    for std, desc in SUBMITTED_AGAINST.items():
+        index_out_list.append('## %s\n\n' % desc)
+        if std not in by_submitted_against:
+            index_out_list.append('No issues recorded.\n\n')
+            continue
+        index_out_list.append(
+            '* [Summary (one page per issue)](summary_%s.md)\n'
+            '* [Full issue log (all issues on one page)](log_%s.md)\n\n'
+            % (std, std))
+        nums = sorted(by_submitted_against[std])
+        was_converted = by_submitted_against_converted[std]
+        summary_head = ['# %s: issue summary\n\n' % desc]
+        log_head = ['# %s: issue log\n\n' % desc]
+        if was_converted:
+            summary_head.append(
+                '**This issue summary has been automatically converted from '
+                'the original issue lists and some formatting may '
+                'not have been preserved.**\n\n')
+            log_head.append(
+                '**This issue log has been automatically converted from '
+                'the original issue lists and some formatting may '
+                'not have been preserved.**\n\n')
+        table = ['|Issue|Summary|Status|\n|-|-|-|\n']
+        for num in nums:
+            data = issues_data[num]
+            if data['status'] == 'fixed':
+                status = ('Fixed in %s'
+                          % ', '.join(FIXED_IN[x] for x in data['fixed-in']))
+            else:
+                status = STATUSES[data['status']]
+            table.append(
+                '|%s|[%s](issue:%s)|%s|\n'
+                % (num, data['summary-md'], num, status))
+        table.append('\n')
+        issues = [issues_data[n]['formatted-list-md'] for n in nums]
+        write_md('summary_%s.md' % std, ''.join(summary_head + table),
+                 True, issues_data)
+        write_md('log_%s.md' % std, ''.join(log_head + table + issues),
+                 False, issues_data)
+    write_md('index.md', ''.join(index_out_list), False, issues_data)
 
 
 def main():
