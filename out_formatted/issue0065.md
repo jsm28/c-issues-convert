@@ -24,16 +24,16 @@ Consider the program:
         char *loc [] = { "English", "En_UK", "Loglan", "" };
 
         for (i = 0; ; i++)
-              if (setlocale (LC_ALL, loc [i]) != NULL)
- 	           {
- 	           /*
- 			 *  We must eventually get here,
- 			 *  because setlocale("") can't yield NULL.
- 	            /*
- 	           printf ("Decimal point = '%s'\n",
- 	           localeconv ()->decimal_point);
- 	           exit (0);
- 	           }
+                if (setlocale (LC_ALL, loc [i]) != NULL)
+                        {
+                        /*
+                         *  We must eventually get here,
+                         *  because setlocale("") can't yield NULL.
+                         /*
+                        printf ("Decimal point = '%s'\n",
+                        localeconv ()->decimal_point);
+                        exit (0);
+                        }
         }
 ```
 

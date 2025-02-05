@@ -11,12 +11,12 @@ strictly conforming?
 ```c
 volatile void func0 (volatile void *vvp)
         {
- 	return *vvp;	/* ? */
+        return *vvp;    /* ? */
         }
 
  const void func1 (const void *cvp)
         {
- 	return *cvp;	/* ? */
+        return *cvp;    /* ? */
         }
 ```
 

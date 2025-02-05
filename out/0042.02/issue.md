@@ -22,24 +22,24 @@ In Example 3:
 
 ```c
 void f3(void) {
- 	void *p = malloc(2*N);	/* Allocate an object. */
+        void *p = malloc(2*N);  /* Allocate an object. */
         {
- 	char (*q)[N] = p;	/* The object pointed to by p may
- 					   be interpreted as having type
- 					   (char [2][N]) when referenced
- 							through q. */
- 	/* ... */
+        char (*q)[N] = p;       /* The object pointed to by p may
+                                                        be interpreted as having type
+                                                        (char [2][N]) when referenced
+                                                        through q. */
+        /* ... */
         memcpy(q[1], q[0], N);
         /* ... */
         }
         {
- 	char *r = p;		/* The object pointed to by p may
- 					   be interpreted as having type
- 					   (char [2*N]) when referenced
- 							through r. */
- 	/* ... */
+        char *r = p;            /* The object pointed to by p may
+                                                        be interpreted as having type
+                                                        (char [2*N]) when referenced
+                                                        through r. */
+        /* ... */
         memcpy(r+N, r, N);
- 	/* ... */
+        /* ... */
         }
  }
 ```

@@ -22,7 +22,7 @@ const char *ccp;
 
  void test ()
         {
- 	vp = ccp;	/* diagnostic required? */
+        vp = ccp;       /* diagnostic required? */
         }
 ```
 

@@ -23,7 +23,7 @@ program strictly conforming?
  main()
         {
         struct A *p = (struct A *) malloc(sizeof(struct A) + 100);
- 	p->x[5] = '?';		/* This is the key line */
+        p->x[5] = '?';               /* This is the key line */
         return 0;
         }
 ```
@@ -55,7 +55,7 @@ A safer idiom is:
 
 ```c
 #include <stdlib.h>
- #define HUGE_ARR	10000	/* largest desired array */
+ #define HUGE_ARR       10000   /* largest desired array */
 
  struct A {
         char x[HUGE_ARR];
@@ -64,8 +64,8 @@ A safer idiom is:
  main()
         {
         struct A *p = (struct A *) malloc(sizeof(struct A)
- 		- HUGE_ARR + 100);	/* want x[100] this time */
- 	p->x[5] = '?';		/* now strictly conforming */
+                - HUGE_ARR + 100);      /* want x[100] this time */
+        p->x[5] = '?';               /* now strictly conforming */
         return 0;
         }
 ```

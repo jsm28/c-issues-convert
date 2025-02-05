@@ -2025,7 +2025,7 @@ def clean_pre(doc, text, insert_blank_line=True):
             line_chars = []
             num_cols = 0
             while line:
-                m = re.match('(.*)[<\t]', line)
+                m = re.match('(.*?)[<\t]', line)
                 if not m:
                     break
                 line_chars.append(m.group(1))

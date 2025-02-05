@@ -56,7 +56,7 @@ array elements also have the padding? If not, what is the effect of using
 
 ```c
 struct fred a, b;
- 	/* ... /*
+        /* ... /*
         memcpy(&a, &b, sizeof (struct fred));
 ```
 

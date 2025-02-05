@@ -6,8 +6,8 @@ relevant portion of subclause 7.7:
 >
 > ```c
 > SIG_DFL
->               SIG_ERR
->               SIG_IGN
+>                 SIG_ERR
+>                 SIG_IGN
 > ```
 >
 > which expand to constant expressions with distinct values that have type

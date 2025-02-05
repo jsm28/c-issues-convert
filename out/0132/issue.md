@@ -7,10 +7,10 @@ Consider the translation unit:
 /* No headers included */
  int checkup()
         {
- 	/* Case 1 */
+        /* Case 1 */
         if (0)
-              printf("Printing.\n");
- 	/* Case 2 */
+                printf("Printing.\n");
+        /* Case 2 */
         return 2 || 1 / 0;
         }
 ```

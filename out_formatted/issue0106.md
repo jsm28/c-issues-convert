@@ -25,10 +25,10 @@ actually “used?”
 ```c
 void example(void *pv, int i)
         {
- 	&*pv;            /* ? */
- 	*pv;             /* ? */
- 	i ? *pv : *pv;   /* ? */
- 	*pv, *pv;        /* ? */
+        &*pv;            /* ? */
+        *pv;             /* ? */
+        i ? *pv : *pv;   /* ? */
+        *pv, *pv;        /* ? */
         }
 ```
 
@@ -68,15 +68,15 @@ that this may not have been what the Committee intended.
 ```c
 void example(const void *pcv, volatile void *pvv, int i)
         {
- 	&*pcv;              /* ? */
- 	*pcv;               /* ? */
- 	i ? *pcv : *pcv;    /* ? */
- 	*pcv, *pcv;         /* ? */
+        &*pcv;              /* ? */
+        *pcv;               /* ? */
+        i ? *pcv : *pcv;    /* ? */
+        *pcv, *pcv;         /* ? */
 
- 	&*pvv;              /* ? */
- 	*pvv;               /* ? */
- 	i ? *pvv : *pvv;    /* ? */
- 	*pvv, *pvv;         /* ? */
+        &*pvv;              /* ? */
+        *pvv;               /* ? */
+        i ? *pvv : *pvv;    /* ? */
+        *pvv, *pvv;         /* ? */
         }
 ```
 

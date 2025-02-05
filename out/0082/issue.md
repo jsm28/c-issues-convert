@@ -15,7 +15,7 @@ Consider the following translation unit:
         va_start (ap1, n);
         va_start (ap2, n);
         while (va_arg (ap1, int) != 0)
-              printf ("Value is %d\n", va_arg (ap2, int));
+                printf ("Value is %d\n", va_arg (ap2, int));
         va_end (ap1);
         va_end (ap2);
         }
@@ -26,15 +26,15 @@ Consider the following translation unit:
 
         va_start (ap, n);
         for (;;)
-              {
-              n = va_arg (ap, int);
-              if (is_final_arg (n))
- 	           {
- 	           va_end (ap);
- 	           return;
- 	           }
-              printf ("Value is %d\n", n);
-              }
+                {
+                n = va_arg (ap, int);
+                if (is_final_arg (n))
+                        {
+                        va_end (ap);
+                        return;
+                        }
+                printf ("Value is %d\n", n);
+                }
         }
 
  void f3 (int n, ...)
@@ -43,10 +43,10 @@ Consider the following translation unit:
 
         va_start (ap, n);
         while (n = va_arg (ap, int), n != 0)
-              printf ("Value is %d\n", n);
+                printf ("Value is %d\n", n);
         va_start (ap, n);
         while (n = va_arg (ap, int), n != 0)
-              printf ("Value is still %d\n", n);
+                printf ("Value is still %d\n", n);
         va_end (ap);
         }
 
@@ -55,7 +55,7 @@ Consider the following translation unit:
         int n;
 
         while (n = va_arg (*pap, int), n != 0)
-              printf ("Value is %d\n", n);
+                printf ("Value is %d\n", n);
         }
 
  void f4 (int n, ...)
@@ -72,7 +72,7 @@ Consider the following translation unit:
         int n;
 
         while (n = va_arg (apc, int), n != 0)
-              printf ("Value is %d\n", n);
+                printf ("Value is %d\n", n);
         }
 
  void f5 (int n, ...)

@@ -13,9 +13,9 @@ void example ()
         {
         register int array[5] = 0;
 
- 	array;     /* ? */
- 	array[3];  /* ? */
- 	array+3;   /* ? */
+        array;     /* ? */
+        array[3];  /* ? */
+        array+3;   /* ? */
         }
 ```
 

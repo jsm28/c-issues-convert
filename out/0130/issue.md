@@ -25,14 +25,14 @@ following example:
         fseek(f, 0, SEEK_SET);
         len = fread(buf, 1, 10, f);
         if (len == 8 && !memcmp(buf, "UWXYZef\n"))
- 		;	/* Case 1: OK, acts like binary */
+                ;       /* Case 1: OK, acts like binary */
         else if (len == 5 && !memcmp(buf, "UWXYZ", 5))
- 		;	/* Case 2: OK to truncate after write */
+                ;       /* Case 2: OK to truncate after write */
         else if (len > 5 && !memcmp(buf, "UWXYZ", 5))
-              printf("len = %u, buf = %s\n", len, buf);
- 			/* Case 3: Is this nonstandard? */
+                printf("len = %u, buf = %s\n", len, buf);
+                        /* Case 3: Is this nonstandard? */
         else
-              printf("This is obviously nonstandard.\n");
+                printf("This is obviously nonstandard.\n");
         }
 ```
 

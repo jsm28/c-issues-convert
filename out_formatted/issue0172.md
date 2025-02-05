@@ -32,7 +32,7 @@ Consider the following code:
 ```c
 char *s = "a string";
  if (s  = NULL)
- 	/* ... */
+        /* ... */
 ```
 
 Subclause 6.3.8, Semantics reads in part:

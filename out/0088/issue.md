@@ -32,7 +32,7 @@ Consider the following translation unit (the file `a.c`):
  struct tag;
 
  int a1 (struct tag * p)
- 	{ a2 (p); }		/* Line A */
+        { a2 (p); }             /* Line A */
 
  struct tag { int i; } s;
 
@@ -43,7 +43,7 @@ Consider the following translation unit (the file `a.c`):
         }
 
  int a2 (struct tag * p)
- 	{ /* ... */ }
+        { /* ... */ }
 ```
 
 e) Is the call to `a2` in line A valid? The parameter and argument types appear
@@ -62,7 +62,7 @@ Does this mean that:
 
 ```c
 struct tag;
- extern struct tag* p;		/* Line B */
+ extern struct tag* p;          /* Line B */
 
  struct tag { int x; }
  extern struct tag* p;
@@ -82,16 +82,16 @@ redeclaration in line C is omitted, does undefined behavior result?
 
  struct tag;
  int c1 (struct tag * p)
- 	{ /* ... */ }
+        { /* ... */ }
 
- struct tag { int i; };		/* Line C */
+ struct tag { int i; };         /* Line C */
 
  /* Second translation unit */
 
  struct tag { int i; } s;
  int main()
         {
- 	c1 (&s);		/* Line D */
+        c1 (&s);            /* Line D */
         return 0;
         }
 ```

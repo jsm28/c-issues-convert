@@ -22,12 +22,12 @@ Consider the following translation unit:
         x = a;
         x = x * x + a;
         if (x > 100)
- 		return x;	/* Returned value must be > 100 */
+                return x;       /* Returned value must be > 100 */
         if (&x == &y)
-              return 0;
+                return 0;
         y = a + 1;
         y = y * y + 17;
- 	return y;		/* Returned value must be > 0 */
+        return y;               /* Returned value must be > 0 */
         }
 
  unsigned int g1 (void) { return 0; };

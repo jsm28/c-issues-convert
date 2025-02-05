@@ -7,8 +7,8 @@ a) Is the following code strictly conforming?
 b) Must a conforming implementation correctly translate the following code?
 
 ```c
-enum E1 { enumerator1 = (const int) 9 };	/* ? */
- enum E2 { enumerator2 = (volatile int) 9 };	/* ? */
+enum E1 { enumerator1 = (const int) 9 };        /* ? */
+ enum E2 { enumerator2 = (volatile int) 9 };    /* ? */
 ```
 
 Background:

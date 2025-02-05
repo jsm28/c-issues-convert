@@ -11,7 +11,7 @@ strictly conforming?
 ```c
 void test (void *vp)
         {
- 	(vp > (void*)0);	/* ? */
+        (vp > (void*)0);     /* ? */
         }
 ```
 

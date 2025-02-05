@@ -16,7 +16,7 @@ Consider the following code extracts:
 ```c
 int a [10];
         int *p;
- 	/* ... */
+        /* ... */
         p = &a[10];
 ```
 
@@ -25,7 +25,7 @@ and
 ```c
 int *n = NULL;
         int *p
- 	/* ... */
+        /* ... */
         p = &*n;
 ```
 
@@ -36,7 +36,7 @@ idiom:
 
 > ```c
 > for (p = &a[0]; p &lt; &a[10]; p++)
->  		/* ... */
+>                 /* ... */
 > ```
 
 In the second extract, is the assignment strictly conforming (with `p` being set

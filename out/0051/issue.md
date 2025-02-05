@@ -12,7 +12,7 @@ program strictly conforming?
  main()
         {
         struct A *p = (struct A *) malloc(sizeof(struct A) + 100);
- 	p->x[5] = '?';		/* This is the key line */
+        p->x[5] = '?';               /* This is the key line */
         return 0;
         }
 ```

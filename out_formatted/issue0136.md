@@ -21,17 +21,17 @@ the C Standard let `mktime` return -1 in this case?
         struct tm t;
         time_t r;
 
- 	/* 1994-04-03 02:30:00 */
+        /* 1994-04-03 02:30:00 */
         t.tm_year = 1994 - 1900; t.tm_mon = 3; t.tm_mday = 3;
         t.tm_hour = 2; t.tm_min = 30; t.tm_sec = 0;
 
- 	t.tm_isdst = -1; /* i.e. unknown */
+        t.tm_isdst = -1; /* i.e. unknown */
 
         r = mktime(&t);
         if (r == -1)
-              printf("mktime failed\n");
+                printf("mktime failed\n");
         else
-              printf("%s", ctime(&r));
+                printf("%s", ctime(&r));
         return 0;
         }
 ```

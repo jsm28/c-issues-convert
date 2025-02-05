@@ -28,9 +28,9 @@ Examples:
 
  void example ()
         {
- 	assert (cp);	/* conforming code?  diagnostic required? */
- 	assert (fp);	/* conforming code?  diagnostic required? */
- 	assert (obj);	/* conforming code?  diagnostic required? */
+        assert (cp);    /* conforming code?  diagnostic required? */
+        assert (fp);    /* conforming code?  diagnostic required? */
+        assert (obj);   /* conforming code?  diagnostic required? */
         }
 ```
 
@@ -45,6 +45,6 @@ Example:
 
  void example ()
         {
- 	assert (0.1);	/* must this casue an abort?  must it NOT? */
+        assert (0.1);   /* must this casue an abort?  must it NOT? */
         }
 ```

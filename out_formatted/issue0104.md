@@ -24,8 +24,8 @@ strictly conforming (because this code violates the above rule):
 typedef struct incomplete_S ST;
  typedef union  incomplete_U UT;
 
- void example1(ST arg);	/* diagnostic permitted/encouraged? */
- void example2(UT arg);	/* diagnostic permitted/encouraged? */
+ void example1(ST arg); /* diagnostic permitted/encouraged? */
+ void example2(UT arg); /* diagnostic permitted/encouraged? */
 ```
 
 I have noted however that many/most/all “conforming” implementations do in fact

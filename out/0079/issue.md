@@ -20,7 +20,7 @@ static size_t strlen (const char *__s)
         size_t __len = 0;
 
         while (*__s++)
-              __len++;
+                __len++;
         return __len;
         }
 ```

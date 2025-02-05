@@ -18,8 +18,8 @@ definition, have no linkage) are declared to have incomplete types:
 ```c
 typedef int AT[];
 
- void example1 (int arg[]);	/* diagnostic permitted/encouraged? */
- void example2 (AT arg);		/* diagnostic permitted/encouraged? */
+ void example1 (int arg[]);     /* diagnostic permitted/encouraged? */
+ void example2 (AT arg);                /* diagnostic permitted/encouraged? */
 ```
 
 I believe that subclause 6.5 needs to be reworded so as to clarify that code

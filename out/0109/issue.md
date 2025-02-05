@@ -48,8 +48,8 @@ allow it to execute) without “failure.”
  int foo()
         {
         int i;
- 	i = (p1 > p2);  /* Must this be "successfully translated"? */
- 	1/0;             /* Must this be "successfully translated"? */
+        i = (p1 > p2);  /* Must this be "successfully translated"? */
+        1/0;             /* Must this be "successfully translated"? */
         return 0;
         }
 ```

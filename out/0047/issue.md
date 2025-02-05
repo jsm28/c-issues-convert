@@ -1,12 +1,12 @@
 Are the following declarations strictly conforming?
 
 ```c
-/* 1 */  struct S;
- /* 2 */ struct S *f(struct S *p) {return p; }
- /* 3 */ struct S *g(struct S a[]) {return a; }
- /* 4 */ int *h(int a2[][]) {return *a2; }
- /* 5 */ extern struct S es1;
- /* 6 */ extern struct S es2[1];
+/* 1 */ struct S;
+ /* 2 */        struct S *f(struct S *p) {return p; }
+ /* 3 */        struct S *g(struct S a[]) {return a; }
+ /* 4 */        int *h(int a2[][]) {return *a2; }
+ /* 5 */        extern struct S es1;
+ /* 6 */        extern struct S es2[1];
 ```
 
 The declaration of struct tag `S` introduces an incomplete type (subclause

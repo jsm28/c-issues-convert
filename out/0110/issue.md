@@ -16,17 +16,17 @@ typedef void VT;
  typedef int AT[];
  typedef void (FT) ();
 
- void declaration1 (VT arg[]);		/* ? */
- void declaration2 (ST arg[]);		/* ? */
- void declaration3 (UT arg[]);		/* ? */
- void declaration4 (AT arg[]);		/* ? */
- void declaration5 (FT arg[]);		/* ? */
+ void declaration1 (VT arg[]);          /* ? */
+ void declaration2 (ST arg[]);          /* ? */
+ void declaration3 (UT arg[]);          /* ? */
+ void declaration4 (AT arg[]);          /* ? */
+ void declaration5 (FT arg[]);          /* ? */
 
- void definition1 (VT arg[]) { }	/* ? */
- void definition2 (ST arg[]) { }	/* ? */
- void definition3 (UT arg[]) { }	/* ? */
- void definition4 (AT arg[]) { }	/* ? */
- void definition5 (FT arg[]) { }	/* ? */
+ void definition1 (VT arg[]) { }        /* ? */
+ void definition2 (ST arg[]) { }        /* ? */
+ void definition3 (UT arg[]) { }        /* ? */
+ void definition4 (AT arg[]) { }        /* ? */
+ void definition5 (FT arg[]) { }        /* ? */
 ```
 
 Footnote: I have heard rumors that the issue of the exact timing of the decay of

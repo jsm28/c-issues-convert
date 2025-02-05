@@ -17,12 +17,12 @@ Given the code:
 ```c
 void example ()
         {
-              {
-              struct TAG {int i};
-              }
-              {
- 		struct TAG object;	/* line 7 */
-              }
+                {
+                struct TAG {int i};
+                }
+                {
+                struct TAG object;      /* line 7 */
+                }
         }
 ```
 

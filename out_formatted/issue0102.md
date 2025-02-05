@@ -31,13 +31,13 @@ one defining declaration of each tag appears within a single scope):
 void example ()
         {
         struct S { int member; };
- 	struct S { int member; };  /* diagnostic required? */
+        struct S { int member; };  /* diagnostic required? */
 
         union U { int member; };
- 	union U { int member; };   /* diagnostic required? */
+        union U { int member; };   /* diagnostic required? */
 
         enum E { member };
- 	enum E { member };         /* diagnostic required? */
+        enum E { member };         /* diagnostic required? */
         }
 ```
 

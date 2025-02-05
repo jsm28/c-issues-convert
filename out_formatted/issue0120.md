@@ -21,12 +21,12 @@ program which prints `3 3`?
 #include <stdio.h>
 
  struct S { unsigned bit:1; };
- struct S object1 = { 3 };	/* ? */
+ struct S object1 = { 3 };      /* ? */
  struct S object2;
 
  int main ()
         {
- 	object2.bit = 3;	/* ? */
+        object2.bit = 3;        /* ? */
         printf ("%d %d\n", object1.bit, object2.bit);
         return 0;
         }

@@ -19,7 +19,7 @@ b) Does the following code involve usage which renders the code itself not
 strictly conforming?
 
 ```c
-char array2[2][5] = { "defghi" };	/* ? */
+char array2[2][5] = { "defghi" };       /* ? */
 ```
 
 Background:

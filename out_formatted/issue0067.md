@@ -29,7 +29,7 @@ char
         unsigned int
         signed long
         unsigned long
- 	int : N	 /* i.e. bitfield of size N /*
+        int : N  /* i.e. bitfield of size N /*
         signed int : N
         unsigned int : N
         enumerated type

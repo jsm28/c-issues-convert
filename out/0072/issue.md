@@ -20,22 +20,22 @@ Consider the following translation unit:
 
         a = malloc (sizeof (struct hacked) + 20 * sizeof (T));
         if (a == NULL)
-              return NULL;
+                return NULL;
         a->size = 20;
 
- 	/* Method 1 /*
- 	a->data [8] = 42;					/* Line A /*
+        /* Method 1 /*
+        a->data [8] = 42;                                    /* Line A /*
 
- 	/* Method 2 /*
+        /* Method 2 /*
         pt = a->data;
- 	pt += 8;							/* Line B /*
+        pt += 8;                                                        /* Line B /*
         *pt = 42;
 
- 	/* Method 3 /*
+        /* Method 3 /*
         pc = (char *) a;
         pc += offsetof (struct hacked, data);
- 	pt = (T *) pc;						/* Line C /*
- 	pt += 8;							/* Line D /*
+        pt = (T *) pc;                                          /* Line C /*
+        pt += 8;                                                        /* Line D /*
         *pt = 6 * 9;
         return a;
         }

@@ -9,10 +9,10 @@ int f(int);
         int (**fpp)();
 
         fp1 = f;
- 	fp2 = fp1;	/* pointers to compatible types, assignment ok */
- 	(*fp2)(3);	/* function types are compatible, call is ok */
- 	fpp = &fp1;	/* pointer to compatible types, assignment ok */
- 	(**fpp)(3);	/* valid? */
+        fp2 = fp1;      /* pointers to compatible types, assignment ok */
+        (*fp2)(3);      /* function types are compatible, call is ok */
+        fpp = &fp1; /* pointer to compatible types, assignment ok */
+        (**fpp)(3);     /* valid? */
 ```
 
 The final call itself should be valid since the resulting function type is

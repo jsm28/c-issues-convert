@@ -56,12 +56,12 @@ double` operands in C:
 Example 1:
 
 ```c
-extern void callee ();	/* non-prototyped */
+extern void callee ();  /* non-prototyped */
  double a, b;
 
  void caller ()
         {
- 	callee(a+b);  /* evaluated in long double then narrowed? */
+        callee(a+b);  /* evaluated in long double then narrowed? */
         }
 ```
 
@@ -72,7 +72,7 @@ double a, b;
 
  double returner ()
         {
- 	return a+b;  /* evaluated in long double then narrowed? */
+        return a+b;  /* evaluated in long double then narrowed? */
         }
 ```
 

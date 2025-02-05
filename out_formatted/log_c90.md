@@ -7395,24 +7395,24 @@ In Example 3:
 
 ```c
 void f3(void) {
- 	void *p = malloc(2*N);	/* Allocate an object. */
+        void *p = malloc(2*N);  /* Allocate an object. */
         {
- 	char (*q)[N] = p;	/* The object pointed to by p may
- 					   be interpreted as having type
- 					   (char [2][N]) when referenced
- 							through q. */
- 	/* ... */
+        char (*q)[N] = p;       /* The object pointed to by p may
+                                                        be interpreted as having type
+                                                        (char [2][N]) when referenced
+                                                        through q. */
+        /* ... */
         memcpy(q[1], q[0], N);
         /* ... */
         }
         {
- 	char *r = p;		/* The object pointed to by p may
- 					   be interpreted as having type
- 					   (char [2*N]) when referenced
- 							through r. */
- 	/* ... */
+        char *r = p;            /* The object pointed to by p may
+                                                        be interpreted as having type
+                                                        (char [2*N]) when referenced
+                                                        through r. */
+        /* ... */
         memcpy(r+N, r, N);
- 	/* ... */
+        /* ... */
         }
  }
 ```
@@ -8006,12 +8006,12 @@ Converted from: [dr.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm
 Are the following declarations strictly conforming?
 
 ```c
-/* 1 */  struct S;
- /* 2 */ struct S *f(struct S *p) {return p; }
- /* 3 */ struct S *g(struct S a[]) {return a; }
- /* 4 */ int *h(int a2[][]) {return *a2; }
- /* 5 */ extern struct S es1;
- /* 6 */ extern struct S es2[1];
+/* 1 */ struct S;
+ /* 2 */        struct S *f(struct S *p) {return p; }
+ /* 3 */        struct S *g(struct S a[]) {return a; }
+ /* 4 */        int *h(int a2[][]) {return *a2; }
+ /* 5 */        extern struct S es1;
+ /* 6 */        extern struct S es2[1];
 ```
 
 The declaration of struct tag `S` introduces an incomplete type (subclause
@@ -8406,7 +8406,7 @@ program strictly conforming?
  main()
         {
         struct A *p = (struct A *) malloc(sizeof(struct A) + 100);
- 	p->x[5] = '?';		/* This is the key line */
+        p->x[5] = '?';               /* This is the key line */
         return 0;
         }
 ```
@@ -8438,7 +8438,7 @@ A safer idiom is:
 
 ```c
 #include <stdlib.h>
- #define HUGE_ARR	10000	/* largest desired array */
+ #define HUGE_ARR       10000   /* largest desired array */
 
  struct A {
         char x[HUGE_ARR];
@@ -8447,8 +8447,8 @@ A safer idiom is:
  main()
         {
         struct A *p = (struct A *) malloc(sizeof(struct A)
- 		- HUGE_ARR + 100);	/* want x[100] this time */
- 	p->x[5] = '?';		/* now strictly conforming */
+                - HUGE_ARR + 100);      /* want x[100] this time */
+        p->x[5] = '?';               /* now strictly conforming */
         return 0;
         }
 ```
@@ -8588,10 +8588,10 @@ int f(int);
         int (**fpp)();
 
         fp1 = f;
- 	fp2 = fp1;	/* pointers to compatible types, assignment ok */
- 	(*fp2)(3);	/* function types are compatible, call is ok */
- 	fpp = &fp1;	/* pointer to compatible types, assignment ok */
- 	(**fpp)(3);	/* valid? */
+        fp2 = fp1;      /* pointers to compatible types, assignment ok */
+        (*fp2)(3);      /* function types are compatible, call is ok */
+        fpp = &fp1; /* pointer to compatible types, assignment ok */
+        (**fpp)(3);     /* valid? */
 ```
 
 The final call itself should be valid since the resulting function type is
@@ -8739,8 +8739,8 @@ relevant portion of subclause 7.7:
 >
 > ```c
 > SIG_DFL
->               SIG_ERR
->               SIG_IGN
+>                 SIG_ERR
+>                 SIG_IGN
 > ```
 >
 > which expand to constant expressions with distinct values that have type
@@ -9315,16 +9315,16 @@ Consider the program:
         char *loc [] = { "English", "En_UK", "Loglan", "" };
 
         for (i = 0; ; i++)
-              if (setlocale (LC_ALL, loc [i]) != NULL)
- 	           {
- 	           /*
- 			 *  We must eventually get here,
- 			 *  because setlocale("") can't yield NULL.
- 	            /*
- 	           printf ("Decimal point = '%s'\n",
- 	           localeconv ()->decimal_point);
- 	           exit (0);
- 	           }
+                if (setlocale (LC_ALL, loc [i]) != NULL)
+                        {
+                        /*
+                         *  We must eventually get here,
+                         *  because setlocale("") can't yield NULL.
+                         /*
+                        printf ("Decimal point = '%s'\n",
+                        localeconv ()->decimal_point);
+                        exit (0);
+                        }
         }
 ```
 
@@ -9550,7 +9550,7 @@ char
         unsigned int
         signed long
         unsigned long
- 	int : N	 /* i.e. bitfield of size N /*
+        int : N  /* i.e. bitfield of size N /*
         signed int : N
         unsigned int : N
         enumerated type
@@ -10181,22 +10181,22 @@ Consider the following translation unit:
 
         a = malloc (sizeof (struct hacked) + 20 * sizeof (T));
         if (a == NULL)
-              return NULL;
+                return NULL;
         a->size = 20;
 
- 	/* Method 1 /*
- 	a->data [8] = 42;					/* Line A /*
+        /* Method 1 /*
+        a->data [8] = 42;                                    /* Line A /*
 
- 	/* Method 2 /*
+        /* Method 2 /*
         pt = a->data;
- 	pt += 8;							/* Line B /*
+        pt += 8;                                                        /* Line B /*
         *pt = 42;
 
- 	/* Method 3 /*
+        /* Method 3 /*
         pc = (char *) a;
         pc += offsetof (struct hacked, data);
- 	pt = (T *) pc;						/* Line C /*
- 	pt += 8;							/* Line D /*
+        pt = (T *) pc;                                          /* Line C /*
+        pt += 8;                                                        /* Line D /*
         *pt = 6 * 9;
         return a;
         }
@@ -10287,26 +10287,26 @@ Consider the following translation unit:
  struct complex *f (double x)
         {
         struct complex *array = malloc(sizeof (struct complex) +
-              sizeof (double));
+                sizeof (double));
         struct complex *pc;
         double *pd;
 
         if (array == NULL)
-              return NULL;
- 	array [1].real [0] = x;				/* Line A /*
- 	array [1].real [1] = x;				/* Line B /*
- 	array [1].imag = x;					/* Line C /*
- 	pc = array + 1;					/* Line D /*
- 	pc = array + 2;					/* Line E /*
- 	pd = &(array [1].real [0]);			/* Line F /*
- 	pd = &(array [1].real [1]);			/* Line G /*
- 	pd = &(array [1].imag);				/* Line H /*
- 	pd = &(array [0].real [0]) + D_PER_C;		/* Line I /*
- 	pd = &(array [0].real [1]) + D_PER_C;		/* Line J /*
- 	pd = &(array [0].imag) + D_PER_C;		/* Line K /*
- 	pd = &(array [0].real [0]) + D_PER_C * 2; 		/* Line L /*
- 	pd = &(array [0].real [0]) + D_PER_C + 1; 		/* Line M /*
- 	pd = &(array [0].real [0]) + D_PER_C + 2; 		/* Line N /*
+                return NULL;
+        array [1].real [0] = x;                         /* Line A /*
+        array [1].real [1] = x;                         /* Line B /*
+        array [1].imag = x;                                     /* Line C /*
+        pc = array + 1;                                 /* Line D /*
+        pc = array + 2;                                 /* Line E /*
+        pd = &(array [1].real [0]);                 /* Line F /*
+        pd = &(array [1].real [1]);                 /* Line G /*
+        pd = &(array [1].imag);                             /* Line H /*
+        pd = &(array [0].real [0]) + D_PER_C;               /* Line I /*
+        pd = &(array [0].real [1]) + D_PER_C;               /* Line J /*
+        pd = &(array [0].imag) + D_PER_C;           /* Line K /*
+        pd = &(array [0].real [0]) + D_PER_C * 2;           /* Line L /*
+        pd = &(array [0].real [0]) + D_PER_C + 1;           /* Line M /*
+        pd = &(array [0].real [0]) + D_PER_C + 2;           /* Line N /*
         return array;
         }
 ```
@@ -10404,7 +10404,7 @@ array elements also have the padding? If not, what is the effect of using
 
 ```c
 struct fred a, b;
- 	/* ... /*
+        /* ... /*
         memcpy(&a, &b, sizeof (struct fred));
 ```
 
@@ -10529,7 +10529,7 @@ Consider the following code extracts:
 ```c
 int a [10];
         int *p;
- 	/* ... */
+        /* ... */
         p = &a[10];
 ```
 
@@ -10538,7 +10538,7 @@ and
 ```c
 int *n = NULL;
         int *p
- 	/* ... */
+        /* ... */
         p = &*n;
 ```
 
@@ -10549,7 +10549,7 @@ idiom:
 
 > ```c
 > for (p = &a[0]; p &lt; &a[10]; p++)
->  		/* ... */
+>                 /* ... */
 > ```
 
 In the second extract, is the assignment strictly conforming (with `p` being set
@@ -10667,12 +10667,12 @@ Consider the following translation unit:
         x = a;
         x = x * x + a;
         if (x > 100)
- 		return x;	/* Returned value must be > 100 */
+                return x;       /* Returned value must be > 100 */
         if (&x == &y)
-              return 0;
+                return 0;
         y = a + 1;
         y = y * y + 17;
- 	return y;		/* Returned value must be > 0 */
+        return y;               /* Returned value must be > 0 */
         }
 
  unsigned int g1 (void) { return 0; };
@@ -10787,7 +10787,7 @@ static size_t strlen (const char *__s)
         size_t __len = 0;
 
         while (*__s++)
-              __len++;
+                __len++;
         return __len;
         }
 ```
@@ -10971,7 +10971,7 @@ Consider the following translation unit:
         va_start (ap1, n);
         va_start (ap2, n);
         while (va_arg (ap1, int) != 0)
-              printf ("Value is %d\n", va_arg (ap2, int));
+                printf ("Value is %d\n", va_arg (ap2, int));
         va_end (ap1);
         va_end (ap2);
         }
@@ -10982,15 +10982,15 @@ Consider the following translation unit:
 
         va_start (ap, n);
         for (;;)
-              {
-              n = va_arg (ap, int);
-              if (is_final_arg (n))
- 	           {
- 	           va_end (ap);
- 	           return;
- 	           }
-              printf ("Value is %d\n", n);
-              }
+                {
+                n = va_arg (ap, int);
+                if (is_final_arg (n))
+                        {
+                        va_end (ap);
+                        return;
+                        }
+                printf ("Value is %d\n", n);
+                }
         }
 
  void f3 (int n, ...)
@@ -10999,10 +10999,10 @@ Consider the following translation unit:
 
         va_start (ap, n);
         while (n = va_arg (ap, int), n != 0)
-              printf ("Value is %d\n", n);
+                printf ("Value is %d\n", n);
         va_start (ap, n);
         while (n = va_arg (ap, int), n != 0)
-              printf ("Value is still %d\n", n);
+                printf ("Value is still %d\n", n);
         va_end (ap);
         }
 
@@ -11011,7 +11011,7 @@ Consider the following translation unit:
         int n;
 
         while (n = va_arg (*pap, int), n != 0)
-              printf ("Value is %d\n", n);
+                printf ("Value is %d\n", n);
         }
 
  void f4 (int n, ...)
@@ -11028,7 +11028,7 @@ Consider the following translation unit:
         int n;
 
         while (n = va_arg (apc, int), n != 0)
-              printf ("Value is %d\n", n);
+                printf ("Value is %d\n", n);
         }
 
  void f5 (int n, ...)
@@ -11345,9 +11345,9 @@ int g;
         {
         int x;
 
- 	x = (10, g = 1, 20) + (30, g = 2, 40);	 /* Line A */
- 	x = (10, f (1), 20) + (30, f (2), 40);	 /* Line B */
- 	x = (g = 1) + (g = 2);			 /* Line C */
+        x = (10, g = 1, 20) + (30, g = 2, 40);   /* Line A */
+        x = (10, f (1), 20) + (30, f (2), 40);   /* Line B */
+        x = (g = 1) + (g = 2);                   /* Line C */
         return 0;
         }
 
@@ -11467,7 +11467,7 @@ Consider the following translation unit (the file `a.c`):
  struct tag;
 
  int a1 (struct tag * p)
- 	{ a2 (p); }		/* Line A */
+        { a2 (p); }             /* Line A */
 
  struct tag { int i; } s;
 
@@ -11478,7 +11478,7 @@ Consider the following translation unit (the file `a.c`):
         }
 
  int a2 (struct tag * p)
- 	{ /* ... */ }
+        { /* ... */ }
 ```
 
 e) Is the call to `a2` in line A valid? The parameter and argument types appear
@@ -11497,7 +11497,7 @@ Does this mean that:
 
 ```c
 struct tag;
- extern struct tag* p;		/* Line B */
+ extern struct tag* p;          /* Line B */
 
  struct tag { int x; }
  extern struct tag* p;
@@ -11517,16 +11517,16 @@ redeclaration in line C is omitted, does undefined behavior result?
 
  struct tag;
  int c1 (struct tag * p)
- 	{ /* ... */ }
+        { /* ... */ }
 
- struct tag { int i; };		/* Line C */
+ struct tag { int i; };         /* Line C */
 
  /* Second translation unit */
 
  struct tag { int i; } s;
  int main()
         {
- 	c1 (&s);		/* Line D */
+        c1 (&s);            /* Line D */
         return 0;
         }
 ```
@@ -11968,11 +11968,11 @@ cases (in which an element type is completed at some point *after* use of the
 type, as an element type, in an array declarator). Here are two examples:
 
 ```c
-struct S array[10];			/* ok? */
- struct S { int member; };	/* type completed now */
+struct S array[10];                     /* ok? */
+ struct S { int member; };      /* type completed now */
 
- int array_of_array[][];		/* ok? */
- int array_of_array[5][5];	/* type completed now */
+ int array_of_array[][];                /* ok? */
+ int array_of_array[5][5];      /* type completed now */
 ```
 
 As I say, I believe that the very least the Committee should do is to add a
@@ -12003,10 +12003,10 @@ Examples:
 > ```c
 >  void example ()
 >         {
->  	void *vp = (int (*)[][]) 0;	/* abstract declarator
->  		declares no  object - type can't be completed */
->  	int array[][];	/* no linkage - type can't ever be
->  			completed */
+>         void *vp = (int (*)[][]) 0;     /* abstract declarator
+>                 declares no  object - type can't be completed */
+>         int array[][];  /* no linkage - type can't ever be
+>                         completed */
 >         }
 > ```
 
@@ -12223,12 +12223,12 @@ double` operands in C:
 Example 1:
 
 ```c
-extern void callee ();	/* non-prototyped */
+extern void callee ();  /* non-prototyped */
  double a, b;
 
  void caller ()
         {
- 	callee(a+b);  /* evaluated in long double then narrowed? */
+        callee(a+b);  /* evaluated in long double then narrowed? */
         }
 ```
 
@@ -12239,7 +12239,7 @@ double a, b;
 
  double returner ()
         {
- 	return a+b;  /* evaluated in long double then narrowed? */
+        return a+b;  /* evaluated in long double then narrowed? */
         }
 ```
 
@@ -12432,13 +12432,13 @@ one defining declaration of each tag appears within a single scope):
 void example ()
         {
         struct S { int member; };
- 	struct S { int member; };  /* diagnostic required? */
+        struct S { int member; };  /* diagnostic required? */
 
         union U { int member; };
- 	union U { int member; };   /* diagnostic required? */
+        union U { int member; };   /* diagnostic required? */
 
         enum E { member };
- 	enum E { member };         /* diagnostic required? */
+        enum E { member };         /* diagnostic required? */
         }
 ```
 
@@ -12492,8 +12492,8 @@ definition, have no linkage) are declared to have incomplete types:
 ```c
 typedef int AT[];
 
- void example1 (int arg[]);	/* diagnostic permitted/encouraged? */
- void example2 (AT arg);		/* diagnostic permitted/encouraged? */
+ void example1 (int arg[]);     /* diagnostic permitted/encouraged? */
+ void example2 (AT arg);                /* diagnostic permitted/encouraged? */
 ```
 
 I believe that subclause 6.5 needs to be reworded so as to clarify that code
@@ -12542,8 +12542,8 @@ strictly conforming (because this code violates the above rule):
 typedef struct incomplete_S ST;
  typedef union  incomplete_U UT;
 
- void example1(ST arg);	/* diagnostic permitted/encouraged? */
- void example2(UT arg);	/* diagnostic permitted/encouraged? */
+ void example1(ST arg); /* diagnostic permitted/encouraged? */
+ void example2(UT arg); /* diagnostic permitted/encouraged? */
 ```
 
 I have noted however that many/most/all “conforming” implementations do in fact
@@ -12660,10 +12660,10 @@ actually “used?”
 ```c
 void example(void *pv, int i)
         {
- 	&*pv;            /* ? */
- 	*pv;             /* ? */
- 	i ? *pv : *pv;   /* ? */
- 	*pv, *pv;        /* ? */
+        &*pv;            /* ? */
+        *pv;             /* ? */
+        i ? *pv : *pv;   /* ? */
+        *pv, *pv;        /* ? */
         }
 ```
 
@@ -12703,15 +12703,15 @@ that this may not have been what the Committee intended.
 ```c
 void example(const void *pcv, volatile void *pvv, int i)
         {
- 	&*pcv;              /* ? */
- 	*pcv;               /* ? */
- 	i ? *pcv : *pcv;    /* ? */
- 	*pcv, *pcv;         /* ? */
+        &*pcv;              /* ? */
+        *pcv;               /* ? */
+        i ? *pcv : *pcv;    /* ? */
+        *pcv, *pcv;         /* ? */
 
- 	&*pvv;              /* ? */
- 	*pvv;               /* ? */
- 	i ? *pvv : *pvv;    /* ? */
- 	*pvv, *pvv;         /* ? */
+        &*pvv;              /* ? */
+        *pvv;               /* ? */
+        i ? *pvv : *pvv;    /* ? */
+        *pvv, *pvv;         /* ? */
         }
 ```
 
@@ -12783,9 +12783,9 @@ Examples:
 
  void example ()
         {
- 	assert (cp);	/* conforming code?  diagnostic required? */
- 	assert (fp);	/* conforming code?  diagnostic required? */
- 	assert (obj);	/* conforming code?  diagnostic required? */
+        assert (cp);    /* conforming code?  diagnostic required? */
+        assert (fp);    /* conforming code?  diagnostic required? */
+        assert (obj);   /* conforming code?  diagnostic required? */
         }
 ```
 
@@ -12800,7 +12800,7 @@ Example:
 
  void example ()
         {
- 	assert (0.1);	/* must this casue an abort?  must it NOT? */
+        assert (0.1);   /* must this casue an abort?  must it NOT? */
         }
 ```
 
@@ -12960,8 +12960,8 @@ allow it to execute) without “failure.”
  int foo()
         {
         int i;
- 	i = (p1 > p2);  /* Must this be "successfully translated"? */
- 	1/0;             /* Must this be "successfully translated"? */
+        i = (p1 > p2);  /* Must this be "successfully translated"? */
+        1/0;             /* Must this be "successfully translated"? */
         return 0;
         }
 ```
@@ -13030,17 +13030,17 @@ typedef void VT;
  typedef int AT[];
  typedef void (FT) ();
 
- void declaration1 (VT arg[]);		/* ? */
- void declaration2 (ST arg[]);		/* ? */
- void declaration3 (UT arg[]);		/* ? */
- void declaration4 (AT arg[]);		/* ? */
- void declaration5 (FT arg[]);		/* ? */
+ void declaration1 (VT arg[]);          /* ? */
+ void declaration2 (ST arg[]);          /* ? */
+ void declaration3 (UT arg[]);          /* ? */
+ void declaration4 (AT arg[]);          /* ? */
+ void declaration5 (FT arg[]);          /* ? */
 
- void definition1 (VT arg[]) { }	/* ? */
- void definition2 (ST arg[]) { }	/* ? */
- void definition3 (UT arg[]) { }	/* ? */
- void definition4 (AT arg[]) { }	/* ? */
- void definition5 (FT arg[]) { }	/* ? */
+ void definition1 (VT arg[]) { }        /* ? */
+ void definition2 (ST arg[]) { }        /* ? */
+ void definition3 (UT arg[]) { }        /* ? */
+ void definition4 (AT arg[]) { }        /* ? */
+ void definition5 (FT arg[]) { }        /* ? */
 ```
 
 Footnote: I have heard rumors that the issue of the exact timing of the decay of
@@ -13095,7 +13095,7 @@ const char *ccp;
 
  void test ()
         {
- 	vp = ccp;	/* diagnostic required? */
+        vp = ccp;       /* diagnostic required? */
         }
 ```
 
@@ -13171,7 +13171,7 @@ strictly conforming?
 ```c
 void test (void *vp)
         {
- 	(vp > (void*)0);	/* ? */
+        (vp > (void*)0);     /* ? */
         }
 ```
 
@@ -13234,12 +13234,12 @@ strictly conforming?
 ```c
 volatile void func0 (volatile void *vvp)
         {
- 	return *vvp;	/* ? */
+        return *vvp;    /* ? */
         }
 
  const void func1 (const void *cvp)
         {
- 	return *cvp;	/* ? */
+        return *cvp;    /* ? */
         }
 ```
 
@@ -13313,7 +13313,7 @@ b) Does the following code involve usage which renders the code itself not
 strictly conforming?
 
 ```c
-char array2[2][5] = { "defghi" };	/* ? */
+char array2[2][5] = { "defghi" };       /* ? */
 ```
 
 Background:
@@ -13471,9 +13471,9 @@ void example ()
         {
         register int array[5] = 0;
 
- 	array;     /* ? */
- 	array[3];  /* ? */
- 	array+3;   /* ? */
+        array;     /* ? */
+        array[3];  /* ? */
+        array+3;   /* ? */
         }
 ```
 
@@ -13865,12 +13865,12 @@ program which prints `3 3`?
 #include <stdio.h>
 
  struct S { unsigned bit:1; };
- struct S object1 = { 3 };	/* ? */
+ struct S object1 = { 3 };      /* ? */
  struct S object2;
 
  int main ()
         {
- 	object2.bit = 3;	/* ? */
+        object2.bit = 3;        /* ? */
         printf ("%d %d\n", object1.bit, object2.bit);
         return 0;
         }
@@ -14092,8 +14092,8 @@ a) Is the following code strictly conforming?
 b) Must a conforming implementation correctly translate the following code?
 
 ```c
-enum E1 { enumerator1 = (const int) 9 };	/* ? */
- enum E2 { enumerator2 = (volatile int) 9 };	/* ? */
+enum E1 { enumerator1 = (const int) 9 };        /* ? */
+ enum E2 { enumerator2 = (volatile int) 9 };    /* ? */
 ```
 
 Background:
@@ -14175,7 +14175,7 @@ Must a conforming implementation issue a diagnostic for the following code?
 ```c
 void example ()
         {
- 	(const volatile void) 0;	/* diagnostic required? */
+        (const volatile void) 0;        /* diagnostic required? */
         }
 ```
 
@@ -14453,12 +14453,12 @@ Given the code:
 ```c
 void example ()
         {
-              {
-              struct TAG {int i};
-              }
-              {
- 		struct TAG object;	/* line 7 */
-              }
+                {
+                struct TAG {int i};
+                }
+                {
+                struct TAG object;      /* line 7 */
+                }
         }
 ```
 
@@ -14627,14 +14627,14 @@ following example:
         fseek(f, 0, SEEK_SET);
         len = fread(buf, 1, 10, f);
         if (len == 8 && !memcmp(buf, "UWXYZef\n"))
- 		;	/* Case 1: OK, acts like binary */
+                ;       /* Case 1: OK, acts like binary */
         else if (len == 5 && !memcmp(buf, "UWXYZ", 5))
- 		;	/* Case 2: OK to truncate after write */
+                ;       /* Case 2: OK to truncate after write */
         else if (len > 5 && !memcmp(buf, "UWXYZ", 5))
-              printf("len = %u, buf = %s\n", len, buf);
- 			/* Case 3: Is this nonstandard? */
+                printf("len = %u, buf = %s\n", len, buf);
+                        /* Case 3: Is this nonstandard? */
         else
-              printf("This is obviously nonstandard.\n");
+                printf("This is obviously nonstandard.\n");
         }
 ```
 
@@ -14769,10 +14769,10 @@ Consider the translation unit:
 /* No headers included */
  int checkup()
         {
- 	/* Case 1 */
+        /* Case 1 */
         if (0)
-              printf("Printing.\n");
- 	/* Case 2 */
+                printf("Printing.\n");
+        /* Case 2 */
         return 2 || 1 / 0;
         }
 ```
@@ -15009,17 +15009,17 @@ the C Standard let `mktime` return -1 in this case?
         struct tm t;
         time_t r;
 
- 	/* 1994-04-03 02:30:00 */
+        /* 1994-04-03 02:30:00 */
         t.tm_year = 1994 - 1900; t.tm_mon = 3; t.tm_mday = 3;
         t.tm_hour = 2; t.tm_min = 30; t.tm_sec = 0;
 
- 	t.tm_isdst = -1; /* i.e. unknown */
+        t.tm_isdst = -1; /* i.e. unknown */
 
         r = mktime(&t);
         if (r == -1)
-              printf("mktime failed\n");
+                printf("mktime failed\n");
         else
-              printf("%s", ctime(&r));
+                printf("%s", ctime(&r));
         return 0;
         }
 ```
@@ -18125,7 +18125,7 @@ Consider the following code:
 ```c
 char *s = "a string";
  if (s  = NULL)
- 	/* ... */
+        /* ... */
 ```
 
 Subclause 6.3.8, Semantics reads in part:

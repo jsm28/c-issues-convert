@@ -48,11 +48,11 @@ cases (in which an element type is completed at some point *after* use of the
 type, as an element type, in an array declarator). Here are two examples:
 
 ```c
-struct S array[10];			/* ok? */
- struct S { int member; };	/* type completed now */
+struct S array[10];                     /* ok? */
+ struct S { int member; };      /* type completed now */
 
- int array_of_array[][];		/* ok? */
- int array_of_array[5][5];	/* type completed now */
+ int array_of_array[][];                /* ok? */
+ int array_of_array[5][5];      /* type completed now */
 ```
 
 As I say, I believe that the very least the Committee should do is to add a
@@ -83,10 +83,10 @@ Examples:
 > ```c
 >  void example ()
 >         {
->  	void *vp = (int (*)[][]) 0;	/* abstract declarator
->  		declares no  object - type can't be completed */
->  	int array[][];	/* no linkage - type can't ever be
->  			completed */
+>         void *vp = (int (*)[][]) 0;     /* abstract declarator
+>                 declares no  object - type can't be completed */
+>         int array[][];  /* no linkage - type can't ever be
+>                         completed */
 >         }
 > ```
 

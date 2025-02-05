@@ -18,7 +18,7 @@ Must a conforming implementation issue a diagnostic for the following code?
 ```c
 void example ()
         {
- 	(const volatile void) 0;	/* diagnostic required? */
+        (const volatile void) 0;        /* diagnostic required? */
         }
 ```
 
