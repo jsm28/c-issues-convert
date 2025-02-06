@@ -22,12 +22,12 @@ SUBMITTED_AGAINST = {
     'c99': 'C99',
     'c11c17': 'C11 / C17',
     'c23': 'C23',
-    'cfp-c11': 'Floating-point TS 18661 (C11 version)',
-    'cfp-c23': 'Floating-point TS 18661 (C23 version)',
+    'cfp-c11': 'Floating-point TS 18661 (C11 version, 2014-2016)',
+    'cfp-c23': 'Floating-point TS 18661 (C23 version, 2025)',
     'cscr2013': 'C Secure Coding Rules TS 17961:2013',
     'embc2004': 'Embedded C TR 18037:2004',
     'embc2008': 'Embedded C TR 18037:2008',
-    'math2009': 'Mathematical special functions ISO/IEC 24747',
+    'math2009': 'Mathematical special functions ISO/IEC 24747:2009',
     'dynalloc2010': 'Dynamic allocation functions TR 24731-2:2010',
     # Included for completeness, these last three were superseded with
     # no issue lists ever created.

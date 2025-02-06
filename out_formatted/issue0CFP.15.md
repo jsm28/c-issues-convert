@@ -5,7 +5,7 @@
 Authors: WG14, Jim Thomas  
 Date: 2017-10-25  
 Reference document: [N2171](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2171.pdf)  
-Submitted against: Floating-point TS 18661 (C11 version)  
+Submitted against: Floating-point TS 18661 (C11 version, 2014-2016)  
 Status: Fixed  
 Fixed in: C23  
 Converted from: [n2397.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2397.htm)

@@ -1,4 +1,4 @@
-# Floating-point TS 18661 (C11 version): issue summary
+# Floating-point TS 18661 (C11 version, 2014-2016): issue summary
 
 **This issue summary has been automatically converted from the original issue lists and some formatting may not have been preserved.**
 

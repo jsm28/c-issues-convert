@@ -5,7 +5,7 @@
 Authors: WG14, C Floating Point Group  
 Date: 2018-02-22  
 Reference document: [N2204](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2204.pdf)  
-Submitted against: Floating-point TS 18661 (C11 version)  
+Submitted against: Floating-point TS 18661 (C11 version, 2014-2016)  
 Status: Fixed  
 Fixed in: C23, Floating-point TS 18661-4:2025  
 Converted from: [n2397.htm](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2397.htm)

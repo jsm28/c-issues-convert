@@ -19,12 +19,12 @@
 
 No issues recorded.
 
-## Floating-point TS 18661 (C11 version)
+## Floating-point TS 18661 (C11 version, 2014-2016)
 
 * [Summary (one page per issue)](summary_cfp-c11.md)
 * [Full issue log (all issues on one page)](log_cfp-c11.md)
 
-## Floating-point TS 18661 (C23 version)
+## Floating-point TS 18661 (C23 version, 2025)
 
 No issues recorded.
 
@@ -42,7 +42,7 @@ No issues recorded.
 
 No issues recorded.
 
-## Mathematical special functions ISO/IEC 24747
+## Mathematical special functions ISO/IEC 24747:2009
 
 No issues recorded.
 
