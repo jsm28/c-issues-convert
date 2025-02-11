@@ -63,6 +63,8 @@ FIXED_IN = {
 STATUSES = {
     'closed': 'Closed',
     'fixed': 'Fixed',
+    'fixed-pending': 'Fixed (pending integration in working draft)',
+    'review': 'Review',
     'open': 'Open'}
 
 
@@ -116,7 +118,7 @@ def format_issue(num, data, for_single):
         meta_list.append('Submitted against: %s'
                          % SUBMITTED_AGAINST[data['submitted-against']])
     meta_list.append('Status: %s' % STATUSES[data['status']])
-    if data['status'] == 'fixed':
+    if data['status'] in ('fixed', 'fixed-pending'):
         meta_list.append('Fixed in: %s'
                          % ', '.join(FIXED_IN[x] for x in data['fixed-in']))
     if data['crossref']:
@@ -203,9 +205,10 @@ def action_format():
         table = ['|Issue|Summary|Status|\n|-|-|-|\n']
         for num in nums:
             data = issues_data[num]
-            if data['status'] == 'fixed':
-                status = ('Fixed in %s'
-                          % ', '.join(FIXED_IN[x] for x in data['fixed-in']))
+            if data['status'] in ('fixed', 'fixed-pending'):
+                status = ('%s in %s'
+                          % (STATUSES[data['status']],
+                             ', '.join(FIXED_IN[x] for x in data['fixed-in'])))
             else:
                 status = STATUSES[data['status']]
             table.append(
