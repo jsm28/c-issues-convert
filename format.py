@@ -29,6 +29,7 @@ SUBMITTED_AGAINST = {
     'embc2008': 'Embedded C TR 18037:2008',
     'math2009': 'Mathematical special functions ISO/IEC 24747:2009',
     'dynalloc2010': 'Dynamic allocation functions TR 24731-2:2010',
+    'prov2025': 'Provenance TS 6010:2025',
     # Included for completeness, these last three were superseded with
     # no issue lists ever created.
     'bounds2007': 'Bounds-checking interfaces TR 24731-1:2007 (superseded)',
