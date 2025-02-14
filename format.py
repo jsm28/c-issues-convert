@@ -6,10 +6,25 @@ import json
 import os
 import os.path
 import re
+from mistletoe import Document
+from mistletoe.contrib.pygments_renderer import PygmentsRenderer
+from mistletoe.html_renderer import HtmlRenderer
 
 
 # The location of the WG14 documents site.
 WG14_DOCS = 'https://www.open-std.org/jtc1/sc22/wg14/www/docs/'
+
+
+# The location of issue data and metadata.
+ISSUES_DIR = 'out'
+
+
+# The location of formatted (Markdown) output.
+OUT_MD_DIR = 'out_formatted'
+
+
+# The location of formatted (HTML) output.
+OUT_HTML_DIR = 'out_html'
 
 
 # Valid submitted-against values and human descriptions (including
@@ -147,29 +162,68 @@ def format_issue(num, data, for_single):
         data['formatted-list-md'] = ''.join(out_list)
 
 
-def write_md(filename, content, for_single, issue_data):
-    """Write Markdown to a file, substituting for issue: links."""
+def subst_md(content, for_single, link_suffix, issue_data):
+    """Substitute for issue: links in Markdown."""
     if for_single:
         content = re.sub(r'\(issue:([0-9][.A-Z0-9]*)\)',
-                         r'(issue\1.md)',
+                         r'(issue\1%s)' % link_suffix,
                          content)
     else:
         content = re.sub(r'\(issue:([0-9][.A-Z0-9]*)\)',
                          lambda m: (
-                             '(log_%s.md#issue%s)'
+                             '(log_%s%s#issue%s)'
                              % (issue_data[m.group(1)]['submitted-against'],
+                                link_suffix,
                                 m.group(1))),
                          content)
-    out_dir = 'out_formatted'
+    return content
+
+
+def file_suffix(for_html):
+    """Return suffix to use in filenames based on output format."""
+    return '.html' if for_html else '.md'
+
+
+def write_md(filename, content, title, for_single, for_html, issue_data):
+    """Write Markdown to a file, substituting for issue: links."""
+    suffix = file_suffix(for_html)
+    out_dir = OUT_HTML_DIR if for_html else OUT_MD_DIR
+    content = subst_md(content, for_single, suffix, issue_data)
+    if for_html:
+        with PygmentsRenderer() as renderer:
+            doc = Document(content)
+            css = renderer.formatter.get_style_defs()
+            content = renderer.render(doc)
+        with HtmlRenderer() as renderer:
+            doc = Document(title)
+            title = renderer.render_to_plain(doc)
+        content = (
+            '<!DOCTYPE html>\n'
+            '<html lang="en">\n'
+            '<head>\n'
+            '<meta http-equiv="Content-Type" content="text/html; '
+            'charset=UTF-8">\n'
+            '<title>%s</title>\n'
+            '<style>\n'
+            '%s\n'
+            '</style>\n'
+            '</head>\n'
+            '<body>\n'
+            '%s\n'
+            '</body>\n'
+            '</html>\n'
+            % (title, css, content))
     os.makedirs(out_dir, exist_ok=True)
+    filename += suffix
     with open(os.path.join(out_dir, filename), 'w', encoding='utf-8') as f:
         f.write(content)
 
 
-def action_format():
-    """Format the issue lists.  The source data is in out/; the
-    formatted output goes to out_formatted/."""
-    issues_data = get_data('out')
+def action_format(for_html):
+    """Format the issue lists.  The source data is in ISSUES_DIR; the
+    formatted output goes to OUT_MD_DIR or OUT_HTML_DIR."""
+    suffix = file_suffix(for_html)
+    issues_data = get_data(ISSUES_DIR)
     by_submitted_against = collections.defaultdict(set)
     by_submitted_against_converted = collections.defaultdict(bool)
     for num, data in issues_data.items():
@@ -178,8 +232,9 @@ def action_format():
             by_submitted_against_converted[data['submitted-against']] = True
         format_issue(num, data, False)
         format_issue(num, data, True)
-        write_md('issue%s.md' % num, data['formatted-single-md'], True,
-                 issues_data)
+        write_md('issue%s' % num, data['formatted-single-md'],
+                 'C issue %s: %s' % (num, data['summary-md']), True,
+                 for_html, issues_data)
     index_out_list = ['# C standard issues lists\n\n']
     index_out_list.append(
         '**Issue tracking for C is not currently in operation.  The\n'
@@ -251,9 +306,9 @@ def action_format():
             index_out_list.append('No issues recorded.\n\n')
             continue
         index_out_list.append(
-            '* [Summary (one page per issue)](summary_%s.md)\n'
-            '* [Full issue log (all issues on one page)](log_%s.md)\n\n'
-            % (std, std))
+            '* [Summary (one page per issue)](summary_%s%s)\n'
+            '* [Full issue log (all issues on one page)](log_%s%s)\n\n'
+            % (std, suffix, std, suffix))
         nums = sorted(by_submitted_against[std])
         was_converted = by_submitted_against_converted[std]
         summary_head = ['# %s: issue summary\n\n' % desc]
@@ -281,11 +336,24 @@ def action_format():
                 % (num, num, data['summary-md'], status))
         table.append('\n')
         issues = [issues_data[n]['formatted-list-md'] for n in nums]
-        write_md('summary_%s.md' % std, ''.join(summary_head + table),
-                 True, issues_data)
-        write_md('log_%s.md' % std, ''.join(log_head + table + issues),
-                 False, issues_data)
-    write_md('index.md', ''.join(index_out_list), False, issues_data)
+        write_md('summary_%s' % std, ''.join(summary_head + table),
+                 '%s: issue summary' % desc,
+                 True, for_html, issues_data)
+        write_md('log_%s' % std, ''.join(log_head + table + issues),
+                 '%s: issue log' % desc,
+                 False, for_html, issues_data)
+    write_md('index', ''.join(index_out_list), 'C standard issues lists',
+             False, for_html, issues_data)
+
+
+def action_format_md():
+    """Format the issue lists in Markdown."""
+    action_format(False)
+
+
+def action_format_html():
+    """Format the issue lists in HTML."""
+    action_format(True)
 
 
 def main():
@@ -294,9 +362,10 @@ def main():
         description='Format C issues in Markdown')
     parser.add_argument('action',
                         help='What to do',
-                        choices=('format'))
+                        choices=('format-md', 'format-html'))
     args = parser.parse_args()
-    action_map = {'format': action_format}
+    action_map = {'format-md': action_format_md,
+                  'format-html': action_format_html}
     action_map[args.action]()
 
 
