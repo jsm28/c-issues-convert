@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0037: Can UNICODE or ISO 10646 be used as a multibyte code?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0037: Can UNICODE or ISO 10646 be used as a multibyte code?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Isai Scheinberg, WG14<br />
+Date: 1992-12-10<br />
+Reference document: X3J11/91-043<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_037.html">dr_037.html</a></p>
+<p>Subclause 5.2.1.2 <strong>Multibyte characters</strong> states:</p>
+<blockquote>
+<p>The source character set may contain multibyte characters, used to represent
+members of the extended character set. The execution character set may also
+contain multibyte characters, which need not have the same encoding as for the
+source character set. For both character sets, the following shall hold:</p>
+<p>- The single-byte characters defined in 5.2.1 shall be present.</p>
+</blockquote>
+<p>and, a bit later on:</p>
+<blockquote>
+<p>- A byte with all bits zero shall not occur in the second or subsequent bytes
+of a multibyte character.</p>
+</blockquote>
+<p>My interpretation (and all of the experts that I consulted with) of the first
+rule, is that the basic character set (A-z, 0-9, etc.) shall be coded in
+one-byte code. All multibyte locales that I know (EUC variants, SJIS) follow
+this rule. But I may still be wrong.</p>
+<p>If the above is true, then both 10646 (other than CM 5) and UNICODE fail this
+rule and cannot be used as multibyte characters. UNICODE also fails the second
+rule.</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>The following answers apply (almost) equally to ISO 10646-1 and UNICODE. They
+are expressed in terms of ISO 10646-1.</p>
+<p>Clause 3, page 2, lines 18-24 and 40-42 define “byte,” “character,” and
+“multibyte character” as follows:</p>
+<p><strong>byte</strong>: The unit of data storage large enough to hold any member of the basic
+character set of the execution environment.</p>
+<p><strong>character</strong>: A bit representation that fits in a byte. The representation of
+each member of the basic character set in both the source and execution
+environments shall fit in a byte.</p>
+<p><strong>multibyte character</strong>: A sequence of one or more bytes representing a member
+of the extended character set of either the source or the execution environment.
+The extended character set is a superset of the basic character set.”</p>
+<p>Therefore, if ISO 10646-1 were used as a basic character set, then by definition
+a byte would have to be large enough to hold each member of the ISO 10646-1
+character set. Also by definition this would make ISO 10646-1 a valid multibyte
+character set.</p>
+<p>If a byte were only eight bits long, the following answer would hold. ISO
+10646-1 represents, in a particular byte order, the character <code>'a'</code> for example
+as follows.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #666666">0</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span><span style="color: #bbbbbb"> </span><span style="color: #666666">97</span>
+<span style="color: #bbbbbb"> </span><span style="color: #666666">----</span><span style="color: #bbbbbb"> </span><span style="color: #666666">16-</span>bit<span style="color: #bbbbbb"> </span>version
+<span style="color: #bbbbbb"> </span><span style="color: #666666">--------</span><span style="color: #bbbbbb"> </span><span style="color: #666666">32-</span>bit<span style="color: #bbbbbb"> </span>version
+</pre></div>
+
+<p>This fails subclause 5.2.1.2, page 11, lines 30-32:</p>
+<p>- A byte with all bits zero shall be interpreted as a null character
+independent of shift state.</p>
+<p>- A byte with all bits zero shall not occur in the second or subsequent bytes
+of a multibyte character.</p>
+<p>Therefore, 8-bit bytes preclude the use of ISO 10646-1 as a multibyte character
+set.</p>
+
+</body>
+</html>

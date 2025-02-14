@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0338: C99 seems to exclude indeterminate value from being an uninitialized register</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0338: C99 seems to exclude <strong>indeterminate value</strong> from being an uninitialized register</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Rich Peterson &lt;Rich.Peterson@hp.com&gt;, Rich Peterson (US)<br />
+Date: 2007-03-09<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1124.pdf">WG14 N1124</a><br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C11<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_338.htm">dr_338.htm</a></p>
+<h3>Summary</h3>
+<p>The following function has undefined behavior under C90, but appears to be<br />
+strictly conforming under C99:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">  </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">foo</span>(<span style="color: #B00040">void</span>)<span style="color: #bbbbbb"> </span>{
+<span style="color: #bbbbbb">      </span><span style="color: #B00040">unsigned</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>uc;
+<span style="color: #bbbbbb">      </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span>uc<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span><span style="color: #666666">1</span><span style="color: #bbbbbb"> </span><span style="color: #666666">&gt;=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;
+<span style="color: #bbbbbb">  </span>}
+</pre></div>
+
+<p>If that is true, then a C99 compiler for a real-life architecture like ia64<br />
+that supports trap representations in hardware (via NaT values) cannot in<br />
+general just allocate <strong>auto</strong> variables to registers and leave initialization<br />
+to the source code as it would for most other architectures. Instead it<br />
+would either have to initialize the register or allocate the variable to<br />
+memory. This is because ia64 NaT values only exist in register representations,<br />
+not in memory representations.</p>
+<p><strong>Rationale</strong></p>
+<p>In C90, 3.16 defines <strong>undefined behavior</strong> as "behavior, upon use of a<br />
+non-portable or erroneous program construct, of erroneous data, or of<br />
+indeterminately valued objects, for which the standard imposes no<br />
+requirements...". And 6.5.7 says: "If an object that has automatic storage<br />
+duration is not initialized explicitly, its value is indeterminate." So it<br />
+directly follows that the above function has undefined behavior under C90.</p>
+<p>C99 then added a definition for <strong>indeterminate value</strong> (3.17.2): "either an<br />
+unspecified value or a trap representation". The first problem is that the<br />
+type unsigned char specifically is excluded from having any trap<br />
+representations. This would seem to render non-conforming a NaT<br />
+consumption fault when evaluating uc + 1 in the example function.<br />
+Furthermore, my reading of 6.2.6.2 "Integer types" is that in order for<br />
+any type to have trap representations, there must be padding bits in the<br />
+in-memory representation of the type. This is because there does not<br />
+appear to be any allowance for padding bits that are present only in the<br />
+register representation of a type, but not in memory.</p>
+<p>Since ia64 NaT values clearly exhibit the properties intended for C99<br />
+trap representations, offering one of the few hardware implementations<br />
+of those properties, it seems most likely that either my reading is<br />
+faulty, or that the words do not correctly express the intent. I<br />
+believe the intent of excluding type <strong>unsigned char</strong> from having trap<br />
+representations was to allow it to be used to copy (via memcpy)<br />
+arbitrary memory, in the case that memory might contain trap<br />
+representations for some types. I believe it was not the intent to<br />
+require translators to perform run-time initialization of uninitialized<br />
+auto objects of type <strong>unsigned char</strong> in order to suppress hardware<br />
+detection of programming faults. And I believe it certainly was not the<br />
+intent to require that all trap representations for any type be<br />
+representable in memory, forbidding register-only trap representations<br />
+like NaT values.</p>
+<p>Unless someone can find text that supports register-only trap<br />
+representations, I think this deserves a TC.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p><em>Page 6, 3.17.2, change the definition of "indeterminate value"</em></p>
+<p>Old:<br />
+either an unspecified value or a trap representation</p>
+<p>New:<br />
+either an unspecified value or a trap representation; or in<br />
+the case of an object of automatic storage duration whose address<br />
+is never taken, a value that behaves as if it were a trap<br />
+representation, even for types that have no trap representations<br />
+in memory (including type <strong>unsigned char)</strong></p>
+<hr />
+<p>Comment from WG14 on 2008-09-12:</p>
+<h3>Committee Discussion (for history only)</h3>
+<h4>Spring 2007</h4>
+<p>On some hardware (e.g. Itanium), an 8-bit value may have as many as 257
+different values (0-255 and a "Not a Thing" value). However, c99 explicitly
+forbids such a value for an unsigned char.</p>
+<p>Page 6, 3.17.2, change the definition of <em>indeterminate value</em> to:</p>
+<blockquote>
+<p>either an unspecified value or a trap representation; or in the case of an
+object of automatic storage duration whose address is never taken, a value that
+behaves as if it were a trap representation.</p>
+</blockquote>
+<p>5.1.2.3 para 5 second bullet speaks to this also.</p>
+<h4>Fall 2007</h4>
+<p>See WG14 e-mail <em>SC22WG14.11380</em></p>
+<p>While some agreed with the comments in this email others did not.</p>
+<h4>Spring 2008</h4>
+<p>Regarding WG14 e-mail <em>SC22WG14.11380</em>, the observations about trap
+representations are correct, and it is unfortunate that the DR was written in a
+way that relied on trap representation terminology and behavior. In fact, the
+problem and solution are not really related to <em>trap representation</em> as defined
+in the standard at all.</p>
+<p>A better way to describe the issue might be to talk about use of an
+uninitialized object that is eligible to have register storage class (i.e. an
+object of automatic storage duration whose address is never taken).</p>
+<p>Also the original DR's suggested wording change was made in the definition of
+<em>indeterminate value</em>. The reason for that was to trigger undefined behavior,
+which would have worked in C90, but in C99 the definition of undefined behavior
+was changed such that it does not mention indeterminate value.</p>
+<p><strong>Change for C1X:</strong></p>
+<blockquote>
+<p>6.3.2.1 paragraph 2, add a sentence to the end:</p>
+<blockquote>
+<p>If the lvalue designates an object of automatic storage duration that could have
+been declared with register storage class (never had its address taken), and
+that object is uninitialized (not declared with an initializer, and no
+assignment to it has been performed prior to the use), the behavior is
+undefined.</p>
+</blockquote>
+</blockquote>
+
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0120: Semantics of assignment to (and initialization of) bit-fields question</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0120: Semantics of assignment to (and initialization of) bit-fields question</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Ron Guilmette, WG14<br />
+Date: 1993-12-03<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_120.html">dr_120.html</a></p>
+<p>ANSI/ISO C Defect Report #rfg27:</p>
+<p>Subject: Semantics of assignment to (and initialization of) bit-fields.</p>
+<p>a) Is the following program strictly conforming?</p>
+<p>b) Must a conforming implementation translate this code into an executable
+program which prints <code>3 3</code>?</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;stdio.h&gt;</span>
+
+<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">S</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">unsigned</span><span style="color: #bbbbbb"> </span>bit<span style="color: #666666">:1</span>;<span style="color: #bbbbbb"> </span>};
+<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">S</span><span style="color: #bbbbbb"> </span>object1<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #666666">3</span><span style="color: #bbbbbb"> </span>};<span style="color: #bbbbbb">      </span><span style="color: #3D7B7B; font-style: italic">/* ? */</span>
+<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">S</span><span style="color: #bbbbbb"> </span>object2;
+
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">main</span><span style="color: #bbbbbb"> </span>()
+<span style="color: #bbbbbb">        </span>{
+<span style="color: #bbbbbb">        </span>object2.bit<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">3</span>;<span style="color: #bbbbbb">        </span><span style="color: #3D7B7B; font-style: italic">/* ? */</span>
+<span style="color: #bbbbbb">        </span>printf<span style="color: #bbbbbb"> </span>(<span style="color: #BA2121">&quot;%d %d</span><span style="color: #AA5D1F; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>,<span style="color: #bbbbbb"> </span>object1.bit,<span style="color: #bbbbbb"> </span>object2.bit);
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;
+<span style="color: #bbbbbb">        </span>}
+</pre></div>
+
+<p>Background:</p>
+<p>Subclause 6.3.16.1 (<strong>Semantics</strong>):</p>
+<blockquote>
+<p>In <em>simple assignment</em> (<code>=</code>), the value of the right operand is converted to the
+type of the assignment expression and replaces the value stored in the object
+designated by the left operand.</p>
+</blockquote>
+<p>Subclause 6.2.1.2 (<strong>Semantics</strong>):</p>
+<blockquote>
+<p>When a value with integral type is converted to another integral type, if the
+value can be represented by the new type, its value is unchanged.</p>
+</blockquote>
+<p>Unless I'm mistaken, the type of the assignment expression:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">        </span>object2.bit<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">3</span>;
+</pre></div>
+
+</blockquote>
+<p>in the above example is type <code>unsigned int</code>. Thus, according to the rules quoted
+here, the value of <code>3</code> is converted to an <code>unsigned int</code> type value (during this
+assignment statement) and it is otherwise unchanged. Then, <em>that value</em> of 3
+replaces the previous value of <code>object2.bit</code>.</p>
+<p>I believe that the above examples illustrate the point that the C Standard
+currently fails to adequately describe the semantics of assignments to (and/or
+initializations of) bit-fields in cases where the value being assigned will not
+actually fit into the bit-field object.</p>
+<p>In lieu of any description of the special semantics of assignments to bitfields,
+it appears to be currently <em>necessary</em> for both implementors and users to assume
+that the “normal” assignment semantics apply, but as you can see from the above
+examples, such assumptions lead to highly counterintuitive expectations (and to
+expectations which fly in the face of actual current common practice).</p>
+<p>I believe that the Committee should rectify the current unfortunate situation by
+adding to subclause 6.3.16.1 (or maybe to subclause 6.2.1.2) some additional new
+verbage explicitly describing the special semantics of assignments to
+bit-fields.</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>Subclause 6.5.2.1 states “A bit-field is interpreted as an integral type
+consisting of the specified number of bits.” Thus the type of <code>object1.bit</code> and
+<code>object2.bit</code> can be informally described as <code>unsigned int : 1</code>. A larger
+integer is converted to this type according to the rules in subclause 6.2.1.2.
+Thus the value 3 is converted to the value 1.</p>
+<p>The program is strictly conforming. It prints <code>1 1</code>.</p>
+
+</body>
+</html>

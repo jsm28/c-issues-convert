@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0294: Technical question on C99 restrict keyword</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0294: Technical question on C99 <code>restrict</code> keyword</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: INCITS, Greg Davis, Green Hills Software<br />
+Date: 2003-08-14<br />
+Submitted against: C99<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_294.htm">dr_294.htm</a></p>
+<h3>Summary</h3>
+<p>I have a question on section 6.7.3.1 of the C99 spec.</p>
+<p>Paragraph 4 is where this seems to get complicated.</p>
+<p>Question 1)</p>
+<blockquote>
+<p>"...Every other lvalue used to access the value of X shall also have its address
+based on P".</p>
+</blockquote>
+<p>Consider the following example:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">        </span><span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;stdlib.h&gt;</span>
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">restrict</span><span style="color: #bbbbbb"> </span>a,<span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">restrict</span><span style="color: #bbbbbb"> </span>b;
+
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">copy</span>(<span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">restrict</span><span style="color: #bbbbbb"> </span>dest,<span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">restrict</span><span style="color: #bbbbbb"> </span>source)
+<span style="color: #bbbbbb">        </span>{
+<span style="color: #bbbbbb">         </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>i;
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">for</span><span style="color: #bbbbbb"> </span>(i<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;<span style="color: #bbbbbb"> </span>i<span style="color: #bbbbbb"> </span><span style="color: #666666">&lt;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">10</span>;<span style="color: #bbbbbb"> </span>i<span style="color: #666666">++</span>)
+<span style="color: #bbbbbb">            </span>dest[i]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>source[i];
+<span style="color: #bbbbbb">        </span>}
+
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">main</span>()
+<span style="color: #bbbbbb">        </span>{
+<span style="color: #bbbbbb">         </span>a<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>calloc(<span style="color: #666666">10</span>);
+<span style="color: #bbbbbb">         </span>b<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>calloc(<span style="color: #666666">10</span>);
+<span style="color: #bbbbbb">         </span>copy(a,<span style="color: #bbbbbb"> </span>b);
+<span style="color: #bbbbbb">         </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;
+<span style="color: #bbbbbb">        </span>}
+</pre></div>
+
+<p>Is this a legal program? If so, could you explain the following? From the
+standpoint of <code>main()</code>, the memory in <code>a</code> is modified through the call to
+<code>copy()</code>. However, it seems to me that based on the definition of <em>based on</em>,
+the writes that modify <code>*a</code> are not <em>based on</em> the pointer <code>a</code>, but instead
+they're based on <code>dest</code>. Doesn't this violate the guarantee above?</p>
+<p>Question 2)</p>
+<blockquote>
+<p>"Every access that modifies X shall be considered also to modify P, for the
+purposes of this subclause." - Why is this necessary?</p>
+</blockquote>
+<p>Question 3)</p>
+<blockquote>
+<p>The same question for the rules on the copying of <code>restrict</code> pointers ("If P is
+assigned the value of a pointer expression E that is based on another restrict
+pointer object P2, associated with block B2, then either the execution of B2
+shall begin before the execution of B, or the execution of B2 shall end prior to
+the assignment."). Why is this necessary?</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2004-09-28:</p>
+<h3>Committee Response</h3>
+<p><strong>Question 1)</strong></p>
+<p>Yes, the program conforms to all requirements in the specification for the
+<code>restrict</code> qualifier (though the call to function <code>calloc</code> should have two
+arguments).</p>
+<p>Some interpretation of this question is provided to clarify the response. The
+response answers the interpretation.</p>
+<p>The interpretation of this question is: I can see how the rules are followed for
+the <code>restrict</code> qualifier on <code>dest</code>, relative to the execution of function
+<code>copy</code>, but I don't see how the rules are followed for the restrict qualifier on
+<code>a</code>, relative to the execution of <code>main</code>.</p>
+<p>Here is a spelling out of all the requirements in the specification of the
+<code>restrict</code> qualifier for this example. The following identify definitions in the
+specification of the <code>restrict</code> qualifier.</p>
+<ul>
+<li><code>D</code> is the declaration for the identifier <code>a</code> and <code>T</code> is <code>char</code></li>
+<li><code>P</code> is the object designated by <code>a</code></li>
+<li><code>B</code> is the block of <code>main</code>, whose execution includes the call to <code>copy()</code></li>
+<li><code>L</code> is the expression <code>dest[i]</code>in <code>copy()</code><br />
+<code>&amp;L == dest+i</code> which is based on <code>a</code>, because <code>dest</code> gets its value from <code>a</code> upon entry to <code>copy()</code> &lt;-- Key point</li>
+<li><code>X</code> is the object designated by <code>dest[i]</code> (which is <code>a[i]</code>)</li>
+<li><code>X</code> is modified during the execution of <code>main</code></li>
+</ul>
+<p>The requirements in the specification are then:</p>
+<ul>
+<li><code>T</code> is not const-qualified.<br />
+This is true.</li>
+<li>Every other lvalue used to access the value of <code>X</code> ...<br />
+Vacuously true, because there are no such other lvalues.</li>
+<li>Every access that modifies <code>X</code> shall be considered also to modify <code>P</code>, for the purposes of this subclause.<br />
+Vacuous, because <code>P</code> itself (which is the pointer object <code>a</code>) is not designated by means of another restrict-qualified pointer.</li>
+<li>If <code>P</code> is assigned the value of a pointer expression <code>E</code> that is based on another restricted pointer object <code>P2</code>, ...<br />
+Vacuously true, because there are no such assignments.</li>
+</ul>
+<p>Contrary to what is implied in the question, an lvalue can have its address
+based on more than one restricted pointer, provided each is associated with a
+different (activation of a) block. In the example, the address of lvalue
+<code>dest[i]</code> in <code>copy()</code> is based not only on <code>dest</code> but also on <code>a</code> (because
+<code>dest</code> receives the value of <code>a</code> when the call is made).</p>
+<p>[Note that there would be undefined behavior if there were also a reference to
+<code>a[i]</code> within the body of <code>copy()</code>, because the address of that lvalue would not
+be based on <code>dest</code>.]</p>
+<p><strong>Question 2)</strong></p>
+<p>This is necessary for the effectiveness of the <code>restrict</code> qualifier for multiple
+levels of indirection. Consider the example:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb"> </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">reverse</span>(<span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">restrict</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">restrict</span><span style="color: #bbbbbb"> </span>dest,
+<span style="color: #bbbbbb">               </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">restrict</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">restrict</span><span style="color: #bbbbbb"> </span>source)
+<span style="color: #bbbbbb">  </span>{
+<span style="color: #bbbbbb">   </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>i,j;
+<span style="color: #bbbbbb">   </span><span style="color: #008000; font-weight: bold">for</span><span style="color: #bbbbbb"> </span>(i<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;<span style="color: #bbbbbb"> </span>i<span style="color: #bbbbbb"> </span><span style="color: #666666">&lt;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">10</span>;<span style="color: #bbbbbb"> </span>i<span style="color: #666666">++</span>)
+<span style="color: #bbbbbb">     </span><span style="color: #008000; font-weight: bold">for</span><span style="color: #bbbbbb"> </span>(j<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;<span style="color: #bbbbbb"> </span>j<span style="color: #bbbbbb"> </span><span style="color: #666666">&lt;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">10</span>;<span style="color: #bbbbbb"> </span>j<span style="color: #666666">++</span>)
+<span style="color: #bbbbbb">      </span>dest[i][j]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>source[i][<span style="color: #666666">9-</span>j];
+<span style="color: #bbbbbb">  </span>}
+</pre></div>
+
+<p>Although the objects <code>dest[i][j]</code> are modified by the assignment statements, the
+pointer objects <code>dest[i]</code> are not. Without the clause quoted above, the
+top-level <code>restrict</code> qualifiers in the declarations of <code>dest</code> would have no
+effect, and a call of the form <code>reverse(x,x)</code> would have defined behavior if the
+elements of <code>x</code> point to 10 disjoint arrays of 10 chars. With the clause, the
+top-level qualifiers have the same effect as if those pointer objects were
+modified, so the iterated assignments are asserted to be fully free of aliasing
+for the modified objects, and a call of the form <code>reverse(x,x)</code> does have
+undefined behavior.</p>
+<p><strong>Question 3)</strong></p>
+<p>This is necessary to allow a translator to assume that two restricted pointers
+declared in the same scope cannot be used to alias the same object. Consider an
+extreme example for file scope pointers:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">   </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">restrict</span><span style="color: #bbbbbb"> </span>p;
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">restrict</span><span style="color: #bbbbbb"> </span>q;
+
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">foo</span><span style="color: #bbbbbb"> </span>()<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>p<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>q;<span style="color: #bbbbbb"> </span>q<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>p;<span style="color: #bbbbbb"> </span>}
+</pre></div>
+
+<p>After the assignments in a call to <code>foo()</code>, each of the two pointers is based on
+the other. Without the rules quoted above, this would be allowed and would
+effectively enable aliasing despite the qualifiers. This possibility would, in
+turn, generally undermine the benefit of the <code>restrict</code> qualifier, because a
+translator would have to prove that there were no such assignments before taking
+advantage of <code>restrict</code> qualifiers.</p>
+<p>[The assignments that are allowed are necessary to allow pointer values based
+on restricted pointers to be used in argument and return expressions.]</p>
+
+</body>
+</html>

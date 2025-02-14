@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0453: Atomic flag type and operations</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0453: Atomic flag type and operations</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Fred J. Tydeman (USA)<br />
+Date: 2013-10-22<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1776.htm">N1776</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>It appears to me that there is a wording problem in 7.17.8.*</p>
+<blockquote>
+<p>7.17.8 Atomic flag type and operations<br />
+#1: The <strong>atomic_flag</strong> type provides the classic test-and-set functionality.
+It has two states, set and clear.</p>
+<p>7.17.8.1 The atomic_flag_test_and_set functions<br />
+#2: Atomically sets the value pointed to by <strong>object</strong> to true.</p>
+<p>#3: Atomically, the value of the object immediately before the effects.</p>
+<p>7.17.8.2 The atomic_flag_clear functions<br />
+#2: Atomically sets the value pointed to by <strong>object</strong> to false.</p>
+</blockquote>
+<p>An issue is states (set, clear) versus values (true, false).</p>
+<p>Does an atomic_flag structure have both states (set, clear) and values (true,
+false)? Can it have all four combinations?</p>
+<p>Another issue is 'set' is used both as a verb and a noun.</p>
+<p>Another issue is: While the test is atomic, and the set is atomic, it is not
+clear that both test and set are part of the same atomic operation.</p>
+<p>I have been told that the same issues exists in the C++ standard (29.7
+[atomics.flag]).</p>
+<p>There was discussion of these topics on the WG14 reflector (around messages
+13067 to 13073)</p>
+<p>One person in the discussion would like the value zero (from default static
+initialization) to be the clear state. They also mentioned DR 421.</p>
+<p>Based upon the email discussion, the intent was that flags logically have
+exactly two states: "set" and "clear". The test_and_set operation returns true
+if it was "set", and false if it was "clear". Test_and_set sets the state to
+"set", and the clear operations set the state to "clear". The value zero need
+not be the "clear" state.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Replace</p>
+<blockquote>
+<p>7.17.8.1 The atomic_flag_test_and_set functions<br />
+#2: Atomically sets the value pointed to by <strong>object</strong> to true.</p>
+<p>#3: Atomically, the value of the object immediately before the effects.</p>
+<p>7.17.8.2 The atomic_flag_clear functions<br />
+#2: Atomically sets the value pointed to by <strong>object</strong> to false.</p>
+</blockquote>
+<p>with:</p>
+<blockquote>
+<p>7.17.8.1 The atomic_flag_test_and_set functions<br />
+#2: Tests the state of the flag pointed to by <strong>object</strong> and then sets the flag,
+as a single atomic operation.</p>
+<p>#3: Returns true if the flag was set when tested or false otherwise.</p>
+<p>7.17.8.2 The atomic_flag_clear functions<br />
+#2: Atomically clears the flag pointed to by <strong>object</strong>.</p>
+</blockquote>
+<p>Add to the rationale in the section on atomic flag:</p>
+<blockquote>
+<p>The atomic flag type is defined in terms of states, not values, as the value
+zero (false) need not be the "clear" state. The committee knows of one
+implementation where zero is the "set" state.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Apr 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<ul>
+<li>The committee agrees that the use of <em>true</em> and <em>false</em> are inaccurate.</li>
+<li>The committee does not feel that the proposed words are a sufficient resolution, however, and has solicited a new paper to resolve the issue.</li>
+</ul>
+<p>Oct 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The paper <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1853.htm">N1853</a>
+was provided and discussed, revised, discussed further, and a further paper was
+solicited. In particular, the committee did not like "converted to a _Bool"
+because it implies some unspecified arithmetic conversion.</p>
+</blockquote>
+<p>Apr 2015 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The paper <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1908.pdf">N1908</a>
+was provided and discussed. "Clears" the flag was vaguely troubling and a new
+approach was offered:</p>
+<blockquote>
+<p>In 7.17.8.1p2, change:</p>
+<p>Atomically sets the value pointed to by <code>object</code> to true.</p>
+<p>to:</p>
+<p>Atomically places the atomic flag pointed to by <code>object</code> in the set state and
+returns the value corresponding to the immediately preceding state.</p>
+<p>In 7.17.8.1p3, change:</p>
+<p>Atomically, the value of the object immediately before the effects.</p>
+<p>to:</p>
+<p>The <code>atomic_flag_test_and_set</code> functions return the value that corresponds to
+the state of the atomic flag immediately before the effects. The return value
+true corresponds to the set state and the return value false corresponds to the
+clear state.</p>
+<p>In 7.17.8.2p2, change:</p>
+<p>Atomically sets the value pointed to by <code>object</code> to false.</p>
+<p>to:</p>
+<p>Atomically places the atomic flag pointed to by <code>object</code> into the clear state.</p>
+</blockquote>
+</blockquote>
+<p>Oct 2015 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The direction developed late at the last meeting is adopted as the Proposed
+Technical Corrigendum.</p>
+</blockquote>
+<h3>Proposed Technical Corrigendum</h3>
+<p>In 7.17.8.1p2, change:</p>
+<blockquote>
+<p>Atomically sets the value pointed to by <code>object</code> to true.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>Atomically places the atomic flag pointed to by <code>object</code> in the set state and
+returns the value corresponding to the immediately preceding state.</p>
+</blockquote>
+<p>In 7.17.8.1p3, change:</p>
+<blockquote>
+<p>Atomically, the value of the object immediately before the effects.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>The <code>atomic_flag_test_and_set</code> functions return the value that corresponds to
+the state of the atomic flag immediately before the effects. The return value
+true corresponds to the set state and the return value false corresponds to the
+clear state.</p>
+</blockquote>
+<p>In 7.17.8.2p2, change:</p>
+<blockquote>
+<p>Atomically sets the value pointed to by <code>object</code> to false.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>Atomically places the atomic flag pointed to by <code>object</code> into the clear state.</p>
+</blockquote>
+
+</body>
+</html>

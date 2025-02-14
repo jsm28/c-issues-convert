@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0455: ATOMIC_VAR_INIT issue 5</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0455: ATOMIC_VAR_INIT issue 5</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Fred J. Tydeman (USA)<br />
+Date: 2013-10-22<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1777.htm">N1777</a><br />
+Submitted against: C11 / C17<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>I see several issues with <strong>ATOMIC_VAR_INIT</strong>. They could be turned into one
+combined defect report, or separate defects, or folded into DR 422.</p>
+<p>Consider the following code:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;stdatomic.h&gt;</span>
+<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">main</span>(<span style="color: #B00040">void</span>){
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">atomic_int</span><span style="color: #bbbbbb"> </span>guide1<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>ATOMIC_VAR_INIT(<span style="color: #666666">42</span>);<span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">/* known value(42); WHAT STATE? */</span>
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">atomic_int</span><span style="color: #bbbbbb"> </span>guide2;<span style="color: #bbbbbb">        </span><span style="color: #3D7B7B; font-style: italic">/* indeterminate value; indeterminate state */</span>
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">atomic_int</span><span style="color: #bbbbbb"> </span>guide3<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">42</span>;<span style="color: #bbbbbb">   </span><span style="color: #3D7B7B; font-style: italic">/* known value(42); indeterminate state */</span>
+<span style="color: #008000; font-weight: bold">static</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">atomic_int</span><span style="color: #bbbbbb"> </span>guide4;<span style="color: #bbbbbb">  </span><span style="color: #3D7B7B; font-style: italic">/* known value(0); valid state */</span>
+<span style="color: #008000; font-weight: bold">static</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">atomic_int</span><span style="color: #bbbbbb"> </span>guide5<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">42</span>;<span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">/* known value(42); valid state */</span>
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">atomic_int</span><span style="color: #bbbbbb"> </span>guide6;
+<span style="color: #bbbbbb"> </span>atomic_init(<span style="color: #666666">&amp;</span>guide6,<span style="color: #bbbbbb"> </span><span style="color: #666666">42</span>);<span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">/* known value(42); initialized state */</span>
+<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;
+}
+</pre></div>
+
+<p>What is the status of the additional state carried for guide1?</p>
+<ul>
+<li>Implicitly undefined</li>
+<li>Indeterminate</li>
+<li>Valid</li>
+<li>Initialized</li>
+<li>Something else</li>
+</ul>
+<p>Is the state of guide1 the same as what guide6 has? If yes, does
+"initialization-compatible" mean do the same thing as if atomic_init() of the
+same object with the same value?</p>
+<ul>
+<li>
+<p>(Issue 5 from N1777)</p>
+<p>Zero initialization of static atomic objects in C requires more than in C++.</p>
+<p>I have been told that C's 7.17.2.1#2:</p>
+<blockquote>
+<p>...; however, the default (zero) initialization for objects with static or
+thread-local storage duration is guaranteed to produce a valid state.</p>
+</blockquote>
+<p>is not in C++. If true and assuming that the two languages should be the
+"same" here, should this be deleted from C? Added to C++?</p>
+<p>DR 422 is somewhat related to this issue.</p>
+</li>
+</ul>
+<h3>Suggested Technical Corrigendum</h3>
+<ul>
+<li>No suggestion on the requirements mis-match between C and C++.</li>
+</ul>
+<hr />
+<p>Comment from WG14 on 2015-10-29:</p>
+<p>Apr 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<ul>
+<li>The 7.17.2.1#2 words should not be deleted.</li>
+<li>Interoperability with C++ atomics must be done by macros that use C++'s declarative syntax for atomic variables. As such there is no direct compatibility issue as is asserted.</li>
+</ul>
+<p>Oct 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>There were was no substantiative further discussion.</p>
+</blockquote>
+<h3>Proposed Committee Response</h3>
+<blockquote>
+<p>Interoperability with C++ atomics must be done by macros that use C++'s
+declarative syntax for atomic variables. As such there is no direct
+compatibility issue as is asserted, and 7.17.2.1#2 shall remain.</p>
+</blockquote>
+
+</body>
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0324: Tokenization obscurities</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0324: Tokenization obscurities</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Ivan A. Kosarev (Unicals Group, RU)<br />
+Date: 2005-04-19<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1123.htm">N1123</a><br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C99 TC3<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_324.htm">dr_324.htm</a></p>
+<p><strong>Summary #1</strong></p>
+<p>5.1.1.2 #2 ("Translation phases") says:</p>
+<blockquote>
+<p>[#2] ...2. Each instance of a backslash character (<code>\</code>) immediately followed
+by a new-line character is deleted, splicing physical source lines to form
+logical source lines. Only the last backslash on any physical source line shall
+be eligible for being part of such a splice. A source file that is not empty
+shall end in a new-line character, which shall not be immediately preceded by a
+backslash character before any such splicing takes place.</p>
+<p>3. The source file is decomposed into preprocessing tokens<sup>6)</sup> and
+sequences of white-space characters (including comments). A source file shall
+not end in a partial preprocessing token or in a partial comment. Each comment
+is replaced by one space character. New-line characters are retained. Whether
+each nonempty sequence of white-space characters other than new-line is retained
+or replaced by one space character is implementation-defined.</p>
+</blockquote>
+<p>Assuming there is a non-empty source file legally ending with a new-line
+character, what are examples of such partial preprocessing tokens that could end
+the file? And, generally, what the partial preprocessing tokens are?</p>
+<p><strong>Summary #2</strong></p>
+<p>6.4.4.4 ("Character constants") says:</p>
+<blockquote>
+<p>[#3] The single-quote <code>'</code>, the double-quote <code>"</code>, the question-mark <code>?</code>, the
+backslash <code>\</code>, and arbitrary integer values are representable according to the
+following table of escape sequences...</p>
+<p>[#5] The octal digits that follow the backslash in an octal escape sequence
+are taken to be part of the construction of a single character for an integer
+character constant or of a single wide character for a wide character
+constant...</p>
+<p>[#6] The hexadecimal digits that follow the backslash and the letter <code>x</code> in a
+hexadecimal escape sequence are taken to be part of the construction of a single
+character for an integer character constant or of a single wide character for a
+wide character constant...</p>
+<p>[#8] In addition, characters not in the basic character set are representable
+by universal character names and certain nongraphic characters are representable
+by escape sequences consisting of the backslash <code>\</code> followed by a lowercase
+letter: <code>\a</code>, <code>\b</code>, <code>\f</code>, <code>\n</code>, <code>\r</code>, <code>\t</code>, and <code>\v</code>.<sup>64)</sup></p>
+<p><sup>64)</sup> The semantics of these characters were discussed in 5.2.2. If
+any other character follows a backslash, the result is not a token and a
+diagnostic is required. See “future language directions” (6.11.4).</p>
+</blockquote>
+<p>6.4 #3 ("Lexical elements") says:</p>
+<blockquote>
+<p>[#3] ...The categories of preprocessing tokens are: header names, identifiers,
+preprocessing numbers, character constants, string literals, punctuators, and
+single non-white-space characters that do not lexically match the other
+preprocessing token categories.<sup>58)</sup> If a <code>'</code> or a <code>"</code> character
+matches the last category, the behavior is undefined.</p>
+</blockquote>
+<p>What in the formal content of the standard says that if any other character
+follows a backslash, there should be a diagnostic? Does such a case causes
+undefined behaviour? Furthermore, if a character sequence that is coming just
+after a double quote <code>"</code> (that is not terminating a string literal) begins with,
+say, <code>\l</code> and the result of the tokenization is not a token, then what the
+result is?</p>
+<p><strong>Summary #3</strong></p>
+<p>6.10.9 #2 ("Pragma operator") gives the following example:</p>
+<blockquote>
+<p>[#2] EXAMPLE A directive of the form:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#pragma listing on &quot;..\listing.dir&quot;</span>
+</pre></div>
+
+<p>can also be expressed as:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #008000; font-weight: bold">_Pragma</span><span style="color: #bbbbbb"> </span>(<span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;listing on </span><span style="color: #AA5D1F; font-weight: bold">\&quot;</span><span style="color: #BA2121">..</span><span style="color: #AA5D1F; font-weight: bold">\\</span><span style="color: #BA2121">listing.dir</span><span style="color: #AA5D1F; font-weight: bold">\&quot;</span><span style="color: #BA2121">&quot;</span><span style="color: #bbbbbb"> </span>)
+</pre></div>
+
+</blockquote>
+<p>The previous summary says that if there an unknown escape sequence encountered
+during tokenization of a character constant or string literal, then the result
+is not token. The question is whether the example above is well-defined.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<hr />
+<p>Comment from WG14 on 2006-10-25:</p>
+<h3>Proposed Committee Response</h3>
+<p><strong>Answers to Summary #1</strong></p>
+<p>"Partial preprocessing token" is not itself a technical term; it is merely the
+English Language word "partial" modifying the technical term "preprocessing
+token". A preprocessing token is defined by the grammar non-terminal
+<em>preprocessing-token</em> in Subclause 6.4. A partial preprocessing token is
+therefore just part of a preprocessing token that is not the entire
+preprocessing token.</p>
+<p>The statement that "source files shall not end in a partial preprocessing token
+or in a partial comment" has two implications. First, a preprocessing token may
+not begin in one file and end in another file. Second, the last preprocessing
+token in a source file must be well-formed and complete. For example, the last
+token may not be a string literal missing the close quote.</p>
+<p><strong>Answers to Summary #2</strong></p>
+<p>Subclause 5.1.1.3 requires a diagnostic to be produced if there is a violation
+of any syntax rule or constraint. The syntax for character constants (Subclause
+6.4.4.4) and string literals (Subclause 6.4.5) both require that any escape
+sequence be well formed according the nonterminal <em>escape-sequence</em> (Subclause
+6.4.4.4). Thus a diagnostic is required if a character constant or string
+literal contains a <code>\</code> not followed by the remainder of a valid escape sequence.</p>
+<p>Note that a preprocessor token may be a <em>header-name</em> in addition to a
+<em>string-literal</em>. Although a <em>header-name</em> has the appearance of a string
+literal, it is parsed by a different grammar (Subclause 6.4.7). The syntax for
+<em>header-name</em> is not violated if a <code>\</code> is not followed by the remainder of a
+valid escape sequence. Thus, no diagnostic is required. However, if a header
+name contains a <code>\</code>, the behavior is undefined (Subclause 6.4.7, paragraph 3).</p>
+<p>Since the behavior is undefined, the implementation is free to do anything it
+wishes. Some possible examples:</p>
+<ul>
+<li>Fail</li>
+<li>Issue a diagnostic</li>
+<li>Treat the <code>\</code> as the start of an escape sequence</li>
+<li>Treat the <code>\</code> as a literal character</li>
+</ul>
+<p>The last alternative is useful if your operating system normally uses <code>\</code> in the
+names of files.</p>
+<p><strong>Answers to Summary #3</strong></p>
+<p>Before your question can be answered, it is necessary to understand the precise
+steps taken in translating a <code>_Pragma</code> operator as controlled by the phases of
+translation (Subclause 5.1.1.2).</p>
+<p>The <code>_Pragma</code> operator (Subclause 6.10.9) has an argument that is a string
+literal. If any escape sequence in that string literal is not grammatically
+well-formed, a diagnostic is required. In the example, the string literal is
+syntactically correct, so no diagnostic is required so far.</p>
+<p>The <code>_Pragma</code> operator is executed during translation phase 4. Note that escape
+sequences in a string are not replaced by the characters that they represent
+until translation phase 5. However, the <code>_Pragma</code> operator itself does limited
+processing to handle <code>\\</code> and <code>\"</code> escape sequences (Subclause 6.10.9 paragraph
+1), and so when the value of the string literal is retokenized to produce
+preprocessor tokens, the result for the example matches the <code>#pragma</code> directive
+given.</p>
+<p>The final answer to your question rests with whether the preprocessor tokens in
+the <code>#pragma</code> directive require a diagnostic. Subclause 6.10.6 states that a
+<code>#pragma</code> directive ends in just a list of preprocessor tokens without placing
+any requirements on which preprocessor tokens.</p>
+<p>Your question then becomes whether the preprocessor token that looks like a
+string in the <code>#pragma</code> in the example is a <em>string-literal</em> or a <em>header-name</em>.
+If it is a <em>string-literal</em>, a diagnostic is required. If it is a <em>header-name</em>,
+no diagnostic is required, but there is undefined behavior. The choice of which
+preprocessor tokens are allowed in a <code>#pragma</code> directive is implementation
+defined.</p>
+<p>Subclause 6.10.9 paragraph 1 states that a <code>#pragma</code> causes the implementation
+to behave in an implementation-defined manner including the possibility that the
+implementation might fail or otherwise behave in a non-conforming manner. The
+intent of the committee was that implementations could recognize <em>header-name</em>
+preprocessor tokens in <code>#pragma</code> directives, if the implementation chooses, but
+this seems to be contradicted by the two places requiring Technical Corrigenda
+below.</p>
+<h3>Technical Corrigendum</h3>
+<p>Change Subclause 6.4.7, paragraph 3, last sentence to:</p>
+<p>Header name preprocessing tokens are recognized only within <code>#include</code>
+preprocessing directives or in implementation-defined locations within <code>#pragma</code>
+directives<sup>*)</sup>.</p>
+<p>(* New Footnote): For an example of a header name preprocessing token used in a
+<code>#pragma</code> directive, see Subclause 6.10.9.</p>
+<p>Change Subclause 6.4, paragraph 4, last sentence to:</p>
+<p>There is one exception to this rule: Header name preprocessing tokens are
+recognized only within <code>#include</code> preprocessing directives or in
+implementation-defined locations within <code>#pragma</code> directives. In such contexts,
+a sequence of characters that could be either a header name or a string literal
+is recognized as the former.</p>
+
+</body>
+</html>

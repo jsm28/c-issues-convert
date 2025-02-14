@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0235: &quot;C&quot; locale collating behaviour not defined</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0235: "<code>C</code>" locale collating behaviour not defined</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: AFNOR (Antoine Leca)<br />
+Date: 2000-10-18<br />
+Submitted against: C99<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_235.htm">dr_235.htm</a></p>
+<h3>Summary</h3>
+<blockquote>
+<p>Usually, the locale-specific behaviour for the library functions is specified
+when it comes to the "<code>C</code>" locale. A noteworthy and well-known exception to that
+the set of <em>printing characters</em> is <strong>not</strong> restricted. However, other points
+that may be seen as overviews. In 7.21.4.3 (<strong>strcoll</strong>), 7.24.4.4.2
+(<code>wcscoll</code>), 7.21.4.5 (<code>strxfrm</code>) and 7.24.4.4.4 (<code>wcsxfrm</code>), no behaviour is
+specified in the case of the "<code>C</code>" locale.</p>
+<p>It is customary to default to respectively <code>strcmp</code> for <code>strcoll</code>, <code>wcscmp</code> for
+<code>wcscoll</code>, and the identity function for the latter two, but this is not
+presently required.</p>
+</blockquote>
+<p><strong>Suggested responses</strong></p>
+<p>There are basically two choices:</p>
+<blockquote>
+<ul>
+<li>left things as they are, since use of <code>strcoll</code> and alii in the "<code>C</code>" locale is not expected to be a noteworthy situation</li>
+<li>correct the Standard along the customary way</li>
+</ul>
+</blockquote>
+<h3>Suggested Technical Corrigendum</h3>
+<blockquote>
+<p>In 7.21.4.3, add a new sentence (or a new paragraph) under <strong>Description</strong> which
+says:</p>
+<blockquote>
+<p>In the "<code>C</code>" locale, this function operates in the same way as <code>strcmp</code> does.</p>
+</blockquote>
+<p>In 7.24.4.4.2, add a new sentence in paragraph 2 (or a new paragraph) which
+says:</p>
+<blockquote>
+<p>In the "<code>C</code>" locale, this function operates in the same way as <code>wcscmp</code> does.</p>
+</blockquote>
+<p>In 7.21.4.5, add a new sentence in paragraph 2 (or a new paragraph) which says:</p>
+<blockquote>
+<p>In the "<code>C</code>" locale, this function copies at most <code>n</code> characters from the string
+pointed by <code>s2</code> to <code>s1</code>.</p>
+</blockquote>
+<p>In 7.24.4.4.4, add a new sentence in paragraph 2 (or a new paragraph) which
+says:</p>
+<blockquote>
+<p>In the "<code>C</code>" locale, this function copies at most <code>n</code> wide characters from the
+string pointed by <code>s2</code> to <code>s1</code>.</p>
+</blockquote>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2002-03-03:</p>
+<h3>Committee Response</h3>
+<p>The committee decided to make no change. The standard does not require that
+<code>strcoll()</code> and <code>strcmp()</code> perform the same in the C locale.</p>
+
+</body>
+</html>

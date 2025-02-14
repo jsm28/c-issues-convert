@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0272: type category</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0272: type category</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Clive D.W. Feather &lt;clive@demon.net&gt;, UK C Panel<br />
+Date: 2001-09-07<br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C99 TC2<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_272.htm">dr_272.htm</a></p>
+<h3>Problem</h3>
+<p>The concept of "type category" is defined but is never used in a useful way; it
+is also used inconsistently. The term and its cognates appear in only six
+places:</p>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">6.2.5#24:</td>
+<td align="left">defines the term;</td>
+</tr>
+<tr>
+<td align="left">6.2.5#25:</td>
+<td align="left">qualified and unqualified versions of types belong to the same category;</td>
+</tr>
+<tr>
+<td align="left">6.2.5#27:</td>
+<td align="left">example: <code>(float *)</code> has category "pointer";</td>
+</tr>
+<tr>
+<td align="left">6.2.5#28:</td>
+<td align="left">example: <code>(struct tag (*[5])(float))</code> has category "array";</td>
+</tr>
+<tr>
+<td align="left">footnote 93:</td>
+<td align="left">"... removes any type qualifiers from the type category of the expression"</td>
+</tr>
+<tr>
+<td align="left">footnote 137:</td>
+<td align="left">"The intent is that the type category in a function definition cannot be inherited from a <code>typedef</code>."</td>
+</tr>
+</tbody>
+</table>
+<p>Note how the use in footnote 93 conflicts with that in #25, and that the use in
+footnote 137 remains less than clear.</p>
+<p>Having an unnecessary term defined leaves the reader confused to no benefit. The
+term should be removed and the remaining wording changed.</p>
+<p>Even if the other changes described here are foregone, footnote 93 is in error
+and should be changed.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Delete 6.2.5#24.</p>
+<p>In 6.2.5#25, delete "belong to the same type category and".</p>
+<p>In 6.2.5#27, change "Its type category is pointer" to "It is a pointer type".</p>
+<p>In 6.2.5#28, change "Its type category is array" to "It is an array type".</p>
+<p>In footnote 93 change "which removes any type qualifiers from the type category
+of the expression" to "which removes any type qualifiers from the outermost
+component of the type of the expression (for example, it removes <code>const</code> but not
+<code>volatile</code> from the type <code>int volatile *const</code>)".</p>
+<p>In footnote 137 change the first part to:</p>
+<blockquote>
+<p>The intent is that the fact that the identifier designates a function is shown
+explicitly and cannot be inherited from a <code>typedef</code>:</p>
+</blockquote>
+<p>leaving the examples unchanged.</p>
+<hr />
+<p>Comment from WG14 on 2003-10-06:</p>
+<h3>Committee Discussion (for history only)</h3>
+<p>The committee wishes to keep the term "type category" for now, removing the term
+"type category" from the next revision of the standard should be considered at
+that time. The text of footnote 93 does use the term incorrectly, but the
+wording can be changed to use the term correctly - and the parenthetical
+example provided in the DR can also be incorporated to make the intent even
+clearer.</p>
+<h3>Technical Corrigendum</h3>
+<p>Change footnote 93.</p>
+<blockquote>
+<p>"...which removes any type qualifiers that were applied to the type category of
+the expression (for example, it removes <code>const</code> but not <code>volatile</code> from the type
+<code>int volatile * const</code>)."</p>
+</blockquote>
+
+</body>
+</html>

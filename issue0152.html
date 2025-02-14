@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0152: Can longjmp be used to return from a signal handler invoked other than through abort or raise?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0152: Can <code>longjmp</code> be used to return from a signal handler invoked other than through <code>abort</code> or <code>raise</code>?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Jutta Degener, DIN<br />
+Date: 1995-06-11<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_152.html">dr_152.html</a></p>
+<p><em>This Defect Report was prepared with considerable help from Mark Brader, Clive
+Feather, Ronald Guilmette, and a person whose employment conditions require
+anonymity.</em></p>
+<p>DIN-003:</p>
+<p>Can <code>longjmp</code> be used to return from a signal handler invoked other than through
+<code>abort</code> or <code>raise</code>? The descriptions of <code>signal</code> and <code>longjmp</code> contradict each
+other.</p>
+<p>According to subclause 7.7.1.1 <strong>The <code>signal</code> function</strong>:</p>
+<p>If the signal occurs other than as the result of calling the <code>abort</code> or <code>raise</code>
+function, the behavior is undefined if the signal handler calls any function in
+the standard library other than the <code>signal</code> function itself (with a first
+argument of the signal number corresponding to the signal that caused the
+invocation of the handler) or refers to any object with static storage duration
+other than by assigning a value to a static storage duration variable of type
+<code>volatile sig_atomic_t</code>.</p>
+<p>Since <code>longjmp</code> is a function, it cannot be called.</p>
+<p>But subclause 7.6.2.1 <strong>The <code>longjmp</code> function</strong>, broadly guarantees the
+opposite:</p>
+<p>As it bypasses the usual function call and return mechanisms, the <code>longjmp</code>
+function shall execute correctly in contexts of interrupts, signals and any of
+their associated functions.</p>
+<h3>Suggested Technical Corrigendum:</h3>
+<p>If the intent is to allow calls to <code>exit</code> and <code>longjmp</code> from signal handlers not
+invoked through calls to <code>raise</code> or <code>abort</code>, replace in subclause 7.6.2.1:</p>
+<p>... other than the <code>signal</code> function itself ...</p>
+<p>by:</p>
+<p>... other than <code>longjmp</code>, <code>exit</code>, or the <code>signal</code> function itself ...</p>
+<p>Alternatively, if the intent is to disallow calls to <code>longjmp</code> from signal
+handlers not invoked through calls to <code>raise</code> or <code>abort</code>, replace in subclause
+7.7.1.1:</p>
+<p>As it bypasses the usual function call and return mechanisms, the <code>longjmp</code>
+function shall execute correctly in contexts of interrupts, signals and any of
+their associated functions. However, if the <code>longjmp</code> function is invoked from a
+nested signal handler (that is, from a function invoked as a result of a signal
+raised during the handling of another signal), the behavior is undefined.</p>
+<p>by:</p>
+<p>If the <code>longjmp</code> function is invoked from a nested signal handler (that is, from
+a function invoked as a result of a signal raised during the handling of another
+signal), the behavior is undefined.</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>The C Standard is clear enough as is. The <code>longjmp</code> function shall execute
+correctly when called from a non-nested signal handler invoked through calls to
+the <code>raise</code> or <code>abort</code> functions; if <code>longjmp</code> is called from a signal handler
+invoked by other means, or from a nested signal handler, the behavior is
+undefined.</p>
+
+</body>
+</html>

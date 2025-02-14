@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0098: Do function types and incomplete type have size?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0098: Do function types and incomplete type have size?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Ron Guilmette, WG14<br />
+Date: 1993-12-03<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_098.html">dr_098.html</a></p>
+<p>ANSI/ISO C Defect report #rfg5:</p>
+<p>Subclause 6.3.3.4 provides the following constraint:</p>
+<blockquote>
+<p>The <code>sizeof</code> operator shall not be applied to an expression that has function
+type or an incomplete type...</p>
+</blockquote>
+<p>The logical implication of this constraint is that neither function types nor
+incomplete types have “sizes” per se, at least not as far as the C Standard is
+concerned.</p>
+<p>I have noted however that neither subclause 6.3.2.4 <strong>Postfix increment and
+decrement operators</strong> nor subclause 6.3.3.1 <strong>Prefix increment and decrement
+operators</strong> contain any constraints which would prohibit the incrementing or
+decrementing of pointers to function types or pointers to incomplete types.</p>
+<p>I believe that this logical inconsistency needs to be addressed (and rectified)
+in the C Standard. It seems that the most appropriate way to do this is to add
+the following additional constraint to subclause 6.3.2.4:</p>
+<blockquote>
+<p>The operand of the postfix increment or decrement operator shall not have a type
+which is a pointer to incomplete type or a pointer to function type.</p>
+</blockquote>
+<p>Likewise, the following new constraint should be added to subclause 6.3.3.1:</p>
+<blockquote>
+<p>The operand of the prefix increment or decrement operator shall not have a type
+which is a pointer to incomplete type or a pointer to function type.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>The explicit constraint on pre/post increment/decrement operators (subclauses
+6.3.2.4 and 6.3.3.1) is not required. Early on, the Committee decided that if a
+behavior was described as being equivalent to another construct, all of the
+constraints of that construct would apply. This “chaining” process means that
+any violation of a constraint in any section referred to explicitly or by the
+phrases “equivalent behavior” or “as if” will generate a diagnostic.</p>
+<p>Both subclauses 6.3.2.4 and 6.3.3.1 state in their respective <strong>Semantics</strong>
+sections, “See the discussions of additive operators and compound assignment for
+information on constraints, types, [side effects,] and conversions and the
+effects of operations on pointers.”</p>
+<p>The <strong>Semantics</strong> section of subclause 6.3.16.2 states, “A <em>compound assignment</em>
+of the form <code>E1</code> <em><code>op</code></em><code>= E2</code> differs from the simple assignment expression <code>E1 = E1</code> <em><code>op</code></em> <code>(E2)</code> only in that the lvalue <code>E1</code> is evaluated only once.”</p>
+<p>This makes the pre/post increment/decrement equivalent to adding or subtracting
+1 to/from an object. Looking at subclause 6.3.6 for the constraints on additive
+operators, in each case which refers to pointer operands, the C Standard uses
+the phrase “pointer to an object type.” Since incomplete types and function
+types are not object types, their use as operands of these operators is
+precluded.</p>
+
+</body>
+</html>

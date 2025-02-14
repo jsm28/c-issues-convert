@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0053: Do the aliasing rules cover accesses to different function pointers properly?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0053: Do the aliasing rules cover accesses to different function pointers properly?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Larry Jones, Project Editor (P.J. Plauger)<br />
+Date: 1993-03-25<br />
+Submitted against: C90<br />
+Status: Fixed<br />
+Fixed in: C90 TC1<br />
+Cross-references: <a href="issue0168.html">0168</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_053.html">dr_053.html</a></p>
+<p>There's been a discussion on <code>comp.std.c</code> recently about accessing a pointer to
+a function with parameter type information through a pointer to a pointer to a
+function without parameter type information. For example:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f</span>(<span style="color: #B00040">int</span>);
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">*</span>fp1)(<span style="color: #B00040">int</span>);
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">*</span>fp2)();
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">**</span>fpp)();
+
+<span style="color: #bbbbbb">        </span>fp1<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>f;
+<span style="color: #bbbbbb">        </span>fp2<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>fp1;<span style="color: #bbbbbb">      </span><span style="color: #3D7B7B; font-style: italic">/* pointers to compatible types, assignment ok */</span>
+<span style="color: #bbbbbb">        </span>(<span style="color: #666666">*</span>fp2)(<span style="color: #666666">3</span>);<span style="color: #bbbbbb">      </span><span style="color: #3D7B7B; font-style: italic">/* function types are compatible, call is ok */</span>
+<span style="color: #bbbbbb">        </span>fpp<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;</span>fp1;<span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">/* pointer to compatible types, assignment ok */</span>
+<span style="color: #bbbbbb">        </span>(<span style="color: #666666">**</span>fpp)(<span style="color: #666666">3</span>);<span style="color: #bbbbbb">     </span><span style="color: #3D7B7B; font-style: italic">/* valid? */</span>
+</pre></div>
+
+<p>The final call itself should be valid since the resulting function type is
+compatible with the type of the function being called, but there's still a
+problem: Subclause 6.3 <strong>Expressions</strong>, page 38, says:</p>
+<blockquote>
+<p>An object shall have its stored value accessed only by an lvalue expression that
+has one of the following types:<strong>36</strong></p>
+<p>- the declared type of the object,</p>
+<p>- a qualified version of the declared type of the object,</p>
+<p>- a type that is the signed or unsigned type corresponding to the declared type
+of the object,</p>
+<p>- a type that is the signed or unsigned type corresponding to a qualified
+version of the declared type of the object,</p>
+<p>- an aggregate or union type that includes one of the aforementioned types
+among its members (including, recursively, a member of a subaggregate or
+contained union), or</p>
+<p>- a character type.</p>
+<p>[Footnote 36: The intent of this list is to specify those circumstances in
+which an object may or may not be aliased.]</p>
+</blockquote>
+<p>This would appear to render the final call undefined since the stored value of
+<code>fp1</code> is being accessed by an lvalue that does not match its declared type:
+<code>(int (*)())</code> vs. <code>(int (*)(int))</code>.</p>
+<p>I think that this example should be valid and that the above limitation is too
+strict. I think what we meant to say was “<em>a type compatible with</em> the declared
+type of the object,” which would allow “reasonable” type mismatches without
+allowing aliasing between wildly different types.</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Correction</h3>
+<p><em><strong>In subclause 6.3, page 38, lines 18-21, change:</strong></em></p>
+<p>An object shall have its stored value accessed only by an lvalue expression that
+has one of the following types:<strong>36</strong></p>
+<p>- the declared type of the object,</p>
+<p>- a qualified version of the declared type of the object,</p>
+<p><em><strong>to:</strong></em></p>
+<p>An object shall have its stored value accessed only by an lvalue expression that
+has one of the following types:<strong>36</strong></p>
+<p>- a type compatible with the declared type of the object,</p>
+<p>- a qualified version of a type compatible with the declared type of the
+object,</p>
+
+</body>
+</html>

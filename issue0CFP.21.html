@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0CFP.21: P1: printf of one-digit character string</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0CFP.21: P1: printf of one-digit character string</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, C Floating Point Group<br />
+Date: 2018-03-24<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2224.pdf">N2224</a><br />
+Submitted against: Floating-point TS 18661 (C11 version, 2014-2016)<br />
+Status: Fixed<br />
+Fixed in: C23<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2397.htm">n2397.htm</a></p>
+<h3>Summary</h3>
+<p>It is possible that a floating-point value, when converted to a one-digit
+character string, results in odd numbers no matter which way rounding is done.
+For roundTiesToEven, IEC 60559 specifies that the larger magnitude value be
+used.</p>
+<p>Suggested Technical Corrigendum:</p>
+<p>Add the following to TS 18661-1 clause 10.2 Conversions to character sequences:</p>
+<blockquote>
+<p>Add to F.5 Binary-decimal conversion:</p>
+<p>NOTE: IEC 60559 specifies that conversion to one-digit character strings using
+roundTiesToEven when both choices are odd, shall produce the value with the
+larger magnitude. This can happen with 9.5 whose nearest neighbors are 9.e0 and
+1.e1, both of which are odd.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2019-05-03:</p>
+<p>Apr 2018 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The committee, once it understood the three floating values supplied, agreed
+with the proposed change.</p>
+<p>Subsequently, the author supplied revised values making such an understanding
+easier. The committee as a whole has yet to see the tweaked values presented
+below as the Proposed Change.</p>
+</blockquote>
+<h3>Proposed Change</h3>
+<p>Add the following to TS 18661-1 clause 10.2 Conversions to character sequences:</p>
+<blockquote>
+<p>Add to F.5 Binary-decimal conversion:</p>
+<p>NOTE: IEC 60559 specifies that conversion to one-digit character strings using
+roundTiesToEven when both choices are odd, shall produce the value with the
+larger magnitude. This can happen with 9.5e2 whose nearest neighbors are 9.e2
+and 1.e3, both of which are odd.</p>
+</blockquote>
+<p>Oct 2018 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>A new paper <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2283.htm">N2283</a>
+was presented with revised words from those suggested above in private
+correspondence.</p>
+<p>The committee accepts the Suggested Technical Corrigendum from that paper as the
+Proposed Change to resolve this issue.</p>
+</blockquote>
+<h3>Proposed Change</h3>
+<p>Add the following to TS 18661-1 clause 10.2 Conversions to character sequences:</p>
+<blockquote>
+<p>At the end of F.5 Binary-decimal conversion, add:</p>
+<p>NOTE IEC 60559 specifies that conversion to one-digit character strings using
+roundTiesToEven when both choices have an odd least significant digit, shall
+produce the value with the larger magnitude. For example, this can happen with
+9.5e2 whose nearest neighbors are 9.e2 and 1.e3, both of which have a single odd
+digit in the significand part.</p>
+</blockquote>
+
+</body>
+</html>

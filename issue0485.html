@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0485: Problem with the specification of ATOMIC_VAR_INIT</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0485: Problem with the specification of <code>ATOMIC_VAR_INIT</code></h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Jens Gustedt<br />
+Date: 2015-08-07<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1951.htm">N1951</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>The current version of the standard states that the argument to this macro
+should be a value of the corresponding base type of the atomic object that is to
+be initialized.</p>
+<blockquote>
+<p>The <code>ATOMIC_VAR_INIT</code> macro expands to a token sequence suitable for
+initializing an atomic object of a type that is initialization-compatible with
+value.</p>
+</blockquote>
+<p>This is problematic, because it excludes the primary form of initializers, the
+<code>{ }</code> form, from the possible uses, that would be necessary to initialize
+<code>struct</code> or <code>union</code> types properly.</p>
+<p><strong>Problem discussion</strong></p>
+<p>As a consequence, there is a problem for atomic objects that combine the two
+properties:</p>
+<ol>
+<li>The base type is a <code>struct</code> or <code>union</code> type.</li>
+<li>The object has static or thread-local storage duration.</li>
+</ol>
+<p>The problem is, that for such types there are no compile time constants that
+could be used as <em>value</em>, here. As a consequence the standard <em>doesn't allow
+explicit initialization</em> for these objects.</p>
+<ol>
+<li>Atomic objects of <code>struct</code> or <code>union</code> type and static or thread-local storage duration can only be default initialized.</li>
+<li>At program and thread startup, respectively, atomic objects of <code>struct</code> or <code>union</code> type and static or thread-local storage duration are in an indeterminate state.</li>
+</ol>
+<p>This is an important drawback that doesn't seem to be intentional:</p>
+<ul>
+<li>The <code>ATOMIC_VAR_INIT</code> had exactly been introduce for the purpose of initializing objects of static storage to a valid state with known value.</li>
+<li><code>struct</code> atomics play an important role for lock-free data structures to avoid the ABA problem.</li>
+</ul>
+<p><strong>Current practice</strong></p>
+<p>Both compilers that I have my hands on (gcc 4.9 and clang 3.6) that implement
+<code>&lt;stdatomic.h&gt;</code> have something equivalent to</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#define ATOMIC_VAR_INIT(VALUE)  (VALUE)</span>
+</pre></div>
+
+<p>This is of course conforming to the standard text as it is now, but exhibit the
+exact problem. They don't allow for a compile time initializer since the <code>()</code>
+around <code>VALUE</code> result in invalid syntax if <code>VALUE</code> is a <code>{ }</code> initializer.</p>
+<p>Clang has an implementation specific way out of this: they allow compound
+literals with constant initializers in that context. Gcc provides no such
+solution.</p>
+<p>For both compilers, it is easily possible to overwrite the macro definition into
+one that omits the parenthesis and all works fine.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Change the beginning of the corresponding section, 7.17.2.1p2, to:</p>
+<p><ins>7.17.2.1 The <code>ATOMIC_VAR_INIT</code> macro<br />
+<strong>Synopsis</strong></ins></p>
+<p><ins><code>#include &lt;stdatomic.h&gt;</code><br />
+<code>#define ATOMIC_VAR_INIT(initializer)</code></ins></p>
+<p><ins><strong>Description</strong><br />
+The <code>ATOMIC_VAR_INIT</code> macro expands to a token sequence suitable for
+initializing an atomic object <code>X</code>. For any invocation of this macro, the
+<em>initializer</em> argument shall expand to a token sequence that would be suitable
+to initialize <code>X</code> if the atomic qualification would be dropped.<strong>footnote</strong>That
+is, it could be used to initialize an object <code>Y</code> of the same base type, storage
+duration and place of declaration as <code>X</code>, but without atomic qualification.<strong>end
+footnote</strong><br />
+An atomic object with automatic storage duration ...</ins></p>
+<p>Then append a new note after the actual para 4:</p>
+<p><ins><em>Note:</em> Since <em>initializer</em> may be a token sequence that contains commas
+which are not protected by <code>()</code> it may constitute a variable number of arguments
+for the macro evaluation. Implementations should be able to deal with such
+situations by defining <code>ATOMIC_VAR_INIT</code> as accepting a variable argument
+list.</ins></p>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Oct 2015 meeting</p>
+<h3>Committee Discussion</h3>
+<ul>
+<li>The fundamental issue is the apparent inability to initialize atomic structures or unions due to the definition of the <code>ATOMIC_VAR_INIT</code> macro as taking a single argument. Some implementations have already taken the liberty of treating the macro as variadic for purposes of atomic structure initialization and moreover to also implicitly provide surrounding <code>{</code> and <code>}</code> that form the syntax for a structure initializer or compound literal as appropriate to the implementation.</li>
+<li>The committee agrees with the sentiment expressed in the suggested NOTE although the wording was not discussed.</li>
+<li>The suggested changes to 7.17.2.1 were not acceptable to the committee, however, and may not be needed at all since, in particular the declared type <code>C</code> is already the non-atomic version of the atomic type <code>A</code> of the variable being initialized. Use of the term “base type” is undefined in C for example.</li>
+<li>The committee requests that the author take this input under advisement in a new solicited paper that would, in effect, make explicit the extended practice.</li>
+</ul>
+<p>Apr 2016 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>A short paper was provided with a Suggested Technical Corrigendum and, although
+close, more work was solicited from the authors. The direction discussed by the
+committee was given that in the section <code>C</code> is defined to be the non-atomic
+equivalent of type <code>A</code>,</p>
+<ul>
+<li>
+<p>new wording must be provided to say it takes an initializer for an object of type <code>C</code>, and the macro expands to an object of type <code>A</code>, and that</p>
+</li>
+<li>
+<p>the macro can be defined as in the Suggested Technical Corrigendum:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">    </span><span style="color: #9C6500">#define ATOMIC_VAR_INIT(...)</span>
+</pre></div>
+
+</li>
+</ul>
+</blockquote>
+<p>Oct 2016 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The definition of <code>ATOMIC_VAR_INIT</code> as a macro is problematic. Several
+implementations use locks introduced by compiler magic for larger structures and
+the macro cannot provide for the proper initialization of a lock that is not
+visible. For these and other implementations, <code>ATOMIC_VAR_INIT</code> should be fully
+implemented as compiler magic.</p>
+<p>Since removing the definition of the macro is outside the scope of a DR, this
+issue may only be addressable in a future revision of the standard.</p>
+</blockquote>
+<p>Apr 2017 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>Although discussed at the last meeting, the point that there are no known
+implementations using <em>embedded</em> locks was not accurately reflected in the prior
+discussion. Atomic structures may still differ in size due to potentially
+increased alignment requirements. It was further noted that some implementations
+use "compiler magic" at initialization time.</p>
+<p>Since the macro definition is neither necessary nor sufficient for structures,
+the email <a href="https://www.open-std.org/jtc1/sc22/wg14/14645">(SC22WG14.14645) DR 485 wording for TC
+2017</a> containing two suggested
+technical corrigenda was discussed at some length. Neither change, however, is
+appropriate as a technical corrigendum, and as such this issue cannot be
+addressed using the Defect Report process.</p>
+</blockquote>
+<h3>Proposed Committee Response</h3>
+<blockquote>
+<p>The <code>ATOMIC_VAR_INIT</code> macro was added to the standard without wide
+implementation experience with the intent being to allow implementations to use
+embedded locks in atomic types. It was not, however, well formulated to
+accommodate the extension of atomics to structures since it would, perhaps,
+require variadic arguments. No known implementations use embedded locks,
+however, and as such there is no technical requirement for the use of the
+<code>ATOMIC_VAR_INIT</code> macro.</p>
+<p>Correcting this is beyond the scope of the Defect Report process.</p>
+<p>There was consensus in the committee to deprecate this macro in the next
+revision of the standard. The following words, drawn from <a href="https://www.open-std.org/jtc1/sc22/wg14/14645">(SC22WG14.14645) DR
+485 wording for TC 2017</a>, are the
+proposed direction:</p>
+<p>In §7.17.2.1 replace paragraph 2 with:</p>
+<blockquote>
+<p>An atomic object with automatic storage duration that is not explicitly
+initialized is initially in an indeterminate state.</p>
+</blockquote>
+</blockquote>
+
+</body>
+</html>

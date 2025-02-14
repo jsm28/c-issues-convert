@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0CFP.15: P3: Characteristic macros for non-arithmetic formats</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0CFP.15: P3: Characteristic macros for non-arithmetic formats</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Jim Thomas<br />
+Date: 2017-10-25<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2171.pdf">N2171</a><br />
+Submitted against: Floating-point TS 18661 (C11 version, 2014-2016)<br />
+Status: Fixed<br />
+Fixed in: C23<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2397.htm">n2397.htm</a></p>
+<h3>Summary</h3>
+<p>This DR addresses an issue related to DR 501 and IEC 60559 non-arithmetic
+interchange formats.</p>
+<p>TS 18661-3 attempted to change the definition of <code>DECIMAL_DIG</code> so that it would
+apply to all supported IEC 60559 formats. DR 501 shows that this change is
+problematic. After several unsuccessful attempts at a suitable TC, WG 14 and the
+CFP group have agreed to obsolesce <code>DECIMAL_DIG</code> in favor of the
+<em>type</em><code>_DECIMAL_DIG</code> macros.</p>
+<p>The <em>type</em><code>_DECIMAL_DIG</code> macros are helpful in using conversions between binary
+floating-point formats and decimal character sequences. TS 18661-3 specifies
+such conversions for non-arithmetic binary interchange formats, but neglects to
+include the macros for such formats.</p>
+<p>Likewise, the <em>type</em><code>_DIG</code> macros too are helpful in using conversions between
+binary floating-point formats and decimal character sequences, though TS 18661-3
+does not specify them for non-arithmetic formats.</p>
+<p>The suggested TC below extends the set of <code>FLT</code><em>N</em><code>_DECIMAL_DIG</code> and
+<code>FLT</code><em>N</em><code>_DIG</code> macros to include ones for IEC 60559 non-arithmetic binary
+interchange formats.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>In TS 18661-3 5.3, in the text for 5.2.4.2.2#6c, after the list for supported
+types <code>_Float</code><em><code>N</code></em>, insert:</p>
+<blockquote>
+<p>for IEC 60559 non-arithmetic binary interchange formats of width <em>N</em>:</p>
+<p><code>FLT</code><em>N</em><code>_DECIMAL_DIG     FLT</code><em>N</em><code>_DIG</code></p>
+</blockquote>
+<p>In TS 18661-3 clause 7, in the text for 5.2.4.2.2a#1, change:</p>
+<blockquote>
+<p>The prefix <code>FLT</code><em>N</em><code>_</code> indicates a binary interchange floating type of width
+<em>N</em>.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>The prefix <code>FLT</code><em>N</em><code>_</code> indicates a binary interchange floating type or a
+non-arithmetic binary interchange format of width <em>N</em>.</p>
+</blockquote>
+<p>Change the last sentence of  5.2.4.2.2a#1 from:</p>
+<blockquote>
+<p>Conversely, for each such type that the implementation does not provide,
+<code>&lt;float.h&gt;</code> shall not define the associated macros in the following lists.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>Conversely, for each such type that the implementation does not provide,
+<code>&lt;float.h&gt;</code> shall not define the associated macros in the following list,
+except, the implementation shall define the macros <code>FLT</code><em>N</em><code>_DECIMAL_DIG</code> and
+<code>FLT</code><em>N</em><code>_DIG</code> if it supports IEC 60559 non-arithmetic binary interchange
+formats of width <em>N</em> by providing the encoding-to-encoding conversion functions
+in <code>&lt;math.h&gt;</code> and the string-to-encoding and string-from-encoding functions in
+<code>&lt;stdlib.h&gt;</code>.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2018-10-18:</p>
+<p>Oct 2017 meeting</p>
+<h3>Committee Discussion</h3>
+<p>The committee agreed with this issue and its proposed clarification.</p>
+<p><strong>Proposed Technical Clarification</strong></p>
+<p>In TS 18661-3 5.3, in the text for 5.2.4.2.2#6c, after the list for supported
+types <code>_Float</code><em><code>N</code></em>, insert:</p>
+<blockquote>
+<p>for IEC 60559 non-arithmetic binary interchange formats of width <em>N</em>:</p>
+<p><code>FLT</code><em>N</em><code>_DECIMAL_DIG     FLT</code><em>N</em><code>_DIG</code></p>
+</blockquote>
+<p>In TS 18661-3 clause 7, in the text for 5.2.4.2.2a#1, change:</p>
+<blockquote>
+<p>The prefix <code>FLT</code><em>N</em><code>_</code> indicates a binary interchange floating type of width
+<em>N</em>.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>The prefix <code>FLT</code><em>N</em><code>_</code> indicates a binary interchange floating type or a
+non-arithmetic binary interchange format of width <em>N</em>.</p>
+</blockquote>
+<p>Change the last sentence of  5.2.4.2.2a#1 from:</p>
+<blockquote>
+<p>Conversely, for each such type that the implementation does not provide,
+<code>&lt;float.h&gt;</code> shall not define the associated macros in the following lists.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>Conversely, for each such type that the implementation does not provide,
+<code>&lt;float.h&gt;</code> shall not define the associated macros in the following list,
+except, the implementation shall define the macros <code>FLT</code><em>N</em><code>_DECIMAL_DIG</code> and
+<code>FLT</code><em>N</em><code>_DIG</code> if it supports IEC 60559 non-arithmetic binary interchange
+formats of width <em>N</em> by providing the encoding-to-encoding conversion functions
+in <code>&lt;math.h&gt;</code> and the string-to-encoding and string-from-encoding functions in
+<code>&lt;stdlib.h&gt;</code>.</p>
+</blockquote>
+
+</body>
+</html>

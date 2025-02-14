@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0430: getenv_s, maxsize should be allowed to be zero</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0430: <code>getenv_s</code>, <code>maxsize</code> should be allowed to be zero</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG 14, Douglas Walls<br />
+Date: 2013-02-11<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1674.htm">N1674</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>getenv_s, Annex K.3.6.2.1p2 under Runtime-constraints says:</p>
+<p><strong>name</strong> shall not be a null pointer. <strong>maxsize</strong> shall neither equal zero nor
+be greater than<br />
+<strong>RSIZE_MAX</strong>. If <strong>maxsize</strong> is not equal to zero, then <strong>value</strong> shall not
+be a null pointer.</p>
+<p>Question here is, if maxsize really cannot be 0.  If it cannot be<br />
+zero, why does the 2nd sentence mention the condition that <code>(maxsize != 0)</code>?</p>
+<p>If maxsize can be 0, it would allow the value to be a null pointer<br />
+which allows what is described in 6.6.2.1 of TR24731 (N1173) cleanly:</p>
+<p>The <strong>getenv_s</strong> function can also be used to get the size needed to<br />
+represent the result. This allows the programmer to first call<br />
+<strong>getenv_s</strong> to get the size, then allocate a buffer to hold the result,<br />
+and then call <strong>getenv_s</strong> again to actually obtain the result."</p>
+<p>if maxsize can be zero, then I think we would get the length of string thusly:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">    </span>getenv_s(<span style="color: #666666">&amp;</span>len,<span style="color: #bbbbbb"> </span><span style="color: #008000">NULL</span>,<span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>,<span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;HOME&quot;</span>);
+</pre></div>
+
+<p>However, since maxsize cannot be 0 which also requires value not to be<br />
+a null pointer, we would need to do something like this:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">    </span>getenv_s(<span style="color: #666666">&amp;</span>len,<span style="color: #bbbbbb"> </span>something,<span style="color: #bbbbbb"> </span><span style="color: #666666">1</span>,<span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;HOME&quot;</span>);
+</pre></div>
+
+<p>AFAICT, getnenv_s as specified in C11 exactly matches what was in TR24731
+(N1172).<br />
+What is in TR24731 (N1172) does not coincide with what is in the rational<br />
+for TR24731 (N1173).  The wording in TR24731 (N1172) (and by extension<br />
+C11) is awkward and it certainly looks like an update intended to correspond to<br />
+the rational for TR24731 (N1173) was either misapplied or not applied.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Replace Annex K.3.6.2.1p2 second sentence with:</p>
+<p><strong>maxsize</strong> shall not be greater than <strong>RSIZE_MAX</strong>.</p>
+<p>K.3.6.2.1p2 would then read thusly:</p>
+<p><strong>name</strong> shall not be a null pointer.  <strong>maxsize</strong> shall not be greater than<br />
+<strong>RSIZE_MAX</strong>.  If <strong>maxsize</strong> is not equal to zero, then <strong>value</strong> shall not
+be a null pointer.</p>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Apr 2013 meeting</p>
+<h3>Committee Discussion</h3>
+<ul>
+<li>The proposed change seems appropriate and is consistent with the existing rationale.</li>
+<li>The committee notes that some implementations may need to change to avoid treating a value of zero for <strong>maxsize</strong> as a constraint violation.</li>
+</ul>
+<h3>Proposed Technical Corrigendum</h3>
+<p>Replace Annex K.3.6.2.1p2 second sentence with:</p>
+<p><strong>maxsize</strong> shall not be greater than <strong>RSIZE_MAX</strong>.</p>
+<p>K.3.6.2.1p2 would then read thusly:</p>
+<p><strong>name</strong> shall not be a null pointer.  <strong>maxsize</strong> shall not be greater than<br />
+<strong>RSIZE_MAX</strong>.  If <strong>maxsize</strong> is not equal to zero, then <strong>value</strong> shall not
+be a null pointer.</p>
+
+</body>
+</html>

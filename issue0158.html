@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0158: Are the semantics for the explicit conversion of null pointer constants defined?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0158: Are the semantics for the explicit conversion of null pointer constants defined?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Clive D.W. Feather, BSI<br />
+Date: 1995-10-16<br />
+Submitted against: C90<br />
+Status: Fixed<br />
+Fixed in: C99<br />
+Cross-references: <a href="issue0155.html">0155</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_158.html">dr_158.html</a></p>
+<p><em>Submitted to BSI by Clive D.W. Feather clive@sco.com.</em></p>
+<p><em>In this Defect Report, identifiers lexically identical to those declared in
+standard headers refer to the identifiers declared in those standard headers,
+whether or not the header is explicitly mentioned.</em></p>
+<p><em>This Defect Report has been prepared with considerable help from Mark Brader,
+Jutta Degener, Ronald Guilmette, and a person whose employment conditions
+require anonymity. However, except where stated, opinions expressed or implied
+should not be assumed to be those of any person other than myself.</em></p>
+<p>Defect Report UK 006: Null pointer conversions</p>
+<p>The C Standard does not define semantics for the explicit conversion of null
+pointer constants and for the implicit conversion of null pointers.</p>
+<p>Subclause 6.2.2.3 reads in part:</p>
+<p>If a null pointer constant is assigned to or compared for equality to a pointer,
+the constant is converted to a pointer of that type. Such a pointer, called a
+null pointer, is guaranteed to compare unequal to a pointer to any object or
+function.</p>
+<p>Two null pointers, converted through possibly different sequences of casts to
+pointer types, shall compare equal.</p>
+<p>Given the definitions:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span>p<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb">  </span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span>i<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;
+</pre></div>
+
+<p>does the standard guarantee that the expression <code>p == i</code> always evaluates to 1?
+The last quoted sentence only covers casts, and not the implicit conversions of
+that comparison. Conversely, do the expressions <code>(int *)0</code> or <code>1 ? 0 : (int *)0</code>
+yield null pointers of type <code>(int *)</code>? The quoted text does not cover the case
+of a null pointer constant being converted other than by assignment or in a test
+for equality, yet expressions such as these are widely used.</p>
+<h3>Suggested Technical Corrigendum:</h3>
+<p>In subclause 6.2.2.3, change:</p>
+<blockquote>
+<p>Two null pointers, converted through possibly different sequences of casts to
+pointer types, shall compare equal.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>Conversion of a null pointer to another pointer type yields a null pointer of
+that type. Any two null pointers shall compare equal.</p>
+</blockquote>
+<p>Alternatively, a common term could be introduced to more conveniently describe
+the various forms of pointer that cannot be dereferenced. In this case, replace
+the last two paragraphs of subclause 6.2.2.3 with:</p>
+<blockquote>
+<p>For each pointer type, there exist values which can participate in assignment
+and equality operations, but which cause undefined behavior if dereferenced.
+These are referred to as <em>undereferenceable.</em> An undereferenceable pointer
+compares unequal to any other value of the same pointer type. For each pointer
+type, one particular undereferenceable pointer value is called the <em>null
+pointer.</em> [Footnote: Since there is only one such value, all null pointers of
+the same type compare equal.]</p>
+<p>An integral constant expression with the value 0, or such an expression cast to
+type <code>void *</code>, is called a <em>null pointer constant.</em> If a null pointer constant
+is assigned to or compared for equality with an object of pointer type, or cast
+to pointer type, then it is converted to the null pointer of that type.
+Conversion of a null pointer to another pointer type produces the null pointer
+of that type.</p>
+</blockquote>
+<p>If the answer to <a href="issue0155.html">Defect Report #155</a> is that <em>unique</em> means
+<em>different each time,</em> then replace the last two sentences of subclause 7.10.3
+with:</p>
+<blockquote>
+<p>If the size of the space requested is zero, an undereferenceable pointer is
+returned. It is implementation-defined whether this is always a null pointer or
+whether the implementation attempts to produce a value distinct from any other
+undereferenceable pointer. Any pointer value returned by an allocation can be
+passed to the free function; if the value is not a null pointer, it becomes
+indeterminate. [Footnote: A subsequent allocation may return a pointer value
+with the same bit pattern, but a strictly conforming program can't detect
+this.] The value of a pointer that refers to any part of a freed object is also
+indeterminate.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>Does the Standard guarantee that <code>p == i</code>? Yes.</p>
+<p>Does <code>(int *) 0</code> yield a null pointer of type <code>int *</code>? Yes.</p>
+<p>Does <code>1 ? 0 : (int *) 0</code> yield a null pointer of type <code>int *</code>? Yes.</p>
+<p>The intent of the part of Subclause 6.2.2.3 that you quote is to state that a
+null pointer results when a null pointer constant is converted to a pointer. By
+singling out assignment and comparison, the Standard is misleadingly specific.
+This should be clarified in the Standard.</p>
+<h3>Future Change</h3>
+<p>In Subclause 6.2.2.3</p>
+<p>Change</p>
+<blockquote>
+<p>"If a null pointer constant is assigned to or compared for equality to a
+pointer, the constant is converted to a pointer of that type. Such a pointer,
+called a null pointer, is guaranteed to compare unequal to a pointer to any
+object or function.</p>
+<p>Two null pointers, converted through possibly different sequences of casts to
+pointer types, shall compare equal."</p>
+</blockquote>
+<p>To</p>
+<blockquote>
+<p>"The result of converting a null pointer constant to a pointer type is called a
+null pointer. A null pointer is guaranteed to compare unequal to a pointer to
+any object or function.</p>
+<p>Conversion of a null pointer to another pointer type yields a null pointer of
+that type. Any two null pointers shall compare equal."</p>
+</blockquote>
+<p>In Subclause 6.3.9</p>
+<p>Add a new paragraph after the first paragraph in Semantics</p>
+<blockquote>
+<p>"If a null pointer constant is compared for equality to a pointer, the constant
+is converted to the type of the pointer."</p>
+</blockquote>
+
+</body>
+</html>

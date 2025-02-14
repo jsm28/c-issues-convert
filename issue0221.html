@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0221: Lacuna in pointer arithmetic</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0221: Lacuna in pointer arithmetic</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Clive Feather (UK)<br />
+Date: 2000-04-04<br />
+Submitted against: C99<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_221.htm">dr_221.htm</a></p>
+<h3>Summary</h3>
+<p>Consider the code extract:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>v<span style="color: #bbbbbb"> </span>[<span style="color: #666666">10</span>];<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>p<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>(v<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span><span style="color: #666666">9</span>)<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span><span style="color: #666666">1</span>;<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>q<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>v<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span><span style="color: #666666">10</span>;
+</pre></div>
+
+</blockquote>
+<p>The relevant part of 6.5.6 paragraph 8 reads:</p>
+<blockquote>
+<p>If the pointer operand points to an element of an array object, and the array is
+large enough, the result points to an element offset from the original element
+such that the difference of the subscripts of the resulting and original array
+elements equals the integer expression. In other words, if the expression <code>P</code>
+points to the <em>i</em>-th element of an array object, the expressions <code>(P)+N</code>
+(equivalently, <code>N+(P)</code>) and <code>(P)-N</code> (where <code>N</code> has the value n) point to,
+respectively, the <em>i</em>+<em>n</em>-th and <em>i</em>-<em>n</em>-th elements of the array object,
+provided they exist. Moreover, if the expression <code>P</code> points to the last element
+of an array object, the expression <code>(P)+1</code> points one past the last element of
+the array object, and if the expression <code>Q</code> points one past the last element of
+an array object, the expression <code>(Q)-1</code> points to the last element of the array
+object. If both the pointer operand and the result point to elements of the same
+array object, or one past the last element of the array object, the evaluation
+shall not produce an overflow; otherwise, the behavior is undefined.</p>
+</blockquote>
+<p>There is a problem with this wording in that it defines arithmetic of pointers
+within the array object properly, but it only defines arithmetic to "one past
+the end" when the pointer was previously to the last object. In other words, the
+initialization of <code>p</code> is correct because <code>(v + 9)</code> points to the last element of
+an array, but the initialization of <code>q</code> is not because the "<em>i</em>+<em>n</em>-th" element
+does not exist.</p>
+<p>This problem also makes common idioms like:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #008000; font-weight: bold">for</span><span style="color: #bbbbbb"> </span>(p<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>v;<span style="color: #bbbbbb"> </span>p<span style="color: #bbbbbb"> </span><span style="color: #666666">&lt;</span><span style="color: #bbbbbb"> </span>v<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span><span style="color: #666666">10</span>;<span style="color: #bbbbbb"> </span>p<span style="color: #666666">++</span>)
+</pre></div>
+
+</blockquote>
+<p>undefined.</p>
+<p>It is clear that these constructs are supposed to work, and that the relevant
+wording just needs to be adjusted.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Change the cited text to:</p>
+<blockquote>
+<p>If the pointer operand points to an element of an array object or to one past
+the last element of the array object, and if the array is large enough, the
+result points to an element, or to the location one past the last element,
+offset from the original element such that the difference of the subscripts of
+the resulting and original array elements equals the integer expression. In
+other words, if the expression <code>P</code> points to the <em>i</em>-th element of an array
+object with <em>k</em> elements, or to one past the last element (in which case <em>i</em>
+equals <em>k</em>), then the expressions <code>(P)+N</code> and <code>N+(P)</code>, (where <code>N</code> has the value
+<em>n</em> which may be positive, zero, or negative) both point to the <em>i</em>+<em>n</em>-th
+elements of the array object, provided it exists, or if <em>i</em>+<em>n</em> equals <em>k</em>, to
+one past the last element of the array object. If both the pointer operand and
+the result point to elements of the same array object, or one past the last
+element of the array object (that is, both <em>i</em> and <em>i</em>+<em>n</em> lie between <em>0</em> and
+<em>k</em> inclusive), the evaluation shall not produce an overflow; otherwise, the
+behavior is undefined.</p>
+</blockquote>
+<p>Similarly, change the following text in paragraph 9:</p>
+<blockquote>
+<p>In other words, if the expressions <code>P</code> and <code>Q</code> point to, respectively, the
+<em>i</em>-th and <em>j</em>- th elements of an array object, the expression <code>(P)-(Q)</code> has
+the value <em>i</em>-<em>j</em> provided the value fits in an object of type <code>ptrdiff_t</code>.
+Moreover, if the expression <code>P</code> points either to an element of an array object
+or one past the last element of an array object, and the expression <code>Q</code> points
+to the last element of the same array object, the expression <code>((Q)+1)-(P)</code> has
+the same value as <code>((Q)-(P))+1</code> and as <code>-((P)-((Q)+1))</code>, and has the value zero
+if the expression <code>P</code> points one past the last element of the array object, even
+though the expression <code>(Q)+1</code> does not point to an element of the array
+object.<sup>88)</sup></p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>In other words, if the expressions <code>P</code> and <code>Q</code> point to, respectively, the
+<em>i</em>-th and <em>j</em>-th elements of an array object with <em>k</em> elements, or to one past
+the last element (in which case <em>i</em> or <em>j</em>, or both, equals <em>k</em>), the expression
+<code>(P)-(Q)</code> has the value <em>i</em>-<em>j</em> provided the value fits in an object of type
+<code>ptrdiff_t</code>.<sup>88)</sup></p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2001-09-18:</p>
+<h3>Committee Response</h3>
+<blockquote>
+<p>1. <code>int v[10];</code><br />
+2. <code>int *p = (v + 9) + 1;</code><br />
+3. <code>int *q = v + 10;</code></p>
+</blockquote>
+<p>Simply put, <code>10 == 9+1</code>. Based on the "as-if" rule, there is no semantic
+distinction among any of the following:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>v<span style="color: #666666">+9+1</span>
+(v<span style="color: #666666">+9</span>)<span style="color: #666666">+1</span>
+v<span style="color: #666666">+</span>(<span style="color: #666666">9+1</span>)
+v<span style="color: #666666">+10</span>
+</pre></div>
+
+</blockquote>
+<p>and that <code>v+x</code> is equivalent to <code>(v+x-1)+1</code> and <code>(v+x+1)-1</code>, assuming that
+<code>x&gt;=1</code> and <code>x&lt;=9</code>.</p>
+<p>Furthermore, the following wording from 6.5.6P8 confirms this equivalence:</p>
+<blockquote>
+<p>"Moreover, if the expression <code>P</code> points to the last element of an array object,
+the expression <code>(P)+1</code> points one past the last element of the array object, and
+if the expression <code>Q</code> points one past the last element of an array object, the
+expression <code>(Q)-1</code> points to the last element of the array object."</p>
+</blockquote>
+<p>The first part of the sentence states that <code>(v+9)+1</code> "points to one past the
+last element of the array object".</p>
+<p>The second part of the sentence states that <code>v+10</code> "points to one past the last
+element of the array object", which equates it to <code>(v+9)+1</code> because it also
+"points to one past the last element of the array object".</p>
+<p>The third part of the sentence states that <code>v+10-1</code> "points to the last element
+of the array object" which is <code>v+9</code>.</p>
+<p>Additionally, the expression <code>(v+11)-2</code> need not be valid because constants
+might not be folded and the expression <code>(v+11)</code> is invalid.</p>
+<p>There are no surprising results in any of the above conclusions, even if the
+above constants are replaced with variables. The committee believes the current
+specification is clear and is unlikely to be misinterpreted.</p>
+<p>There is no consensus to make the requested changes or any changes along these
+lines.</p>
+
+</body>
+</html>

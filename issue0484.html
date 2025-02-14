@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0484: invalid characters in strcoll()</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0484: invalid characters in <code>strcoll()</code></h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Fred J. Tydeman<br />
+Date: 2015-06-23<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1944.htm">N1944</a><br />
+Submitted against: C11 / C17<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>7.24.4.3 strcoll makes the assumption that the result of comparing two strings
+can only have one of three outcomes: greater than, equal to, or less than.
+However, there is a fourth outcome that is possible: not comparable.</p>
+<p>I have been told that there are locales or codesets that have strings of bytes
+that do not form valid characters. Those invalid characters could be considered
+Not-a-Character (similar to Not-a-Number for floating-point). And, they are not
+comparable to anything.</p>
+<p>I do not know if the same issue can apply to wchar_t. If so, then 7.29.4.4.1
+wcscmp(), 7.29.4.4.3 wcsncmp(), and 7.29.4.4.5 wmemcmp() have the same problem.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Replace the start of 7.24.4.3, paragraph 3,</p>
+<blockquote>
+<p>The <strong>strcoll</strong> ...</p>
+</blockquote>
+<p>with</p>
+<blockquote>
+<p>If either string contains invalid characters, <strong>errno</strong> is set to an
+implementation defined value and the return value is unspecified; otherwise,
+<strong>errno</strong> is left alone and the <strong>strcoll</strong> ...</p>
+</blockquote>
+<p>The same change should also be applied to 7.29.4.4.2 wcscoll.</p>
+<hr />
+<p>Comment from WG14 on 2016-10-21:</p>
+<p>Oct 2015 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The committee agrees that the standard does not specify behavior under these
+conditions and as such there is undefined behavior by way of §7.1.4p1 “If an
+argument to a function has an invalid value … the behavior is undefined”. There
+is strong sentiment to keep the library fast and that imposing new requirements
+to set <code>errno</code> is to be generally avoided. Whereas POSIX does define behavior
+that sets <code>errno</code> under these conditions, it is explicitly the intent of the
+committee to leave such behavior undefined in the standard to allow such
+refinements by others.</p>
+</blockquote>
+<h3>Proposed Committee Response</h3>
+<blockquote>
+<p>By way of §7.1.4p1 “If an argument to a function has an invalid value … the
+behavior is undefined” the behavior of <code>strcoll</code> in the face of invalid input is
+already clearly undefined. The committee wishes to leave it so specified. This
+latitude allows POSIX to further refine the semantics according to their needs.
+We therefore do not accept the Proposed Technical Corrigendum.</p>
+</blockquote>
+
+</body>
+</html>

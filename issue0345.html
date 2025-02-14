@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0345: Where does parameter scope start?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0345: Where does parameter scope start?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Rob Arthan &lt;UK&gt;, Derek Jones (UK)<br />
+Date: 2007-04-23<br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C11<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_345.htm">dr_345.htm</a></p>
+<h3>Summary</h3>
+<p>1)</p>
+<p>The wording in 6.2.1p7:</p>
+<blockquote>
+<p>Any other identifier [except a struct/union tag or an enumeration constant]
+has scope that begins just after the completion of its declarator.</p>
+</blockquote>
+<p>permits the use of <code>q</code> in the following declaration of the parameter <code>r</code>.</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f</span>(
+<span style="color: #bbbbbb">     </span><span style="color: #B00040">long</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>q,
+<span style="color: #bbbbbb">     </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">**</span>r)[<span style="color: #666666">10</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>q])
+{<span style="color: #bbbbbb"> </span>}
+</pre></div>
+
+</blockquote>
+<p>However, consider 6.9.1p9 (which was not in C90):</p>
+<blockquote>
+<p>Each parameter has automatic storage duration. Its identifier is an lvalue,
+which is in effect declared at the head of the compound statement that
+constitutes the function body ...</p>
+</blockquote>
+<p>This does not appear to permit the use of <code>q</code> in the declaration of the
+parameter <code>r</code>.</p>
+<p>Does <code>q</code> have two points of declaration (one at the end of its declarator and
+one at the head of the compound statement)?</p>
+<p>2)</p>
+<p>Consider the situation when a function has a parameter with the same name as the
+function, as in the following example:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#include&gt;stdio.h&lt;</span>
+<span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f</span>(
+<span style="color: #bbbbbb">     </span><span style="color: #B00040">long</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>f,
+<span style="color: #3D7B7B; font-style: italic">/* #1 */</span>
+<span style="color: #bbbbbb">     </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">**</span>a)[<span style="color: #666666">10</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>f])
+{
+<span style="color: #3D7B7B; font-style: italic">/* #2 */</span>
+<span style="color: #bbbbbb">         </span>printf(<span style="color: #BA2121">&quot;%d</span><span style="color: #AA5D1F; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>,<span style="color: #bbbbbb"> </span>(<span style="color: #B00040">int</span>)<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span><span style="color: #666666">**</span>a);
+<span style="color: #3D7B7B; font-style: italic">/* #3 */</span>
+}
+<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">main</span>(<span style="color: #B00040">void</span>)
+{
+<span style="color: #bbbbbb">         </span>f(<span style="color: #666666">0</span>,<span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>);
+<span style="color: #bbbbbb">         </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;
+}
+<span style="color: #3D7B7B; font-style: italic">/* #4 */</span>
+</pre></div>
+
+</blockquote>
+<p>6.2.1p4 says:</p>
+<blockquote>
+<p>... If an identifier designates two different entities in the same name space,
+the scopes might overlap. If so, the scope of one entity (the inner scope) will
+be a strict subset of the scope of the other entity (the outer scope). Within
+the inner scope, the identifier designates the entity declared in the inner
+scope ...</p>
+</blockquote>
+<p>The scope of the function <code>f</code> starts at #2 and continues to the end of the file
+(#4). The scope of the parameter <code>f</code> starts at #1 and continues to the end of
+the definition of the function <code>f</code> (#3). Neither of these scopes is a strict
+subset of the other.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>1)</p>
+<p>None proposed.</p>
+<p>2)</p>
+<p>One solution is to fix up the scope overlap wording in 6.2.1p4 and acknowledge
+that the function <code>f</code> in the above example is not callable (although currently
+callable by some compilers that have been tried).</p>
+<p>The second sentence from 6.2.1p4 could be amended to read:</p>
+<blockquote>
+<p>... scopes might overlap. If so, the scope of one entity (the inner scope) will
+end strictly before the scope of the other entity (the outer scope). Within the
+inner scope, ...</p>
+</blockquote>
+<p>So the example would be conformant and would print out 10 times the size of a
+<code>long double</code>.</p>
+<hr />
+<p>Comment from WG14 on 2008-09-12:</p>
+<h3>Committee Discussion</h3>
+<h4>Spring 2007</h4>
+<p>There was no consensus for question 2.</p>
+<p>For question 1: The Committee believes that 6.9.1 paragraph 9 is a comment on
+the storage duration and does not override the lexical scope described in 6.2.1
+paragraph 7.</p>
+<h4>Fall 2007</h4>
+<p>General consensus is that the wording in the Standard is basically not correct
+and needs to be reworked.</p>
+<p>Also see comments in WG14 e-mail <em>SC22WG14.11380</em></p>
+<h4>Spring 2008</h4>
+<h4>Question 1</h4>
+<p>C++ 3.3.2p2 has three sentences (words irrelevant to C are deleted):</p>
+<ol>
+<li>The potential scope of a function parameter name or of a function-local predefined variable in a function definition begins at its point of declaration.</li>
+<li>The potential scope of a parameter or of a function-local predefined variable ends at the end of the outermost block of the function definition.</li>
+<li>A parameter name shall not be redeclared in the outermost block of the function definition.</li>
+</ol>
+<p>For sentence 1, 6.2.1p7 already says:</p>
+<blockquote>
+<p>Any other identifier has scope that begins just after the completion of its
+declarator.</p>
+</blockquote>
+<p>For sentence 2, 6.2.1p4 already says:</p>
+<blockquote>
+<p>If the declarator or type specifier that declares the identifier appears inside
+a block or within the list of parameter declarations in a function definition,
+the identifier has <em>block scope</em>, which terminates at the end of the associated
+block.</p>
+</blockquote>
+<p>For sentence 3, 6.7p3 already says:</p>
+<blockquote>
+<p>If an identifier has no linkage, there shall be no more than one declaration of
+the identifier (in a declarator or type specifier) with the same scope and in
+the same name space, except for tags as specified in 6.7.2.3.</p>
+</blockquote>
+<p>And 6.2.1p6 says:</p>
+<blockquote>
+<p>Two identifiers have the <em>same scope</em> if and only if their scopes terminate at
+the same point.</p>
+</blockquote>
+<p>So what the C++ standard says, and what the C standard needs to say, about the
+scope of a parameter name is already covered in the C standard, outside of
+6.9.1p9. Therefore, I suggest modifying 6.9.1p9 as indicated:</p>
+<blockquote>
+<p>Each parameter has automatic storage duration. Its identifier is an lvalue<del>,
+which is in effect declared at the head of the compound statement that
+constitutes the function body (and therefore cannot be redeclared in the
+function body except in an enclosed block)</del>. The layout of the storage for
+parameters is unspecified.</p>
+</blockquote>
+<p>Additionally, if desired, add a footnote at the point of the deletion:</p>
+<blockquote>
+<p><ins>A parameter identifier cannot be redeclared in the function body except in
+an enclosed block.</ins></p>
+</blockquote>
+<h4>Question 2</h4>
+<p>The words "a strict subset" are technically incorrect, but nothing really
+depends on them. Fixing them can be treated as an editorial matter.</p>
+<p>One possibility would be simply to qualify that statement with "generally" or
+"usually". The submitter's suggested technical corrigendum would also be
+technically correct. In 6.2.1p4:</p>
+<blockquote>
+<p>... If an identifier designates two different entities in the same name space,
+the scopes might overlap. If so, the scope of one entity (the <em>inner scope</em>)
+will <del>be a strict subset of</del> <ins>end strictly before</ins> the scope
+of the other entity (the <em>outer scope</em>). Within the inner scope, the identifier
+designates the entity declared in the inner scope; the entity declared in the
+outer scope is <em>hidden</em> (and not visible) within the inner scope.</p>
+</blockquote>
+<p><strong>Change for C1X</strong></p>
+<p>Change 6.9.1 paragraph 9 to:</p>
+<blockquote>
+<p>Each parameter has automatic storage duration. Its identifier is an
+lvalue,<sup>*</sup> the layout of the storage for parameters is unspecified.</p>
+<p><sup>*</sup>A parameter identifier cannot be redeclared in the function body
+except in an enclosed block.</p>
+</blockquote>
+<p>Change 6.2.1 paragraph 4 to:</p>
+<blockquote>
+<p>... If an identifier designates two different entities in the same name space,
+the scopes might overlap. If so, the scope of one entity (the <em>inner scope</em>)
+will end strictly before the scope of the other entity (the <em>outer scope</em>).
+Within the inner scope, the identifier designates the entity declared in the
+inner scope; the entity declared in the outer scope is <em>hidden</em> (and not
+visible) within the inner scope.</p>
+</blockquote>
+
+</body>
+</html>

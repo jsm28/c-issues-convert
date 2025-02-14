@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0008.02: Should volatile functions be added?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0008.02: Should volatile functions be added?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Otto R. Newman, WG14<br />
+Date: 1992-12-10<br />
+Reference document: X3J11/90-021<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_008.html">dr_008.html</a></p>
+<p>What is happening is that, since the standard has not provided a mechanism to
+describe a very recognizable and very important property of a function, such
+mechanisms are by necessity being provided in non-standard ways. My
+understanding is that a pragma should never be required for a program to execute
+correctly as defined by the standard.</p>
+<p>The existing situation serves to reduce portability of C programs. We believe
+the Committee should address this problem and would like to offer a suggestion
+which seems rather attractive.</p>
+<p>Currently, defining an object as <code>volatile</code> indicates to the compiler that its
+contents may be altered in ways not under control of the implementation. This is
+meaningless with function declarations since a function doesn't have alterable
+contents (i.e., is not an lvalue). Instead, it may be possible to utilize this
+otherwise syntactic no-op by defining a “volatile function” to be one whose
+return may not necessarily occur sequentially at the point of the invocation,
+but possibly at some other point where the state of the calling program is
+unknown. In other words, invocation of such a function results in the state of
+the program becoming volatile.</p>
+<p>Now, I admit that this is not a perfectly “clean” extrapolation of the use of
+the type qualifier <code>volatile</code>, but it is rather compelling, having the following
+advantages:</p>
+<ol>
+<li>
+<p>It solves the described problem in a general way that can be used with functions not necessarily named “<code>setjmp</code>.” Implementations defining <code>setjmp</code> as a function in <code>setjmp.h</code> would simply declare</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">volatile</span><span style="color: #bbbbbb"> </span>setjmp(<span style="color: #B00040">jmp_buf</span><span style="color: #bbbbbb"> </span>env);
+</pre></div>
+
+</li>
+<li>
+<p>It utilizes an existing keyword and gives meaning to its use in a context which would be otherwise meaningless.</p>
+</li>
+<li>
+<p>It is consistent with the type specifier syntax to distinguish between volatile pointers and pointers to volatile objects. For example,</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">volatile</span><span style="color: #bbbbbb"> </span>setjmp();
+</pre></div>
+
+<p>defines <code>setjmp</code> to be a volatile function (i.e., a function whose invocation
+must inhibit certain optimizations).</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">volatile</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">*</span>maybe_setjmp_ptr)();
+</pre></div>
+
+<p>defines a pointer to such a function, while</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">*</span>mustnotbe_setjmp_ptr)();
+</pre></div>
+
+<p>defines a pointer to a normal function.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">*</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">volatile</span><span style="color: #bbbbbb"> </span>vol_mustnotbe_setjmp_ptr)();
+</pre></div>
+
+<p>defines a volatile pointer to a normal function.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">volatile</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">*</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">volatile</span><span style="color: #bbbbbb"> </span>vol_maybe_setjmp_ptr)();
+</pre></div>
+
+<p>defines a volatile pointer to a volatile function, and so on ...</p>
+</li>
+<li>
+<p>Type consistency rules are already in place and make sense. For example,</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>maybe_setjmp_ptr<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>mustnotbe_setjmp_ptr;
+</pre></div>
+
+<p>is okay with no type-checking violation, whereas</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>mustnotbe_setjmp_ptr<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>maybe_setjmp_ptr;
+</pre></div>
+
+<p>is diagnosed. It would require casting such as</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>mustnotbe_setjmp_ptr<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">*</span>)())maybe_setjmp_ptr;
+</pre></div>
+
+</li>
+<li>
+<p>Since no new syntax or keywords are required, the impact of this change is very small to both the document defining the standard and to compilers which support it.</p>
+</li>
+</ol>
+<p>If there is enough Committee interest in this sort of solution, I would be glad
+to draft a formal proposal.</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>The Committee reasserts that the current semantics for type qualifiers as they
+appear in the standard are as intended.</p>
+
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0477: nan should take a string argument</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0477: <code>nan</code> should take a string argument</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Martin Sebor<br />
+Date: 2015-08-27<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1957.htm">N1957</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>The Description for the <code>nan(const char *tagp)</code> function reads as follows:</p>
+<blockquote>
+<p>The call <code>nan("</code><em>n-char-sequence</em><code>")</code> is equivalent to
+<code>strtod("NAN(</code><em>n-char-sequence</em><code>)", (char**) NULL)</code>; the call <code>nan("")</code> is
+equivalent to <code>strtod("NAN()", (char**) NULL)</code>. If <code>tagp</code> does not point to an
+<em>n-char sequence</em> or an empty string, the call is equivalent to <code>strtod("NAN", (char**) NULL).</code></p>
+</blockquote>
+<p>An <em>n-char sequence</em> is a string of an implementation-defined form.</p>
+<p>§7.1.4, Use of library functions, requires that arguments to library functions
+must have valid values. Specifically, pointers must not be null or point outside
+the address space of the program. In addition, arguments described as arrays
+(including strings) must be such that all address computations and accesses to
+objects that would be valid if the pointer argument did point to the first
+element of such an array are in fact valid.</p>
+<p>Since <code>tagp</code> argument is not required to point to a string or array, only the
+first condition in §7.1.4 applies: it must not point outside the address space
+of the program or be null.</p>
+<p>Therefore, in the snippet below, since <code>tagp</code> is a valid pointer that does not
+point to an <em>n-char-sequence</em> or the empty string, the <code>nan</code> call is valid and
+required to be be equivalent to <code>strtod("NAN", (char**) NULL).</code></p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">    </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>c<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&#39;1&#39;</span>;<span style="color: #bbbbbb">   </span><span style="color: #3D7B7B; font-style: italic">// not a n-char-sequence (no terminating NUL)</span>
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>tagp<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;</span>c;
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>x<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>nan<span style="color: #bbbbbb"> </span>(tagp);
+</pre></div>
+
+<p>But for an implementation that recognizes <em>n-char-sequences</em> of length greater
+than 1 the requirement to determine whether <code>tagp</code> points to one is impossible
+to implement since to do so <code>nan</code> would have to attempt to read past the end of
+<code>c</code>.</p>
+<p>It seems obvious that this is not intended and that the standard text is simply
+missing a requirement that the <code>tagp</code> argument point to a string.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>The solution is to require the argument to the <code>nan</code> family of functions to be a
+pointer to a string, analogously to all other library functions that operate on
+strings.</p>
+<p>Change §7.12.11.2 as follows:</p>
+<blockquote>
+<p><ins>The <code>nan</code>, <code>nanf</code>, and <code>nanl</code> functions convert the string pointed to by
+<code>tagp</code> according to the following rules.</ins> The call
+<code>nan("</code><em>n-char-sequence</em><code>")</code> is equivalent to
+<code>strtod("NAN(</code><em>n-char-sequence</em><code>)", (char**) NULL)</code>; the call <code>nan("")</code> is
+equivalent to <code>strtod("NAN()", (char**) NULL)</code>. If <code>tagp</code> does not point to an
+<em>n-char sequence</em> or an empty string, the call is equivalent to <code>strtod("NAN", (char**) NULL).</code></p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Oct 2015 meeting</p>
+<h3>Committee Discussion</h3>
+<ul>
+<li>The committee agrees with the author and accepts his Suggested Technical Corrigendum as the committee‘s Proposed Technical Corrigendum.</li>
+<li>This issue is likely a defect in the recently published ISO/IEC TS 18661 Floating Point extensions for C - Part 1, and the author is solicited to submit a DR against FPE-1 to this committee.</li>
+</ul>
+<h3>Proposed Technical Corrigendum</h3>
+<p>To §7.12.11.2 insert as first sentence:</p>
+<blockquote>
+<p>The <code>nan</code>, <code>nanf</code>, and <code>nanl</code> functions convert the string pointed to by <code>tagp</code>
+according to the following rules. The call <code>nan("</code><em>n-char-sequence</em><code>")</code> is
+equivalent ...</p>
+</blockquote>
+
+</body>
+</html>

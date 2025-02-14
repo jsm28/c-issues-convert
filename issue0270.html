@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0270: wint_t is not the promoted version of wchar_t</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0270: <code>wint_t</code> is not the promoted version of <code>wchar_t</code></h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Clive D.W. Feather &lt;clive@demon.net&gt;, UK C Panel<br />
+Date: 2001-09-07<br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C99 TC2<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_270.htm">dr_270.htm</a></p>
+<h3>Problem</h3>
+<p>In the <code>fprintf</code> conversion specifier <code>"%lc"</code>, the corresponding argument is of
+type <code>wint_t</code>, but is then treated as if it contained a <code>wchar_t</code> value. In
+7.19.6.1#18, the last call is:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">  </span>fprintf(stdout,<span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;|%13lc|</span><span style="color: #AA5D1F; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>,<span style="color: #bbbbbb"> </span>wstr[<span style="color: #666666">5</span>]);
+</pre></div>
+
+<p>This argument has the type <code>wchar_t</code>.</p>
+<p>There is no requirement in the Standard that the default argument promotions
+convert <code>wchar_t</code> to <code>wint_t</code>. Therefore this example exhibits undefined
+behaviour on some implementations. Nonetheless, the code looks like it ought to
+work, and WG14 should consider changing the definition of <code>wint_t</code> to force it.</p>
+<p>The current definition of <code>wint_t</code> is in 7.24.1#2:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">wint_t</span>
+</pre></div>
+
+<p>which is an integer type unchanged by default argument promotions that can hold
+any value corresponding to members of the extended character set, as well as at
+least one value that does not correspond to any member of the extended character
+set (see <code>WEOF</code> below);<sup>269)</sup> and</p>
+<p><sup>269</sup><code>wchar_t</code> and <code>wint_t</code> can be the same integer type.</p>
+</blockquote>
+<p>Three possible solutions are:</p>
+<ol>
+<li>Fix the example.</li>
+<li>Change the definition of <code>wint_t</code> to be the promoted version of <code>wchar_t</code>.</li>
+<li>Change the definition of <code>%lc</code> to take promoted <code>wchar_t</code> rather than <code>wint_t</code>.</li>
+</ol>
+<h3>Suggested Technical Corrigendum 1</h3>
+<p>Change the quoted line of 7.19.6.1#18 to:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">  </span>fprintf(stdout,<span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;|%13lc|</span><span style="color: #AA5D1F; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>,<span style="color: #bbbbbb"> </span>(<span style="color: #B00040">wint_t</span>)<span style="color: #bbbbbb"> </span>wstr[<span style="color: #666666">5</span>]);
+</pre></div>
+
+</blockquote>
+<h3>Suggested Technical Corrigendum 2</h3>
+<p>Change the cited portion of 7.24.1#2 to:</p>
+<blockquote>
+<p><code>wint_t</code> which is the integer type resulting when the default argument
+promotions are applied to the type <code>wchar_t</code>;269) and</p>
+</blockquote>
+<h3>Suggested Technical Corrigendum 3</h3>
+<p><em>[Italics are used to show the changed text.]</em></p>
+<p>Change 7.19.6.1#7 and 7.24.2.1#7, l modifier, to:</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>l</code> (ell)</td>
+<td align="left">Specifies that a following <code>d</code>, <code>i</code>, <code>o</code>, <code>u</code>, <code>x</code>, or <code>X</code> conversion specifier applies to a <code>long int</code> or <code>unsigned long int</code> argument; that a following <code>n</code> conversion specifier applies to a pointer to a <code>long int</code> argument; that a following <code>c</code> conversion specifier applies to <em>an argument whose type is that resulting when the default argument conversions are applied to the type <code>wchar_t</code></em>; that a following <code>s</code> conversion specifier applies to a pointer to a <code>wchar_t</code> argument; or has no effect on a following <code>a</code>, <code>A</code>, <code>e</code>, <code>E</code>, <code>f</code>, <code>F</code>, <code>g</code>, or <code>G</code> conversion specifier.</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>Change 7.19.6.1#8, <code>c</code> specifier, second paragraph, to:</p>
+<blockquote>
+<p>If an <code>l</code> length modifier is present*, the argument - whose type is that
+resulting when the default argument conversions are applied to the type
+<code>wchar_t</code>* - is converted as if by an <code>ls</code> conversion specification with no
+precision and an argument that points to the initial element of a two-element
+array of <code>wchar_t</code>, the first element containing <em>the argument</em> to the <code>lc</code>
+conversion specification and the second a null wide character.</p>
+</blockquote>
+<p>Change 7.24.2.1#8, <code>c</code> specifier, second paragraph, to:</p>
+<blockquote>
+<p>If an <code>l</code> length modifier is present, <em>the argument</em> is converted to <code>wchar_t</code>
+and written.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2002-03-07:</p>
+<h3>Technical Corrigendum</h3>
+<p>Change the quoted line of 7.19.6.1#18 to:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">  </span>fprintf(stdout,<span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;|%13lc|</span><span style="color: #AA5D1F; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>,<span style="color: #bbbbbb"> </span>(<span style="color: #B00040">wint_t</span>)<span style="color: #bbbbbb"> </span>wstr[<span style="color: #666666">5</span>]);
+</pre></div>
+
+
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0332: gets is generally unsafe</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0332: <code>gets</code> is generally unsafe</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Douglas A. Gwyn &lt;gwyn@arl.army.mil&gt;, Gwyn (US)<br />
+Date: 2006-10-17<br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C99 TC3<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_332.htm">dr_332.htm</a></p>
+<h3>Summary</h3>
+<p>The <code>gets</code> function's notorious vulnerability to buffer overrun ought to be
+addressed.</p>
+<p><strong>Rationale</strong></p>
+<p>The <code>gets</code> function draws much criticism due to its vulnerability to buffer
+overrun, which is inherent in its legacy interface specification. Its very
+presence in the Standard has been taken by many as evidence of WG14's ineptitude
+or lack of concern for software reliability, despite arguments to the contrary.
+The Committee may be more favorably regarded within the programming community if
+it takes reasonable steps to address this issue.</p>
+<p>The recent publication of <em>TR 24731</em>, which specifies an alternative function
+<code>gets_s</code> that could be used instead of <code>gets</code>, does not satisfy the critics who
+claim that the continuing existence of the <code>gets</code> specification in the C
+standard amounts to an endorsement of its unsafe use in new programs.</p>
+<p><strong>Discussion</strong></p>
+<p>Consider this representative usage of <code>gets</code>:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;stdio.h&gt;</span>
+<span style="color: #008000; font-weight: bold">static</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>line[BUFSIZ];<span style="color: #bbbbbb">     </span><span style="color: #3D7B7B; font-style: italic">/* BUFSIZ is bigger than any normal text line */</span>
+<span style="color: #008000; font-weight: bold">extern</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">process</span>(<span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>);
+<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">main</span>(<span style="color: #B00040">void</span>)<span style="color: #bbbbbb"> </span>{
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">while</span><span style="color: #bbbbbb"> </span>(gets(line))
+<span style="color: #bbbbbb">        </span>process(line);<span style="color: #bbbbbb">        </span><span style="color: #3D7B7B; font-style: italic">/* may invoke puts(line), etc. */</span>
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;
+}
+</pre></div>
+
+<p>This shows how <em>convenient</em> the <code>gets</code> interface is. The well-known problem with
+this interface occurs when the standard input stream contains a text line longer
+than the allocated size of the buffer; because <code>gets</code> has no way to know that
+size, it blindly continues to store data beyond the end of the array, with
+potentially devastating impact on program operation. The infamous 1988 Morris
+Internet worm was merely the first of many attacks that exploit this behavior to
+breach security in network applications.</p>
+<p>What might be done to improve the specification for <code>gets</code> so that the safety of
+this exceptionally convenient interface can be assured? (I do not recommend
+removing it altogether!) It seems evident that the only feasible change would be
+to impose a limit on the amount of data transferred. Requiring the programmer to
+establish the limit through some additional interface would sacrifice the
+convenience. The alternative is to impose some constant limit, in which case the
+remaining question is what would be a suitable constant. That can be answered by
+examining existing uses of <code>gets</code> to determine typical buffer sizes. It appears
+that two usage patterns predominate: Using the <code>BUFSIZ</code> macro which happens to
+be conveniently at hand as a consequence of <code>#include &lt;stdio.h&gt;</code>, or using some
+assumed text-line length such as 80.</p>
+<p>Restricting the amount of data transferred to only 80 characters may be too
+severe for many applications, and in any case it would necessitate the
+introduction of a new limit macro such as <code>LINE_MAX</code> to provide a convenient way
+for programmers to declare suitable buffer arrays. Therefore I recommend instead
+that the existing usage of <code>BUFSIZ</code> be legitimatized, as follows.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Add the following sentence to the <strong>Description</strong> in subclause 7.19.7.7 (The
+<code>gets</code> function)], between the two existing sentences:</p>
+<blockquote>
+<p>At most <code>BUFSIZ-1</code> characters are copied to the array; excessive characters are
+discarded.</p>
+</blockquote>
+<p>(The portion after the semicolon isn't strictly necessary, but it adds clarity.)</p>
+<p><strong>Impact</strong></p>
+<p>The proposed change to the <code>gets</code> specification would have the effect of
+preventing buffer overruns in many existing applications. Overly long input
+lines would be silently truncated (which is better than the alternative of
+treating them as multiple lines).</p>
+<p>Existing applications using small buffers would not be automatically rescued by
+this change; however, there would be a simple source-code fix (change the buffer
+size). New applications would obtain safe behavior by using the known limit for
+buffer allocation, exactly as in the above example.</p>
+<p>Adoption of such a change would demonstrate the committee's willingness to
+improve specifications compatibly with the existing standard, without resorting
+to unnecessarily drastic measures.</p>
+<hr />
+<p>Comment from WG14 on 2007-09-06:</p>
+<h3>Committee Discussion (for history only)</h3>
+<p>The Committee thinks that the programming community would be better served by
+flagging the <code>gets()</code> function as deprecated.</p>
+<h3>Technical Corrigendum</h3>
+<p>Add to subclause 7.26.9:</p>
+<blockquote>
+<p>The <code>gets</code> function is obsolescent, and is deprecated.</p>
+</blockquote>
+<p>Add forward reference in 7.19.7.7 to 7.26.9</p>
+
+</body>
+</html>

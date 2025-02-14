@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0327: Italicize definition of variable length array type, add forward references</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0327: Italicize definition of variable length array type, add forward references</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Rich Peterson &lt;Rich.Peterson@hp.com&gt;, J11<br />
+Date: 2006-03-29<br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C11<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_327.htm">dr_327.htm</a></p>
+<h3>Summary</h3>
+<p>The definition of variable length array type is in 6.7.5.2p4 (Array
+declarators), but it is not italicized:</p>
+<blockquote>
+<p>If the size is * instead of being an expression, the array<br />
+type is a variable length array type of unspecified size,<br />
+which can only be used in declarations with function prototype<br />
+scope; such arrays are nonetheless complete types. If the size<br />
+is an integer constant expression and the element type has a<br />
+known constant size, the array type is not a variable length<br />
+array type; otherwise, the array type is a variable length<br />
+array type.</p>
+</blockquote>
+<p>The way that the term appears in the text is not in a form where there is a
+single occurrence that gives the complete definition, but it would still
+probably be better to italicize it than not.</p>
+<p>Or perhaps both the 1st and 3rd occurrence of it in the above should get
+italics?  It would not make sense to italicize the 2nd occurrence.  Re-writing
+the text to create a single occurrence that provides a complete definition does
+not seem worthwhile.</p>
+<p>Also, variable length array types are mentioned several times prior to this
+definition.  The following sections should probably have a forward reference
+"variable length array type (6.7.5.2)":  6.2.4, 6.2.7, 6.5.3.4</p>
+<p>Similarly, a forward reference "variably modified type (6.7.5)" is desirable in 
+6.7.2.1.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>1. Change first sentence of 6.7.5.2p4 (adding italics) from::</p>
+<blockquote>
+<blockquote>
+<p>If the size is * instead of being an expression, the array type is a variable
+length array type of unspecified size, which can only be used in declarations
+with function prototype scope; such arrays are nonetheless complete types.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>If the size is * instead of being an expression, the array type is a <em>variable
+length array type</em> of unspecified size, which can only be used in declarations
+with function prototype scope; such arrays are nonetheless complete types.</p>
+</blockquote>
+</blockquote>
+<p>It might also be desirable to change the second sentence (adding italics)
+from:</p>
+<blockquote>
+<blockquote>
+<p>If the size is an integer constant expression and the element type has a known
+constant size, the array type is not a variable length array type; otherwise,
+the array type is a variable length array type.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>If the size is an integer constant expression and the element type has a known
+constant size, the array type is not a variable length array type; otherwise,
+the array type is a <em>variable length array type.</em></p>
+</blockquote>
+</blockquote>
+<p>2. Change list of Forward references following 6.2.4p6 from</p>
+<blockquote>
+<p><strong>Forward references:</strong> statements (6.8), function calls (6.5.2.2), declarators
+(6.7.5), array declarators (6.7.5.2), initialization (6.7.8).</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p><strong>Forward references:</strong> statements (6.8), function calls (6.5.2.2), declarators
+(6.7.5), array declarators (6.7.5.2), variable length array type (6.7.5.2),
+initialization (6.7.8).</p>
+</blockquote>
+<p>3. Add forward reference section following 6.2.7p5:</p>
+<blockquote>
+<p><strong>Forward references:</strong> variable length array type (6.7.5.2).</p>
+</blockquote>
+<p>4. Change list of Forward references following 6.5.3.4p7 from:</p>
+<blockquote>
+<p><strong>Forward references:</strong> common definitions <code>&lt;stddef.h&gt;</code> (7.17), declarations
+(6.7), structure and union specifiers (6.7.2.1), type names (6.7.6), array
+declarators (6.7.5.2).</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p><strong>Forward references:</strong> common definitions <code>&lt;stddef.h&gt;</code> (7.17), declarations
+(6.7), structure and union specifiers (6.7.2.1), type names (6.7.6), array
+declarators (6.7.5.2), variable length array type (6.7.5.2).</p>
+</blockquote>
+<p>5. Change list of Forward references following 6.7.2.1p22 from:</p>
+<blockquote>
+<p><strong>Forward references:</strong> tags (6.7.2.3).</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p><strong>Forward references:</strong> tags (6.7.2.3), variably modified type (6.7.5).</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2007-09-06:</p>
+<h3>Technical Corrigendum</h3>
+<p>1. Change first sentence of 6.7.5.2p4 (adding italics) from::</p>
+<blockquote>
+<blockquote>
+<p>If the size is * instead of being an expression, the array type is a variable
+length array type of unspecified size, which can only be used in declarations
+with function prototype scope; such arrays are nonetheless complete types.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>If the size is * instead of being an expression, the array type is a <em>variable
+length array type</em> of unspecified size, which can only be used in declarations
+with function prototype scope; such arrays are nonetheless complete types.</p>
+</blockquote>
+</blockquote>
+<p>2. Change the second sentence (adding italics) from:</p>
+<blockquote>
+<blockquote>
+<p>If the size is an integer constant expression and the element type has a known
+constant size, the array type is not a variable length array type; otherwise,
+the array type is a variable length array type.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>If the size is an integer constant expression and the element type has a known
+constant size, the array type is not a variable length array type; otherwise,
+the array type is a <em>variable length array type.</em></p>
+</blockquote>
+</blockquote>
+<p>3. Change list of Forward references following 6.2.4p6 from</p>
+<blockquote>
+<p><strong>Forward references:</strong> statements (6.8), function calls (6.5.2.2), declarators
+(6.7.5), array declarators (6.7.5.2), initialization (6.7.8).</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p><strong>Forward references:</strong> statements (6.8), function calls (6.5.2.2), declarators
+(6.7.5), array declarators (6.7.5.2), variable length array type (6.7.5.2),
+initialization (6.7.8).</p>
+</blockquote>
+<p>4. Add forward reference section following 6.2.7p5:</p>
+<blockquote>
+<p><strong>Forward references:</strong> variable length array type (6.7.5.2).</p>
+</blockquote>
+<p>5. Change list of Forward references following 6.5.3.4p7 from:</p>
+<blockquote>
+<p><strong>Forward references:</strong> common definitions <code>&lt;stddef.h&gt;</code> (7.17), declarations
+(6.7), structure and union specifiers (6.7.2.1), type names (6.7.6), array
+declarators (6.7.5.2).</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p><strong>Forward references:</strong> common definitions <code>&lt;stddef.h&gt;</code> (7.17), declarations
+(6.7), structure and union specifiers (6.7.2.1), type names (6.7.6), array
+declarators (6.7.5.2), variable length array type (6.7.5.2).</p>
+</blockquote>
+<p>6. Change list of Forward references following 6.7.2.1p22 from:</p>
+<blockquote>
+<p><strong>Forward references:</strong> tags (6.7.2.3).</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p><strong>Forward references:</strong> tags (6.7.2.3), variably modified type (6.7.5).</p>
+</blockquote>
+
+</body>
+</html>

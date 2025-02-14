@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0082: Many varargs questions</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0082: Many varargs questions</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Clive Feather, WG14<br />
+Date: 1993-12-03<br />
+Submitted against: C90<br />
+Status: Fixed<br />
+Fixed in: C90 TC2<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_082.html">dr_082.html</a></p>
+<p>Item 19 - multiple varargs</p>
+<p>Consider the following translation unit:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;stdarg.h&gt;</span>
+<span style="color: #bbbbbb"> </span><span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;stdio.h&gt;</span>
+
+<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">extern</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">is_final_arg</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">int</span>);
+
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f1</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>n,<span style="color: #bbbbbb"> </span>...)
+<span style="color: #bbbbbb">        </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">va_list</span><span style="color: #bbbbbb"> </span>ap1,<span style="color: #bbbbbb"> </span>ap2;
+
+<span style="color: #bbbbbb">        </span>va_start<span style="color: #bbbbbb"> </span>(ap1,<span style="color: #bbbbbb"> </span>n);
+<span style="color: #bbbbbb">        </span>va_start<span style="color: #bbbbbb"> </span>(ap2,<span style="color: #bbbbbb"> </span>n);
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">while</span><span style="color: #bbbbbb"> </span>(va_arg<span style="color: #bbbbbb"> </span>(ap1,<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span>)<span style="color: #bbbbbb"> </span><span style="color: #666666">!=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>)
+<span style="color: #bbbbbb">                </span>printf<span style="color: #bbbbbb"> </span>(<span style="color: #BA2121">&quot;Value is %d</span><span style="color: #AA5D1F; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>,<span style="color: #bbbbbb"> </span>va_arg<span style="color: #bbbbbb"> </span>(ap2,<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span>));
+<span style="color: #bbbbbb">        </span>va_end<span style="color: #bbbbbb"> </span>(ap1);
+<span style="color: #bbbbbb">        </span>va_end<span style="color: #bbbbbb"> </span>(ap2);
+<span style="color: #bbbbbb">        </span>}
+
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f2</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>n,<span style="color: #bbbbbb"> </span>...)
+<span style="color: #bbbbbb">        </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">va_list</span><span style="color: #bbbbbb"> </span>ap;
+
+<span style="color: #bbbbbb">        </span>va_start<span style="color: #bbbbbb"> </span>(ap,<span style="color: #bbbbbb"> </span>n);
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">for</span><span style="color: #bbbbbb"> </span>(;;)
+<span style="color: #bbbbbb">                </span>{
+<span style="color: #bbbbbb">                </span>n<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>va_arg<span style="color: #bbbbbb"> </span>(ap,<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span>);
+<span style="color: #bbbbbb">                </span><span style="color: #008000; font-weight: bold">if</span><span style="color: #bbbbbb"> </span>(is_final_arg<span style="color: #bbbbbb"> </span>(n))
+<span style="color: #bbbbbb">                        </span>{
+<span style="color: #bbbbbb">                        </span>va_end<span style="color: #bbbbbb"> </span>(ap);
+<span style="color: #bbbbbb">                        </span><span style="color: #008000; font-weight: bold">return</span>;
+<span style="color: #bbbbbb">                        </span>}
+<span style="color: #bbbbbb">                </span>printf<span style="color: #bbbbbb"> </span>(<span style="color: #BA2121">&quot;Value is %d</span><span style="color: #AA5D1F; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>,<span style="color: #bbbbbb"> </span>n);
+<span style="color: #bbbbbb">                </span>}
+<span style="color: #bbbbbb">        </span>}
+
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f3</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>n,<span style="color: #bbbbbb"> </span>...)
+<span style="color: #bbbbbb">        </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">va_list</span><span style="color: #bbbbbb"> </span>ap;
+
+<span style="color: #bbbbbb">        </span>va_start<span style="color: #bbbbbb"> </span>(ap,<span style="color: #bbbbbb"> </span>n);
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">while</span><span style="color: #bbbbbb"> </span>(n<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>va_arg<span style="color: #bbbbbb"> </span>(ap,<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span>),<span style="color: #bbbbbb"> </span>n<span style="color: #bbbbbb"> </span><span style="color: #666666">!=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>)
+<span style="color: #bbbbbb">                </span>printf<span style="color: #bbbbbb"> </span>(<span style="color: #BA2121">&quot;Value is %d</span><span style="color: #AA5D1F; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>,<span style="color: #bbbbbb"> </span>n);
+<span style="color: #bbbbbb">        </span>va_start<span style="color: #bbbbbb"> </span>(ap,<span style="color: #bbbbbb"> </span>n);
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">while</span><span style="color: #bbbbbb"> </span>(n<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>va_arg<span style="color: #bbbbbb"> </span>(ap,<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span>),<span style="color: #bbbbbb"> </span>n<span style="color: #bbbbbb"> </span><span style="color: #666666">!=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>)
+<span style="color: #bbbbbb">                </span>printf<span style="color: #bbbbbb"> </span>(<span style="color: #BA2121">&quot;Value is still %d</span><span style="color: #AA5D1F; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>,<span style="color: #bbbbbb"> </span>n);
+<span style="color: #bbbbbb">        </span>va_end<span style="color: #bbbbbb"> </span>(ap);
+<span style="color: #bbbbbb">        </span>}
+
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f4a</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">va_list</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>pap)
+<span style="color: #bbbbbb">        </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>n;
+
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">while</span><span style="color: #bbbbbb"> </span>(n<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>va_arg<span style="color: #bbbbbb"> </span>(<span style="color: #666666">*</span>pap,<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span>),<span style="color: #bbbbbb"> </span>n<span style="color: #bbbbbb"> </span><span style="color: #666666">!=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>)
+<span style="color: #bbbbbb">                </span>printf<span style="color: #bbbbbb"> </span>(<span style="color: #BA2121">&quot;Value is %d</span><span style="color: #AA5D1F; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>,<span style="color: #bbbbbb"> </span>n);
+<span style="color: #bbbbbb">        </span>}
+
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f4</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>n,<span style="color: #bbbbbb"> </span>...)
+<span style="color: #bbbbbb">        </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">va_list</span><span style="color: #bbbbbb"> </span>ap;
+
+<span style="color: #bbbbbb">        </span>va_start<span style="color: #bbbbbb"> </span>(ap,<span style="color: #bbbbbb"> </span>n);
+<span style="color: #bbbbbb">        </span>f4a<span style="color: #bbbbbb"> </span>(<span style="color: #666666">&amp;</span>ap);
+<span style="color: #bbbbbb">        </span>va_end<span style="color: #bbbbbb"> </span>(ap);
+<span style="color: #bbbbbb">        </span>}
+
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f5a</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">va_list</span><span style="color: #bbbbbb"> </span>apc)
+<span style="color: #bbbbbb">        </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>n;
+
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">while</span><span style="color: #bbbbbb"> </span>(n<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>va_arg<span style="color: #bbbbbb"> </span>(apc,<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span>),<span style="color: #bbbbbb"> </span>n<span style="color: #bbbbbb"> </span><span style="color: #666666">!=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>)
+<span style="color: #bbbbbb">                </span>printf<span style="color: #bbbbbb"> </span>(<span style="color: #BA2121">&quot;Value is %d</span><span style="color: #AA5D1F; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>,<span style="color: #bbbbbb"> </span>n);
+<span style="color: #bbbbbb">        </span>}
+
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f5</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>n,<span style="color: #bbbbbb"> </span>...)
+<span style="color: #bbbbbb">        </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">va_list</span><span style="color: #bbbbbb"> </span>ap;
+
+<span style="color: #bbbbbb">        </span>va_start<span style="color: #bbbbbb"> </span>(ap,<span style="color: #bbbbbb"> </span>n);
+<span style="color: #bbbbbb">        </span>f5a<span style="color: #bbbbbb"> </span>(ap);
+<span style="color: #bbbbbb">        </span>va_end<span style="color: #bbbbbb"> </span>(ap);
+<span style="color: #bbbbbb">        </span>}
+</pre></div>
+
+<p>a. Is each function in this translation unit strictly conforming? Note in
+particular:</p>
+<p>in <code>f1</code>, the use of simultaneous <code>va_lists</code> in <code>f1</code>;</p>
+<p>in <code>f2</code>, <code>va_start</code> and <code>va_end</code> are in different scopes;</p>
+<p>in <code>f3</code>, there are two <code>va_start</code>s and one <code>va_end</code>;</p>
+<p>in <code>f4</code>, the address of an object of type <code>va_list</code> is taken;</p>
+<p>in <code>f4a</code> and <code>f5a</code>, <code>va_arg</code> is called with a first parameter which is not “the
+same as the <code>va_list ap</code> initialized by <code>va_start</code>” (subclause 7.8.1.2).</p>
+<p>b. Is the following implementation conforming?</p>
+<p><code>va_start</code> allocates a block of memory with <code>malloc</code>;</p>
+<p>a <code>va_list</code> is a pointer to the block;</p>
+<p><code>va_end</code> frees the same block;</p>
+<p>c. Is there any portable method to copy the current state of a <code>va_list</code>, for
+example in order that the remaining arguments can be scanned twice without
+knowledge of the <code>va_arg</code> calls made previous to that point? If the answer to
+(b) is “yes,” I believe the answer to (c) must be “no.”</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>a) All functions listed except for <code>f3</code> contain strictly conforming code. The
+function <code>f3</code> violates the intended requirement for <code>va_start</code> and <code>va_end</code> to
+be invoked in matching pairs, as reflected in the following Correction.</p>
+<p>b) There is nothing described in this section that would make such an
+implementation non-conforming.</p>
+<p>c) No.</p>
+<h3>Correction</h3>
+<p><em><strong>In subclause 7.8.1, page 122, change the last sentence from:</strong></em></p>
+<p>The <code>va_start</code> and <code>va_end</code> macros shall be invoked in the function accepting a
+varying number of arguments, if access to the varying arguments is desired.</p>
+<p><em><strong>to:</strong></em></p>
+<p>The <code>va_start</code> and <code>va_end</code> macros shall be invoked in corresponding pairs in
+the function accepting a varying number of arguments, if access to the varying
+arguments is desired.</p>
+<p><em><strong>In subclause 7.8.1.1, page 122, add at the end of the second paragraph of the
+Description:</strong></em></p>
+<p><code>va_start</code> shall not be invoked again for the same <code>ap</code> without an intervening
+invocation of <code>va_end</code> for the same <code>ap</code>.</p>
+
+</body>
+</html>

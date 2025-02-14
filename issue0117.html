@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0117: Abstract semantics, sequence points, and expression evaluation question</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0117: Abstract semantics, sequence points, and expression evaluation question</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Ron Guilmette, WG14<br />
+Date: 1993-12-03<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_117.html">dr_117.html</a></p>
+<p>ANSI/ISO C Defect Report #rfg24:</p>
+<p>Subject: Abstract semantics, sequence points, and expression evaluation.</p>
+<p>Does the following code involve usage which renders the code itself not strictly
+conforming?</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">example</span><span style="color: #bbbbbb"> </span>()
+<span style="color: #bbbbbb">        </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>x1<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">2</span>,<span style="color: #bbbbbb"> </span>x2<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">1</span>,<span style="color: #bbbbbb"> </span>x_temp;
+
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span>(x_temp<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>x1,<span style="color: #bbbbbb"> </span>x_temp)<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span>(x_temp<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>x2,<span style="color: #bbbbbb"> </span>x_temp);
+<span style="color: #bbbbbb">        </span>}
+</pre></div>
+
+<p>Background:</p>
+<p>Subclause 5.1.2.3:</p>
+<blockquote>
+<p>The semantic descriptions in this International Standard describe the behavior
+of an abstract machine in which issues of optimization are irrelevant.</p>
+</blockquote>
+<p>Subclause 6.3:</p>
+<blockquote>
+<p>Between the previous and next sequence point an object shall have its stored
+value modified at most once by the evaluation of an expression.</p>
+</blockquote>
+<p>Although it is quite clear that the above quoted “modified at most once” rule
+was intended to render certain programs “not strictly conforming,” there is an
+unfortunate amount of ambiguity built into the current wording of that rule.</p>
+<p>Quite simply, while the “modified at most once” rule is obviously telling us
+what a “strictly conforming program” must not do between two particular points
+<em>in time,</em> it is altogether less than clear what events and/or actions (exactly)
+are associated with these two points in time. Additionally, it is also less than
+clear (from reading the remainder of the C Standard) what actions and/or events
+are allowed (or required) to take place between some pair of sequence points in
+cases where both members of the pair are part of some large single expression
+whose evaluation order is not completely dictated by the C Standard.</p>
+<p>Note that despite the assertion given in subclause 5.1.2.3 (and quoted above)
+the C Standard does not <em>fully</em> specify the behavior of the “abstract machine,”
+especially when it comes to the issue of the ordering of sub-expression
+evaluation used by the “abstract machine” model.</p>
+<p>This fact makes it inherently impossible to precisely determine even just the
+<em>relative</em> timings of various events (including the “occurrence” of or the
+“execution” of or the “evaluation” of sequence points) which may (or must) occur
+sometime during the evaluation of a larger containing expression (except in a
+few cases involving <code>||</code> or <code>&amp;&amp;</code> or <code>?:</code> or <code>,</code> operators).</p>
+<p>To put it more plainly, if some pair of sequence points will be “reached” (or
+“evaluated” or “executed”) during the evaluation of any pair of subexpressions
+which are themselves operands for some binary operator (other than the operators
+<code>||</code> or <code>&amp;&amp;</code> or <code>?:</code> or <code>,</code>) then the C Standard's description of the “abstract
+machine” semantics are inadequate to enable us to know either which <em>order</em>
+these two sequence points will occur in, or even which other aspects of the
+evaluation of the overall expression may (or must) occur “between” the two
+sequence points.</p>
+<p>Thus, it seems that it may also be inherently impossible to know whether or not
+the prohibition against multiple modifications of a given variable “between” two
+consecutive sequence points is (or may be) violated in such contexts.</p>
+<p>Here is a simple example of an expression which illustrates these points:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">        </span>(x<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>i,<span style="color: #bbbbbb"> </span>x)<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span>(x<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>j,<span style="color: #bbbbbb"> </span>x)
+</pre></div>
+
+</blockquote>
+<p>In this expression there are two “comma” sequence points; however, nothing in
+the C Standard gives any indication as to which of these two may be (or must be)
+“evaluated” or “reached” first. (Indeed, it would seem that on a parallel
+machine of some sort, <em>both</em> points could perhaps be reached simultaneously.) It
+is fairly clear however that each of the references to the stored values of <code>x</code>
+must not be evaluated until their respective preceding “comma sequence points”
+have been “reached” or “evaluated.” Thus, a partial (but very incomplete)
+ordering is imposed upon the sequence of events which must occur during the
+evaluation of this expression.</p>
+<p>For the sake of this example, let us call the leftmost comma in the above
+expression “lcomma” and call the rightmost comma “rcomma.” Given this
+terminology, it would appear that the C Standard permits the following sequence
+of events during evaluation of the above expression:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">        </span>eval(i)
+<span style="color: #bbbbbb">        </span>x<span style="color: #666666">=</span><span style="color: #bbbbbb">          </span>(leftmost<span style="color: #bbbbbb"> </span>assignment<span style="color: #bbbbbb"> </span>to<span style="color: #bbbbbb"> </span>x)
+<span style="color: #bbbbbb">        </span>lcomma<span style="color: #bbbbbb">      </span><span style="color: #666666">&lt;====</span><span style="color: #bbbbbb"> </span>sequence<span style="color: #bbbbbb"> </span>point
+<span style="color: #bbbbbb">        </span>eval(x)<span style="color: #bbbbbb">     </span>(leftmost<span style="color: #bbbbbb"> </span>reference<span style="color: #bbbbbb"> </span>to<span style="color: #bbbbbb"> </span>stored<span style="color: #bbbbbb"> </span>value<span style="color: #bbbbbb"> </span>of<span style="color: #bbbbbb"> </span>x)
+<span style="color: #bbbbbb">        </span>eval(j)
+<span style="color: #bbbbbb">        </span>x<span style="color: #666666">=</span><span style="color: #bbbbbb">          </span>(rightmost<span style="color: #bbbbbb"> </span>assignment<span style="color: #bbbbbb"> </span>to<span style="color: #bbbbbb"> </span>x)
+<span style="color: #bbbbbb">        </span>rcomma<span style="color: #bbbbbb">      </span><span style="color: #666666">&lt;====</span><span style="color: #bbbbbb"> </span>sequence<span style="color: #bbbbbb"> </span>point
+<span style="color: #bbbbbb">        </span>eval(x)<span style="color: #bbbbbb">     </span>(rightmost<span style="color: #bbbbbb"> </span>reference<span style="color: #bbbbbb"> </span>to<span style="color: #bbbbbb"> </span>stored<span style="color: #bbbbbb"> </span>value<span style="color: #bbbbbb"> </span>of<span style="color: #bbbbbb"> </span>x)
+<span style="color: #bbbbbb">        </span><span style="color: #666666">+</span>
+</pre></div>
+
+</blockquote>
+<p>Note that in this (very realistic) example, the stored value of <code>x</code> is <em>never</em>
+modified more than once between any pair of sequence points. Given that the
+ordering described above is both a perfectly <em>plausible</em> and also a perfectly
+<em>permissible</em> ordering for the evaluation of the expression in question, and
+given that this particular permissible ordering of events does not violate the
+“modified at most once” rule (quoted earlier) it therefore appears that the
+expression in question may in fact be interpreted as being “strictly
+conforming,” and that such expressions may appear within “strictly conforming”
+programs.</p>
+<p>I would like the Committee to either confirm or reject this view, and to provide
+some commentary explaining that confirmation or rejection.</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>The C Standard does not forbid an implementation from interleaving the
+subexpressions in the given example as specified above. Similarly, there is no
+requirement that an implementation use this particular interleaving. It is
+irrelevant that one particular interleaving yields code that properly delimits
+multiple modifications of the same object with sequence points. Any program that
+depends on this particular interleaving is depending on unspecified behavior,
+and is therefore not strictly conforming.</p>
+
+</body>
+</html>

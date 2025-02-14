@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0482: Macro invocation split over many files</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0482: Macro invocation split over many files</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Fred J. Tydeman<br />
+Date: 2015-06-23<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1942.htm">N1942</a><br />
+Submitted against: C11 / C17<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>Based upon my reading of the standard, it appears that the following is strictly
+conforming code. However, many compilers refuse to translate it (which I think
+is good).</p>
+<p>main.c:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;string.h&gt;  /* strcpy(), strcmp() */</span>
+<span style="color: #9C6500">#undef NDEBUG</span>
+<span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;assert.h&gt;  /* assert() */</span>
+
+<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">main</span>(<span style="color: #B00040">void</span>)<span style="color: #bbbbbb"> </span>{
+<span style="color: #bbbbbb">  </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>line1;
+<span style="color: #bbbbbb">  </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>line2;
+<span style="color: #bbbbbb">  </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>file1[<span style="color: #666666">1023</span>];
+<span style="color: #bbbbbb">  </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>file2[<span style="color: #666666">1023</span>];
+
+<span style="color: #bbbbbb">  </span><span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&quot;file1.h&quot;    /* start of call of assert() split over many files */</span>
+<span style="color: #bbbbbb">  </span>);<span style="color: #bbbbbb">                    </span><span style="color: #3D7B7B; font-style: italic">/* end of assert() */</span>
+
+<span style="color: #bbbbbb">  </span>assert(<span style="color: #bbbbbb"> </span><span style="color: #666666">2</span><span style="color: #bbbbbb"> </span><span style="color: #666666">==</span><span style="color: #bbbbbb"> </span>line1<span style="color: #bbbbbb"> </span>);
+<span style="color: #bbbbbb">  </span>assert(<span style="color: #bbbbbb"> </span><span style="color: #666666">3</span><span style="color: #bbbbbb"> </span><span style="color: #666666">==</span><span style="color: #bbbbbb"> </span>line2<span style="color: #bbbbbb"> </span>);
+<span style="color: #bbbbbb">  </span>assert(<span style="color: #bbbbbb"> </span><span style="color: #666666">0</span><span style="color: #bbbbbb"> </span><span style="color: #666666">!=</span><span style="color: #bbbbbb"> </span>strcmp(<span style="color: #bbbbbb"> </span>file1,<span style="color: #bbbbbb"> </span>file2<span style="color: #bbbbbb"> </span>)<span style="color: #bbbbbb"> </span>);
+
+<span style="color: #bbbbbb">  </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;
+}<span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">/* end main() */</span>
+</pre></div>
+
+<p>file2.h:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>assert(
+<span style="color: #bbbbbb">       </span>(<span style="color: #bbbbbb"> </span>(<span style="color: #B00040">void</span>)strcpy(file1,__FILE__),<span style="color: #bbbbbb"> </span>line1<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>__LINE__<span style="color: #bbbbbb"> </span>)
+</pre></div>
+
+<p>file1.h:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&quot;file2.h&quot;</span>
+<span style="color: #666666">!=</span>
+<span style="color: #bbbbbb">  </span>(<span style="color: #bbbbbb"> </span>(<span style="color: #B00040">void</span>)strcpy(file2,__FILE__),<span style="color: #bbbbbb"> </span>line2<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>__LINE__<span style="color: #bbbbbb"> </span>)
+</pre></div>
+
+<p>There already are some ways to have a macro invocation be split over two files
+that result in undefined behaviour.</p>
+<p>5.1.1.2 Translation phases, paragraph 1, bullet 2 has:</p>
+<blockquote>
+<p>A source file that is not empty shall end in a new-line character, which shall
+not be immediately preceded by a backslash character before any such splicing
+takes place.</p>
+</blockquote>
+<p>which makes using line splicing (as a way to split a macro invocation over many
+files) undefined.</p>
+<p>6.10.3 Macro replacement, paragraph 11 has:</p>
+<blockquote>
+<p>If there are sequences of preprocessing tokens within the list of arguments that
+would otherwise act as preprocessing directives,172) the behavior is undefined.</p>
+</blockquote>
+<p>which makes using #include of arguments (as a way to split a macro invocation
+over many files) between the outside-most matching parentheses undefined.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Add to 5.1.1.2, paragraph 1, bullet 3, words along the lines of:</p>
+<blockquote>
+<p>A macro invocation shall be contained within one source file.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2017-04-07:</p>
+<p>Oct 2015 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The committee was unsympathetic to the Suggested Technical Corrigendum. It was
+noted that function invocations are allowed to span files and that there are
+some implementations that do support macro invocations that the Suggested
+Technical Corrigendum would invalidate.</p>
+<p>The committee agrees that such uses should probably have been prohibited in the
+original specification and may consider adding such restrictions in a possible
+future revision of the Standard, and will record this intent in the next
+revision of WG 14 Standing Document 3 currently at
+<a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1972.htm">N1972</a> .</p>
+</blockquote>
+<p>Apr 2016 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The Proposed Committee Response was augmented.</p>
+</blockquote>
+<h3>Proposed Committee Response</h3>
+<blockquote>
+<p>The committee agrees that such uses should probably have been prohibited in the
+original specification and may consider adding such restrictions in a possible
+future revision of the Standard, and has recorded this intent in WG 14 Standing
+Document 3.</p>
+<p>Although the committee agrees that such invocations are not necessarily best
+practice, they are supported in existing implementations and as such the
+committee sees no benefit to accepting changes that would invalidate this
+practice.</p>
+</blockquote>
+
+</body>
+</html>

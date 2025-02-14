@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0CFP.16: P1: tgmath cbrt macro</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0CFP.16: P1: tgmath cbrt macro</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Jim Thomas<br />
+Date: 2017-10-25<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2178.pdf">N2178</a><br />
+Submitted against: Floating-point TS 18661 (C11 version, 2014-2016)<br />
+Status: Fixed<br />
+Fixed in: C23<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2397.htm">n2397.htm</a></p>
+<h3>Summary</h3>
+<p>This DR addresses a problem noted by Joseph Myers in emails SC22WG14.14743 and
+14744:</p>
+<blockquote>
+<p>… the example [in TS 18661-1 clause 16, for 7.25#6b – see below] implies that
+"#undef cbrtl" before calling the cbrt type-generic macro would mean it's not
+affected by constant rounding modes, but the actual normative text says "is
+affected by constant rounding modes" with no such caveat.</p>
+</blockquote>
+<p>and</p>
+<blockquote>
+<p>… neither example definition [in C11 or TS 18661-1] is valid because they
+might call a block-scope cbrtf / cbrtl; they need to avoid such a block-scope
+identifier, or a macro defined by the user, while still depending on whether
+expansion of the  <br />
+standard header cbrtf / cbrtl macros has been suppressed at that point.</p>
+</blockquote>
+<p>The text in question is:</p>
+<blockquote>
+<p>[6b] A type-generic macro corresponding to a function indicated in the table
+in 7.6.1a is affected by constant rounding modes (7.6.2). Note that the
+type-generic macro definition in the example in 6.5.1.1 does not conform to this
+specification. A conforming macro could be implemented as follows:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#define cbrt(X)     _Generic((X),                  \</span>
+<span style="color: #9C6500">               long double: cbrtl(X),         \</span>
+<span style="color: #9C6500">               default: _Roundwise_cbrt(X),   \</span>
+<span style="color: #9C6500">               float: cbrtf(X)                \</span>
+<span style="color: #9C6500">               )</span>
+</pre></div>
+
+<p>where <code>_Roundwise_cbrt()</code> is equivalent to <code>cbrt()</code> invoked without
+macro-replacement suppression.</p>
+</blockquote>
+<p>The cause of the problems is the use of <code>cbrtl</code> and <code>cbrtf</code> in the macro
+definition. The suggested TC below replaces these uses with <code>_Roundwise_ prefixed</code> identifiers similar to <code>_Roundwise_cbrt</code>.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>In TS 18661-1, clause 16, replace:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#define cbrt(X)     _Generic((X),                  \</span>
+<span style="color: #9C6500">               long double: cbrtl(X),         \</span>
+<span style="color: #9C6500">               default: _Roundwise_cbrt(X),   \</span>
+<span style="color: #9C6500">               float: cbrtf(X)                \</span>
+<span style="color: #9C6500">               )</span>
+</pre></div>
+
+<p>where <code>_Roundwise_cbrt()</code> is equivalent to <code>cbrt()</code> invoked without
+macro-replacement suppression.</p>
+</blockquote>
+<p>with</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#define cbrt(X)     _Generic((X),                       \</span>
+<span style="color: #9C6500">               long double: _Roundwise_cbrtl(X),   \</span>
+<span style="color: #9C6500">               default: _Roundwise_cbrt(X),        \</span>
+<span style="color: #9C6500">               float: _Roundwise_cbrtf(X)               \</span>
+<span style="color: #9C6500">               )</span>
+</pre></div>
+
+<p>where <code>_Roundwise_cbrtl()</code>, <code>_Roundwise_cbrt()</code>, and <code>_Roundwise_cbrtf()</code> are
+equivalent to <code>cbrtl()</code>, <code>cbrt()</code>, and <code>cbrtf()</code>, respectively, invoked without
+macro-replacement suppression.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2019-05-03:</p>
+<p>Oct 2017 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>There was considerable discussion on this issue. The first point is that the
+_Generic example cited that is proposed to be fixed was not intended to impose
+requirements, yet has elicited two fixes so far, this being a third. The second
+point is that the fix offered would likely elicit numerous compiler errors as
+stated and no longer serves its original intention of illustrating _Generic
+best practice usage. Lastly, lacking a clear simple example, is there a problem
+here that needs clarification becomes uncertain.</p>
+</blockquote>
+<p>Apr 2018 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>A new document
+<a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2212.pdf">N2212</a> was
+presented with a much simpler proposed change. It was accepted by the committee.</p>
+</blockquote>
+<h3>Proposed Change</h3>
+<p>In TS 18661-1, clause 16, replace:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">       </span><span style="color: #9C6500">#define cbrt(X) _Generic((X), \</span>
+<span style="color: #9C6500">                       long double: cbrtl(X), \</span>
+<span style="color: #9C6500">                       default: _Roundwise_cbrt(X), \</span>
+<span style="color: #9C6500">                       float: cbrtf(X) \</span>
+<span style="color: #9C6500">                       )</span>
+</pre></div>
+
+<blockquote>
+<p>where <code>_Roundwise_cbrt()</code> is equivalent to <code>cbrt()</code> invoked without
+macro-replacement suppression.</p>
+</blockquote>
+<p>with</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">       </span><span style="color: #9C6500">#define cbrt(X) _Generic((X), \</span>
+<span style="color: #9C6500">                       long double: _Roundwise_cbrtl, \</span>
+<span style="color: #9C6500">                       default: _Roundwise_cbrt, \</span>
+<span style="color: #9C6500">                       float: _Roundwise_cbrtf \</span>
+<span style="color: #9C6500">                       )(X)</span>
+</pre></div>
+
+<blockquote>
+<p>where <code>_Roundwise_cbrtl()</code>, <code>_Roundwise_cbrt()</code>, and <code>_Roundwise_cbrtf()</code> are
+equivalent to <code>cbrtl()</code>, <code>cbrt()</code>, and <code>cbrtf()</code>, respectively, invoked without
+macro-replacement suppression.</p>
+</blockquote>
+
+</body>
+</html>

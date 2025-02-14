@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0468: strncpy_s clobbers buffer past null</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0468: <code>strncpy_s</code> clobbers buffer past <code>null</code></h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Martin Sebor<br />
+Date: 2014-09-19<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1872.htm">N1872</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>K.3.7.1.4, p5 permits <code>strncpy_s</code> to "clobber" characters in the destination
+buffer past the terminating <code>null</code>:</p>
+<blockquote>
+<p>All elements following the terminating null character (if any) written by
+<code>strncpy_s</code> in the array of <code>s1max</code> characters pointed to by <code>s1</code> take
+unspecified values when <code>strncpy_s</code> returns. <sup>420)</sup></p>
+</blockquote>
+<p>Footnote 420 explains that the intent is to allow implementations to copy
+characters from <code>s2</code> to <code>s1</code> while simultaneously checking if any of those
+characters are null. Such an approach might write a character to every element
+of <code>s1</code> before discovering that the first element should be set to the null
+character.</p>
+<p>This intent is to allow efficient implementations to make a single pass over the
+source sequence that simultaneously copies characters and checks the runtime
+constraints. (Otherwise two passes would be required, one to compute the length
+of the source sequence and another to copy it.)</p>
+<p>It has been pointed out that the implementation latitude granted by this text
+goes too far, since the function only might need to write past the null after a
+constraint violation. Otherwise, when all runtime constraints are satisfied, the
+function stops copying characters after either the first null is encountered or
+all <code>n</code> characters have been copied.</p>
+<p>Since the mention of unspecified values tends to raise security concerns about
+information leakage, and since permitting the implementations to modify the
+contents of the destination buffer past the terminating null on success serves
+no useful purpose, the requirements on the function can and should be tightened
+up.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>The proposed corrigendum below tightens up the requirements on the function so
+as to leave intact the contents of the destination buffer past the terminating
+null on success, while allowing it to clobber its contents on runtime constraint
+violation.</p>
+<p>Modify K.3.7.1.4, p5 as indicated below:</p>
+<blockquote>
+<p>All elements following the terminating null character (if any) written by
+<code>strncpy_s</code> in the array of <code>s1max</code> characters pointed to by <code>s1</code> take
+unspecified values when <code>strncpy_s</code> returns <ins>a non-zero value</ins>.
+<sup>420)</sup></p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Oct 2014 meeting</p>
+<h3>Proposed Technical Corrigendum</h3>
+<p>Change K.3.7.1.4, p5 from</p>
+<blockquote>
+<p>All elements following the terminating null character (if any) written by
+<code>strncpy_s</code> in the array of <code>s1max</code> characters pointed to by <code>s1</code> take
+unspecified values when <code>strncpy_s</code> returns. <sup>420)</sup></p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>All elements following the terminating null character (if any) written by
+<code>strncpy_s</code> in the array of <code>s1max</code> characters pointed to by <code>s1</code> take
+unspecified values when <code>strncpy_s</code> returns a non-zero value. <sup>420)</sup></p>
+</blockquote>
+
+</body>
+</html>

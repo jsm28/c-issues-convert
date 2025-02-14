@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0418: fmod(0.,Nan) and fmod(Nan, infinity)</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0418: <code>fmod(0.,Nan)</code> and <code>fmod(Nan, infinity)</code></h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Fred J. Tydeman (USA)<br />
+Date: 2012-09-13<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1633.htm">N1633</a><br />
+<strong>Related:</strong> <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1497.htm">N1497</a><br />
+Submitted against: C11 / C17<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<p>First question. When Annex F is in effect, what should the value of fmod(0.,NaN)
+be? The two choices are 0. or NaN.</p>
+<p>Annex F.10.7.1 The fmod functions has:</p>
+<blockquote>
+<ul>
+<li>fmod(+/-0, y) returns +/-0 for y not zero.</li>
+<li>fmod(x, y) returns a NaN and raises the “invalid” floating-point exception for x infinite or y zero (and neither is a NaN).</li>
+</ul>
+</blockquote>
+<p>So, that first bullet item says fmod(0.,NaN) is 0.</p>
+<p>Elsewhere in that annex (F.10 Mathematics, paragraph 11), we have:</p>
+<blockquote>
+<p>Functions with a NaN argument return a NaN result and raise no floating-point
+exception, except where stated otherwise.</p>
+</blockquote>
+<p>That says that fmod(0.,NaN) is NaN.</p>
+<p>One idea is to explicitly add words about a NaN to the first bullet item in
+F.10.7.1, such as:</p>
+<blockquote>
+<ul>
+<li>fmod(+/-0, y) returns +/-0 for y not zero nor NaN.</li>
+</ul>
+</blockquote>
+<p>However, if F.10#11 covers NaN arguments before any other arguments are
+considered, then words about NaN could be removed from the second case in
+F.10.7.1, such as:</p>
+<blockquote>
+<ul>
+<li>fmod(x, y) returns a NaN and raises the “invalid” floating-point exception for x infinite or y zero.</li>
+</ul>
+</blockquote>
+<p>I believe that takes us back to before N1497 was done.</p>
+<p>Second question: what should fmod(NaN,infinity) be? Must it be the same NaN
+argument, or may it be any NaN?</p>
+<p>Annex F.10.7.1 The fmod functions has:</p>
+<blockquote>
+<ul>
+<li>fmod(x, +/-infinity) returns x for x not infinite.</li>
+</ul>
+</blockquote>
+<p>Which says fmod(NaN,infinity) must be the same NaN argument.</p>
+<p>But, if F.10#11 covers this NaN argument, then this case is just some NaN.</p>
+<p>It appears that the third bullet should either be left alone or changed to:</p>
+<blockquote>
+<ul>
+<li>fmod(x, +/-infinity) returns x for finite x.</li>
+</ul>
+</blockquote>
+<p>Some other functions that discuss NaN arguments in Annex F are: frexp, ilogb,
+modf, hypot, pow, fmax, fmin, and fma. Of those, only hypot, pow, fmax, and fmin
+have exceptions on NaN in implies NaN out.</p>
+<hr />
+<p>Comment from WG14 on 2013-04-26:</p>
+<p>Oct 2012 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<ul>
+<li>Given that, unless stated otherwise, if the argument is a NaN, the result is a NaN, and there is no floating point exception.</li>
+<li>The parenthetical comment <strong>might</strong> be causing confusion, and removing it seems to make it more confusing.</li>
+<li>Adding more explicit wording is possible but seems unnecessary.</li>
+</ul>
+</blockquote>
+<h3>Proposed Committee Response</h3>
+<p>The consensus was to do nothing and the author agrees.</p>
+
+</body>
+</html>

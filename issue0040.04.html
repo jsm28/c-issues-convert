@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0040.04: Should the response to Defect Report #017, Q39 be reconsidered?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0040.04: Should the response to <a href="issue0017.39.html">Defect Report #017, Q39</a> be reconsidered?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Derek M. Jones, WG14<br />
+Date: 1992-12-10<br />
+Reference document: X3J11/91-062<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Cross-references: <a href="issue0017.39.html">0017.39</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_040.html">dr_040.html</a></p>
+<p>For the fragment</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #008000; font-weight: bold">if</span><span style="color: #bbbbbb"> </span>(a<span style="color: #666666">**</span>b<span style="color: #666666">||</span>c<span style="color: #666666">++</span>d)
+<span style="color: #bbbbbb"> </span>;
+</pre></div>
+
+<p><a href="issue0017.39.html">Defect Report #017 Question 39</a> states that this is lexed as:</p>
+<p>a. {<code>if</code>} {<code>(</code>} {<code>a</code>} {<code>&lt;&lt;</code>} {<code>b</code>} {<code>||</code>} {<code>c</code>} {<code>&gt;&gt;</code>} {<code>d</code>} {<code>)</code>}</p>
+<p>not as:</p>
+<p>b. {<code>if</code>} {<code>(</code>} {<code>a</code>} {<code>**b||c++</code>} {<code>d</code>} {<code>)</code>}</p>
+<p>The rationale for this interpretation was that the constraint in subclause
+6.1.7, page 32, lines 33-34 disallowed a header name preprocessing token
+anywhere except within a <code>#include</code>. Since the header name preprocessing token
+could not exist it was not lexed as such.</p>
+<p>It was pointed out that the “longest possible token” rule was not influenced by
+rules elsewhere in the C Standard, i.e. <code>i+++++j</code> is lexed as:</p>
+<p>c. {<code>i</code>} {<code>++</code>} {<code>++</code>} {<code>+</code>} {<code>j</code>}</p>
+<p>not as:</p>
+<p>d. {<code>i</code>} {<code>++</code>} {<code>+</code>} {<code>++</code>} {<code>j</code>}</p>
+<p>Now (c) is a constraint violation by subclause 6.3.2.4, page 42, lines 38-39,
+the operand of the second <code>++</code> is not a modifiable lvalue. But this constraint
+does not require that the input be re-lexed to form the preprocessing tokens
+given in (d), which is conforming code.</p>
+<p>As the UK C Panel saw it, the first example should be lexed as given in (b) and
+a diagnostic issued. Having violated a constraint, we are now into undefined
+behavior. An implementation could define the behavior in this circumstance to be
+a re-lex of the input to produce the preprocessing tokens given in (a).</p>
+<p>As far as the user was concerned, they would get the expected behavior with the
+added value of a diagnostic being issued.</p>
+<p>All those present felt that the interpretation was incorrect and recommended
+that the UK ask the Committee to reconsider its decision.</p>
+<p>To summarize, there is no ambiguity in the C Standard and the original X3J11
+interpretation is incorrect.</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>Is a diagnostic required for an input such as</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #008000; font-weight: bold">if</span><span style="color: #bbbbbb"> </span>(a<span style="color: #666666">**</span>b<span style="color: #666666">||</span>c<span style="color: #666666">++</span>d)
+</pre></div>
+
+<p>because of a violation of the constraint specified in subclause 6.1.7, page 32,
+lines 33-34?</p>
+<p>Answer: No. Our response to <a href="issue0017.39.html">Defect Report #017 Question 39</a>
+addresses this issue.</p>
+
+</body>
+</html>

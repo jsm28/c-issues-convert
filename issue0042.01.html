@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0042.01: Does memcpy define a (sub)object?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0042.01: Does <code>memcpy</code> define a (sub)object?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Tom MacDonald, WG14<br />
+Date: 1992-12-10<br />
+Reference document: X3J11/92-001<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Cross-references: <a href="issue0054.html">0054</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_042.html">dr_042.html</a></p>
+<p>The description of <code>memcpy</code> in subclause 7.11.2.1 says:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #0000FF">memcpy</span>(<span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>s1,<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">const</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>s2,<span style="color: #bbbbbb"> </span><span style="color: #B00040">size_t</span><span style="color: #bbbbbb"> </span>n);
+</pre></div>
+
+<p>The <code>memcpy</code> function copies <code>n</code> characters from the object pointed to by <code>s2</code>
+to the object pointed to by <code>s1</code>. If copying takes place between objects that
+overlap, the behavior is undefined.</p>
+</blockquote>
+<p>The definition of the term <em>object</em> in subclause 3.14 is:</p>
+<blockquote>
+<p><strong>object</strong> - A region of data storage in the execution environment, the
+contents of which can represent values. Except for bit-fields, objects are
+composed of contiguous sequences of one or more bytes, the number, order, and
+encoding of which are either explicitly specified or implementation-defined.
+When referenced, an object may be interpreted as having a particular type...</p>
+</blockquote>
+<p>Are the objects in the description of <code>memcpy</code> the largest objects into which
+the arguments can be construed as pointing?</p>
+<p>In particular, is the behavior of the call of <code>memcpy</code> in Example 1 defined:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f1</span>(<span style="color: #B00040">void</span>)<span style="color: #bbbbbb"> </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">extern</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>a[<span style="color: #666666">2</span>][N];
+<span style="color: #bbbbbb">        </span>memcpy(a[<span style="color: #666666">1</span>],<span style="color: #bbbbbb"> </span>a[<span style="color: #666666">0</span>],<span style="color: #bbbbbb"> </span>N);
+<span style="color: #bbbbbb">        </span>}
+</pre></div>
+
+<p>because the arguments point into the disjoint array objects, <code>a[1]</code> and <code>a[0]</code>?
+Or is the behavior undefined because the arguments both point into the same
+array object, <code>a</code>?</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>From subclause 3.14, an object is “a region of data storage ... Except for
+bit-fields, objects are composed of contiguous sequences of one or more bytes,
+the number, order, and encoding of which are either explicitly specified or
+implementation-defined ...” From subclause 7.11.1, “the header <code>&lt;string.h&gt;</code>
+declares one type and several functions, and defines one macro useful for
+manipulating arrays of character type and other objects treated as arrays of
+character type.” “Various methods are used for determining the lengths of the
+arrays...” From subclause 7.11.2.1, description of <code>memcpy</code>, “if copying takes
+place between objects that overlap, the behavior is undefined.” Therefore, the
+“objects” referred to by subclause 7.11.2.1 are exactly the regions of data
+storage pointed to by the pointers and dynamically determined to be of <code>N</code> bytes
+in length (i.e. treated as an array of <code>N</code> elements of character type).</p>
+<p>a. So, no, the objects are not “the largest objects into which the arguments can
+be construed as pointing.”</p>
+<p>b. In Example 1, the call to <code>memcpy</code> has defined behavior.</p>
+<p>c. The behavior is defined because the pointers point into different
+(non-overlapping) objects.</p>
+
+</body>
+</html>

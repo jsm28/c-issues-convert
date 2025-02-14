@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0234: Miscellaneous Typos</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0234: Miscellaneous Typos</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14 Convener (John Benito)<br />
+Date: 2000-09-26<br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C99 TC1<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_234.htm">dr_234.htm</a></p>
+<p><strong>Summary #1</strong></p>
+<p>In 6.10.3 Macro Replacement the text:</p>
+<blockquote>
+<p>[#5] The identifier <code>__VA_ARGS__</code> shall occur only in the replacement-list of
+a function-like macro that uses the ellipsis notation in the arguments.</p>
+</blockquote>
+<p>The word "arguments" should be "parameters".</p>
+<p><strong>Summary #2</strong><br />
+In the Foreword under major changes, <code>VA_COPY</code> should be <code>va_copy</code> .</p>
+<p><strong>Summary #3</strong><br />
+In 7.11.2.1, in the description of the <code>lconv</code> members <code>int_p_cs_precedes</code>,
+<code>int_n_cs_precedes</code>, <code>int_p_sep_by_space</code>, and <code>int_n_sep_by_space</code>, the
+reference to <code>int_currency_symbol</code> should be <code>int_curr_symbol</code>.</p>
+<p><strong>Summary #4</strong><br />
+In 7.19.6.14 The <code>vsscanf</code> function:</p>
+<blockquote>
+<p>The <code>vsscanf</code> function returns the value of the macro <code>EOF</code> if an input failure
+occurs before any conversion. Otherwise, the <code>vscanf</code> function ...</p>
+</blockquote>
+<p>The reference to <code>vscanf</code> should be <code>vsscanf</code>.</p>
+<p><strong>Summary #5</strong><br />
+In 7.19.6.12 The <code>vsnprintf</code> function is misspelled in the synopsis.</p>
+<p><strong>Summary #6</strong><br />
+In 7.4.1.12, paragraph #2, "as defined in 6.4.4.2" should be "as defined in
+6.4.4.1".</p>
+<hr />
+<p>Comment from WG14 on 2001-01-22:</p>
+<h3>Technical Corrigendum</h3>
+<p>In the cited text in 6.10.3, change "arguments" to "parameters"</p>
+<p>In the Foreword, change <code>VA_COPY</code> to <code>va_copy</code>.</p>
+<p>In 7.11.2.1, change all occurrences of <code>int_currency_symbol</code> to
+<code>int_curr_symbol</code>. Also, append to paragraph 5:</p>
+<blockquote>
+<p>For <code>int_p_sep_by_space</code> and <code>int_n_sep_by_space</code>, the fourth character of
+<code>int_curr_symbol</code> is used instead of a space.</p>
+</blockquote>
+<p>In 7.19.6.14, change the reference from <code>vscanf</code> to <code>vsscanf</code>.</p>
+<p>In 7.19.6.12, change <code>vsprintf</code> to <code>vsnprintf</code> in the synopsis.</p>
+<p>In 7.4.1.12, change "(as defined in 6.4.4.2)" to "(as defined in 6.4.4.1)".</p>
+
+</body>
+</html>

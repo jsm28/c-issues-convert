@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0312: Meaning of &quot;known constant size&quot;</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0312: Meaning of "known constant size"</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Joseph Myers &lt;joseph@codesourcery.com&gt;, UK C Panel<br />
+Date: 2005-03-04<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1100.htm">ISO/IEC WG14 N1100</a><br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C99 TC3<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_312.htm">dr_312.htm</a></p>
+<h3>Summary</h3>
+<p>Does "known constant size" mean something different from "not a VLA"? The phrase
+is used in the definition of composite types, 6.2.7#3:</p>
+<blockquote>
+<p>-- If one type is an array of known constant size, the composite type is an
+array of that size; otherwise, if one type is a variable length array, the
+composite type is that type.</p>
+</blockquote>
+<p>and in an example in 6.5.6#11 (where it doesn't cause problems), and in
+6.7.5.2#4 to define VLAs:</p>
+<blockquote>
+<p>[#4] If the size is not present, the array type is an incomplete type. If the
+size is <code>*</code> instead of being an expression, the array type is a variable length
+array type of unspecified size, which can only be used in declarations with
+function prototype scope;122) such arrays are nonetheless complete types. If the
+size is an integer constant expression and the element type has a known constant
+size, the array type is not a variable length array type; otherwise, the array
+type is a variable length array type.</p>
+</blockquote>
+<p>Suppose the implementation does not accept any non-standard forms of constant
+expressions under 6.6#10, so that <code>(int)+1.0</code> is an arithmetic constant
+expression but not an integer constant expression. Thus <code>int[(int)+1.0]</code> is a
+VLA type. But is <code>int[1][(int)+1.0]</code> a VLA type? The element type is a VLA type,
+but the element size is a known constant. If "known constant size" is
+interpreted to include some VLA cases, this also means further indeterminacy of
+composite types in such cases; is "an array of that size" a VLA of that size, or
+a non-VLA of that size, and may cases involving compatible array types with
+different known constant sizes (which would yield undefined behavior if
+executed) be rejected at translation time?</p>
+<h3>Suggested Technical Corrigendum</h3>
+<hr />
+<p>Comment from WG14 on 2006-04-04:</p>
+<h3>Committee Discussion (for history only)</h3>
+<p>The statement, "Suppose the implementation does not accept any non-standard
+forms of constant expressions under 6.6#10, so that <code>(int)+1.0</code> is an arithmetic
+constant expression but not an integer constant expression." , implies an
+interpretation of the standard that the implementation can extend the meaning of
+what constitutes an integer constant expression. For example, that <code>(int)+1.0</code>
+is an integer constant expression.</p>
+<p>The committee does not believe that it does. Even if an implementation accepts
+other forms of constant expressions, paragraph 6.6#10 does not change the
+definition of an integer constant expression given by paragraph 6.6#6, and
+<code>int[(int)+1.0]</code> is still a VLA.</p>
+<p>Paragraph 6.6#10 cannot be used to get around issuing diagnostics for constraint
+violations where integer constant expressions are required. Which we believe is
+what the first paragraph of the introductory text is implying</p>
+<h3>Technical Corrigendum</h3>
+<p>Add to 6.2.5, after Paragraph 22</p>
+<blockquote>
+<p>A type has <em>known constant size</em> if the type is not incomplete and is not a
+variable length array type.</p>
+</blockquote>
+
+</body>
+</html>

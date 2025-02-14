@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0202: Change return type of certain &lt;fenv.h&gt; functions</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0202: Change return type of certain <code>&lt;fenv.h&gt;</code> functions</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Clive Feather (UK)<br />
+Date: 1999-07-06<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n883.htm">ISO/IEC WG14 N883</a><br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C99 TC1<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_202.htm">dr_202.htm</a></p>
+<h3>Summary</h3>
+<p>Change the return type of various functions in 7.6.2 from <code>void</code> to <code>int</code> so
+that they can fail.</p>
+<p><strong>Urgency</strong><br />
+These functions are new in C99. Once the function prototypes have been published
+it will not be practical to change them. The only solution will be to produce
+new parallel functions with a return value; because of the way these functions
+are defined, this will involve significantly more change than just that.</p>
+<p><strong>Rationale</strong><br />
+The functions in question are to do with the floating-point exception and
+environment flags. The former will do as an example.</p>
+<p>The wording of the FDIS assumes that either:</p>
+<ul>
+<li>the implementation has full control over the flags, or</li>
+<li>the implementation has no control over the flags.</li>
+</ul>
+<p>In the first case it defines various <code>FE_</code> macros such as <code>FE_DIVBYZERO</code> for the
+flags. The Standard then assumes that it is always possible to set or clear the
+flag or to raise the exception. In the second case the macros are not defined
+and so there are no valid argument values for the functions (other than zero).</p>
+<p>However, there are implementations that can do some things with the flags but
+not others. For example, it may be possible to raise exceptions but not to clear
+flags. This case is not allowed in the present draft.</p>
+<p>The two alternative proposed changes are:</p>
+<blockquote>
+<ol>
+<li>Change the return types of the functions to <code>int</code>. For now the functions always return zero (success) but a later Amendment can alter this. This is the minimum to "future-proof".</li>
+<li>Change the definitions properly to allow them to fail. This is more complex but solves the problem once and for all.</li>
+</ol>
+</blockquote>
+<p>Option 2 contains an extra item to make<code>fesetround</code> more consistent with the
+other changes. This change may be omitted if it will increase consensus.</p>
+<p><strong>Proposed solutions<br />
+Option A</strong> - placeholder change</p>
+<p>For each of the following functions:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>feclearexcept
+fegetexceptflag
+feraiseexcept
+fesetexceptflag
+fegetenv
+fesetenv
+feupdateenv
+</pre></div>
+
+</blockquote>
+<p>change the return type to <code>int</code> and add the following:</p>
+<blockquote>
+<p><strong>Returns</strong></p>
+<p>This function always returns zero. [*]</p>
+<p>[*] This may change in a future revision of this Standard, in which case a
+zero return will mean success and a non-zero return will mean failure of some
+kind.</p>
+</blockquote>
+<p>Add to the Future Directions clause:</p>
+<blockquote>
+<p>The fact that various functions in 7.6.2 and 7.6.4 always return zero is an
+obsolescent feature.</p>
+</blockquote>
+<p><strong>Option B</strong> - full change</p>
+<p>In 7.6 paragraph 5, attach a footnote to the wording:</p>
+<blockquote>
+<p>if and only if the implementation supports the floating-point exception by means
+of the functions in 7.6.2.</p>
+</blockquote>
+<p>where the footnote is:</p>
+<blockquote>
+<p>[*] The implementation supports an exception if there are circumstances where
+a call to at least one of the functions in 7.6.2, using the macro as the
+appropriate argument, will succeed. It is not necessary for all the functions to
+succeed all the time.</p>
+</blockquote>
+<p>For each of the following functions:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>feclearexcept
+fegetexceptflag
+feraiseexcept
+fesetexceptflag
+fegetenv
+fesetenv
+feupdateenv
+</pre></div>
+
+</blockquote>
+<p>make changes equivalent to the following (which shows the wording changes for
+7.6.2.1).</p>
+<p>In paragraph 2, replace "clears" with "attempt to clear".</p>
+<p>Add a new heading and paragraph 3:</p>
+<blockquote>
+<p><strong>Returns</strong></p>
+<p>[3] The <code>feclearexcept</code> function returns zero if the excepts argument is zero
+or if all the specified exceptions were successfully cleared. Otherwise it
+returns a nonzero value.</p>
+</blockquote>
+<p>Optional additional change: replace 7.6.3.2p3 by:</p>
+<blockquote>
+<p>[3] The <code>fesetround</code> function returns zero if and only if the requested
+rounding direction was established.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2001-01-22:</p>
+<h3>Technical Corrigendum</h3>
+<p>In 7.6 paragraph 5, attach a footnote to the wording:</p>
+<blockquote>
+<p>if and only if the implementation supports the floating-point exception by means
+of the functions in 7.6.2.</p>
+</blockquote>
+<p>where the footnote is:</p>
+<blockquote>
+<p>[*] The implementation supports an exception if there are circumstances where
+a call to at least one of the functions in 7.6.2, using the macro as the
+appropriate argument, will succeed. It is not necessary for all the functions to
+succeed all the time.</p>
+</blockquote>
+<p>In 7.6.2.1 paragraph 1, change the result type from <code>void</code> to <code>int</code>.</p>
+<p>In 7.6.2.1 paragraph 2, replace "clears" with "attempts to clear".</p>
+<p>In 7.6.2.1 add a new heading and paragraph 3:</p>
+<blockquote>
+<p><strong>Returns</strong></p>
+<p>[#3] The <code>feclearexcept</code> function returns zero if the excepts argument is zero
+or if all the specified exceptions were successfully cleared. Otherwise it
+returns a nonzero value.</p>
+</blockquote>
+<p>In 7.6.2.2 paragraph 1, change the result type from <code>void</code> to <code>int</code>.</p>
+<p>In 7.6.2.2 paragraph 2, replace "stores" with "attempts to store".</p>
+<p>In 7.6.2.2 add a new heading and paragraph 3:</p>
+<blockquote>
+<p><strong>Returns</strong></p>
+<p>[#3] The <code>fegetexceptflag</code> function returns zero if the representation was
+successfully stored. Otherwise it returns a nonzero value.</p>
+</blockquote>
+<p>In 7.6.2.3 paragraph 1, change the result type from <code>void</code> to <code>int</code>.</p>
+<p>In 7.6.2.3 paragraph 2, replace "raises" with "attempts to raise".</p>
+<p>In 7.6.2.3 add a new heading and paragraph 3:</p>
+<blockquote>
+<p><strong>Returns</strong></p>
+<p>[#3] The <code>feraiseexcept</code> function returns zero if the excepts argument is zero
+or if all the specified exceptions were successfully raised. Otherwise it
+returns a nonzero value.</p>
+</blockquote>
+<p>In 7.6.2.4 paragraph 1, change the result type from <code>void</code> to <code>int</code>.</p>
+<p>In 7.6.2.4 paragraph 2, replace "sets" with "attempts to set".</p>
+<p>In 7.6.2.4 add a new heading and paragraph 3:</p>
+<blockquote>
+<p><strong>Returns</strong></p>
+<p>[#3] The <code>fesetexceptflag</code> function returns zero if the excepts argument is
+zero or if all the specified flags were successfully set to the appropriate
+state. Otherwise it returns a nonzero value.</p>
+</blockquote>
+<p>In 7.6.3.2 replace paragraph 3 by:</p>
+<blockquote>
+<p>[#3] The <code>fesetround</code> function returns zero if and only if the requested
+rounding direction was established.</p>
+</blockquote>
+<p>In 7.6.4.1 paragraph 1, change the result type from <code>void</code> to <code>int</code>.</p>
+<p>In 7.6.4.1 paragraph 2, replace "stores" with "attempts to store".</p>
+<p>In 7.6.4.1 add a new heading and paragraph 3:</p>
+<blockquote>
+<p><strong>Returns</strong></p>
+<p>[#3] The <code>fegetenv</code> function returns zero if representation was successfully
+stored. Otherwise it returns a nonzero value.</p>
+</blockquote>
+<p>In 7.6.4.3 paragraph 1, change the result type from <code>void</code> to <code>int</code>.</p>
+<p>In 7.6.4.3 paragraph 2, replace "establishes" with "attempts to establish".</p>
+<p>In 7.6.4.3 add a new heading and paragraph 3:</p>
+<blockquote>
+<p><strong>Returns</strong></p>
+<p>[#3] The <code>fesetenv</code> function returns zero if the environment was successfully
+established. Otherwise it returns a nonzero value.</p>
+</blockquote>
+<p>In 7.6.4.4 paragraph 1, change the result type from <code>void</code> to <code>int</code>.</p>
+<p>In 7.6.4.4 paragraph 2, replace "saves" with "attempts to save", replace
+"installs" by "install", and replace "raises" by "raise".</p>
+<p>In 7.6.4.4 add a new heading and paragraph 3:</p>
+<blockquote>
+<p><strong>Returns</strong></p>
+<p>[#3] The <code>feupdateenv</code> function returns zero if all the actions were
+successfully carried out. Otherwise it returns a nonzero value.</p>
+</blockquote>
+<p>In 7.6.4.4 change to existing paragraph 3, also renumbering it as 4:</p>
+<blockquote>
+<p>[#3] EXAMPLE Hide spurious underflow floating-point exceptions:</p>
+</blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">       </span><span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;fenv.h&gt;</span>
+<span style="color: #bbbbbb">         </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f</span>(<span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>x)
+<span style="color: #bbbbbb">         </span>{
+<span style="color: #bbbbbb">             </span><span style="color: #9C6500">#pragma STDC FENV_ACCESS ON</span>
+<span style="color: #bbbbbb">             </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>result;
+<span style="color: #bbbbbb">             </span>fenv_t<span style="color: #bbbbbb"> </span>save_env;
+<span style="color: #bbbbbb">             </span><span style="color: #008000; font-weight: bold">if</span><span style="color: #bbbbbb"> </span>(feholdexcept(<span style="color: #666666">&amp;</span>save_env))
+<span style="color: #bbbbbb">                 </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">/* indication of an environmental problem*/</span>;
+<span style="color: #bbbbbb">             </span><span style="color: #3D7B7B; font-style: italic">// compute result           if (/* test spurious underflow*/)</span>
+<span style="color: #bbbbbb">                 </span><span style="color: #008000; font-weight: bold">if</span><span style="color: #bbbbbb"> </span>(feclearexcept(FE_UNDERFLOW))
+<span style="color: #bbbbbb">                     </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">/* indication of an environmental problem */</span>;
+<span style="color: #bbbbbb">             </span><span style="color: #008000; font-weight: bold">if</span><span style="color: #bbbbbb"> </span>(feupdateenv(<span style="color: #666666">&amp;</span>save_env))
+<span style="color: #bbbbbb">                 </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">/* indication of an environmental problem*/</span>;
+<span style="color: #bbbbbb">             </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span>result;
+<span style="color: #bbbbbb">         </span>}
+</pre></div>
+
+<p>In Annex B change the return types for the following to <code>int</code>.</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>feclearexcept
+fegetexceptflag
+feraiseexcept
+fesetexceptflag
+fegetenv
+fesetenv
+feupdateenv
+</pre></div>
+
+</blockquote>
+
+</body>
+</html>

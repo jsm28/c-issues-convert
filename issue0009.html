@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0009: Are typedef names sometimes ambiguous in parameter declarations?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0009: Are typedef names sometimes ambiguous in parameter declarations?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Bruce Blodgett, WG14<br />
+Date: 1992-12-10<br />
+Reference document: X3J11/90-023<br />
+Submitted against: C90<br />
+Status: Fixed<br />
+Fixed in: C90 TC1<br />
+Cross-references: <a href="issue0017.12.html">0017.12</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_009.html">dr_009.html</a></p>
+<p>Use of typedef names in parameter declarations</p>
+<p>A syntactic ambiguity exists in the draft proposed C standard for which there
+appears to be no semantic disambiguation. A sequence of examples should explain
+the ambiguity. This matter needs interpretation by the Committee.</p>
+<p>For these examples, let <code>T</code> be declaration specifiers which contain at least one
+type specifier, to satisfy the semantics from subclause 6.5.6:</p>
+<blockquote>
+<p>If the identifier is redeclared in an inner scope ..., the type specifiers shall
+not be omitted in the inner declaration.</p>
+</blockquote>
+<p>Let <code>U</code> be an identifier which is a typedef name at outer scope and which has
+not (yet) been redeclared at current scope. A caret indicates the position of
+each abstract declarator. Consider this declaration:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>declaration<span style="color: #666666">-</span>specifiers<span style="color: #bbbbbb"> </span>direct<span style="color: #666666">-</span>declarator<span style="color: #bbbbbb"> </span>(T<span style="color: #666666">^</span>(U));
+</pre></div>
+
+<p>Here <code>U</code> is the type of the single parameter to a function returning type <code>T</code>,
+due to a requirement from subclause 6.5.4.3:</p>
+<blockquote>
+<p>In a parameter declaration, a single typedef name in parentheses is taken to be
+an abstract declarator that specifies a function with a single parameter, not as
+redundant parentheses around the identifier for a declarator.</p>
+</blockquote>
+<p>Consider this declaration:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>declaration<span style="color: #666666">-</span>specifiers<span style="color: #bbbbbb"> </span>direct<span style="color: #666666">-</span>declarator
+<span style="color: #bbbbbb">         </span>(T<span style="color: #666666">^</span>(U<span style="color: #666666">^</span>(parameter<span style="color: #666666">-</span>type<span style="color: #666666">-</span>list)));
+</pre></div>
+
+<p>In this example, <code>U</code> could be the type returned by a function which takes
+<code>parameter-type-list</code>. This in turn would be the single parameter to a function
+returning type <code>T</code>.</p>
+<p>Alternatively, <code>U</code> could be a redundantly parenthesized name of a function which
+takes <code>parameter-type-list</code> and returns type <code>T</code>.</p>
+<p>Given the spirit of the requirement from subclause 6.5.4.3, the former
+interpretation seems to be that intended by the Committee. If so, the
+requirement may be changed to something similar to:</p>
+<blockquote>
+<p>In a parameter declaration, a direct declarator which redeclares a typedef name
+shall not be redundantly parenthesized.</p>
+</blockquote>
+<p>Of course, parentheses must not be disallowed entirely... [The original had
+more, but this will suffice.]</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Correction</h3>
+<p><em><strong>In subclause 6.5.4.3, page 68, lines 2-4, replace:</strong></em></p>
+<p>In a parameter declaration, a single typedef name in parentheses is taken to be
+an abstract declarator that specifies a function with a single parameter, not as
+redundant parentheses around the identifier for a declarator.</p>
+<p><em><strong>with:</strong></em></p>
+<p>If, in a parameter declaration, an identifier can be treated as a typedef name
+or as a parameter name, it shall be taken as a typedef name.</p>
+
+</body>
+</html>

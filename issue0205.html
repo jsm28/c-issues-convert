@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0205: New keyword __at_least</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0205: New keyword <code>__at_least</code></h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Canada C Working Group, Raymond Mak (Canada C Working Group)<br />
+Date: 1999-09-15<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n893.htm">ISO/IEC WG14 N893</a><br />
+Submitted against: C99<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_205.htm">dr_205.htm</a></p>
+<h3>Summary</h3>
+<p>6.7.5 introduces a new use of the <code>static</code> keyword. A new keyword should be used
+instead.</p>
+<p>This use of <code>static</code> can only occur in function parameter declaration. If we
+examine the syntax carefully, <code>static assignment-expression</code> taken together
+inside <code>[</code> and <code>]</code> really plays the role of a type qualifier qualifying a
+pointer. This means the <code>assignment-expression</code> should only be allowed to follow
+immediately after the keyword <code>static</code> (when <code>static</code> is present), with no other
+type qualifiers allowed in between. Also, a new keyword should be used to make
+the meaning clear.</p>
+<h3>Suggested Correction</h3>
+<p>Use a new keyword, <code>__at_least</code>, in place of <code>static</code>.</p>
+<p>Change 6.4.1p1 to add a new keyword: <code>__at_least</code></p>
+<p>Change the syntax under 6.7.5 to (the two occurrences of <code>static</code> to
+<code>__at_least</code>):</p>
+<blockquote>
+<p><em>direct_declarator</em> <code>:</code><br />
+<em>identifier</em><br />
+<code>(</code> <em>declarator</em> <code>)</code><br />
+<em>direct-declarator</em> <code>[</code> <em>type-qualifier-list<sub>opt</sub>
+assignment-expression<sub>opt</sub></em> <code>]</code><br />
+<em>direct-declarator</em> <code>[ __at_least</code> <em>assignment-expression
+type-qualifier-list<sub>opt</sub></em> <code>]</code><br />
+<em>direct-declarator</em> <code>[</code> <em>type-qualifier-list<sub>opt</sub></em> <code>__at_least</code>
+<em>assignment-expression</em> <code>]</code><br />
+... (the rest is the same as in the FDIS) ...</p>
+</blockquote>
+<p>Change 6.7.5.2p1 to (i.e. the two occurrences of <code>static</code> to <code>__at_least</code>):</p>
+<blockquote>
+<p>[#1] In addition to optional type qualifiers and the keyword <code>__at_least</code>, the
+<code>[</code> and <code>]</code> may delimit an expression or <code>*</code>. If they delimit an expression
+(which specifies the size of an array), the expression shall have an integer
+type. If the expression is a constant expression, it shall have a value greater
+than zero. The element type shall not be an incomplete or function type. The
+optional type qualifiers and the keyword <code>__at_least</code> shall appear only in a
+declaration of a function parameter with an array type, and then only in the
+outermost array type derivation.</p>
+</blockquote>
+<p>Change 6.7.5.2p3 to (i.e. the three occurrences of <code>static</code> to <code>__at_least</code>, and
+bind <code>__at_least</code> with <code>assignment-expr</code> in the syntax):</p>
+<blockquote>
+<blockquote>
+<p><code>D[</code> <em>type-qualifier-list<sub>opt</sub> assignment-expr<sub>opt</sub></em> <code>]</code><br />
+<code>D[ __at_least</code> <em>assignment-expr type-qualifier-list<sub>opt</sub></em> <code>]</code><br />
+<code>D[</code> <em>type-qualifier-list</em> <code>__at_least</code> <em>assignment-expr</em> <code>]</code><br />
+<code>D[</code> <em>type-qualifier-list<sub>opt</sub></em> <code>* ]</code></p>
+</blockquote>
+<p>and the type specified for <em>ident</em> in the declaration "<code>T D</code>" is
+"<em>derived-declarator-type-list T</em>", then the type specified for ident is
+"<em>derived-declarator-type-list array of T</em>".<sup>121)</sup> (See 6.7.5.3 for
+the meaning of the optional type qualifiers and the keyword <code>__at_least</code>.)</p>
+</blockquote>
+<p>Change 6.7.5.3p7 to (i.e. <code>static</code> to <code>__at_least</code>):</p>
+<blockquote>
+<p>[#7] A declaration of a parameter as "array of <em>type</em>" shall be adjusted to
+"qualified pointer to <em>type</em>", where the type qualifiers (if any) are those
+specified within the <code>[</code> and <code>]</code> of the array type derivation. If the keyword
+<code>__at_least</code> ...</p>
+</blockquote>
+<p>Change 6.7.5.3p21 to (i.e. <code>static</code> to <code>__at_least</code>):</p>
+<blockquote>
+<p>[#21] EXAMPLE 5 The following are all compatible function prototype
+declarators.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">       </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">maximum</span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>n,<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>m,<span style="color: #bbbbbb"> </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>a[n][m]);
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">maximum</span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>n,<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>m,<span style="color: #bbbbbb"> </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>a[<span style="color: #666666">*</span>][<span style="color: #666666">*</span>]);
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">maximum</span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>n,<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>m,<span style="color: #bbbbbb"> </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>a[<span style="color: #bbbbbb"> </span>][<span style="color: #666666">*</span>]);
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">maximum</span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>n,<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>m,<span style="color: #bbbbbb"> </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>a[<span style="color: #bbbbbb"> </span>][m]);
+</pre></div>
+
+<p>as are:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">       </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f</span>(<span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">*</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">restrict</span><span style="color: #bbbbbb"> </span>a)[<span style="color: #666666">5</span>]);
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f</span>(<span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>a[<span style="color: #008000; font-weight: bold">restrict</span>][<span style="color: #666666">5</span>]);
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f</span>(<span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>a[<span style="color: #008000; font-weight: bold">restrict</span><span style="color: #bbbbbb"> </span><span style="color: #666666">3</span>][<span style="color: #666666">5</span>]);
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f</span>(<span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>a[<span style="color: #008000; font-weight: bold">restrict</span><span style="color: #bbbbbb"> </span>__at_least<span style="color: #bbbbbb"> </span><span style="color: #666666">3</span>][<span style="color: #666666">5</span>]);
+<span style="color: #bbbbbb">        </span>...
+</pre></div>
+
+</blockquote>
+<p>Change A.1.2 to add keyword:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>__at_least
+</pre></div>
+
+</blockquote>
+<p><strong>Explanation of the change</strong><br />
+The new syntax groups '<code>__at_least</code> <em>assignment-expression</em>' together. For
+example:</p>
+<blockquote>
+<p><code>double a[restrict __at_least 3] /*</code> <em>ok</em> <code>*/</code><br />
+<code>double a[__at_least 3 restrict] /*</code> <em>ok</em> <code>*/</code><br />
+<code>double a[__at_least restrict 3] /*</code><em>not ok</em> <code>*/</code></p>
+</blockquote>
+<p>Conceptually, '<code>__at_least</code> <em>assignment-expression</em>' is a type qualifier. Even
+though we do not treat it as such in C9X, the potential is there for future
+enhancement of the language. Therefore we should not interfere with possible
+future changes in this respect. The following example illustrates the point.</p>
+<p>In a function parameter declaration, a parameter of "array of <em>type</em>" is
+adjusted to "qualified pointer to <em>type</em>". The type-qualifiers inside <code>[</code> and
+<code>]</code> become the qualifier for the pointer. If
+'<code>__at_least</code><em>assignment-expression</em>' is also a type qualifier, this adjustment
+enables us to write:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">__at_least</span>(<span style="color: #666666">10</span>)<span style="color: #bbbbbb"> </span>p;
+</pre></div>
+
+</blockquote>
+<p>which declares a pointer pointing to the first of a sequence of 10 integers in
+memory. (The parentheses are used for clarity.) The clumsy description in
+6.7.5.3p7 become unnecessary. Note that the current <code>static</code> syntax prevents us
+from writing the equivalent pointer declaration for an array parameter
+declaration.</p>
+<p>This example is presented here only as an illustration of what is possible in
+the future; it is not meant as a suggested change for this DR. Nevertheless, it
+does show that allowing other qualifiers appearing between <code>static</code> and the
+<em>assignment-expression</em> is a conceptual error.</p>
+<hr />
+<p>Comment from WG14 on 2001-09-18:</p>
+<h3>Committee Discussion</h3>
+<p>The committee has had several viewpoints on this controversial item. These are
+ranked with the choice getting the most support first, the last entry getting
+little or no support.</p>
+<ol>
+<li>
+<p>Do nothing.</p>
+</li>
+<li>
+<p>Remove this feature (the use of <strong>static</strong> to mean a minimum array size).</p>
+</li>
+<li>
+<p>Deprecate this feature (the use of <strong>static</strong> to mean a minimum array size).</p>
+</li>
+<li>
+<p>In 6.7.5 Declarators (p. 114) and its subclauses, deprecate:</p>
+<blockquote>
+<p><em>direct-declarator</em> <code>[ static</code> <em>type-qualifier-list<sub>opt</sub>
+assignment-expression</em> <code>]</code></p>
+</blockquote>
+<p>and change:</p>
+<blockquote>
+<p><em>direct-declarator</em> <code>[</code> <em>type-qualifier-list</em> <code>static</code> <em>assignment-expression</em>
+<code>]</code></p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p><em>direct-declarator</em> <code>[</code> <em>type-qualifier-list<sub>opt</sub></em> <code>static</code>
+<em>assignment-expression</em> <code>]</code></p>
+</blockquote>
+</li>
+<li>
+<p>Accept the suggestions of this DR.</p>
+</li>
+</ol>
+<blockquote>
+<p><em><ins>Note:</ins></em></p>
+<blockquote>
+<p>There was a unanimous vote that the feature is <em>ugly</em>, and a good consensus that
+its incorporation into the standard at the 11<sup>th</sup> hour was an
+unfortunate decision.</p>
+</blockquote>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2001-09-18:</p>
+<h3>Committee Response</h3>
+<p>There is no consensus to make this change or any change along this line.</p>
+
+</body>
+</html>

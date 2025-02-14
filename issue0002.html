@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0002: Should \ be escaped within macro actual parameters?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0002: Should <code>\</code> be escaped within macro actual parameters?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Terence David Carroll, WG14<br />
+Date: 1992-12-10<br />
+Reference document: X3J11/90-010<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_002.html">dr_002.html</a></p>
+<p>Subclause 6.8.3.2: Semantics of <code>#</code></p>
+<p>A minor detail in the semantics is that it does not explicitly state that a <code>\</code>
+character will be inserted before a <code>\</code> character that occurs within a macro
+actual parameter, only when the <code>\</code> character occurs within a string literal or
+character constant within the actual parameter.</p>
+<p>I can see that there is an argument concerning the systems where <code>\</code> is a valid
+part of a path name and where <code>#include</code> path names are desired to be built
+dynamically and then <code>#</code>ed.</p>
+<p>Would it not be better, however, to escape all <code>\</code> within actual parameters and
+require either</p>
+<p>a. that systems using <code>\</code> in path names escape them within<code>#include</code> strings, or
+perhaps</p>
+<p>b. that during macro processing of <code>#include</code> parameters the <code>#</code> operator will
+not cause <code>\</code> characters to be escaped at all or will be implementation defined?</p>
+<p>This second case (b) is better, as strings for <code>#include</code> directives are already
+a special case (no escape processing, etc.), so should not the <code>#</code> operator also
+be special for <code>#include</code> directives?</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>The Committee reasserts that the grammar and/or semantics of preprocessing as
+they appear in the standard are as intended. We are attaching a copy of the
+previous response to this item from David F. Prosser (Editor of the standard).
+The Committee endorses the substance of this response, which follows: The rules
+in subclause 6.8.3.2 regarding <code>\</code> were discussed in the Committee and the
+result is as intended. The Committee's charter was to standardize prior art
+where such was clear, and the behavior of those C preprocessing phases that
+allowed tokens such as <code>\</code> left them alone, even when inserting them into
+strings. However, the Committee also had license to fix or add to the language
+where it was judged to be deficient. Since none of the existing stringizing
+preprocessing phases correctly handled string literals and certain character
+constants, the special rules for these were chosen. Subclause 6.8.3's examples
+(page 92, lines 4-33) include a <code>\</code> that is outside of a string literal or
+character constant. If the rules were to be modified along the lines of your
+proposal, the intended effect would not happen. One of the main points in your
+argument is that uncontained <code>\</code>s are only critical in path names that use <code>\</code>
+as a special character, and that this is only needed when <code>#include</code> filenames
+are constructed via macro replacement. I agree that the current rules do allow
+this sort of use without too much trouble, but I don't see this as being a main
+motivation for this feature. By default, the rules for stringizing were that the
+original spelling of the invocation argument is placed into a string literal.
+The only exceptions made to this were those that were valid C tokens that could
+not be simply inserted between a pair of <code>"</code>s. The rules for <code>\</code> and <code>"</code> within
+string literals and character constants were derived from that need only.
+Furthermore, a lone <code>\</code> is a preprocessing token due to the “some other
+character” rule of the syntax from subclause 6.1. This would be the only place
+where special constraints were placed on one of this type of preprocessing
+token.</p>
+<p>Finally, solution b) of your discussion involves context-dependent rules for the
+stringizing operation. While there is a minor context dependency regarding macro
+replacement and the <code>defined</code> unary operator on <code>#if</code> and <code>#elif</code> directive
+lines, this is the only context dependency in the whole set of macro replacement
+rules. Moreover, this dependency is at the topmost level only. Solution b) would
+require a flag noting whether the result of the replacement was to be used
+within a <code>#include</code> directive. Therefore, the same macro invocation would
+produce different results at different invocations. (At the least, debugging
+and/or testing of a tricky macroized <code>#include</code> directive would be more
+difficult.)</p>
+<p>In conclusion, to the best of my knowledge, the Committee wants to keep the
+behavior here as currently described, and made this choice intentionally.</p>
+
+</body>
+</html>

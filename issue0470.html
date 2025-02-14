@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0470: mtx_trylock should be allowed to fail spuriously</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0470: mtx_trylock should be allowed to fail spuriously</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Torvald Riegel, Hans Boehm<br />
+Date: 2014-10-10<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1882.htm">N1882</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>C11 does not <em>appear</em> to allow <code>mtx_trylock</code> to fail spuriously (i.e., return
+<code>thrd_busy</code> even thought the lock was not acquired, yet eventually acquire the
+lock if it is not acquired by any thread), but C++11 does (see 30.4.1.1/16):</p>
+<blockquote>
+<p>An implementation may fail to obtain the lock even if it is not held by any
+other thread. [ Note: This spurious failure is normally uncommon, but allows
+interesting implementations based on a simple compare and exchange (Clause 29).
+-- end note ] An implementation should ensure that try_lock() does not
+consistently return false in the absence of contending mutex acquisitions.</p>
+</blockquote>
+<p>It might be better to point out explicitly that programmers should treat
+<code>mtx_trylock</code> as if spurious failure were allowed, since the memory model is
+intentionally too weak to support correct reasoning that is based on a return
+value of <code>thrd_busy</code>. There has been debate on this issue, and we would prefer
+the standard to be clearer. Consider the following example:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>Thread<span style="color: #bbbbbb"> </span><span style="color: #666666">1:</span>
+<span style="color: #bbbbbb">  </span>v1<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">1</span>;
+<span style="color: #bbbbbb">  </span>mtx_lock(l1);
+
+Thread<span style="color: #bbbbbb"> </span><span style="color: #666666">2:</span>
+<span style="color: #bbbbbb">  </span>r1<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>mtx_trylock(l1);
+<span style="color: #bbbbbb">  </span><span style="color: #008000; font-weight: bold">while</span><span style="color: #bbbbbb"> </span>(r1<span style="color: #bbbbbb"> </span><span style="color: #666666">==</span><span style="color: #bbbbbb"> </span>thrd_success<span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">/* was unlocked */</span>)<span style="color: #bbbbbb"> </span>{
+<span style="color: #bbbbbb">    </span>unlock(l1);
+<span style="color: #bbbbbb">    </span>r1<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>mtx_trylock(l1);
+<span style="color: #bbbbbb">  </span>}
+<span style="color: #bbbbbb">  </span>r2<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>v1;
+<span style="color: #bbbbbb">  </span>out(r2);
+</pre></div>
+
+<p>This program is not data-race-free according to C11, independently of whether
+<code>mtx_trylock</code> is allowed to fail spuriously or not; the happens-before-based
+definition of a data race and the current specification of synchronizes-with
+relations between mutex operations makes it clear that the program above has a
+data race on <code>v1</code>.</p>
+<p>However, if spurious failures are not allowed, an intuitive understanding of the
+memory model in the sense that everything will appear to be sequentially
+consistent if only locks are used to synchronize does not hold anymore. The
+intuitive understanding would make the program above correct; in particular the
+store to <code>v1</code> by the first thread would be expected to "happen before" the load
+from <code>v1</code> by the second thread.</p>
+<p>Therefore, to make an intuitive understanding of the C11 memory model and locks
+match the actual specification, it would be helpful to point out that
+programmers should assume <code>mtx_trylock</code> to fail spuriously. Otherwise, without
+spurious failure, we have cases like the example above in which two operations
+race according to the specification in spite of the fact that they intuitively
+can't execute at the same time.</p>
+<p>Allowing spurious failures does not affect the typical uses of <code>mtx_trylock</code>,
+for example to acquire several locks without risk of deadlock. It does rule out
+uses like the example above, however, in which locks are attempted to be used as
+a replacement for atomics.</p>
+<p>(Note that we are not arguing for specifying that <code>mtx_lock</code> should synchronize
+with a <code>mtx_trylock</code> that returns <code>thrd_busy</code>. This would make the
+implementation of lock acquisition less efficient on architectures such as ARM
+or PowerPC. In particular, an <code>atomic_compare_exchange</code> or similar that
+transitions the lock's state from not acquired to acquired would have to use
+<code>memory_order_acq_rel</code> instead of <code>memory_order_acquire</code>.)</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>It seems that the normative specification already states the preferred
+semantics, although the return value specification for <code>thrd_busy</code> may make
+readers believe that this return code allows one to infer a certain ordering
+(see the example above).</p>
+<p>We propose to add a clarifying note at an appropriate place (e.g., in
+7.26.4.5p3):</p>
+<blockquote>
+<p>Programmers should treat <code>mtx_trylock</code> as if spurious failures were allowed; the
+memory model is intentionally too weak to support reasoning based on a return
+value of <code>thrd_busy</code>.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Oct 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>A spurious failure can occur on PPC/ARM style architectures if, after the
+load-word-and-reserve instruction is issued the operating system schedules the
+task out, and upon resumption the corresponding store-word fails because the
+reservation is lost, even if the lock is unlocked. This failure can be seen by
+<code>mtx_trylock</code> if it is implemented with <code>atomic_compare_exchange_weak</code> where
+this failure can occur.</p>
+<p>A new paper was solicited to extract the corresponding words from C++ so as to
+keep the two standards as close as possible in this area.</p>
+</blockquote>
+<p>Apr 2015 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The paper <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1922.pdf">N1922</a>
+was presented and adopted with an editorial improvement.</p>
+</blockquote>
+<h3>Proposed Technical Corrigendum</h3>
+<p>In 7.26.4.5 replace paragraph 3</p>
+<blockquote>
+<p>The <strong>mtx_trylock</strong> function returns <strong>thrd_success</strong> on success, or
+<strong>thrd_busy</strong> if the resource requested is already in use, or <strong>thrd_error</strong>
+if the request could not be honored.</p>
+</blockquote>
+<p>with</p>
+<blockquote>
+<p>The <strong>mtx_trylock</strong> function returns <strong>thrd_success</strong> on success, or
+<strong>thrd_busy</strong> if the resource requested is already in use, or <strong>thrd_error</strong>
+if the request could not be honored. <strong>mtx_trylock</strong> may spuriously fail to
+lock an unused resource, in which case it shall return <strong>thrd_busy</strong>.</p>
+</blockquote>
+
+</body>
+</html>

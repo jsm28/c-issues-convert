@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0445: Issues with alignment in C11, part 2</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0445: Issues with alignment in C11, part 2</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG 14, Joseph Myers<br />
+Date: 2013-07-23<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1731.pdf">N1731</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>There are various deficiencies in the C11 text about alignment requirements.</p>
+<p>Issue 2: Contexts in which alignments are supported</p>
+<p>6.2.8#2 defines "fundamental alignment": "A fundamental alignment is represented
+by an alignment less than or equal to the greatest alignment supported by the
+implementation in all contexts, which is equal to _Alignof (max_align_t)."</p>
+<p>6.2.8#3 defines "extended alignment": "An extended alignment is represented by
+an alignment greater than _Alignof (max_align_t). It is
+implementation-defined whether any extended alignments are supported and the
+contexts in which they are supported. A type having an extended alignment
+requirement is an over-aligned type."</p>
+<p>6.2.8#4 defines "valid alignment", saying "Alignments are represented as values
+of the type size_t. Valid alignments include only those values returned by an
+_Alignof expression for fundamental types, plus an additional
+implementation-defined set of values, which may be empty. Every valid alignment
+value shall be a nonnegative integral power of two.".</p>
+<p>max_align_t is specified in 7.19#2 as "an object type whose alignment is as
+great as is supported by the implementation in all contexts".</p>
+<p>The memory management functions in 7.22.3 are defined to return a pointer
+"suitably aligned so that it may be assigned to a pointer to any type of object
+with a fundamental alignment requirement and then used to access such an object
+or an array of such objects in the space allocated". In the case of
+aligned_alloc, there may be a stricter requirement given by the alignment
+passed to the function, but the alignment passed to the function can't result in
+memory any less-aligned than a fundamental alignment requirement. The alignment
+requirement still applies even if the size is too small for any object requiring
+the given alignment (see the response to C90 DR#075).</p>
+<p>There are various problems with the above:</p>
+<ul>
+<li>
+<p>The term "fundamental type" is not defined in C11.</p>
+</li>
+<li>
+<p>There is also no definition of what a "context" is in which an alignment might or might not be supported. In common implementation practice, separate contexts might be by the storage duration of the object (static, thread, automatic, allocated, with the last referring to the alignments guaranteed by calloc, malloc and realloc).</p>
+</li>
+<li>
+<p>A "valid alignment" may not be a "fundamental alignment". Thus, whatever interpretation is adopted for "fundamental type", nothing in the standard requires the alignment of a "fundamental type" to be a "fundamental alignment". For example, say "long double" is a "fundamental type"; it would seem nonsensical if declaring "long double" objects (in any context) failed to work, but nothing seems to require malloc to return objects sufficiently aligned for long double.</p>
+</li>
+<li>
+<p>Given these gaps in the definition, nothing in the normative text appears to imply footnote 57 "Every over-aligned type is, or contains, a structure or union type with a member to which an extended alignment has been applied.", although no doubt it reflects the intent.</p>
+</li>
+<li>
+<p>If "fundamental type" is interpreted to mean "basic type", that is not sufficient to resolve these lacunae. For example, if</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">long</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>ld;<span style="color: #bbbbbb"> </span>}
+</pre></div>
+
+<p>has an alignment requirement bigger than long double, it should still be
+possible to allocate memory for it with malloc, and the same applies to any
+typedef from a standard header that might also have a bigger alignment
+requirement than any basic type.</p>
+</li>
+</ul>
+<p>The following principles seem natural for any fix for this issue:</p>
+<ul>
+<li>C99 referred to "any type of object" in the alignment requirements for calloc, malloc and realloc. As a matter of compatibility, this means that any type that could be constructed within C99 (including one using types from standard headers) should have an alignment required by C11 to be supported in all contexts, and the same applies to types from C extensions originally specified as extensions to C99. Most of the following principles follow to a greater or lesser extent from this compatibility principle.</li>
+<li>All basic types have alignments supported in all contexts.</li>
+<li>All enumerated types have alignments supported in all contexts.</li>
+<li>All pointer types have alignments supported in all contexts (even if the type pointed to does not).</li>
+<li>All types from standard headers specified as complete object types in the definitions of those headers have alignments supported in all contexts. (This includes both types specified as typedefs and types specified as structs or unions with a given tag.)</li>
+<li>If a type has an alignment supported in all contexts, so do arrays of that type, qualified versions of that type, and atomic versions of that type.</li>
+<li>If all the members of a structure or union have types with alignments supported in all contexts, and none of them use an _Alignas specifier specifying an alignment bigger than supported in all contexts, then that structure or union has an alignment supported in all contexts.</li>
+<li>Where C extensions such as TS 18661-2 and 18661-3 are proposed that define new types, or existing such extensions such as TR 18037 are revised and updated for C11, care should be taken that the new types are covered under the above, whether through being basic types or through being defined in standard headers. (If SIMD vector types, as mentioned at <a href="https://www.open-std.org/pipermail/cplex/2013-June/000010.html">http://www.open-std.org/pipermail/cplex/2013-June/000010.html</a>, were to end up in any such extension, it would probably be appropriate to define them in a way that does *not* require calloc, malloc and realloc to return memory suitably aligned for them; such types often require alignments bigger than needed for any other type, so imposing such requirements on memory allocation functions would result in undue inefficiency.)</li>
+</ul>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Oct 2013 meeting</p>
+<h3>Committee Discussion</h3>
+<ul>
+<li>It is indeed the case that 6.2.8p3 "fundamental type" is not defined. The intention is that it be "basic type", such that "fundamental alignment" is well defined, and yet this is not the case, and "fundamental alignment" also needs a definition. It is likely that the definition of fundamental type can be made editorially, but that when and where fundamental alignment is required is substantive.</li>
+<li>It is also the case that 6.2.8p3 "contexts" is not defined. It is intended to mean the full set of storage durations. Perhaps we should say "storage duration contexts".</li>
+<li>It is also the case that "valid alignment" may not be a "fundamental alignment".</li>
+<li>It was the case in C99 that <code>malloc</code> was required to return memory appropriate for "any type", and this should not be lost in the new wording regarding types that are not over-aligned. All other C99 behaviors must also be preserved as he describes as guidance.</li>
+<li>All types declared without the _Alignas directive are intended to have fundamental alignment, which must be tied somehow to basic type. A consequence is that the only manner in which one can produce an over-aligned type is through _Alignas. <code>malloc</code> has been defined in terms of fundamental alignment, yet we do not anywhere strongly state that, say, <code>int</code> has such fundamental alignment.</li>
+<li>These are several interwoven definitions and missing definitions that need a comprehensive review for adequate correction. We solicit the author for a suggested technical corrigendum. A copy of the audio discussion can be provided.</li>
+</ul>
+<p>Apr 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<ul>
+<li>
+<p>The author provided input to <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1804.htm">N1804</a> as a proposed technical corrigendum:</p>
+</li>
+<li>
+<p>Change 6.2.8#2 to:</p>
+<blockquote>
+<p>A fundamental alignment is a valid alignment less than or equal to <code>_Alignof (max_align_t)</code>. Fundamental alignments shall be supported by the implementation
+for objects of all storage durations. The alignment requirements of the
+following types shall be fundamental alignments:</p>
+<ul>
+<li>all atomic, qualified or unqualified basic types;</li>
+<li>all atomic, qualified or unqualified enumerated types;</li>
+<li>all atomic, qualified or unqualified pointer types;</li>
+<li>all array types whose element type has a fundamental alignment requirement;</li>
+<li>all types specified in clause 7 as complete object types;</li>
+<li>all structure or union types all of whose elements have types with fundamental alignment requirements and none of whose elements have an alignment specifier specifying an alignment that is not a fundamental alignment.</li>
+</ul>
+</blockquote>
+<p>In 6.2.8#3, change "the contexts in" to "the storage durations of objects for
+which".</p>
+<p>In 6.2.8#4, change "those values returned by an _Alignof expression for
+fundamental types" to "fundamental alignments".</p>
+<p>(Note that the above admits the possibility that e.g. 1 and 4 are fundamental
+alignments, but 2 isn't, in which case it can't be an extended alignment either.
+If we want to ensure that 2 isn't a valid alignment at all in that case, rather
+than possibly having valid alignments that are neither fundamental nor extended,
+also change "additional implementation-defined set of values" to "additional
+implementation-defined set of extended alignments" in 6.2.8#4.) In 6.7.5#3,
+change "in the context in which it appears" to "for an object of the storage
+duration, if any, being declared". Add a new constraint at the end of 6.7.5#3:
+"An object shall not be declared with an over-aligned type with an extended
+alignment requirement not supported by the implementation for an object of that
+storage duration.".</p>
+<p>(This deals with the point that if an over-aligned struct is defined, then
+objects with that type may be supported with some storage durations but not
+others, so it is the declaration of an object with that type that can violate a
+constraint rather than the declaration of the struct.)</p>
+<p>In 7.19#2, change "whose alignment is as great as is supported by the
+implementation in all contexts" to "whose alignment is the greatest fundamental
+alignment".</p>
+<p>(I'm trying to avoid an undesirable implication that if an alignment of e.g. 1MB
+is supported in all contexts - and it's quite plausible that an implementation
+can support more or less arbitrary alignments - then max_align_t must have
+such an alignment and so such an alignment must count as fundamental and so
+malloc must return memory suitable aligned for it.)</p>
+</li>
+<li>
+<p>This is a difficult area and further study is required.</p>
+</li>
+</ul>
+<p>Oct 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The proposed changes have raised no concerns and so the committee has agreed to
+use them as the following Proposed Technical Corrigendum.</p>
+</blockquote>
+<h3>Proposed Technical Corrigendum</h3>
+<p>Change 6.2.8#2 to:</p>
+<blockquote>
+<p>A fundamental alignment is a valid alignment less than or equal to <code>_Alignof (max_align_t)</code>. Fundamental alignments shall be supported by the implementation
+for objects of all storage durations. The alignment requirements of the
+following types shall be fundamental alignments:</p>
+<ul>
+<li>all atomic, qualified or unqualified basic types;</li>
+<li>all atomic, qualified or unqualified enumerated types;</li>
+<li>all atomic, qualified or unqualified pointer types;</li>
+<li>all array types whose element type has a fundamental alignment requirement;</li>
+<li>all types specified in clause 7 as complete object types;</li>
+<li>all structure or union types all of whose elements have types with fundamental alignment requirements and none of whose elements have an alignment specifier specifying an alignment that is not a fundamental alignment.</li>
+</ul>
+</blockquote>
+<p>In 6.2.8#3, change</p>
+<blockquote>
+<p>"the contexts in"</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>"the storage durations of objects for which".</p>
+</blockquote>
+<p>In 6.2.8#4, change</p>
+<blockquote>
+<p>"those values returned by an _Alignof expression for fundamental types"</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>"fundamental alignments".</p>
+</blockquote>
+<p>In 6.7.5#3, change</p>
+<blockquote>
+<p>"in the context in which it appears"</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>"for an object of the storage duration, if any, being declared".</p>
+</blockquote>
+<p>Add a new constraint at the end of 6.7.5#3:</p>
+<blockquote>
+<p>"An object shall not be declared with an over-aligned type with an extended
+alignment requirement not supported by the implementation for an object of that
+storage duration.".</p>
+</blockquote>
+<p>In 7.19#2, change</p>
+<blockquote>
+<p>"whose alignment is as great as is supported by the implementation in all
+contexts"</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>"whose alignment is the greatest fundamental alignment".</p>
+</blockquote>
+
+</body>
+</html>

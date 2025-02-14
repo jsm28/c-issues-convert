@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0464: Clarifying the Behavior of the #line Directive</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0464: Clarifying the Behavior of the <code>#line</code> Directive</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, David Keaton (suggested by Max Woodbury)<br />
+Date: 2014-06-27<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1842.htm">N1842</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>Context:</p>
+<p>In a distributed development environment, the exact file name passed to the
+compiler or preprocessor may vary from site to site. It is therefore desirable
+to be able to set the file name as seen by <code>__FILE__</code> and elsewhere to a uniform
+value. The mechanism to do this is the '<code>#line &lt;num&gt; "&lt;string&gt;"</code>' form of the
+'<code>#line</code>' preprocessor directive. It is also necessary that such a directive
+leave the line numbering sequence unchanged. Further, it is desirable that edits
+that change the location of the directive in the source module should not
+require modification to the directive and that comments embedded in the
+directive likewise do not have to be accounted for.</p>
+<p>Searches of the online literature show that a directive of the form '<code>#line __LINE__ "string"</code>' is expected to have this property.</p>
+<p>Despite this, at least one compiler/preprocessor does not allow this.</p>
+<p>Technical argument:</p>
+<p>The value substituted for the predefined macro '<code>__LINE__</code>' is specified in
+6.10.8.1p1 as the presumed line number of the current source line. The presumed
+line number is initially (6.10.4p2) the number of newline characters (or their
+equivalent) seen in phase 1 of the translation process, plus 1, <em>at the time of
+substitution</em>. (Note that this is <em>not</em> the same as the time of tokenization,
+which is where the failing compilers make their mistake.) The mechanism for
+transferring this count between phase 1 and phase 4, where macro substitution
+takes place, is not specified, but may be presumed to exist and be reliable. (If
+it were not, the <code>__LINE__</code> predefined macro would be useless.) That makes the
+question 'when does the substitution take place?'</p>
+<p>Macro substitution in directives is a separate issue from macro expansion in
+code. It does <em>not</em> always take place. If and when it occurs depends on the
+directive and the details of its form. That means the entire directive has to be
+'in hand' in order to be evaluated, and that means, in turn, that the newline
+that terminates the directive has to have been seen. The standard goes to some
+length to specify the various directive forms and all include the terminating
+newline in their specification.</p>
+<p>Therefore, when a substitution is made for '<code>__LINE__</code>', its value should be the
+line count following the end of the directive, which is the same as the line
+number of next line in the source module. This is precisely the value that
+produces the desired property of the '<code>#line __LINE__ "string"</code>' directive.</p>
+<p>Correction requested:</p>
+<p>While there is no need to change the standard's normative text, a note that
+'<code>#line __LINE__ "string"</code>' and similar directives leaves line numbering
+unchanged would both be educational and make misinterpretations more difficult.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Append the following to footnote 177 in 6.10.8.1p1:</p>
+<p><code>#line __LINE__ "newfilename"</code> changes the presumed file name without changing
+the presumed line number.</p>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Oct 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The committee discussed the Proposed Technical Corrigendum from
+<a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1842.htm">N1842</a> and found
+that it didn't sufficiently clarify the issue. Investigation during the meeting
+revealed that several (in fact all that were tested) compilers did not seem to
+follow the interpretation of the standard as given in N1842, and that it would
+be best to acknowledge this as unspecified behavior.</p>
+</blockquote>
+<h3>Proposed Committee Response</h3>
+<blockquote>
+<p>6.10.4 paragraph 2 states that “The <em>line number</em> of the current source line is
+one greater than the number of new-line characters read or introduced in
+translation phase 1 (5.1.1.2) while processing the source file to the current
+token.” Note that it does not say the number of new-line characters that exist
+prior to the current token; it says the number of new-line characters that have
+been read while processing to the current token.</p>
+<p>In the case of the <code>#line</code> directive of the form</p>
+<p><code>#line</code> <em>pp-tokens new-line</em></p>
+<p>there are two possible values for the number of new-line characters that have
+been read when processing begins on the first <em>pp-token</em>. In a one-pass
+preprocessor, the line number at the first <em>pp-token</em> will be the number of
+new-line characters that exist prior to the <code>#line</code> directive, because that
+number of new-lines will have been read. In a preprocessor that must see the
+entire directive before processing it, since the directive explicitly includes a
+new-line, the line number at the first <em>pp-token</em> will be the number of new-line
+characters that exist prior to the <code>#line</code> directive plus one.</p>
+<p>Therefore, in a <code>#line</code> directive of the form</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#line __LINE__ “filename”</span>
+</pre></div>
+
+<p>there are two possible values for <code>__LINE__</code>, which leads to two possible values
+for the line number following the <code>#line</code> directive. Both are valid.</p>
+</blockquote>
+<h3>Proposed Technical Corrigendum</h3>
+<p>Add the following footnote to the end of 6.10.4 paragraph 5.</p>
+<blockquote>
+<p>Because a new-line is explicitly included as part of the <code>#line</code> directive, the
+number of new-line characters read while processing to the first <em>pp-token</em> may
+be different depending on whether or not the implementation uses a one-pass
+preprocessor. Therefore, there are two possible values for the line number
+following a directive of the form <code>#line __LINE__ new-line</code>.</p>
+</blockquote>
+<p>Add the following to J.1 Unspecified behavior.</p>
+<blockquote>
+<p>The line number following a directive of the form <code>#line __LINE__ new-line</code>
+(6.10.4).</p>
+</blockquote>
+
+</body>
+</html>

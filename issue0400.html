@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0400: realloc with size zero problems</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0400: <code>realloc</code> with size zero problems</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Austin Group, Nick Stoughton (US)<br />
+Date: 2011-10-24<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1559.pdf">N1559</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>There are at least three existing <code>realloc</code> behaviors when <code>NULL</code> is returned;
+the differences only occur for a size of 0 (for non-zero size, all three
+implementations set <code>errno</code> to <code>ENOMEM</code> when returning <code>NULL</code>, even though that
+is not required by C99).</p>
+<blockquote>
+<p><strong>AIX</strong></p>
+<blockquote>
+<p><code>realloc(NULL,0)</code> always returns NULL, errno is EINVAL<br />
+<code>realloc(ptr,0)</code> always returns NULL, ptr freed, errno is EINVAL</p>
+</blockquote>
+<p><strong>BSD</strong></p>
+<blockquote>
+<p><code>realloc(NULL,0)</code> only gives NULL on alloc failure, errno is ENOMEM<br />
+<code>realloc(ptr,0)</code> only gives NULL on alloc failure, ptr unchanged, errno is
+ENOMEM</p>
+</blockquote>
+<p><strong>glibc</strong></p>
+<blockquote>
+<p><code>realloc(NULL,0)</code> only gives NULL on alloc failure, errno is ENOMEM<br />
+<code>realloc(ptr,0)</code> always returns NULL, ptr freed, errno unchanged</p>
+</blockquote>
+</blockquote>
+<p>The Austin Group raised this matter with WG14 during earlier meetings (most
+notably during the London 2011 meeting). The direction from WG14 has led to The
+Austin Group aligning the POSIX text more closely to that in C99 and C1x as a
+part of TC1.</p>
+<p>The behavior now required in POSIX is that implemented by <strong>BSD</strong> above.
+However, C99 has a loophole in implementation-defined behavior that still
+appears to permit AIX and glibc behaviors. The C1x draft carries the same
+wording loophole, so the planned course of action is to raise a defect against
+C1x once it completes standardization, where the outcome of that defect will
+either be that C1x tightens the wording to eliminate the loophole or relaxes the
+wording to align with existing practice. Therefore, the behavior of errno in
+Issue 8 should be deferred until after any C1x defect has been resolved.</p>
+<blockquote>
+<p>If the size of the space requested is zero, the behavior is
+implementation-defined: either a null pointer is returned, or the behavior is as
+if the size were some nonzero value, except that the returned pointer shall not
+be used to access an object.</p>
+</blockquote>
+<p>An implementation should not be allowed to define the behavior of returning a
+null pointer as a successful reallocation; if a null pointer is returned, then
+the orignal pointer has not been freed.</p>
+<h3>Suggested Change</h3>
+<p>At 7.22.3, para 1, change:</p>
+<blockquote>
+<p>If the size of the space requested is zero, the behavior is
+implementation-defined: either a null pointer is returned, or the behavior is as
+if the size were some nonzero value, except that the returned pointer shall not
+be used to access an object.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>If the size of the space requested is zero, the behavior is
+implementation-defined: either a null pointer is returned <ins>and errno set to
+indicate the error</ins>, or the behavior is as if the size were some nonzero
+value, except that the returned pointer shall not be used to access an object.</p>
+</blockquote>
+<p>Add a footnote to this sentence stating:</p>
+<blockquote>
+<p><ins><strong>Note</strong> Memory allocated by these functions should be freed via a call to
+<code>free</code>, and not by means of a <code>realoc(p, 0)</code>.</ins></p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Oct 2011 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<ul>
+<li>It was pointed out that the AIX behavior was not correct according to Rajan, in fact the behavior is that <code>errno</code> is not set.</li>
+<li>This change came out of a defect report on C99</li>
+</ul>
+</blockquote>
+<p>Feb 2012 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<ul>
+<li>The current C Rationale needs to be edited.</li>
+</ul>
+</blockquote>
+<h3>Proposed Technical Corrigendum</h3>
+<blockquote>
+<p>In subsection 7.22.3 paragraph 1, change</p>
+<blockquote>
+<p>If the size of the space requested is zero, the behavior is
+implementation-defined: either a null pointer is returned, ...</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>If the size of the space requested is zero, the behavior is
+implementation-defined: either a null pointer is returned to indicate an error,
+...</p>
+</blockquote>
+<p>In subsection 7.22.3.5 (The <code>realloc</code> function), change the final sentence of
+paragraph 3 from</p>
+<blockquote>
+<p>If memory for the new object cannot be allocated, the old object is not
+deallocated and its value is unchanged.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>If <code>size</code> is non-zero and memory for the new object is not allocated, the old
+object is not deallocated. If <code>size</code> is zero and memory for the new object is
+not allocated, it is implementation-defined whether the old object is
+deallocated. If the old object is not deallocated, its value shall be unchanged.</p>
+</blockquote>
+<p>In subsection 7.22.3.5 (The <code>realloc</code> function), change paragraph 4 from</p>
+<blockquote>
+<p>The <code>realloc</code> function returns a pointer to the new object (which may have the
+same value as a pointer to the old object), or a null pointer if the new object
+could not be allocated.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>The <code>realloc</code> function returns a pointer to the new object (which may have the
+same value as a pointer to the old object), or a null pointer if the new object
+has not been allocated.</p>
+</blockquote>
+<p>Add to subsection 7.31.12 a new paragraph (paragraph 2):</p>
+<blockquote>
+<p>Invoking <code>realloc</code> with a size argument equal to zero is an obsolescent feature.</p>
+</blockquote>
+</blockquote>
+
+</body>
+</html>

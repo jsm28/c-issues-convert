@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0492: Named Child struct-union with no Member</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0492: Named Child struct-union with no Member</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Clive H. Pygott<br />
+Date: 2016-03-01<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2007.pdf">N2007</a><br />
+Submitted against: C11 / C17<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p><strong>Introduction</strong></p>
+<p>Some weeks ago I posted the following code to the reflector after an argument at
+work as to whether it was legal, and if so, what was it meant to do?</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">       </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb">  </span><span style="color: #0000FF; font-weight: bold">S1</span>
+<span style="color: #bbbbbb">            </span>{<span style="color: #bbbbbb">  </span><span style="color: #008000; font-weight: bold">union</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">U11</span>
+<span style="color: #bbbbbb">                    </span>{<span style="color: #B00040">int</span><span style="color: #bbbbbb">    </span>m11;
+<span style="color: #bbbbbb">                     </span><span style="color: #B00040">float</span><span style="color: #bbbbbb">  </span>m12;
+<span style="color: #bbbbbb">                    </span>};
+
+<span style="color: #bbbbbb">               </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>m13;
+<span style="color: #bbbbbb">            </span>}<span style="color: #bbbbbb"> </span>s1;
+</pre></div>
+
+<p>The issue is that U11 isn't an anonymous union (because it has a name U11) but
+doesn't declare a member of S1. When tried with a number of compilers the result
+was either that it was rejected as a constraint error or it was treated as an
+anonymous union, with m11 and m12 accessible as though they were members of S1
+(e.g. s1.m11 = 42;). The declaration of union U11 was also added at file scope,
+so could be used in other structs.</p>
+<p>After some discussion (thanks to Doug and Roberto), it was concluded that the
+code was intended to be a constraint error because it can be argued that it
+violates the first constraint in 6.7.2.1 para 2 "A <em>struct-declaration</em> that
+does not declare an anonymous structure or anonymous union shall contain a
+<em>struct-declarator-list</em>". The syntax fragment its referring to is:</p>
+<blockquote>
+<p><em>struct-declaration:<br />
+specifier-qualifier-list struct-declarator-list<sub>opt</sub></em> <code>;</code><br />
+<em>static_assert-declaration</em></p>
+</blockquote>
+<p>In parsing the above code “<code>union U11 {int m11; float m12;} ;</code>” is a
+<em>struct-declaration</em>. It is believed that the intended reading is:</p>
+<blockquote>
+<ul>
+<li>“<code>union U11 {int m11; float m12;}</code>” is a <em>specifier-qualifier-list</em></li>
+<li>There is no <em>struct-declarator-list</em></li>
+</ul>
+</blockquote>
+<p>Hence, as U11 isn't an anonymous union and doesn't have a
+<em>struct-declarator-list</em>, it violates the quoted constraint.</p>
+<p>However, there would appear to be a different reading that says that this
+<em>struct-declaration</em> does “contain a <em>struct-declarator-list</em>”. So it shouldn't
+be a constraint error hence the potential need for a DR to clarify the intent
+(discussed in the next section).</p>
+<p>The alternative reading of the constraint requirement comes about because the
+<em>specifier-qualifier-list</em> <code>union U11 {int m11; float m12;}</code> is interpreted by
+recursively entering the same part of the syntax tree. As its interpreted, int
+m11; and float m12; are <em>struct-declarations</em>, where “m11” and “m12” are
+<em>struct-declarator-lists,</em>. So the <em>struct-declaration</em> for U11 does contain a
+<em>struct-declarator-lists</em>, so shouldn't be a constraint error.</p>
+<p>The response to that argument on the reflector was that ‘whenever a constraint
+refers to elements of the syntax tree, it means those elements in the term
+currently being processed, and not any terms that may be found by recursively
+traversing the tree’. However, I cannot see this principle stated anywhere in
+the standard.</p>
+<p>Hence, I'd argue that whether this code is legal or not is ambiguous and a DR is
+required, either to:</p>
+<blockquote>
+<ul>
+<li>Establish the principle that “whenever a constraint refers to elements of the syntax tree, it means those elements in the term currently being processed, and not any terms that maybe found by recursively traversing the tree”, or</li>
+<li>Reword the constraint in 6.7.2.1 para 2 to clarify that the above code is intended to be aconstraint error, for example by adding ‘shall contain a struct-declarator-list, <ins>other than any that may be found in the interpretation of the <em>specifier-qualifier-list</em></ins>’</li>
+</ul>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2017-04-07:</p>
+<p>Apr 2016 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The committee formed a strong consensus that this was not a defect.</p>
+</blockquote>
+<h3>Proposed Committee Response</h3>
+<blockquote>
+<p>There are implementations that allow this construct and other variations, but
+the committee is clear that since <code>union U11</code> isn‘t anonymous, it is a
+constraint violation.</p>
+</blockquote>
+
+</body>
+</html>

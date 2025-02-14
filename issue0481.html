@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0481: Controlling expression of _Generic primary expression</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0481: Controlling expression of <code>_Generic</code> primary expression</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Jens Gustedt<br />
+Date: 2015-04-24<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1930.htm">N1930</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>This is a follow up of the now closed DR 423 which resulted in the clarification
+of the status of qualifications of rvalues.</p>
+<p>This defect report aims to clarify the status of the controlling expression of
+<code>_Generic</code> primary expression:</p>
+<p><em><strong>Does the controlling expression of a <code>_Generic</code> primary expression undergo
+any type of conversion to calculate the type that is used to do the
+selection?</strong></em></p>
+<p>Implementers have given different answers to this question; gcc (<em>choice 1</em> in
+the following) on one side and clang and IBM (<em>choice 2</em>) on the other side went
+quite opposite ways, resulting in severe incompatibility for <code>_Generic</code>
+expression that use qualifiers or arrays.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">const</span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span>a<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">_Generic</span>(<span style="color: #BA2121">&quot;bla&quot;</span>,<span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #666666">*:</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;blu&quot;</span>);<span style="color: #bbbbbb">                 </span><span style="color: #3D7B7B; font-style: italic">// clang error</span>
+<span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">const</span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span>b<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">_Generic</span>(<span style="color: #BA2121">&quot;bla&quot;</span>,<span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span>[<span style="color: #666666">4</span>]<span style="color: #666666">:</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;blu&quot;</span>);<span style="color: #bbbbbb">               </span><span style="color: #3D7B7B; font-style: italic">// gcc error</span>
+<span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">const</span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span>c<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">_Generic</span>((<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">const</span>){<span style="color: #bbbbbb"> </span><span style="color: #666666">0</span><span style="color: #bbbbbb"> </span>},<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #666666">:</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;blu&quot;</span>);<span style="color: #bbbbbb">        </span><span style="color: #3D7B7B; font-style: italic">// clang error</span>
+<span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">const</span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span>d<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">_Generic</span>((<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">const</span>){<span style="color: #bbbbbb"> </span><span style="color: #666666">0</span><span style="color: #bbbbbb"> </span>},<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">const</span><span style="color: #666666">:</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;blu&quot;</span>);<span style="color: #bbbbbb">  </span><span style="color: #3D7B7B; font-style: italic">// gcc error</span>
+<span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">const</span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span>e<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">_Generic</span>(<span style="color: #666666">+</span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">const</span>){<span style="color: #bbbbbb"> </span><span style="color: #666666">0</span><span style="color: #bbbbbb"> </span>},<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #666666">:</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;blu&quot;</span>);<span style="color: #bbbbbb">       </span><span style="color: #3D7B7B; font-style: italic">// both ok</span>
+<span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">const</span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span>f<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">_Generic</span>(<span style="color: #666666">+</span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">const</span>){<span style="color: #bbbbbb"> </span><span style="color: #666666">0</span><span style="color: #bbbbbb"> </span>},<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">const</span><span style="color: #666666">:</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;blu&quot;</span>);<span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">// both error</span>
+</pre></div>
+
+<p>The last two lines, where gcc and clang agree, points to the nature of the
+problem: gcc treats all such expressions as rvalues and does all applicable
+conversions of 6.3.2.1, that is lvalue to rvalue and array to pointer
+conversions. clang treats them as lvalues.</p>
+<h3>Problem discussion</h3>
+<p>The problem arises to know whether or not the conversions of 6.3 apply to the
+controlling expression.</p>
+<ul>
+<li><strong>promotions:</strong> There is no general rule to which expressions these apply, but their application is hard coded for the individual operators, where it makes reference to "its (promoted) operand".</li>
+<li><strong>lvalue conversion:</strong> I didn't find any text that would impose lvalue conversion performed to the controlling expression. All wording in 6.3 is "some" and "may". Also it talks of "operators" and "operations", but <code>_Generic</code> is not an operator, but a primary expression. The wording in 6.5.1.1 is <em>has a type</em> and doesn't make any reference to type conversion.</li>
+<li><strong>array conversion:</strong> The support for array conversion is stronger. Array conversion has an explicit list of cases (<em>6.3.2.1 p3</em>) were an array is an <em>operand</em> where it doesn't apply. But
+<ul>
+<li>The case of arrays as an exception in <em>6.3.2.1 p3</em> doesn't list the <em>associations</em> of <code>_Generic</code> either, which are listed in <em>6.5.1.1</em>.</li>
+<li>There is another precedent, namely <em>parenthesized expressions</em>, which are also not listed in <em>6.3.2.1 p3</em> and where nobody expects an array conversion, either.</li>
+</ul>
+</li>
+</ul>
+<h4>Integer promotions</h4>
+<p>Applying promotions would have as an effect that we wouldn't be able to
+distinguish narrow integer types from <code>int</code>. There is no indication that the
+text implies that form or conversion, nor that anybody has proposed to use
+<code>_Generic</code> like this.</p>
+<h4>Choice 1: Consequences of lvalue conversion</h4>
+<p>All conversion in <em>6.3.2.1 p2</em> describe what would in normal CS language be
+named the evaluation of an object. It has no provision to apply it to types
+alone. In particular it includes the special clause that uninitialized
+<code>register</code> variables lead to undefined behavior when undergoing lvalue
+conversion. As a consequence:</p>
+<p><em>Any lvalue conversion of an uninitialized <code>register</code> variable leads to
+undefined behavior.</em></p>
+<p>And thus</p>
+<p><em><strong>Under the hypothesis that the controlling expression undergoes lvalue
+conversion, any <code>_Generic</code> primary expression that uses an uninitialized
+<code>register</code> variable as controlling expression leads to undefined behavior.</strong></em></p>
+<h4>Choice 2: Consequences not doing conversions</h4>
+<p>In view of the resolution of DR 423 (rvalues drop qualifiers) using <code>_Generic</code>
+primary expressions with objects in controlling expression may have results that
+appear surprising.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#define F(X) _Generic((X), char const: 0, char: 1, int: 2)</span>
+<span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">const</span><span style="color: #bbbbbb"> </span>strc[]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;&quot;</span>;
+F(strc[<span style="color: #666666">0</span>])<span style="color: #bbbbbb">   </span><span style="color: #3D7B7B; font-style: italic">// -&gt; 0</span>
+F(<span style="color: #BA2121">&quot;&quot;</span>[<span style="color: #666666">0</span>])<span style="color: #bbbbbb">     </span><span style="color: #3D7B7B; font-style: italic">// -&gt; 1</span>
+F(<span style="color: #666666">+</span>strc[<span style="color: #666666">0</span>])<span style="color: #bbbbbb">  </span><span style="color: #3D7B7B; font-style: italic">// -&gt; 2</span>
+</pre></div>
+
+<p>So the problem is here, that there is no type agnostic operator that results in
+a simple lvalue conversion for <code>char const</code> objects to <code>char</code>; all such
+operators also promote <code>char</code> to <code>int</code>.</p>
+<p><em><strong>Under the hypothesis that the controlling expression doesn't undergo
+conversion, any <code>_Generic</code> primary expression that uses a qualified lvalue of
+narrow type <code>T</code> can't directly trigger the association for <code>T</code> itself.</strong></em></p>
+<h4>non-equivalence of the two approaches</h4>
+<p>For many areas the two approaches are feature equivalent, that is both allow to
+implement the same semantic concepts, but with different syntax. Rewriting code
+that was written with one of choices in mind to the other choice is in general
+not straight forward and probably can't be automated.</p>
+<ul>
+<li>
+<p>Code that was written with <em>choice 1</em> in mind (enforced lvalue and array conversion) when translated to <em>choice 2</em> has to enforce such conversions. E.g as long as we know that the type of <code>X</code> is only a wide integer type or an array or pointer type, a macro such as</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">        </span><span style="color: #9C6500">#define bla(X) _Generic((X), ... something ... )</span>
+</pre></div>
+
+<p>would have to become</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">        </span><span style="color: #9C6500">#define bla(X) _Generic((X)+0, ... something ... )</span>
+</pre></div>
+
+<p>Writing code that takes care of narrow integer types is a bit more difficult, but can be done with 48 extra case selections, taking care of all narrow types (6) and all their possible qualifications (8, <code>restrict</code> is not possible, here). Code that uses <code>struct</code> or <code>union</code> types must use bizarre things like <code>1 ? (X) : (X)</code> to enforce lvalue conversion.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">        </span><span style="color: #9C6500">#define blaOther((X),                                  \</span>
+<span style="color: #9C6500">          char: blub, char const: blub, ...,                   \</span>
+<span style="color: #9C6500">          short: ...,                                          \</span>
+<span style="color: #9C6500">          default: _Generic(1 ? (X) : (X), struct toto: ... )</span>
+
+<span style="color: #bbbbbb">        </span><span style="color: #9C6500">#define bla(X) _Generic((X)+0, ... something ... ,     \</span>
+<span style="color: #9C6500">          default: blaOther(X))</span>
+</pre></div>
+
+</li>
+<li>
+<p>Code that was written with <em>choice 2</em> in mind (no lvalue or array conversion) when translated to <em>choice 1</em> has to pass to a setting where qualifiers and arrays are preserved in the type. The only such setting is the address-of operator <code>&amp;</code>.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">        </span><span style="color: #9C6500">#define blu(X) _Generic((X), \</span>
+<span style="color: #9C6500">           char const: blub,         \</span>
+<span style="color: #9C6500">           char[4]: blob,            \</span>
+<span style="color: #9C6500">           ...)</span>
+</pre></div>
+
+<p>has to be changed to something like</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">        </span><span style="color: #9C6500">#define blu(X) _Generic(&amp;(X),\</span>
+<span style="color: #9C6500">          char const*: blub,         \</span>
+<span style="color: #9C6500">          char(*)[4]: blob,          \</span>
+<span style="color: #9C6500">          ...)</span>
+</pre></div>
+
+<p>That is each individual type selection has to be transformed, and the syntactical change that is to be apply is no simple textual replacement.</p>
+</li>
+</ul>
+<h3>Application work around</h3>
+<p>Since today C implementations have already taken different paths for this
+feature, applications should be careful when using <code>_Generic</code> to remain in the
+intersection of these two interpretations. A certain number of design questions
+should be answered when implementing a type generic macro:</p>
+<ul>
+<li>Do I want to differentiate the outcome according to the qualification of the argument?</li>
+<li>Do I want to distinguish arrays from pointer arguments?</li>
+<li>Do I want to distinguish narrow types?</li>
+<li>Do I want to apply it to composite types, namely <code>struct</code> types?</li>
+</ul>
+<p>The following lists different strategies for common scenarios, that can be used
+to code type generic macros that will work with both of the choices 1 or 2.</p>
+<h4>Wide integers and floating point types</h4>
+<p>This is e.g the case of the C library interfaces in <code>&lt;tgmath.h&gt;</code>. If we know
+that the possible type of the argument is restricted in such a way, the easiest
+is to apply the unary plus operator <code>+</code>, as in</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">  </span><span style="color: #9C6500">#define F(X) _Generic(+(X),             \</span>
+<span style="color: #9C6500">    default: doubleFunc,                  \</span>
+<span style="color: #9C6500">    int: intFunc,                         \</span>
+<span style="color: #9C6500">    ...                                   \</span>
+<span style="color: #9C6500">    _Complex long double: cldoubleFunc)(X)</span>
+
+<span style="color: #bbbbbb">  </span><span style="color: #9C6500">#define fabs(X) _Generic(+(X),          \</span>
+<span style="color: #9C6500">    default: fabs,                        \</span>
+<span style="color: #9C6500">    float: fabsf,                         \</span>
+<span style="color: #9C6500">    long double: fabsl)(X)</span>
+</pre></div>
+
+<p>This <code>+</code> sign ensures an lvalue to rvalue conversion, and, that it will error
+out at compilation time for pointer types or arrays. It also forcibly promotes
+narrow integer types, usually to <code>int</code>. For the later case of <code>fabs</code> all integer
+types will map to the <code>double</code> version of the function, and the argument will
+eventually be converted to <code>double</code> before the call is made.</p>
+<h4>Adding pointer types and converting arrays</h4>
+<p>If we also want to capture pointer types <em>and</em> convert arrays to pointers, we
+should use <code>+0</code>.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">  </span><span style="color: #9C6500">#define F(X) _Generic((X)+0),           \</span>
+<span style="color: #9C6500">    default: doubleFunc,                  \</span>
+<span style="color: #9C6500">    char*: stringFunc,                    \</span>
+<span style="color: #9C6500">    char const*: stringFunc,              \</span>
+<span style="color: #9C6500">    int: intFunc,                         \</span>
+<span style="color: #9C6500">    ...                                   \</span>
+<span style="color: #9C6500">    _Complex long double: cldoubleFunc)(X)</span>
+</pre></div>
+
+<p>This binary <code>+</code> ensures that any array is first converted to a pointer; the
+properties of <code>0</code> ensure that this constant works well with all the types that
+are to be captured, here. It also forcibly promotes narrow integer types,
+usually to <code>int</code>.</p>
+<h4>Converting arrays, only</h4>
+<p>If we k now that a macro will only be used for array and pointer types, we can
+use the <code>[]</code> operator:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">  </span><span style="color: #9C6500">#define F(X) _Generic(&amp;((X)[0]),        \</span>
+<span style="color: #9C6500">    char*: stringFunc,                    \</span>
+<span style="color: #9C6500">    char const*: stringFunc,              \</span>
+<span style="color: #9C6500">    wchar_t*: wcsFunc,                    \</span>
+<span style="color: #9C6500">    ...                                   \</span>
+<span style="color: #9C6500">    )(X)</span>
+</pre></div>
+
+<p>This operator only applies to array or to pointer types and would error if
+present with any integer type.</p>
+<h4>Using qualifiers of types or arrays</h4>
+<p>If we want a macro that selects differently according to type qualification or
+according to different array size, we can use the <code>&amp;</code> operator:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">  </span><span style="color: #9C6500">#define F(X) _Generic(&amp;(X),        \</span>
+<span style="color: #9C6500">    char**: stringFunc,              \</span>
+<span style="color: #9C6500">    char(*)[4]: string4Func,         \</span>
+<span style="color: #9C6500">    char const**: stringFunc,        \</span>
+<span style="color: #9C6500">    char const(*)[4]: string4Func,   \</span>
+<span style="color: #9C6500">    wchar_t**: wcsFunc,              \</span>
+<span style="color: #9C6500">    ...                              \</span>
+<span style="color: #9C6500">    )(X)</span>
+</pre></div>
+
+<h3>Possible solutions</h3>
+<p>The above discussion describes what can be read from the text of C11, alone, and
+not the intent of the committee. I think if the committee would have wanted a
+<em>choice 2</em>, the standard text would not have looked much different than what we
+have, now. Since also the intent of the committee to go for <em>choice 1</em> seems not
+to be very clear from any additional text (minutes of the meetings, e.g) I think
+the reading of <em>choice 2</em> should be the preferred one.</p>
+<h3>Suggested Technical Corrigendum (any choice)</h3>
+<p>Amend the list in footnote 121 for objects with <code>register</code> storage class. Change</p>
+<blockquote>
+<p>Thus, the only operators that can be applied to an array declared with
+storage-class specifier <code>register</code> are <code>sizeof</code> and <code>_Alignof</code>.</p>
+</blockquote>
+<p><ins>Thus, an identifier with array type and declared with storage-class
+specifier <code>register</code> may only appear in primary expressions and as operand to
+<code>sizeof</code> and <code>_Alignof</code>.</ins></p>
+<h3>Suggested Technical Corrigendum (Choice 2)</h3>
+<p>Change 6.5.1.1 p3, first sentence</p>
+<blockquote>
+<p>The controlling expression of a generic selection is not evaluated <ins>and the
+type of that expression is used without applying any conversions described in
+Section 6.3</ins>.</p>
+</blockquote>
+<p>Add <code>_Generic</code> to the exception list in <em>6.3.2.1 p3</em> to make it clear that array
+to pointer conversion applies to none of the controlling or association
+expression if they are lvalues of array type.</p>
+<blockquote>
+<p>Except when it is <ins>the controlling expression or an association expression
+of a <code>_Generic</code> primary expression, or is</ins> the operand of the <code>sizeof</code>
+operator, the <code>_Alignof</code> operator, or the unary <code>&amp;</code> operator, or is a string
+literal used to initialize an array, an expression that has type “array of type”
+is converted to an expression with type “pointer to type” that points to the
+initial element of the array object and is not an lvalue. If the array object
+has register storage class, the behavior is undefined.</p>
+</blockquote>
+<p>Also add a forward reference to <code>_Generic</code> in 6.3.2.</p>
+<h3>Suggested Technical Corrigendum (Choice 1)</h3>
+<p>If the intent of the committee had been <em>choice 1</em> or similar, bigger changes of
+the standard would be indicated. I only list some of the areas that would need
+changes:</p>
+<ul>
+<li>Move <code>_Generic</code> from primary expressions to a proper subsection, and rename the feature to <code>_Generic</code> operator.</li>
+<li>Clarify which <em>as-if</em> conversions must be applied to determine the type.</li>
+<li>Reformulate those conversions as conversions of types instead of values.</li>
+</ul>
+<p>Also, add <code>_Generic</code> to the exception list in <em>6.3.2.1 p3</em> to make it clear that
+array to pointer conversion applies to none of the association expression if
+they are lvalues of array type.</p>
+<blockquote>
+<p>Except when it is <ins>an association expression of a <code>_Generic</code> expression, or
+is</ins> the operand of the <code>sizeof</code> operator, the <code>_Alignof</code> operator, or the
+unary <code>&amp;</code> operator, or is a string literal used to initialize an array, an
+expression that has type “array of type” is converted to an expression with type
+“pointer to type” that points to the initial element of the array object and is
+not an lvalue. If the array object has register storage class, the behavior is
+undefined.</p>
+</blockquote>
+<h3>Suggested Technical Corrigendum (Status quo)</h3>
+<p>A third possibility would be to leave this leeway to implementations. I strongly
+object to that, but if so, I would suggest to add a phrase to 6.5.1.1 p3 like:</p>
+<blockquote>
+<p>... in the default generic association. <ins>Whether or not the type of the
+controlling expression is determined as if any of conversions described in
+Section 6.3 are applied is implementation defined.</ins> None of the expressions
+...</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Oct 2015 meeting</p>
+<h3>Committee Discussion</h3>
+<ul>
+<li>This paper elicited a long and productive discussion. The committee agrees with the author of the <code>_Generic</code> proposal that the intent was that selecting on qualified types was explicitly to be avoided as was selecting on arrays by size. The intent of <code>_Generic</code> was to give C a mechanism to somewhat express the notion of “overloaded function” found in C++, and in particular a possible mechanism for implementors to use to implement the atomic type generic functions from section 7.17.7. Although this sentiment is most closely reflected in Choice 1 above, and it is reported that clang has also now adopted that approach, the committee feels that the wording in the Suggested Technical Corrigendum is not appropriate.</li>
+<li>The sentiment of the committee is to state that the type of arrays should decay into pointers in the controlling expression of a <code>_Generic</code> primary expression.</li>
+<li>The sentiment of the committee is that a better approach to the lvalue conversion issue is to revise 6.5.1.1p2 by adding something along the lines of
+<blockquote>
+<p>The type of the controlling expression of a generic selection is the unqualified
+type determined by applying the lvalue conversions described in 6.3.2.1p2 as if
+by evaluation.</p>
+</blockquote>
+</li>
+<li>The author is requested to incorporate this feedback into a new proposal and is encouraged to solicit input directly from committee members and on the WG14 reflector.</li>
+</ul>
+<p>Apr 2016 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The paper <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2001.pdf">N2001</a>
+was presented and, with revision, adopted as the Proposed Technical Corrigendum
+below.</p>
+</blockquote>
+<p>Oct 2016 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>It was noted that bitfields are of integer type.</p>
+</blockquote>
+<h3>Proposed Technical Corrigendum</h3>
+<p>In §6.5.1.1p2 change:</p>
+<blockquote>
+<p>The controlling expression of a generic selection shall have type compatible
+with at most one of the types named in its generic association list.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>The type of the controlling expression is the type of the expression as if it
+had undergone an lvalue conversion<sup>new</sup>, array to pointer conversion,
+or function to pointer conversion. That type shall be compatible with at most
+one of the types named in the generic association list.</p>
+<p><sup>new)</sup>lvalue conversion drops type qualifiers.</p>
+</blockquote>
+
+</body>
+</html>

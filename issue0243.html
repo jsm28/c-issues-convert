@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0243: Make the base standard and Annex F consistent for fmod(), remainder(), and remquo() for a zero divisor</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0243: Make the base standard and Annex F consistent for <code>fmod()</code>, <code>remainder()</code>, and <code>remquo()</code> for a zero divisor</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Fred Tydeman (US)<br />
+Date: 2001-02-25<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n943.txt">ISO/IEC WG14 N943</a><br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C99 TC2<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_243.htm">dr_243.htm</a></p>
+<h3>Summary</h3>
+<blockquote>
+<p><code>fmod()</code>, <code>remainder()</code>, and <code>remquo()</code> should be made consistent with each
+other when the divisor is zero. There are two "correct" behaviours when the
+divisor is zero: Treat it as a domain error (cannot divide by zero), or, based
+upon limits, compute a zero remainder. This series of changes may also require
+that IEEE-754 be changed (to allow a zero result in addition to the currently
+required invalid operation). Assuming that <code>fmod()</code>, <code>remainder()</code>, and
+<code>remquo()</code> should be consistent with each other, the following needs to be done.</p>
+<p>An alternative is to do some of these changes, or changes along these lines.</p>
+<p>It is assumed that requiring just the return of zero behaviour is too drastic as
+there are many millions of chips already doing the invalid operation behaviour.</p>
+</blockquote>
+<h3>Details</h3>
+<blockquote>
+<p>For a fixed <code>x</code>, as one takes the limit as <code>y</code> approaches zero, the remainder of
+<code>x</code>/<code>y</code> approaches zero <code>(0 &lt;= |result| &lt; |y|)</code> and the quotient is unspecified.</p>
+<p>IEC 60559 requires that <code>x</code> REM <code>y</code>, when <code>y</code> is zero, be an invalid operation,
+e.g., a domain error.</p>
+<p><code>fmod(x,0)</code> is currently allowed to be either 0 or a domain error by 7.12.10.1,
+while Annex F requires it to be an invalid exception, e.g., domain error.</p>
+<p><code>remainder(x,0)</code> is currently unspecified by 7.12.10.2, while Annex F requires
+it to be an invalid exception, e.g., domain error.</p>
+<p><code>remquo(x,0)</code> is currently unspecified by 7.12.10.3, while Annex F requires it
+to be an invalid exception, e.g., domain error. In addition, nothing is said
+about the quotient that is stored for this case.</p>
+<p><ins>Counter-argument</ins>: These functions are discontinuous along the lines
+<code>y = mx</code> or <code>y = (m+1/2)x</code> for integers <strong>m</strong>. We see no reason to "take the
+limit as <code>y</code> approaches zero".</p>
+<p>Allowing two different behaviours for these functions for the same arguments,
+will cause applications to be more complicated, with no real added benefit.</p>
+<p><ins>Counter-counter-argument</ins>: By discontinuous, I assume you mean that
+they are like saw-tooth shaped functions, e.g., a linear rise and a vertical
+fall. I agree with that, but, as one approaches the line <code>y=0</code>, the height of
+the teeth gets smaller and smaller.</p>
+</blockquote>
+<h3>Suggested Technical Corrigendum</h3>
+<p>In 7.12.10.1 <code>fmod</code>:</p>
+<blockquote>
+<p>No change needed.</p>
+</blockquote>
+<p>In 7.12.10.2 <code>remainder</code>:</p>
+<p>Add to Returns:</p>
+<blockquote>
+<p>If <code>y</code> is zero, whether a domain error occurs or the <code>remainder</code> functions
+return zero is implementation defined.</p>
+</blockquote>
+<p>In 7.12.10.3 <code>remquo</code>:</p>
+<p>Add to Returns:</p>
+<blockquote>
+<p>If <code>y</code> is zero, whether a domain error occurs or the <code>remquo</code> functions return
+zero is implementation defined.</p>
+<p>If <code>y</code> is zero, the quotient stored is unspecified.</p>
+</blockquote>
+<p>In F.9.7.1 <code>fmod</code>:</p>
+<p>Change</p>
+<blockquote>
+<p><code>fmod(x,y)</code> returns a <code>NaN</code> and raises the "invalid" floating-point exception
+for <code>x</code> infinite or <code>y</code> zero.</p>
+</blockquote>
+<p>to two items:</p>
+<blockquote>
+<p><code>fmod(x,y)</code> returns a <code>NaN</code> and raises the "invalid" floating-point exception
+for <code>x</code> infinite.</p>
+</blockquote>
+<p>and</p>
+<blockquote>
+<p>For <code>y</code> zero, <code>fmod(x,y)</code> either returns a zero (with sign of <code>x</code>), or returns a
+<code>NaN</code> and raises the "invalid" floating-point exception.</p>
+</blockquote>
+<p>In F.9.7.2 <code>remainder</code>:</p>
+<p>Add:</p>
+<blockquote>
+<p>For <code>y</code> zero, <code>remainder(x,y)</code> either returns a zero (with sign of <code>x</code>), or
+returns a <code>NaN</code> and raises the "invalid" floating-point exception.</p>
+</blockquote>
+<p>In F.9.7.3 <code>remquo</code>:</p>
+<p>Add:</p>
+<blockquote>
+<p>For <code>y</code> zero, <code>remquo(x,y)</code> either returns a zero (with sign of <code>x</code>), or returns
+a <code>NaN</code> and raises the "invalid" floating-point exception; and, in both cases,
+has an unspecified quotient stored.</p>
+</blockquote>
+<p>Also add,</p>
+<blockquote>
+<p>When <code>remquo</code> returns a <code>NaN</code>, the quotient stored is unspecified.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2001-10-16:</p>
+<h3>Technical Corrigendum</h3>
+<p>In 7.12.10.2 <code>remainder</code>:</p>
+<p>Add to Returns:</p>
+<blockquote>
+<p>If <code>y</code> is zero, whether a domain error occurs or the <code>remainder</code> functions
+return zero is implementation defined.</p>
+</blockquote>
+<p>In 7.12.10.3 <code>remquo</code>:</p>
+<p>Add to Returns:</p>
+<blockquote>
+<p>If <code>y</code> is zero, whether a domain error occurs or the <code>remquo</code> functions return
+zero is implementation defined.</p>
+<p>If <code>y</code> is zero, the quotient stored is unspecified.</p>
+</blockquote>
+<p>In J.3.12 Library functions:</p>
+<p>Add (after fmod):</p>
+<blockquote>
+<p>Whether a domain error occurs or zero is returned when an <code>remainder</code> function
+has a second argument of zero (7.12.10.2).</p>
+<p>Whether a domain error occurs or zero is returned when an <code>remquo</code> function has
+a second argument of zero (7.12.10.3).</p>
+</blockquote>
+
+</body>
+</html>

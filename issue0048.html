@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0048: Is abort compatible with POSIX?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0048: Is <code>abort</code> compatible with POSIX?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: David F. Prosser, WG14<br />
+Date: 1992-12-10<br />
+Reference document: X3J11/92-043<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_048.html">dr_048.html</a></p>
+<p>This Defect Report requests a clarification regarding the valid interpretations
+of the <code>abort</code> function, especially when the implementation must also match the
+requirements of POSIX.1 (ISO/IEC 9945-1:1990).</p>
+<p>The C Standard states (subclause 7.10.4.1, page 155):</p>
+<blockquote>
+<p>The <code>abort</code> function causes abnormal termination to occur, unless the signal
+<code>SIGABRT</code> is being caught and the signal handler does not return. Whether open
+output streams are flushed or open streams closed or temporary files removed is
+implementation-dependent. An implementation-defined form of the status
+<em>unsuccessful termination</em> is returned to the host environment by means of the
+function call <code>raise(SIGABRT)</code>.</p>
+</blockquote>
+<p>and (subclause 7.10.4.3, page 156):</p>
+<blockquote>
+<p>The <code>exit</code> function causes normal program termination to occur.</p>
+</blockquote>
+<p>and (subclause 7.10.4.1, page 101 [Rationale]):</p>
+<blockquote>
+<p>The Committee vacillated over whether a call to <code>abort</code> should return if the
+signal <code>SIGABRT</code> is caught or ignored. To minimize astonishment, the final
+decision was that <code>abort</code> never returns.</p>
+</blockquote>
+<p>The POSIX.1 Standard states (subclause 3.2, page 46):</p>
+<blockquote>
+<p>There are two kinds of process termination:</p>
+<p>(1) Normal termination occurs by a return from <code>main()</code> or when requested with
+the <code>exit()</code> or <code>_exit()</code> functions.</p>
+<p>(2) Abnormal termination occurs when requested by the <code>abort()</code> function or when
+some signals are received (see 3.3.1).</p>
+<p>The <code>exit()</code> and <code>abort()</code> functions shall be as described in the C Standard
+{2}. Both <code>exit()</code> and <code>abort()</code> shall terminate a process with the consequences
+specified in 3.2.2, except that the status made available to <code>wait()</code> or
+<code>waitpid()</code> by <code>abort()</code> shall be that of a process terminated by the <code>SIGABRT</code>
+signal.</p>
+</blockquote>
+<p>and (subclause 8.2.3.12, page 161):</p>
+<blockquote>
+<p>The <code>exit()</code> function shall have the effect of <code>fclose()</code> ... as described
+above. The <code>abort()</code> function shall also have these effects if the call to
+<code>abort()</code> causes process termination, but shall have no effect on streams
+otherwise. The C Standard {2} specifies the conditions where <code>abort()</code> does or
+does not cause process termination. For the purposes of that specification, a
+signal that is blocked shall not be considered caught.</p>
+</blockquote>
+<p>and (subclause B.8.2.3.12, page 291 [Rationale]):</p>
+<blockquote>
+<p>POSIX.1 intends that processing related to the <code>abort()</code> function will occur
+unless “the signal <code>SIGABRT</code> is being caught, and the signal handler does not
+return,” as defined by the C Standard {2}. This processing includes at least the
+effect of <code>fclose()</code> on all open streams, and the default actions defined for
+<code>SIGABRT</code>.</p>
+<p>The <code>abort()</code> function will override blocking or ignoring the <code>SIGABRT</code> signal.
+Catching the signal is intended to provide the application writer with a
+portable means to abort processing, free from possible interference from any
+implementation-provided library functions.</p>
+<p>Note that the term “program termination” in the C Standard {2} is equivalent to
+“process termination” in POSIX.1.</p>
+</blockquote>
+<p>The above quotes make it clear that the POSIX.1 Standard intends to have the
+abort function implementation be roughly the following:</p>
+<ol>
+<li>Inquire about <code>SIGABRT</code> handling.</li>
+<li>If currently blocked, unblock <code>SIGABRT</code>.</li>
+<li>If currently <code>SIG_IGN</code>, reset <code>SIGABRT</code> to <code>SIG_DFL</code>.</li>
+<li>If currently <code>SIG_DFL</code>, flush all open output streams.</li>
+<li><code>raise(SIGABRT)</code>.</li>
+<li>Reset <code>SIGABRT</code> to <code>SIG_DFL</code> (handler must have returned).</li>
+<li>Go to step 5.</li>
+</ol>
+<p>As far as the C Standard is concerned, step 2 is outside its scope, so it can be
+part of a valid implementation. (The effects cannot be noticed by a strictly
+conforming program.) Step 4 is clearly permitted as well. It is step 3 and the
+loop that are the key of this Defect Report. (Note that step 3 could have been
+skipped above as it would be handled by the 5-6-7 loop, but I've left it
+explicit for clarity.)</p>
+<p>The special case in the C Standard regarding <code>SIGABRT</code> handlers that don't
+return is intended to keep the implementation straightforward. (It is, in
+general, difficult to determine whether a handler will return without calling
+it!) The POSIX.1 Standard has understood the C Standard to require, in effect,
+an implementation to force an uncaught <code>SIGABRT</code> to terminate the program. But,
+is this actually the C Standard's intent? The Rationale quote can certainly be
+taken to indicate that catching and ignoring <code>SIGABRT</code> are in the same category.</p>
+<p>Does the C Standard either permit or require an implementation to reset an
+ignored <code>SIGABRT</code> to <code>SIG_DFL</code>? Or, does the C Standard permit or require a call
+similar to <code>exit(EXIT_FAILURE)</code>? Is the distinction between abnormal termination
+and unsuccessful normal termination beyond the scope of the C Standard? (After
+all, how can it be tested?) And, finally, can a portable application find any
+utility in setting <code>SIGABRT</code> to <code>SIG_IGN</code>?</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>Does the C Standard either permit or require an implementation to reset an
+ignored <code>SIGABRT</code> to <code>SIG_DFL</code>?</p>
+<p>Answer: Yes, it permits it. There is no way to detect such a change in a
+strictly conforming program.</p>
+<p>Or, does the C Standard permit or require a call similar to
+<code>exit(EXIT_FAILURE)</code>?</p>
+<p>Answer: No. Abnormal termination does not allow calls to the <code>atexit</code>-registered
+functions.</p>
+<p>Does the C Standard? (After all, how can it be tested?)</p>
+<p>Answer: No. See above.</p>
+<p>And, finally, can a portable application find any utility in setting <code>SIGABRT</code>
+to <code>SIG_IGN</code>?</p>
+<p>Answer: Not within the context of <code>abort</code>.</p>
+<p>We note that therefore there is no clash between Standard C and POSIX.1.</p>
+
+</body>
+</html>

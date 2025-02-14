@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0314: Cross-translation-unit tagged type compatibility</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0314: Cross-translation-unit tagged type compatibility</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Joseph Myers &lt;joseph@codesourcery.com&gt;, UK C Panel<br />
+Date: 2005-03-04<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1102.htm">ISO/IEC WG14 N1102</a><br />
+Submitted against: C99<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_314.htm">dr_314.htm</a></p>
+<h3>Summary</h3>
+<p>Compatibility of tagged types can be intransitive when there are multiple
+translation units:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #3D7B7B; font-style: italic">// TU 1:</span>
+<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span>;
+<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>a;<span style="color: #bbbbbb"> </span>};
+
+<span style="color: #3D7B7B; font-style: italic">// TU 2:</span>
+<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>p;<span style="color: #bbbbbb"> </span>};
+<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>a;<span style="color: #bbbbbb"> </span>};
+
+<span style="color: #3D7B7B; font-style: italic">// TU 3:</span>
+<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">long</span><span style="color: #bbbbbb"> </span>q;<span style="color: #bbbbbb"> </span>};
+<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>a;<span style="color: #bbbbbb"> </span>};
+</pre></div>
+
+<p>where <code>struct t</code> in TU 1 is compatible with that in TU 2 and TU 3 but they are
+not compatible with each other.</p>
+<p>C++ avoids problems with such cases by giving types linkage, meaning that the
+incompatible definitions of named struct types yield undefined behavior. In C
+types do not have linkage, and such incompatibilities can give rise to several
+problems. The requirement of 6.2.7#2 that "All declarations that refer to the
+same object or function shall have compatible type; otherwise, the behavior is
+undefined." does not seem sufficient to avoid all such problems.</p>
+<p>Question 1: Does 6.2.7#2 refer to the types immediately after the declarations,
+or the types at any point where the declarations are in scope?</p>
+<p>Question 2: If each of the above three translation units started <code>extern struct t *x;</code>, would there be undefined behavior?</p>
+<p>Even if the requirement applies to the types anywhere in scope, this may not be
+enough. Each translation unit above could have prepended to it</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t</span>;
+<span style="color: #008000; font-weight: bold">static</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f</span>(<span style="color: #B00040">void</span>)<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">extern</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>x;<span style="color: #bbbbbb"> </span>}
+</pre></div>
+
+<p>and the incompatible completions are not within the scope of <code>x</code>. (<code>x</code> might
+then be defined in another translation unit that just says <code>struct t *x;</code>.)</p>
+<p>The above example at least leads to incompatible "ultimate" types for <code>x</code> that
+the object has at the end of each translation unit, albeit outside the scope of
+the declaration. But now consider the following three translation units.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #3D7B7B; font-style: italic">// TU 1:</span>
+<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span>;
+<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>a;<span style="color: #bbbbbb"> </span>};
+<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">g1</span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>);
+<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">g2</span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>);
+<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f</span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>p,<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>x)<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span>x<span style="color: #bbbbbb"> </span><span style="color: #666666">?</span><span style="color: #bbbbbb"> </span>g1(p<span style="color: #666666">-&gt;</span>a)<span style="color: #bbbbbb"> </span><span style="color: #666666">:</span><span style="color: #bbbbbb"> </span>g2(p<span style="color: #666666">-&gt;</span>a);<span style="color: #bbbbbb"> </span>}
+
+<span style="color: #3D7B7B; font-style: italic">// TU 2:</span>
+<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>b;<span style="color: #bbbbbb"> </span>};
+<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>a;<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>z;<span style="color: #bbbbbb"> </span>};
+<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">g1</span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>p)<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span>p<span style="color: #666666">-&gt;</span>a<span style="color: #bbbbbb">  </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span>p<span style="color: #666666">-&gt;</span>z<span style="color: #666666">-&gt;</span>b;<span style="color: #bbbbbb"> </span>}
+
+<span style="color: #3D7B7B; font-style: italic">// TU 3:</span>
+<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">long</span><span style="color: #bbbbbb"> </span>c;<span style="color: #bbbbbb"> </span>};
+<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>z;<span style="color: #bbbbbb"> </span><span style="color: #B00040">long</span><span style="color: #bbbbbb"> </span>a;<span style="color: #bbbbbb"> </span>};
+<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">g2</span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>p)<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span>p<span style="color: #666666">-&gt;</span>a<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span>p<span style="color: #666666">-&gt;</span>z<span style="color: #666666">-&gt;</span>c;<span style="color: #bbbbbb"> </span>}
+</pre></div>
+
+<p>Each object and function has a well-defined complete type. But a <code>struct t</code> in
+TU 1 may contain pointers to two different versions of <code>struct s</code>, and each of
+these contains pointers to an entirely different <code>struct t</code> from that in TU 1.
+This requires very strange gymnastics for an implementation inlining across
+translation units to inline <code>g1</code> and <code>g2</code> into <code>f</code>. There is no single
+translation unit representing a natural merger of the three above; renaming
+static objects with conflicting names does not suffice (indeed, there are no
+such objects), and renaming type names used in different names in different
+translation units does not help either because there is no single natural
+expression of a recursive completion of TU 1's <code>struct t</code>.</p>
+<p>Question 3: Is an implementation required to accept compiling the three
+translation units above together into a program?</p>
+<p>This issue arises directly from actual implementation problems implementing
+optimizations across multiple translation units in GCC. It is natural for an
+implementation to take multiple translation units and convert them into a
+language-independent intermediate representation of the whole program which is
+then optimized, and in so doing to unify the declarations in different
+translation units which refer to the same object or function. But unifying them
+involves unifying their types, and so recursively the types involved in the
+definitions of those types, and the above translation units, although apparently
+valid to link into a single program at present, do not admit of such a
+unification.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<hr />
+<p>Comment from WG14 on 2008-09-12:</p>
+<h3>Committee Discussion (for history only)</h3>
+<p>2006-10-25, There was not consensus for the <em>Proposed Committee Response</em> listed
+below. There was no consensus that question 2 is <em>undefined behavior</em>. There
+does not seem to be specific words in the Standard that make it undefined
+behavior, however that may be what the Committee intended.</p>
+<h4>Spring 2007</h4>
+<p>See <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1237.htm">N1237</a>.</p>
+<h4>Fall 2007</h4>
+<p>The Standard doesn't seem to specifically allow the compilation/linking of the
+three translations units in question, but is does not seem to disallow it
+either.</p>
+<h4>Spring 2008</h4>
+<p>Current response is good. However, is this is an issue that should be addressed
+in C1x? Looked again at N1237 (reviewed in Kona).</p>
+<ul>
+<li>publish an answer that C99 is unspecified/undefined, and we will fix it in C1x</li>
+<li>just come up with a fix for C1x</li>
+</ul>
+<p>There is consensus that it should be possible for an implementation to combine
+the translation units of a program into a single internal representation and
+optimize that, unifying structure and union types across translation units where
+required to be compatible in the process.</p>
+<p>Normally, it is possible to create a single translation unit equivalent to
+multiple translation units, after renaming static variables and functions and
+structure and union tags. DR314 question 3 is an example where such renaming is
+not possible. My proposal is to add a requirement that it is possible.</p>
+<p>It was noted that this has been hanging around for several years. Needs someone
+to actually come up with the right words.</p>
+<h3>Proposed Committee Response</h3>
+<p>Question 1: Does 6.2.7#2 refer to the types immediately after the declarations,
+or the types at any point where the declarations are in scope?</p>
+<blockquote>
+<p>Subclause 6.2.7 Paragraph 2 makes a statement about <em>all</em> declarations of the
+same object or function, regardless of where the declarations that object or
+function are. It requires that all declarations of the same object or function,
+even if those declarations are in different translation units of the program, to
+have compatible type.<br />
+Note also that if an object with struct or union type is declared with an
+incomplete type, and that type is later completed in the same scope, the type of
+the declaration is the completed type (Subclause 6.2.5, Paragraph 22). Under
+such conditions, the type of the object or function is the completed type, and
+that type must be compatible with any other declarations.</p>
+</blockquote>
+<p>Question 2: If each of the above three translation units started <code>extern struct t *x;</code>, would there be undefined behavior?</p>
+<blockquote>
+<p>Yes, undefined behavior.</p>
+</blockquote>
+<p>Question 3: Is an implementation required to accept compiling the three
+translation units above together into a program?</p>
+<blockquote>
+<p>It was never the Committees intention that the standard be interpreted this way.<br />
+This will be addressed in a future revision of the standard. See WG14 N<strong>xxx</strong>.</p>
+</blockquote>
+
+</body>
+</html>

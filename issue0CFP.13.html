@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0CFP.13: P3: Type-generic macros for functions that round result to narrower type</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0CFP.13: P3: Type-generic macros for functions that round result to narrower type</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Jim Thomas<br />
+Date: 2017-03-04<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2125.pdf">N2125</a><br />
+Submitted against: Floating-point TS 18661 (C11 version, 2014-2016)<br />
+Status: Fixed<br />
+Fixed in: C23<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2397.htm">n2397.htm</a></p>
+<h3>Summary</h3>
+<p>This is about an issue raised by Joseph Myers in SC22WG14.14561:</p>
+<blockquote>
+<p>TS 18661-1 and -2 define type-generic macros for the functions that round</p>
+<p>result to a narrower type.  In part 1 these are, for example, fadd and</p>
+<p>dadd for addition; in part 2, for example, d32add and d64add.</p>
+<p>Part 3 does not seem to make any changes or additions to those macros, and</p>
+<p>consequences of that seem nonobvious.  It defines new functions for the</p>
+<p>new types: fMaddfN, fMaddfNx, fMxaddfN, fMxaddfNx (where M &lt; N, or M &lt;= N</p>
+<p>in the fMaddfNx case), and likewise for decimal types.  But the</p>
+<p>type-generic macros remain as defined in 7.25#6a after the changes from</p>
+<p>parts 1 and 2 are applied (part 3 does not contain the string "6a").</p>
+<p>That is, it's valid to pass the _FloatN and _FloatNx types to the fadd and</p>
+<p>dadd macros, and valid to pass the new _DecimalN and _DecimalNx types from</p>
+<p>part 3 to the d32add and d64add types.</p>
+<p>(a) 7.25#6a says "If the macro prefix is d32 or d64, use of an argument of</p>
+<p>standard floating type results in undefined behavior.".  Other places get</p>
+<p>amended in part 3 to say "floating type of radix 2" in addition to</p>
+<p>"standard floating type".  But it appears it fails to make it undefined to</p>
+<p>pass _FloatN or _FloatNx arguments to d32add, d64add etc. type-generic</p>
+<p>macros - although clearly it should be undefined.</p>
+<p>(b) Passing _Decimal128 to d32add would result in the d32addd128 function</p>
+<p>being called, as expected.  But say you pass a _Decimal128x argument.  A</p>
+<p>function d32addd128x exists but the specification would seem to result in</p>
+<p>d32addd64 being called, which seems unintuitive.  Similar issues apply</p>
+<p>with _FloatN and _FloatNx types - calling fadd on them would always call</p>
+<p>the fadd function not faddl.  (But in that case there *are* no functions</p>
+<p>defined that take _FloatN / _FloatNx arguments and return float or double.</p>
+<p>So the right thing to do is less obvious.)</p>
+</blockquote>
+<p>The following addresses these issues by filling in the missing specification in
+part 3.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>In clause 15, after the change to 7.25#6, add:</p>
+<blockquote>
+<p>Change 7.25#6a from:</p>
+<blockquote>
+<p>[6a] The functions that round result to a narrower type have type-generic
+macros whose names are obtained by omitting any suffix from the function names.
+Thus, the macros with <code>f</code> or <code>d</code> prefix are:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>fadd<span style="color: #bbbbbb">              </span>fmul<span style="color: #bbbbbb">                 </span>ffma
+
+dadd<span style="color: #bbbbbb">              </span>dmul<span style="color: #bbbbbb">                 </span>dfma
+
+fsub<span style="color: #bbbbbb">              </span>fdiv<span style="color: #bbbbbb">                 </span>fsqrt
+
+dsub<span style="color: #bbbbbb">              </span>ddiv<span style="color: #bbbbbb">                 </span>dsqrt
+</pre></div>
+
+</blockquote>
+</blockquote>
+<p>and the macros with <code>d32</code> or <code>d64</code> prefix are:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>d32add<span style="color: #bbbbbb">            </span>d32mul<span style="color: #bbbbbb">               </span>d32fma
+
+d64add<span style="color: #bbbbbb">            </span>d64mul<span style="color: #bbbbbb">               </span>d64fma
+
+d32sub<span style="color: #bbbbbb">            </span>d32div<span style="color: #bbbbbb">               </span>d32sqrt
+
+d64sub<span style="color: #bbbbbb">            </span>d64div<span style="color: #bbbbbb">               </span>d64sqrt
+</pre></div>
+
+<p>All arguments are generic. If any argument is not real, use of the macro results
+in undefined behavior. If the macro prefix is <code>f</code> or <code>d</code>, use of an argument of
+decimal floating type results in undefined behavior. If the macro prefix is
+<code>d32</code> or <code>d64</code>, use of an argument of standard floating type results in
+undefined behavior. The function invoked is determined as follows:</p>
+<blockquote>
+<p>—    If any argument has type <code>_Decimal128</code>, or if the macro prefix is <code>d64</code>,
+the function invoked has the name of the macro, with a <code>d128</code> suffix.</p>
+<p>—    Otherwise, if the macro prefix is <code>d32</code>, the function invoked has the name
+of the macro, with a <code>d64</code> suffix.</p>
+<p>—    Otherwise, if any argument has type <code>long double</code>, or if the macro prefix
+is <code>d</code>, the function invoked has the name of the macro, with an <code>l</code> suffix.</p>
+<p>—    Otherwise, the function invoked has the name of the macro (with no suffix).</p>
+</blockquote>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>[6a] The functions that round result to a narrower type have type-generic
+macros whose names are obtained by omitting any suffix from the function names.
+Thus, the macros with <code>f</code> or <code>d</code> prefix are:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>fadd<span style="color: #bbbbbb">              </span>fmul<span style="color: #bbbbbb">                 </span>ffma
+
+dadd<span style="color: #bbbbbb">              </span>dmul<span style="color: #bbbbbb">                 </span>dfma
+
+fsub<span style="color: #bbbbbb">              </span>fdiv<span style="color: #bbbbbb">                 </span>fsqrt
+
+dsub<span style="color: #bbbbbb">              </span>ddiv<span style="color: #bbbbbb">                 </span>dsqrt
+</pre></div>
+
+</blockquote>
+</blockquote>
+<p>and the macros with <code>f</code><em>M</em>, <code>f</code><em>M</em><code>x</code>, <code>d</code><em>M</em>, or <code>d</code><em>M</em><code>x</code> prefix are:</p>
+<blockquote>
+<p><code>f</code><em>M</em><code>add             f</code><em><code>M</code></em><code>xmul              d</code><em><code>M</code></em><code>fma</code></p>
+<p><code>f</code><em>M</em><code>sub             f</code><em><code>M</code></em><code>xdiv              d</code><em><code>M</code></em><code>sqrt</code></p>
+<p><code>f</code><em>M</em><code>mul             f</code><em><code>M</code></em><code>xfma              d</code><em><code>M</code></em><code>xadd</code></p>
+<p><code>f</code><em>M</em><code>div             f</code><em><code>M</code></em><code>xsqrt             d</code><em><code>M</code></em><code>xsub</code></p>
+<p><code>f</code><em>M</em><code>fma             d</code><em><code>M</code></em><code>add               d</code><em><code>M</code></em><code>xmul</code></p>
+<p><code>f</code><em>M</em><code>sqrt            d</code><em><code>M</code></em><code>sub               d</code><em><code>M</code></em><code>xdiv</code></p>
+<p><code>f</code><em>M</em><code>xadd            d</code><em><code>M</code></em><code>mul               d</code><em><code>M</code></em><code>xfma</code></p>
+<p><code>f</code><em>M</em><code>xsub            d</code><em><code>M</code></em><code>div               d</code><em><code>M</code></em><code>xsqrt</code></p>
+</blockquote>
+<p>All arguments are generic. If any argument is not real, use of the macro results
+in undefined behavior. If the macro prefix is <code>f</code>, <code>d</code>, <code>f</code><em>M</em>, or <code>f</code><em>M</em><code>x</code>,
+use of an argument of decimal floating type results in undefined behavior. If
+the macro prefix is <code>d</code>M or <code>d</code><em>M</em><code>x</code>, use of an argument of standard or binary
+floating type results in undefined behavior. The function invoked is determined
+as follows:</p>
+<blockquote>
+<p>—    Arguments that have integer type are regarded as having type <code>_Decimal64</code>
+if any argument has decimal floating type, and as having type <code>double</code>
+otherwise.</p>
+<p>—    The unsuffixed name of the function is the name of the macro, and its
+suffix, if any, corresponds to the parameter type which may be any type with at
+least the range and precision of the argument types.</p>
+</blockquote>
+</blockquote>
+<p>In clause 15, at the end of the text appended to the table in 7.25#7, further
+append:</p>
+<blockquote>
+<p><code>f32xadd(d, f32x)</code>                any <code>f32xaddf</code><em>N</em> or <code>f32xaddf</code><em>N</em><code>x</code> such
+that <em>N</em> &gt; 32 and the suffix type, <code>_Float</code><em><code>N</code></em> or <code>_Float</code><em><code>N</code></em><code>x</code>, is at
+least as wide as <code>double</code> and <code>_Float32x</code></p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2019-05-03:</p>
+<p>Apr 2017 meeting</p>
+<h3>Committee Discussion</h3>
+<p>The committee agrees that this is a defect and accepts the Suggested Technical
+Corrigendum</p>
+<p>Apr 2018 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>After extensive discussion on the mailing list several documents were proposed
+with new and revised change suggestions. The following revised proposed change
+is largely drawn from
+<a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2213.pdf">N2213</a> with further
+changes reviewed at the meeting.</p>
+</blockquote>
+<h3>Proposed Change</h3>
+<p>In clause 15, after the change to 7.25#6, add:</p>
+<blockquote>
+<p>Change 7.25#6a from:</p>
+<blockquote>
+<p>[6a] The functions that round result to a narrower type have type-generic
+macros whose names are obtained by omitting any suffix from the function names.
+Thus, the macros with <code>f</code> or <code>d</code> prefix are:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>fadd<span style="color: #bbbbbb">              </span>fmul<span style="color: #bbbbbb">                 </span>ffma
+
+dadd<span style="color: #bbbbbb">              </span>dmul<span style="color: #bbbbbb">                 </span>dfma
+
+fsub<span style="color: #bbbbbb">              </span>fdiv<span style="color: #bbbbbb">                 </span>fsqrt
+
+dsub<span style="color: #bbbbbb">              </span>ddiv<span style="color: #bbbbbb">                 </span>dsqrt
+</pre></div>
+
+</blockquote>
+</blockquote>
+<p>and the macros with <code>d32</code> or <code>d64</code> prefix are:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>d32add<span style="color: #bbbbbb">            </span>d32mul<span style="color: #bbbbbb">               </span>d32fma
+
+d64add<span style="color: #bbbbbb">            </span>d64mul<span style="color: #bbbbbb">               </span>d64fma
+
+d32sub<span style="color: #bbbbbb">            </span>d32div<span style="color: #bbbbbb">               </span>d32sqrt
+
+d64sub<span style="color: #bbbbbb">            </span>d64div<span style="color: #bbbbbb">               </span>d64sqrt
+</pre></div>
+
+<p>All arguments are generic. If any argument is not real, use of the macro results
+in undefined behavior. If the macro prefix is <code>f</code> or <code>d</code>, use of an argument of
+decimal floating type results in undefined behavior. If the macro prefix is
+<code>d32</code> or <code>d64</code>, use of an argument of standard floating type results in
+undefined behavior. The function invoked is determined as follows:</p>
+<blockquote>
+<p>—    If any argument has type <code>_Decimal128</code>, or if the macro prefix is <code>d64</code>,
+the function invoked has the name of the macro, with a <code>d128</code> suffix.</p>
+<p>—    Otherwise, if the macro prefix is <code>d32</code>, the function invoked has the name
+of the macro, with a <code>d64</code> suffix.</p>
+<p>—    Otherwise, if any argument has type <code>long double</code>, or if the macro prefix
+is <code>d</code>, the function invoked has the name of the macro, with an <code>l</code> suffix.</p>
+<p>—    Otherwise, the function invoked has the name of the macro (with no suffix).</p>
+</blockquote>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>[6a] The functions that round result to a narrower type have type-generic
+macros whose names are obtained by omitting any suffix from the function names.
+Thus, the macros with <code>f</code> or <code>d</code> prefix are:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>fadd<span style="color: #bbbbbb">              </span>fmul<span style="color: #bbbbbb">                 </span>ffma
+
+dadd<span style="color: #bbbbbb">              </span>dmul<span style="color: #bbbbbb">                 </span>dfma
+
+fsub<span style="color: #bbbbbb">              </span>fdiv<span style="color: #bbbbbb">                 </span>fsqrt
+
+dsub<span style="color: #bbbbbb">              </span>ddiv<span style="color: #bbbbbb">                 </span>dsqrt
+</pre></div>
+
+</blockquote>
+</blockquote>
+<p>and the macros with <code>f</code><em>M</em>, <code>f</code><em>M</em><code>x</code>, <code>d</code><em>M</em>, or <code>d</code><em>M</em><code>x</code> prefix are:</p>
+<blockquote>
+<p><code>f</code><em>M</em><code>add             f</code><em><code>M</code></em><code>xmul              d</code><em><code>M</code></em><code>fma</code></p>
+<p><code>f</code><em>M</em><code>sub             f</code><em><code>M</code></em><code>xdiv              d</code><em><code>M</code></em><code>sqrt</code></p>
+<p><code>f</code><em>M</em><code>mul             f</code><em><code>M</code></em><code>xfma              d</code><em><code>M</code></em><code>xadd</code></p>
+<p><code>f</code><em>M</em><code>div             f</code><em><code>M</code></em><code>xsqrt             d</code><em><code>M</code></em><code>xsub</code></p>
+<p><code>f</code><em>M</em><code>fma             d</code><em><code>M</code></em><code>add               d</code><em><code>M</code></em><code>xmul</code></p>
+<p><code>f</code><em>M</em><code>sqrt            d</code><em><code>M</code></em><code>sub               d</code><em><code>M</code></em><code>xdiv</code></p>
+<p><code>f</code><em>M</em><code>xadd            d</code><em><code>M</code></em><code>mul               d</code><em><code>M</code></em><code>xfma</code></p>
+<p><code>f</code><em>M</em><code>xsub            d</code><em><code>M</code></em><code>div               d</code><em><code>M</code></em><code>xsqrt</code></p>
+</blockquote>
+<p>All arguments are generic. If any argument is not real, use of the macro results
+in undefined behavior. If the macro prefix is <code>f</code> or <code>d</code>, use of an argument of
+interchange or extended floating type results in undefined behavior. If the
+macro prefix is <code>f</code><em>M</em>, or <code>f</code><em>M</em><code>x</code>, use of an argument of standard or decimal
+floating type results in undefined behavior. If the macro prefix is <code>d</code><em>M</em> or
+<code>d</code><em>M</em><code>x</code>, use of an argument of standard or binary floating type results in
+undefined behavior.  The function invoked is determined as follows:</p>
+<blockquote>
+<p>—  Arguments that have integer type are regarded as having type <code>double</code> if the
+macro prefix is <code>f</code> or <code>d</code>, as having type <code>_Float64</code> if the macro prefix is
+<code>f</code><em>M</em> or <code>f</code><em>M</em><code>x</code>, and as having type <code>_Decimal64</code> if the macro prefix is
+<code>d</code><em>M</em> or <code>d</code><em>M</em><code>x</code>.</p>
+</blockquote>
+<p>—  If the function has exactly one generic parameter, the type determined is the
+type of the argument.</p>
+<p>—  If the function has exactly two generic parameters, the type determined
+is the type determined by the usual arithmetic conversions (6.3.1.8) applied to
+the arguments.</p>
+<p>—  If the function has three generic parameters, the type determined is the type
+determined by applying the usual arithmetic conversions twice, first to the
+first two arguments, then to that result type and the third argument.</p>
+<p>—  If no function with the given prefix has the parameter type determined above,
+the parameter type is determined from the prefix as follows:</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>c f </code></td>
+<td align="left"><code>c double </code></td>
+</tr>
+<tr>
+<td align="left"><code>c d </code></td>
+<td align="left"><code>c long double </code></td>
+</tr>
+<tr>
+<td align="left"><code>f</code><em>M</em></td>
+<td align="left"><code>_Float</code><em><code>N</code></em> for minimum <em>N</em> &gt; <em>M</em> if supported, else <code>_Float</code><em><code>M</code></em><code>x</code></td>
+</tr>
+<tr>
+<td align="left"><code>f</code><em>M</em><code>x</code></td>
+<td align="left"><code>_Float</code><em><code>N</code></em><code>x</code> for minimum <em>N</em> &gt; <em>M</em> if supported, else <code>_Float</code><em><code>N</code></em> for minimum <em>N</em> &gt; <em>M</em></td>
+</tr>
+<tr>
+<td align="left"><code>d</code><em>M</em></td>
+<td align="left"><code>_Decimal</code><em><code>N</code></em> for minimum <em>N</em> &gt; <em>M</em> if supported, else <code>_Decimal</code><em><code>M</code></em><code>x</code></td>
+</tr>
+<tr>
+<td align="left"><code>d</code><em>M</em><code>x</code></td>
+<td align="left"><code>_Decimal</code><em><code>N</code></em><code>x</code> for minimum <em>N</em> &gt; <em>M</em> if supported, else <code>_Decimal</code><em><code>N</code></em> for minimum <em>N</em> &gt; <em>M</em></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>In clause 15, at the end of the text appended to the table in 7.25#7, further
+append:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>fsub(d,<span style="color: #bbbbbb"> </span>ld)<span style="color: #bbbbbb">          </span>fsubl
+
+f32add(f64x,<span style="color: #bbbbbb"> </span>f64)<span style="color: #bbbbbb">     </span>f32addf64x
+
+d32xsqrt(n)<span style="color: #bbbbbb">          </span>d32xsqrtd64
+</pre></div>
+
+<p><code>f32mul(f128, f32x)    f32mulf128</code> if <code>_Float128</code> is at least as wide as
+<code>_Float32x</code>, or <code>f32mulf32x</code> if <code>_Float32x</code> is wider than <code>_Float128</code></p>
+<p><code>f32fma(f32x, n, f32x)  f32fmaf64</code> if <code>_Float64</code> is at least as wide as
+<code>_Float32x,</code> or <code>f32fmaf32x</code> if <code>_Float32x</code> is wider than <code>_Float64</code></p>
+<p><code>ddiv(ld, f128)</code>                 undefined</p>
+<p><code>f32fma(f64, d, f64)</code>      undefined</p>
+<p><code>fmul(dc, d)</code>                        undefined</p>
+</blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>f32add(f32,<span style="color: #bbbbbb"> </span>f32)<span style="color: #bbbbbb">             </span>f32addf64(f32,<span style="color: #bbbbbb"> </span>f32)
+</pre></div>
+
+<p><code>f32xsqrt(f32)                   f32xsqrtf64x(f32)</code> if <code>_Float64x</code> is</p>
+<blockquote>
+<p>supported, else <code>f32xsqrtf64</code></p>
+</blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>f64div(f32x,<span style="color: #bbbbbb"> </span>f32x)<span style="color: #bbbbbb">        </span>f64divf128(f32x,<span style="color: #bbbbbb"> </span>f32x)
+</pre></div>
+
+</blockquote>
+
+</body>
+</html>

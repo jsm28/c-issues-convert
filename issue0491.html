@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0491: Concern with Keywords that Match Reserved Identifiers</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0491: Concern with Keywords that Match Reserved Identifiers</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Douglas Walls<br />
+Date: 2016-02-23<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2000.htm">N2000</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>Should a conforming program be allowed to use identifiers spelled with a leading
+underscore followed by an uppercase letter that match the spelling of a keyword?</p>
+<p>The C committee has been adding keywords to the C standard spelled with a
+leading underscore followed by an uppercase letter so that they will not
+conflict with identifiers that are not already reserved to the implementation,
+i.e. so existing programs that conform to the C standard are not impacted by
+addition of new keywords in a new revision of the C standard.</p>
+<p>So the C standard spells keywords in two ways:</p>
+<ul>
+<li>Leading underscore followed by an uppercase letter</li>
+<li>Leading lowercase letter</li>
+</ul>
+<p>7.1.2p4 provides restrictions on when macros with names lexically identical to
+keywords can be defined, thus infering when macro names lexically identical to
+keywords can be defined.</p>
+<p>As specified in 7.1.3, identifiers spelled with a leading underscore followed by
+an uppercase letter are reserved to the implementation.  While those identifiers
+beginning with a lowercase letter are not.  Thus, for example, a conforming
+program can use <code>inline</code> as a macro name, but a conforming program cannot use
+<code>_Noreturn</code> as a macro name.</p>
+<p>Though the C committee has added new keywords from the reserved identifier
+namespace, the committee has not updated the rules about reserved identifiers. 
+What I don't know is if that is intentional or an oversight, as I don't ever
+remember discussing the issue from that perspective during a committee meeting.</p>
+<p>The issue came to my attention when I found some C standard headers defining
+_<code>Noreturn</code> as a macro because they knew it is an identifier reserved to the
+implementation.  I was a bit surprised, as it required a otherwise conforming
+program to <code>#undef _Noreturn</code> in order to use the _<code>Noreturn</code> keyword as a
+function specifier.  The macro in this case was expanding to a gcc like
+attribute syntax recognized by the compiler.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Replace the first two bullets under 7.1.3p1 with:</p>
+<p>— All identifiers that begin with an underscore and either an uppercase letter
+or another underscore are always reserved for any use<ins>, except those
+identifiers which are lexically identical to keywords</ins>.
+<ins><sup>footnote)</sup></ins><br />
+— All identifiers that begin with an underscore are always reserved for use as
+identifiers with file scope in both the ordinary and tag name spaces<ins>,
+except those identifiers which are lexically identical to keywords</ins>.</p>
+<p><ins><sup>footnote)</sup> Allows identifiers spelled with a leading underscore
+followed by an uppercase letter that match the spelling of a keyword to be used
+as macro names.</ins></p>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Apr 2016 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The committee accepts the first suggestion as the Proposed Technical
+Corrigendum.</p>
+</blockquote>
+<h3>Proposed Technical Corrigendum</h3>
+<p>Change §7.1.3.p1 first bullet from:</p>
+<blockquote>
+<p>— All identifiers that begin with an underscore and either an uppercase letter
+or another underscore are always reserved for any use.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>— All identifiers that begin with an underscore and either an uppercase letter
+or another underscore are always reserved for any use, except those identifiers
+which are lexically identical to keywords. <sup>footnote)</sup></p>
+<p><sup>footnote)</sup> Allows identifiers spelled with a leading underscore
+followed by an uppercase letter that match the spelling of a keyword to be used
+as macro names by the program.</p>
+</blockquote>
+
+</body>
+</html>

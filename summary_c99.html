@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C99: issue summary</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h1>C99: issue summary</h1>
+<p><strong>This issue summary has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">Issue</th>
+<th align="left">Summary</th>
+<th align="left">Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><a href="issue0201.html">0201</a></td>
+<td align="left">Integer types longer than <code>long</code></td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0202.html">0202</a></td>
+<td align="left">Change return type of certain <code>&lt;fenv.h&gt;</code> functions</td>
+<td align="left">Fixed in C99 TC1</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0203.html">0203</a></td>
+<td align="left">C locale conflict with ISO/IEC 9945-2</td>
+<td align="left">Fixed in C99</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0204.html">0204</a></td>
+<td align="left"><code>size_t</code> and <code>ptrdiff_t</code> as a <code>long long</code> type</td>
+<td align="left">Fixed in C99 TC1</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0205.html">0205</a></td>
+<td align="left">New keyword <code>__at_least</code></td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0206.html">0206</a></td>
+<td align="left">Default argument conversion of <code>float _Complex</code></td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0207.html">0207</a></td>
+<td align="left">Handling of imaginary types</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0208.html">0208</a></td>
+<td align="left">Ambiguity in initialization</td>
+<td align="left">Fixed in C99 TC1</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0209.html">0209</a></td>
+<td align="left">Problem implementing <code>INT</code><em>N</em><code>_C</code> macros</td>
+<td align="left">Fixed in C99 TC1</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0210.html">0210</a></td>
+<td align="left"><code>fprintf %a</code> and <code>%A</code> conversions recommended practice</td>
+<td align="left">Fixed in C99 TC1</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0211.html">0211</a></td>
+<td align="left">Accuracy of decimal string to/from "binary" (non-decimal) floating-point conversions</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0212.html">0212</a></td>
+<td align="left">Binding of multibyte conversion state objects</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0213.html">0213</a></td>
+<td align="left">Lacuna in <code>mbrtowc</code></td>
+<td align="left">Fixed in C99 TC1</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0214.html">0214</a></td>
+<td align="left"><code>atexit</code> function registration</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0215.html">0215</a></td>
+<td align="left">Equality operators</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0216.html">0216</a></td>
+<td align="left">Source character encodings</td>
+<td align="left">Fixed in C99 TC1</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0217.html">0217</a></td>
+<td align="left"><code>asctime</code> limits</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0218.html">0218</a></td>
+<td align="left">Signs of non-numeric floating point values</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0219.html">0219</a></td>
+<td align="left">Effective types</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0220.html">0220</a></td>
+<td align="left">Definition of "decimal integer"</td>
+<td align="left">Fixed in C99 TC1</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0221.html">0221</a></td>
+<td align="left">Lacuna in pointer arithmetic</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0222.html">0222</a></td>
+<td align="left">Partially initialized structures</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0223.html">0223</a></td>
+<td align="left"><code>FP_FAST_FMAF</code> and <code>FP_FAST_FMAL</code> should be integer constant</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0224.html">0224</a></td>
+<td align="left"><code>fpclassify</code> return is not defined</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0225.html">0225</a></td>
+<td align="left"><code>strtod</code>, <code>strtof</code> and <code>strtold</code> expected form of the subject sequence</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0226.html">0226</a></td>
+<td align="left"><code>strftime</code> references</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0227.html">0227</a></td>
+<td align="left"><code>strftime %U</code>, <code>%V</code>, and <code>%W</code> conversion specifiers</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0228.html">0228</a></td>
+<td align="left"><code>wmemcmp</code> declaration in Annex B</td>
+<td align="left">Fixed in C99 TC1</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0229.html">0229</a></td>
+<td align="left"><code>localeconv() *_sep_by_space</code> table entries issues</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0230.html">0230</a></td>
+<td align="left">Enumerated type rank</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0231.html">0231</a></td>
+<td align="left">Semantics of <em>text-line</em> and <em>non-directive</em></td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0232.html">0232</a></td>
+<td align="left">Typo in Annex I</td>
+<td align="left">Fixed in C99 TC1</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0233.html">0233</a></td>
+<td align="left"><code>%g</code>, <code>%G</code> precision specification</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0234.html">0234</a></td>
+<td align="left">Miscellaneous Typos</td>
+<td align="left">Fixed in C99 TC1</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0235.html">0235</a></td>
+<td align="left">"<code>C</code>" locale collating behaviour not defined</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0236.html">0236</a></td>
+<td align="left">The interpretation of type based aliasing rule when applied to union objects or allocated objects</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0237.html">0237</a></td>
+<td align="left">Declarations using <code>[static]</code></td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0238.html">0238</a></td>
+<td align="left">Decriptions of <code>fma()</code> overflow and underflow errors are missing</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0239.html">0239</a></td>
+<td align="left">Annex F <code>nexttoward</code> description is inconsistent with 7.12.11.4. and F.9.8.3</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0240.html">0240</a></td>
+<td align="left"><code>lrint</code>, <code>llrint</code>, <code>lround</code>, <code>llround</code>, and <code>ilogb</code> descriptions are not consistent for unrepresentable results</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0241.html">0241</a></td>
+<td align="left">Make the base standard and Annex F consistent for <code>pow(0, &lt;0)</code></td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0242.html">0242</a></td>
+<td align="left">Make the base standard and Annex F consistent for <code>logb(0)</code></td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0243.html">0243</a></td>
+<td align="left">Make the base standard and Annex F consistent for <code>fmod()</code>, <code>remainder()</code>, and <code>remquo()</code> for a zero divisor</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0244.html">0244</a></td>
+<td align="left"><code>tgamma(zero or negative integer)</code> should be considered a pole error</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0245.html">0245</a></td>
+<td align="left">Missing paragraph numbers</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0246.html">0246</a></td>
+<td align="left">completion of declarators</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0247.html">0247</a></td>
+<td align="left">are values a form of behaviour ?</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0248.html">0248</a></td>
+<td align="left">limits are required for optional types</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0249.html">0249</a></td>
+<td align="left">Lacuna applying C89:TC1 to C99</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0250.html">0250</a></td>
+<td align="left">non-directives within macro arguments</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0251.html">0251</a></td>
+<td align="left">are <code>struct fred</code> and <code>union fred</code> the same type ?</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0252.html">0252</a></td>
+<td align="left">incomplete argument types when calling non-prototyped functions</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0253.html">0253</a></td>
+<td align="left">"overriding" in designated initializers</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0254.html">0254</a></td>
+<td align="left"><code>mbtowc</code> and partial characters</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0255.html">0255</a></td>
+<td align="left">non-prototyped function calls and argument mismatches</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0256.html">0256</a></td>
+<td align="left">multiple inclusion of headers</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0257.html">0257</a></td>
+<td align="left">common initial sequences and related issues with unions</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0258.html">0258</a></td>
+<td align="left">ordering of "defined" and macro replacement</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0259.html">0259</a></td>
+<td align="left">macro invocations with no arguments</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0260.html">0260</a></td>
+<td align="left">indeterminate values and identical representations</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0261.html">0261</a></td>
+<td align="left">constant expressions</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0262.html">0262</a></td>
+<td align="left">maximum size of bit fields</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0263.html">0263</a></td>
+<td align="left">all-zero bits representations</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0264.html">0264</a></td>
+<td align="left">graphic characters</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0265.html">0265</a></td>
+<td align="left">preprocessor arithmetic</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0266.html">0266</a></td>
+<td align="left">overflow of <code>sizeof</code></td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0267.html">0267</a></td>
+<td align="left">Typos in 5.1.2.3, 7.24.4.4.5, 7.24.6.1, 7.24.6.1</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0268.html">0268</a></td>
+<td align="left">jumps into iteration statements</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0269.html">0269</a></td>
+<td align="left">lacunae in exact-width integer types</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0270.html">0270</a></td>
+<td align="left"><code>wint_t</code> is not the promoted version of <code>wchar_t</code></td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0271.html">0271</a></td>
+<td align="left">lacuna in <code>iswctype</code> and <code>towctrans</code></td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0272.html">0272</a></td>
+<td align="left">type category</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0273.html">0273</a></td>
+<td align="left">meaning of <code>__STDC_ISO_10646__</code></td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0274.html">0274</a></td>
+<td align="left">meaning of "character" in &lt;string,h&gt; functions</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0275.html">0275</a></td>
+<td align="left">bitwise-OR of nothing</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0276.html">0276</a></td>
+<td align="left">orientation of <code>perror</code></td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0277.html">0277</a></td>
+<td align="left">declarations within iteration statements</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0278.html">0278</a></td>
+<td align="left">lacuna in character encodings</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0279.html">0279</a></td>
+<td align="left">Wide character code values for members of the basic character set</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0280.html">0280</a></td>
+<td align="left"><code>struct tm</code>, member <code>tm_isdst</code>, and <code>mktime()</code> in <code>&lt;time.h&gt;</code></td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0281.html">0281</a></td>
+<td align="left">CLOCKS_PER_SEC should not be a constant expression</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0282.html">0282</a></td>
+<td align="left">flexible array members &amp; struct padding</td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0283.html">0283</a></td>
+<td align="left">Accessing a non-current union member ("type punning")</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0284.html">0284</a></td>
+<td align="left">Does &lt;math.h&gt; define <code>INT_MIN</code> and <code>INT_MAX</code>?</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0285.html">0285</a></td>
+<td align="left">Conversion of an <code>imaginary</code> type to <code>_Bool</code></td>
+<td align="left">Fixed in C99 TC2</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0286.html">0286</a></td>
+<td align="left">Correctly rounded and rounding direction/mode</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0287.html">0287</a></td>
+<td align="left">Floating-point status flags and sequence points</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0288.html">0288</a></td>
+<td align="left">deficiency on multibyte conversions</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0289.html">0289</a></td>
+<td align="left">Function prototype with [restrict]</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0290.html">0290</a></td>
+<td align="left"><code>FLT_EVAL_METHOD</code> and extra precision and/or range</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0291.html">0291</a></td>
+<td align="left">corrections to requirements on inexact floating-point exceptions</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0292.html">0292</a></td>
+<td align="left">Use of the word <em>variable</em></td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0293.html">0293</a></td>
+<td align="left">Typo in Standard - <code>double complex</code> instead of <code>complex</code> in an example</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0294.html">0294</a></td>
+<td align="left">Technical question on C99 <code>restrict</code> keyword</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0295.html">0295</a></td>
+<td align="left">Incomplete types for function parameters</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0296.html">0296</a></td>
+<td align="left">Is <code>exp(INFINITY)</code> overflow? A range error? A divide-by-zero exception? <code>INFINITY</code> without any errors?</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0297.html">0297</a></td>
+<td align="left">May <code>FE_*</code> floating-point exception flags have bits in common?</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0298.html">0298</a></td>
+<td align="left">Validity of constant in <code>unsigned long long</code> range</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0299.html">0299</a></td>
+<td align="left">Is <code>cabs()</code> a type-generic macro?</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0300.html">0300</a></td>
+<td align="left">Translation-time expresssion evaluation</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0301.html">0301</a></td>
+<td align="left">Meaning of FE_* macros in &lt;fenv.h&gt;</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0302.html">0302</a></td>
+<td align="left">6.10.2p5: Adding underscore to portable include file name character set</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0303.html">0303</a></td>
+<td align="left">6.10p2: Breaking up the very long sentence describing preprocessing directive</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0304.html">0304</a></td>
+<td align="left">Clarifying illegal tokens in <code>#if</code> directives</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0305.html">0305</a></td>
+<td align="left">6.10.1p3: Clarifying handling of keywords in <code>#if</code> directives</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0306.html">0306</a></td>
+<td align="left">6.10.3p9: Clarifying that rescanning applies to object-like macros</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0307.html">0307</a></td>
+<td align="left">6.10.3p10: Clarifiying arguments vs. parameters</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0308.html">0308</a></td>
+<td align="left">Clarify that source files et al. need not be "files"</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0309.html">0309</a></td>
+<td align="left">Clarifying trigraph substitution</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0310.html">0310</a></td>
+<td align="left">Add non-corner case example of trigraphs</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0311.html">0311</a></td>
+<td align="left">Definition of variably modified types</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0312.html">0312</a></td>
+<td align="left">Meaning of "known constant size"</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0313.html">0313</a></td>
+<td align="left">Incomplete arrays of VLAs</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0314.html">0314</a></td>
+<td align="left">Cross-translation-unit tagged type compatibility</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0315.html">0315</a></td>
+<td align="left">Implementation-defined bit-field types</td>
+<td align="left">Fixed in C11</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0316.html">0316</a></td>
+<td align="left">Unprototyped function types</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0317.html">0317</a></td>
+<td align="left">Function definitions with empty parentheses</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0318.html">0318</a></td>
+<td align="left"><code>(double)0.1f</code> with <code>FLT_EVAL_METHOD</code> being 2</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0319.html">0319</a></td>
+<td align="left">printf("%a", 1.0) and trailing zeros</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0320.html">0320</a></td>
+<td align="left">Scope of variably modified type</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0321.html">0321</a></td>
+<td align="left">Wide character code values for members of the basic character set</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0322.html">0322</a></td>
+<td align="left">Problem with TC2 Change #67 (Add <code>perror</code> to the list defining byte input/output functions.)</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0323.html">0323</a></td>
+<td align="left">Potential problems with TC2 #34, #35, and #36</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0324.html">0324</a></td>
+<td align="left">Tokenization obscurities</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0325.html">0325</a></td>
+<td align="left"><code>strerror()</code></td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0326.html">0326</a></td>
+<td align="left"><code>asctime()</code></td>
+<td align="left">Fixed in C11</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0327.html">0327</a></td>
+<td align="left">Italicize definition of variable length array type, add forward references</td>
+<td align="left">Fixed in C11</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0328.html">0328</a></td>
+<td align="left">String literals in compound literal initialization</td>
+<td align="left">Fixed in C11</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0329.html">0329</a></td>
+<td align="left">Math functions and directed rounding</td>
+<td align="left">Fixed in C11</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0330.html">0330</a></td>
+<td align="left">Externally visible exceptional conditions</td>
+<td align="left">Fixed in C11</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0331.html">0331</a></td>
+<td align="left">permit <code>FE_DIVBYZERO</code> when <code>errno</code> says <code>EDOM</code></td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0332.html">0332</a></td>
+<td align="left"><code>gets</code> is generally unsafe</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0333.html">0333</a></td>
+<td align="left">Missing Predefined Macro Name</td>
+<td align="left">Fixed in C99 TC3</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0334.html">0334</a></td>
+<td align="left">Missing semantics of comparison macros</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0335.html">0335</a></td>
+<td align="left">_Bool bit-fields</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0336.html">0336</a></td>
+<td align="left"><code>TMP_MAX</code></td>
+<td align="left">Fixed in C11</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0337.html">0337</a></td>
+<td align="left"><code>stdio.h</code> macro definition problems</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0338.html">0338</a></td>
+<td align="left">C99 seems to exclude <strong>indeterminate value</strong> from being an uninitialized register</td>
+<td align="left">Fixed in C11</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0339.html">0339</a></td>
+<td align="left">Variably modified compound literals</td>
+<td align="left">Fixed in C11</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0340.html">0340</a></td>
+<td align="left">Composite types for variable-length arrays</td>
+<td align="left">Fixed in C11</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0341.html">0341</a></td>
+<td align="left"><code>[*]</code> in abstract declarators</td>
+<td align="left">Fixed in C11</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0342.html">0342</a></td>
+<td align="left">VLAs and conditional expressions</td>
+<td align="left">Fixed in C11</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0343.html">0343</a></td>
+<td align="left">Initializing qualified wchar_t arrays</td>
+<td align="left">Fixed in C11</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0344.html">0344</a></td>
+<td align="left">Casts in preprocessor conditional expressions</td>
+<td align="left">Fixed in C11</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0345.html">0345</a></td>
+<td align="left">Where does parameter scope start?</td>
+<td align="left">Fixed in C11</td>
+</tr>
+</tbody>
+</table>
+
+</body>
+</html>

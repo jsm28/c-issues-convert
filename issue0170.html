@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0170: Are the description of operators and punctuators is confusing, and are the constraints contradictory?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0170: Are the description of operators and punctuators is confusing, and are the constraints contradictory?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Clive D.W. Feather, BSI<br />
+Date: 1995-10-16<br />
+Submitted against: C90<br />
+Status: Fixed<br />
+Fixed in: C99<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_170.html">dr_170.html</a></p>
+<p><em>Submitted to BSI by Clive D.W. Feather clive@sco.com .</em></p>
+<p><em>In this Defect Report, identifiers lexically identical to those declared in
+standard headers refer to the identifiers declared in those standard headers,
+whether or not the header is explicitly mentioned.</em></p>
+<p><em>This Defect Report has been prepared with considerable help from Mark Brader,
+Jutta Degener, Ronald Guilmette, and a person whose employment conditions
+require anonymity. However, except where stated, opinions expressed or implied
+should not be assumed to be those of any person other than myself.</em></p>
+<p>Defect Report UK 018: Operators and punctuators</p>
+<p>The description of operators and punctuators is confusing, and the constraints
+are contradictory.</p>
+<p>Subclause 6.1.5 Constraints reads:</p>
+<p>The operators <code>[ ]</code>, <code>( )</code>, and <code>? :</code> shall occur in pairs, possibly separated
+by expressions. The operators <code>#</code> and <code>##</code> shall occur in macro-defining
+preprocessing directives only.</p>
+<p>Subclause 6.1.6 Constraints reads:</p>
+<p>The punctuators <code>[ ]</code>, <code>( )</code>, and <code>{ }</code> shall occur (after translation phase 4)
+in pairs, possibly separated by expressions, declarations, or statements. The
+punctuator <code>#</code> shall occur in preprocessing directives only.</p>
+<p>Consider the code:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#define STR(x)  #x</span>
+<span style="color: #bbbbbb"> </span>STR<span style="color: #bbbbbb"> </span>({)<span style="color: #bbbbbb">    </span><span style="color: #3D7B7B; font-style: italic">/* Line A */</span>
+<span style="color: #bbbbbb"> </span>STR<span style="color: #bbbbbb"> </span>(<span style="color: #666666">:</span>)<span style="color: #bbbbbb">    </span><span style="color: #3D7B7B; font-style: italic">/* Line B */</span>
+<span style="color: #bbbbbb"> </span>STR<span style="color: #bbbbbb"> </span>([)<span style="color: #bbbbbb">    </span><span style="color: #3D7B7B; font-style: italic">/* Line C */</span>
+<span style="color: #bbbbbb"> </span>STR<span style="color: #bbbbbb"> </span>(<span style="border: 1px solid #FF0000">#</span>)<span style="color: #bbbbbb">    </span><span style="color: #3D7B7B; font-style: italic">/* Line D */</span>
+</pre></div>
+
+<p>Line A appears to be strictly conforming, since the first sentence of the
+constraint of subclause 6.1.6 does not apply during translation phase 4. Line B
+violates the constraint of subclause 6.1.5. The interpretation of line C depends
+on whether the <code>[</code> is an operator or a punctuator!</p>
+<p>Line D violates both constraints, but again which one depends on whether it is
+an operator or a punctuator, something which is not made clear in the C
+Standard.</p>
+<p>Assuming that the intent was for line B to be strictly conforming, and that
+<em>(after translation phase 4)</em> was inadvertently omitted from subclause 6.1.5,
+the first sentence of each of these Constraints is nugatory, as any program that
+violates these constraints also violates a syntax rule elsewhere in clause 6.
+The remaining sentences would be better expressed as part of subclause 6.8. It
+is also arguable that the concepts of operator and punctuator are better merged
+at the syntactic level, and separated out only at the semantic level.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Delete the Constraints of subclauses 6.1.5 and 6.1.6. Add the following
+constraint to 6.8:</p>
+<p>A <code>#</code> preprocessing token shall only occur within a replacement-list or when
+permitted by the syntax rules of this subclause. A <code>##</code> preprocessing token
+shall only occur within a replacement-list.</p>
+<p>Add to the end of the Constraints of subclause 6.1, just before the full stop:</p>
+<p>, and shall not be <code>#</code> or <code>##</code></p>
+<p><strong>Alternative Suggested Technical Corrigendum</strong></p>
+<p>In subclause 6.1 syntax, delete both occurrences of <em>operator</em> and replace the
+second occurrence of <em>punctuator</em> by <em>pp-punctuator.</em></p>
+<p>Delete subclauses 6.1.5 and 6.1.6, and replace them by the following:</p>
+<p><strong>6.1.5 Punctuators</strong></p>
+<p><strong>Syntax:</strong></p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">  </span>pp<span style="color: #666666">-</span>punctuator<span style="color: #666666">:</span>
+<span style="color: #bbbbbb">                 </span>punctuator
+<span style="color: #bbbbbb">                 </span>pp<span style="color: #666666">-</span>only<span style="color: #666666">-</span>punctuator
+<span style="color: #bbbbbb">         </span>pp<span style="color: #666666">-</span>only<span style="color: #666666">-</span>punctuator<span style="color: #666666">:</span><span style="color: #bbbbbb"> </span>one<span style="color: #bbbbbb"> </span>of
+<span style="color: #bbbbbb">                 </span><span style="color: #9C6500"># ## defined</span>
+<span style="color: #bbbbbb">         </span><span style="color: #767600">punctuator</span>:
+<span style="color: #bbbbbb">                 </span>[<span style="color: #bbbbbb"> </span>]<span style="color: #bbbbbb"> </span>(<span style="color: #bbbbbb"> </span>)<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>}<span style="color: #bbbbbb"> </span>.<span style="color: #bbbbbb"> </span><span style="color: #666666">-</span>
+<span style="color: #bbbbbb">                 </span><span style="color: #666666">++</span><span style="color: #bbbbbb"> </span><span style="color: #666666">--</span><span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span><span style="color: #666666">-</span><span style="color: #bbbbbb"> </span><span style="color: #666666">~</span><span style="color: #bbbbbb"> </span><span style="color: #666666">!</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">sizeof</span>
+<span style="color: #bbbbbb">                 </span><span style="color: #666666">/</span><span style="color: #bbbbbb"> </span><span style="color: #666666">%</span><span style="color: #bbbbbb">            </span><span style="color: #666666">=</span><span style="color: #bbbbbb">  </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">==</span><span style="color: #bbbbbb"> </span><span style="color: #666666">!=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">^</span><span style="color: #bbbbbb"> </span><span style="color: #666666">|</span><span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;&amp;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">||</span>
+<span style="color: #bbbbbb">                 </span><span style="color: #666666">?</span><span style="color: #bbbbbb"> </span><span style="color: #666666">:</span><span style="color: #bbbbbb"> </span>,<span style="color: #bbbbbb"> </span><span style="color: #666666">:</span><span style="color: #bbbbbb"> </span>;<span style="color: #bbbbbb"> </span>...
+<span style="color: #bbbbbb">                 </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">/=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">%=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">+=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">-=</span><span style="color: #bbbbbb">   </span><span style="color: #666666">=</span><span style="color: #bbbbbb">   </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">^=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">|=</span>
+</pre></div>
+
+<p><strong>Semantics:</strong></p>
+<p>A punctuator is a symbol that has independent syntactic and semantic
+significance. Depending on context, some punctuators may specify an operation to
+be performed (an <em>evaluation</em>) that yields a value, or yields a designator, or
+produces a side-effect, or a combination thereof; in that context, the
+punctuator is known as an <em>operator.</em> An <em>operand</em> is an entity on which an
+operator acts.</p>
+<p>Add the following constraint to 6.8:</p>
+<p>A <code>#</code> preprocessing token shall only occur within a replacement-list or when
+permitted by the syntax rules of this subclause. A <code>##</code> preprocessing token
+shall only occur within a replacement-list.</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>This is a work in progress item.</p>
+<p>General feeling is that this should be cleaned up for C9X along the lines of
+C++ pp-punctuator grammar.</p>
+<p>Suggested response is to add words to subclause 6.1.5 along the lines, <em>shall
+occur in pairs within expressions...</em></p>
+
+</body>
+</html>

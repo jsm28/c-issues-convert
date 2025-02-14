@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0448: What are the semantics of a # non-directive?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0448: What are the semantics of a <strong># non-directive</strong>?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG 14, Fred J. Tydeman<br />
+Date: 2013-08-20<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1740.htm">N1740,</a> <a href="issue0231.html">DR 231</a>, <a href="issue0250.html">DR 250</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Cross-references: <a href="issue0231.html">0231</a>, <a href="issue0250.html">0250</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>What is a <strong>directive name</strong>? What are the semantics of a <strong># non-directive</strong>?</p>
+<p>In particular, what should happen for a translation unit with these four lines:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500"># non-directive</span>
+<span style="color: #9C6500"># &quot;Long string&quot;</span>
+<span style="color: #9C6500"># &#39;Many characters are implementation defined&#39;</span>
+<span style="color: #9C6500"># 1234</span>
+</pre></div>
+
+</blockquote>
+<p>The syntax in <strong>6.10 Preprocessing directives</strong> has in group-part:</p>
+<blockquote>
+<p># non-directive</p>
+</blockquote>
+<p>The C standard section 6.10, paragraph 3 has:</p>
+<blockquote>
+<p>A non-directive shall not begin with any of the directive names appearing in the
+syntax.</p>
+</blockquote>
+<p>I find that confusing as <strong>directive name</strong> is only used in the C standard in
+6.10 paragraphs 3 and 4 (without any definition). So, what is a <strong>directive
+name</strong>?</p>
+<p>Assuming <strong>directive name</strong> is one of:</p>
+<ul>
+<li>if</li>
+<li>ifdef</li>
+<li>ifndef</li>
+<li>elif</li>
+<li>else</li>
+<li>endif</li>
+<li>include</li>
+<li>define</li>
+<li>undef</li>
+<li>line</li>
+<li>error</li>
+<li>pragma</li>
+</ul>
+<p>then my four line program contains lines that are</p>
+<blockquote>
+<p># non-directive</p>
+</blockquote>
+<p>so should be valid. However, almost every C compiler I have tried considers them
+errors that end translation. I did find at least one C compiler that ignored
+them (treated them as comments). I did find at least one C compiler that
+considered them errors even inside of:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#if 0</span>
+<span style="color: #9C6500">#endif</span>
+</pre></div>
+
+</blockquote>
+<p>where they should have been ignored.</p>
+<p>I believe that gcc treats</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500"># 1234</span>
+</pre></div>
+
+</blockquote>
+<p>the same as:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500"># line 1234</span>
+</pre></div>
+
+</blockquote>
+<p>I see no semantics for non-directive. So, what is supposed to happen with them?
+Is it implicitly undefined?</p>
+<p>Since preprocessing directives (which includes non-directive) are deleted at the
+end of translation phase 4, these non-directives could act as comments.</p>
+<p>DRs 231 and 250 appear to contradict each other on what happens with a
+non-directive and neither refers to the other.</p>
+<p><a href="issue0231.html">DR 231</a> Says that text-line and non-directive are not
+implementation defined. They are placeholders in the phases of translation and
+are subject to normal processing in subsequent phases of translation. And that
+words were supposed to be added to the Rationale.</p>
+<p><a href="issue0250.html">DR 250</a> Says that non-directive is a preprocessing directive. And,
+it added that as a footnote in 6.10.3#11</p>
+<p>Neither DR added normative words.</p>
+<p>In answering this, we should consider what happens with mis-spellings, such as:</p>
+<ul>
+<li>#endf</li>
+<li>#deifine</li>
+</ul>
+<p>Should <strong># non-directive</strong> be a comment (and ignored)? Implementation defined?
+An error that ends translation (like #error)? Undefined behaviour?</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Since I do not know what should happen, I have none. But, if we decide on
+undefined behaviour, I would like that as explicit words.</p>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Oct 2013 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>There is intentional vagueness in this area such that implementations have and
+exhibit unspecified and useful additional behaviors. This has been a source of
+historical confusion and should be addressed.</p>
+</blockquote>
+<p>Oct 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>A small change was identified and made in the Proposed Technical Corrigendum.</p>
+</blockquote>
+<h3>Proposed Technical Corrigendum</h3>
+<p>Add new paragraph 6.10 paragraph 9:</p>
+<blockquote>
+<p>The execution of a non-directive preprocessing directive results in undefined
+behavior.</p>
+</blockquote>
+<p>Add to Annex J.2:</p>
+<blockquote>
+<p>The execution of a non-directive preprocessing directive (6.10)</p>
+</blockquote>
+
+</body>
+</html>

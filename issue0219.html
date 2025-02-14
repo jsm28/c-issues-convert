@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0219: Effective types</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0219: Effective types</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Clive Feather (UK)<br />
+Date: 2000-04-04<br />
+Submitted against: C99<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_219.htm">dr_219.htm</a></p>
+<h3>Summary</h3>
+<p>6.5 reads:</p>
+<blockquote>
+<p>[#6] [...] If a value is copied into an object having no declared type using
+<code>memcpy</code> or <code>memmove</code>, or is copied as an array of character type, then the
+effective type of the modified object for that access and for subsequent
+accesses that do not modify the value is the effective type of the object from
+which the value is copied, if it has one. For all other accesses to an object
+having no declared type, the effective type of the object is simply the type of
+the lvalue used for the access.</p>
+</blockquote>
+<p>Now consider the code extract:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>c;<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>i;<span style="color: #bbbbbb"> </span><span style="color: #B00040">long</span><span style="color: #bbbbbb"> </span>l;<span style="color: #bbbbbb"> </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>d;<span style="color: #bbbbbb"> </span>}<span style="color: #bbbbbb"> </span>s<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #666666">1</span>,<span style="color: #bbbbbb"> </span><span style="color: #666666">2</span>,<span style="color: #bbbbbb"> </span><span style="color: #666666">3</span>,<span style="color: #bbbbbb"> </span><span style="color: #666666">4</span><span style="color: #bbbbbb"> </span>};
+<span style="color: #bbbbbb">     </span><span style="color: #B00040">size_t</span><span style="color: #bbbbbb"> </span>len1<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">int</span>);
+<span style="color: #bbbbbb">     </span><span style="color: #B00040">size_t</span><span style="color: #bbbbbb"> </span>len2<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>offsetof<span style="color: #bbbbbb"> </span>(s,<span style="color: #bbbbbb"> </span>d)<span style="color: #bbbbbb"> </span><span style="color: #666666">-</span><span style="color: #bbbbbb"> </span>offsetof<span style="color: #bbbbbb"> </span>(s,<span style="color: #bbbbbb"> </span>i));
+<span style="color: #bbbbbb">     </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>p1<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>malloc<span style="color: #bbbbbb"> </span>(len1);<span style="color: #bbbbbb"> </span>assert<span style="color: #bbbbbb"> </span>(p1);
+<span style="color: #bbbbbb">     </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>p2<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>malloc<span style="color: #bbbbbb"> </span>(len2);<span style="color: #bbbbbb"> </span>assert<span style="color: #bbbbbb"> </span>(p2);
+<span style="color: #bbbbbb">     </span>memcpy<span style="color: #bbbbbb"> </span>(p1,<span style="color: #bbbbbb"> </span>(<span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>)<span style="color: #666666">&amp;</span>s<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span>offsetof<span style="color: #bbbbbb"> </span>(s,<span style="color: #bbbbbb"> </span>i),<span style="color: #bbbbbb"> </span>len1);
+<span style="color: #bbbbbb">     </span>memcpy<span style="color: #bbbbbb"> </span>(p2,<span style="color: #bbbbbb"> </span>(<span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>)<span style="color: #666666">&amp;</span>s<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span>offsetof<span style="color: #bbbbbb"> </span>(s,<span style="color: #bbbbbb"> </span>i),<span style="color: #bbbbbb"> </span>len2);
+</pre></div>
+
+<p>What are the effective types of <code>p1</code> and <code>p2</code> ? The cited text would imply that
+they are both <code>struct s</code>, even though this is patently nonsense.</p>
+<hr />
+<p>Comment from WG14 on 2006-04-04:</p>
+<h3>Committee Discussion</h3>
+<p>Consider:</p>
+<blockquote>
+<p>1. <code>struct s { char c; int i; long l; double d; } s = { 1, 2, 3, 4 };</code><br />
+2. <code>size_t len1 = sizeof (int);</code><br />
+3. <code>size_t len2 = offsetof (s, d) - offsetof (s, i));</code><br />
+4. <code>void *p1 = malloc (len1); assert (p1);</code><br />
+5. <code>void *p2 = malloc (len2); assert (p2);</code><br />
+6. <code>memcpy (p1, (char *)&amp;s + offsetof (s, i), len1);</code><br />
+7. <code>memcpy (p2, (char *)&amp;s + offsetof (s, i), len2);</code></p>
+</blockquote>
+<p>In lines 6 and 7, the type of the source object in the <code>memcpy</code> is an array of
+<code>char</code> because the dereference of <code>(char *)&amp;s + ...</code> is a <code>char</code>. This is
+inferred by:</p>
+<blockquote>
+<p>- "<code>(</code><em>some_type</em><code>*)x</code>" has the type "pointer to <em>some_type</em>"<br />
+- the dereference of "pointer to <em>some_type</em>" has the type "<em>some_type</em>"</p>
+</blockquote>
+<p>In other words, "<code>(char *)&amp;s + offsetof (s,i)</code>" has type "pointer to <code>char</code>" and
+its dereference has type "<code>char</code>", i.e., the type of the source object. In the
+following examples:</p>
+<blockquote>
+<p>8. <code>memcpy (p1, &amp;s.i, len1);</code><br />
+9. <code>memcpy (p1, (char *) &amp;s.i, len1);</code><br />
+10. <code>memcpy (p1, (float *) &amp;s.i, len1);</code></p>
+</blockquote>
+<p>the source types are, respectively, array of <code>int</code>, <code>char</code>, and <code>float</code>.</p>
+<p>In lines 6 and 7, the effective type of the source arguments to <code>memcpy</code> is an
+array of <code>char</code>, based on the following sentence from 6.5P6:</p>
+<blockquote>
+<p>"For all other accesses to an object having no declared type, the effective type
+of the object is simply the type of the lvalue used for the access."</p>
+</blockquote>
+<p>Based on the following sentence again from 6.5P6:</p>
+<blockquote>
+<p>"If a value is copied into an object having no declared type using <code>memcpy</code> or
+<code>memmove</code>, or is copied as an array of character type, then the effective type
+of the modified object for that access and for subsequent accesses that do not
+modify the value is the effective type of the object from which the value is
+copied, if it has one."</p>
+</blockquote>
+<p>The object being copied into has no declared type (because it was an allocated
+object), thus "the effective type of the modified object for that access ... is
+the effective type of the object from which the value is copied ...". The object
+from which it was copied is array of <code>char</code>. The effective type for <code>p1</code> and
+<code>p2</code> in lines 6 and 7 is: array of <code>char</code>.</p>
+<h3>Committee Response</h3>
+<p>The effective types of <code>*p1</code> and <code>*p2</code> are not <code>struct S</code> because not all of the
+bytes of <code>struct S</code> are copied.</p>
+<p>However, the memcpy calls do copy pieces of <code>s</code>. Those pieces contain objects
+with declared types.</p>
+<p><code>memcpy (p1, (char *)&amp;s + offsetof (s, i), len1);</code> copies all of the bytes of
+<code>s.i</code> to an alignment suitable for an object of type int. The effective type of
+the resulting copy can be treated as having effective type <code>int</code>.</p>
+<p><code>memcpy (p2, (char *)&amp;s + offsetof (s, i), len2);</code> copies all of the bytes of
+<code>s.i</code> and <code>s.l</code>. The memcpy also might copy bytes corresponding to padding
+before and after <code>s.l</code>.</p>
+<p>The <code>int</code> object from <code>s.i</code> is copied to an alignment suitable for an object of
+type <code>int</code>. The object starting at <code>*p2</code> extending for <code>sizeof (int)</code> bytes can
+be treated as having effective type <code>int</code>.</p>
+<p>Because of alignment requirements and padding rules that vary from
+implementation to implementation, the long object from <code>s.l</code> might or might not
+be copied to an alignment suitable for an object of type long. If it is aligned
+properly, the object starting at <code>*((char *) p2 + (offsetof (s, l) - offsetof (s, i)))</code> extending for <code>sizeof (long)</code> bytes can be treated as having effective
+type long.</p>
+<p>The objects resulting from the calls to memcpy may also be accessed by other
+types (primarily given by Subclause 6.5 paragraph 7).</p>
+
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0054: What is the behavior of various string functions with a specified length of zero?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0054: What is the behavior of various string functions with a specified length of zero?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Larry Jones, Project Editor (P.J. Plauger)<br />
+Date: 1993-04-01<br />
+Submitted against: C90<br />
+Status: Fixed<br />
+Fixed in: C90 TC1<br />
+Cross-references: <a href="issue0042.01.html">0042.01</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_054.html">dr_054.html</a></p>
+<p>Are the string handling functions defined in subclause 7.11 that have an
+explicit length specification (<code>memcpy</code>, <code>memmove</code>, <code>strncpy</code>, <code>strncat</code>,
+<code>memcmp</code>, <code>strncmp</code>, <code>strxfrm</code>, <code>memchr</code>, and <code>memset</code>) well-defined when the
+length is specified as zero?</p>
+<p>Taking <code>memcpy</code> as an example, the description in subclause 7.11.2.1 states:</p>
+<blockquote>
+<p>The <code>memcpy</code> function copies <code>n</code> characters from the object pointed to by <code>s2</code>
+into the object pointed to by <code>s1</code>. If copying takes place between objects that
+overlap, the behavior is undefined.</p>
+</blockquote>
+<p>The response to <a href="issue0042.01.html">Defect Report #042 Question 1</a> indicates that:</p>
+<blockquote>
+<p>... the “objects” referred to by subclause 7.11.2.1 are exactly the regions of
+data storage pointed to by the pointers and dynamically determined to be of <code>N</code>
+bytes in length (i.e. treated as an array of <code>N</code> elements of character type).</p>
+</blockquote>
+<p>Since, by definition, objects consist of at least one byte, this would imply
+that <code>s1</code> and <code>s2</code> are not pointing to objects when <code>N</code> is zero and thus are
+outside the domain of the function leading to undefined behavior.</p>
+<p>I do not recall whether this was the Committee's intent or not, but it would
+seem that some clarification is in order.</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Correction</h3>
+<p><em><strong>Add to subclause 7.11.1, page 162:</strong></em></p>
+<p>Where an argument declared as <code>size_t n</code> specifies the length of the array for a
+function, <code>n</code> can have the value zero on a call to that function. Unless
+explicitly stated otherwise in the description of a particular function in this
+subclause, pointer arguments on such a call must still have valid values, as
+described in subclause 7.1.7. On such a call, a function that locates a
+character finds no occurrence, a function that compares two character sequences
+returns zero, and a function that copies characters copies zero characters.</p>
+
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0042.02: If so, how big is the object defined by memcpy?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0042.02: If so, how big is the object defined by <code>memcpy</code>?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Tom MacDonald, WG14<br />
+Date: 1992-12-10<br />
+Reference document: X3J11/92-001<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_042.html">dr_042.html</a></p>
+<p>For the purposes of the description of <code>memcpy</code>, can a contiguous sequence of
+elements within an array be regarded as an object in its own right? If so, are
+the objects in the description of <code>memcpy</code> the smallest contiguous sequences of
+bytes that can be construed as the objects into which the arguments point?</p>
+<p>In Example 2:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f2</span>(<span style="color: #B00040">void</span>)<span style="color: #bbbbbb"> </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">extern</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>b[<span style="color: #666666">2*</span>N];
+<span style="color: #bbbbbb">        </span>memcpy(b<span style="color: #666666">+</span>N,<span style="color: #bbbbbb"> </span>b,<span style="color: #bbbbbb"> </span>N);
+<span style="color: #bbbbbb">        </span>}
+</pre></div>
+
+<p>can each of the first and last half of array <code>b</code> be regarded as an object in its
+own right, so that the behavior of the call of <code>memcpy</code> is defined? (Although
+they are not declared as separate objects, each half does seem to satisfy the
+definition of object quoted above.) Or is the behavior undefined, since both
+arguments point into the same array object <code>b</code>?</p>
+<p>In Example 3:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f3</span>(<span style="color: #B00040">void</span>)<span style="color: #bbbbbb"> </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>p<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>malloc(<span style="color: #666666">2*</span>N);<span style="color: #bbbbbb">  </span><span style="color: #3D7B7B; font-style: italic">/* Allocate an object. */</span>
+<span style="color: #bbbbbb">        </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">*</span>q)[N]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>p;<span style="color: #bbbbbb">       </span><span style="color: #3D7B7B; font-style: italic">/* The object pointed to by p may</span>
+<span style="color: #3D7B7B; font-style: italic">                                                        be interpreted as having type</span>
+<span style="color: #3D7B7B; font-style: italic">                                                        (char [2][N]) when referenced</span>
+<span style="color: #3D7B7B; font-style: italic">                                                        through q. */</span>
+<span style="color: #bbbbbb">        </span><span style="color: #3D7B7B; font-style: italic">/* ... */</span>
+<span style="color: #bbbbbb">        </span>memcpy(q[<span style="color: #666666">1</span>],<span style="color: #bbbbbb"> </span>q[<span style="color: #666666">0</span>],<span style="color: #bbbbbb"> </span>N);
+<span style="color: #bbbbbb">        </span><span style="color: #3D7B7B; font-style: italic">/* ... */</span>
+<span style="color: #bbbbbb">        </span>}
+<span style="color: #bbbbbb">        </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>r<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>p;<span style="color: #bbbbbb">            </span><span style="color: #3D7B7B; font-style: italic">/* The object pointed to by p may</span>
+<span style="color: #3D7B7B; font-style: italic">                                                        be interpreted as having type</span>
+<span style="color: #3D7B7B; font-style: italic">                                                        (char [2*N]) when referenced</span>
+<span style="color: #3D7B7B; font-style: italic">                                                        through r. */</span>
+<span style="color: #bbbbbb">        </span><span style="color: #3D7B7B; font-style: italic">/* ... */</span>
+<span style="color: #bbbbbb">        </span>memcpy(r<span style="color: #666666">+</span>N,<span style="color: #bbbbbb"> </span>r,<span style="color: #bbbbbb"> </span>N);
+<span style="color: #bbbbbb">        </span><span style="color: #3D7B7B; font-style: italic">/* ... */</span>
+<span style="color: #bbbbbb">        </span>}
+<span style="color: #bbbbbb"> </span>}
+</pre></div>
+
+<p>the types of the objects are inferred from the pointers, and the underlying
+storage is dynamically allocated. Is the behavior of each call of <code>memcpy</code>
+defined?</p>
+<p>Since the relationship between the values of the arguments presented to <code>memcpy</code>
+is the same in all the above calls, it seems reasonable to expect that either
+all these calls of <code>memcpy</code> give defined behavior, or none do. But which is it?</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>a. Yes, for <code>memcpy</code>, a contiguous sequence of elements within an array can be
+regarded as an object in its own right.</p>
+<p>b. The objects are not the smallest contiguous sequence of bytes that can be
+construed; they are exactly the regions of data storage starting at the pointer
+and of <code>N</code> bytes in length.</p>
+<p>c. Yes, the non-overlapping halves of array <code>b</code> can be regarded as objects in
+their own rights.</p>
+<p>d. The behavior (in Example 2) is defined.</p>
+<p>e. The definition of object is independent of the <em>method</em> of storage
+allocation. The array length is determined by “various methods.” So, yes, the
+behavior of each call of <code>memcpy</code> is well-defined.</p>
+<p>f. All of the calls of <code>memcpy</code> (in Example 3) give defined behavior.</p>
+
+</body>
+</html>

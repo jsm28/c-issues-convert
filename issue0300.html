@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0300: Translation-time expresssion evaluation</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0300: Translation-time expresssion evaluation</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG 14, Fred Tydeman (USA)<br />
+Date: 2004-08-26<br />
+Submitted against: C99<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_300.htm">dr_300.htm</a></p>
+<h3>Summary</h3>
+<p>The standard does not require translation-time expression evaluation to produce
+"obvious" values. For example, there is no requirement that <code>static const double d = 1.23/4.56 - 1.23/4.56;</code> be zero.</p>
+<h3>Details</h3>
+<p>5.2.4.2.2p7 discusses <code>FLT_EVAL_FORMAT</code>, range and precision of floating-point
+constants and operations.</p>
+<p>6.4.4.2p5 discusses translation time conversion of floating-point constants to
+internal format.</p>
+<p>6.6p5 discusses translation time evaluation of floating-point constant
+expressions.</p>
+<p>F.7.2p2 and footnote 306 discusses conversion of floating-point constants to
+internal representation.</p>
+<p>F.7.5p3 discusses initialization and internal representation of floating-point
+constants.</p>
+<p>Currently, if <code>FLT_EVAL_METHOD</code> is negative, there is no requirement that the
+first 1.23 and the second 1.23 convert to the same internal representation; one
+could have more precision than the other. While the same range and precision is
+a requirement when <code>FLT_EVAL_METHOD</code> is 0, 1, or 2, there is no requirement that
+those two identical constants convert to the same value.</p>
+<p>Currently, if <code>FLT_EVAL_METHOD</code> is negative, there is no requirement that the
+first '/' produce a result with the same precision as the second '/' (for the
+same operands). This is a requirement when <code>FLT_EVAL_METHOD</code> is 0, 1, or 2.</p>
+<p>Without these two requirements, the best one can do to try to get zero is:
+<code>static const double d = (double)((double)1.23/(double)4.56) - (double)((double)1.23/(double)4.56);</code> and even that could fail if the first 1.23
+and the second 1.23 convert to different values.</p>
+<p>For translation-time expression evaluation to produce the "obvious" value, two
+requirments must be met: the same decimal constants must result in the same
+value and internal representation, and operators must use the same precision.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>6.4.4.2 Floating constants: Add to paragraph 5: All floating-constants of the
+same source form in the same translation unit shall convert to the same internal
+format with the same value. Footnote: 1.23, 1.230, 123e-2, 123e-02, 1.23L are
+all different source forms, so need not convert to the same internal format and
+value.</p>
+<p>Add to 6.4.4.2p7, All floating-constants with the same mathematical value and
+type in the same translation unit should convert to the same internal format and
+value. Footnote: 1.23, 1.230, 123e-2 and 123e-02 have the same mathematical
+value, so should convert to the same internal format and value.</p>
+<p>6.6: Constant expression: Add a 12th paragraph: All operators with the same
+type(s) of floating-point operand(s) in the same translation unit shall use the
+same precision.</p>
+<hr />
+<p>Comment from WG14 on 2006-03-05:</p>
+<h3>Committee Discussion</h3>
+<p>The Committee consensus is this is not a defect, and that this DR imposes a new
+requirement on implementations.</p>
+<h3>Committee Response</h3>
+<p>This is not really a requirement, but an area to be investigated that could be
+addressed in a future revision of the C Standard.</p>
+
+</body>
+</html>

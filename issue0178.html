@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0178: Why does Defect Report #051 and Defect Report #073 answer the same question differently?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0178: Why does <a href="issue0051.html">Defect Report #051</a> and <a href="issue0073.html">Defect Report #073</a> answer the same question differently?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Frank Farance, WG14<br />
+Date: 1996-02-06<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Cross-references: <a href="issue0051.html">0051</a>, <a href="issue0073.html">0073</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_178.html">dr_178.html</a></p>
+<p>Is the following conforming?</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">  </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">x</span>
+<span style="color: #bbbbbb">                 </span>{
+<span style="color: #bbbbbb">                 </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>y[<span style="color: #666666">1</span>];
+<span style="color: #bbbbbb">                  </span>};
+<span style="color: #bbbbbb">         </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">x</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>z;
+
+<span style="color: #bbbbbb">         </span>z<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">x</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>)<span style="color: #bbbbbb"> </span>malloc(<span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">*</span>z)<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span><span style="color: #666666">100</span>);
+<span style="color: #bbbbbb">         </span>z<span style="color: #666666">-</span><span style="color: #bbbbbb"> </span>y[<span style="color: #666666">5</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&#39;?&#39;</span>;
+</pre></div>
+
+<p><a href="issue0051.html">Defect Report #051</a> states that this isn't conforming behavior
+because the pointer arithmetic for the larger structure might not be compatible
+with a smaller structure. Thus, it recommends the <em>safer</em> idiom:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#define HUGE_ARR  1000    </span><span style="color: #3D7B7B; font-style: italic">/* or bigger than ever needed */</span>
+<span style="color: #bbbbbb">         </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">x</span>
+<span style="color: #bbbbbb">                 </span>{
+<span style="color: #bbbbbb">                 </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>y[HUGE_ARR];
+<span style="color: #bbbbbb">                 </span>};
+<span style="color: #bbbbbb">         </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">x</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>z;
+
+<span style="color: #bbbbbb">         </span>z<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">x</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>)<span style="color: #bbbbbb"> </span>malloc(<span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">*</span>z)<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span><span style="color: #666666">100</span>);
+<span style="color: #bbbbbb">         </span>z<span style="color: #666666">-</span><span style="color: #bbbbbb"> </span>y[<span style="color: #666666">5</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&#39;?&#39;</span>;
+</pre></div>
+
+<p>However, <a href="issue0073.html">Defect Report #073</a> states that the <em>safer</em> idiom is
+undefined behavior because it is possible to implement the operator <code>-</code> as first
+fetching all of <code>*z</code>, then selecting <code>y[5]</code> from it. This approach would cause
+access to unallocated memory. Thus, the operation produces undefined behavior.</p>
+<p>These responses are inconsistent. At the Oct 95 meeting in Nashua NH, WG14
+indicated that it wanted to designate this as undefined behavior.</p>
+
+</body>
+</html>

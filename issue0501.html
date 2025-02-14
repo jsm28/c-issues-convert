@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0501: Can DECIMAL_DIG be larger than necessary?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0501: Can <strong>DECIMAL_DIG</strong> be larger than necessary?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Jim Thomas<br />
+Date: 2016-09-10<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2077.pdf">N2077</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C23<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>This is about the issue raised by Joseph Myers in email SC22WG14.14285:</p>
+<blockquote>
+<p>C11 defines <code>DECIMAL_DIG</code> as "number of decimal digits, <em>n</em>, such that any
+floating-point number in the widest supported floating type with
+<em>p<sub>max</sub></em> radix <em>b</em> digits can be rounded to a floating-point number
+with <em>n</em> decimal digits and back again without change to the value," and then
+gives a formula.</p>
+<p>Is it OK for the value of <code>DECIMAL_DIG</code> to be larger than given by the formula?
+Such a value would still seem to meet the textual description, though being
+suboptimal.</p>
+<p>This is an issue for implementing TS 18661-3 when that involves types wider than
+<code>long double</code>.  In C11, "real floating type" means <code>float</code>, <code>double</code> or <code>long double</code> (6.2.5#10) (and then those types plus the three complex types are
+defined to be the floating types).  TS 18661-3 is supposed to be compatible with
+C11, so that an implementation can conform to both simultaneously.  The
+definition of <code>DECIMAL_DIG</code> in TS 18661-3 covers all supported floating types
+and non-arithmetic encodings.  And that's not conditional on
+<code>__STDC_WANT_IEC_60559_TYPES_EXT__</code>.  So in an implementation of TS 18661-3 that
+supports <code>_Float128</code>, <code>DECIMAL_DIG</code> must be big enough for <code>_Float128</code>, even if
+<code>__STDC_WANT_IEC_60559_TYPES_EXT__</code> is not defined when <code>&lt;float.h&gt;</code> is included.
+And that's only compatible with C11 (if <code>long double</code> is narrower than
+<code>_Float128</code>) if C11 allows <code>DECIMAL_DIG</code> to be larger than given by the formula.</p>
+</blockquote>
+<p>Agreed. The current specification for <code>DECIMAL_DIG</code> in TS 18661-3 is
+incompatible with C11, as explained.</p>
+<p>The suggested Technical Corrigendum below allows <code>DECIMAL_DIG</code> to be larger than
+the value of the given formula. Thus an implementation that supports a floating
+type wider than <code>long double</code>, for example a wide type in TS 18661-3, could
+define <code>DECIMAL_DIG</code> to be large enough for its widest type and still conform as
+a C implementation without extensions.</p>
+<p>Where <code>DECIMAL_DIG</code> is used to determine a sufficient number of digits, this
+change might lead to conversions with more digits than needed and with more
+digits than would have been used without the change. However, programs wishing
+the minimal sufficient number of digit are better served by the type-specific
+macros <code>FLT_DECIMAL_DIG</code>, etc.</p>
+<p>We considered the alternative of changing TS 198661-3 to make <code>DECIMAL_DIG</code>
+dependent on <code>__STDC_WANT_IEC_60559_TYPES_EXT__</code>.  But this could lead to errors
+resulting from separately compiled parts of a program using inconsistent values
+of <code>DECIMAL_DIG</code>.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>In 5.2.4.2.2#11, change the bullet defining <code>DECIMAL_DIG</code> from:</p>
+<blockquote>
+<p>—      number of decimal digits, <em>n</em>, such that any floating-point number in the
+widest supported floating type with <em>p<sub>max</sub></em> radix <em>b</em> digits can be
+rounded to a floating-point number with n decimal digits and back again without
+change to the value,</p>
+<blockquote>
+<p>&lt; … formula … &gt;</p>
+</blockquote>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>—      number of decimal digits, <em>n</em>, such that any floating-point number in the
+widest supported floating type with <em>p<sub>max</sub></em> radix <em>b</em> digits can be
+rounded to a floating-point number with n decimal digits and back again without
+change to the value, at least</p>
+<blockquote>
+<p>&lt; … formula … &gt;</p>
+</blockquote>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2019-05-03:</p>
+<p>Oct 2016 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The committee agrees with the recommendation. The following example was
+solicited and provided for a committee response.</p>
+<p>(The committee’s Proposed Committee Response and Proposed Technical Corrigendum
+have been superceded)</p>
+</blockquote>
+<p>Apr 2017 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The committee’s Proposed Committee Response and Proposed Technical Corrigendum
+from the last meeting was discussed and a new paper
+<a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2108.pdf">N2108</a> by the WG14
+Floating Point study group was written and discussed at some length. After due
+consideration the committee agreed with their conclusion that <code>DECIMAL_DIG</code>
+could not in fact be implemented properly, and adopted their Suggested Technical
+Corrigendum below. For reference, the committee's previous direction can be
+found in <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2109.htm">N2109</a> and
+has been elided in this document.</p>
+</blockquote>
+<p>Oct 2017 meeting</p>
+<blockquote>
+<p>A proposed change was adopted.</p>
+</blockquote>
+<p>Apr 2018 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>Alternative input to the Proposed Change was presented in paper
+<a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2211.htm">N2211</a> by the C
+Floating Point working group.</p>
+<p>These changes were, however, not reviewed by the Committee.</p>
+</blockquote>
+<p>Oct 2018 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>Alternative input to the Proposed Change was presented in paper
+<a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2211.htm">N2211</a> by the C
+Floating Point working group.</p>
+<p>N2108 suggested obsolescing <code>DECIMAL_DIG</code>, as part of the resolution of CR 501.
+This document updates the suggested CR in N2108 to eliminate references in C11
+to <code>DECIMAL_DIG</code>, and to clarify. Changes below (along with changes to TS
+18661) were identified in N2211.</p>
+<p>The Floating Point Study Group was requested to extract the changes for C from
+N2211 and present them separately. This was done and presented (without change)
+in paper <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2253.pdf">N2253</a> and
+these changes were accepted by the committee as the proposed resolution to this
+issue.</p>
+</blockquote>
+<h3>Proposed Change</h3>
+<p>In 7.31, add a subclause:</p>
+<blockquote>
+<p><strong>7.31.x Mathematics</strong> <code>&lt;math.h&gt;</code></p>
+<p>Use of the <code>DECIMAL_DIG</code> macro is an obsolescent feature. A similar
+type-specific macro, such as <code>LDBL_DECIMAL_DIG</code> can be used instead.</p>
+</blockquote>
+<p>In 5.2.4.2.2#11, in the bullet defining <code>DECIMAL_DIG</code>, attach a footnote to the
+wording:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>DECIMAL_DIG
+</pre></div>
+
+</blockquote>
+<p>where the footnote is:</p>
+<blockquote>
+<p>*) See ‘‘future library directions’’ (7.31.x).</p>
+</blockquote>
+<p>In 5.2.4.2.2#14, change:</p>
+<blockquote>
+<p>[14] Conversion from (at least) <code>double</code> to decimal with <code>DECIMAL_DIG</code> digits
+and back should be the identity function.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>[14] Conversion between real floating type and decimal character sequence with
+at most <em>T</em><code>_DECIMAL_DIG</code> digits should be correctly rounded, where <em>T</em> is the
+macro prefix for the type. This assures conversion from real floating type to
+decimal character sequence with <em>T</em><code>_DECIMAL_DIG</code> digits and back, using
+to-nearest rounding, is the identity function.</p>
+</blockquote>
+<p>In 5.2.4.2.2#16, in the list of macro values in EXAMPLE 2, omit:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>DECIMAL_DIG<span style="color: #bbbbbb">          </span><span style="color: #666666">17</span>
+</pre></div>
+
+</blockquote>
+<p>In 5.2.4.2.2#16, at the end of EXAMPLE 2, omit:</p>
+<blockquote>
+<p>If a type wider than <code>double</code> were supported, then <code>DECIMAL_DIG</code> would be
+greater than 17. For example, if the widest type were to use the minimal-width
+IEC 60559 double-extended format (64 bits of precision), then <code>DECIMAL_DIG</code>
+would be 21.</p>
+</blockquote>
+<p>In 7.21.6.1#13 and 7.29.2.1#13, change:</p>
+<blockquote>
+<p>[13] For <code>e</code>, <code>E</code>, <code>f</code>, <code>F</code>, <code>g</code>, and <code>G</code> conversions, if the number of
+significant decimal digits is at most <code>DECIMAL_DIG</code>, then the result should be
+correctly rounded.283) If the number of significant decimal digits is more than
+<code>DECIMAL_DIG</code> but the source value is exactly representable with <code>DECIMAL_DIG</code>
+digits, then the result should be an exact representation with trailing zeros.
+Otherwise, the source value is bounded by two adjacent decimal strings <em>L</em> &lt;
+<em>U</em>, both having <code>DECIMAL_DIG</code> significant digits; the value of the resultant
+decimal string <em>D</em> should satisfy <em>L</em> ≤ <em>D</em> ≤ <em>U</em>, with the extra stipulation
+that the error should have a correct sign for the current rounding direction.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>[13] For <code>e</code>, <code>E</code>, <code>f</code>, <code>F</code>, <code>g</code>, and <code>G</code> conversions, if the number of
+significant decimal digits is at most the maximum value <em>M</em> of the
+<em>T</em><code>_DECIMAL_DIG</code> macros (defined in <code>&lt;float.h&gt;</code>), then the result should be
+correctly rounded.283) If the number of significant decimal digits is more than
+<em>M</em> but the source value is exactly representable with <em>M</em> digits, then the
+result should be an exact representation with trailing zeros. Otherwise, the
+source value is bounded by two adjacent decimal strings <em>L</em> &lt; <em>U</em>, both having
+<em>M</em> significant digits; the value of the resultant decimal string <em>D</em> should
+satisfy <em>L</em> ≤ <em>D</em> ≤ <em>U</em>, with the extra stipulation that the error should have a
+correct sign for the current rounding direction.</p>
+</blockquote>
+<p>In 7.22.1.3#9 and 7.29.4.1.1#9, change:</p>
+<blockquote>
+<p>[9] If the subject sequence has the decimal form and at most <code>DECIMAL_DIG</code>
+(defined in <code>&lt;float.h&gt;</code>) significant digits, the result should be correctly
+rounded. If the subject sequence <em>D</em> has the decimal form and more than
+<code>DECIMAL_DIG</code> significant digits, consider the two bounding, adjacent decimal
+strings <em>L</em> and <em>U</em>, both having <code>DECIMAL_DIG</code> significant digits, such that the
+values of <em>L</em>, <em>D</em>, and <em>U</em> satisfy <em>L</em> ≤ <em>D</em> ≤ <em>U</em>. The result should be one of
+the (equal or adjacent) values that would be obtained by correctly rounding <em>L</em>
+and <em>U</em> according to the current rounding direction, with the extra stipulation
+that the error with respect to <em>D</em> should have a correct sign for the current
+rounding direction.294)</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>[9] If the subject sequence has the decimal form and at most <em>M</em> significant
+digits, where <em>M</em> is the maximum value of the <em>T</em><code>_DECIMAL_DIG</code> macros (defined
+in <code>&lt;float.h&gt;</code>), the result should be correctly rounded. If the subject sequence
+<em>D</em> has the decimal form and more than <em>M</em> digits, consider the two bounding,
+adjacent decimal strings <em>L</em> and <em>U</em>, both having <em>M</em> significant digits, such
+that the values of <em>L</em>, <em>D</em>, and <em>U</em> satisfy <em>L</em> ≤ <em>D</em> ≤ <em>U</em>. The result should
+be one of the (equal or adjacent) values that would be obtained by correctly
+rounding <em>L</em> and <em>U</em> according to the current rounding direction, with the extra
+stipulation that the error with respect to <em>D</em> should have a correct sign for
+the current rounding direction.294)</p>
+</blockquote>
+<p>In 7.22.1.3 footnote 294 and 7.29.4.1.1 footnote 345, change:</p>
+<blockquote>
+<p><code>DECIMAL_DIG</code>, defined in <code>&lt;float.h&gt;</code>, should be sufficiently large that <em>L</em> and
+<em>U</em> will usually round to the same internal floating value, but if not will
+round to adjacent values.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p><em>M</em> is sufficiently large that <em>L</em> and <em>U</em> will usually correctly round to the
+same internal floating value, but if not will correctly round to adjacent
+values.</p>
+</blockquote>
+<p>In F.5, omit footnote 361:</p>
+<blockquote>
+<p>If the minimum-width IEC 60559 extended format (64 bits of precision) is
+supported, <code>DECIMAL_DIG</code> shall be at least 21. If IEC 60559 double (53 bits of
+precision) is the widest IEC 60559 format supported, then <code>DECIMAL_DIG</code> shall be
+at least 17. (By contrast, <code>LDBL_DIG</code> and <code>DBL_DIG</code> are 18 and 15,
+respectively, for these formats.)</p>
+</blockquote>
+<p>The following change is needed only if TS 18661-1 (with CR 20) is not
+incorporated into C.</p>
+<p>In F.5, replace::</p>
+<blockquote>
+<p>[1] Conversion from the widest supported IEC 60559 format to decimal with
+<strong>DECIMAL_DIG</strong> digits and back is the identity function.361)</p>
+<p>[2] Conversions involving IEC 60559 formats follow all pertinent recommended
+practice. In particular, conversion between any supported IEC 60559 format and
+decimal with <code>DECIMAL_DIG</code> or fewer significant digits is correctly rounded
+(honoring the current rounding mode), which assures that conversion from the
+widest supported IEC 60559 format to decimal with <code>DECIMAL_DIG</code> digits and back
+is the identity function.</p>
+</blockquote>
+<p>with:</p>
+<blockquote>
+<p>[1] Conversions involving IEC 60559 formats follow all pertinent recommended
+practice. Conversion between any supported IEC 60559 format and decimal
+character sequence with <em>M</em> or fewer significant digits is correctly rounded
+(honoring the current rounding mode), where <em>M</em> is the maximum value of the
+<em>T</em><code>_DECIMAL_DIG</code> macros (defined in <code>&lt;float.h&gt;</code>). Conversion from any supported
+IEC 60559 format to decimal character sequence with at least <em>T</em><code>_DECIMAL_DIG</code>
+digits (for the corresponding <em>type</em>) and back, using to-nearest rounding, is
+the identity function.</p>
+</blockquote>
+<p>and renumber the subsequent paragraph.</p>
+
+</body>
+</html>

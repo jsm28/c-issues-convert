@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0341: [*] in abstract declarators</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0341: <code>[*]</code> in abstract declarators</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Joseph Myers &lt;joseph@codesourcery.com&gt;, Joseph Myers (UK)<br />
+Date: 2007-03-24<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1222.htm">ISO/IEC WG14 N1222</a><br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C11<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_341.htm">dr_341.htm</a></p>
+<h3>Summary</h3>
+<p>6.7.5.2#4 says that <code>*</code> as an array size "can only be used in declarations with
+function prototype scope", and paragraph 5 says "If the size is an expression
+that is not an integer constant expression: if it occurs in a declaration at
+function prototype scope, it is treated as if it were replaced by <code>*</code>".</p>
+<p>But is a type name in a function prototype a declaration, and does it have
+function prototype scope? Scopes are only defined in 6.2.1 for identifiers, and
+such type names do not declare identifiers. The presence of <code>[*]</code> in the syntax
+for abstract declarators suggests that</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">    </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f</span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">*</span>)[<span style="color: #666666">*</span>]);
+</pre></div>
+
+<p>was intended to be valid and <code>void f(int (*)[a]);</code> was intended to be equivalent
+to it, but there are no declarations at function prototype scope involved.</p>
+<p>Similarly, what is "in" such a declaration? Is the following valid?</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">    </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f</span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">*</span>)[<span style="color: #008000; font-weight: bold">sizeof</span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">*</span>)[<span style="color: #666666">*</span>])]);
+</pre></div>
+
+<p>Although the <code>[*]</code> lies within a parameter declaration, it's within an
+expression inside it; not one of the declarators involved in declaring the
+identifier with function prototype scope.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>6.7.5.2 paragraph 4, change "declarations with function prototype scope" to "the
+nested sequence of declarators or abstract declarators for a function parameter
+in a function declaration that is not a definition"; remove the footnote.
+Paragraph 5, change "declaration at function prototype scope" to "the nested
+sequence of declarators or abstract declarators for a function parameter in a
+function declaration that is not a definition".</p>
+<hr />
+<p>Comment from WG14 on 2008-07-21:</p>
+<h3>Committee Discussion</h3>
+<h4>Spring 2007</h4>
+<p>There was consensus that the first example should be valid, and the second
+should be invalid.</p>
+<p>Also see <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1238.htm">N1238</a>.</p>
+<p><strong>Fall 2007</strong></p>
+<p>Above reference to N1238 is not relevant.</p>
+<p>It appears the issue hinges entirely on the point that a <em>type-name</em> is not a
+declaration and does not declare an identifier, and because of that it has no
+scope. Instead of adding complex wording to avoid using the term "scope" as
+suggested in the DR, it seems clearer to modify the definition of Scope such
+that it applies to <em>type-name</em>, which is described in 6.7.6 as "syntactically a
+declaration for a function or an object of that type that omits the identifier".</p>
+<p><strong>Spring 2008</strong></p>
+<p>The Committee does not see a way to avoid this change, it seems to be safe. Not
+altogether satisfied with the aesthetics of this change, but this seems to be a
+satisfactory way forward.</p>
+<h3>Technical Corrigendum</h3>
+<p>6.2.1, add a new paragraph at the end (following paragraph 7):</p>
+<blockquote>
+<p>As a special case, a <em>type-name</em> (which is not a declaration of an identifier)
+is considered to have a scope that begins just after the place within the
+<em>type-name</em> where the omitted identifier would appear were it not omitted.</p>
+</blockquote>
+<p>Also add a forward reference to Type names (6.7.6).</p>
+<p>6.7.5.2 paragraph 4, change</p>
+<blockquote>
+<p>declarations with function prototype scope</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>declarations or type-names with function prototype scope</p>
+</blockquote>
+
+</body>
+</html>

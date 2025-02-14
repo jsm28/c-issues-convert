@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0274: meaning of &quot;character&quot; in &lt;string,h&gt; functions</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0274: meaning of "character" in &lt;string,h&gt; functions</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Clive D.W. Feather &lt;clive@demon.net&gt;, UK C Panel<br />
+Date: 2001-09-07<br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C99 TC2<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_274.htm">dr_274.htm</a></p>
+<h3>Problem</h3>
+<p>7.21.2.1#2 defines the operation of <code>memcpy</code> as:</p>
+<blockquote>
+<p>[#2] The <code>memcpy</code> function copies n characters from the object pointed to by
+<code>s2</code> into the object pointed to by <code>s1</code>.</p>
+</blockquote>
+<p>7.21.2.3#2 defines the operation of <code>strcpy</code> as:</p>
+<blockquote>
+<p>[#2] The <code>strcpy</code> function copies the string pointed to by <code>s2</code> (including the
+terminating null character) into the array pointed to by <code>s1</code>.</p>
+</blockquote>
+<p>Other functions in 7.21 refer to either a string or a set of characters in the
+same way. The definition of "string" is in 7.1.1#1:</p>
+<blockquote>
+<p>[#1] A <em>string</em> is a contiguous sequence of characters terminated by and
+including the first null character.</p>
+</blockquote>
+<p>and that of "character" is in 3.7:</p>
+<blockquote>
+<p>3.7 [#1] character<br />
+&lt;abstract&gt; member of a set of elements used for the organization, control, or
+representation of data</p>
+<p>3.7.1 [#1] character single-byte character<br />
+&lt;C&gt; bit representation that fits in a byte</p>
+</blockquote>
+<p>However, none of this makes it clear whether "character" is to be interpreted as
+having type <code>char</code>, <code>signed char</code>, or <code>unsigned char</code>. This matters because
+<code>signed char</code> need not have the same sized range of values as <code>unsigned char</code>
+(for example, <code>SCHAR_MIN</code> could be -127, or on a 10 bit byte system signed
+<code>char</code>s could have a padding bit, with <code>SCHAR_MAX</code> equal to 255 but <code>UCHAR_MAX</code>
+equal to 1023).</p>
+<p>It would be very unfortunate if the <code>mem</code>* functions could not copy every
+possible byte value. The <code>str</code>* functions probably ought to access the values
+as if they were plain <code>char</code>.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Append a new paragraph to 7.21.1:</p>
+<blockquote>
+<p>[#3] Where a block of characters is accessed through a parameter of type <code>void *</code>, each character shall be interpreted as if it had type <code>unsigned char</code> (and
+therefore every object representation is valid and has a different value). Where
+it is accessed through a parameter of type <code>char *</code>, each character shall be
+interpreted as if it had type <code>char</code> (and therefore, if <code>CHAR_MAX - CHAR_MIN + 1</code> is less than <code>UCHAR_MAX</code>, some byte values may be trap representations or be
+treated as equal to other values).</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2003-10-22:</p>
+<h3>Committee Discussion</h3>
+<p>Our intention is that string and memory copies in the standard library should be
+treated as <code>unsigned char</code>, similar to 7.21.4.</p>
+<h3>Technical Corrigendum</h3>
+<p>Add a new paragraph 7.21.1#3:</p>
+<blockquote>
+<p>For all functions in this subclause, each character shall be interpreted as if
+it had the type <code>unsigned char</code> (and therefore every possible object
+representation is valid and has a different value).</p>
+</blockquote>
+
+</body>
+</html>

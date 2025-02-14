@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0299: Is cabs() a type-generic macro?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0299: Is <code>cabs()</code> a type-generic macro?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG 14, Fred Tydeman (USA)<br />
+Date: 2004-08-13<br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C99 TC3<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_299.htm">dr_299.htm</a></p>
+<h3>Summary</h3>
+<p>The standard is not clear as to which type-generic macro(s) should be used to
+compute the absolute value of real, complex, and imaginary types.</p>
+<h3>Details</h3>
+<p>Here are two viewpoints.</p>
+<p>1) <code>cabs()</code> is not a type-generic macro. Instead <code>fabs()</code> covers <code>fabsf()</code>,
+<code>fabs()</code>, <code>fabsl()</code>, <code>cabsf()</code>, <code>cabs()</code>, and <code>cabsl()</code>.</p>
+<p>If this viewpoint is correct, then 7.22p2 may need to be updated along the lines
+of "except <code>modf</code> and <code>cabs</code>". Also, in 7.22p7 (3rd line from end), <code>cabs(fc)</code>
+should be changed to <code>fabs(fc)</code>.</p>
+<p>2) <code>cabs()</code> is a type-generic macro (but only for complex arguments). That is
+<code>cabs()</code> covers <code>cabsf()</code>, <code>cabs()</code>, and <code>cabsl()</code>. In addition, <code>fabs()</code> covers
+<code>fabsf()</code>, <code>fabs()</code>, <code>fabsl()</code>, <code>cabsf()</code>, <code>cabs()</code>, and <code>cabsl()</code>.</p>
+<p>If this viewpoint is correct, then 7.22p6 needs to be updated with <code>cabs</code>. Also,
+B.21 needs to have <code>cabs</code> added to it.</p>
+<p>It seems clear that <code>cabs()</code> is not a type-generic macro.</p>
+<p>In addition, it is not clear what <code>modf</code> is in 7.22p5.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>7.22p5 Add ", except <code>modf</code>" after "<code>&lt;math.h&gt;</code>"</p>
+<p>7.22p7 (3rd line from end), <code>cabs(fc)</code> should be changed to <code>fabs(fc)</code>.</p>
+<hr />
+<p>Comment from WG14 on 2006-04-04:</p>
+<h3>Committee Discussion</h3>
+<p>7.22p2 says that every function in <code>&lt;math.h&gt;</code> and <code>&lt;complex.h&gt;</code> without an <code>l</code>
+or <code>f</code> suffix has a corresponding type-generic macro. Except <code>modf</code>.</p>
+<p>However, 7.22p2 says nothing about what the macro is <em>called</em>.</p>
+<p>7.22p4 says that if there is a function F() in <code>&lt;math.h&gt;</code> and a corresponding
+function cF() in <code>&lt;complex.h&gt;</code>, then the TG-macro for both F() and cF() is
+called "F". In addition, the TG-macro for both <code>fabs()</code> and <code>cabs()</code> is called
+"<code>fabs</code>".</p>
+<p>7.22p5 and 7.22p6 say that for all remaining functions that have TG-macros, the
+macro has the same name as the function.</p>
+<p>However, none of 7.22p4 to 7.22p6 say which functions have TG-macros.</p>
+<p>Adding "except <code>cabs</code>" to 7.22p2 would directly contradict 7.22p4, because it
+says that there is <em>no</em> TG-macro corresponding to <code>cabs</code> (and, therefore,
+<code>fabs</code>).</p>
+<p>If there's a defect in the wording, it's that 7.22p5 should say "except modf"
+after "<code>&lt;math.h&gt;</code>". Or all of 7.22p4 to 7.22p6 should have something like "Where
+a function has a corresponding type-generic macro" inserted in them. But we
+don't even believe that is necessary.</p>
+<p>To get the absolute value of a <code>float complex</code> using a type-generic macro, use
+<code>fabs</code>. Therefore, 7.22p7 (3rd line from end) needs to change <code>cabs(fc)</code> to
+<code>fabs(fc)</code>.</p>
+<p>As G.7p1 correctly shows, to take the absolute value of an imaginary type, use
+<code>fabs</code>.</p>
+<h3>Technical Corrigendum</h3>
+<p>7.22p5 Add ", except <code>modf</code>" after "<code>&lt;math.h&gt;</code>"</p>
+<p>7.22p7 (3rd line from end), <code>cabs(fc)</code> should be changed to <code>fabs(fc)</code>.</p>
+
+</body>
+</html>

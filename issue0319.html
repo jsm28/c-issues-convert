@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0319: printf(&quot;%a&quot;, 1.0) and trailing zeros</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0319: printf("%a", 1.0) and trailing zeros</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG 14, Fred Tydeman (USA)<br />
+Date: 2005-04-04<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1094.txt">ISO/IEC WG14 N1094</a><br />
+Submitted against: C99<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_319.htm">dr_319.htm</a></p>
+<h3>Summary</h3>
+<p>Given that <strong>FLT_RADIX</strong> is 2, what is the output of:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">  </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>x<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">1.0</span>;
+<span style="color: #bbbbbb">  </span>printf(<span style="color: #BA2121">&quot;%a&quot;</span>,<span style="color: #bbbbbb"> </span>x);
+</pre></div>
+
+<p>In particular, are trailing zeros removed or kept?</p>
+<p>Some choices that occur to me are:</p>
+<ol>
+<li>use the smallest precision for an exact representation of this particular value; in effect, remove trailing zeros.</li>
+<li>use the smallest precision for an exact representation of all values of this type; in effect, keep trailing zeros.</li>
+<li>use the smallest precision for an exact representation of all values of all floating-point types; in effect, promote to long double and keep trailing zeros.</li>
+<li>implementation defined.</li>
+<li>unspecified.</li>
+<li>something else.</li>
+</ol>
+<p>Some implementations that I have seen do 1, others do 2, and one does both 1 and
+2 (value and format dependent). I believe choice 1 is the intended behaviour.</p>
+<p>Another way to look at this is: should <strong>%a</strong> act like <strong>%e</strong> (keep trailing
+zeros) or <strong>%g</strong> (remove trailing zeros) with respect to trailing zeros? Should
+this behaviour depend upon the user specifing a precision?</p>
+<p>Some parts of <strong>7.19.6.1 The fprintf function</strong> that are relavent are:</p>
+<p>Paragraph 6 on the '<strong>#</strong>' flag has: "For <strong>g</strong> and <strong>G</strong> conversions, trailing
+zeros are <em>not</em> removed from the result."</p>
+<p>Paragraph 8, section <strong>e,E</strong>, has: "... if the precision is zero and the <strong>#</strong>
+flag is not specified, no decimal-point character appears."</p>
+<p>Paragraph 8, section <strong>g,G</strong>, has: "Trailing zeros are removed from the
+fractional portion of the result unless the <strong>#</strong> flag is specified; a
+decimal-point character appears only if it is followed by a digit."</p>
+<p>Paragraph 8, section <strong>a,A</strong>, has: "... if the precision is missing and
+<strong>FLT_RADIX</strong> is a power of 2, then the precision is sufficient for an exact
+representation of the value; ..."</p>
+<p>Paragraph 8, section <strong>a,A</strong>, has: "... if the precision is missing and
+<strong>FLT_RADIX</strong> is not a power of 2, then the precision is sufficient to
+distinguish values of type <strong>double</strong>, except that trailing zeros may be
+omitted; ..."</p>
+<p>There are corresponding sections for the wide character versions of the
+functions in <strong>7.24.2.1 The fwprintf function</strong>.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Change <strong>7.19.6.1 The fprintf function</strong> sections as follows.</p>
+<p>Paragraph 6 on the '<strong>#</strong>' flag, change the above to: "For <strong>a</strong>, <strong>A</strong>, <strong>g</strong>
+and <strong>G</strong> conversions, trailing zeros are <em>not</em> removed from the result."</p>
+<p>Paragraph 8, section <strong>a,A</strong>, change the above to: "... if the precision is
+missing and <strong>FLT_RADIX</strong> is a power of 2, then the precision is the minimum
+sufficient for an exact representation of all values of type <strong>double</strong> (removal
+of trailing zeros depends upon the <strong>#</strong> flag); ..."</p>
+<p>Paragraph 8, section <strong>a,A</strong>, change the above to: "... if the precision is
+missing and <strong>FLT_RADIX</strong> is not a power of 2, then the precision is the
+minimum sufficient to distinguish values of type <strong>double</strong> (removal of trailing
+zeros depends upon the <strong>#</strong> flag); ..."</p>
+<p>Also, update the corresponding sections for the wide character versions of the
+functions in <strong>7.24.2.1 The fwprintf function</strong>.</p>
+<p>Add to the Rationale in section 7.19.6.1: <strong>%a</strong> (without an explicit precision)
+acts like <strong>%g</strong> (removes trailing zeros), while <strong>%.*a</strong> (with an explicit
+precision) acts like <strong>%e</strong> (keeps trailing zeros). This was done to allow two
+forms of behaviour while using only one conversion specifier.</p>
+<hr />
+<p>Comment from WG14 on 2006-04-04:</p>
+<h3>Committee Response</h3>
+<p>The Committee does not believe this is a defect, however the Committee may
+consider establishing a rule for removing or not removing trailing zeros at some
+point in the future.</p>
+
+</body>
+</html>

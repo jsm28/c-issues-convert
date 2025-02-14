@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0CFP.12: P1: Zero payloads and set payload function</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0CFP.12: P1: Zero payloads and <code>set payload</code> function</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Jim Thomas<br />
+Date: 2017-03-04<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2125.pdf">N2125</a><br />
+Submitted against: Floating-point TS 18661 (C11 version, 2014-2016)<br />
+Status: Fixed<br />
+Fixed in: C23<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2397.htm">n2397.htm</a></p>
+<h3>Summary</h3>
+<p>This is about an issue raised by Joseph Myers in SC22WG14.14450:</p>
+<blockquote>
+<p>The specification for <code>setpayload</code> (and likewise <code>setpayloadsig</code>) says "If <code>pl</code>
+is not a positive floating-point integer representing a valid payload, <code>*res</code> is
+set to positive zero."</p>
+<p>Does "positive" as applied to "floating-point integer" here mean "with sign bit
+0" (the list of definitions in IEEE 754 doesn't include "positive")?  In the
+preferred encodings for binary interchange formats, 0 is a valid payload for
+quiet NaNs.  So should +0.0 as an argument to <code>setpayload</code> result in a quiet
+NaN with payload 0, while -0.0 results in <code>*res</code> being set to +0.0 because -0.0
+isn't positive (and for <code>setpayloadsig</code>, both result in <code>*res</code> set to +0.0
+because a payload for a signaling NaN has to be nonzero to avoid all mantissa
+bits being zero)?</p>
+</blockquote>
+<p>A “positive floating-point integer” is a positive integer in the floating-point
+format, hence it is greater than zero. So, the current specification for
+<code>setpayload</code> and <code>setpayloadsig</code> is flawed in that it doesn’t allow setting the
+payload to zero.</p>
+<p>A more basic problem is that TS 18661-1 assumes IEC 60559 interprets payloads as
+integers. This is true for decimal formats. IEC 60559 says:</p>
+<blockquote>
+<p>The payload corresponds to the significand of finite numbers, interpreted as
+an integer with a maximum value of 10^(3×J)−1, …</p>
+</blockquote>
+<p>The significand c interpreted as an integer is assumed throughout to be
+non-negative, while the <em>s</em> field in (<em>s</em>, <em>q</em>, <em>c</em>) provides the sign. For
+decimal, interpreting the bits in the encodings allows the two encoding schemes
+to have the same payloads and the payloads to fit conceptually with their
+encoding schemes.</p>
+<p>However, for binary formats, IEC 60559 says:</p>
+<blockquote>
+<p>For binary formats, the payload is encoded in the <em>p</em>−2 least significant bits
+of the trailing significand field.</p>
+</blockquote>
+<p>Nowhere does it actually interpret the payload for binary formats as an integer.</p>
+<p>However, the payload for binary formats has a natural interpretation as an
+unsigned integer, so it is reasonable for TS 1866-1 to interpret payloads (for
+binary and decimal formats) as such.</p>
+<p>The suggested Technical Corrigendum below addresses these problems.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>In 14.10, replace the first sentence:</p>
+<blockquote>
+<p>IEC 60559 defines the payload of a NaN to be a certain part of the NaN’s
+significand interpreted as an integer.</p>
+</blockquote>
+<p>with:</p>
+<blockquote>
+<p>IEC 60559 defines the payload of a NaN to be a certain part of the NaN’s
+significand. The payload can be interpreted as an unsigned integer.</p>
+</blockquote>
+<p>In 14.10, in the new C subclause F.10.13, replace:</p>
+<blockquote>
+<p>IEC 60559 defines the <em>payload</em> of a quiet or signaling NaN as an integer value
+encoded in the significand.</p>
+</blockquote>
+<p>with:</p>
+<blockquote>
+<p>IEC 60559 defines the <em>payload</em> of a quiet or signaling NaN as information
+encoded in part of the NaN significand. The payload can be interpreted as an
+unsigned integer.</p>
+</blockquote>
+<p>In 14.10, in the new C subclauses F.10.13.2#2 and F.10.13.3#2, change:</p>
+<blockquote>
+<p>If <code>pl</code> is not a positive floating-point integer representing a valid payload,
+<code>*res</code> is set to positive zero.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>If <code>pl</code> is not a floating-point integer representing a valid payload, <code>*res</code> is
+set to positive zero.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2018-10-18:</p>
+<p>Apr 2017 meeting</p>
+<h3>Committee Discussion</h3>
+<p>The committee agrees that this is a defect and accepts the Suggested Technical
+Corrigendum</p>
+<h3>Proposed Change</h3>
+<p>In 14.10, replace the first sentence:</p>
+<blockquote>
+<p>IEC 60559 defines the payload of a NaN to be a certain part of the NaN’s
+significand interpreted as an integer.</p>
+</blockquote>
+<p>with:</p>
+<blockquote>
+<p>IEC 60559 defines the payload of a NaN to be a certain part of the NaN’s
+significand. The payload can be interpreted as an unsigned integer.</p>
+</blockquote>
+<p>In 14.10, in the new C subclause F.10.13, replace:</p>
+<blockquote>
+<p>IEC 60559 defines the <em>payload</em> of a quiet or signaling NaN as an integer value
+encoded in the significand.</p>
+</blockquote>
+<p>with:</p>
+<blockquote>
+<p>IEC 60559 defines the <em>payload</em> of a quiet or signaling NaN as information
+encoded in part of the NaN significand. The payload can be interpreted as an
+unsigned integer.</p>
+</blockquote>
+<p>In 14.10, in the new C subclauses F.10.13.2#2 and F.10.13.3#2, change:</p>
+<blockquote>
+<p>If <code>pl</code> is not a positive floating-point integer representing a valid payload,
+<code>*res</code> is set to positive zero.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>If <code>pl</code> is not a floating-point integer representing a valid payload, <code>*res</code> is
+set to positive zero.</p>
+</blockquote>
+
+</body>
+</html>

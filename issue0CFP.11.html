@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0CFP.11: Part 2: a-style formatting not IEC 60559 conformant</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0CFP.11: Part 2: a-style formatting not IEC 60559 conformant</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Jim Thomas<br />
+Date: 2016-09-10<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2077.pdf">N2077</a><br />
+Submitted against: Floating-point TS 18661 (C11 version, 2014-2016)<br />
+Status: Fixed<br />
+Fixed in: C23<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2397.htm">n2397.htm</a></p>
+<h3>Summary</h3>
+<p>The <code>a</code>-style formatting specified in subclause 12.5 of TS 18661-2 is not an IEC
+60559 conversion for cases where the formatting precision is less than the
+length of the coefficient of the input. The specification entails an
+intermediate rounding to the floating type of the input, which might overflow
+resulting in a character sequence representation of infinity. IEC 60559
+conversions to character sequences do not overflow, unless the language
+over-restricts the exponent range for character sequence output, which C does
+not.</p>
+<p>Another undesirable aspect of the current specification is that in certain cases
+it produces results with more precision than given by a width modifier.</p>
+<p>Here are some examples, showing the result of the intermediate conversion, with
+different behaviors for the current spec (“old”) and the spec in the suggested
+Technical Corrigendum below (“new”):</p>
+<p>For <code>_Decimal32</code> input <em>x</em> with representation (1, 9512345, 90) and specifier
+...</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #666666">%.3</span>Ha
+</pre></div>
+
+<p>old:                           <em>x</em>                -&gt;             (1, 9510000,
+90)                -&gt;             <code>9.510000e96</code></p>
+<p>new:                         <em>x</em>                -&gt;             (1, 951,
+94)                            -&gt;             <code>9.51e96</code></p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #666666">%.2</span>Ha
+</pre></div>
+
+<p>old:                           <em>x</em>                -&gt;             (1, 9500000,
+90)                -&gt;             <code>9.500000e96</code></p>
+<p>new:                         <em>x</em>                -&gt;             (1, 95,
+95)                               -&gt;             <code>9.5e96</code></p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #666666">%.1</span>Ha
+</pre></div>
+
+<p>old:                           <em>x</em>                -&gt;            
+Inf                                                -&gt;             <code>inf</code></p>
+<p>new:                         <em>x</em>                -&gt;             (1, 1,
+97)                                  -&gt;             <code>1e97</code></p>
+<p>Here’s another example:</p>
+<p>For <code>_Decimal32</code> input x with representation (1, 9512345, 86) and specifier ...</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #666666">%.2</span>Ha
+</pre></div>
+
+<p>old:                           <em>x</em>                -&gt;             (1, 950,
+90)                            -&gt;             <code>9.50e92</code></p>
+<p>new:                         <em>x</em>                -&gt;             (1, 95,
+91)                               -&gt;             <code>9.5e92</code></p>
+<p>The examples use a to-nearest rounding.</p>
+<p>As the examples illustrate, the problematic cases for the current “old” spec
+occur because of the exponent range limitation of the format used for the
+intermediate conversion.</p>
+<p>The suggested Technical Corrigendum below specifies formatting that is IEC 60559
+conformant and which honors a width modifier. It does not change the numerical
+value of the result, except in overflow cases.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>In 12.5, in the addition to 7.21.6.1#8 and 7.29.2.1#8, under <code>a</code>,<code>A</code> conversion
+specifiers, change:</p>
+<blockquote>
+<p>If the precision is present (in the conversion specification) and is zero or at
+least as large as the precision <em>p</em> (5.2.4.2.2) of the decimal floating type,
+the conversion is as if the precision were missing. If the precision is present
+(and nonzero) and less than the precision <em>p</em> of the decimal floating type, the
+conversion first obtains an intermediate result by rounding the input in the
+type, according to the current rounding direction for decimal floating-point
+operations, to the number of digits specified by the precision, then converts
+the intermediate result as if the precision were missing. The length of the
+coefficient of the intermediate result is the smallest number, at least as large
+as the formatting precision, for which the quantum exponent is within the
+quantum exponent range of the type (see 5.2.4.2.2a). The intermediate rounding
+may overflow.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>If the precision <em>P</em> is present (in the conversion specification) and is zero or
+at least as large as the precision <em>p</em> (5.2.4.2.2) of the decimal floating type,
+the conversion is as if the precision were missing. If the precision <em>P</em> is
+present (and nonzero) and less than the precision <em>p</em> of the decimal floating
+type, the conversion first obtains an intermediate result as follows, where <em>n</em>
+is the number of significant digits in the coefficient:</p>
+<blockquote>
+<p>If <em>n</em> &lt;= <em>P</em>, set the intermediate result to the input.</p>
+<p>If <em>n</em> &gt; <em>P</em>, round the input value, according to the current rounding
+direction for decimal floating-point operations, to <em>P</em> decimal digits, with
+unbounded exponent range, representing the result with a <em>P</em>-digit integer
+coefficient when in the form (<em>s</em>, <em>c</em>, <em>q</em>).</p>
+</blockquote>
+<p>Convert the intermediate result in the manner described above for the case where
+the precision is missing.</p>
+</blockquote>
+<p>In 12.5, in the addition to 7.21.6.1#8 and 7.29.2.1#8, in EXAMPLE 3, change the
+results:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #666666">9.54321e+93</span>
+
+<span style="color: #666666">9.5432e+93</span>
+
+<span style="color: #666666">9.543e+93</span>
+
+<span style="color: #666666">9.540e+93</span>
+
+<span style="color: #666666">9.500e+93</span>
+
+<span style="color: #666666">1.0000e+94</span>
+
+inf
+</pre></div>
+
+</blockquote>
+<p>to:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #666666">9.54321e+93</span>
+
+<span style="color: #666666">9.5432e+93</span>
+
+<span style="color: #666666">9.543e+93</span>
+
+<span style="color: #666666">9.54e+93</span>
+
+<span style="color: #666666">9.5e+93</span>
+
+<span style="color: #666666">1e+94</span>
+
+<span style="color: #666666">1e+97</span>
+</pre></div>
+
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2018-10-18:</p>
+<p>Oct 2016 meeting</p>
+<h3>Committee Discussion</h3>
+<p>The committee agrees that this is a defect and accepts the Suggested Technical
+Corrigendum</p>
+<p>Apr 2017 meeting</p>
+<h3>Committee Discussion</h3>
+<p>The paper <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2126.htm">N2126</a>
+provides an example that illustrates this change, and the committee agreed to
+accept this as an addendum to the Proposed Technical Corrigendum.</p>
+<p>However, the committee is concerned that <code>%a</code> behavior differs from binary
+floating point and more review is needed. In particular, there were concerns
+that for the decimal floating point types now the %a format specifier given with
+a precision is the total number of significant digits, not the number of digits
+after the decimal point as it has been for other data types.</p>
+<h3>Proposed Technical Corrigendum</h3>
+<p>In 12.5, in the addition to 7.21.6.1#8 and 7.29.2.1#8, under <code>a</code>,<code>A</code> conversion
+specifiers, change:</p>
+<blockquote>
+<p>If the precision is present (in the conversion specification) and is zero or at
+least as large as the precision <em>p</em> (5.2.4.2.2) of the decimal floating type,
+the conversion is as if the precision were missing. If the precision is present
+(and nonzero) and less than the precision <em>p</em> of the decimal floating type, the
+conversion first obtains an intermediate result by rounding the input in the
+type, according to the current rounding direction for decimal floating-point
+operations, to the number of digits specified by the precision, then converts
+the intermediate result as if the precision were missing. The length of the
+coefficient of the intermediate result is the smallest number, at least as large
+as the formatting precision, for which the quantum exponent is within the
+quantum exponent range of the type (see 5.2.4.2.2a). The intermediate rounding
+may overflow.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>If the precision <em>P</em> is present (in the conversion specification) and is zero or
+at least as large as the precision <em>p</em> (5.2.4.2.2) of the decimal floating type,
+the conversion is as if the precision were missing. If the precision <em>P</em> is
+present (and nonzero) and less than the precision <em>p</em> of the decimal floating
+type, the conversion first obtains an intermediate result as follows, where <em>n</em>
+is the number of significant digits in the coefficient:</p>
+<blockquote>
+<p>If <em>n</em> &lt;= <em>P</em>, set the intermediate result to the input.</p>
+<p>If <em>n</em> &gt; <em>P</em>, round the input value, according to the current rounding
+direction for decimal floating-point operations, to <em>P</em> decimal digits, with
+unbounded exponent range, representing the result with a <em>P</em>-digit integer
+coefficient when in the form (<em>s</em>, <em>c</em>, <em>q</em>).</p>
+</blockquote>
+<p>Convert the intermediate result in the manner described above for the case where
+the precision is missing.</p>
+</blockquote>
+<p>In 12.5, in the addition to 7.21.6.1#8 and 7.29.2.1#8, in EXAMPLE 3, change the
+results:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #666666">9.54321e+93</span>
+
+<span style="color: #666666">9.5432e+93</span>
+
+<span style="color: #666666">9.543e+93</span>
+
+<span style="color: #666666">9.540e+93</span>
+
+<span style="color: #666666">9.500e+93</span>
+
+<span style="color: #666666">1.0000e+94</span>
+
+inf
+</pre></div>
+
+</blockquote>
+<p>to:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #666666">9.54321e+93</span>
+
+<span style="color: #666666">9.5432e+93</span>
+
+<span style="color: #666666">9.543e+93</span>
+
+<span style="color: #666666">9.54e+93</span>
+
+<span style="color: #666666">9.5e+93</span>
+
+<span style="color: #666666">1e+94</span>
+
+<span style="color: #666666">1e+97</span>
+</pre></div>
+
+</blockquote>
+<p>Add, as a new EXAMPLE,</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;stdio.h&gt;</span>
+
+<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">main</span>(<span style="color: #B00040">void</span>)<span style="color: #bbbbbb"> </span>{
+<span style="color: #bbbbbb">  </span>_Decimal32<span style="color: #bbbbbb"> </span>x<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">9512345e90</span>df;
+<span style="color: #bbbbbb">  </span>_Decimal32<span style="color: #bbbbbb"> </span>x2<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">9512345e86</span>df;
+
+<span style="color: #bbbbbb">  </span>printf(<span style="color: #BA2121">&quot;%.3Ha</span><span style="color: #AA5D1F; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>,<span style="color: #bbbbbb"> </span>x);<span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">// New expected output: 9.51e96</span>
+<span style="color: #bbbbbb">  </span>printf(<span style="color: #BA2121">&quot;%.2Ha</span><span style="color: #AA5D1F; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>,<span style="color: #bbbbbb"> </span>x);<span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">// New expected output: 9.5e96</span>
+<span style="color: #bbbbbb">  </span>printf(<span style="color: #BA2121">&quot;%.1Ha</span><span style="color: #AA5D1F; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>,<span style="color: #bbbbbb"> </span>x);<span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">// New expected output: 1e97</span>
+<span style="color: #bbbbbb">  </span>printf(<span style="color: #BA2121">&quot;%.2Ha</span><span style="color: #AA5D1F; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>,<span style="color: #bbbbbb"> </span>x2);<span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">// New expected output: 9.5e92</span>
+
+<span style="color: #bbbbbb">  </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;
+}
+</pre></div>
+
+
+</body>
+</html>

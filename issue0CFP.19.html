@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0CFP.19: P1: updating underflow definition</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0CFP.19: P1: updating underflow definition</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, C Floating Point Group<br />
+Date: 2018-03-16<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2210.pdf">N2210</a><br />
+Submitted against: Floating-point TS 18661 (C11 version, 2014-2016)<br />
+Status: Fixed<br />
+Fixed in: C23<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2397.htm">n2397.htm</a></p>
+<h3>Summary</h3>
+<p>C11 7.12.1 says</p>
+<blockquote>
+<p>The result underflows if the magnitude of the mathematical result is so small
+that the mathematical result cannot be represented, without extraordinary
+roundoff error, in an object of the specified type.232)</p>
+<p>232) The term underflow here is intended to encompass both ‘‘gradual
+underflow’’ as in IEC 60559 and also ‘‘flush-to-zero’’ underflow</p>
+</blockquote>
+<p>The C definition of underflow doesn’t accomplish its intention as expressed in
+footnote 232. It’s too restrictive to encompass IEC 60559 gradual underflow,
+because IEC 60559 underflow can occur without extraordinary roundoff error.</p>
+<p>In IEC 60559:2011, the underflow flag is raised (in C terminology, set) if and
+only if the result is tiny and inexact, even if the roundoff error is the same
+as it would have been if the full (normal) precision of the type were available,
+i.e., even if there is no extraordinary roundoff error.</p>
+<p>IEC 60559:1989 offered the implementation the option to raise the underflow flag
+for tiny results with extraordinary roundoff error, though it also offered the
+option to raise the underflow flag for tiny inexact results, which is what most
+implementations did. IEC 60559:2011 dropped the option to raise the underflow
+flag based on extraordinary roundoff error.</p>
+<p>The following suggested TC aims to loosens the C definition of underflow to
+encompass IEC 60559:2011 underflow behavior, which is based on tiny inexact
+results.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>In TS 18661-1, before 14.1, insert:</p>
+<p><strong>14.0 C underflow</strong></p>
+<p>The following change to C11 loosens the C definition of underflow to encompass
+IEC 60559 gradual underflow, as is its stated intention (see C11 footnote 232).</p>
+<p><strong>Changes to C11:</strong></p>
+<p>Change the first sentence in 7.12.1#6 from:</p>
+<blockquote>
+<p>[6] The result underflows if the magnitude of the mathematical result is so
+small that the mathematical result cannot be represented, without extraordinary
+roundoff error, in an object of the specified type.232) …</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>[6] The result underflows if the magnitude of the mathematical result is
+nonzero and less than the minimum normal number in the type.232) …</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2018-10-18:</p>
+<p>Apr 2018 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The committee accepted the Suggested Technical Corrigendum as the Proposed
+Change (using our new terminology).</p>
+</blockquote>
+<h3>Proposed Change</h3>
+<p>In TS 18661-1, before 14.1, insert:</p>
+<p><strong>14.0 C underflow</strong></p>
+<p>The following change to C11 loosens the C definition of underflow to encompass
+IEC 60559 gradual underflow, as is its stated intention (see C11 footnote 232).</p>
+<p><strong>Changes to C11:</strong></p>
+<p>Change the first sentence in 7.12.1#6 from:</p>
+<blockquote>
+<p>[6] The result underflows if the magnitude of the mathematical result is so
+small that the mathematical result cannot be represented, without extraordinary
+roundoff error, in an object of the specified type.232) …</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>[6] The result underflows if the magnitude of the mathematical result is
+nonzero and less than the minimum normal number in the type.232) …</p>
+</blockquote>
+
+</body>
+</html>

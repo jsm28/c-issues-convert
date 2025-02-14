@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0EMB.09: Effective type definition (aka US-40)</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0EMB.09: Effective type definition (aka US-40)</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14<br />
+Date: 2004-09-23<br />
+Reference document: Embedded-c email list <a href="https://www.open-std.org/jtc1/sc22/wg14/embedded-c/184">184</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/embedded-c/195">195</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/embedded-c/199">199</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/embedded-c/207">207</a><br />
+Submitted against: Embedded C TR 18037:2004<br />
+Status: Fixed<br />
+Fixed in: Embedded C TR 18037:2008<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1071.pdf">n1071.pdf</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1087.pdf">n1087.pdf</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1180.pdf">n1180.pdf</a></p>
+<p>Description: a couple of the statements concerning effective types in 6.5 of the
+C Standard are not exactly correct in the presence of address-space qualifiers.
+The easiest fix is probably to modify the concept of <em>effective type</em> in the C
+Standard so as not to include an address-space qualifier. (The whole concept of
+<em>effective type</em> is used only in 6.5 and in one footnote elsewhere in the C
+Standard.)</p>
+<p>Possible solution: add the following section to clause 5.3 of TR 18037:</p>
+<blockquote>
+<p><strong>Clause 6.5 - Expressions</strong>, replace the first two sentences of paragraph 6
+with: The <em>effective type</em> of an object for an access to its stored value is the
+declared type of the object, if any, without any address-space qualifier that
+the declared type may have.<sup>72)</sup> If a value is stored into an object
+having no declared type through an lvalue having a type that is not a character
+type, then the type of the lvalue, without any address-space qualifier, becomes
+the effective type of the object for that access and for subsequent accesses
+that do not modify the stored value.</p>
+</blockquote>
+<p>and remove the notion <em>additionally access-qualified version</em> from TR 18037
+(first replacement paragraph of paragraph 26 of 6.2.5, replacement text for
+paragraph 7 of 6.5).</p>
+<hr />
+<p>Comment from WG14 on 2004-11-15:</p>
+<p>Problem: If _X and _Y are address spaces with _Y enclosing _X, after the
+declarations</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>_X<span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>a;
+
+
+_Y<span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>p<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;</span>a;
+</pre></div>
+
+<p>the dereference *p is undefined because of the way TR 18037 applies the notion
+of effective type (C Standard 6.5, paragraphs 6 and 7). This makes overlapping
+named address spaces unusable by strictly conforming code in most circumstances.</p>
+<p>Solution: In the detailed changes to the C Standard, modify the definition of
+<em>effective type</em> (clause 6.5, paragraph 6) to exclude address space qualifiers,
+and restore the rules in paragraph 7 to their original form. (Note that the
+whole concept of <em>effective type</em> is used only in 6.5 and in one footnote
+elsewhere in the C Standard.) This makes TR 18037's definition of <em>additionally
+access-qualified version</em> of a type (in the new text for 6.2.5) unnecessary.</p>
+<p>Changes: Change the replacement text for clause 6.5 of the C Standard to the
+following:</p>
+<blockquote>
+<p><strong>Clause 6.5 - Expressions</strong>, replace the first two sentences of paragraph 6
+with:</p>
+<p>The <em>effective type</em> of an object for an access to its stored value is the
+declared type of the object, if any, without any address-space qualifier that
+the declared type may have.<sup>72)</sup> If a value is stored into an object
+having no declared type through an lvalue having a type that is not a character
+type, then the type of the lvalue, without any address-space qualifier, becomes
+the effective type of the object for that access and for subsequent accesses
+that do not modify the stored value.</p>
+</blockquote>
+<p>Remove the sentence defining <em>additionally access-qualified version</em> from TR
+18037 (first paragraph replacing paragraph 26 of 6.2.5).</p>
+
+</body>
+</html>

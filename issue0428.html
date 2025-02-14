@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0428: runtime-constraint issue with sprintf family of routines in Annex K</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0428: runtime-constraint issue with sprintf family of routines in Annex K</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG 14, Douglas Walls<br />
+Date: 2013-02-11<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1672.htm">N1672</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Cross-references: <a href="issue0433.html">0433</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>snprintf_s  (Annex K.3.5.3.5)</p>
+<p>In the "Runtime-constraints" section, K.3.5.3.5p2 first sentence it says:</p>
+<p>"Neither s nor format shall be a null pointer. n shall neither equal<br />
+zero nor be greater than RSIZE_MAX."</p>
+<p>So,</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">if</span><span style="color: #bbbbbb"> </span>(n<span style="color: #bbbbbb"> </span><span style="color: #666666">==</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span><span style="color: #bbbbbb"> </span><span style="color: #666666">||</span><span style="color: #bbbbbb"> </span>n<span style="color: #bbbbbb"> </span><span style="color: #666666">&gt;</span><span style="color: #bbbbbb"> </span>RSIZE_MAX)
+<span style="color: #bbbbbb">        </span><span style="color: #3D7B7B; font-style: italic">/* runtime constraints violation */</span>
+</pre></div>
+
+<p>This is clear. However the next paragraph K.3.5.3.5p3, says this about "s":</p>
+<p>"If there is a runtime-constraint violation, then if s is not a null<br />
+pointer and n is greater than zero and less than RSIZE_MAX, then the<br />
+snprintf_s function sets s[0] to the null character."</p>
+<p>So, it takes action when (n &lt; RSIZE_MAX)</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">if</span><span style="color: #bbbbbb"> </span>(s<span style="color: #bbbbbb"> </span><span style="color: #666666">!=</span><span style="color: #bbbbbb"> </span><span style="color: #008000">NULL</span><span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;&amp;</span><span style="color: #bbbbbb"> </span>n<span style="color: #bbbbbb"> </span><span style="color: #666666">&gt;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span><span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;&amp;</span><span style="color: #bbbbbb"> </span>n<span style="color: #bbbbbb"> </span><span style="color: #666666">&lt;</span><span style="color: #bbbbbb"> </span>RSIZE_MAX)
+<span style="color: #bbbbbb">            </span>s[<span style="color: #666666">0</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&#39;\0&#39;</span>;
+</pre></div>
+
+<p>Question here is, what if n equals RSIZE_MAX? Should we still reset<br />
+s[0]?</p>
+<p>If I were to say this looks like a typo, would WG14 agree with me?</p>
+<p>That is the text of K.3.5.3.5p3 should be:</p>
+<p>If there is a runtime-constraint violation, then if s is not a null<br />
+pointer and n is greater than zero and not greater than RSIZE_MAX, then the<br />
+snprintf_s function sets s[0] to the null character.</p>
+<p>This issue applies to all the sprintf family of routines in Annex K</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>snprintf_s<br />
+Replace K.3.5.3.5p3 with:</p>
+<p>If there is a runtime-constraint violation, then if s is not a null<br />
+pointer and n is greater than zero and not greater than RSIZE_MAX, then the<br />
+snprintf_s function sets s[0] to the null character.</p>
+<p>sprintf_s<br />
+Replace K.3.5.3.6p3 with:</p>
+<p>If there is a runtime-constraint violation, then if s is not a null<br />
+pointer and n is greater than zero and not greater than RSIZE_MAX, then the<br />
+sprintf_s function sets s[0] to the null character.</p>
+<p>vsnprintf_s<br />
+Replace K.3.5.3.12p3 with:</p>
+<p>If there is a runtime-constraint violation, then if s is not a null<br />
+pointer and n is greater than zero and not greater than RSIZE_MAX, then the<br />
+vsnprintf_s function sets s[0] to the null character.</p>
+<p>vsprintf_s<br />
+Replace K.3.5.3.13p3 with:</p>
+<p>If there is a runtime-constraint violation, then if s is not a null<br />
+pointer and n is greater than zero and not greater than RSIZE_MAX, then the<br />
+vsprintf_s function sets s[0] to the null character.</p>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Apr 2013 meeting</p>
+<h3>Committee Discussion</h3>
+<ul>
+<li>The committee agrees with the assessment and the suggested changes.</li>
+<li>There are, however, other places where similar changes are needed.</li>
+</ul>
+<p>Oct 2013 meeting</p>
+<h3>Committee Discussion</h3>
+<ul>
+<li>Further investigation confirmed that there were several other functions that also need similar corrections to their runtime constraints. All of these additional functions also need additional corrections as specified in <a href="issue0433.html">DR433,</a> and the full resolution of both this defect and the additional issue will be found in the Proposed Technical Corrigendum of <a href="issue0433.html">DR433.</a></li>
+<li>That list is:
+<ul>
+<li>K.3.9.1.3 The snwprintf_s function</li>
+<li>K.3.9.1.4 The swprintf_s function</li>
+<li>K.3.9.1.8 The vsnwprintf_s function</li>
+<li>K.3.9.1.9 The vswprintf_s function</li>
+<li>K.3.9.3.2.1 The mbsrtowcs_s function</li>
+<li>K.3.9.3.2.2 The wcsrtombs_s function</li>
+</ul>
+</li>
+<li>It is noted that with these changes that K.3.5.1.2 <code>tmpname_s</code> will have wording inconsistent with respect to these modifications.</li>
+<li>Consistent wording would be, in K.3.5.1.2p2 replace "less than or equal to RSIZE_MAX" with "not greater than RSIZE_MAX".</li>
+<li>As such, the committee continues to accept unchanged the Proposed Technical Corrigendum as partial fulfillment of this defect, and that full resolution of the other similar defects will be found in <a href="issue0433.html">DR433.</a></li>
+</ul>
+<h3>Proposed Technical Corrigendum</h3>
+<p>snprintf_s<br />
+Replace K.3.5.3.5p3 with:</p>
+<p>If there is a runtime-constraint violation, then if s is not a null   pointer
+and n is greater than zero and not greater than RSIZE_MAX, then the  
+snprintf_s function sets s[0] to the null character.</p>
+<p>sprintf_s<br />
+Replace K.3.5.3.6p3 with:</p>
+<p>If there is a runtime-constraint violation, then if s is not a null pointer and
+n is greater than zero and not greater than RSIZE_MAX, then the sprintf_s
+function sets s[0] to the null character.</p>
+<p>vsnprintf_s<br />
+Replace K.3.5.3.12p3 with:</p>
+<p>If there is a runtime-constraint violation, then if s is not a null pointer and
+n is greater than zero and not greater than RSIZE_MAX, then the   vsnprintf_s
+function sets s[0] to the null character.</p>
+<p>vsprintf_s<br />
+Replace K.3.5.3.13p3 with:</p>
+<p>If there is a runtime-constraint violation, then if s is not a null   pointer
+and n is greater than zero and not greater than RSIZE_MAX, then the  
+vsprintf_s function sets s[0] to the null character.</p>
+
+</body>
+</html>

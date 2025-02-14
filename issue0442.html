@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0442: Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 3</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0442: Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 3</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG 14, Joseph Myers<br />
+Date: 2013-07-21<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1730.pdf">N1730</a><br />
+Submitted against: C11 / C17<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>Some issues with floating point in C11 have been identified as part of the UK
+review of the N1711 draft of TS 18661-1. While such issues relate to the general
+area of C bindings to IEC 60559:2011, and so could be addressed in the TS on
+that basis, since the issues also apply to C11 as-is it may be more appropriate
+to address some or all of these issues as Defect Reports with a view to having a
+normative fix in a future TC to C11 rather than only having a fix in conjunction
+with the new bindings.</p>
+<p>Issue 3: Floating-point exceptions and 6.5#5</p>
+<p>C11 6.5#5 says "If an exceptional condition occurs during the evaluation of an
+expression (that is, if the result is not mathematically defined or not in the
+range of representable values for its type), the behavior is undefined.". When
+the Annex F bindings are in effect, it must be intended that floating-point
+exceptions do not produce such undefined behavior (instead, behavior such as
+evaluating to a NaN must be defined). But no normative text actually says that.</p>
+<p>A suitable fix would be:</p>
+<blockquote>
+<p>Append to 6.5#5: For implementations defining __STDC_IEC_559__, this does
+not apply to exceptional conditions where the behavior (such as raising a
+floating-point exception and returning a NaN) is defined by Annex F, directly or
+by reference to IEC 60559.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2015-04-17:</p>
+<p>Oct 2013 meeting</p>
+<h3>Committee Discussion</h3>
+<ul>
+<li>The following words were discussed extensively and thought appropriate as appropriate for inclusion in F.3, rather than a new F.4:
+<blockquote>
+<p>If an exceptional condition occurs during the evaluation of an expression (that
+is, if the result is not mathematically defined or not in the range of
+representable values for its type), and the behaviour is not defined in this
+annex or by reference to IEC 60559, 6.5p5 applies and the behaviour is
+undefined.</p>
+</blockquote>
+</li>
+<li>The committee also suggested adding an example or footnote suggesting that this would apply to a non-IEC 60550 <code>long double</code>.</li>
+</ul>
+<p>Apr 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>Further correspondence with the author and excerpted in
+<a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1804.htm">N1804</a> has
+identified the core issue as being a simple misunderstanding of the
+applicability of normative annexes to the standard.</p>
+</blockquote>
+<h3>Proposed Committee Response</h3>
+<blockquote>
+<p>WG14 treats normative annexes such as Annex F as if they were linear extensions
+of the standard itself. When Annex F is requested via definition of
+<code>__STDC_IEC_559__</code> then 6.5#5 is superseded and floating point exceptions become
+well defined.</p>
+</blockquote>
+
+</body>
+</html>

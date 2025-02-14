@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0024: For strtod, what does &quot;C&quot; locale mean?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0024: For <code>strtod</code>, what does <code>"C"</code> locale mean?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Fred Tydeman, WG14<br />
+Date: 1992-12-10<br />
+Reference document: X3J11/91-004<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_024.html">dr_024.html</a></p>
+<p>In subclause 7.10.1.4 <strong>The <code>strtod</code> function</strong> page 151, line 5: What does
+“<code>"C"</code> locale” mean?</p>
+<p>a.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>setlocale(LC_ALL,<span style="color: #008000">NULL</span>)<span style="color: #bbbbbb"> </span><span style="color: #666666">==</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;C&quot;</span>
+</pre></div>
+
+<p>b.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>setlocale(LC_NUMERIC,<span style="color: #008000">NULL</span>)<span style="color: #bbbbbb"> </span><span style="color: #666666">==</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;C&quot;</span>
+</pre></div>
+
+<p>c. <code>&amp;&amp;</code></p>
+<p>d.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #666666">||</span>
+</pre></div>
+
+<p>e. something else.</p>
+<p>What does “other than the <code>"C"</code> locale” mean?</p>
+<p>a.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>setlocale(LC_ALL,<span style="color: #008000">NULL</span>)<span style="color: #bbbbbb"> </span><span style="color: #666666">!=</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;C&quot;</span>
+</pre></div>
+
+<p>b.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>setlocale(LC_NUMERIC,<span style="color: #008000">NULL</span>)<span style="color: #bbbbbb"> </span><span style="color: #666666">!=</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;Ct</span>
+</pre></div>
+
+<p>c.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #666666">&amp;&amp;</span>
+</pre></div>
+
+<p>d.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #666666">||</span>
+</pre></div>
+
+<p>e. something else.</p>
+<p>Subclause 7.4.1 <strong>Locale control</strong>, page 107 may help answer the questions.</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>Subclause 7.4.1.1, page 107, lines 11-17 describe what is affected by each
+locale portion.</p>
+<p>Is it the <code>LC_NUMERIC</code> locale category which affects the implementation-defined
+behavior of <code>strtod</code>, etc.?</p>
+<p>Answer: Yes.</p>
+<p>How can one guarantee that <code>strtod</code> functions are in the <code>"C"</code> locale?</p>
+<p>Answer: Execute <code>setlocale(LC_NUMERIC, "C")</code> or execute <code>setlocale(LC_ALL, "C")</code>
+.</p>
+<p>What is meant by “other than the <code>"C"</code> locale?” That is, how can one ensure that
+<code>strtod</code> is not in the <code>"C"</code> locale?</p>
+<p>Answer: Successfully execute <code>setlocale(LC_NUMERIC, str)</code> or <code>setlocale(LC_ALL, str)</code> to some implementation-defined string <code>str</code> which specifies a locale that
+is different from the <code>"C"</code> locale. No universally portable method can be
+provided, because the functionality is implementation-defined.</p>
+
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0494: Part 1: Alignment specifier expression evaluation</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0494: Part 1: Alignment specifier expression evaluation</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Clark Nelson<br />
+Date: 2016-03-17<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2025.htm">N2027</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C23<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>Point D of DR439 (a.k.a. N1729) raises the question of the meaning of a
+non-constant expression in an abstract declarator. The other points of that DR
+are rather more straightforward, but point D requires more thought. Here I
+present some additional analysis I have done on the question.</p>
+<h3>Overview</h3>
+<p>There are three places an abstract declarator or type name can appear and (at
+least potentially) not be part of a larger expression:</p>
+<ol>
+<li><em>parameter-declaration</em></li>
+<li><em>alignment-specifier</em></li>
+<li><em>atomic-type-specifier</em></li>
+</ol>
+<p>(When this topic comes up, the case of a generic selection is generally raised
+as well. However, it should be clearly understood that a type name appearing in
+a generic selection is necessarily part of a larger expression, so any
+expression therein isn't a full expression, so DR439 does not raise any issues
+about it. It's certainly possible that there are issues, but if so, they need to
+be spelled out. Once they have been clearly defined, it will hopefully become
+clear whether they should be considered along with DR439 or separately.)</p>
+<p>So let's consider three file-scope declarations:</p>
+<ol>
+<li><code>void f(int [rand()]);</code></li>
+<li><code>_Alignas(int [rand()]) int i;</code></li>
+<li><code>_Atomic(int [rand()]) a;</code></li>
+</ol>
+<p>The first declaration has a clearly defined meaning. According to 6.7.6.2p5, the
+expression is “treated as if it were replaced by <code>*</code>”. Therefore:</p>
+<ul>
+<li>the expression is not evaluated; and</li>
+<li>the parameter is declared as a VLA of unspecified size.</li>
+</ul>
+<p>These are both true even if the declaration appears in a block scope.</p>
+<p>For the second and third declarations, the standard today gives no clue how the
+expression should be handled. The only thing that is clear (even though the
+standard doesn't say so) is that, if the declarations are at file scope, any
+answer that requires evaluating the expressions is wrong.</p>
+<h3>The alignment specifier case</h3>
+<p>The interesting thing about <code>_Alignas</code> is that the “answer” is just a number;
+all other details of the type named are irrelevant. Since the alignment of an
+array type must be the same as that of its element type, the value of the array
+size is irrelevant, so strictly speaking it need not be evaluated.</p>
+<p>This is similar to <code>sizeof</code>; according to 6.7.6.2p5:</p>
+<blockquote>
+<p>Where a size expression is part of the operand of a <code>sizeof</code> operator and
+changing the value of the size expression would not affect the result of the
+operator, it is unspecified whether or not the size expression is evaluated.</p>
+</blockquote>
+<p>For an alignment specifier, I would prefer that the behavior not depend on the
+scope in which it appears. It would also be simpler to require that a
+non-constant size expression <strong>not</strong> be evaluated than to permit implementation
+latitude. That would be consistent with the parameter declaration case, and I
+doubt that any real-world code would change behavior as a result.</p>
+<p>As an aside, here is an interesting related example:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">size_t</span><span style="color: #bbbbbb"> </span>s<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">sizeof</span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>[rand()]);
+</pre></div>
+
+<p>According to 6.5.3.4p2:</p>
+<blockquote>
+<p>If the type of the operand is a variable length array type, the operand is
+evaluated; otherwise, the operand is not evaluated and the result is an integer
+constant.</p>
+</blockquote>
+<p>If the declaration of <code>s</code> appeared at file scope, the fact that the result of
+<code>sizeof</code> is not an integer constant would run afoul of the constraints on
+initialization, so a diagnostic would be required. That might be considered
+enough to override the requirement that “the operand is evaluated” in an
+initializer at file scope – but the phrasing would seem to be suboptimal.</p>
+<hr />
+<p>Comment from WG14 on 2018-10-18:</p>
+<p>Oct 2016 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>From <a href="https://www.open-std.org/jtc1/sc22/wg14/14483">(SC22WG14.14483) Suggested TC for DR
+494</a> the following suggestion was
+made:</p>
+</blockquote>
+<p>In 6.7.6.2 paragraph 5, change:</p>
+<blockquote>
+<p>... Where a size expression is part of the operand of a <code>sizeof</code> operator and
+changing the value of the size expression would not affect the result of the
+operator, it is unspecified whether or not the size expression is evaluated.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>... Where a size expression is part of the operand of a <code>sizeof</code> operator and
+changing the value of the size expression would not affect the result of the
+operator, it is unspecified whether or not the size expression is evaluated.
+Where a size expression is part of the operand of an <code>_Alignof</code> operator, that
+expression is not evaluated.</p>
+</blockquote>
+<p>Apr 2017 meeting</p>
+<h3>Committee Discussion</h3>
+<p>The words discussed and reported in the last meeting were adopted.</p>
+<h3>Proposed Change</h3>
+<p>In 6.7.6.2 paragraph 5, change:</p>
+<blockquote>
+<p>... Where a size expression is part of the operand of a <code>sizeof</code> operator and
+changing the value of the size expression would not affect the result of the
+operator, it is unspecified whether or not the size expression is evaluated.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>... Where a size expression is part of the operand of a <code>sizeof</code> operator and
+changing the value of the size expression would not affect the result of the
+operator, it is unspecified whether or not the size expression is evaluated.
+Where a size expression is part of the operand of an <code>_Alignof</code> operator, that
+expression is not evaluated.</p>
+</blockquote>
+
+</body>
+</html>

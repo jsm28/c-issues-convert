@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C standard issues lists</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h1>C standard issues lists</h1>
+<p><strong>Issue tracking for C is not currently in operation.  The
+following is a proposed process for issue submission, to be
+considered at the Graz meeting of the C standards committee.</strong></p>
+<p>The C standards committee considers issues reported against the
+C standard and other associated documents it has released.  Please
+send reports of issues to the issues list maintainer (<em>details to
+be inserted here</em>).  The data for the issues lists is maintained
+in JSON and Markdown format in a public git repository (<em>details to
+be inserted here</em>); issues may be submitted in Markdown format
+if you wish, but that is not required.  Note that the following
+principles apply to issue handling.</p>
+<ul>
+<li>Submitted issues will be handled along the lines described in
+<a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n3002.pdf">N3002</a>.
+As the C standards committee returns to issue tracking after a
+hiatus from 2019 to 2025, the details of the process may evolve.</li>
+<li>The issue tracking process is only suitable for problems in the
+standard (and associated documents) that can be addressed with a
+reasonably small, local fix.  Feature or enhancement requests
+need to be submitted as papers through the standards development
+process, not as issues for issue tracking.</li>
+<li>The C standards committee does not maintain old versions of
+standards or other superseded documents.  Thus, issues can only
+be considered if they are present in the most recent version
+of the relevant document to be officially published (or pending
+publication) and that has not been superseded by another
+document.  For example, issues with the C standard can only be
+considered if they are present in C23; issues can no longer be
+reported against C17.  However, if an issue is present in both
+C17 and C23, it is likely many implementations will find it
+useful to apply a resolution for C23 also in C17 mode.  If some
+issues reported against C23 (and present in C2Y) remain open after
+C2Y has been published, those will continue to be processed
+alongside issues newly reported against the released version of
+C2Y.</li>
+<li>If an issue is not present in the most recent officially
+published version of the relevant document, only in a subsequent
+working draft, then it should be raised through the standards
+development process, not through issue tracking.  For example,
+issues present in a C2Y working draft but not in C23 should not
+be raised here.  Instead, such an issue can be raised through a
+paper proposing a fix, or a direct email to the author of the
+paper that introduced the issue to start joint work with them on
+a fix.  Depending on the stage of standard development, issues
+may also be raised through NB comments on ballot drafts.</li>
+<li>Fixes for typos, formatting and similar very straightforward
+editorial issues (present in the latest working draft, whether or
+not present in an officially published document) may be sent
+direct to the editor (for the C standard or other documents with
+an active editor) rather than needing to go through issue
+tracking; see the <a href="https://www.open-std.org/jtc1/sc22/wg14/www/contacts.html">contact
+list</a>.
+This also includes cases where a mistake was made in
+applying changes approved by the committee to the working draft.
+(If such a mistake has technical impact and is present in an
+officially published document rather than just a working draft,
+then an actual issue report is a good idea, however.)</li>
+<li>If an issue has already been fixed in the latest working draft
+(for example, an issue present in C23 but fixed in C2Y), there
+is limited value in also submitting it through issue tracking,
+but if such an issue is submitted it may result in an opinion
+from the committee on what fix would be appropriate for
+implementations of the current release.</li>
+</ul>
+<h2>C90</h2>
+<ul>
+<li><a href="summary_c90.html">Summary (one page per issue)</a></li>
+<li><a href="log_c90.html">Full issue log (all issues on one page)</a></li>
+</ul>
+<h2>C99</h2>
+<ul>
+<li><a href="summary_c99.html">Summary (one page per issue)</a></li>
+<li><a href="log_c99.html">Full issue log (all issues on one page)</a></li>
+</ul>
+<h2>C11 / C17</h2>
+<ul>
+<li><a href="summary_c11c17.html">Summary (one page per issue)</a></li>
+<li><a href="log_c11c17.html">Full issue log (all issues on one page)</a></li>
+</ul>
+<h2>C23</h2>
+<p>No issues recorded.</p>
+<h2>Floating-point TS 18661 (C11 version, 2014-2016)</h2>
+<ul>
+<li><a href="summary_cfp-c11.html">Summary (one page per issue)</a></li>
+<li><a href="log_cfp-c11.html">Full issue log (all issues on one page)</a></li>
+</ul>
+<h2>Floating-point TS 18661 (C23 version, 2025)</h2>
+<p>No issues recorded.</p>
+<h2>C Secure Coding Rules TS 17961:2013</h2>
+<ul>
+<li><a href="summary_cscr2013.html">Summary (one page per issue)</a></li>
+<li><a href="log_cscr2013.html">Full issue log (all issues on one page)</a></li>
+</ul>
+<h2>Embedded C TR 18037:2004</h2>
+<ul>
+<li><a href="summary_embc2004.html">Summary (one page per issue)</a></li>
+<li><a href="log_embc2004.html">Full issue log (all issues on one page)</a></li>
+</ul>
+<h2>Embedded C TR 18037:2008</h2>
+<p>No issues recorded.</p>
+<h2>Mathematical special functions ISO/IEC 24747:2009</h2>
+<p>No issues recorded.</p>
+<h2>Dynamic allocation functions TR 24731-2:2010</h2>
+<p>No issues recorded.</p>
+<h2>Provenance TS 6010:2025</h2>
+<p>No issues recorded.</p>
+<h2>Bounds-checking interfaces TR 24731-1:2007 (superseded)</h2>
+<p>No issues recorded.</p>
+<h2>New character data types TR 19769:2004 (superseded)</h2>
+<p>No issues recorded.</p>
+<h2>Decimal floating-point TR 24732:2009 (superseded)</h2>
+<p>No issues recorded.</p>
+
+</body>
+</html>

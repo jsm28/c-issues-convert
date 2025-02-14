@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0471: Complex math functions cacosh and ctanh</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0471: Complex math functions cacosh and ctanh</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Fred Tydeman<br />
+Date: 2014-10-28<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1886.htm">N1886</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>Complex math functions (cacosh (G.6.2.1) and ctanh(G.6.2.6)) are incorrectly
+specified.</p>
+<ol>
+<li>cacosh( 0.0 + I*NaN ) should be NaN + I*pi/2 (not NaN + I*NaN).</li>
+</ol>
+<p>Reasons: Mathematically, cacosh(0.0+I*y) = asinh(y) + I*pi/2. Also, C
+requires cacos(0+I*NaN) to be pi/2+I*NAN, which along with the
+mathematically identity cacosh(z) = +/-I * cacos(z), means cacosh(0.0 +
+I*NaN) is NaN + I*pi/2.</p>
+<ol start="2">
+<li>ctanh(+0.0+I*NaN) should be 0.0 + I*NaN (not NaN+I*NaN)</li>
+<li>ctanh(+0.0+I*INF) should be 0.0 + I*NaN w/ invalid (not NaN+I*NaN w/ invalid)</li>
+</ol>
+<p>Reason for above two: Since ctanh(x+I*y) = (sinh(2x) + I*sin(2y)) /
+(cosh(2x) + cos(2y)), for any rational number y, cos(2y) cannot be exactly -1,
+so no 0/(1+(-1)),so no 0/0, so no NaN for the real component of the result</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Add to G.6.2.1 cacosh before 4th bullet: cacosh(0.0+I*NaN) returns NaN +
+I*pi/2</p>
+<p>Add to G.6.2.1 cacosh 4th bullet: "non-zero" so it reads: cacosh(x + iNaN)
+returns NaN + i*NaN and optionally raises the “invalid” floating-point
+exception, for finite non-zero x.</p>
+<p>Add to G.6.2.6 ctanh before 3rd bullet: ctanh(0.0+I*INF) returns 0.0+I*NAN
+and raises the “invalid” floating-point exception.</p>
+<p>Add to G.6.2.6 ctanh 3rd bullet: "non-zero" so it reads: ctanh(x + I*INF)
+returns NaN + i*NaN and raises the “invalid” floating-point exception, for
+finite non-zero x.</p>
+<p>Add to G.6.2.6 ctanh before 4th bullet: ctanh(0.0+I*NaN) returns 0.0+I*NAN</p>
+<p>Add to G.6.2.6 ctanh 4th bullet: "non-zero" so it reads: ctanh(x + I*NAN)
+returns NaN + i*NaN and optionally raises the “invalid” floating-point
+exception, for finite non-zero x.</p>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Oct 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>This DR is derived from
+<a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1867.htm">N1867.</a> The
+committee agrees with the Suggested Technical Corrigendum.</p>
+</blockquote>
+<p>Oct 2017 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>In light of the paper
+<a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2173.htm">N2173</a> the
+committee agrees to amend the PTC to specify that</p>
+<blockquote>
+<p>cacosh(0.0+<em>i</em>NaN) returns NaN ± <em>i</em>π/2</p>
+</blockquote>
+</blockquote>
+<h3>Proposed Technical Corrigendum</h3>
+<p>Add new paragraph to G.6.2.1 cacosh before 4th bullet:</p>
+<blockquote>
+<p>cacosh(0.0+<em>i</em>NaN) returns NaN ± <em>i</em>π/2</p>
+</blockquote>
+<p>Change G.6.2.1 cacosh 4th bullet from:</p>
+<blockquote>
+<p>cacosh(x + <em>i</em>NaN) returns NaN + <em>i</em>NaN and optionally raises the “invalid”
+floating-point exception, for finite x.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>cacosh(x + <em>i</em>NaN) returns NaN + <em>i</em>NaN and optionally raises the “invalid”
+floating-point exception, for finite non-zero x.</p>
+</blockquote>
+<p>Add new paragraph to G.6.2.6 ctanh before 3rd bullet:</p>
+<blockquote>
+<p>ctanh(0.0+<em>i</em>∞) returns 0.0+<em>i</em>NAN and raises the “invalid” floating-point
+exception.</p>
+</blockquote>
+<p>Change G.6.2.6 ctanh 3rd bullet clause from:</p>
+<blockquote>
+<p>ctanh(x + <em>i</em>∞) returns NaN + <em>i</em>NaN and raises the “invalid” floating-point
+exception, for finite x.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>ctanh(x + <em>i</em>∞) returns NaN + <em>i</em>NaN and raises the “invalid” floating-point
+exception, for finite non-zero x.</p>
+</blockquote>
+<p>Add new paragraph to G.6.2.6 ctanh before 4th bullet:</p>
+<blockquote>
+<p>ctanh(0.0+<em>i</em>NaN) returns 0.0+<em>i</em>NAN</p>
+</blockquote>
+<p>Change G.6.2.6 ctanh 4th bullet from:</p>
+<blockquote>
+<p>ctanh(x + <em>i</em>NAN) returns NaN + <em>i</em>NaN and optionally raises the “invalid”
+floating-point exception, for finite x.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>ctanh(x + <em>i</em>NAN) returns NaN + <em>i</em>NaN and optionally raises the “invalid”
+floating-point exception, for finite non-zero x.</p>
+</blockquote>
+
+</body>
+</html>

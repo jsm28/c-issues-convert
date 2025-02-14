@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0301: Meaning of FE_* macros in &lt;fenv.h&gt;</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0301: Meaning of FE_* macros in &lt;fenv.h&gt;</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG 14, Fred Tydeman (USA)<br />
+Date: 2004-08-27<br />
+Submitted against: C99<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_301.htm">dr_301.htm</a></p>
+<h3>Summary</h3>
+<p>Exactly WHERE are the MEANINGS of any of the FE_* macros defined in cases
+where &lt;fenv.h&gt; applies to an environment that is not IEEE-754 (IEC 60559)?</p>
+<h3>Details</h3>
+<p>5.1.2.3p2 Program execution says:</p>
+<blockquote>
+<p>Accessing a volatile object, modifying an object, modifying a file, or calling a
+function that does any of those operations are all side effects,<sup>11)</sup>
+which are changes in the state of the execution environment. Evaluation of an
+expression may produce side effects.</p>
+<p>11) The IEC 60559 standard for binary floating-point arithmetic requires
+certain user-accessible status flags and control modes. Floating-point
+operations implicitly set the status flags; modes affect result values of
+floating-point operations. Implementations that support such floating-point
+state are required to regard changes to it as side effects see annex F for
+details. The floating-point environment library &lt;fenv.h&gt; provides a
+programming facility for indicating when these side effects matter, freeing the
+implementations in other cases.</p>
+</blockquote>
+<p>The above footnote is the closest I can find to a requirement that there is any
+relationship between floating-point operations, status flags, and modes. But, it
+is a footnote, and only for IEC 60559.</p>
+<p>5.2.4.2.2p6 Characteristics of floating types &lt;float.h&gt; has:</p>
+<blockquote>
+<p>The rounding mode for floating-point addition is characterized by the
+implementation-defined value of FLT_ROUNDS:<sup>18)</sup></p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb"> </span><span style="color: #666666">-1</span><span style="color: #bbbbbb"> </span>indeterminable
+<span style="color: #bbbbbb">  </span><span style="color: #666666">0</span><span style="color: #bbbbbb"> </span>toward<span style="color: #bbbbbb"> </span>zero
+<span style="color: #bbbbbb">  </span><span style="color: #666666">1</span><span style="color: #bbbbbb"> </span>to<span style="color: #bbbbbb"> </span>nearest
+<span style="color: #bbbbbb">  </span><span style="color: #666666">2</span><span style="color: #bbbbbb"> </span>toward<span style="color: #bbbbbb"> </span>positive<span style="color: #bbbbbb"> </span>infinity
+<span style="color: #bbbbbb">  </span><span style="color: #666666">3</span><span style="color: #bbbbbb"> </span>toward<span style="color: #bbbbbb"> </span>negative<span style="color: #bbbbbb"> </span>infinity
+</pre></div>
+
+<p>All other values for FLT_ROUNDS characterize implementation-defined rounding
+behavior.</p>
+<p>18) Evaluation of FLT_ROUNDS correctly reflects any execution-time change of
+rounding mode through the function fesetround in &lt;fenv.h&gt;.</p>
+</blockquote>
+<p>The above mentions, but does not define, some rounding modes.</p>
+<p>7.6p5 Floating-point environment &lt;fenv.h&gt; has:</p>
+<blockquote>
+<p>Each of the macros</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">   </span>FE_DIVBYZERO
+<span style="color: #bbbbbb">   </span>FE_INEXACT
+<span style="color: #bbbbbb">   </span>FE_INVALID
+<span style="color: #bbbbbb">   </span>FE_OVERFLOW
+<span style="color: #bbbbbb">   </span>FE_UNDERFLOW
+</pre></div>
+
+<p>is defined if and only if the implementation supports the floating-point
+exception by means of the functions in 7.6.2. <sup>175)</sup> Additional
+implementation-defined floating-point exceptions, with macro definitions
+beginning with FE_ and an uppercase letter, may also be specified by the
+implementation.</p>
+<p>175) The implementation supports an exception if there are circumstances where
+a call to at least one of the functions in 7.6.2, using the macro as the
+appropriate argument, will succeed. It is not necessary for all the functions to
+succeed all the time.</p>
+</blockquote>
+<p>The above mentions, but does not define, some floating-point exceptions.</p>
+<p>If an implementation defines a new floating-point exception, FE_BLUEMOON, such
+that:</p>
+<ul>
+<li><code>feraiseexcept(FE_BLUEMOON)</code> succeeds,</li>
+<li><code>fetestexcept(FE_BLUEMOON)</code> returns the current status of that "exception",</li>
+<li><code>feclearexcept(FE_BLUEMOON)</code> succeeds,</li>
+</ul>
+<p>but FE_BLUEMOON is NOT tied to any floating-point operation, is this valid
+"support"?</p>
+<p>7.6p7 Floating-point environment &lt;fenv.h&gt; has:</p>
+<blockquote>
+<p>Each of the macros</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">   </span>FE_DOWNWARD
+<span style="color: #bbbbbb">   </span>FE_TONEAREST
+<span style="color: #bbbbbb">   </span>FE_TOWARDZERO
+<span style="color: #bbbbbb">   </span>FE_UPWARD
+</pre></div>
+
+<p>is defined if and only if the implementation supports getting and setting the
+represented rounding direction by means of the fegetround and fesetround
+functions. Additional implementation-defined rounding directions, with macro
+definitions beginning with FE_ and an uppercase letter, may also be specified
+by the implementation. The defined macros expand to integer constant expressions
+whose values are distinct nonnegative values.<sup>176)</sup></p>
+<p>176) Even though the rounding direction macros may expand to constants
+corresponding to the values of FLT_ROUNDS, they are not required to do so.</p>
+</blockquote>
+<p>The above mentions, but does not define, some rounding modes.</p>
+<p>F.8.1p1 Global transformations says:</p>
+<blockquote>
+<p>Floating-point arithmetic operations and external function calls may entail side
+effects which optimization shall honor, at least where the state of the
+FENV_ACCESS pragma is "on". The flags and modes in the floating-point
+environment may be regarded as global variables; floating-point operations (+,
+*, etc.) implicitly read the modes and write the flags.</p>
+</blockquote>
+<p>The above is a clear description of how modes and flags interact with
+operations, but it applies only to IEEE-754.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>7.6 Floating-point environment &lt;fenv.h&gt;: Add to paragraph 5:</p>
+<blockquote>
+<p>A necessary condition for an implementation to support a given FE_* exception
+is that it implicitly occur as a side effect of at least one floating-point
+operation. Just having <code>feraiseexcept()</code>, <code>fetestexcept()</code> and <code>feclearexcept()</code>
+succeed for a given FE_* exception is not sufficient.</p>
+<p><code>FE_INVALID</code> should be a side-effect of:</p>
+<ul>
+<li>operations on signaling NaN or trap representation,</li>
+<li>adding infinities with different signs,</li>
+<li>subtracting infinities with the same signs,</li>
+<li>multipling zero by infinity,</li>
+<li>dividing zero by zero and infinity by infinity,</li>
+<li>remainder (x REM y), where x is infinite or y is zero,</li>
+<li>square root of a negative number (excluding -0.0),</li>
+<li>converting a too large to represent floating value to an integer [both signed and unsigned], e.g., int i = INFINITY; unsigned int ui = -1.0;</li>
+<li>comparison with a relational operator (&lt;, &lt;=, &gt;=, &gt;) when (at least) one of the operands is a NaN.</li>
+</ul>
+<p><code>FE_DIVBYZERO</code> should be a side-effect of dividing a non-zero finite number by
+zero, e.g., 1.0/0.0. There should be no exception when dividing an infinity by
+zero, nor when dividing a NaN by zero.</p>
+<p>It is implementation defined as to whether FE_INVALID, FE_DIVBYZERO, or no
+exception is raised for zero / zero.</p>
+<p><code>FE_OVERFLOW</code> should be a side-effect of producing a rounded floating-point
+result (assuming an unbounded exponent range) larger in magnitude than the
+largest finite number.</p>
+<p><code>FE_UNDERFLOW</code> should be a side-effect of producing a rounded floating-point
+result (assuming an unbounded exponent range) smaller in magnitude than the
+smallest non-zero finite number, or an inexact denormal number smaller than the
+smallest non-zero normalized number.</p>
+<p><code>FE_INEXACT</code> should be a side-effect of producing a rounded floating-point
+result that differs from the mathematical (or infinitely precise) result.</p>
+</blockquote>
+<p>Also in 7.6, change footnote 175 from "The implementation supports an exception
+if ..." to "The implementation supports an exception if that exception happens
+as a side-effect of at least one floating-point operation and if ..."</p>
+<p>5.2.4.2.2 Characteristics of floating types &lt;float.h&gt;: Add to paragraph 6:</p>
+<blockquote>
+<p>See 7.6 Floating-point environment paragraph 7 for meaning of these rounding
+modes.</p>
+</blockquote>
+<p>7.6 Floating-point environment &lt;fenv.h&gt;: Add to paragraph 7:</p>
+<blockquote>
+<p>A necessary condition for an implementation to support these rounding control
+modes is that they can be set explicitly and that they affect result values of
+floating-point operations. Just having <code>fegetround()</code> and <code>fesetround()</code> succeed
+for a given FE_* rounding direction is not sufficient.</p>
+<p><code>FE_TOWARDZERO</code> means the result shall be the format's value closest to and no
+greater in magnitude than the infinitely precise result. For example, if
+rounding to integer value in floating-point format, +3.7 rounds to +3.0 and
+-3.7 rounds to -3.0.</p>
+<p><code>FE_UPWARD</code> means the result shall be the format's value closest to and no less
+than the infinitely precise result. For example, if rounding to integer value in
+floating-point format, +3.1 rounds to +4.0 and -3.7 rounds to -3.0.</p>
+<p><code>FE_DOWNWARD</code> means the result shall be the format's value closest to and no
+greater than the infinitely precise result. For example, if rounding to integer
+value in floating-point format, +3.7 rounds to +3.0 and -3.1 rounds to -4.0.</p>
+<p><code>FE_TONEAREST</code> means the result shall be the format's value closest to the
+infinitely precise result. It is implementation defined as to what happens when
+the two nearest representable values are equally near. For example, if rounding
+to integer value in floating-point format, +3.1 rounds to +3.0 and +3.7
+rounds to +4.0, and +3.5 rounds to either +3.0 or +4.0.</p>
+</blockquote>
+<p>Add to J.3.6 Floating point:</p>
+<blockquote>
+<p>-- to nearest rounding result when the two nearest representable values are
+equally near.</p>
+<p>-- whether FE_INVALID, FE_DIVBYZERO, or no exception is raised for zero /
+zero.</p>
+</blockquote>
+<p>Add 7.6 to the index entry for floating-point rounding mode.</p>
+<hr />
+<p>Comment from WG14 on 2006-03-05:</p>
+<h3>Committee Discussion</h3>
+<p>Footnote 173 in 7.6 paragraph 1 also describes intent of &lt;fenv.h&gt;. Footnote
+180 in 7.6.2.3 paragraph 2 mentions exceptions as raised by floating-point
+operations.</p>
+<p>Some members would like FE_BLUEMOON to be a valid macro (even though none of
+the basic floating-point operations would raise it). Hence, they do not want to
+require the FE_* macros to be side-effects of floating-point operations.</p>
+<p>The current FE_* macros are unspecified as that was the best compromise that
+could be agreed to by the various committee members when C99 was being
+developed.</p>
+<p>Not really a <em>defect</em>, but a <em>deficiency</em>.</p>
+<p>Two Heads of Delegations would like LIA-1 added as a normative reference by C99
+as a way to define floating-point in C.</p>
+<p>Several members believe that nailing down floating-point would be a good thing,
+but that the DR process is not the way to do it. Perhaps an amendment (similar
+to how wide characters were added to C90) should be done to C99 as a way to
+"clean up" floating-point. Several members would like 2.0+3.0 being 5.0 to be
+true.</p>
+<p>Most of the proposed TC material should be added to the C Rationale.</p>
+<p>This material could be added to C99 as Recommended Practice.</p>
+<h3>Committee Response</h3>
+<p>This is not really a <em>defect</em>, but an area which could be addressed in a future
+revision of the C Standard.</p>
+
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0496: offsetof questions</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0496: <code>offsetof</code> questions</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Martin Sebor<br />
+Date: 2016-03-23<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2031.htm">N2031</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C23<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>The <code>offsetof</code> macro is specified in the normative text of the C11 standard in
+<strong>§7.19 Common Definitions <code>&lt;stddef.h&gt;</code></strong> as follows:</p>
+<blockquote>
+<p>The macros [defined in the header <code>&lt;stddef.h&gt;</code>] are...</p>
+<blockquote>
+<p><code>offsetof(</code><em>type</em><code>,</code> <em>member-designator</em><code>)</code></p>
+</blockquote>
+<p>which expands to an integer constant expression that has type <code>size_t</code>, the
+value of which is the offset in bytes, to the structure member (designated by
+<em>member-designator</em>), from the beginning of its structure (designated by
+<em>type</em>). The type and member designator shall be such that given</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #008000; font-weight: bold">static</span><span style="color: #bbbbbb"> </span>type<span style="color: #bbbbbb"> </span>t;
+</pre></div>
+
+</blockquote>
+<p>then the expression <code>&amp;(t.</code><em>member-designator</em><code>)</code> evaluates to an address
+constant. (If the specified member is a bit-field, the behavior is undefined.)</p>
+</blockquote>
+<p>In addition, undefined uses of the macro are mentioned in the informative <strong>§J.2
+Undefined Behavior</strong> using the following words:</p>
+<blockquote>
+<p>— The member designator parameter of an <code>offsetof</code> macro is an invalid right
+operand of the <code>.</code> operator for the type parameter, or designates a bit-field
+(7.19).</p>
+</blockquote>
+<p>A number of questions have been independently raised about this specification
+over the years, both by C (and C++) committee members and by implementers of
+both languages (the C++ defintion of the macro is largely equivalent to C's),
+pointing out gaps or aspects lacking in clarity. Most recently some of the
+questions were raised in the thread <a href="https://www.open-std.org/jtc1/sc22/wg14/13852">(SC22WG14.13852) what's a
+member-designator?</a> As a result
+of the lack of clarity, implementations diverge in what <code>offsetof</code> expressions
+they accept. In one case, an implementer of a compiler known for its conformance
+and high quality of diagnostics interpreted the specification as restricting the
+<code>member-designator</code> operand of the macro to ordinary identifiers and to the
+exclusion of references to subobjects.</p>
+<p>For example, given the following code:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">A</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>n,<span style="color: #bbbbbb"> </span>a<span style="color: #bbbbbb"> </span>[<span style="color: #666666">2</span>];<span style="color: #bbbbbb"> </span>};
+<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">B</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">A</span><span style="color: #bbbbbb"> </span>a;<span style="color: #bbbbbb"> </span>};
+
+<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>noff<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>offsetof<span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">B</span>,<span style="color: #bbbbbb"> </span>a.n);
+<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>aoff<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>offsetof<span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">B</span>,<span style="color: #bbbbbb"> </span>a.a<span style="color: #bbbbbb"> </span>[<span style="color: #666666">1</span>]);
+</pre></div>
+
+</blockquote>
+<p>this implemenation issues the diagnostics below.</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #767600">warning</span>:<span style="color: #bbbbbb"> </span>using<span style="color: #bbbbbb"> </span>extended<span style="color: #bbbbbb"> </span>field<span style="color: #bbbbbb"> </span>designator<span style="color: #bbbbbb"> </span>is<span style="color: #bbbbbb"> </span>an<span style="color: #bbbbbb"> </span>extension<span style="color: #bbbbbb"> </span>[<span style="color: #666666">-</span>Wextended<span style="color: #666666">-</span>offsetof]
+<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>noff<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>offsetof<span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">B</span>,<span style="color: #bbbbbb"> </span>a.n);
+<span style="color: #bbbbbb">           </span><span style="color: #666666">^</span><span style="color: #bbbbbb">                    </span><span style="color: #666666">~~</span>
+<span style="color: #767600">warning</span>:<span style="color: #bbbbbb"> </span>using<span style="color: #bbbbbb"> </span>extended<span style="color: #bbbbbb"> </span>field<span style="color: #bbbbbb"> </span>designator<span style="color: #bbbbbb"> </span>is<span style="color: #bbbbbb"> </span>an<span style="color: #bbbbbb"> </span>extension<span style="color: #bbbbbb"> </span>[<span style="color: #666666">-</span>Wextended<span style="color: #666666">-</span>offsetof]
+<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>aoff<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>offsetof<span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">B</span>,<span style="color: #bbbbbb"> </span>a.a<span style="color: #bbbbbb"> </span>[<span style="color: #666666">1</span>]);
+<span style="color: #bbbbbb">           </span><span style="color: #666666">^</span><span style="color: #bbbbbb">                    </span><span style="color: #666666">~~~~~~</span>
+</pre></div>
+
+</blockquote>
+<p>In other instances, some implementations reject the following example with an
+error, indicating that they are not prepared to handle the <code>-&gt;</code> operator in this
+context.</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">A</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>i;<span style="color: #bbbbbb"> </span>};
+<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">B</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">A</span><span style="color: #bbbbbb"> </span>a<span style="color: #bbbbbb"> </span>[<span style="color: #666666">1</span>];<span style="color: #bbbbbb"> </span>};
+
+<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>ioff<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>offsetof<span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">B</span>,<span style="color: #bbbbbb"> </span>a<span style="color: #666666">-&gt;</span>i);
+</pre></div>
+
+</blockquote>
+<p>Some of the questions that have been identified are outlined in the following
+list.</p>
+<ul>
+<li>
+<p>In the specification, the <em>member-designator</em> operand is referred to as a
+<em>structure member</em>. Is this intended to include members of subobjects (members
+of structures other thant <em>type</em>, subobjects of which are members of <em>type</em>), or
+of and array elements as in the code examples above, or are the diagnostics
+required?</p>
+</li>
+<li>
+<p>The <em>type</em> operand is described as designating a structure. Is a <em>type</em> that
+that refers to a union not a valid operand? (No implementation has been observed
+to reject union operands.)</p>
+</li>
+<li>
+<p>Does C intend to permit defining a new type as the <em>type</em> operand? For example,
+is the following a well-formed expression? (No implementation has been observed
+to reject such operands.)</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>offsetof<span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">A</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>i;<span style="color: #bbbbbb"> </span>},<span style="color: #bbbbbb"> </span>i)
+</pre></div>
+
+</blockquote>
+</li>
+<li>
+<p>If C does intend to permit defining a new type in <code>offsetof</code> expressions, does
+it intend to permit defining arbitrarily complex types such as the one below?
+(No implementation is known to accept the definition of a type containing commas
+since they are interpreted by the preprocessor as separating macro arguments.
+But since implementations often define the <code>offsetof</code> macro in terms of a
+built-in function, it would be possible to implement each as a variadic macro
+and function, respectively, and handle this corner case. This isn't a question
+about whether it would be worthwhile to do so but rather about whether the
+standard text can be interpreted so as to require implementers to accept this
+admittedly unusual case.)</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>offsetof<span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">A</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">B</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>i,<span style="color: #bbbbbb"> </span>j;<span style="color: #bbbbbb"> </span>}<span style="color: #bbbbbb"> </span>b<span style="color: #bbbbbb"> </span>[<span style="color: #666666">1</span>];<span style="color: #bbbbbb"> </span>},<span style="color: #bbbbbb"> </span>b<span style="color: #666666">-&gt;</span>j)
+</pre></div>
+
+</blockquote>
+</li>
+</ul>
+<p>Some of the same questions and others were summarized a number of years ago by
+Joseph Myers in his paper on
+<a href="https://www.polyomino.org.uk/computer/c/pre-dr-3.txt"><code>offsetof</code></a>. Althugh
+Joseph chose not to submit the paper to WG14 we believe many are still relevant
+and should be dealt with by clarifying the text of the standard.</p>
+<hr />
+<p>Comment from WG14 on 2019-05-03:</p>
+<p>Oct 2016 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The committee notes that since all known implementations but one "get it right"
+this may well not be a defect at all.</p>
+</blockquote>
+<p>Apr 2017 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The committee discussed this issue at some length. By the strict reading of the
+standard, one concludes that only structures are supported, not unions, and that
+only named members of structures rather than extended references to sub-objects
+in a recursive fashion are allowed.</p>
+<p>Implementations commonly treat the standard as if it had been defined in terms
+of named members and sub-objects recursively, and would likely be sympathetic to
+a paper that consolidates existing practice since this seems to be a nearly
+universal extension.</p>
+<p>There was no discussion asserting that this extension, however, was the actual
+intent of the standard, and as such there is was no sentiment to accept these
+extensions with clarified wording. Such a change could only be made in a new
+revision of the standard.</p>
+</blockquote>
+<p>Oct 2017 meeting</p>
+<h3>Committee Discussion</h3>
+<p>A small paper was discussed and its contents reflected below in the PTC.
+Although the committee believes that allowing this for unions was originally
+intended, there was no opinion expressed that allowing new type declarations was
+intended. So the answers to questions in the first two bullet points are yes,
+and to the third, no, and the fourth is moot.</p>
+<p>Apr 2018 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>There was committee consensus that such a construct should be a new constraint
+violation. A new paper was solicited.</p>
+</blockquote>
+<h3>Proposed Committee Response</h3>
+<blockquote>
+<p>There was no intent to allow new types to be declared in an <code>offsetof</code>
+expression.</p>
+</blockquote>
+<h3>Proposed Change</h3>
+<p>Change the following words in §7.19 p 3 from:</p>
+<blockquote>
+<p>..., to the structure member (designated by <em>member-designator</em>),</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>..., to the subobject (designated by <em>member-designator</em>),</p>
+</blockquote>
+<p>Oct 2018 meeting</p>
+<h3>Committee Response</h3>
+<blockquote>
+<p>The "C17" edition of the standard has been published as IS 9899:2018.</p>
+<p>This issue was not resolved in that publication.</p>
+<p>The committee discussed this issue at some length. By the strict reading of the
+standard, one concludes that only structures are supported, not unions, and that
+only named members of structures rather than extended references to sub-objects
+in a recursive fashion are allowed.</p>
+<p>Implementations commonly treat the standard as if it had been defined in terms
+of named members and sub-objects recursively, and such a paper was presented and
+its proposed change accepted below.</p>
+</blockquote>
+<h3>Proposed Committee Response</h3>
+<blockquote>
+<p>There was no intent to allow new types to be declared in an <code>offsetof</code>
+expression.</p>
+<p>Although the committee believes that allowing this for unions was originally
+intended, there was no opinion expressed that allowing new type declarations was
+intended. So the answers to questions in the first two bullet points are yes,
+and to the third, no, and the fourth is moot.</p>
+</blockquote>
+<h3>Proposed Change</h3>
+<p>Change the following words in §7.19 p 3 from:</p>
+<blockquote>
+<p>..., to the structure member (designated by <em>member-designator</em>),</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>..., to the subobject (designated by <em>member-designator</em>),</p>
+<p>April 2019 meeting</p>
+<blockquote>
+<p>A new paper <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2350.htm">N2350</a>
+was submitted for C2x and has been accepted.</p>
+</blockquote>
+</blockquote>
+
+</body>
+</html>

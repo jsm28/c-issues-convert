@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0456: Compile time definition of UINTN_C(value)</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0456: Compile time definition of <code>UINT</code><em><code>N</code></em><code>_C(</code><em><code>value</code></em><code>)</code></h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Rajan Bhakta<br />
+Date: 2014-03-05<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1798.htm">N1798</a><br />
+Submitted against: C11 / C17<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>With reference to ISO/IEC WG14 N1569, subclause 7.20.4.1: The macro
+<code>UINT</code><em><code>N</code></em><code>_C(</code><em><code>value</code></em><code>)</code> shall expand to an integer constant expression
+corresponding to the type <code>uint_least</code><em><code>N</code></em><code>_t</code>.</p>
+<p>7.20.4 p1 imposes a stricter requirement on the form of the expansion; it must
+be an integer constant (for which paragraph 2 points to 6.4.4.1).</p>
+<p>The type described in 7.20.4 p3 for the result of the expansion has an
+interesting property; we observe this for <code>uint_least16_t</code> without reference to
+the <code>UINT16_C</code> macro by using <code>u'\0'</code> in a context where it will be first
+promoted as part of the usual arithmetic conversions:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;assert.h&gt;</span>
+
+<span style="color: #9C6500">#if u&#39;\0&#39; - 1 &lt; 0</span>
+<span style="color: #bbbbbb">  </span><span style="color: #3D7B7B; font-style: italic">// Types: #if (uint_least16_t) - (signed int) &lt; (signed int)</span>
+<span style="color: #bbbbbb">  </span><span style="color: #3D7B7B; font-style: italic">// Due to 6.10.1 p4, near the reference to footnote 167,</span>
+<span style="color: #bbbbbb">  </span><span style="color: #3D7B7B; font-style: italic">// after applying the integer promotions as part of 6.3.1.8 p1</span>
+<span style="color: #bbbbbb">  </span><span style="color: #3D7B7B; font-style: italic">// to the operands of the subtraction, the expression becomes:</span>
+<span style="color: #bbbbbb">  </span><span style="color: #3D7B7B; font-style: italic">// Types: #if (unsigned int) - (signed int) &lt; (signed int)</span>
+<span style="color: #bbbbbb">  </span><span style="color: #3D7B7B; font-style: italic">// Following 6.3.1.8 p1 through to the last point gives:</span>
+<span style="color: #bbbbbb">  </span><span style="color: #3D7B7B; font-style: italic">// Types: #if (unsigned int) - (unsigned int) &lt; (signed int)</span>
+<span style="color: #bbbbbb">  </span><span style="color: #3D7B7B; font-style: italic">// Result: false</span>
+<span style="color: #9C6500"># error Expected large unsigned value.</span>
+<span style="color: #9C6500">#endif</span>
+
+<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">main</span>(<span style="color: #B00040">void</span>)<span style="color: #bbbbbb"> </span>{
+<span style="color: #bbbbbb">  </span><span style="color: #3D7B7B; font-style: italic">// Types: assert((uint_least16_t) - (signed int) &lt; (signed int))</span>
+<span style="color: #bbbbbb">  </span><span style="color: #3D7B7B; font-style: italic">// Assuming that signed int can represent all values of uint_least16_t,</span>
+<span style="color: #bbbbbb">  </span><span style="color: #3D7B7B; font-style: italic">// after applying the integer promotions as part of 6.3.1.8 p1</span>
+<span style="color: #bbbbbb">  </span><span style="color: #3D7B7B; font-style: italic">// to the operands of the subtraction, the expression becomes:</span>
+<span style="color: #bbbbbb">  </span><span style="color: #3D7B7B; font-style: italic">// Types: assert((signed int) - (signed int) &lt; (signed int))</span>
+<span style="color: #bbbbbb">  </span><span style="color: #3D7B7B; font-style: italic">// Result: true</span>
+<span style="color: #bbbbbb">  </span>assert(<span style="color: #BA2121">u&#39;\0&#39;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">-</span><span style="color: #bbbbbb"> </span><span style="color: #666666">1</span><span style="color: #bbbbbb"> </span><span style="color: #666666">&lt;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>);
+<span style="color: #bbbbbb">  </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;
+}
+</pre></div>
+
+<p>The code presented should neither fail to compile nor abort when executed (for
+example) on a system using two's complement and 8, 16 and 32 bits (respectively)
+for <code>char</code>, <code>short</code> and <code>int</code> with no padding bits.</p>
+<p>Consider the case for N = 8 or 16 on systems with <code>INT_MAX</code> as +2147483647,
+<code>UCHAR_MAX</code> as 255 and <code>USHRT_MAX</code> as 65535: it is unclear how a macro can be
+formed such that it expands to an integer constant that has the promoted signed
+int type in phase 7 of translation and also the promoted <code>unsigned int</code> type in
+phase 4 of translation without special (non-standard) support from the compiler.</p>
+<p>Even if the requirement for an integer constant is relaxed to only require an
+integer constant expression, the case for N = 8 on systems with <code>INT_MAX</code> as
++32767 and <code>UCHAR_MAX</code> as 255 remains a problem without the use of casts (since
+<code>uint_least16_t</code>, for which we can form a literal, has different promotion
+behaviour from <code>uint_least8_t</code>).</p>
+<p>Implementations seen:</p>
+<ol>
+<li><code>#define UINT8_C(c) c ## U</code></li>
+<li><code>#define UINT8_C(c) c</code></li>
+</ol>
+<p>DR 209 seemed to try to address the issue of needing special compiler support in
+order to define the macros for integer constants; however, the problem seems to
+remain.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<ol>
+<li>Add in suffixes for char and short literals.</li>
+<li>Remove the <code>UINT{8,16}_C</code> macros from the standard.</li>
+</ol>
+<hr />
+<p>Comment from WG14 on 2015-10-29:</p>
+<p>Apr 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<ul>
+<li>The committee believes that DR209 is still appropriate in that "compiler magic" must be used for the implementation of these macros.</li>
+<li>As such, both proposed resolutions were found inappropriate.</li>
+</ul>
+<p>Oct 2014 meeting</p>
+<h3>Proposed Committee Response</h3>
+<blockquote>
+<p>The committee believes that DR209 is still appropriate in that "compiler magic"
+must be used for the implementation of these macros. The committee does not
+consider this a defect.</p>
+<p>As such, both proposed resolutions were found inappropriate.</p>
+</blockquote>
+
+</body>
+</html>

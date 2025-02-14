@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0402: memory model coherence is not aligned with C++11</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0402: memory model coherence is not aligned with C++11</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG 14, Batty<br />
+Date: 2011-10-14<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1584.pdf">N1584</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Cross-references: <a href="issue0406.html">0406</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>The memory model described in
+<a href="https://www.open-std.org/jtc1/sc22/wg14/prot/n1569.pdf">N1569</a> matches an older
+version of the C++0x memory model, one that allowed executions that were not
+intended by the designers. The recommandation is to match the C++11 text by
+removing the sentence starting 'Furthermore' in 5.1.2.4p22, and including the
+following paragraphs in section 5.1.2.4 (Taken from C++
+<a href="https://www.open-std.org/jtc1/sc22/wg21/prot/14882fdis/n3291.pdf">N3291</a>,
+1.10p15 through 18):</p>
+<blockquote>
+<p>If an operation <code>A</code> that modifies an atomic object <code>M</code> happens before an
+operation <code>B</code> that modifies <code>M</code> , then <code>A</code> shall be earlier than <code>B</code> in the
+modification order of <code>M</code> .</p>
+<p><em>NOTE:</em> The requirement above is known as write-write coherence.</p>
+<p>If a value computation <code>A</code> of an atomic object <code>M</code> happens before a value
+computation <code>B</code> of <code>M</code> , and <code>A</code> takes its value from a side effect <code>X</code> on <code>M</code>,
+then the value computed by <code>B</code> shall either be the value stored by <code>X</code> or the
+value stored by a side effect <code>Y</code> on <code>M</code>, where <code>Y</code> follows <code>X</code> in the
+modification order of <code>M</code>.</p>
+<p><em>NOTE:</em> The requirement above is known as read-read coherence.</p>
+<p>If a value computation <code>A</code> of an atomic object <code>M</code> happens before an operation
+<code>B</code> on <code>M</code>, then <code>A</code> shall take its value from a side effect <code>X</code> on <code>M</code>, where
+<code>X</code> precedes <code>B</code> in the modification order of <code>M</code>.</p>
+<p><em>NOTE:</em> The requirement above is known as read-write coherence.</p>
+<p>If a side effect <code>X</code> on an atomic object <code>M</code> happens before a value computation
+<code>B</code> of <code>M</code>, then the evaluation <code>B</code> shall take its value from <code>X</code> or from a side
+effect <code>Y</code> that follows <code>X</code> in the modification order of <code>M</code>.</p>
+<p><em>NOTE:</em> The requirement above is known as write-read coherence.</p>
+</blockquote>
+<h3>Suggested Technical Corrigendum</h3>
+<p>See above.</p>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Oct 2011 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<ul>
+<li>The consensus was that this is an oversight, and should be changed as recommended.</li>
+</ul>
+</blockquote>
+<p>Feb 2012 meeting</p>
+<h3>Proposed Technical Corrigendum</h3>
+<blockquote>
+<p>In 5.1.2.4 Paragraph 22 starting at the third sentence, add:</p>
+<blockquote>
+<p>If an operation <code>A</code> that modifies an atomic object <code>M</code> happens before an
+operation <code>B</code> that modifies <code>M</code> , then <code>A</code> shall be earlier than <code>B</code> in the
+modification order of <code>M</code> .</p>
+<p><em>NOTE:</em> The requirement above is known as write-write coherence.</p>
+<p>If a value computation <code>A</code> of an atomic object <code>M</code> happens before a value
+computation <code>B</code> of <code>M</code> , and <code>A</code> takes its value from a side effect <code>X</code> on <code>M</code>,
+then the value computed by <code>B</code> shall either be the value stored by <code>X</code> or the
+value stored by a side effect <code>Y</code> on <code>M</code>, where <code>Y</code> follows <code>X</code> in the
+modification order of <code>M</code>.</p>
+<p><em>NOTE:</em> The requirement above is known as read-read coherence.</p>
+<p>If a value computation <code>A</code> of an atomic object <code>M</code> happens before an operation
+<code>B</code> on <code>M</code>, then <code>A</code> shall take its value from a side effect <code>X</code> on <code>M</code>, where
+<code>X</code> precedes <code>B</code> in the modification order of <code>M</code>.</p>
+<p><em>NOTE:</em> The requirement above is known as read-write coherence.</p>
+<p>If a side effect <code>X</code> on an atomic object <code>M</code> happens before a value computation
+<code>B</code> of <code>M</code>, then the evaluation <code>B</code> shall take its value from <code>X</code> or from a side
+effect <code>Y</code> that follows <code>X</code> in the modification order of <code>M</code>.</p>
+<p><em>NOTE:</em> The requirement above is known as write-read coherence.</p>
+</blockquote>
+</blockquote>
+
+</body>
+</html>

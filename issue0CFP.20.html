@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0CFP.20: P1: changes for obsolescing DECIMAL_DIG</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0CFP.20: P1: changes for obsolescing DECIMAL_DIG</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, C Floating Point Group<br />
+Date: 2018-03-16<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2211.pdf">N2211</a><br />
+Submitted against: Floating-point TS 18661 (C11 version, 2014-2016)<br />
+Status: Fixed<br />
+Fixed in: C23<br />
+Cross-references: <a href="issue0CFP.22.html">0CFP.22</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2397.htm">n2397.htm</a></p>
+<h3>Summary</h3>
+<p>N2211 described changes in C11 and TS 18661 to remove references to
+<code>DECIMAL_DIG</code>, which CR501 is expected to obsolesce. The changes that apply to
+C11 are collected in N2253 as an update to the suggested TC in CR501. The
+changes that apply to TS 18661-1 compose the CR in this document. The remaining
+change is for TS 18661-3, which will be covered by a CR in a subsequent
+document.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>In 7.1, omit:</p>
+<blockquote>
+<p>Change footnote 361) from:</p>
+<blockquote>
+<p>361)  If the minimum-width IEC60559 extended format (64 bits of precision) is
+supported, <code>DECIMAL_DIG</code> shall be at least 21. If IEC 60559 double (53 bits of
+precision) is the widest IEC 60559 format supported, then <code>DECIMAL_DIG</code> shall be
+at least 17. (By contrast, <code>LDBL_DIG</code> and <code>DBL_DIG</code> are 18 and 15,
+respectively, for these formats.)</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>361)  If the minimum-width IEC 60559 binary64-extended format (64 bits of
+precision) is supported, <code>DECIMAL_DIG</code> shall be at least 21. If IEC 60559
+binary64 (53 bits of precision) is the widest IEC 60559 format supported, then
+<code>DECIMAL_DIG</code> shall be at least 17. (By contrast, <code>LDBL_DIG</code> and <code>DBL_DIG</code> are
+18 and 15, respectively, for these formats.)</p>
+</blockquote>
+</blockquote>
+<p>In 10.1, change:</p>
+<blockquote>
+<p>After F.5#2, insert:</p>
+<blockquote>
+<p>[2a] The <code>&lt;float.h&gt;</code> header defines the macro</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>CR_DECIMAL_DIG
+</pre></div>
+
+<p>if and only if <code>__STDC_WANT_IEC_60559_BFP_EXT__</code> is defined as a macro at the
+point in the source file where <code>&lt;float.h&gt;</code> is first included. If defined,
+<code>CR_DECIMAL_DIG</code> expands to an integral constant expression suitable for use in
+<code>#if</code> preprocessing directives whose value is a number such that conversions
+between all supported types with IEC 60559 binary formats and character
+sequences with at most <code>CR_DECIMAL_DIG</code> significant decimal digits are correctly
+rounded. The value of <code>CR_DECIMAL_DIG</code> shall be at least <code>DECIMAL_DIG</code> + 3. If
+the implementation correctly rounds for all numbers of significant decimal
+digits, then <code>CR_DECIMAL_DIG</code> shall have the value of the macro <code>UINTMAX_MAX</code>.</p>
+<p>[2b] Conversions of types with IEC 60559 binary formats to character sequences
+with more than <code>CR_DECIMAL_DIG</code> significant decimal digits shall correctly round
+to <code>CR_DECIMAL_DIG</code> significant digits and pad zeros on the right.</p>
+<p>[2c] Conversions from character sequences with more than <code>CR_DECIMAL_DIG</code>
+significant decimal digits to types with IEC 60559 binary formats shall
+correctly round to an intermediate character sequence with <code>CR_DECIMAL_DIG</code>
+significant decimal digits, according to the applicable rounding direction, and
+correctly round the intermediate result (having <code>CR_DECIMAL_DIG</code> significant
+decimal digits) to the destination type. The “inexact” floating-point exception
+is raised (once) if either conversion is inexact. (The second conversion may
+raise the “overflow” or “underflow” floating-point exception.)</p>
+</blockquote>
+<p>In F.5#2c, attach a footnote to the wording:</p>
+<blockquote>
+<p>The “inexact” floating-point exception is raised (once) if either conversion is
+inexact.</p>
+</blockquote>
+<p>where the footnote is:</p>
+<blockquote>
+<p>*) The intermediate conversion is exact only if all input digits after the
+first <code>CR_DECIMAL_DIG</code> digits are <code>0</code><strong>.</strong></p>
+</blockquote>
+<p>to:</p>
+<p>Replace the content of F.5 with:</p>
+<blockquote>
+<p>[1] The <code>&lt;float.h&gt;</code> header defines the macro</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>CR_DECIMAL_DIG
+</pre></div>
+
+<p>if and only if <code>__STDC_WANT_IEC_60559_BFP_EXT__</code> is defined as a macro at the
+point in the source file where <code>&lt;float.h&gt;</code> is first included. If defined,
+<code>CR_DECIMAL_DIG</code> expands to an integral constant expression suitable for use in
+<strong>#if</strong> preprocessing directives whose value is a number such that conversions
+between all supported IEC 60559 binary formats and character sequences with at
+most <code>CR_DECIMAL_DIG</code> significant decimal digits are correctly rounded. The
+value of <code>CR_DECIMAL_DIG</code> shall be at least <em>M</em> + 3, where <em>M</em> is the maximum
+value of the <em>T</em><code>_DECIMAL_DIG</code> macros for IEC 60559 binary formats. If the
+implementation correctly rounds for all numbers of significant decimal digits,
+then <code>CR_DECIMAL_DIG</code> shall have the value of the macro <code>UINTMAX_MAX</code>.</p>
+<p>[2] Conversions of types with IEC 60559 binary formats to character sequences
+with more than <code>CR_DECIMAL_DIG</code> significant decimal digits shall correctly round
+to <code>CR_DECIMAL_DIG</code> significant digits and pad zeros on the right.</p>
+<p>[3] Conversions from character sequences with more than <code>CR_DECIMAL_DIG</code>
+significant decimal digits to types with IEC 60559 binary formats shall
+correctly round to an intermediate character sequence with <code>CR_DECIMAL_DIG</code>
+significant decimal digits, according to the applicable rounding direction, and
+correctly round the intermediate result (having <code>CR_DECIMAL_DIG</code> significant
+decimal digits) to the destination type. The “inexact” floating-point exception
+is raised (once) if either conversion is inexact. (The second conversion may
+raise the “overflow” or “underflow” floating-point exception.)</p>
+<p>[4] The specification in this subclause assures conversion between IEC 60559
+binary format and decimal character sequence follows all pertinent recommended
+practice. It also assures conversion from IEC 60559 format to decimal character
+sequence with at least <em>T</em><code>_DECIMAL_DIG</code> digits and back, using to-nearest
+rounding, is the identity function, where <em>T</em> is the macro prefix for the
+format.</p>
+<p>[5] Functions such as <code>strtod</code> that convert character sequences to floating
+types honor the rounding direction. Hence, if the rounding direction might be
+upward or downward, the implementation cannot convert a minus-signed sequence by
+negating the converted unsigned sequence.</p>
+</blockquote>
+<p>In F.5#3, attach a footnote to the wording:</p>
+<blockquote>
+<p>The “inexact” floating-point exception is raised (once) if either conversion is
+inexact.</p>
+</blockquote>
+<p>where the footnote is:</p>
+<blockquote>
+<p>*) The intermediate conversion is exact only if all input digits after the
+first <code>CR_DECIMAL_DIG</code> digits are <code>0</code><strong>.</strong></p>
+</blockquote>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2019-05-03:</p>
+<p>Apr 2018 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The paper was only briefly discussed.</p>
+<p>This resolution is tied to the Floating Point <a href="issue0CFP.22.html">CR 22</a> as well as
+to the C2x DR 501.</p>
+</blockquote>
+<p>Oct 2018 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>A new paper <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2254.pdf">N2254</a>
+was split out from
+<a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2211.pdf">N2211</a> that
+incorporates directly the Suggested Technical Corrigendum already extracted
+above.</p>
+<p>The committee accepts the Suggested Technical Corrigendum as the Proposed Change
+to resolve this issue.</p>
+</blockquote>
+<h3>Proposed Change</h3>
+<p>In 7.1, omit:</p>
+<blockquote>
+<p>Change footnote 361) from:</p>
+<blockquote>
+<p>361)  If the minimum-width IEC60559 extended format (64 bits of precision) is
+supported, <code>DECIMAL_DIG</code> shall be at least 21. If IEC 60559 double (53 bits of
+precision) is the widest IEC 60559 format supported, then <code>DECIMAL_DIG</code> shall be
+at least 17. (By contrast, <code>LDBL_DIG</code> and <code>DBL_DIG</code> are 18 and 15,
+respectively, for these formats.)</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>361)  If the minimum-width IEC 60559 binary64-extended format (64 bits of
+precision) is supported, <code>DECIMAL_DIG</code> shall be at least 21. If IEC 60559
+binary64 (53 bits of precision) is the widest IEC 60559 format supported, then
+<code>DECIMAL_DIG</code> shall be at least 17. (By contrast, <code>LDBL_DIG</code> and <code>DBL_DIG</code> are
+18 and 15, respectively, for these formats.)</p>
+</blockquote>
+</blockquote>
+<p>In 10.1, change:</p>
+<blockquote>
+<p>After F.5#2, insert:</p>
+<blockquote>
+<p>[2a] The <code>&lt;float.h&gt;</code> header defines the macro</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>CR_DECIMAL_DIG
+</pre></div>
+
+<p>if and only if <code>__STDC_WANT_IEC_60559_BFP_EXT__</code> is defined as a macro at the
+point in the source file where <code>&lt;float.h&gt;</code> is first included. If defined,
+<code>CR_DECIMAL_DIG</code> expands to an integral constant expression suitable for use in
+<code>#if</code> preprocessing directives whose value is a number such that conversions
+between all supported types with IEC 60559 binary formats and character
+sequences with at most <code>CR_DECIMAL_DIG</code> significant decimal digits are correctly
+rounded. The value of <code>CR_DECIMAL_DIG</code> shall be at least <code>DECIMAL_DIG</code> + 3. If
+the implementation correctly rounds for all numbers of significant decimal
+digits, then <code>CR_DECIMAL_DIG</code> shall have the value of the macro <code>UINTMAX_MAX</code>.</p>
+<p>[2b] Conversions of types with IEC 60559 binary formats to character sequences
+with more than <code>CR_DECIMAL_DIG</code> significant decimal digits shall correctly round
+to <code>CR_DECIMAL_DIG</code> significant digits and pad zeros on the right.</p>
+<p>[2c] Conversions from character sequences with more than <code>CR_DECIMAL_DIG</code>
+significant decimal digits to types with IEC 60559 binary formats shall
+correctly round to an intermediate character sequence with <code>CR_DECIMAL_DIG</code>
+significant decimal digits, according to the applicable rounding direction, and
+correctly round the intermediate result (having <code>CR_DECIMAL_DIG</code> significant
+decimal digits) to the destination type. The “inexact” floating-point exception
+is raised (once) if either conversion is inexact. (The second conversion may
+raise the “overflow” or “underflow” floating-point exception.)</p>
+</blockquote>
+<p>In F.5#2c, attach a footnote to the wording:</p>
+<blockquote>
+<p>The “inexact” floating-point exception is raised (once) if either conversion is
+inexact.</p>
+</blockquote>
+<p>where the footnote is:</p>
+<blockquote>
+<p>*) The intermediate conversion is exact only if all input digits after the
+first <code>CR_DECIMAL_DIG</code> digits are <code>0</code><strong>.</strong></p>
+</blockquote>
+<p>to:</p>
+<p>Replace the content of F.5 with:</p>
+<blockquote>
+<p>[1] The <code>&lt;float.h&gt;</code> header defines the macro</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>CR_DECIMAL_DIG
+</pre></div>
+
+<p>if and only if <code>__STDC_WANT_IEC_60559_BFP_EXT__</code> is defined as a macro at the
+point in the source file where <code>&lt;float.h&gt;</code> is first included. If defined,
+<code>CR_DECIMAL_DIG</code> expands to an integral constant expression suitable for use in
+<strong>#if</strong> preprocessing directives whose value is a number such that conversions
+between all supported IEC 60559 binary formats and character sequences with at
+most <code>CR_DECIMAL_DIG</code> significant decimal digits are correctly rounded. The
+value of <code>CR_DECIMAL_DIG</code> shall be at least <em>M</em> + 3, where <em>M</em> is the maximum
+value of the <em>T</em><code>_DECIMAL_DIG</code> macros for IEC 60559 binary formats. If the
+implementation correctly rounds for all numbers of significant decimal digits,
+then <code>CR_DECIMAL_DIG</code> shall have the value of the macro <code>UINTMAX_MAX</code>.</p>
+<p>[2] Conversions of types with IEC 60559 binary formats to character sequences
+with more than <code>CR_DECIMAL_DIG</code> significant decimal digits shall correctly round
+to <code>CR_DECIMAL_DIG</code> significant digits and pad zeros on the right.</p>
+<p>[3] Conversions from character sequences with more than <code>CR_DECIMAL_DIG</code>
+significant decimal digits to types with IEC 60559 binary formats shall
+correctly round to an intermediate character sequence with <code>CR_DECIMAL_DIG</code>
+significant decimal digits, according to the applicable rounding direction, and
+correctly round the intermediate result (having <code>CR_DECIMAL_DIG</code> significant
+decimal digits) to the destination type. The “inexact” floating-point exception
+is raised (once) if either conversion is inexact. (The second conversion may
+raise the “overflow” or “underflow” floating-point exception.)</p>
+<p>[4] The specification in this subclause assures conversion between IEC 60559
+binary format and decimal character sequence follows all pertinent recommended
+practice. It also assures conversion from IEC 60559 format to decimal character
+sequence with at least <em>T</em><code>_DECIMAL_DIG</code> digits and back, using to-nearest
+rounding, is the identity function, where <em>T</em> is the macro prefix for the
+format.</p>
+<p>[5] Functions such as <code>strtod</code> that convert character sequences to floating
+types honor the rounding direction. Hence, if the rounding direction might be
+upward or downward, the implementation cannot convert a minus-signed sequence by
+negating the converted unsigned sequence.</p>
+</blockquote>
+<p>In F.5#3, attach a footnote to the wording:</p>
+<blockquote>
+<p>The “inexact” floating-point exception is raised (once) if either conversion is
+inexact.</p>
+</blockquote>
+<p>where the footnote is:</p>
+<blockquote>
+<p>*) The intermediate conversion is exact only if all input digits after the
+first <code>CR_DECIMAL_DIG</code> digits are <code>0</code><strong>.</strong></p>
+</blockquote>
+</blockquote>
+
+</body>
+</html>

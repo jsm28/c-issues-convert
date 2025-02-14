@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0488: c16rtomb() on wide characters encoded as multiple char16_t</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0488: <code>c16rtomb()</code> on wide characters encoded as multiple <code>char16_t</code></h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Philipp Klaus Krause<br />
+Date: 2015-12-09<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1991.htm">N1991</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C23<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>Section 7.28.1 describes the function c16rtomb(). In particular, it states "When
+c16 is not a valid wide character, an encoding error occurs". "wide character"
+is defined in section 3.7.3 as "value representable by an object of type
+wchar_t, capable of representing any character in the current locale". This
+wording seems to imply that, e.g. for the common cases (e.g, an implementation
+that defines __STDC_UTF_16__ and a program that uses an UTF-8 locale),
+c16rtomb() will return -1 when it encounters a character that is encoded as
+multiple char16_t (for UTF-16 a wide character can be encoded as a surrogate
+pair consisting of two char16_t). In particular, c16rtomb() will not be able to
+process strings generated by mbrtoc16().</p>
+<p>I would like to implement a standard-conforming c16rtomb() for SDCC, that allows
+conversion from all of UTF-16 (not just the basic multilingual plane) to UTF-8.
+It seems to me that this is currently not possible.</p>
+<p>On the other hand, the description of mbrtoc16() described in section 7.28.1
+states "If the function determines that the next multibyte character is complete
+and valid, it determines the values of the corresponding wide characters". So it
+considers it possible that a single multibyte character translates into multiple
+wide characters. So maybe the meaning of "wide character" in section 7.28.1 is
+different from definition of "wide character" in section 3.7.3.</p>
+<p>In either case, the intended behaviour of c16rtomb() for characters encoded as
+multiple char16_t seems unclear. The issue has been discussed in the thread "A
+function to convert char16_t strings to char strings" in comp.std.c.</p>
+<h3>Suggested Change</h3>
+<p>I see two possible options:</p>
+<ul>
+<li>State clearly that passing a char16_t that is not a valid character by itself to c16rtomb() is an error. In this case, another function to convert char16_t strings to char strings should be provided by the standard. The term "wide character" should then not be used in the description of mbrtoc16() the way it currently is.</li>
+<li>State clearly that c16rtomb() can handle characters consisting of multiple char16_t. For such characters the first call would return 0, and only once all char16_t encoding the character had been seen, c16rtomb() could write the character as multibyte character. The current wording "When c16 is not a valid wide character, an encoding error occurs" should be changed accordingly.</li>
+</ul>
+<hr />
+<p>Comment from WG14 on 2018-10-18:</p>
+<p>Apr 2016 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>After discussion, the committee concluded that <code>mbstate</code> was already specified
+to handle this case, and as such the second interpretation is intended. The
+committee believes that there is an underspecification, and solicited a further
+paper from the author along the lines of the second option. Although not
+discussed a Suggested Technical Corrigendum can be found at
+<a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2040.htm">N2040</a>.</p>
+</blockquote>
+<p>Oct 2016 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The paper <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2040.htm">N2040</a>.
+was discussed and found inadequate: it does not link the first call with the
+second as is intended by the standard.</p>
+<p>Additional input was solicited and found in <a href="https://www.open-std.org/jtc1/sc22/wg14/14481">(SC22WG14.14481) DR488 Suggested
+Corrigendum</a> and is repeated
+below:</p>
+</blockquote>
+<p>In 7.28.1.2 paragraph 3, change:</p>
+<blockquote>
+<p>If <code>s</code> is not a null pointer, the <code>c16rtomb</code> function determines the number of
+bytes needed to represent the multibyte character that corresponds to the wide
+character given by <code>c16</code> (including any shift sequences), and stores the
+multibyte character representation in the array whose first element is pointed
+to by <code>s</code>.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>If <code>s</code> is not a null pointer, the <code>c16rtomb</code> function determines the number of
+bytes needed to represent the multibyte character that corresponds to the wide
+character given or completed by <code>c16</code> (including any shift sequences), and
+stores the multibyte character representation in the array whose first element
+is pointed to by <code>s</code>, or stores nothing if <code>c16</code> does not represent a complete
+character.</p>
+</blockquote>
+<p>Apr 2017 meeting</p>
+<h3>Committee Discussion</h3>
+<p>The words discussed and reported in the last meeting were adopted.</p>
+<h3>Proposed Change</h3>
+<p>In 7.28.1.2 paragraph 3, change:</p>
+<blockquote>
+<p>If <code>s</code> is not a null pointer, the <code>c16rtomb</code> function determines the number of
+bytes needed to represent the multibyte character that corresponds to the wide
+character given by <code>c16</code> (including any shift sequences), and stores the
+multibyte character representation in the array whose first element is pointed
+to by <code>s</code>.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>If <code>s</code> is not a null pointer, the <code>c16rtomb</code> function determines the number of
+bytes needed to represent the multibyte character that corresponds to the wide
+character given or completed by <code>c16</code> (including any shift sequences), and
+stores the multibyte character representation in the array whose first element
+is pointed to by <code>s</code>, or stores nothing if <code>c16</code> does not represent a complete
+character.</p>
+</blockquote>
+
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0174: Is there a number of errors in the usual arithmetic conversions section?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0174: Is there a number of errors in the usual arithmetic conversions section?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Clive D.W. Feather, BSI<br />
+Date: 1995-10-16<br />
+Submitted against: C90<br />
+Status: Fixed<br />
+Fixed in: C99<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_174.html">dr_174.html</a></p>
+<p><em>Submitted to BSI by Clive D.W. Feather clive@sco.com .</em></p>
+<p><em>In this Defect Report, identifiers lexically identical to those declared in
+standard headers refer to the identifiers declared in those standard headers,
+whether or not the header is explicitly mentioned.</em></p>
+<p><em>This Defect Report has been prepared with considerable help from Mark Brader,
+Jutta Degener, Ronald Guilmette, and a person whose employment conditions
+require anonymity. However, except where stated, opinions expressed or implied
+should not be assumed to be those of any person other than myself.</em></p>
+<p>Defect Report UK 022: Implicit conversions</p>
+<p>The wording dealing with the usual arithmetic conversions contains a number of
+errors; while the correct meaning is usually clear, a strict reading of the C
+Standard shows some contradictions and/or unwanted side-effects.</p>
+<p>Subclause 6.2.1.5 reads in part:</p>
+<p>Many binary operators that expect operands of arithmetic type cause conversions
+and yield result types in a similar way. The purpose is to yield a common type,
+which is also the type of the result.</p>
+<p>Subclause 6.3.15 reads in part:</p>
+<p>The second operand is evaluated only if the first compares unequal to 0; the
+third operand is evaluated only if the first compares equal to 0; the value of
+the second or third operand (whichever is evaluated) is the result.</p>
+<p>If both the second and third operands have arithmetic type, the usual arithmetic
+conversions are performed to bring them to a common type and the result has that
+type ... in which case the other operand is converted to type pointer to void,
+and the result has that type.</p>
+<p>These citations have several defects:</p>
+<p>The relational and equality operators apply the usual arithmetic conversions,
+but not to yield the type of result.</p>
+<p>The conditional operator <code>?:</code> is not a binary operator, but is specified as
+performing the usual arithmetic conversions.</p>
+<p>The concept of conversions applies only to a value; subclause 6.3.15 is
+therefore contradicting itself when it calls for both the second and third
+operands to be subject to conversion when only one of them is evaluated.</p>
+<p>The value of the result of the <code>?:</code> operator is not necessarily that of the
+second or third operand, as the value may have been converted (possibly yielding
+a different value).</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>In subclause 6.2.1.5, change the cited sentences to:</p>
+<p>Many operators cause the same pattern of conversions to be applied to two
+operands of arithmetic type. The purpose is to yield a common type, which,
+unless explicitly stated otherwise, is also the type of the operator's result.</p>
+<p>In 6.3.15, change the cited wording to:</p>
+<p>The second operand is evaluated only if the first compares unequal to 0; the
+third operand is evaluated only if the first compares equal to 0; the result of
+the operator is the value of the second or third operand (whichever is
+evaluated), converted to the type described below.</p>
+<p>If both the second and third operands have arithmetic type, the type that the
+usual arithmetic conversions would yield if applied to those two operands is the
+type of the result ... in which case the type of the result is pointer to
+<code>void</code>.</p>
+
+</body>
+</html>

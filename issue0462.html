@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0462: Clarifying objects accessed in signal handlers</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0462: Clarifying objects accessed in signal handlers</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, <a href="mailto:rcs@cert.org">Robert Seacord</a><br />
+Date: 2014-03-25<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1813.htm">N1813</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>It appears the intent of the committee in Subclause 5.1.2.3 paragraph 5 was to
+allow lock-free atomic objects or objects of type <code>volatile sig_atomic_t</code> to be
+accessed from a signal handler.  Objects of type <code>atomic_flag</code> are an obvious
+choice operations on an object of type <code>atomic_flag</code> are required to be lock
+free. However, objects of type <code>atomic_flag</code> can only be meaningfully accessed
+by a call to a function, and calls to these functions from a signal handler are
+undefined behavior according to subclause 7.14.1.1 paragraph 5.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Change subclause 7.14.1.1 paragraph 5 from:</p>
+<p>If the signal occurs other than as the result of calling the <code>abort</code> or <code>raise</code>
+function, the behavior is undefined if the signal handler refers to any object
+with static or thread storage duration that is not a lock-free atomic object
+other than by assigning a value to an object declared as <code>volatile sig_atomic_t</code>, or the signal handler calls any function in the standard library
+other than the <code>abort</code> function, the <code>_Exit</code> function, the <code>quick_exit</code>
+function, or the <code>signal</code> function with the first argument equal to the signal
+number corresponding to the signal that caused the invocation of the handler.
+Furthermore, if such a call to the <code>signal</code> function results in a <code>SIG_ERR</code>
+return, the value of <code>errno</code> is indeterminate.<sup>252)</sup></p>
+<p>to:</p>
+<p>If the signal occurs other than as the result of calling the <code>abort</code> or <code>raise</code>
+function, the behavior is undefined if the signal handler refers to any object
+with static or thread storage duration that is not a lock-free atomic object
+other than by assigning a value to an object declared as <code>volatile sig_atomic_t</code>, or the signal handler calls any function in the standard library
+other than the <code>abort</code> function, the <code>_Exit</code> function, the <code>quick_exit</code>
+function, <ins>the <code>atomic_flag_test_and_set</code> functions, the <code>atomic_flag_clear</code>
+functions,</ins> or the <code>signal</code> function with the first argument equal to the
+signal number corresponding to the signal that caused the invocation of the
+handler. Furthermore, if such a call to the <code>signal</code> function results in a
+<code>SIG_ERR</code> return, the value of <code>errno</code> is indeterminate.<sup>252)</sup></p>
+<p>Sublcause J.2 Undefined behavior. Page 566</p>
+<p>Change:</p>
+<p>A signal occurs other than as the result of calling the <code>abort</code> or <code>raise</code>
+function, and the signal handler refers to an object with static or thread
+storage duration that is not a lock-free atomic object other than by assigning a
+value to an object declared as <code>volatile sig_atomic_t</code>, or calls any function in
+the standard library other than the <code>abort</code> function, the <code>_Exit</code> function, the
+<code>quick_exit</code> function, or the <code>signal</code> function (for the same signal number)
+(7.14.1.1).</p>
+<p>to:</p>
+<p>A signal occurs other than as the result of calling the <code>abort</code> or <code>raise</code>
+function, and the signal handler refers to an object with static or thread
+storage duration that is not a lock-free atomic object other than by assigning a
+value to an object declared as <code>volatile sig_atomic_t</code>, or calls any function in
+the standard library other than the <code>abort</code> function, the <code>_Exit</code> function, the
+<code>quick_exit</code> function, <ins>the <code>atomic_flag_test_and_set</code> functions, the
+<code>atomic_flag_clear</code> functions,</ins> or the <code>signal</code> function (for the same
+signal number) (7.14.1.1).</p>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Apr 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The Suggested Technical Corrigendum was accepted as the Proposed Technical
+Corrigendum.</p>
+</blockquote>
+<p>Oct 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>Upon further consideration, since by implication 5.1.2.3p5 allows by implication
+any of the atomic functions on lock-free atomic objects, the following revision
+to the Suggested Technical Corrigendum was substantially adopted from the new
+paper <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1887.htm">N1887</a></p>
+</blockquote>
+<h3>Proposed Technical Corrigendum (superceded)</h3>
+<p>Change subclause 7.14.1.1 paragraph 5 from:</p>
+<blockquote>
+<p>If the signal occurs other than as the result of calling the <code>abort</code> or <code>raise</code>
+function, the behavior is undefined if the signal handler refers to any object
+with static or thread storage duration that is not a lock-free atomic object
+other than by assigning a value to an object declared as <code>volatile sig_atomic_t</code>, or the signal handler calls any function in the standard library
+other than the <code>abort</code> function, the <code>_Exit</code> function, the <code>quick_exit</code>
+function, or the <code>signal</code> function with the first argument equal to the signal
+number corresponding to the signal that caused the invocation of the handler.
+Furthermore, if such a call to the <code>signal</code> function results in a <code>SIG_ERR</code>
+return, the value of <code>errno</code> is indeterminate.<sup>252)</sup></p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>If the signal occurs other than as the result of calling the <code>abort</code> or <code>raise</code>
+function, the behavior is undefined if the signal handler refers to any object
+with static or thread storage duration that is not a lock-free atomic object
+other than by assigning a value to an object declared as <code>volatile sig_atomic_t</code>, or the signal handler calls any function in the standard library
+other than</p>
+<ul>
+<li>the <code>abort</code> function,</li>
+<li>the <code>_Exit</code> function,</li>
+<li>the <code>quick_exit</code> function,</li>
+<li>the atomic functions from <code>stdatomic.h</code>, when the atomic arguments are
+lock-free,</li>
+<li>the <code>atomic_is_lock_free</code> function with any atomic argument,</li>
+<li>or the <code>signal</code> function with the first argument equal to the signal number
+corresponding to the signal that caused the invocation of the handler.
+Furthermore, if such a call to the <code>signal</code> function results in a <code>SIG_ERR</code>
+return, the value of <code>errno</code> is indeterminate.<sup>252</sup><sup>)</sup></li>
+</ul>
+</blockquote>
+<p>In subclause J.2 Undefined behavior, change:</p>
+<blockquote>
+<p>A signal occurs other than as the result of calling the <code>abort</code> or <code>raise</code>
+function, and the signal handler refers to an object with static or thread
+storage duration that is not a lock-free atomic object other than by assigning a
+value to an object declared as <code>volatile sig_atomic_t</code>, or calls any function in
+the standard library other than the <code>abort</code> function, the <code>_Exit</code> function, the
+<code>quick_exit</code> function, or the <code>signal</code> function (for the same signal number)
+(7.14.1.1).</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>A signal occurs other than as the result of calling the <code>abort</code> or <code>raise</code>
+function, and the signal handler refers to an object with static or thread
+storage duration that is not a lock-free atomic object other than by assigning a
+value to an object declared as <code>volatile sig_atomic_t</code>, or calls any function in
+the standard library other than the <code>abort</code> function, the <code>_Exit</code> function, the
+<code>quick_exit</code> function, the atomic functions from <code>stdatomic.h</code> (when the atomic
+arguments are lock-free) , the <code>atomic_is_lock_free</code> function with any atomic
+argument, or the <code>signal</code> function (for the same signal number) (7.14.1.1).</p>
+</blockquote>
+<p>Apr 2015 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The committee noted that <code>atomic_init</code> was not safe to call. It was decided that
+the best place to say this was in the <code>atomic_init</code> description as a pattern to
+follow for future possible additions. As such, the following revised Proposed
+Technical Corrigendum was provided and accepted.</p>
+</blockquote>
+<h3>Proposed Technical Corrigendum</h3>
+<p>Change subclause 7.14.1.1 paragraph 5 from:</p>
+<blockquote>
+<p>If the signal occurs other than as the result of calling the <strong>abort</strong> or
+<strong>raise</strong> function, the behavior is undefined if the signal handler refers to
+any object with static or thread storage duration that is not a lock-free atomic
+object other than by assigning a value to an object declared as <strong>volatile
+sig_atomic_t</strong>, or the signal handler calls any function in the standard
+library other than the <strong>abort</strong> function, the <strong>_Exit</strong> function, the
+<strong>quick_exit</strong> function, or the signal function with the first argument equal
+to the signal number corresponding to the signal that caused the invocation of
+the handler. Furthermore, if such a call to the signal function results in a
+SIG_ERR return, the value of errno is indeterminate.<sup>252</sup></p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>If the signal occurs other than as the result of calling the <strong>abort</strong> or
+<strong>raise</strong> function, the behavior is undefined if the signal handler refers to
+any object with static or thread storage duration that is not a lock-free atomic
+object other than by assigning a value to an object declared as <strong>volatile
+sig_atomic_t</strong>, or the signal handler calls any function in the standard
+library other than</p>
+<ul>
+<li>the <strong>abort</strong> function,</li>
+<li>the <strong>_Exit</strong> function,</li>
+<li>the <strong>quick_exit</strong> function,</li>
+<li>the functions in <strong>&lt;stdatomic.h&gt;</strong> (except where explicitly stated otherwise) when the atomic arguments are lock-free,</li>
+<li>the <strong>atomic_is_lock_free</strong> function with any atomic argument, or</li>
+<li>the <strong>signal</strong> function with the first argument equal to the signal number corresponding to the signal that caused the invocation of the handler. Furthermore, if such a call to the <strong>signal</strong> function results in a <strong>SIG_ERR</strong> return, the value of errno is indeterminate.<sup>252</sup></li>
+</ul>
+</blockquote>
+<p>Add a new paragraph after 7.17.2.2 paragraph 3:</p>
+<blockquote>
+<p>If a signal occurs other than as the result of calling the <strong>abort</strong> or
+<strong>raise</strong> function, the behavior is undefined if the signal handler calls the
+<strong>atomic_init</strong> generic function.</p>
+</blockquote>
+<p>In subclause J.2 Undefined behavior, change:</p>
+<blockquote>
+<p>A signal occurs other than as the result of calling the <strong>abort</strong> or <strong>raise</strong>
+function, and the signal handler refers to an object with static or thread
+storage duration that is not a lock-free atomic object other than by assigning a
+value to an object declared as <strong>volatile sig_atomic_t</strong>, or calls any
+function in the standard library other than the <strong>abort</strong> function, the
+<strong>_Exit</strong> function, the <strong>quick_exit</strong> function, or the <strong>signal</strong> function
+(for the same signal number) (7.14.1.1).</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>A signal occurs other than as the result of calling the <strong>abort</strong> or <strong>raise</strong>
+function, and the signal handler refers to an object with static or thread
+storage duration that is not a lock-free atomic object other than by assigning a
+value to an object declared as <strong>volatile sig_atomic_t</strong>, or calls any
+function in the standard library other than the <strong>abort</strong> function, the
+<strong>_Exit</strong> function, the <strong>quick_exit</strong> function, the functions in
+<strong>&lt;stdatomic.h&gt;</strong> (except where explicitly stated otherwise) when the atomic
+arguments are lock-free, the <strong>atomic_is_lock_free</strong> function with any atomic
+argument, or the <strong>signal</strong> function (for the same signal number) (7.14.1.1).</p>
+</blockquote>
+
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0280: struct tm, member tm_isdst, and mktime() in &lt;time.h&gt;</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0280: <code>struct tm</code>, member <code>tm_isdst</code>, and <code>mktime()</code> in <code>&lt;time.h&gt;</code></h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Emmanuel Ruffin (ruffin@besancon.sema.slb.com) via ANSI, Randy Meyers (US)<br />
+Date: 2002-09-26<br />
+Submitted against: C99<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_280.htm">dr_280.htm</a></p>
+<h3>Summary</h3>
+<p>If it is not known whether daylight saving time is in effect (<code>tm_isdst</code> set to
+<code>-1</code>), some times expressed in <code>struct tm</code> become ambiguous. There is no
+specification as to what <code>mktime()</code> should do for such cases.</p>
+<p><strong>Questions</strong></p>
+<ol>
+<li>Normally when calling <code>mktime()</code>, the user will set <code>tm_isdst</code> to <code>-1</code> to request that <code>mktime()</code> determine the true value (See 7.23.2.3 footnote 267). Usually, <code>mktime()</code> can determine whether daylight saving time is in effect based on the time and date information initially stored in the <code>struct tm</code> argument. However, during the Fall change over, there is one hour that exists both in daylight saving time and standard time. Example: In France, we will change time on October the 27th at 3am. That means that at 3am it will be 2am again. If asked to convert October 27 at 2.30am when <code>tm_isdst</code> is <code>-1</code>, what value should <code>mktime()</code> store in <code>tm_isdst</code> and what is the return value?</li>
+<li>For the same example as point <code>1</code>, what should we return in case <code>tm_isdst</code> is set to <code>0</code> or <code>1</code> ?</li>
+<li>In a general case, what should we do in case <code>tm_isdst</code> is different from <code>-1</code> ?</li>
+<li>When calling <code>mktime()</code> function, is it true that this function should modify the <code>tm</code> structure to put in it the GM time instead the local time given as an entry ?</li>
+</ol>
+<h3>Suggested Committee Response</h3>
+<p>Subclause 7.23.1 Paragraph 1 of the C Standard says,</p>
+<blockquote>
+<p>"The local time zone and Daylight Saving Time are implementation-defined."</p>
+</blockquote>
+<p>That means that the standard does not specify the behavior and that the
+implementation is free to make choices that it must document. Although the C
+Standard imposes no particular definition on daylight saving time, other
+standards or local custom may.</p>
+<ol>
+<li>It is implementation defined. For example, an implementation might assume that daylight saving time is not in effect and set <code>tm_isdst</code> to <code>0</code> and return the <code>time_t</code> value corresponding to 2:30 AM Standard Time.</li>
+<li>It is implementation defined. However, assuming that an implementation chose a conventional definition of daylight saving time, these times are unambiguous since the user specified whether daylight saving time was in effect, and the <code>time_t</code> return value would be different for 2:30 daylight saving time versus 2:30 standard time. Note that it would be reasonable for <code>mktime()</code> to change <code>tm_hour</code> and <code>tm_isdst</code> on output. For example, <code>tm_hour=2</code> and <code>tm_isdst=1</code> on input might change to <code>tm_hour=1</code> and <code>tm_dst=0</code> on output.</li>
+<li>It is implementation defined. One possibility would be to consider any two <code>struct tm</code> values as being exactly one hour apart if all members have the same value except that one <code>struct tm</code> value has <code>tm_isdst=1</code> and the other has <code>tm_isdst=0</code> (regardless of the date stored in the <code>struct tm</code> values).</li>
+<li>No. A <code>struct tm</code> represents a local time in the local time zone for <code>mktime()</code>. See 7.23.2.3 Paragraph 2.</li>
+</ol>
+<hr />
+<p>Comment from WG14 on 2003-10-06:</p>
+<h3>Committee Response</h3>
+<blockquote>
+<p>It is implementation defined. One possibility would be to consider any two
+<code>struct tm</code> values as being exactly one hour apart if all members have the same
+value except that one <code>struct tm</code> value has <code>tm_isdst=1</code> and the other has
+<code>tm_isdst=0</code> (regardless of the date stored in the <code>struct tm</code> values).</p>
+<p>See footnote 267.</p>
+</blockquote>
+
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0128: Editorial issue relating to tag declarations in type specifiers</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0128: Editorial issue relating to tag declarations in type specifiers</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Ron Guilmette, WG14<br />
+Date: 1993-12-03<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_128.html">dr_128.html</a></p>
+<p>ANSI/ISO C Defect Report #rfg35:</p>
+<p>Subject: Editorial issue relating to tag declarations in type specifiers.</p>
+<p>Given the code:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">example</span><span style="color: #bbbbbb"> </span>()
+<span style="color: #bbbbbb">        </span>{
+<span style="color: #bbbbbb">                </span>{
+<span style="color: #bbbbbb">                </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">TAG</span><span style="color: #bbbbbb"> </span>{<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>i};
+<span style="color: #bbbbbb">                </span>}
+<span style="color: #bbbbbb">                </span>{
+<span style="color: #bbbbbb">                </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">TAG</span><span style="color: #bbbbbb"> </span>object;<span style="color: #bbbbbb">      </span><span style="color: #3D7B7B; font-style: italic">/* line 7 */</span>
+<span style="color: #bbbbbb">                </span>}
+<span style="color: #bbbbbb">        </span>}
+</pre></div>
+
+<p>Does line 7 violate the semantic rule given at the very end of the semantics
+sub-part of subclause 6.5, i.e., “If an identifier for an object is declared
+with no linkage, the type for the object shall be complete by the end of its
+declarator, ...”?</p>
+<p>In other words, does <code>struct TAG</code> represent an incomplete type on line 7? (I
+believe that the answer is “yes,” but the C Standard fails to make that entirely
+clear.)</p>
+<p>Background:</p>
+<p>Subclause 6.5.2.3 says:</p>
+<blockquote>
+<p>If a type specifier of the form</p>
+<blockquote>
+<p><em>struct-or-union identifier</em></p>
+</blockquote>
+<p>occurs prior to the declaration that defines the content, the structure or union
+is an incomplete type. It declares a tag that specifies a type that may be used
+only when the size of an object of the specified type is not needed.</p>
+</blockquote>
+<p>These statements fail to take full account of scoping issues. The statements
+quoted above should be rephrased to take scope issues into account, perhaps as
+follows:</p>
+<blockquote>
+<p>If a type specifier of the form</p>
+<blockquote>
+<p><em>struct-or-union identifier</em></p>
+</blockquote>
+<p>occurs within a given scope prior to another declaration (in the same scope) of
+the same identifier (which also declares the identifier to be a struct or union
+tag) or if such a type specifier occurs at some point within a given scope where
+no prior declaration of the same tag identifier is visible, then the type
+specifier declares the identifier to be a structure or union tag for an
+incomplete structure or union type (respectively). The type so declared may only
+be used when the size of an object of the specified type is not needed.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>Yes, line 7 violates the semantic rule cited. Yes, <code>struct TAG</code> represents an
+incomplete type. The application of rules such as scope rules need not be
+restated at each relevant point in the C Standard.</p>
+
+</body>
+</html>

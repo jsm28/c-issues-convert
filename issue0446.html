@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0446: Use byte instead of character for memcmp, memcpy</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0446: Use byte instead of character for memcmp, memcpy</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG 14, Blaine Garst<br />
+Date: 2013-07-31<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1736.htm">N1736</a><br />
+Submitted against: C11 / C17<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>It has been noted that the descriptions for 7.24.2.1 <code>memcpy</code>, 7.24.2.2
+<code>memmove</code> and 7.24.4.1 <code>memcmp</code> are written using the term <em>character</em> which is
+inconsistent with their design as <em>memory</em> functions. Moreover, if one then
+reads 3.7.2 as allowing character to mean multibyte character, it is thought
+that confusion could arise as to whether the number of multibyte characters
+should be supplied rather than the number of bytes.</p>
+<p>Although it is clear by 7.24.1 <em>String function conventions</em> paragraph 3</p>
+<blockquote>
+<p>For all functions in this sub clause, each character shall be interpreted as if
+it had the type <code>unsigned char</code></p>
+</blockquote>
+<p>that the number of bytes to be used corresponds to the size of a <code>unsigned char</code>, one has to reference 6.2.6 <em>Representation of types</em> to learn that
+<code>unsigned char</code> is in fact a single byte (consisting of <code>CHAR_BIT</code> bits).</p>
+<p>It would be simpler and more to the point if the three memory functions describe
+their count parameter <code>n</code> in terms of bytes.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p><strong>memcpy</strong></p>
+<p>Change 7.24.2.1 p 2 first sentence from</p>
+<blockquote>
+<p>The <code>memcpy</code> function copies <code>n</code> <ins>characters</ins> from the object pointed
+to by <code>s2</code> into the object pointed to by <code>s1</code>.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>The <code>memcpy</code> function copies <code>n</code> <ins>bytes</ins> from the object pointed to by
+<code>s2</code> into the object pointed to by <code>s1</code>.</p>
+</blockquote>
+<p><strong>memmove</strong></p>
+<p>Change 7.24.2.2 p 2 from</p>
+<blockquote>
+<p>The <code>memmove</code> function copies <code>n</code> <ins>characters</ins> from the object pointed
+to by <code>s2</code> into the object pointed to by <code>s1</code>. Copying takes place as if the <code>n</code>
+<ins>characters</ins> from the object pointed to by <code>s2</code> are first copied into a
+temporary array of <code>n</code> <ins>characters</ins> that does not overlap the objects
+pointed to by <code>s1</code> and <code>s2</code>, and then the <code>n</code> <ins>characters</ins> from the
+temporary array are copied into the object pointed to by <code>s1</code>.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>The <code>memmove</code> function copies <code>n</code> <ins>bytes</ins> from the object pointed to by
+<code>s2</code> into the object pointed to by <code>s1</code>. Copying takes place as if the <code>n</code>
+<ins>bytes</ins> from the object pointed to by <code>s2</code> are first copied into a
+temporary array of <code>n</code> <ins>bytes</ins> that does not overlap the objects
+pointed to by <code>s1</code> and <code>s2</code>, and then the <code>n</code> <ins>bytes</ins> from the
+temporary array are copied into the object pointed to by <code>s1</code>.</p>
+</blockquote>
+<p><strong>memcmp</strong></p>
+<p>Change 7.24.4.1 p 2 from</p>
+<blockquote>
+<p>The <code>memcmp</code> function compares the first <code>n</code> <ins>characters</ins> of the object
+pointed to by <code>s1</code> to the first <code>n</code> <ins>characters</ins> of the object pointed
+to by <code>s2</code>.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>The <code>memcmp</code> function compares the first <code>n</code> <ins>bytes</ins> of the object
+pointed to by <code>s1</code> to the first <code>n</code> <ins>bytes</ins> of the object pointed to by
+<code>s2</code>.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2014-10-31:</p>
+<p>Oct 2013 meeting</p>
+<h3>Proposed Committee Response</h3>
+<blockquote>
+<p>After reviewing the original motivation and suggestion for change, it was noted
+by the project editor that "character" is used in several distinct contexts, and
+that it would be inappropriate to simply improve one area without a
+comprehensive review of all uses such that the existing consistency of uses of
+character be replaced in a consistent new manner, as yet undetermined. As it
+stands, although careful reading is strictly required, it is correct and as such
+this is not a defect.</p>
+</blockquote>
+
+</body>
+</html>

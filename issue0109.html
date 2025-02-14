@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0109: Does the C Standard draw any significant distinction between undefined values and undefined behavior?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0109: Does the C Standard draw any significant distinction between <em>undefined values</em> and <em>undefined behavior</em>?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Ron Guilmette, WG14<br />
+Date: 1993-12-03<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_109.html">dr_109.html</a></p>
+<p>[Question was revised in Jun 94.]</p>
+<p>ANSI/ISO C Defect Report #rfg16:</p>
+<p>Does the C Standard draw any significant distinction between “undefined values”
+and “undefined behavior?” (It appears that it does, but if it does, that fact is
+not always apparent.)</p>
+<p>Just to give two examples which, it would appear, involve the generation (in a
+running program) of undefined values (as opposed to totally undefined behavior
+at either compile-time or link-time or run-time) I provide the following two
+citations.</p>
+<p>Subclause 6.3.8 <strong>Relational operators</strong>:</p>
+<blockquote>
+<p>If the objects pointed to are not members of the same aggregate or union object,
+the <em>result</em> is undefined,...</p>
+</blockquote>
+<p>(Emphasis added.)</p>
+<p>Subclause 7.5.2.1 <strong>The <code>acos</code> function</strong>:</p>
+<blockquote>
+<p>A domain error occurs for arguments not in the range [-1,+1].</p>
+</blockquote>
+<p>The issue of “undefined values” versus “undefined behavior” has great
+significance and importance to people doing compiler testing. It is generally
+accepted that the C Standard's use of the term “undefined behavior” is meant to
+imply that absolutely <em>anything</em> can happen at any time, e.g. at compile-time,
+at link-time, or at run-time. Thus, people testing compilers must either totally
+avoid writing test cases which involve any kind of “undefined behavior” or else
+they must treat any such test cases which they <em>do</em> write as strictly “quality
+of implementation” tests which may validly cause errors at compile-time, at
+link-time, or at run-time.</p>
+<p>If however the C Standard recognizes the separate existence of “undefined
+values” (whose mere creation <em>does not</em> involve wholly “undefined behavior”)
+then a person doing compiler testing could write a test case such as the
+following, and he/she could also expect (or possibly demand) that a conforming
+implementation should, at the very least, compile this code (and possibly also
+allow it to execute) without “failure.”</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>array1[<span style="color: #666666">5</span>];
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>array2[<span style="color: #666666">5</span>];
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>p1<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;</span>array1[<span style="color: #666666">0</span>];
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>p2<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;</span>array2[<span style="color: #666666">0</span>];
+
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">foo</span>()
+<span style="color: #bbbbbb">        </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>i;
+<span style="color: #bbbbbb">        </span>i<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>(p1<span style="color: #bbbbbb"> </span><span style="color: #666666">&gt;</span><span style="color: #bbbbbb"> </span>p2);<span style="color: #bbbbbb">  </span><span style="color: #3D7B7B; font-style: italic">/* Must this be &quot;successfully translated&quot;? */</span>
+<span style="color: #bbbbbb">        </span><span style="color: #666666">1/0</span>;<span style="color: #bbbbbb">             </span><span style="color: #3D7B7B; font-style: italic">/* Must this be &quot;successfully translated&quot;? */</span>
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;
+<span style="color: #bbbbbb">        </span>}
+</pre></div>
+
+<p>So the bottom line question is this: Must the above code be “successfully
+translated” (whatever that means)? (See the footnote attached to subclause
+5.1.1.3.)</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>The C Standard uses the term “indeterminately valued” not “undefined value.” Use
+of an indeterminate valued object results in undefined behavior.</p>
+<p>The footnote to subclause 5.1.1.3 points out that an implementation is free to
+produce any number of diagnostics as long as a valid program is still correctly
+translated.</p>
+<p>If an expression whose evaluation would result in undefined behavior appears in
+a context where a constant expression is required, the containing program is not
+strictly conforming. Furthermore, if <em>every</em> possible execution of a given
+program would result in undefined behavior, the given program is not strictly
+conforming.</p>
+<p>A conforming implementation must not fail to translate a strictly conforming
+program simply because <em>some</em> possible execution of that program would result in
+undefined behavior. Because <code>foo</code> might never be called, the example given must
+be successfully translated by a conforming implementation.</p>
+
+</body>
+</html>

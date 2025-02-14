@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0409: f(inf) is inf being a range error</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0409: <code>f(inf)</code> is <code>inf</code> being a range error</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG 14, Fred J. Tydeman (USA)<br />
+Date: 2012-01-11<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1593.htm">N1593</a><br />
+Submitted against: C11 / C17<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>Several of the functions in <code>&lt;math.h&gt;</code> that compute infinity for <code>f(infinity)</code>
+have the phrase (or something similar):</p>
+<blockquote>
+<p>A range error occurs if the magnitude of x is too large.</p>
+</blockquote>
+<p>Since infinity is 'too large', one might conclude that <code>f(infinity)</code> is a range
+error for those functions.</p>
+<p>However, 7.12.1#5 has:</p>
+<blockquote>
+<p>A floating result overflows if the magnitude of the mathematical result is
+finite but so large that the mathematical result cannot be represented without
+extraordinary roundoff error ...</p>
+</blockquote>
+<p>The key word being 'finite'. So, one could conclude f(infinity) being infinity
+is not overflow (and therefore, not a range error).</p>
+<p>To me, this appears to be a contradiction. I have encountered both kinds of
+implementations; some treat this case as a range error, and others that do not.</p>
+<p>For both LIA and IEEE-754, f(infinity) being infinity is not considered an
+error.</p>
+<h3>Suggested Change</h3>
+<ol>
+<li>
+<p>7.12.5.4 The cosh functions</p>
+<p>Change to: A range error occurs if the magnitude of finite x is too large.</p>
+</li>
+<li>
+<p>7.12.5.5 The sinh functions</p>
+<p>Change to: A range error occurs if the magnitude of finite x is too large.</p>
+</li>
+<li>
+<p>7.12.6.1 The exp functions</p>
+<p>Change to: A range error occurs if the magnitude of finite x is too large.</p>
+</li>
+<li>
+<p>7.12.6.2 The exp2 functions</p>
+<p>Change to: A range error occurs if the magnitude of finite x is too large.</p>
+</li>
+<li>
+<p>7.12.6.3 The expm1 functions</p>
+<p>Change to: A range error occurs if the magnitude of finite x is too large.</p>
+</li>
+<li>
+<p>7.12.6.6 The ldexp functions</p>
+<p>Change to: A range error may occur for finite arguments.</p>
+</li>
+<li>
+<p>7.12.6.13 The scalbn and scalbln functions</p>
+<p>Change to: A range error may occur for finite arguments.</p>
+</li>
+<li>
+<p>7.12.7.3 The hypot functions</p>
+<p>Change to: A range error may occur for finite arguments.</p>
+</li>
+<li>
+<p>7.12.7.4 The pow functions</p>
+<p>Change to: A range error may occur for finite arguments.</p>
+</li>
+<li>
+<p>7.12.8.2 The erfc functions</p>
+<p>Change to: A range error occurs if finite x is too large.</p>
+</li>
+<li>
+<p>7.12.8.3 The lgamma functions</p>
+<p>Change to: A range error occurs if finite x is too large.</p>
+</li>
+<li>
+<p>7.12.8.4 The tgamma functions</p>
+<p>Change to: A range error occurs if the magnitude of finite x is too large and
+may occur if the magnitude of x is too small.</p>
+</li>
+<li>
+<p>7.12.12.1 The fdim functions</p>
+<p>Change to: A range error may occur for finite arguments.</p>
+</li>
+<li>
+<p>7.12.13.1 The fma functions</p>
+<p>Change to: A range error may occur for finite arguments.</p>
+</li>
+</ol>
+<hr />
+<p>Comment from WG14 on 2016-10-21:</p>
+<p>Feb 2012 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<ul>
+<li>
+<p>The committee rejected the Suggested Change in the main body of this defect report.</p>
+</li>
+<li>
+<p>The committee considered the following, but rejected it (as just being a restatement of 7.12.1 paragraphs 4 and 5).</p>
+<blockquote>
+<p>If the result overflows, a range error shall occur.</p>
+</blockquote>
+</li>
+<li>
+<p>A question arose as to why these range error cases are listed in the individual functions (instead of just being covered by the blanket 7.12.1 paragraphs 4, 5, and 6)</p>
+<p>7.12.1 paragraph 1 has the answer:</p>
+<blockquote>
+<p>The behavior of each of the functions in &lt;math.h&gt; is specified for all
+representable values of its input arguments, except where stated otherwise.</p>
+</blockquote>
+</li>
+<li>
+<p>Several other approaches were discussed, without any consensus reached</p>
+<ol>
+<li>Add a footnote to 7.12.1 paragraph 5, first sentence:
+<blockquote>
+<p>In an implementation that supports infinities, a range error may happen for
+functions that map an infinity argument into an exact infinity or exact zero
+result.</p>
+</blockquote>
+</li>
+<li>Add to end of 7.12.1 paragraph 4:
+<blockquote>
+<p>Recommended practice</p>
+<p>In an implementation that supports infinities, a range error should not happen
+for functions that map an infinity argument into an exact infinity or exact zero
+result.</p>
+</blockquote>
+</li>
+<li>Add to 7.12.1 paragraph 4:
+<blockquote>
+<p>An implementation may define additional range errors, provided that such errors
+are consistent with the mathematical definition of the function.</p>
+</blockquote>
+</li>
+</ol>
+</li>
+</ul>
+</blockquote>
+<p>Oct 2012 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<ul>
+<li>Fred wrote a paper <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1629.htm">N1629</a> discussing "Fixing a contradiction" and "Taking care of infinity".</li>
+<li>The definition of range error, however, in 7.12.1 paragraph 4 indicates infinity is excluded (since it has a representation), and as such no change is required.</li>
+</ul>
+</blockquote>
+<p>Oct 2015 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>Fred presented another paper
+<a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1979.htm">N1979</a> noting an
+error in the October 2012 committee response, and after discussion, the proposed
+clarification was adopted, and is as follows</p>
+</blockquote>
+<h3>Proposed Committee Response</h3>
+<p>The definition of range error in 7.12.1 paragraph 4 excludes infinity.</p>
+<p>For example, <code>exp(+infinity)</code> is <code>+infinity</code>. Since the input <code>+infinity</code> is
+representable, then the output <code>+infinity</code> is representable in an object of the
+specified type. By, 7.12.1 paragraph 4, a range error has not happened. Also, by
+7.12.1 paragraph 5, since the result is not finite, overflow has not happened.</p>
+
+</body>
+</html>

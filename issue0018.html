@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0018: Does fscanf recognize literal multibyte characters properly?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0018: Does <code>fscanf</code> recognize literal multibyte characters properly?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Yasushi Nakahara, WG14<br />
+Date: 1992-12-10<br />
+Reference document: X3J11/90-066<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_018.html">dr_018.html</a></p>
+<p>It is unclear how the <code>fscanf</code> function shall behave when executing directives
+that include “ordinary multibyte characters,” especially in the case of
+shift-encoded ordinary multibyte characters.</p>
+<p>The following statements are described in subclause 7.9.6.2 <strong>The <code>fscanf</code>
+function</strong> of the current standard:</p>
+<p>A directive that is an ordinary multibyte character is executed by reading the
+next characters of the stream. If one of the characters differs from one
+comprising the directive, the directive fails, and the differing and subsequent
+characters remain unread.</p>
+<p>Assume a typical shift-encoded directive: <code>A\*</code> in 7-bit representation. And
+consider two different encoding systems, Latin Alphabet No.1 - 8859/1 and
+German Standard DIN 66 003. The codes are, for example,</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>A;<span style="color: #bbbbbb"> </span>in<span style="color: #bbbbbb"> </span><span style="color: #666666">8859/1:</span><span style="color: #bbbbbb"> </span>SO<span style="color: #bbbbbb"> </span><span style="color: #666666">4/4</span><span style="color: #bbbbbb"> </span>SI
+<span style="color: #bbbbbb"> </span>A;<span style="color: #bbbbbb"> </span>in<span style="color: #bbbbbb"> </span>DIN<span style="color: #bbbbbb"> </span><span style="color: #666666">66</span><span style="color: #bbbbbb"> </span><span style="color: #666666">003:</span><span style="color: #bbbbbb"> </span>ESC<span style="color: #bbbbbb"> </span><span style="color: #666666">2/8</span><span style="color: #bbbbbb"> </span><span style="color: #666666">4/11</span><span style="color: #bbbbbb"> </span><span style="color: #666666">5/11</span><span style="color: #bbbbbb"> </span>ESC<span style="color: #bbbbbb"> </span><span style="color: #666666">2/8</span><span style="color: #bbbbbb"> </span><span style="color: #666666">4/2</span>
+</pre></div>
+
+<p><code>where SO</code> is a Shift-Out code (0/15 = 0x0F) and <strong>SI</strong> corresponds to a
+Shift-In code (0/14). “<code>ESC 2/8 4/11</code>” is an escape sequence for the German
+Standard DIN 66 003, and “<code>ESC 2/8 4/2</code>” is for ISO 646 USA Version (ASCII).</p>
+<p>Assuming that a subject sequence includes <code>A;</code>, <code>O;</code>, and <code>U;</code> with the
+following 7-bit representations,</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>in<span style="color: #bbbbbb"> </span><span style="color: #666666">8859/1:</span><span style="color: #bbbbbb"> </span>SO<span style="color: #bbbbbb"> </span><span style="color: #666666">4/4</span><span style="color: #bbbbbb"> </span><span style="color: #666666">5/6</span><span style="color: #bbbbbb"> </span><span style="color: #666666">5/12</span><span style="color: #bbbbbb"> </span>SI
+<span style="color: #bbbbbb"> </span>in<span style="color: #bbbbbb"> </span>DIN<span style="color: #bbbbbb"> </span><span style="color: #666666">66</span><span style="color: #bbbbbb"> </span><span style="color: #666666">003:</span><span style="color: #bbbbbb"> </span>ESC<span style="color: #bbbbbb"> </span><span style="color: #666666">2/8</span><span style="color: #bbbbbb"> </span><span style="color: #666666">4/11</span><span style="color: #bbbbbb"> </span><span style="color: #666666">5/11</span><span style="color: #bbbbbb"> </span><span style="color: #666666">5/12</span><span style="color: #bbbbbb"> </span><span style="color: #666666">5/13</span><span style="color: #bbbbbb"> </span>ESC<span style="color: #bbbbbb"> </span><span style="color: #666666">2/8</span><span style="color: #bbbbbb"> </span><span style="color: #666666">4/2</span>
+</pre></div>
+
+<p>does the “<code>A;</code>” directive in the <code>fscanf</code> format string match the beginning part
+of the“<code>A;O;U;</code>” sequence?</p>
+<p>At what position of the target sequence shall the “<code>A;</code>” directive fail?</p>
+<p>One interpretation of this is that because the current standard defined the
+behavior of the directive in the <code>fscanf</code> format based on the word “character”
+(byte), not using the term “multibyte character,” the comparison shall be done
+on a byte-by-byte basis. One may conclude that the “<code>A;</code>” directive never
+matches the “<code>;”;O;U</code> sequence in this case.</p>
+<p>Another interpretation may lead to an opposite conclusion, saying that the
+current standard's statements quoted above do not necessarily mean that such
+comparison shall be done on a byte-by-byte basis. Instead, it is read that the
+matching shall be done on a “multibyte character by multibyte character basis”
+or rather “wide character by wide character basis.” Especially, a “ghost”
+sequence like “<code>ESC ...</code>” and <code>SI</code><em><code>/</code></em><code>SO</code> characters should not be regarded as
+independent ordinary multibyte characters in this case.</p>
+<p>Which is a correct interpretation of the current standard?</p>
+<p>These different interpretations are caused by the ambiguity of the descriptions
+in the current standard. Also, it should be pointed out that the major problem
+here is usage of the word “character.” The generic word “character” and the
+specific word “character(=byte)” should be properly discriminated in the
+standard.</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>Subclause 7.9.6.2 says, “A directive that is an ordinary multibyte character is
+executed by reading the next <em>characters</em> ...” [emphasis added]. Consistently
+throughout the standard, plain “characters” refers to one-byte characters. (See
+subclause 3.5 for the definition of “character.”)</p>
+
+</body>
+</html>

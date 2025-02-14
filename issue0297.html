@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0297: May FE_* floating-point exception flags have bits in common?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0297: May <code>FE_*</code> floating-point exception flags have bits in common?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG 14, Fred Tydeman (USA)<br />
+Date: 2003-11-29<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1045.htm">N1045</a><br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C99 TC3<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_297.htm">dr_297.htm</a></p>
+<h3>Summary</h3>
+<p>May the floating-point exception flags of 7.6 Floating-point environment
+<code>&lt;fenv.h&gt;</code>, paragraph 5, have bits in common, e.g., the AND between two of the
+<code>FE_*</code> macros be nonzero?</p>
+<p><strong>Details from C99+TC1</strong></p>
+<p>Suppose that the floating-point exception flags of 7.6 Floating-point
+environment <code>&lt;fenv.h&gt;</code> are defined as follows:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb"> </span><span style="color: #9C6500">#define FE_INVALID   0x8001</span>
+<span style="color: #bbbbbb">  </span><span style="color: #9C6500">#define FE_DIVBYZERO 0x8002</span>
+<span style="color: #bbbbbb">  </span><span style="color: #9C6500">#define FE_OVERFLOW  0x8004</span>
+<span style="color: #bbbbbb">  </span><span style="color: #9C6500">#define FE_UNDERFLOW 0x8008</span>
+<span style="color: #bbbbbb">  </span><span style="color: #9C6500">#define FE_INEXACT   0x8010</span>
+</pre></div>
+
+<p>That is, there is a bit in common to at least two of the macros, in this case,
+it is common to all five macros. This is allowed by the current C99 wording.
+That bit here could mean: any floating-point exception is raised.</p>
+<p>Clive Feather scanned through Annex B, and concluded that this is really the
+only case of flags being allowed to have common bits, which could be why we
+haven't spotted this condition before now.</p>
+<p>Does this cause any problems?</p>
+<p>Yes. Consider the example code in 7.6.2.5:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #008000; font-weight: bold">if</span><span style="color: #bbbbbb"> </span>(set_excepts<span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;</span><span style="color: #bbbbbb"> </span>FE_INVALID)<span style="color: #bbbbbb"> </span>f();
+<span style="color: #bbbbbb">  </span><span style="color: #008000; font-weight: bold">if</span><span style="color: #bbbbbb"> </span>(set_excepts<span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;</span><span style="color: #bbbbbb"> </span>FE_OVERFLOW)<span style="color: #bbbbbb"> </span>g();
+</pre></div>
+
+<p>Suppose that just <code>FE_DIVBYZERO</code> is raised, e.g., set_excepts is 0x8002. Then,
+both of the above tests would report true (which is wrong), and both <code>f()</code> and
+<code>g()</code> would be called.</p>
+<p>I know of two solutions:</p>
+<ol>
+<li>
+<p>Require that there be no bits in common to any of these <code>FE_*</code> floating-point
+exception macros. One way is to change the last sentence of paragraph 5 of 7.6
+to be:</p>
+<blockquote>
+<p>The defined macros expand to integer constant expressions with values such that
+bitwise ORs of all combinations of the macros result in distinct values, and
+furthermore, bitwise ANDs of all combinations of the macros result in zero.</p>
+</blockquote>
+<p>In addition, we could add a footnote to that sentance along the lines of:</p>
+<blockquote>
+<p>The macros should be distinct powers of two.</p>
+</blockquote>
+<p>Possible problem: This could break existing implementations. Anyone know of an
+implementation that would break?</p>
+<p>All feedback I have received says this is what we "designed" and is the only
+sane solution; it is also what people expect.</p>
+</li>
+<li>
+<p>Add another macro, such as <code>FE_EXP_MASK</code>, that is the OR of all these macros,
+but without any of the bits in common. In this case, it would be 0x001f. If we
+choose this solution, then we will need to redo the examples that test the
+floating-point exception flags. For example, in 7.6.2.5, the tests would become:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #008000; font-weight: bold">if</span><span style="color: #bbbbbb"> </span>(set_excepts<span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;</span><span style="color: #bbbbbb"> </span>FE_INVALID<span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;</span><span style="color: #bbbbbb"> </span>FE_EXP_MASK)<span style="color: #bbbbbb"> </span>f();
+<span style="color: #bbbbbb">  </span><span style="color: #008000; font-weight: bold">if</span><span style="color: #bbbbbb"> </span>(set_excepts<span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;</span><span style="color: #bbbbbb"> </span>FE_OVERFLOW<span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;</span><span style="color: #bbbbbb"> </span>FE_EXP_MASK)<span style="color: #bbbbbb"> </span>g();
+</pre></div>
+
+<p>Possible problem: This would require existing user programs to be recoded.</p>
+<p>Many of us do not like this solution, and if it were allowed, would be very bad
+news.</p>
+</li>
+</ol>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Change the last sentence of paragraph 5 of 7.6 Floating-point environment
+<code>&lt;fenv.h&gt;</code> to be:</p>
+<blockquote>
+<p>The defined macros expand to integer constant expressions with values such that
+bitwise ORs of all combinations of the macros result in distinct values, and
+furthermore, bitwise ANDs of all combinations of the macros result in zero.</p>
+</blockquote>
+<p>In addition, add a footnote to that sentance along the lines of:</p>
+<blockquote>
+<p>The macros should be distinct powers of two.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2004-09-28:</p>
+<h3>Technical Corrigendum</h3>
+<p>Change the last sentence of paragraph 5 of 7.6 Floating-point environment
+<code>&lt;fenv.h&gt;</code> to be:</p>
+<blockquote>
+<p>The defined macros expand to integer constant expressions with values such that
+bitwise ORs of all combinations of the macros result in distinct values, and
+furthermore, bitwise ANDs of all combinations of the macros result in zero.</p>
+</blockquote>
+<p>In addition, add a footnote to that sentance along the lines of:</p>
+<blockquote>
+<p>The macros should be distinct powers of two.</p>
+</blockquote>
+
+</body>
+</html>

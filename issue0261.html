@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0261: constant expressions</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0261: constant expressions</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Clive D.W. Feather &lt;clive@demon.net&gt;, UK C Panel<br />
+Date: 2001-09-07<br />
+Submitted against: C99<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_261.htm">dr_261.htm</a></p>
+<h3>Problem</h3>
+<p>When is an expression a constant expression ?</p>
+<p>Consider the code (at block scope):</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">enum</span><span style="color: #bbbbbb"> </span>e1<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>ex1<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>INT_MAX<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span><span style="color: #666666">1</span><span style="color: #bbbbbb"> </span>};<span style="color: #bbbbbb">        </span><span style="color: #3D7B7B; font-style: italic">// Line E1  enum e2 { ex2 = INT_MAX + (0, 1) };   // Line E2  char *p1 = (1 - 1);                   // Line P1  char *p2 = (42, 1 - 1);               // Line P2  short s1 = 42 + (0, 1);               // Line S1  p1 = (42, 1 - 1);                     // Line X1  s1 = (42, 69);                        // Line X2  p2 = 0;                               // Line X3  p2 = 1 - 1;                           // Line X4</span>
+</pre></div>
+
+<p>On line E1 the syntax says that <code>INT_MAX + 1</code> is a constant-expr. Therefore this
+is a constant expression, the requirements of 6.6 apply, and line E2 violates
+the constraint in 6.6#3.</p>
+<p>On the remaining lines the syntax says that the code following the = sign is an
+assignment-expr; at no point in the parse does a constant-expr occur. So are
+these constant expressions ?</p>
+<p>For line P1 to be legitimate, the expression <code>(1 - 1)</code> must be an integer
+constant expression (6.3.2.3#3). This implies that any expression comprised
+entirely of constants is an integer constant expression. So line P2 violates the
+constraint in 6.6#3 and, rather more worryingly, so does line S1.</p>
+<p>If a generic initializer can be a constant expression, then, surely, so can any
+other expression. This means that lines X1 and X2 violate the constraint in
+6.6#3. On the other hand, if they are not constant expressions, then the right
+hand sides on lines X3 and X4 do not include a null pointer constant; nor does
+line P1.</p>
+<p>Consider also:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #008000; font-weight: bold">static</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>v<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>[(<span style="color: #666666">2</span>,<span style="color: #bbbbbb"> </span><span style="color: #666666">2</span>)]);
+</pre></div>
+
+<p>This is legitimate if, and only if, <code>(2, 2)</code> is a constant expression.</p>
+<p>It would appear that the term "constant expression" actually has four subtly
+different meanings.</p>
+<ol>
+<li>An object in the syntax. Where the syntax tree contains constant-expr the resulting code must meet the constraints and semantics of 6.6. An example is 6.7.2.2, where explicit values for enumeration constants must be constant-exprs.</li>
+<li>A requirement on the program that a given construct must, in context, be a constant expression even though in other contexts the expression need not be constant. An example is 6.7.8#4: if the object has static storage duration, the initializer is subject to the constraints and semantics of 6.6, but if it has automatic storage duration there is no such requirement.</li>
+<li>A requirement on the implementation that an entity must be a constant expression. For example, this applies to macros in standard headers. The implementation is not conforming if the definition does not meet the syntax, constraints, and semantic requirements of 6.6.</li>
+<li>A test that distinguishes two cases. An example is 6.3.2.3#3, where a certain subset of integer expressions (those that are constant-exprs and have a value of 0) are also null pointer constants. It is not clear whether expressions that break the constraints or semantic requirements are erroneous or are simply not constant expressions.</li>
+</ol>
+<p>The Standard needs to make clear when each of these four cases applies.</p>
+<p>On further examination, cases (1) and (2) appear to always be obvious from the
+text of the Standard. Case (3) appears only to apply to macros defined in
+standard headers or predefined. Case (4) is harder to identify, but I believe
+that there are only two situations:</p>
+<blockquote>
+<p>- null pointer constants;<br />
+- determining whether a type is variably modified.</p>
+</blockquote>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Replace 6.6#2 with the following:</p>
+<blockquote>
+<p>[#2] A constant expression is one which is evaluated during translation rather
+than runtime, usually because the precise value will affect the translation in
+some way.</p>
+<p>[#2a] Where the implementation is required to provide a constant expression,
+that expression shall be one that, if included in the appropriate context, would
+meet the requirements of this subclause and whose evaluation would not involve
+undefined behaviour.</p>
+<p>[#2b] An expression has a <em>translation-time value</em> if it meets the
+requirements of this subclause and evaluation would not involve undefined
+behaviour. If the expression fails to meet these requirements (for example, an
+integer expression includes a comma operator or a cast to a floating type), the
+expression does not have a translation-time value but nevertheless is not
+necessarily invalid.</p>
+</blockquote>
+<p>Change 6.3.2.3#3 to begin:</p>
+<blockquote>
+<p>[#3] An integer expression with the translation-time value 0, or such an
+expression cast to type <code>void *</code>, is called a <em>null pointer constant</em>.55)</p>
+</blockquote>
+<p>Change 6.7.5.2#1 to read, in part:</p>
+<blockquote>
+<p>[...] an integer type. If the expression has a translation-time value, it
+shall be greater than zero. The element type [...]</p>
+</blockquote>
+<p>the last part of #4 to read:</p>
+<blockquote>
+<p>If the size is an integer expression with a translation-time value and the
+element type has a known constant size, the array type is not a variable length
+array type; otherwise, the array type is a variable length array type.</p>
+</blockquote>
+<p>#5 to begin:</p>
+<blockquote>
+<p>[#5] If the size is an expression that does not have a translation-time value:
+if it occurs [...]</p>
+</blockquote>
+<p>#6 to begin:</p>
+<blockquote>
+<p>[#6] For two array types to be compatible, both shall have compatible element
+types, and if both size specifiers are present and have translation-time values,
+then both size specifiers shall have the same value.</p>
+</blockquote>
+<p>and add a new example:</p>
+<blockquote>
+<p>[#11] EXAMPLE 5: an expression that contains only constants but breaks one or
+more of the rules of 6.6 does not have a translation-time value. Therefore, in:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">     </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>fla<span style="color: #bbbbbb"> </span>[<span style="color: #666666">5</span>];<span style="color: #bbbbbb">       </span><span style="color: #3D7B7B; font-style: italic">// not a VLA, &quot;5&quot; has a translation-time value      int vla [(0, 5)];  // VLA, 6.6 forbids comma operators</span>
+</pre></div>
+
+<p>This can be used to force an array to have a constant size but still be variably
+modified.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2003-10-06:</p>
+<p><strong>Committee Discussion</strong> (for history only)<br />
+The semantics and grammar overlap.<br />
+The grammar says "this is an expression".<br />
+The semantics says "this is a constant expression"</p>
+<h3>Committee Response</h3>
+<blockquote>
+<p>The Committee agrees with your analysis of "constant expression" and the
+division into four categories.</p>
+<p>We agree that line P1 is legitimate because "(1-1)" is a constant expression.
+Lines P2 and S1 do not include constant expressions because:</p>
+<ul>
+<li>they contain a comma operator (forbidden by 6.6#3)</li>
+<li>there is a valid interpretation of the code that uses a non-constant expression.</li>
+</ul>
+<p>Line S1 is legitimate, while line P2 violates the constraints of 6.5.16.1#3 (the
+right hand side must either have pointer to character or pointer to void type,
+or must be a null pointer constant). Line X1 violates the same constraint for
+the same reason (this was also addressed in DR 064).</p>
+<p>Line X2 is legitimate because there is no requirement for the right hand side to
+be a constant expression. Lines X3 and X4 are legitimate because the expressions
+are constant expressions with value <code>0</code> and therefore null pointer constants.</p>
+<p>The Committee also agrees that:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">    </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>fla<span style="color: #bbbbbb"> </span>[(<span style="color: #666666">0+5</span>)];<span style="color: #bbbbbb">     </span><span style="color: #3D7B7B; font-style: italic">// is a normal array, not variably modified</span>
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>vla<span style="color: #bbbbbb"> </span>[(<span style="color: #666666">0</span>,<span style="color: #666666">5</span>)];<span style="color: #bbbbbb">     </span><span style="color: #3D7B7B; font-style: italic">// is a variable length array</span>
+</pre></div>
+
+<p>In general, the interpretation of an expression for constantness is context
+sensitive. For any expression which contains only constants:</p>
+<ul>
+<li>If the syntax or context only permits a constant expression, the constraints of 6.6#3 and 6.6#4 shall apply.</li>
+<li>Otherwise, if the expression meets the requirements of 6.6 (including any form accepted in accordance with 6.6#10), it is a constant expression.</li>
+<li>Otherwise it is not a constant expression.</li>
+</ul>
+<p>In summary, provided the above points are taken account of, the Committee does
+not believe the Standard is ambiguous nor that it is necessary to modify it to
+make this clearer.</p>
+</blockquote>
+
+</body>
+</html>

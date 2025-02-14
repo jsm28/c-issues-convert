@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0251: are struct fred and union fred the same type ?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0251: are <code>struct fred</code> and <code>union fred</code> the same type ?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Clive D.W. Feather &lt;clive@demon.net&gt;, UK C Panel<br />
+Date: 2001-09-07<br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C99 TC3<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_251.htm">dr_251.htm</a></p>
+<h3>Problem</h3>
+<p>Consider the code:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">union</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">fred</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>a;<span style="color: #bbbbbb"> </span>}
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>main<span style="color: #bbbbbb"> </span>(<span style="color: #B00040">void</span>)
+<span style="color: #bbbbbb">    </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">fred</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>ptr;<span style="color: #bbbbbb">  </span><span style="color: #3D7B7B; font-style: italic">/* Line X */</span>
+<span style="color: #bbbbbb">        </span><span style="color: #3D7B7B; font-style: italic">// ...</span>
+</pre></div>
+
+<p>I can see nothing that forbids this code. In particular, 6.7.2.3#8 reads:</p>
+<blockquote>
+<p>[#8] If a type specifier of the form</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #666666">-</span>or<span style="color: #666666">-</span><span style="color: #008000; font-weight: bold">union</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">identifier</span>
+</pre></div>
+
+<p>or</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">enum</span><span style="color: #bbbbbb"> </span>identifier
+</pre></div>
+
+<p>occurs other than as part of one of the above forms, and a declaration of the
+identifier as a tag is visible, then it specifies the same type as that other
+declaration, and does not redeclare the tag.</p>
+</blockquote>
+<p>At line X a declaration of <code>fred</code> as a tag is visible, so this line specifies
+the same type as that other declaration, even though this uses <code>struct</code> and that
+uses <code>union</code> !</p>
+<p>It has been further pointed out to me that nothing in the Standard actually says
+that <code>union x</code> is a union type as opposed to a structure type, and vice versa.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Append to 6.7.2.1#6:</p>
+<blockquote>
+<p>The keywords <code>struct</code> and <code>union</code> indicate that the type being specified is,
+respectively, a structure type or a union type.</p>
+</blockquote>
+<p>Add a new paragraph following 6.7.2.3#1:</p>
+<blockquote>
+<p>[#1a] Where two declarations that use the same tag declare the same type, they
+shall both use the same choice of <code>struct</code>, <code>union</code>, or <code>enum</code>.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2006-03-29:</p>
+<h3>Committee Discussion</h3>
+<p>The Committee is inclined to accept the suggested TC, but the issue is still
+being debated.</p>
+<h3>Technical Corrigendum</h3>
+<p>Append to 6.7.2.1#6:</p>
+<blockquote>
+<p>The keywords <code>struct</code> and <code>union</code> indicate that the type being specified is,
+respectively, a structure type or a union type.</p>
+</blockquote>
+<p>Add a new paragraph following 6.7.2.3#1:</p>
+<blockquote>
+<p>[#1a] Where two declarations that use the same tag declare the same type, they
+shall both use the same choice of <code>struct</code>, <code>union</code>, or <code>enum</code>.</p>
+</blockquote>
+
+</body>
+</html>

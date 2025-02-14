@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0440: Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 1</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0440: Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 1</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG 14, Joseph Myers<br />
+Date: 2013-07-21<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1730.pdf">N1730</a><br />
+Submitted against: C11 / C17<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>Some issues with floating point in C11 have been identified as part of the UK
+review of the N1711 draft of TS 18661-1. While such issues relate to the general
+area of C bindings to IEC 60559:2011, and so could be addressed in the TS on
+that basis, since the issues also apply to C11 as-is it may be more appropriate
+to address some or all of these issues as Defect Reports with a view to having a
+normative fix in a future TC to C11 rather than only having a fix in conjunction
+with the new bindings.</p>
+<p>Issue 1: Choice of long double in Annex F</p>
+<p>Annex F provides various choices for the long double type (which may or may not
+be an IEC 60559 type), but no method is provided for an application to determine
+which choice has been made.</p>
+<p>If a macro is provided to say whether the type is an IEC 60559 type, all the
+other properties can be determined from the existing &lt;float.h&gt; macros. So, a
+sufficient fix would be:</p>
+<blockquote>
+<p>In 5.2.4.2.2, insert a new paragraph after paragraph 10: Whether a type matches
+an IEC 60559 type is characterized by the implementation-defined values of
+FLT_IS_IEC_60559, DBL_IS_IEC_60559, and LDBL_IS_IEC_60559:</p>
+<ul>
+<li>0 type does not match an IEC 60559 format</li>
+<li>1 type's values and operations are those of an IEC 60559 basic, interchange or extended type</li>
+</ul>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2015-04-17:</p>
+<p>Oct 2013 meeting</p>
+<blockquote>
+<p>Committee discussion led to a proposed committee response.</p>
+</blockquote>
+<p>Apr 2014 meeting</p>
+<blockquote>
+<p>Correspondence with the author led the committee to augment the proposed
+committee response.</p>
+</blockquote>
+<h3>Proposed Committee Response</h3>
+<blockquote>
+<p>To do as suggested, distinguish whether <code>float</code>, <code>double</code>, and <code>long double</code> are
+IEC or not, requires the addition of new macros, which is a feature, which is
+not allowed by the mechanism of defect reports.</p>
+<p>The defect originator notes that the underlying issue that needs consideration
+in any further comprehensive publication of the Standard is that all
+implementation defined behaviors need to be strictly called out in the Standard,
+and moreover that they be done so in a manner that is accessible to a client of
+the implementation to allow proper choice of algorithms. It has been asserted
+that leaving implementation defined behaviors formally undefined in the Standard
+has led to significant and unnecessary divergences in implementations.</p>
+</blockquote>
+
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0416: tss_t destruction unspecified</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0416: <code>tss_t</code> destruction unspecified</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Owen Shepherd<br />
+Date: 2012-08-12<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1627.htm">N1627</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Cross-references: <a href="issue0424.html">0424</a>, <a href="issue0469.html">0469</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>The standard does not specify if or when destructors for thread specific data
+keys (created with the <code>tss_create</code> function) are invoked.</p>
+<p>This proposal suggests to align the behavior with that specified by POSIX for
+<code>pthread_key_t</code>. This behavior is hoped to both match the intention of the
+standard, and be possible to implement on other systems (it is noted that a
+pthreads implementation exists for Windows, for example, while the behavior of
+POSIX and Windows thread local storage implementations differ greatly)</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>After 7.26.5.1p2, add</p>
+<blockquote>
+<p>Returning from <code>func</code> shall have the same behaviour as invoking <code>thrd_exit</code> with
+the returned value</p>
+</blockquote>
+<p>Change 7.26.5.5 parts 2 and 3 from</p>
+<blockquote>
+<p>The <code>thrd_exit</code> function terminates execution of the calling thread and sets its
+result code to <code>res</code>.</p>
+<p>The program shall terminate normally after the last thread has been terminated.
+The behavior shall be as if the program called the exit function with the
+status EXIT_SUCCESS at thread termination time.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>For every thread specific storage key which was created with a non-NULL
+destructor and for which the value is non-NULL, <code>thrd_exit</code> shall set the value
+associated with the key to NULL and then invoke the destructor with its previous
+value. The order in which destructors are invoked is unspecified.</p>
+<p>If after this process there remain keys with both non-NULL destructors and
+values, the implementation shall repeat this process up to <code>TSS_DTOR_ITERATIONS</code>
+times.</p>
+<p>If <code>thrd_exit</code> is not being invoked in the last thread in the process, then the
+implementation shall terminate execution of the calling thread and set its
+result code to <code>res</code>. Otherwise, the implementation shall behave as
+if <code>exit(EXIT_SUCCESS)</code> was invoked.</p>
+</blockquote>
+<p>(This change provides application writers guarantees about the identity of the
+thread executing functions registered with <code>atexit</code>)</p>
+<p>After 7.26.6.1p2, add</p>
+<blockquote>
+<p>The value NULL shall be associated with the newly created key in all existing
+threads. Upon thread creation, the value associated with all keys shall be
+initialized to NULL</p>
+<p>Note that destructors associated thread specific storage are not invoked at
+process exit.</p>
+</blockquote>
+<p>To 7.26.6.2p2, append</p>
+<blockquote>
+<p>If <code>tss_delete</code> is called while another thread is executing destructors, whether
+this will affect the number of invocations of the destructor associated
+with <code>key</code> on that thread is unspecified. If the thread from which <code>tss_delete</code>
+is invoked is executing destructors, then no further invocations of the
+destructor associated with <code>key</code> will occur on said thread.</p>
+<p>Calling <code>tss_delete</code> will not result in the invocation of any destructors.</p>
+</blockquote>
+<p>After 7.26.6.4p2, add</p>
+<blockquote>
+<p>This action will not invoke the destructor associated with the key on the value
+being replaced.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Oct 2012 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<ul>
+<li>This paper was discussed in conjunction with <a href="issue0424.html">DR424</a> which covers one additional related issue.</li>
+<li>The key observation is that these papers are about the deliberate underspecification of threads, since that allows the greatest opportunity for implementation on a variety of operating systems.</li>
+<li>Pete Becker, an implementor of the C11 threads library, was asked about these papers and replied in SC22/WG14 message 12813.</li>
+<li>Based on that response the committee is concerned that there could be subtleties in adopting the Proposed Technical Corrigendum and that, as such, these changes are substantial enough to warrant a proposal and to not be considered a defect.</li>
+</ul>
+</blockquote>
+<p>Apr 2013 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<ul>
+<li>A revised paper <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1687.pdf">N1687</a> was submitted, although not in the recommended html format.</li>
+<li>The suggested technical corrigendum would specify new instances of undefined behavior as well as new requirements on implementations.</li>
+<li>The committee expressed concern that some of the new requirements may be onerous or impossible to provide above the native platform implementation.</li>
+</ul>
+</blockquote>
+<p>Oct 2013 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>After several papers
+<a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1750.htm">N1750,</a>
+<a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1751.htm">N1751,</a> revisions,
+and much discussion, the committee has agreed on the following as the
+resolution.</p>
+</blockquote>
+<h3>Proposed Technical Corrigendum</h3>
+<p>After 7.26.5.1 paragraph 2, add</p>
+<blockquote>
+<p>Returning from <code>func</code> shall have the same behavior as invoking <code>thrd_exit</code> with
+the value returned from <code>func</code>.</p>
+</blockquote>
+<p>Change 7.26.5.5, replace paragraph 2 with:</p>
+<blockquote>
+<p>For every thread-specific storage key which was created with a non-null
+destructor and for which the value is non-null, <code>thrd_exit</code> shall set the value
+associated with the key to <code>NULL</code> and then invoke the destructor with its
+previous value. The order in which destructors are invoked is unspecified.</p>
+<p>If after this process there remain keys with both non-null destructors and
+values, the implementation shall repeat this process up to <code>TSS_DTOR_ITERATIONS</code>
+times.</p>
+<p>Following this, the <code>thrd_exit</code> function terminates execution of the calling
+thread and sets its result code to <code>res</code>.</p>
+</blockquote>
+<p>After 7.26.6.1 paragraph 2, add the following new paragraphs:</p>
+<blockquote>
+<p>The value <code>NULL</code> shall be associated with the newly created key in all existing
+threads. Upon thread creation, the value associated with all keys shall be
+initialized to <code>NULL</code>.</p>
+<p>Destructors associated with thread-specific storage are not invoked at program
+termination.</p>
+<p>A call to <code>tss_create</code> from within a destructor results in undefined behavior.</p>
+</blockquote>
+<p>In 7.26.6.2 paragraph 2, add the following new second sentence:</p>
+<blockquote>
+<p>A call to <code>tss_delete</code> function results in undefined behavior if the call to
+<code>tss_create</code> which set <code>key</code> completed after the thread commenced executing
+destructors.</p>
+</blockquote>
+<p>After 7.26.6.2 paragraph 2, add the following new paragraphs:</p>
+<blockquote>
+<p>If <code>tss_delete</code> is called while another thread is executing destructors, whether
+this will affect the number of invocations of the destructor associated with
+<code>key</code> on that thread is unspecified.</p>
+<p>Calling <code>tss_delete</code> will not result in the invocation of any destructors.</p>
+</blockquote>
+<p>In 7.26.6.3 paragraph 2, add the following new second sentence:</p>
+<blockquote>
+<p>A call to <code>tss_get</code> function results in undefined behavior if the call to
+<code>tss_create</code> which set <code>key</code> completed after the thread commenced executing
+destructors.</p>
+</blockquote>
+<p>In 7.26.6.4 paragraph 2, add the following new second sentence:</p>
+<blockquote>
+<p>A call to <code>tss_set</code> function results in undefined behavior if the call to
+<code>tss_create</code> which set <code>key</code> completed after the thread commenced executing
+destructors.</p>
+</blockquote>
+<p>After 7.26.6.4 paragraph 2, add the following new paragraph:</p>
+<blockquote>
+<p>This action will not invoke the destructor associated with the key on the value
+being replaced.</p>
+</blockquote>
+
+</body>
+</html>

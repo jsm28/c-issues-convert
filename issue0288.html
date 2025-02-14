@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0288: deficiency on multibyte conversions</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0288: deficiency on multibyte conversions</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: BSI, Clive Feather<br />
+Date: 2003-10-21<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1012.txt">N1012</a><br />
+Submitted against: C99<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_288.htm">dr_288.htm</a></p>
+<h3>Summary</h3>
+<p>Consider a typical use of the multibyte conversion function <code>mbrtowc</code>:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">enum</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>FINISHED,<span style="color: #bbbbbb"> </span>ERROR<span style="color: #bbbbbb"> </span>}<span style="color: #bbbbbb"> </span>convert<span style="color: #bbbbbb"> </span>(<span style="color: #B00040">void</span>)
+<span style="color: #bbbbbb">    </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">mbstate_t</span><span style="color: #bbbbbb"> </span>s<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #666666">0</span><span style="color: #bbbbbb"> </span>};
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>c;
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">wchar_t</span><span style="color: #bbbbbb"> </span>wc;
+
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">for</span><span style="color: #bbbbbb"> </span>(;;)
+<span style="color: #bbbbbb">        </span>{
+<span style="color: #bbbbbb">            </span>c<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>get_a_byte<span style="color: #bbbbbb"> </span>();
+<span style="color: #bbbbbb">            </span><span style="color: #008000; font-weight: bold">switch</span><span style="color: #bbbbbb"> </span>(mbrtowc<span style="color: #bbbbbb"> </span>(<span style="color: #666666">&amp;</span>wc,<span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;</span>c,<span style="color: #bbbbbb"> </span><span style="color: #666666">1</span>,<span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;</span>s))
+<span style="color: #bbbbbb">            </span>{
+<span style="color: #bbbbbb">            </span><span style="color: #008000; font-weight: bold">case</span><span style="color: #bbbbbb"> </span><span style="color: #666666">1</span>:<span style="color: #bbbbbb">          </span>put_wide_char<span style="color: #bbbbbb"> </span>(wc);<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">break</span>;
+<span style="color: #bbbbbb">            </span><span style="color: #008000; font-weight: bold">case</span><span style="color: #bbbbbb"> </span>(<span style="color: #880000">size_t</span>)<span style="color: #666666">-2</span>:<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">break</span>;
+<span style="color: #bbbbbb">            </span><span style="color: #008000; font-weight: bold">case</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>:<span style="color: #bbbbbb">          </span>put_wide_char<span style="color: #bbbbbb"> </span>(<span style="color: #BA2121">L&#39;\0&#39;</span>);<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span>FINISHED;
+<span style="color: #bbbbbb">            </span><span style="color: #008000; font-weight: bold">case</span><span style="color: #bbbbbb"> </span>(<span style="color: #880000">size_t</span>)<span style="color: #666666">-1</span>:<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span>ERROR;
+<span style="color: #bbbbbb">            </span>}
+<span style="color: #bbbbbb">        </span>}
+<span style="color: #bbbbbb">    </span>}
+</pre></div>
+
+<p>The multibyte conversion functions were originally written on the assumption
+that wide characters are singletons. That is, while several multibyte characters
+may map to one wide character, and may map to different wide characters
+depending on the current state, each sequence maps to only one wide character.
+As a result, functions such as <code>mbrtowc</code> do not have the concept of returning
+more than one wide character; only a single one can be returned per call.</p>
+<p>This is fine for mappings like:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">    </span>ISO<span style="color: #bbbbbb"> </span><span style="color: #666666">8859-1</span><span style="color: #bbbbbb">   </span><span style="color: #666666">-&gt;</span><span style="color: #bbbbbb">  </span>UTF<span style="color: #666666">-16</span><span style="color: #bbbbbb"> </span>or<span style="color: #bbbbbb"> </span>UTF<span style="color: #666666">-32</span><span style="color: #bbbbbb"> </span>in<span style="color: #bbbbbb"> </span>Normalization<span style="color: #bbbbbb"> </span>Form<span style="color: #bbbbbb"> </span>C
+<span style="color: #bbbbbb">    </span>UTF<span style="color: #666666">-8</span><span style="color: #bbbbbb">        </span><span style="color: #666666">-&gt;</span><span style="color: #bbbbbb">  </span>UTF<span style="color: #666666">-32</span><span style="color: #bbbbbb"> </span>without<span style="color: #bbbbbb"> </span>change<span style="color: #bbbbbb"> </span>of<span style="color: #bbbbbb"> </span>normalization
+</pre></div>
+
+<p>but not for others. It is possible to play fast and loose with the meaning of
+<em>state</em> to relax the requirement a little bit - if a sequence of three bytes
+maps to two wide characters, the first call to <code>mbrtowc</code> can return <code>2</code> and the
+second call <code>1</code>, with the state object holding any necessary information. The
+requirement then becomes: N bytes can result in M wide characters, where N &gt;=
+M and where the first K wide characters depend only on the first N-M+K bytes.
+An example of such a mapping is UTF-8 -&gt; UTF-16 (shown in binary):</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">  </span><span style="color: #666666">0</span>AAAAAAA<span style="color: #bbbbbb">                            </span><span style="color: #666666">-&gt;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">000000000</span>AAAAAAA
+<span style="color: #bbbbbb">  </span><span style="color: #666666">110</span>AAAAA<span style="color: #bbbbbb"> </span><span style="color: #666666">10</span>BBBBBB<span style="color: #bbbbbb">                   </span><span style="color: #666666">-&gt;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">00000</span>AAAAABBBBBB
+<span style="color: #bbbbbb">  </span><span style="color: #666666">1110</span>AAAA<span style="color: #bbbbbb"> </span><span style="color: #666666">10</span>BBBBBB<span style="color: #bbbbbb"> </span><span style="color: #666666">10</span>CCCCCC<span style="color: #bbbbbb">          </span><span style="color: #666666">-&gt;</span><span style="color: #bbbbbb"> </span>AAAABBBBBBCCCCCC
+<span style="color: #bbbbbb">  </span><span style="color: #666666">11110</span>AAA<span style="color: #bbbbbb"> </span><span style="color: #666666">10</span>BBCCCC<span style="color: #bbbbbb"> </span><span style="color: #666666">10</span>DDEEEE<span style="color: #bbbbbb"> </span><span style="color: #666666">10F</span>FFFFF<span style="color: #bbbbbb"> </span><span style="color: #666666">-&gt;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">110110</span>XXXXCCCCDD
+<span style="color: #666666">110111</span>EEEEFFFFFF
+</pre></div>
+
+<p>In the last case the <code>mbrtowc</code> function can return <code>-2</code>, <code>-2</code>, <code>1</code>, and <code>1</code> in
+that order. However, consider a very similar encoding to UTF-16 where the two
+wide characters are in the opposite order. The first wide character (the one
+beginning 110111) cannot be output until all 4 bytes have been seen, so the
+first three calls to mbrtowc must return <code>-2</code>. The fourth call can return the
+first wide character, but there is now no way to return the second one. If the
+next UTF-8 sequence is 2 or 3 bytes long, it would provide an opportunity, but
+if it is only 1 byte long or, even worse, was the zero character, it wouldn't.
+While the above is a hypothetical situation, a real conversion that has this
+problem is converting ISO 8859-1 (or many similar encodings) to Unicode in
+Normalization Form D. In NFD all accented characters are broken down into their
+components. So some example conversions are:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">    </span><span style="color: #666666">0x20</span><span style="color: #bbbbbb"> </span><span style="color: #666666">-&gt;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0x0020</span>
+<span style="color: #bbbbbb">    </span><span style="color: #666666">0x61</span><span style="color: #bbbbbb"> </span><span style="color: #666666">-&gt;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0x0061</span>
+<span style="color: #bbbbbb">    </span><span style="color: #666666">0xBF</span><span style="color: #bbbbbb"> </span><span style="color: #666666">-&gt;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0x00BF</span>
+<span style="color: #bbbbbb">    </span><span style="color: #666666">0xC0</span><span style="color: #bbbbbb"> </span><span style="color: #666666">-&gt;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0x0041</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0x0300</span>
+<span style="color: #bbbbbb">    </span><span style="color: #666666">0xC1</span><span style="color: #bbbbbb"> </span><span style="color: #666666">-&gt;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0x0041</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0x0301</span>
+<span style="color: #bbbbbb">    </span><span style="color: #666666">0xC4</span><span style="color: #bbbbbb"> </span><span style="color: #666666">-&gt;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0x0041</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0x0308</span>
+<span style="color: #bbbbbb">    </span><span style="color: #666666">0xC8</span><span style="color: #bbbbbb"> </span><span style="color: #666666">-&gt;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0x0045</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0x0300</span>
+<span style="color: #bbbbbb">    </span><span style="color: #666666">0xE6</span><span style="color: #bbbbbb"> </span><span style="color: #666666">-&gt;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0x00E6</span>
+<span style="color: #bbbbbb">    </span><span style="color: #666666">0xE7</span><span style="color: #bbbbbb"> </span><span style="color: #666666">-&gt;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0x0063</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0x0327</span>
+</pre></div>
+
+<p>What is needed is for mbrtowc to have a way to say "I have an unfinished wide
+character sequence, I do not need any more bytes for now". The obvious way to
+represent this would be a returned value of <code>0</code>. Unfortunately this has already
+been given a different meaning ("end of string reached") and changing it would
+be impractical. Therefore the following text proposes the return value <code>-3</code> for
+this case. This value would only be generated for locales where this was an
+issue, so it will not affect existing uses of the code. And applications that
+are not modified to handle this code but are presented with it are likely to
+treat it as an error.</p>
+<p>Of the other functions in 7.24.6, <code>mbrlen</code> has the same problem. The <code>wcrtomb</code>
+function also has to deal with this issue, but the wording already allows it to
+be state-ful and return <code>0</code> to indicate that nothing has been output at this
+stage. Neither the <code>mbsrtowcs</code> nor <code>wcsrtombs</code> functions have an issue (though
+with the former it is possible that the limit of len wide characters is reached
+in the middle of a multi-wide-character sequence; the rest of the sequence will
+be retained in the <code>mbstate_t</code> object until the next call).</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Append to 7.24.6.3.2#4:</p>
+<blockquote>
+<p><code>(size_t)(-3)</code> if the multibyte sequence converted by the previous call with the
+same <code>mbstate_t</code> object generated more than one wide character and not all these
+characters have yet been stored; the next wide character in the sequence has now
+been stored and no bytes from the input have been consumed by this call.</p>
+</blockquote>
+<p>In 7.24.6.3.1#3, add <code>(size_t)(-3)</code> to the possible returned values.</p>
+<p>Optional extra change for clarity:</p>
+<p>In 7.24.6.3.3#4, EITHER add to the end of the first sentence:</p>
+<blockquote>
+<p>; this may be 0</p>
+</blockquote>
+<p>OR add a footnote reference to that sentence:</p>
+<blockquote>
+<p>291A If the wide character encoding requires two or more wide characters to be
+considered together when doing the conversion, the value returned can be 0.</p>
+</blockquote>
+<p>The Rationale could also be amended to address these issues.</p>
+<hr />
+<p>Comment from WG14 on 2004-09-28:</p>
+<h3>Committee Discussion</h3>
+<ul>
+<li>More time is needed to assess the impact on the char32 work!</li>
+<li>Not really a <em>defect</em>, but a <em>deficiency</em>.</li>
+</ul>
+<h3>Committee Response</h3>
+<p>This is not really a <em>defect</em>, but a <em>deficiency</em> which could be addressed in a
+future release of the C Standard.</p>
+
+</body>
+</html>

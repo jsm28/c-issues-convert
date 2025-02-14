@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0326: asctime()</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0326: <code>asctime()</code></h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: The Austin Group, Stoughton (US)<br />
+Date: 2006-03-28<br />
+Reference document: <a href="http://www.opengroup.org/austin/interps/protected/uploads/20/9920/AI-053.txt">AI-053.txt</a>, <a href="issue0217.html">DR 217</a><br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C11<br />
+Cross-references: <a href="issue0217.html">0217</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_326.htm">dr_326.htm</a></p>
+<p><strong>Summary:</strong> <code>asctime() tm_year gt 9999</code></p>
+<p>This is a potential defect forwarded from the Austin Group.</p>
+<p>If <code>asctime()</code> is called with a tm structure whose <code>tm_year</code> field results in a
+year &gt; 9999 (which is possible with 64-bit <code>time_t</code>), the current specification
+of <code>asctime()</code> would result in <code>asctime()</code> to overrunning a 26-character buffer;
+the specification says the <code>sprintf()</code> format for printing the year is "%d", and
+(eg) a 5-digit number would print 5 characters, overrunning the buffer.</p>
+<p>Similarly, since the user can create the input <code>struct tm</code>, it is possible for
+the user to set the fields of the <code>struct tm</code> to values that are outside the
+normal bounds. In such a case, the <code>sprintf()</code> format given in the <code>asctime()</code>
+specification can result in a buffer overrun. For example, if <code>tm_hour</code> is
+<code>100</code>, the <code>sprintf()</code> format <code>.2d</code> writes the string "100", which could result
+in a buffer overrun. The specification should be updated to state the algorithm
+can be used as long as the values of the <code>tm</code> struct are restricted to the
+normal bounds.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Change 7.23.3.1 para 2 from:</p>
+<blockquote>
+<p>The asctime function converts the broken-down time in the structure pointed to
+by <code>timeptr</code> into a string in the form:</p>
+</blockquote>
+<p>To:</p>
+<blockquote>
+<p>The <code>asctime()</code> function shall convert the broken-down time in the structure
+pointed to by <code>timeptr</code> into a string in the form, provided the broken-down time
+in the fields of the structure pointed to by <code>timeptr</code> contain values that are
+within the normal ranges as defined in <code>&lt;time.h&gt;</code>, and the calculated year does
+not exceed four digits:</p>
+</blockquote>
+<p>(NB, see 7.23.1 para 4 for the specifications of the "normal ranges").</p>
+<p>Also, add after the example code, and before the "Returns" section, the
+following new paragraph:</p>
+<blockquote>
+<p>Otherwise, if any of the fields of the <code>tm</code> structure pointed to by <code>timeptr</code>
+contain values that are outside the normal ranges, the behavior of <code>asctime()</code>
+is undefined. If the calculated year exceeds four digits, the behavior is
+undefined.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2007-09-06:</p>
+<h3>Committee Discussion (for history only)</h3>
+<p>The proposed resolution invalidates code that strictly conforms to the C99
+standard. Here is a contrived example (though there are some examples that are
+not contrived):</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">   </span><span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;time.h&gt;</span>
+<span style="color: #bbbbbb">   </span><span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;stdio.h&gt;</span>
+
+<span style="color: #bbbbbb">   </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">tm</span><span style="color: #bbbbbb"> </span>tm;
+
+<span style="color: #bbbbbb">   </span><span style="color: #B00040">int</span>
+<span style="color: #bbbbbb">   </span><span style="color: #0000FF">main</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">void</span>)
+<span style="color: #bbbbbb">   </span>{
+<span style="color: #bbbbbb">     </span>tm.tm_wday<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;
+<span style="color: #bbbbbb">     </span>tm.tm_mon<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;
+<span style="color: #bbbbbb">     </span>tm.tm_mday<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">-99</span>;
+<span style="color: #bbbbbb">     </span>tm.tm_hour<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">99</span>;
+<span style="color: #bbbbbb">     </span>tm.tm_min<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">99</span>;
+<span style="color: #bbbbbb">     </span>tm.tm_sec<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">99</span>;
+<span style="color: #bbbbbb">     </span>tm.tm_year<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">-999</span><span style="color: #bbbbbb"> </span><span style="color: #666666">-</span><span style="color: #bbbbbb"> </span><span style="color: #666666">1900</span>;
+<span style="color: #bbbbbb">     </span>printf<span style="color: #bbbbbb"> </span>(<span style="color: #BA2121">&quot;%s</span><span style="color: #AA5D1F; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>,<span style="color: #bbbbbb"> </span>asctime<span style="color: #bbbbbb"> </span>(<span style="color: #666666">&amp;</span>tm));
+<span style="color: #bbbbbb">     </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;
+<span style="color: #bbbbbb">   </span>}
+</pre></div>
+
+<p>This code strictly conforms to C99, with well-defined behavior, and some
+implementations prints "Sun Jan-99 99:99:99 -999". The proposed resolution
+places extra constraints on asctime's arguments that would cause the above code
+to have undefined behavior.</p>
+<p>The original interpretation request considered by the Austin Group contained an
+additional requirement, that the calculated year should not precede the Epoch
+(the date and time associated with <code>(time_t)0)</code>. This restriction was removed in
+forwarding this to the C committee, since there is no C equivalent concept.
+However, if the calculated year is less than 1000, problems may occur, so
+perhaps the wording should be:</p>
+<blockquote>
+<p>If the calculated year is less than 1000 or greater than 9999, the behavior is
+undefined.</p>
+</blockquote>
+<p><strong>Note:</strong> This appears to be a duplicate of <a href="issue0217.html">DR 217</a>, which advises
+no consensus / no change.</p>
+<p>It was also pointed out that the Proposed Technical Corrigendum does not fix all
+of the issues, such as if <code>tm_mon=4</code> and <code>tm_mday=31</code>, both valid numbers, but
+not a valid date.</p>
+<h3>Technical Corrigendum</h3>
+<p>Add after the example code, and before the "Returns" section, the following new
+paragraph:</p>
+<blockquote>
+<p>If any of the fields of the <code>tm</code> structure pointed to by <code>timeptr</code> contain
+values that are outside the normal ranges*, the behavior of <code>asctime()</code> is
+undefined. If the calculated year exceeds four digits, or is less than the year
+1000, the behavior is undefined.</p>
+</blockquote>
+<p>Add footnote *:</p>
+<blockquote>
+<p>See 7.23.1 para 4 for the specifications of the "normal ranges".</p>
+</blockquote>
+
+</body>
+</html>

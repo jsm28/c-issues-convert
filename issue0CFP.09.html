@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0CFP.09: Part 2,3: Missing specification for usual arithmetic conversions, tgmath</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0CFP.09: Part 2,3: Missing specification for usual arithmetic conversions, tgmath</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Jim Thomas<br />
+Date: 2016-09-10<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2077.pdf">N2077</a><br />
+Submitted against: Floating-point TS 18661 (C11 version, 2014-2016)<br />
+Status: Fixed<br />
+Fixed in: C23<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2397.htm">n2397.htm</a></p>
+<h3>Summary</h3>
+<p>This is about the issue raised by Joseph Myers in email SC22WG14.14282:</p>
+<blockquote>
+<p>C11 specifies that the usual arithmetic conversions on the pair of types (<code>long double</code>, <code>double</code>) produces a result of type <code>long double</code>.</p>
+<p>Suppose <code>long double</code> and <code>double</code> have the same set of values.  TS 18661-3
+rewrites the rules for usual arithmetic conversions so that the case "if both
+operands are floating types and the sets of values of their corresponding real
+types are equivalent" prefers interchange types to standard types to extended
+types.  But this leaves the case of (<code>long double</code>, <code>double</code>) unspecified as to
+which type is chosen, unlike in C11, as those are both standard types.</p>
+<p>I think this is a defect in TS 18661-3, and it should say that if both are
+standard types with the same set of values then <code>long double</code> is preferred to
+<code>double</code> which is preferred to <code>float</code>, as in C11.</p>
+<p>A similar issue could arise if two of the extended types have equivalent sets of
+values.  I'm not aware of anything to prohibit that, although it seems less
+likely in practice.  I think the natural fix would be to say that <code>_Float128x</code>
+is preferred to <code>_Float64x</code> which is preferred to <code>_Float32x</code>.</p>
+<p>I think such an issue would also arise for <code>&lt;tgmath.h&gt;</code> (if <code>_Float64x</code> and
+<code>_Float128x</code> have the same set of values, the choice doesn't seem to be
+specified).  It also seems possible for the <code>&lt;tgmath.h&gt;</code> rules for purely
+floating-point arguments to produce a different result from the usual arithmetic
+conversions (consider the case where <code>_Float32x</code> is wider than <code>long double</code>,
+and <code>&lt;tgmath.h&gt;</code> chooses <code>long double</code>), and since rules that are the same in
+most cases but subtly different in obscure cases tend to be confusing, I wonder
+if it might be better to specify much simpler rules for <code>&lt;tgmath.h&gt;</code>: take the
+type resulting from the usual arithmetic conversions[*], where integer
+arguments are replaced by <code>_Decimal64</code> if there are any decimal arguments and
+<code>double</code> otherwise.  (That's different from the present rules for e.g.
+(<code>_Float32x</code>, <code>int</code>), but it's a lot simpler, and seems unlikely in practice to
+choose a type with a different set of values from the present choice.)</p>
+<p>[*] Meaningful for more than two arguments as long as the usual arithmetic
+conversions are commutative and associative as an operation on pairs of types.</p>
+</blockquote>
+<p>Though substantive, the suggested change to the usual arithmetic conversions is
+consistent with the intention in TS 18661-3 to specify all the cases (except
+where neither format is a subset of the other and the formats are not the same).
+The missing cases were an oversight. The suggested preferences of <code>long double</code>
+over <code>double</code> over <code>float</code> and <code>_Float128x</code> over <code>_Float64x</code> over <code>_Float32x</code>
+are the obvious choices.</p>
+<p>Joseph Myers notes that the <code>&lt;tgmath.h&gt;</code> specification is incomplete in the same
+way as the usual arithmetic conversions. He argues for simplifying the
+specification by referring to the usual arithmetic conversions specification,
+rather than mostly repeating it, as the current specification does. The
+suggested Technical Corrigendum below follows this new approach. Though a
+substantive change to TS 18661-3, the effects on implementations and users are
+expected to be minimal – worth the simplification.</p>
+<p>The suggested Technical Corrigendum below also restores footnote number 62,
+which is lost in the current TS 18661-3.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>In clause 8, change the replacement text for 6.3.1.8#1:</p>
+<blockquote>
+<p>If one operand has decimal floating type, the other operand shall not have
+standard floating type, binary floating type, complex type, or imaginary type.</p>
+<p>If both operands have floating types and neither of the sets of values of their
+corresponding real types is a subset of (or equivalent to) the other, the
+behavior is undefined.</p>
+<p>Otherwise, if both operands are floating types and the sets of values of their
+corresponding real types are equivalent, then the following rules are applied:</p>
+<blockquote>
+<p>If both operands have the same corresponding real type, no further conversion is
+needed.</p>
+<p>Otherwise, if the corresponding real type of either operand is an interchange
+floating type, the other operand is converted, without change of type domain, to
+a type whose corresponding real type is that same interchange floating type.</p>
+<p>Otherwise, if the corresponding real type of either operand is a standard
+floating type, the other operand is converted, without change of type domain, to
+a type whose corresponding real type is that same standard floating type.</p>
+</blockquote>
+<p>Otherwise, if both operands have floating types, the operand, whose set of
+values of its corresponding real type is a (proper) subset of the set of values
+of the corresponding real type of the other operand, is converted, without
+change of type domain, to a type with the corresponding real type of that other
+operand.</p>
+<p>Otherwise, if one operand has a floating type, the other operand is converted to
+the corresponding real type of the operand of floating type.</p>
+<p>Otherwise, the integer promotions are performed on both operands. Then the
+following rules are applied to the promoted operands:</p>
+<blockquote>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>If one operand has decimal floating type, the other operand shall not have
+standard floating type, binary floating type, complex type, or imaginary type.</p>
+<p>If both operands have floating types and neither of the sets of values of their
+corresponding real types is a subset of (or equivalent to) the other, the
+behavior is undefined.</p>
+<p>If both operands have the same corresponding real type, no further conversion is
+needed.</p>
+<p>Otherwise, if both operands are floating types and the sets of values of their
+corresponding real types are equivalent, then the following rules are applied:</p>
+<blockquote>
+<p>If the corresponding real type of either operand is an interchange floating
+type, the other operand is converted, without change of type domain, to a type
+whose corresponding real type is that same interchange floating type.</p>
+<p>Otherwise, if the corresponding real type of either operand is <code>long double</code>,
+the other operand is converted, without change of type domain, to a type whose
+corresponding real type is <code>long double</code>.</p>
+<p>Otherwise, if the corresponding real type of either operand is <code>double</code>, the
+other operand is converted, without change of type domain, to a type whose
+corresponding real type is <code>double</code>.</p>
+<p>(All cases where <code>float</code> might have the same format as another type are covered
+above.)</p>
+<p>Otherwise, if the corresponding real type of either operand is <code>_Float128x</code> or
+<code>_Decimal128x</code>, the other operand is converted, without change of type domain,
+to a type whose corresponding real type is <code>_Float128x</code> or <code>_Decimal128x</code>,
+respectively.</p>
+<p>Otherwise, if the corresponding real type of either operand
+is <code>_Float64x</code> or <code>_Decimal64x</code>, the other operand is converted, without change
+of type domain, to a type whose corresponding real type
+is <code>_Float64x</code> or <code>_Decimal64x</code>, respectively.</p>
+</blockquote>
+<p>Otherwise, if both operands have floating types, the operand, whose set of
+values of its corresponding real type is a (proper) subset of the set of values
+of the corresponding real type of the other operand, is converted, without
+change of type domain62), to a type with the corresponding real type of that
+other operand.</p>
+<p>Otherwise, if one operand has a floating type, the other operand is converted to
+the corresponding real type of the operand of floating type.</p>
+<p>Otherwise, the integer promotions are performed on both operands. Then the
+following rules are applied to the promoted operands:</p>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>In clause 15, replace:</p>
+<blockquote>
+<p>In 7.25#3c, replace the bullets:</p>
+<blockquote>
+<p>… bullets …</p>
+</blockquote>
+<p>with:</p>
+<blockquote>
+<blockquote>
+<p>—  If two arguments have floating types and neither of the sets of values of
+their corresponding real types is a subset of (or equivalent to) the other, the
+behavior is undefined.</p>
+<p>—  If any arguments for generic parameters have type <code>_Decimal</code><em><code>M</code></em> where <em>M</em> ≥
+64 or <code>_Decimal</code><em><code>N</code></em><code>x</code> where <em>N</em> ≥ 32, the type determined is the widest of
+the types of these arguments. If <code>_Decimal</code><em><code>M</code></em> and <code>_Decimal</code><em><code>N</code></em><code>x</code> are both
+widest types (with equivalent sets of values) of these arguments, the type
+determined is <code>_Decimal</code><em><code>M</code></em>.</p>
+<p>—  Otherwise, if any argument for generic parameters is of integer type and
+another argument for generic parameters has type <code>_Decimal32</code>, the type
+determined is <code>_Decimal64</code>.</p>
+<p>—  Otherwise, if any argument for generic parameters has type <code>_Decimal32</code>, the
+type determined is <code>_Decimal32</code>.</p>
+<p>—  Otherwise, if the corresponding real type of any argument for generic
+parameters has type <code>long double</code>, <code>_Float</code><em><code>M</code></em> where <em>M</em> ≥ 128, or
+<code>_Float</code><em><code>N</code></em><code>x</code> where <em>N</em> ≥ 64, the type determined is the widest of the
+corresponding real types of these arguments. If <code>_Float</code><em><code>M</code></em> and either
+<code>long double</code> or <code>_Float</code><em><code>N</code></em><code>x</code> are both widest corresponding real types (with
+equivalent sets of values) of these arguments, the type determined is
+<code>_Float</code><em><code>M</code></em>. Otherwise, if <code>long double</code> and <code>_Float</code><em><code>N</code></em><code>x</code> are both widest
+corresponding real types (with equivalent sets of values) of these arguments,
+the type determined is <code>long double</code>.</p>
+<p>—  Otherwise, if the corresponding real type of any argument for generic
+parameters has type <code>double</code>, <code>_Float64</code>, or <code>_Float32x</code>, the type determined is
+the widest of the corresponding real types of these arguments. If <code>_Float64</code> and
+either <code>double</code> or <code>_Float32x</code> are both widest corresponding real types (with
+equivalent sets of values) of these arguments, the type determined is
+<code>_Float64</code>. Otherwise, if <code>double</code> and <code>_Float32x</code> are both widest corresponding
+real types (with equivalent sets of values) of these arguments, the type
+determined is <code>double</code>.</p>
+<p>—  Otherwise, if any argument for generic parameters is of integer type, the
+type determined is <code>double</code>.</p>
+<p>—  Otherwise, if the corresponding real type of any argument for generic
+parameters has type <code>_Float32</code>, the type determined is <code>_Float32</code>.</p>
+<p>—  Otherwise, the type determined is <code>float</code>.</p>
+</blockquote>
+<p>In the second bullet 7.25#3c, attach a footnote to the wording:</p>
+<p>the type determined is the widest</p>
+<p>where the footnote is:</p>
+<p>*) The term widest here refers to a type whose set of values is a superset of
+(or equivalent to) the sets of values of the other types.</p>
+</blockquote>
+</blockquote>
+<p>with:</p>
+<blockquote>
+<p>In 7.25#3c, replace the first sentence and bullets:</p>
+<blockquote>
+<p>[3c] Except for the macros for functions that round result to a narrower type
+(7.12.13a), use of a type-generic macro invokes a function whose generic
+parameters have the corresponding real type determined by the corresponding real
+types of the arguments as follows:</p>
+<blockquote>
+<p>—    First, if any argument for generic parameters has type <code>_Decimal128</code>, the
+type determined is <code>_Decimal128</code>.</p>
+<p>—    Otherwise, if any argument for generic parameters has type <code>_Decimal64</code>, or
+if any argument for generic parameters is of integer type and another argument
+for generic parameters has type <code>_Decimal32</code>, the type determined is
+<code>_Decimal64</code>.</p>
+<p>—    Otherwise, if any argument for generic parameters has type <code>_Decimal32</code>,
+the type determined is <code>_Decimal32</code>.</p>
+<p>—    Otherwise, if the corresponding real type of any argument for generic
+parameters is <code>long double</code>, the type determined is <code>long double</code>.</p>
+<p>—    Otherwise, if the corresponding real type of any argument for generic
+parameters is <code>double</code> or is of integer type, the type determined is <code>double</code>.</p>
+<p>—    Otherwise, if any argument for generic parameters is of integer type, the
+type determined is <code>double</code>.</p>
+<p>—    Otherwise, the type determined is <code>float</code>.</p>
+</blockquote>
+</blockquote>
+<p>with:</p>
+<blockquote>
+<p>[3c] Except for the macros for functions that round result to a narrower type
+(7.12.13a), use of a type-generic macro invokes a function whose generic
+parameters have the corresponding real type determined by the types of the
+arguments for the generic parameters as follows:</p>
+<blockquote>
+<p>—  Arguments of integer type are regarded as having type <code>_Decimal64</code> if any
+argument has decimal floating type, and as having type <code>double</code> otherwise.</p>
+<p>—  If the function has exactly one generic parameter, the type determined is
+the corresponding real type of the argument for the generic parameter.</p>
+<p>—  If the function has exactly two generic parameters, the type determined is
+the corresponding real type determined by the usual arithmetic conversions
+(6.3.1.8) applied to the arguments for the generic parameters.</p>
+<p>—  If the function has more than two generic parameters, the type determined is
+the corresponding real type determined by repeatedly applying the usual
+arithmetic conversions, first to the first two arguments for generic parameters,
+then to that result type and the next argument for a generic parameter, and so
+forth until the usual arithmetic conversions have been applied to the last
+argument for a generic parameter.</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2018-10-18:</p>
+<p>Oct 2016 meeting</p>
+<h3>Committee Discussion</h3>
+<p>The committee agrees that this is a defect and accepts the Suggested Technical
+Corrigendum</p>
+<p>Apr 2017 meeting</p>
+<h3>Committee Discussion</h3>
+<p>A new paper <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2127.pdf">N2127</a>
+was presented which offers a simplified Technical Corrigendum. From that paper:</p>
+<blockquote>
+<p>The TC in DR 501 includes two changes to TS 18661-3, one for the usual
+arithmetic conversions, the other for type-generic math. The first change fills
+in missing conversions for new types in TS 18661-3. The second change simplifies
+type-generic math by referencing the usual arithmetic conversions, and thereby
+also fills in missing type-generic math rules for arguments of the new types.</p>
+<p>This is a proposal for an alternative change to type-generic math. The original
+change was proposed for TS 18661-3, where the new types where introduced.
+However, the change can be made in TS 18661-2, where it is easier to understand
+and leads to a simplification in TS 18661-3.</p>
+</blockquote>
+<p>The committee accepts the proposed modification as reflected below.</p>
+<h3>Proposed Technical Corrigendum</h3>
+<p>In TS 18662-3</p>
+<p>In clause 8, change the replacement text for 6.3.1.8#1:</p>
+<blockquote>
+<p>If one operand has decimal floating type, the other operand shall not have
+standard floating type, binary floating type, complex type, or imaginary type.</p>
+<p>If both operands have floating types and neither of the sets of values of their
+corresponding real types is a subset of (or equivalent to) the other, the
+behavior is undefined.</p>
+<p>Otherwise, if both operands are floating types and the sets of values of their
+corresponding real types are equivalent, then the following rules are applied:</p>
+<blockquote>
+<p>If both operands have the same corresponding real type, no further conversion is
+needed.</p>
+<p>Otherwise, if the corresponding real type of either operand is an interchange
+floating type, the other operand is converted, without change of type domain, to
+a type whose corresponding real type is that same interchange floating type.</p>
+<p>Otherwise, if the corresponding real type of either operand is a standard
+floating type, the other operand is converted, without change of type domain, to
+a type whose corresponding real type is that same standard floating type.</p>
+</blockquote>
+<p>Otherwise, if both operands have floating types, the operand, whose set of
+values of its corresponding real type is a (proper) subset of the set of values
+of the corresponding real type of the other operand, is converted, without
+change of type domain, to a type with the corresponding real type of that other
+operand.</p>
+<p>Otherwise, if one operand has a floating type, the other operand is converted to
+the corresponding real type of the operand of floating type.</p>
+<p>Otherwise, the integer promotions are performed on both operands. Then the
+following rules are applied to the promoted operands:</p>
+<blockquote>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>If one operand has decimal floating type, the other operand shall not have
+standard floating type, binary floating type, complex type, or imaginary type.</p>
+<p>If both operands have floating types and neither of the sets of values of their
+corresponding real types is a subset of (or equivalent to) the other, the
+behavior is undefined.</p>
+<p>If both operands have the same corresponding real type, no further conversion is
+needed.</p>
+<p>Otherwise, if both operands are floating types and the sets of values of their
+corresponding real types are equivalent, then the following rules are applied:</p>
+<blockquote>
+<p>If the corresponding real type of either operand is an interchange floating
+type, the other operand is converted, without change of type domain, to a type
+whose corresponding real type is that same interchange floating type.</p>
+<p>Otherwise, if the corresponding real type of either operand is <code>long double</code>,
+the other operand is converted, without change of type domain, to a type whose
+corresponding real type is <code>long double</code>.</p>
+<p>Otherwise, if the corresponding real type of either operand is <code>double</code>, the
+other operand is converted, without change of type domain, to a type whose
+corresponding real type is <code>double</code>.</p>
+<p>(All cases where <code>float</code> might have the same format as another type are covered
+above.)</p>
+<p>Otherwise, if the corresponding real type of either operand is <code>_Float128x</code> or
+<code>_Decimal128x</code>, the other operand is converted, without change of type domain,
+to a type whose corresponding real type is <code>_Float128x</code> or <code>_Decimal128x</code>,
+respectively.</p>
+<p>Otherwise, if the corresponding real type of either operand
+is <code>_Float64x</code> or <code>_Decimal64x</code>, the other operand is converted, without change
+of type domain, to a type whose corresponding real type
+is <code>_Float64x</code> or <code>_Decimal64x</code>, respectively.</p>
+</blockquote>
+<p>Otherwise, if both operands have floating types, the operand, whose set of
+values of its corresponding real type is a (proper) subset of the set of values
+of the corresponding real type of the other operand, is converted, without
+change of type domain62), to a type with the corresponding real type of that
+other operand.</p>
+<p>Otherwise, if one operand has a floating type, the other operand is converted to
+the corresponding real type of the operand of floating type.</p>
+<p>Otherwise, the integer promotions are performed on both operands. Then the
+following rules are applied to the promoted operands:</p>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>In TS 18661-2</p>
+<p>In 12.9, change the introduced [3c] from:</p>
+<blockquote>
+<p>[3c] Except for the macros for functions that round result to a narrower type
+(7.12.13a), use of a type-generic macro invokes a function whose generic
+parameters have the corresponding real type determined by the corresponding real
+types of the arguments as follows:</p>
+<blockquote>
+<p>—    First, if any argument for generic parameters has type <code>_Decimal128</code>, the
+type determined is <code>_Decimal128</code>.</p>
+<p>—    Otherwise, if any argument for generic parameters has type <code>_Decimal64</code>, or
+if any argument for generic parameters is of integer type and another argument
+for generic parameters has type <code>_Decimal32</code>, the type determined is
+<code>_Decimal64</code>.</p>
+<p>—    Otherwise, if any argument for generic parameters has type <code>_Decimal32</code>,
+the type determined is <code>_Decimal32</code>.</p>
+<p>—    Otherwise, if the corresponding real type of any argument for generic
+parameters is <code>long double</code>, the type determined is <code>long double</code>.</p>
+<p>—    Otherwise, if the corresponding real type of any argument for generic
+parameters is <code>double</code> or is of integer type, the type determined is <code>double</code>.</p>
+<p>—    Otherwise, if any argument for generic parameters is of integer type, the
+type determined is <code>double</code>.</p>
+<p>—    Otherwise, the type determined is <code>float</code>.</p>
+</blockquote>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>[3c] Except for the macros for functions that round result to a narrower type
+(7.12.13a), use of a type-generic macro invokes a function whose generic
+parameters have the corresponding real type determined by the types of the
+arguments for the generic parameters as follows:</p>
+<blockquote>
+<p>—    Arguments of integer type are regarded as having type <code>_Decimal64</code> if any
+argument has decimal floating type, and as having type <code>double</code> otherwise.</p>
+<p>—     If the function has exactly one generic parameter, the type determined
+is the corresponding real type of the argument for the generic parameter.</p>
+<p>—    If the function has exactly two generic parameters, the type determined
+is the corresponding real type determined by the usual arithmetic conversions
+(6.3.1.8) applied to the arguments for the generic parameters.</p>
+<p>—    If the function has more than two generic parameters, the type determined
+is the corresponding real type determined by repeatedly applying the usual
+arithmetic conversions, first to the first two arguments for generic parameters,
+then to that result type and the next argument for a generic parameter, and so
+forth until the usual arithmetic conversions have been applied to the last
+argument for a generic parameter.</p>
+</blockquote>
+</blockquote>
+
+</body>
+</html>

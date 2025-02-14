@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0478: valid uses of the main function</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0478: valid uses of the <code>main</code> function</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Martin Sebor<br />
+Date: 2015-09-10<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1960.htm">N1960</a><br />
+Submitted against: C11 / C17<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>The text of the standard isn't entirely clear as to whether or not the function
+<code>main</code> can be used by strictly conforming C programs in hosted environments. The
+following passages quote the permissions and requirements that at the same time
+suggest that <code>main</code> may not be used by such programs, and that there may be more
+than the one call to the function made by the implementation at program startup.</p>
+<p>§5.1.2.2.2 Program execution says:</p>
+<blockquote>
+<p>In a hosted environment, a program may use all the functions, macros, type
+definitions, and objects described in the library clause (clause 7).</p>
+</blockquote>
+<p>suggesting that, since <code>main</code> is not described in the library clause but rather
+in §5.1.2.2.1, it may not be used by a program.</p>
+<p>However, §5.1.2.2.3 Program termination, immediately following the section
+quoted above, then goes on to state (emphasis added):</p>
+<blockquote>
+<p>If the return type of the <code>main</code> function is a type compatible with <code>int</code>, a
+return from the <strong>initial call</strong> to the <code>main</code> function is equivalent to calling
+the <code>exit</code> function with the value returned by the <code>main</code> function as its
+argument; ...</p>
+</blockquote>
+<p>In addition, §7.21.3 Files contains the following sentence (emphasis also
+added):</p>
+<blockquote>
+<p>If the <code>main</code> function returns to <strong>its original caller</strong>, all open files are
+closed...</p>
+</blockquote>
+<p>Finally, since the C++ standard explicitly prohibits programs from calling or
+otherwise using <code>main</code>, one might expect C to do the same. However the
+references to <code>main</code>'s initial call and its original caller in the latter two
+paragraphs suggest otherwise.</p>
+<p>The question was raised and discussed on the committee's mailing list starting
+with message <a href="https://www.open-std.org/jtc1/sc22/wg14/13780">(SC22WG14.13780) valid uses of
+main</a>. In response, members of
+the committee who participated in the preparation of the version of the C
+standard that introduced the words clarified that the intent was and remains for
+C to allow programs to use <code>main</code>. In particular, the intent of §5.1.2.2.2
+Program execution is to grant permission to programs to use the facilities of
+the standard library but not to preclude the uses of <code>main</code> or other symbols
+defined by them.</p>
+<p>However, since the function <code>main</code> is special and unlike any other symbol
+defined by a program, and since C++ contains a rule to the contrary, we feel
+that the intent isn't sufficiently clearly and unambiguously reflected in the
+quoted passages or the rest of the standard, and that a clarification is called
+for.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>In light of the intent of the passages quoted above as made clear by the mailing
+list discussion, we offer two proposals to clarify the text of the standard.</p>
+<h4>Proposal 1</h4>
+<p>Change §5.1.2.2.2 Program execution as follows:</p>
+<blockquote>
+<p>In a hosted environment, a program may use <ins>the function <code>main</code> as well
+as</ins> all the functions, macros, type definitions, and objects described in
+the library clause (clause 7).</p>
+</blockquote>
+<h4>Proposal 2</h4>
+<p>Add a footnote to the end of §5.1.2.2.2 Program execution, with the following
+text:</p>
+<blockquote>
+<p><ins>A program may also use the function <code>main</code>.</ins></p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2016-10-21:</p>
+<p>Oct 2015 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The committee does not agree that any further clarification is needed in the
+standard. We know of no actual confusion in a practical sense on this matter. As
+such, the committee agrees with and draws substantially from <a href="https://www.open-std.org/jtc1/sc22/wg14/13780">(SC22WG14.13787)
+RE: RE: RE: valid uses of main</a>
+in the formulation of its Proposed Committee Response below.</p>
+</blockquote>
+<h3>Proposed Committee Response</h3>
+<blockquote>
+<p>As there is no "only" in 5.1.2.2.2 the interpretation should be that the
+statement is granting permission, not making a restriction. It is drawing a
+distinction between freestanding environments, where only a subset of the
+library can be used, and hosted environments, where all of the library can be
+used. Programs are always free, in either kind of environment, to use things in
+addition to the library, like their own functions and objects. Additionally, the
+reference in 5.1.2.2.3 to the <strong>initial</strong> call to <code>main</code> strongly suggests that
+recursive calls are allowed.</p>
+</blockquote>
+
+</body>
+</html>

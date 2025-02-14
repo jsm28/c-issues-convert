@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0407: SC fences do not restrict modification order enough</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0407: SC fences do not restrict modification order enough</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG 14, Batty<br />
+Date: 2011-10-14<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1584.pdf">N1584</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>C11 seems to omit the restriction imposed in C++11 in 29.3p7 (from
+<a href="https://www.open-std.org/jtc1/sc22/wg21/prot/14882fdis/n3291.pdf">N3291</a>):</p>
+<blockquote>
+<p>For atomic operations <code>A</code> and <code>B</code> on an atomic object <code>M</code>, if there are
+<code>memory_order_seq_cst fences X</code> and <code>Y</code> such that <code>A</code>is sequenced before <code>X</code>,
+<code>Y</code> is sequenced before <code>B</code>, and <code>X</code> precedes <code>Y</code> in <code>S</code>, then <code>B</code> occurs later
+than <code>A</code> in the modification order of <code>M</code>.</p>
+</blockquote>
+<p>Furthermore, it seems that both C11 and C++11 are missing the following two
+derivatives of this rule:</p>
+<blockquote>
+<p>For atomic modifications <code>A</code> and <code>B</code> of an atomic object <code>M</code>, if there is a
+<code>memory_order_seq_cst fence X</code> such that <code>A</code> is sequenced before <code>X</code>, and <code>X</code>
+precedes <code>B</code> in <code>S</code>, then <code>B</code> occurs later than <code>A</code> in the modification order of
+<code>M</code>.</p>
+<p>For atomic modifications <code>A</code> and <code>B</code> of an atomic object <code>M</code>, if there is a
+<code>memory_order_seq_cst</code> fence <code>Y</code> such that <code>Y</code> is sequenced before <code>B</code>, and <code>A</code>
+precedes <code>Y</code> in <code>S</code>, then <code>B</code> occurs later than <code>A</code> in the modification order of
+<code>M</code>.</p>
+</blockquote>
+<h3>Suggested Technical Corrigendum</h3>
+<p>See above.</p>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Oct 2011 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<ul>
+<li>The changes are difficult to fully understand - a diagram might help.</li>
+<li>A paper for the next meeting would help the Committee make progress on this.</li>
+<li>Some concern about having C and C++ differ.</li>
+</ul>
+</blockquote>
+<p>Feb 2012 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<ul>
+<li>No work was done on this defect between meetings, so no additional information has been provided.</li>
+<li>There seems to be two issues here, and this should possibility be two defect reports rather than one.</li>
+<li>No known liaison has taken place with WG 21 on this issue.</li>
+<li>The proposed words are inappropriate for C, still need words that work for C.</li>
+<li>There seems to be editorial issues with the proposed words for C++ as well.</li>
+<li>There is consensus to adopt something along the lines of the first proposed change, with wording that is consistent with C.</li>
+<li>WG 14 needs to stay in step with WG 21.</li>
+<li>Clark Nelson took an action item to liaise with WG 21.</li>
+</ul>
+</blockquote>
+<p>Oct 2012 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<ul>
+<li>
+<p>This item has also become WG21 Library Issue 2130.</p>
+</li>
+<li>
+<p>Rajan presented a diagram and argued that we should adopt the first part and that the second two parts were redundant.</p>
+</li>
+<li>
+<p>After 7.17.3 paragraph 11 add the following:</p>
+<blockquote>
+<p>For atomic operations <code>A</code> and <code>B</code> on an atomic object <code>M</code>, if there are
+<code>memory_order_seq_cst fences X</code> and <code>Y</code> such that <code>A</code> is sequenced before <code>X</code>,
+<code>Y</code> is sequenced before <code>B</code>, and <code>X</code> precedes <code>Y</code> in <code>S</code>, then <code>B</code> occurs later
+than <code>A</code> in the modification order of <code>M</code>.</p>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<p>Oct 2013 meeting</p>
+<h3>Committee Discussion</h3>
+<ul>
+<li>The corresponding words in proposed working draft for C++ have changed, and the proposal above is no longer appropriate.</li>
+<li>The corresponding paragraph reference for C is still 7.13.3 paragraph 11.</li>
+<li>The following change has been applied to the C++ working draft:
+<blockquote>
+<p>Change 29.3 [atomics.order] paragraph 7 as indicated: <em>[Drafting note: Note
+that the wording change intentionally does also replace the term atomic
+operation by atomic modification]</em></p>
+<p>-7- <del>For atomic operations <em>A</em> and <em>B</em> on an atomic object <em>M</em>, if there are
+<code>memory_order_seq_cst</code> fences <em>X</em> and <em>Y</em> such that <em>A</em> is sequenced before <em>X</em>,
+<em>Y</em> is sequenced before <em>B</em>, and <em>X</em> precedes <em>Y</em> in <em>S</em>, then <em>B</em> occurs later
+than <em>A</em> in the modification order of <em>M</em>.</del> <ins>For atomic modifications
+<em>A</em> and <em>B</em> of an atomic object <em>M</em>, <em>B</em> occurs later than <em>A</em> in the
+modification order of <em>M</em> if:</ins></p>
+<ul>
+<li><ins>there is a <code>memory_order_seq_cst</code> fence <em>X</em> such that <em>A</em> is sequenced before <em>X</em>, and <em>X</em> precedes <em>B</em> in <em>S</em>, or</ins></li>
+<li><ins>there is a <code>memory_order_seq_cst</code> fence <em>Y</em> such that <em>Y</em> is sequenced before <em>B</em>, and <em>A</em> precedes <em>Y</em> in <em>S</em>, or</ins></li>
+<li><ins>there are <code>memory_order_seq_cst</code> fences <em>X</em> and <em>Y</em> such that <em>A</em> is sequenced before <em>X</em>, <em>Y</em> is sequenced before <em>B</em>, and <em>X</em> precedes <em>Y</em> in <em>S</em>.</ins></li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<p>Apr 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>WG21 liaison has been asked to ascertain status of this w.r.t. C++14 and to
+provide a suggested TC.</p>
+</blockquote>
+<p>Oct 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>A paper <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1856.htm">N1856</a> was
+provided that discusses the drift between the two Standards and a first cut at
+some possible wording changes, as follows. It was not, however, discussed, but
+does provide insight as to the necessary direction for a resolution to this DR.</p>
+</blockquote>
+<ol>
+<li>
+<p><em>[Drafting note: The project editor is kindly asked to consider to replace in
+1.10 [intro.multithread] p17 the phrase "before an operation B on M" by
+"before a modification B of M".]</em></p>
+</li>
+<li>
+<p>Change 7.17.3 paragraph 11 as indicated: <em>[Drafting note: Note that the wording
+change intentionally does also replace the term atomic operation by atomic
+modification]</em></p>
+<p><del>For atomic operations <em>A</em> and <em>B</em> on an atomic object <em>M</em>, if there are
+<code>memory_order_seq_cst</code> fences <em>X</em> and <em>Y</em> such that <em>A</em> is sequenced before <em>X</em>,
+<em>Y</em> is sequenced before <em>B</em>, and <em>X</em> precedes <em>Y</em> in <em>S</em>, then <em>B</em> occurs later
+than <em>A</em> in the modification order of <em>M</em>.</del> <ins>For atomic modifications
+<em>A</em> and <em>B</em> of an atomic object <em>M</em>, <em>B</em> occurs later than <em>A</em> in the
+modification order of <em>M</em> if:</ins></p>
+<ul>
+<li><ins>there is a <code>memory_order_seq_cst</code> fence <em>X</em> such that <em>A</em> is sequenced before <em>X</em>, and <em>X</em> precedes <em>B</em> in <em>S</em>, or</ins></li>
+<li><ins>there is a <code>memory_order_seq_cst</code> fence <em>Y</em> such that <em>Y</em> is sequenced before <em>B</em>, and <em>A</em> precedes <em>Y</em> in <em>S</em>, or</ins></li>
+<li><ins>there are <code>memory_order_seq_cst</code> fences <em>X</em> and <em>Y</em> such that <em>A</em> is sequenced before <em>X</em>, <em>Y</em> is sequenced before <em>B</em>, and <em>X</em> precedes <em>Y</em> in <em>S</em>.</ins></li>
+</ul>
+<p>[ <em>Note</em>: <code>memory_order_seq_cst</code> ensures sequential consistency only for a
+program that is free of data races and uses exclusively <code>memory_order_seq_cst</code>
+operations. Any use of weaker ordering will invalidate this guarantee unless
+extreme care is used. In particular, <code>memory_order_seq_cst</code> fences ensure a
+total order only for the fences themselves. Fences cannot, in general, be used
+to restore sequential consistency for atomic operations with weaker ordering
+specifications. —<em>end note</em> ]</p>
+</li>
+</ol>
+<p>Apr 2015 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The provided words were adopted as the Proposed Technical Corrigendum. The
+project editor is asked to review and replace the phrase "before an operation
+<em>B</em> on <em>M</em>" by "before a modification <em>B</em> of <em>M</em>".</p>
+</blockquote>
+<h3>Proposed Technical Corrigendum</h3>
+<p>Change 7.17.3 paragraph 11 from:</p>
+<blockquote>
+<p>For atomic operations <em>A</em> and <em>B</em> on an atomic object <em>M</em>, if there are
+<code>memory_order_seq_cst</code> fences <em>X</em> and <em>Y</em> such that <em>A</em> is sequenced before <em>X</em>,
+<em>Y</em> is sequenced before <em>B</em>, and <em>X</em> precedes <em>Y</em> in <em>S</em>, then <em>B</em> occurs later
+than <em>A</em> in the modification order of <em>M</em>.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>For atomic modifications <em>A</em> and <em>B</em> of an atomic object <em>M</em>, <em>B</em> occurs later
+than <em>A</em> in the modification order of <em>M</em> if:</p>
+<ul>
+<li>there is a <code>memory_order_seq_cst</code> fence <em>X</em> such that <em>A</em> is sequenced before <em>X</em>, and <em>X</em> precedes <em>B</em> in <em>S</em>, or</li>
+<li>there is a <code>memory_order_seq_cst</code> fence <em>Y</em> such that <em>Y</em> is sequenced before <em>B</em>, and <em>A</em> precedes <em>Y</em> in <em>S</em>, or</li>
+<li>there are <code>memory_order_seq_cst</code> fences <em>X</em> and <em>Y</em> such that <em>A</em> is sequenced before <em>X</em>, <em>Y</em> is sequenced before <em>B</em>, and <em>X</em> precedes <em>Y</em> in <em>S</em>.</li>
+</ul>
+</blockquote>
+
+</body>
+</html>

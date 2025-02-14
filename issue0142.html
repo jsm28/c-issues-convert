@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0142: Is it permitted to #undef a reserved macro name?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0142: Is it permitted to <code>#undef</code> a reserved macro name?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Clive D.W. Feather, BSI<br />
+Date: 1995-02-23<br />
+Submitted against: C90<br />
+Status: Fixed<br />
+Fixed in: C99<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_142.html">dr_142.html</a></p>
+<p><em>Submitted to BSI by Clive D.W. Feather clive@sco.com.</em></p>
+<p><em>In this Defect Report, identifiers lexically identical to those declared in
+standard headers refer to the identifiers declared in those standard headers,
+whether or not the header is explicitly mentioned.</em></p>
+<p><em>This Defect Report has been prepared with considerable help from Mark Brader,
+Jutta Degener, Ronald Guilmette, and a person whose employment conditions
+require anonymity. However, except where stated, opinions expressed or implied
+should not be assumed to be those of any person other than myself.</em></p>
+<p>Defect Report UK 026: Reservation of macro names</p>
+<p>Is it permitted to <code>#undef</code> a reserved macro name? Consider the translation
+unit:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;errno.h&gt;</span>
+<span style="color: #bbbbbb"> </span><span style="color: #9C6500">#undef EASTER</span>
+<span style="color: #bbbbbb"> </span><span style="color: #9C6500">#undef EDOM</span>
+<span style="color: #bbbbbb"> </span><span style="color: #9C6500">#undef __ERRNO_BASE</span>
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">error</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">void</span>)<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span>errno<span style="color: #bbbbbb"> </span><span style="color: #666666">==</span><span style="color: #bbbbbb"> </span>ERANGE;<span style="color: #bbbbbb"> </span>}
+</pre></div>
+
+<p>Considering each of the three <code>#undef</code> directives independently, is each
+directive permitted in a strictly conforming program? Is the translation unit
+strictly conforming?</p>
+<p>Subclause 7.1.3 describes various classes of reserved identifiers, and then
+states:</p>
+<blockquote>
+<p>If the program declares or defines an identifier with the same name as an
+identifier reserved in that context (other than as allowed by 7.1.7), the
+behavior is undefined.</p>
+</blockquote>
+<p>However, this does mention the use of <code>#undef</code>. Subclause 7.1.7 does so, for
+certain identifiers, but in rather ambiguous words:</p>
+<blockquote>
+<p>The use of <code>#undef</code> to remove any macro definition will also ensure ...</p>
+</blockquote>
+<p>It has been suggested that this wording merely describes a strictly conforming
+coding technique, rather than establishing a special case (rather like the
+wording about placing the name in parentheses does).</p>
+<p>Therefore, can a strictly conforming program <code>#undef</code> a name which is reserved
+for any use at that point?</p>
+<p>There is a good reason to allow such an <code>#undef</code>. A program can make use of a
+identifier which is convenient but would otherwise be reserved (for example, the
+identifier <code>EASTER</code>). There is also a good reason to forbid it: the macro
+<code>ERANGE</code> might actually be defined as (<code>__ERRNO_BASE + 42</code>). This leads to the
+conclusion that it might be best to permit it for some names but not others.</p>
+<p>A further example [inserted at the request of BSI] is the translation unit:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;stdlib.h&gt;</span>
+<span style="color: #bbbbbb"> </span><span style="color: #9C6500">#undef __INCLUDED_STDLIB_H</span>
+<span style="color: #bbbbbb"> </span><span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;stdlib.h&gt;</span>
+</pre></div>
+
+<h3>Suggested Technical Corrigendum:</h3>
+<p>Add to the end of subclause 7.1.3:</p>
+<p>If the program removes (with <code>#undef</code>) the macro definition of an identifier in
+the first group listed above, the behavior is undefined.</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Technical Corrigendum</h3>
+<p>Replace the third bullet in subclause 7.1.3 with the following:</p>
+<p>Each macro name in any of the following subclauses (including <strong>Future library
+directions</strong>) is reserved for use as specified if any of its associated headers
+is included, unless explicitly stated otherwise.</p>
+<p>Forward reference: 7.1.7.</p>
+
+</body>
+</html>

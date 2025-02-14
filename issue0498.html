@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0498: mblen, mbtowc, and wctomb thread-safety</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0498: <code>mblen</code>, <code>mbtowc</code>, and <code>wctomb</code> thread-safety</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Philipp Klaus Krause<br />
+Date: 2016-04-11<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2037.htm">N2037</a><br />
+Submitted against: C11 / C17<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>This corresponds to Austin Group Defect #708 by Rich Felker. The following four
+paragraphs are copies of that Defect Report and the three responses, all from
+2013.</p>
+<p>dalias (Rich Felker, musl libc): Per C11 7.1.4 paragraph 5, "Unless explicitly
+stated otherwise in the detailed descriptions that follow, library functions
+shall prevent data races as follows: A library function shall not directly or
+indirectly access objects accessible by threads other than the current thread
+unless the objects are accessed directly or indirectly via the function's
+arguments. A library function shall not directly or indirectly modify objects
+accessible by threads other than the current thread unless the objects are
+accessed directly or indirectly via the function's non-const arguments.
+Implementations may share their own internal objects between threads if the
+objects are not visible to users and are protected against data races." 7.22.7
+(Multibyte/wide character conversion functions) does not specify that these
+functions are not required to avoid data races with other calls. The only time
+they would even potentially be subject to data races is for state-dependent
+encodings, which are all but obsolete; for single-byte or modern multi-byte
+(i.e. UTF-8) encodings, these functions are pure. Note that 7.29.6.3
+(Restartable multibyte/wide character conversion functions) does make exceptions
+that the "r" versions of these functions are not required to avoid data races
+when the state argument is NULL.</p>
+<p>geoffclare: It seems odd that C11 would have different thread-safety
+requirements for mbrlen, mbrtowc, and wcrtomb with a null state argument than
+for mblen, mbtowc, and wctomb. We should query this with the C committee, as it
+may well be unintentional.</p>
+<p>dalias: I think there's a very good reason for the discrepancy: the restartable
+versions can store a partially-decoded character in the mbstate_t object, so
+even for state-independent encodings, there is state which would need to be
+protected against data races. The non-restartable versions, on the other hand,
+are pure except in the case of state-dependent encodings, which are mostly a
+relic of the past and which were never supported on most POSIX systems, since
+these encodings are mostly incompatible with POSIX filesystem semantics. Only
+implementations supporting such encodings (which might not even exist - can
+anyone confirm?) would incur the burden of avoiding data races. Note that these
+functions give applications access to information on whether the locale's
+encoding is state-dependent, so a portable application could use the restartable
+interfaces when the locale is state-dependent, and the non-restartable ones
+otherwise. As to the motivation behind my request for this change, I have spent
+a good deal of time investigating the performance bottlenecks in
+character-at-a-time multibyte processing, and it turns out that there is a
+fundamental bottleneck in the restartable interfaces due to their interface
+requirements for handling the ps argument and partially-decoded characters. For
+applications which don't need partial-character processing capability, I believe
+it would make sense to encourage a transition to the non-restartable interfaces,
+but of course this is problematic if the non-restartable interfaces are not
+thread-safe. In my experiments, I found the non-restartable interfaces capable
+of reaching roughly a 50% performance advantage over the restartable ones; this
+difference would of course become even more extreme if the core decoding
+algorithms were further optimized.</p>
+<p>nick: This will be raised as a potential defect with the C committee, and any
+decision on how to proceed should be made there first.</p>
+<p>It seems however that this was so far not brought to the attention of WG 14.
+There seems to be confusion about the thread-safety of mblen(), mbtowc() and
+wctomb() when the encoding is not state-dependent. While the C standard seems to
+imply that the functions are thread-safe when the encoding is not
+state-dependent, apparently some think otherwise. The GNU/Linux manpage for
+these functions states "MT-Unsafe race", and recommends to use mbrlen() instead.
+Thus clarification is needed.</p>
+<p><strong>Possible Change</strong></p>
+<p>A footnote could be added to 7.22.7 clarifying that the functions mblen(),
+mbtowc() and wctomb() do not keep internal state if the encoding is not
+state-dependent.</p>
+<hr />
+<p>Comment from WG14 on 2018-10-18:</p>
+<p>Oct 2016 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The text in §7.1.4 paragraph 5 requires implementations to avoid data races in
+library functions that maintain their internal state. The <code>mblen</code>, <code>mbtowc</code>, and
+<code>wctomb</code> functions are among those that maintain such state. Although the state
+is typically needed only for state-dependent, multibyte encodings, the standard
+doesn't intend to prevent implementations from accessing it for other encodings
+as well. And indeed implementations are known to exist that access the state for
+other encodings as well. Multi-threaded programs that need the functionality
+provided by these functions are intended to make use of the corresponding
+restartable forms of these functions instead (i.e., <code>mbrlen</code>, <code>mbrtowc</code>, and
+<code>wcrtomb</code>, respectively) with a non-null state pointer.</p>
+</blockquote>
+<p>In §7.22.7 paragraph 1 , change:</p>
+<blockquote>
+<p>Changing the <code>LC_CTYPE</code> category causes the conversion state of these functions
+to be indeterminate.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>Changing the <code>LC_CTYPE</code> category causes the conversion state of these functions
+to be indeterminate. A call to any one of these functions may introduce a data
+race with a call to any other function in this section.</p>
+</blockquote>
+<p>In §7.29.6.3 paragraph 1 , change:</p>
+<blockquote>
+<p>The implementation behaves as if no library function calls these functions with
+a null pointer for <code>ps</code>.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>The implementation behaves as if no library function calls these functions with
+a null pointer for <code>ps</code>. A call to one of these functions with a null <code>ps</code>
+pointer may introduce a data race with another call to the same function.</p>
+</blockquote>
+<p>Apr 2017 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The committee adopted the words discussed in the previous meeting, with a small
+refinement as suggested in <a href="https://www.open-std.org/jtc1/sc22/wg14/14652">(SC22WG14.14652) editorial tweak for DR 498
+PTC</a>.</p>
+</blockquote>
+<p>Apr 2017 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>A new paper <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2246.htm">N2246</a>
+was not discussed at WG14 and has been postponed until the next meeting.</p>
+</blockquote>
+<h3>Proposed Change</h3>
+<p>In §7.22.7 paragraph 1 , change:</p>
+<blockquote>
+<p>Changing the <code>LC_CTYPE</code> category causes the conversion state of these functions
+to be indeterminate.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>Changing the <code>LC_CTYPE</code> category causes the conversion state of these functions
+to be indeterminate. A call to any one of these functions may introduce a data
+race with a call to any other function in this subclause.</p>
+</blockquote>
+<p>In §7.29.6.3 paragraph 1 , change:</p>
+<blockquote>
+<p>The implementation behaves as if no library function calls these functions with
+a null pointer for <code>ps</code>.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>The implementation behaves as if no library function calls these functions with
+a null pointer for <code>ps</code>. A call to one of these functions with a null <code>ps</code>
+pointer may introduce a data race with another call to the same function.</p>
+</blockquote>
+<p>Oct 2018 meeting</p>
+<h3>Committee Response</h3>
+<blockquote>
+<p>The "C17" edition of the standard has been published as IS 9899:2018.</p>
+<p>This issue was not resolved in that publication.</p>
+<p>A new paper <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2281.htm">N2281</a>
+was discussed at some length for possible inclusion in a new edition of the
+standard.</p>
+<p>The committee believes that the goal of these papers is to establish a normative
+requirement that calls to <code>mblen</code>, <code>mbtowc</code>, and <code>wctomb</code> be data-race free when
+operating upon state-independent encodings. The committee notes that interleaved
+calls to <code>setlocale</code> that change even among non-state-dependent encodings must
+necessarily atomically change a reference to the encoding tables used by these
+functions, and that such change would impede the desired speed advantage sought
+by this change. Any assertion of data-race free must also disallow interleaved
+calls to <code>setlocale</code> to maintain the speed advantage.</p>
+<p>It was also noted in earlier discussions that some implementations are known to
+use shared state even for non-state dependent encodings.</p>
+<p>A new paper is solicited from the author for inclusion in a new edition of the
+standard. An affirmative statement is requested, perhaps along the lines of: The
+total order of <code>mblen</code>, <code>mbtowc</code>, and <code>wctomb</code> shall be data-race free when
+there are no calls to <code>setlocale</code> in that order and, proabably, that a
+state-indepenent encoding has been determined by a call to <code>mblen</code> in the
+normative manner.</p>
+</blockquote>
+
+</body>
+</html>

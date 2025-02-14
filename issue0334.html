@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0334: Missing semantics of comparison macros</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0334: Missing semantics of comparison macros</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG 14, Fred Tydeman (USA)<br />
+Date: 2006-12-12<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1203.htm">ISO/IEC WG14 N1203</a><br />
+Submitted against: C99<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_334.htm">dr_334.htm</a></p>
+<h3>Summary</h3>
+<p>Section 7.12.14 Comparison macros (and subsections) are missing <strong>Semantics</strong>.
+In particular, something along the lines of: "The usual arithmetic conversions
+are performed on the operands." This matters if the two operands are of
+different type, e.g., <strong>isless(4.f/3.f,4.L/3.L)</strong>.</p>
+<p>In addition, we might need to add something alone the lines of: "The result of
+the ... operator is ..." to each of the subsections. We should consider section
+6.5.8 Relational operators when we process this defect.</p>
+<p>We should review the <strong>Constraints</strong> of 6.5.* and consider adding something
+along the lines of: "Each of the operands shall have real floating-type." to
+7.12.14 as a constraint. The example in 7.12.3.1 paragraph 4 which uses
+<strong>sizeof</strong> will not work when <strong>float</strong> and <strong>_Decimal32</strong> are the same size;
+nor for <strong>double</strong> and <strong>_Decimal64</strong> being the same size.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<hr />
+<p>Comment from WG14 on 2008-04-16:</p>
+<h3>Proposed Technical Corrigendum</h3>
+<h3>Committee Discussion (for history only)</h3>
+<h4>Spring 2007</h4>
+<p>There seem to be consensus that the comparison functions are under-specified.</p>
+<p>The Standard currently says:</p>
+<blockquote>
+<p>In the synopses in this subclause, real-floating indicates that the argument
+shall be an expression of real floating type.</p>
+</blockquote>
+<p>This is well defined, see 6.2.5 para 10. However, several in attendance believe
+there should be explicit language explaining whether or not the two arguments to
+a comparison macro must be the same real-floating type or allowed to be
+different real-floating type.</p>
+<h4>Fall 2007</h4>
+<p>It as also asked for the following to be added to the committee discussion:</p>
+<blockquote>
+<p>IEEE-754 (and IEEE-754R) require that comparison operations work in all
+supported formats, even if the operands' format differ. C99+TC1+TC2, Annex
+F.3, printed page 445, first bullet says that the comparison macros (along with
+the relational and equality operators) are the IEC 60559 comparisons.</p>
+</blockquote>
+<h4>Spring 2008</h4>
+<p>This work could possibly fit into the <em>type generic/overloading</em> project that
+needs to be completed for C1X.</p>
+<h3>Committee Response</h3>
+<p>This issue will be addressed in a future revision of the C standard. See WG 14
+document N<strong>xxx</strong>.</p>
+
+</body>
+</html>

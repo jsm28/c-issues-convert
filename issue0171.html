@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0171: Is it possible to create implementations with unreasonable arrangements of integral types?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0171: Is it possible to create implementations with unreasonable arrangements of integral types?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Clive D.W. Feather, BSI<br />
+Date: 1995-10-16<br />
+Submitted against: C90<br />
+Status: Fixed<br />
+Fixed in: C99<br />
+Cross-references: <a href="issue0069.html">0069</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_171.html">dr_171.html</a></p>
+<p><em>Submitted to BSI by Clive D.W. Feather clive@sco.com .</em></p>
+<p><em>In this Defect Report, identifiers lexically identical to those declared in
+standard headers refer to the identifiers declared in those standard headers,
+whether or not the header is explicitly mentioned.</em></p>
+<p><em>This Defect Report has been prepared with considerable help from Mark Brader,
+Jutta Degener, Ronald Guilmette, and a person whose employment conditions
+require anonymity. However, except where stated, opinions expressed or implied
+should not be assumed to be those of any person other than myself.</em></p>
+<p>Defect Report UK 019: Ranges of integral types</p>
+<p>It appears to be possible to create implementations with unreasonable
+arrangements of integral types.</p>
+<p>Subclause 6.1.2.5 states various rules which allow the following deductions to
+be made:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>SCHAR_MAX<span style="color: #bbbbbb">  </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>SHRT_MAX
+<span style="color: #bbbbbb"> </span>SHRT_MAX<span style="color: #bbbbbb">   </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>INT_MAX
+<span style="color: #bbbbbb"> </span>INT_MAX<span style="color: #bbbbbb">    </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>LONG_MAX
+<span style="color: #bbbbbb"> </span>SCHAR_MIN<span style="color: #bbbbbb">  </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>SHRT_MIN
+<span style="color: #bbbbbb"> </span>SHRT_MIN<span style="color: #bbbbbb">   </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>INT_MIN
+<span style="color: #bbbbbb"> </span>INT_MIN<span style="color: #bbbbbb">    </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>LONG_MIN
+<span style="color: #bbbbbb"> </span>SCHAR_MAX<span style="color: #bbbbbb">  </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>UCHAR_MAX
+<span style="color: #bbbbbb"> </span>SHRT_MAX<span style="color: #bbbbbb">   </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>USHRT_MAX
+<span style="color: #bbbbbb"> </span>INT_MAX<span style="color: #bbbbbb">    </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>UINT_MAX
+<span style="color: #bbbbbb"> </span>LONG_MAX<span style="color: #bbbbbb">   </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>ULONG_MAX
+</pre></div>
+
+</blockquote>
+<p>and, depending on the interpretation of the term <em>the same amount of storage:</em></p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">unsigned</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">short</span>)<span style="color: #bbbbbb"> </span><span style="color: #666666">==</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">short</span>)
+<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">unsigned</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span>)<span style="color: #bbbbbb">   </span><span style="color: #666666">==</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">int</span>)
+<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">unsigned</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">long</span>)<span style="color: #bbbbbb">  </span><span style="color: #666666">==</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">long</span>)
+</pre></div>
+
+</blockquote>
+<p>However, (based on the preliminary discussions of <a href="issue0069.html">Defect Report
+#069</a>, which allow padding bits in integral types) there does not
+appear to be any requirement for the following:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>UCHAR_MAX<span style="color: #bbbbbb">  </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>USHRT_MAX
+<span style="color: #bbbbbb"> </span>USHRT_MAX<span style="color: #bbbbbb">  </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>UINT_MAX
+<span style="color: #bbbbbb"> </span>UINT_MAX<span style="color: #bbbbbb">   </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>ULONG_MAX
+<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">short</span>)<span style="color: #bbbbbb">  </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">int</span>)
+<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">int</span>)<span style="color: #bbbbbb">    </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">long</span>)
+<span style="color: #bbbbbb"> </span>UCHAR_MAX<span style="color: #bbbbbb">  </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>INT_MAX
+</pre></div>
+
+</blockquote>
+<p>The first five of these are necessary to allow reasonable deductions to be made
+about the behavior of types in the presence of padding bits (for example, that
+unsigned long can hold any value representable in any integral type). The sixth
+is necessary to allow the <code>&lt;ctype.h&gt;</code> functions to behave sensibly (it is also
+assumed by example 2 of subclause 5.1.2.3).</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>In subclause 6.1.2.5, change in the fourth paragraph:</p>
+<blockquote>
+<p>In the list of signed integer types above, the range of values of each type is a
+subrange of the values of the next type in the list</p>
+</blockquote>
+<ul>
+<li>to:</li>
+</ul>
+<blockquote>
+<p>In the list of signed integer types above, the range of values of each type is a
+subrange of the values of the next type in the list, and the size of an object
+of each type is not greater than the size of an object of the next type in the
+list.</p>
+</blockquote>
+<p>Add to the fifth paragraph:</p>
+<blockquote>
+<p>The range of values of each unsigned integer type is a subrange of the next type
+(in the list <code>unsigned char</code>, <code>unsigned short</code>, <code>unsigned int</code>, <code>unsigned long</code>).</p>
+</blockquote>
+<p>Add to the fifth or eighth paragraph:</p>
+<blockquote>
+<p>The range of values of the type <code>unsigned char</code> is a subrange of the values of
+the type <code>int</code>.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>This is a work in progress item.</p>
+<p>Summary: Explicit statements are not made about ranges for all types. It can be
+argued that you can derive this information from the C Standard.</p>
+<p>Does the Committee want to make explicit statements about all relationships,
+specifically the unsigned types?</p>
+
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0452: Effective Type in Loop Invariant</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0452: Effective Type in Loop Invariant</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG 14, Shao Miller<br />
+Date: 2013-09-29<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1762.htm">N1762</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>The definition for "effective type" does not appear to apply to non-lvalue
+expressions. This can cause a behavioural difference, in loops.</p>
+<p>6.5p6:</p>
+<blockquote>
+<p>The effective type of an object for an access to its stored value is the
+declared type of the object, if any.87) If a value is stored into an object
+having no declared type through an lvalue having a type that is not a character
+type, then the type of the lvalue becomes the effective type of the object for
+that access and for subsequent accesses that do not modify the stored value. If
+a value is copied into an object having no declared type using memcpy or
+memmove, or is copied as an array of character type, then the effective type of
+the modified object for that access and for subsequent accesses that do not
+modify the value is the effective type of the object from which the value is
+copied, if it has one. For all other accesses to an object having no declared
+type, the effective type of the object is simply the type of the lvalue used for
+the access.</p>
+</blockquote>
+<p>Given the following code:</p>
+<blockquote>
+<p>union u1 {<br />
+int x;<br />
+long y;<br />
+};</p>
+<p>int func1(void) {<br />
+union u1 o1 = { 42 };</p>
+<p>return (0, o1).x;<br />
+}</p>
+</blockquote>
+<p>The <code>o1</code> sub-expression in the <code>return</code> statement's expression accesses the
+stored union value of the object. The comma operator's result has that value,
+but it is not an lvalue and so "effective type" does not appear to apply. While
+the access to <code>o1</code> involves an access to a stored value, the membership operator
+can be said to access an object whose value is available, but perhaps not
+exactly "stored." <code>o1.x</code> is an lvalue, but <code>(0, o1).x</code> is not.</p>
+<p>6.5.2.3p3:</p>
+<blockquote>
+<p>A postfix expression followed by the . operator and an identifier designates a
+member of a structure or union object. The value is that of the named member,95)
+and is an lvalue if the first expression is an lvalue. If the first expression
+has qualified type, the result has the so-qualified version of the type of the
+designated member.</p>
+</blockquote>
+<p>6.5p7:</p>
+<blockquote>
+<p>An object shall have its stored value accessed only by an lvalue expression that
+has one of the following types:88)</p>
+<ul>
+<li>a type compatible with the effective type of the object,</li>
+<li>a qualified version of a type compatible with the effective type of the object,</li>
+<li>a type that is the signed or unsigned type corresponding to the effective type of the object,</li>
+<li>a type that is the signed or unsigned type corresponding to a qualified version of the effective type of the object,</li>
+<li>an aggregate or union type that includes one of the aforementioned types among its members (including, recursively, a member of a subaggregate or contained union), or</li>
+<li>a character type.</li>
+</ul>
+</blockquote>
+<p>Given:</p>
+<blockquote>
+<p>union u2 {<br />
+int x;<br />
+long y;<br />
+char ca[2];<br />
+};</p>
+<p>int func2(void) {<br />
+union u2 o2 = { 42 };</p>
+<p>return (0, o2).x;<br />
+}</p>
+</blockquote>
+<p>We have a similar situation, even though <code>(0, o2)</code> yields an object with
+temporary lifetime. (Side question: Should the expression <code>(0, o2).ca == o2.ca</code>
+yield zero, non-zero, or should it be implementation-defined?)</p>
+<p>Suppose we have a portable strategy to determine whether or not the object
+representations of <code>int</code> and <code>long</code> are the same. If they are and if we have the
+following code:</p>
+<blockquote>
+<p>union u3 {<br />
+int x;<br />
+long y;<br />
+};</p>
+<p>long func3(void) {<br />
+union u3 o3;</p>
+<p>o3.x = 42;<br />
+return (0, o3).y;<br />
+}</p>
+</blockquote>
+<p>Are we violating the effective type rules? We might expect type-punning to be
+relevant here and the membership operator to be accessing a member value of a
+union value.</p>
+<p>If the answer is yes, then does the Standard define the effective type of the
+non-lvalue expression <code>0, o3</code> ?</p>
+<p>If the answer is no, then this can cause the loss of an optimization opportunity
+in the following code:</p>
+<blockquote>
+<p>struct s4 {<br />
+int x;<br />
+float f;<br />
+};</p>
+<p>void func4(long * lp, struct s4 * s4p) {<br />
+int c;</p>
+<p>for (c = 0; c &lt; (0, *s4p).i; ++c)<br />
+--*lp;<br />
+}</p>
+</blockquote>
+<p>We do not expect <code>*lp</code> to alias into <code>*s4p</code>, so we might optimize this loop such
+that <code>(0, *s4p).i</code> is only computed once. If, in another translation unit, it
+turned out that these did alias, the optimization would normally be justified
+based on a violation of the effective type rules. If there isn't a violation
+because of the non-lvalue nature of the comma operator's expression, then the
+optimization would not appear to be justified.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>None.</p>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Oct 2013 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The committee did not have adequate time to consider these issues and intends
+that these issues be further refined through consultation with the author.</p>
+</blockquote>
+<p>Apr 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>Further input was not received from the author and will again be solicited.</p>
+</blockquote>
+<p>Oct 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>Discussion with the author clarified these issues, and the paper
+<a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1888.htm">N1888</a> was
+discussed. From that, we extract the following example</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #008000; font-weight: bold">union</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">u2</span><span style="color: #bbbbbb"> </span>{
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>x;
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">long</span><span style="color: #bbbbbb"> </span>y;
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>ca[<span style="color: #666666">2</span>];
+};
+
+<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">func2</span>(<span style="color: #B00040">void</span>)<span style="color: #bbbbbb"> </span>{
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">union</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">u2</span><span style="color: #bbbbbb"> </span>o2<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>.ca<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;a&quot;</span><span style="color: #bbbbbb"> </span>};
+</pre></div>
+
+</blockquote>
+<p>and question, what is the result of <code>(0,o2).ca == o2.ca</code>?</p>
+<p>Given that the comma operator doesn't yield an lvalue (6.5.17), and from 6.2.4p8
+such a non-lvalue expression is stated to have automatic storage duration, this
+seems to require that the answer is false, even though this defeats compiler
+optimizations.</p>
+<p>The effective type rule 6.5.p6 also does not seem to apply to objects with
+temporary lifetime, and has undesirable consequences.</p>
+<p>The direction the committee would like to go is something like:</p>
+<p>In 6.2.4p8, append</p>
+<blockquote>
+<p>An object with temporary lifetime behaves as if it had the declared type of its
+value. Such an object is known as a <em>temporary object</em>. A temporary object need
+not have a unique address.</p>
+</blockquote>
+<p>Apr 2015 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The following words were drafted and approved by the committee as the Proposed
+Technical Corrigendum.</p>
+</blockquote>
+<h3>Proposed Committee Response</h3>
+<blockquote>
+<p>To the question "Should the expression <code>(O, o2).ca == o2.ca</code> yield zero,
+non-zero, or should it be implementation defined?" the answer is "implementation
+defined".</p>
+<p>With the following changes, the effective type of <code>O, o3</code> is defined.</p>
+</blockquote>
+<h3>Proposed Technical Corrigendum</h3>
+<p>In 6.2.4p8, append</p>
+<blockquote>
+<p>An object with temporary lifetime behaves as if it were declared with the type
+of its value for the purposes of effective type. Such an object need not have a
+unique address.</p>
+<p>(add forward reference to 6.5p6 to this section)</p>
+</blockquote>
+</blockquote>
+
+</body>
+</html>

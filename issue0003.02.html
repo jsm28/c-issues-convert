@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0003.02: Should white space surround macro substitutions?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0003.02: Should white space surround macro substitutions?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Terence David Carroll, WG14<br />
+Date: 1992-12-10<br />
+Reference document: X3J11/90-011<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_003.html">dr_003.html</a></p>
+<p>Subclause 6.8.3: Macro substitutions, tokenization, and white space In general I
+think it is a good guiding principle that a C implementation should be able to
+be based around completely disjoint preprocessing and lexical scanning parses of
+the compiler. As such the rules on tokenizing need to be emphasized with the
+following paragraphs (possibly placed after paragraph 1 of subclause 6.8.3.1):</p>
+<blockquote>
+<p>All macro substitutions and expanded macro argument substitutions will result in
+an additional space token being inserted before and after the replacement token
+sequence where such a space token is not already present and there is a
+corresponding preceding or subsequent token in the target token sequence.</p>
+<p>The last token of every macro argument has no subsequent token at the time of
+its initial macro argument expansion, and similarly a macro parameter that is
+the last token of a replacement token list has no subsequent token at the time
+of that parameter's substitution. Similarly for first tokens and preceding
+tokens.</p>
+</blockquote>
+<p>Naturally such a step can be treated as purely conceptual by a tokenized
+implementation with combined preprocessing and lexical analysis, except for the
+purposes of argument stringizing where the added spacing may be essential for
+unambiguous identification of the preprocessing tokens involved. Such a
+statement is not a substantive change, as it is merely clarifying the
+tokenization rules, and given that Standard C has changed the definition of the
+preprocessor substantially from K&amp;R already (re macro argument expansion before
+substitution) such an additional explicit change from K&amp;R C should cause
+comparatively little difficulty except to those who had not appreciated just how
+different the preprocessing rules are already. Examples which are clarified by
+this change are:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#define    macro    +</span>
+<span style="color: #bbbbbb">            </span><span style="color: #666666">+</span>macro
+<span style="color: #bbbbbb">            </span>macro<span style="color: #666666">+</span>
+<span style="color: #bbbbbb">  </span><span style="color: #9C6500">#define    mac()    +</span>
+<span style="color: #bbbbbb"> </span><span style="color: #9C6500">#define    ro       +</span>
+<span style="color: #bbbbbb">            </span>mac()ro
+</pre></div>
+
+<p>all of which unambiguously result in lines with two <code>+</code> operator tokens, in
+strict accordance with the draft standard's tokenization rules, and not, as was
+formerly the case with traditional text oriented preprocessors, in single <code>++</code>
+operators.</p>
+<p>Examples which are changed by this statement are:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#define    mac()         +</span>
+<span style="color: #bbbbbb"> </span><span style="color: #9C6500">#define    ro            +</span>
+<span style="color: #bbbbbb"> </span><span style="color: #9C6500">#define    str(s)        # s</span>
+<span style="color: #bbbbbb"> </span><span style="color: #9C6500">#define    eval(m,e)     m(e)</span>
+<span style="color: #bbbbbb">            </span>eval(<span style="color: #bbbbbb"> </span>str,<span style="color: #bbbbbb"> </span>mac()ro<span style="color: #bbbbbb"> </span>)
+</pre></div>
+
+<p>which produces the string <code>"+N+"</code> and not the string <code>"++"</code> as it would do with
+the draft's current wording.</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>The Committee reasserts that the grammar and/or semantics of preprocessing as
+they appear in the standard are as intended. We are attaching a copy of the
+previous responses to this item from David F. Prosser. The Committee endorses
+the substance of these responses, which follow: KR never specified the macro
+replacement algorithm to the extent that any such conclusion is possible. The
+widest range of implementation choices were present in this area of the
+language. The eventual choice of a macro replacement algorithm was one that did
+not match any existing implementation, but one that tried to include the
+behavior of all major variants. You agree that the C Standard is clear that once
+a token is recognized, it is never retokenized unless subjected to a <code>#</code> or <code>##</code>
+operation. The behavior described is that which was chosen by the Committee.
+Your proposal would cause, as you note, certain created string literals to
+include white space not present in the original text. This runs counter to the
+<code>#</code> operator's goal of producing a string version of the spelling of the
+invocation arguments. The C Standard allows an implementation that uses a
+text-to-text separate preprocessing stage the option to use white space as
+necessary to separate tokens when it produces its output. However, this
+insertion of white space must not be visible to the program. The proposed extra
+white space would probably be a surprise to the programmer as well. Finally,
+this proposal would require those implementations that have a built-in
+preprocessing stage to add extra code to insert white space in special
+circumstances. This is counter to the goal of having both built-in and separate
+implementations be purely an implementation choice.</p>
+
+</body>
+</html>

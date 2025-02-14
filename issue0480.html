@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0480: cnd_wait and cnd_timewait should allow spurious wake-ups</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0480: <code>cnd_wait</code> and <code>cnd_timewait</code> should allow spurious wake-ups</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Torvald Riegel, Martin Sebor<br />
+Date: 2015-09-25<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1964.htm">N1964</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>Both ISO C++ and POSIX allow for spurious wake-ups from their condition
+variable wait functions. However, C11 has no wording that would allow that.
+(This applies to both <code>cnd_wait</code> and <code>cnd_timewait</code>, but just <code>cnd_wait</code> is
+referred to in what follows.)</p>
+<p>If spurious wake-ups are allowed, then some implementations become significantly
+easier; it also allows to implement the C standard on top of POSIX using just a
+thin wrapper. In contrast, implementing a condition variable that does not allow
+spurious wake-ups on top of a condition variable implementation that does allow
+that is likely close to implementing a condition variable from scratch in terms
+of complexity.</p>
+<p>Another reason for allowing spurious wake-ups is that to actually exploit having
+no spurious wake-ups, a program needs to take quite some care to establish the
+happens-before relations required to make just the return from <code>cnd_wait</code> mean
+something that can be used to infer something about the then current state of
+memory (for example, if the wake-up is supposed to also mean that some state has
+been initialized).</p>
+<p>Specifically, the program must make sure that it actually calls <code>cnd_signal</code> (or
+<code>cnd_broadcast</code>) after <code>cnd_wait</code> has started to block; this can be ensured by
+calling <code>cnd_signal</code> from a critical section protected by the same mutex as
+supplied to the respective <code>cnd_wait</code>, and checking the ordering of the
+<code>cnd_wait</code> and <code>cnd_signal</code> critical sections in some way (e.g., through access
+to variables protected by the same mutex, or by not letting the signaling thread
+enter the <code>cnd_signal</code> critical section before the <code>cnd_wait</code> critical section).
+Second, <code>cnd_wait</code> is not specified to synchronize with <code>cnd_signal</code>, so either
+<code>cnd_signal</code> must be in such a critical section (ie, there is a second reason
+for that), or the signaler and the waiter must establish a happens-before
+relation through other means such as atomics.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Change this sentence from the specification of <code>cnd_wait</code> (7.26.3.6p2):</p>
+<blockquote>
+<p>The cnd_wait function atomically unlocks the mutex pointed to by mtx and
+endeavors to block until the condition variable pointed to by cond is signaled
+by a call to cnd_signal or to cnd_broadcast.</p>
+</blockquote>
+<p>to this:</p>
+<blockquote>
+<p>The cnd_wait function atomically unlocks the mutex pointed to by mtx and
+endeavors to block until the condition variable pointed to by cond is signaled
+by a call to cnd_signal or to cnd_broadcast, or until it is unblocked due to a
+spurious, unspecified reason.</p>
+</blockquote>
+<p>Likewise for <code>cnd_timedwait</code>.</p>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Oct 2015 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The committee agrees with the authors’ interpretation and accepts their
+Suggested Technical Corrigendum with one minor edit. The word “spurious” is felt
+to be implied by the use of the verb “endeavors” and is struck.</p>
+</blockquote>
+<p>Apr 2016 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The committee decided to change “endeavors to block” to “blocks”, and that
+change is made in the Proposed Technical Corrigendum below.</p>
+</blockquote>
+<h3>Proposed Technical Corrigendum</h3>
+<p>In §7.26.3.5p2 change</p>
+<blockquote>
+<p>The <code>cnd_timedwait</code> function atomically unlocks the mutex pointed to by <code>mtx</code>
+and endeavors to block until the condition variable pointed to by <code>cond</code> is
+signaled by a call to <code>cnd_signal</code> or to <code>cnd_broadcast</code>, or until after the
+<code>TIME_UTC</code>-based calendar time pointed to by <code>ts</code>.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>The <code>cnd_timedwait</code> function atomically unlocks the mutex pointed to by <code>mtx</code>
+and blocks until the condition variable pointed to by <code>cond</code> is signaled by a
+call to <code>cnd_signal</code> or to <code>cnd_broadcast</code>, or until after the <code>TIME_UTC</code>-based
+calendar time pointed to by <code>ts</code>, or until it is unblocked due to an unspecified
+reason.</p>
+</blockquote>
+<p>In §7.26.3.6p2 change</p>
+<blockquote>
+<p>The <code>cnd_wait</code> function atomically unlocks the mutex pointed to by <code>mtx</code> and
+endeavors to block until the condition variable pointed to by <code>cond</code> is signaled
+by a call to <code>cnd_signal</code> or to <code>cnd_broadcast</code>.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>The <code>cnd_wait</code> function atomically unlocks the mutex pointed to by <code>mtx</code> and
+blocks until the condition variable pointed to by <code>cond</code> is signaled by a call
+to <code>cnd_signal</code> or to <code>cnd_broadcast</code>, or until it is unblocked due to an
+unspecified reason.</p>
+</blockquote>
+
+</body>
+</html>

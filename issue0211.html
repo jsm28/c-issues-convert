@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0211: Accuracy of decimal string to/from &quot;binary&quot; (non-decimal) floating-point conversions</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0211: Accuracy of decimal string to/from "binary" (non-decimal) floating-point conversions</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: NCITS J11, Fred Tydeman (US)<br />
+Date: 1999-10-20<br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C99 TC2<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_211.htm">dr_211.htm</a></p>
+<h3>Summary</h3>
+<p>What is the accuracy of decimal string to/from "binary" (non-decimal)
+floating-point conversions?</p>
+<p>What is the accuracy of hexadecimal string to/from "decimal" (non-power-of-2)
+floating-point conversions?</p>
+<p>In the following, the phrase "decimal to binary" shall cover any pair of bases
+that are not both a power of the same number. It also shall cover both the
+string to internal floating-point and internal floating-point to string
+conversions.</p>
+<p>There are two basic cases to consider at run-time:</p>
+<ul>
+<li>decimal string to internal binary (<code>scanf</code> family, <code>strtod</code> family)</li>
+<li>internal binary to decimal string (<code>printf</code> family)</li>
+</ul>
+<p>For each of those basic cases, there are two generic sub-cases: base 10 to base
+2 and base 2 to base 10.</p>
+<p><strong>Background</strong><br />
+7.19.6.1 The <code>fprintf</code> function:</p>
+<blockquote>
+<p>Paragraph 8 on "<code>f,F</code>" and "<code>e,E</code>" conversion specifiers says: The value is
+rounded to the appropriate number of digits.</p>
+<p>Does that mean round to nearest, round by truncating, round by add 0.5 and
+truncate, round as per the current rounding direction, or something else? Must
+the rounding used for <code>f,F</code> match the rounding used for <code>e,E</code>? Since there is no
+explicit allowance for multiple values (as there is in 6.4.4.2 Floating
+constants), must the value produced be as if the infinitely precise value were
+rounded (and the rounding produce an error less than or equal to 0.5 units in
+the last place (ulp) for nearest and less than 1.0 ulp otherwise)?</p>
+<p>For round to nearest, IEEE-754 (IEC-60559) requires that the maximum error be
+0.5 ulp for a large subset of its values and 0.97 ulp for all values. For the
+other roundings, the maximum error allowed by IEEE-754 is 1.47 ulp. The fourth
+committee draft (1999-09-30) of ISO/IEC 10967-2 (LIA-2) appears to require the
+maximum error be in the range 0.5 to 0.75 ulp. These bounds appear to apply to
+both directions of conversions.</p>
+</blockquote>
+<p>7.19.6.2 The <code>fscanf</code> function:</p>
+<blockquote>
+<p>Paragraph 10 discusses conversion. Paragraph 12 on "<code>a,e,f,g</code>" conversion
+specifiers discusses format. Neither discuss accuracy of the decimal to binary
+conversion, e.g., it is not specified.</p>
+<p>What is the accuracy of floating-point string to internal representation
+conversions? Is it the same as translation time? Is it the same as <code>strtod</code>? Is
+it undefined behavior if the value is not exactly representable? Is it round to
+nearest? Is it affected by the current rounding mode, e.g., correctly rounded?</p>
+</blockquote>
+<p>7.20.1.3 The <code>strtod</code> ... functions:</p>
+<blockquote>
+<p>What is the required accuracy of <code>strtod</code> family functions? It appears to be
+either not specified or the same as 6.4.4.2. It appears to depend upon what
+paragraph 4 "interpreted as a floating constant according to the rules of
+6.4.4.2" means.</p>
+</blockquote>
+<h3>Suggested Changes</h3>
+<p>Changes to 7.19.6.1 The <code>fprintf</code> function:</p>
+<p>Add near paragraph 11 before Recommended practice:</p>
+<blockquote>
+<p>The roundings used by %<code>f</code>, %<code>F</code>, %<code>e</code>, and %<code>E</code> shall be the same and shall
+have an accuracy of better than 1 ulp in round to nearest and better than 2 ulp
+in other roundings.</p>
+</blockquote>
+<p>Changes to 7.19.6.2 The <code>fscanf</code> function:</p>
+<p>In paragraph 12, "<code>a,e,f,g</code>" conversion specifier, add the sentence:</p>
+<blockquote>
+<p>The accuracy of this conversion shall be no worse than that of <code>strtold</code> for the
+same subject.</p>
+</blockquote>
+<p>Change 7.20.1.3 The <code>strtod</code> ... functions:</p>
+<p>In paragraph 4, change "rules of 6.4.4.2" to "rules of 6.4.4.2 (including
+accuracy requirements)"</p>
+<p>Add a third recommended practice paragraph:</p>
+<blockquote>
+<p>Conversions done by <code>strtod</code> family functions and <code>fscanf</code> family functions of
+the same valid floating-point subject string shall produce the same value.</p>
+</blockquote>
+<p>An alternative (not liked by this author) to all of the above is to add to
+5.2.4.2.2 Characteristics of floating types &lt;<code>float.h</code>&gt; in paragraph 4 before
+"and": ", binary-decimal conversions(footnote),".</p>
+<blockquote>
+<p>footnote: binary-decimal covers both string to internal representations and
+internal to string representations, and covers any pair of bases.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2001-09-18:</p>
+<h3>Committee Discussion</h3>
+<p>5.2.4.2.2 paragraph 4 (which covers the accuracy of <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, and math
+library functions) does not cover decimal &lt;--&gt; binary conversions. Therefore,
+the rest of 5.2.4.2.2 covers these conversions (F.P. characteristics must meet
+the minimum-maximum requirements for the &lt;<code>float.h</code>&gt; parameters (even though
+the exact model need not be followed)). That appears to require that the actual
+representation be able to express &gt;= <code>FLT</code>/<code>DBL</code>/<code>LDBL_DIG</code> digits precise to
+the last of those digits (for decimal to binary conversions) and &gt;=
+<code>DECIMAL_DIG</code> digits (for binary to decimal conversions).</p>
+<p>6.3.1.5 para. 1 implies that the different widths of F.P. types must have
+similar representations differing only in number of bits in exponent, mantissa,
+and padding.</p>
+<p>In 7.19.6.1 <code>f,F</code> format, the value is rounded to the appropriate number of
+digits, which indicates that the displayed value differs from the "numerical"
+value only with regard to that rounding. (Of course, <em>all</em> the <code>fprintf</code>
+conversions of numeric values to display form are on the assumption that what is
+displayed is the same value as the numeric value, but in human-comprehensible
+form and subject to specified rounding etc.)</p>
+<p>7.20.1.3 says that the numeric string is interpreted as a value according to the
+rules in 6.4.4.2 for floating constants.</p>
+<p>Details of rounding are not specified, although certain modes are described in
+5.2.4.2.2.</p>
+<p>The latitude allowed for inexactness by the standard applies only to precision
+of representation and to rounding mode.</p>
+<hr />
+<p>Comment from WG14 on 2001-09-18:</p>
+<h3>Technical Corrigendum</h3>
+<p>Change 5.2.4.2.2 paragraph #4 to:</p>
+<blockquote>
+<p>The accuracy of the floating-point operations ( <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>) and of the
+library functions in &lt;<code>math.h</code>&gt; and &lt;<code>complex.h</code>&gt; that return floating-point
+results is implementation defined, as is the accuracy of the conversion between
+floating-point internal representations and string representations performed by
+the libray routine in &lt;<code>stdio.h</code>&gt;, &lt;<code>stdlib.h</code>&gt; and &lt;<code>wchar.h</code>&gt;. The
+implementation may state that the accuracy is unknown.</p>
+</blockquote>
+
+</body>
+</html>

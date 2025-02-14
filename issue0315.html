@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0315: Implementation-defined bit-field types</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0315: Implementation-defined bit-field types</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Joseph Myers &lt;joseph@codesourcery.com&gt;, UK C Panel<br />
+Date: 2005-03-04<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1103.htm">ISO/IEC WG14 N1103</a><br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C11<br />
+Cross-references: <a href="issue0335.html">0335</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_315.htm">dr_315.htm</a></p>
+<h3>Summary</h3>
+<p>C99 6.7.2#2 lists the valid combinations of type specifiers. 6.7.2#5 says:</p>
+<blockquote>
+<p>[#5] Each of the comma-separated sets designates the same type, except that
+for bit-fields, it is implementation-defined whether the specifier <code>int</code>
+designates the same type as <code>signed int</code> or the same type as <code>unsigned int</code>.</p>
+</blockquote>
+<p>6.7.2.1#4 says:</p>
+<blockquote>
+<p>[#4] A bit-field shall have a type that is a qualified or unqualified version
+of <code>_Bool</code>, <code>signed int</code>, <code>unsigned int</code>, or some other implementation-defined
+type.</p>
+</blockquote>
+<p>Some problems arise with use of an "other implementation-defined type", a new
+addition in C99.</p>
+<p>1. Suppose an implementation supports bit-fields of types <code>char</code>, <code>short</code>,
+<code>long</code> and <code>long long</code>. Bit-fields of type <code>int</code> may be unsigned on that
+implementation. Must bit-fields of type <code>char</code> nevertheless have the same
+signedness as ordinary objects of type <code>char</code>, and similarly for those of types
+<code>short</code> (or <code>short int</code>), <code>long</code> (or <code>long int</code>), <code>long long</code> (or <code>long long int</code>)? The practice in C++ is that all these are implementation-defined
+(except that C++ does not include <code>long long</code>); it seems an oversight in the
+addition of implementation-defined bit-field types in C99 not to make such
+provision for <code>char</code>, <code>short</code>, <code>long</code> and <code>long long</code> bit-fields as is made for
+<code>int</code> bit-fields. (It might still be appropriate to ensure, for example, that
+<code>short</code> and <code>short int</code> have the same signedness as bit-field types, although
+that might be unsigned and so differ from the signedness of <code>signed short</code> and
+<code>signed short int</code>.) Footnote 104, reiterating that <code>int</code> as a bit-field type
+may be signed or unsigned, would also need amendment.</p>
+<p>2. Suppose an implementation has 32-bit <code>int</code> (with no padding bits) and
+permits <code>unsigned long long</code> as an implementation-defined bit-field type.
+Consider the code:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">  </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">unsigned</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">long</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">long</span><span style="color: #bbbbbb"> </span>a<span style="color: #bbbbbb"> </span><span style="color: #666666">:</span><span style="color: #bbbbbb"> </span><span style="color: #666666">37</span>,<span style="color: #bbbbbb"> </span>b<span style="color: #bbbbbb"> </span><span style="color: #666666">:</span><span style="color: #bbbbbb"> </span><span style="color: #666666">37</span>;<span style="color: #bbbbbb"> </span>}<span style="color: #bbbbbb"> </span>x;
+<span style="color: #bbbbbb">  </span><span style="color: #3D7B7B; font-style: italic">// ...</span>
+<span style="color: #bbbbbb">  </span><span style="color: #008000; font-weight: bold">sizeof</span>(x.a<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span>x.b);
+</pre></div>
+
+<p><code>x.a</code> and <code>x.b</code> have 37-bit unsigned integer types, by 6.7.2.1#9. Such types
+have an integer conversion rank greater than that of <code>int</code>, so are unchanged by
+the integer promotions. (That all the bit-field types have integer conversion
+ranks, and may need to be documented by implementations as extended integer
+types, is a consequence of the standard that may not be intended and may be
+surprising to some, but it is a logical consequence of the text of the
+standard.) Whether or not <code>x.a</code> and <code>x.b</code> have the same 37-bit type, <code>(x.a + x.b)</code> also has a 37-bit unsigned integer type. However, <code>(x.a + x.b)</code> does not
+designate a bit-field member, so it does not violate the constraints on
+<code>sizeof</code>. But what should <code>sizeof(x.a + x.b)</code> evaluate to, when <code>(x.a + x.b)</code>
+has such a bit-field type which does not occupy an integer number of bytes? Must
+an implementation define representations occupying an integer number of bytes
+(with some padding bits) for all such types, although such representations would
+have no use other than to define the result of <code>sizeof</code>?</p>
+<p>Changing the promotion rules for bit-fields wider than int to avoid such
+expressions of bit-field type would create an odd inconsistency in the type
+system about which types are promoted, although it would be consistent with
+C++ where bit-fields have narrow representation but are considered to have the
+declared type rather than a special narrow type and would allow implementations
+to support bit-fields wider than <code>int</code> without needing special support for
+arithmetic on such types (alternatively, it could be argued that if an
+implementor wishes to support bit-fields wider than <code>int</code> it is up to them to
+implement arithmetic on all bit-field types wider than <code>int</code> as a consequence of
+their decision); changing the C definition of bit-field types to follow the
+C++ one would be more radical and probably not suitable for a TC. (C++ then
+has a special rule so that <code>unsigned int</code> bit-fields promote to <code>int</code> if
+narrower than <code>int</code>.) The alternative is to be more explicit about the nature of
+bit-field types and to define when an expression has such a type, and to make
+the constraint on <code>sizeof</code> apply to expressions with such types and not just to
+bit-fields themselves.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<hr />
+<p>Comment from WG14 on 2007-10-10:</p>
+<h3>Committee Discussion (for history only)</h3>
+<h4>Fall 2005 discussion</h4>
+<p>This defect report has been move back to open, to liaison with C++ -
+2005-09-28</p>
+<p>The Committee decision was to withdraw the answers to 2 and 3, see 6.3.1.1;p2.</p>
+<p><strong>Question 1:</strong> Must bit-fields of type <code>char</code> nevertheless have the same
+signedness as ordinary objects of type <code>char</code>, and similarly for those of types
+<code>short</code> (or <code>short int</code>), <code>long</code> (or <code>long int</code>), <code>long long</code> (or <code>long long int</code>)?</p>
+<blockquote>
+<p>This is unspecified in the Standard - No.</p>
+</blockquote>
+<p><strong>Question 2:</strong> But what should <code>sizeof(int)</code> evaluate to, when <code>(x.a + x.b)</code>
+has such a bit-field type which does not occupy an integer number of bytes?</p>
+<blockquote>
+<p>It must be something larger than <code>int</code>.</p>
+</blockquote>
+<p><strong>Question 3:</strong> Must an implementation define representations occupying an
+integer number of bytes (with some padding bits) for all such types, although
+such representations would have no use other than to define the result of
+sizeof?</p>
+<blockquote>
+<p>Yes.</p>
+</blockquote>
+<h4>Spring 2006 discussion</h4>
+<p>Consider this relevant citation:</p>
+<p>6.3.1.1 <strong>Boolean, characters, and integers</strong></p>
+<p>2 The following may be used in an expression wherever an <code>int</code> or <code>unsigned int</code>
+may be used:</p>
+<p>— An object or expression with an integer type whose integer conversion rank is
+less than or equal to the rank of int and unsigned int.</p>
+<p>— A bit-field of type <code>_Bool</code>, <code>int</code>, <code>signed int</code>, or <code>unsigned int</code>.</p>
+<p>If an int can represent all values of the original type, the value is converted
+to an <code>int</code>; otherwise, it is converted to an <code>unsigned int</code>. These are called
+the integer promotions.<sup>48)</sup> All other types are unchanged by the
+integer promotions. 48) The integer promotions are applied only: as part of the
+usual arithmetic conversions, to certain argument expressions, to the operands
+of the unary <code>+</code>, <code>-</code>, and <code>~</code> operators, and to both operands of the shift
+operators, as specified by their respective subclauses.</p>
+<p>This citation supports the committee's view that the type of a bit-field does
+not include the width; if <code>int:7</code> were a type that is different from <code>int</code>, then
+these rules would not apply to any bit-field type, an obviously incorrect
+conclusion.</p>
+<p><strong>Question 1:</strong> Must bit-fields of type char nevertheless have the same
+signedness as ordinary objects of type <code>char</code>, and similarly for those of types
+<code>short</code> (or <code>short int</code>), <code>long</code> (or <code>long int</code>), <code>long long</code> (or <code>long long int</code>)?</p>
+<blockquote>
+<p>These are all determined by the implementation-defined behavior specified in
+6.7.2.1#4.</p>
+</blockquote>
+<p><strong>Question 2:</strong> But what should <code>sizeof(x.a + x.b)</code> evaluate to, when <code>(x.a + x.b)</code> has such a bit-field type which does not occupy an integer number of
+bytes?</p>
+<blockquote>
+<p>In the example presented above, the type is <code>unsigned long long</code>, and it does
+occupy an integral number of bytes. The expression evaluates to <code>sizeof(unsigned long long)</code>.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Note:</td>
+<td align="left">This DR was marked to move into <em>Review</em> status after the Spring 2006 meeting. However, the document voted on at the Spring 2006 meeting had no <strong>Proposed</strong> text only <strong>Discussion</strong> text. The Editor decided to leave the DR as <em>Open</em> and allow the Committee to decide on the <strong>Proposed</strong> text for this DR at the Fall 2006 meeting.</td>
+</tr>
+</tbody>
+</table>
+<h4>Fall 2006 discussion</h4>
+<p><strong>Question 1:</strong> Must bit-fields of type <code>char</code> nevertheless have the same
+signedness as ordinary objects of the <code>char</code>, and similarly for those of types
+<code>short</code> (or <code>short int</code>), <code>long</code> (or <code>long int</code>), <code>long long</code> (or <code>long long int</code>)?</p>
+<p>these would all be implementation-defined, determined by the
+implementation-defined behavior specified in 6.7.2.1#4.</p>
+<p><strong>Question 2:</strong> But what should <code>sizeof(x.a + x.b)</code> evaluate to, when <code>(x.a + x.b)</code>has such a bit-field type which does not occupy an integer number of bytes?</p>
+<p>In example presented above, this would be implementation-defined, determined by
+the implementation-defined behavior specified in 6.7.2.1#4.</p>
+<h3>Proposed Technical Corrigendum</h3>
+<p>Last sentence of paragraph 2 of 6.3.1.1, add the words <em>as restricted by the
+width, for a bit-field</em> as follows:</p>
+<blockquote>
+<p>If an <code>int</code> can represent all values of the original type (as restricted by the
+width, for a bit-field), the type is converted to an <code>int</code>;</p>
+</blockquote>
+
+</body>
+</html>

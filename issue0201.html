@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0201: Integer types longer than long</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0201: Integer types longer than <code>long</code></h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Clive Feather (UK)<br />
+Date: 1999-07-06<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n883.htm">ISO/IEC WG14 N883</a><br />
+Submitted against: C99<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_201.htm">dr_201.htm</a></p>
+<h3>Summary</h3>
+<p>Require that <code>size_t</code> be no wider than <code>unsigned long</code> and <code>ptrdiff_t</code> be no
+wider than <code>signed long</code>.</p>
+<p><strong>Urgency</strong><br />
+If this change is not made now, there will be a window of opportunity - of at
+least two years - when implementations can make <code>size_t</code> be wider than
+<code>unsigned long</code>. By the time any future Amendment is ready it will be
+impractical to re-impose the restriction. If the change <strong>is</strong> made now, it can
+always be relaxed if it becomes necessary.</p>
+<p><strong>Rationale</strong><br />
+Various types in the Standard are defined as integer types. Two of these
+<code>size_t</code> and <code>ptrdiff_t</code> - are frequently manipulated and on many
+implementations need to hold values of the same order as <code>[un]signed long</code>. In
+C89 there are various programming idioms that involve these types but also need
+a standard integer type. For example:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>printf<span style="color: #bbbbbb"> </span>(<span style="color: #BA2121">&quot;%lu&quot;</span>,<span style="color: #bbbbbb"> </span>(<span style="color: #B00040">unsigned</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">long</span>)<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>X);
+</pre></div>
+
+</blockquote>
+<p>or:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>P1,<span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>P2;
+...<span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">/* make P1 and P2 point into the same array*/</span>
+malloc<span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">int</span>)<span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span>labs<span style="color: #bbbbbb"> </span>(P1<span style="color: #bbbbbb"> </span><span style="color: #666666">-</span><span style="color: #bbbbbb"> </span>P2));
+</pre></div>
+
+</blockquote>
+<p>If these types are allowed to become wider than long, these idioms will stop
+working. More importantly, this might not happen when the code is compiled but
+rather when large values first get used by a previously working program. This is
+clearly a Quiet Change.</p>
+<p>There do not appear to be any implementations which would be affected by this
+proposal, and it eliminates the vast majority of potential problems with these
+two types. While there are other types that theoretically meet these criteria,
+such as <code>sig_atomic_t</code>, in practice they are unlikely to be larger than long and
+no action is needed. There are also types in POSIX and other standards, such as
+<code>off_t</code>, which are similarly affected, but they are outside the scope of C9X;
+the recommended practice section would assist them.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Append a new paragraph to 7.18.3:</p>
+<blockquote>
+<p>The value of <code>SIZE_MAX</code> shall be no greater than that of <code>ULONG_MAX</code>. The
+absolute values of <code>PTRDIFF_MIN</code> and <code>PTRDIFF_MAX</code> shall be no greater than
+those of <code>LONG_MIN</code> and<code>LONG_MAX</code> respectively.</p>
+</blockquote>
+<p>or change the first part of 7.17 paragraph 2 to:</p>
+<blockquote>
+<p>[#2] The types are <code>ptrdiff_t</code> which is the signed integer type of the result
+of subtracting two pointers (the width of <code>ptrdiff_t</code> shall be no greater than
+that of <code>signed long</code>);</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">size_t</span>
+</pre></div>
+
+</blockquote>
+<p>which is the unsigned integer type of the result of the <code>sizeof</code> operator (the
+width of <code>size_t</code> shall be no greater than that of unsigned long); or both (the
+changes are equivalent in effect).</p>
+</blockquote>
+<p>Possibly also add the following paragraph somewhere (perhaps in 6.3.1.3):</p>
+<blockquote>
+<p>Recommended practice</p>
+<p>Implementations should provide a mode which will warn of conversions (including
+those involving an explicit cast) where:</p>
+<ul>
+<li>the original value was taken from an object whose type is derived from a typedef defined in a header provided by the implementation;</li>
+<li>that type has a conversion rank greater than that of signed long;</li>
+<li>the result type has a conversion rank equal to that of signed long.</li>
+</ul>
+<p>(Headers provided by the implementation are not limited to those defined by this
+Standard, but explicitly excludes &lt;<code>stdint.h&gt;</code>.)</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2007-09-06:</p>
+<h3>Committee Response</h3>
+<p>There is no consensus to make this change or any change along this line.</p>
+
+</body>
+</html>

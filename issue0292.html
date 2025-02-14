@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0292: Use of the word variable</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0292: Use of the word <em>variable</em></h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Convener, J. Benito (convener)<br />
+Date: 2003-09-18<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1025.htm">ISO/IEC WG14 N1025</a><br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C99 TC3<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_292.htm">dr_292.htm</a></p>
+<h3>Summary</h3>
+<p>Change the use of <em>variable</em> to <em>object</em> in those instances where the Standard
+is referring to an object.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p><em>EXAMPLE 2, 5.1.2.3</em>, change</p>
+<blockquote>
+<p>the value of each variable to size <code>int</code></p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>the value of each object to size <code>int</code></p>
+</blockquote>
+<p><em>Footnote 41</em>, change</p>
+<blockquote>
+<p>Thus, an automatic variable can be initialized to a trap representation without
+causing undefined behavior, but the value of the variable cannot be used until a
+proper value is stored in it.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>Thus, an automatic object can be initialized to a trap representation without
+causing undefined behavior, but the value of the object cannot be used until a
+proper value is stored in it.</p>
+</blockquote>
+<p><em>EXAMPLE 1, 6.5.16.1</em>, change</p>
+<blockquote>
+<p>Therefore, for full portability, the variable <code>c</code> should be declared as <code>int</code>.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>Therefore, for full portability, the object <code>c</code> should be declared as <code>int</code>.</p>
+</blockquote>
+<p><em>EXAMPLE, 6.7.5.1</em>, change</p>
+<blockquote>
+<p>EXAMPLE The following pair of declarations demonstrates the difference between a
+“variable pointer to a constant value” and a “constant pointer to a variable
+value”.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>EXAMPLE The following pair of declarations demonstrates the difference between a
+“object pointer to a constant value” and a “constant pointer to a object value”.</p>
+</blockquote>
+<p><em>6.8.5.3 #1</em>, change</p>
+<blockquote>
+<p>If <em>clause-1</em> is a declaration, the scope of any variables it declares is the
+remainder of the declaration and the entire loop, including the other two
+expressions;</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>If <em>clause-1</em> is a declaration, the scope of any objects it declares is the
+remainder of the declaration and the entire loop, including the other two
+expressions;</p>
+</blockquote>
+<p><em>Footnote 134</em>, change</p>
+<blockquote>
+<p>Thus, <em>clause-1</em> specifies initialization for the loop, possibly declaring one
+or more variables for use in the loop;</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>Thus, <em>clause-1</em> specifies initialization for the loop, possibly declaring one
+or more objects for use in the loop;</p>
+</blockquote>
+<p><em>Footnote 165</em>, change</p>
+<blockquote>
+<p>For a variable <code>z</code> of complex type, <code>z == creal(z) + cimag(z)*I</code>.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>For the object <code>z</code> of complex type, <code>z == creal(z) + cimag(z)*I</code>.</p>
+</blockquote>
+<p><em>Footnote 166</em>, change</p>
+<blockquote>
+<p>For a variable <code>z</code> of complex type, <code>z == creal(z) + cimag(z)*I</code>.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>For the object <code>z</code> of complex type, <code>z == creal(z) + cimag(z)*I</code>.</p>
+</blockquote>
+<p><em>7.6, #1,</em> change</p>
+<blockquote>
+<p>A floating-point status flag is a system variable whose value is set (but never
+cleared) when a floating-point exception is raised,</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>A floating-point status flag is a system object whose value is set (but never
+cleared) when a floating-point exception is raised,</p>
+</blockquote>
+<p><em>7.6, #1,</em> change</p>
+<blockquote>
+<p>A floating-point control mode is a system variable whose value may be set by the
+user to affect the subsequent behavior of floating-point arithmetic.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>A floating-point control mode is a system object whose value may be set by the
+user to affect the subsequent behavior of floating-point arithmetic.</p>
+</blockquote>
+<p><em>F.8.1,</em> change</p>
+<blockquote>
+<p>The flags and modes in the floating-point environment may be regarded as global
+variables;</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>The flags and modes in the floating-point environment may be regarded as global
+objects;</p>
+</blockquote>
+<p><em>Footnote 308</em>, change</p>
+<blockquote>
+<p>Use of <code>float_t</code> and <code>double_t</code> variables increases the likelihood of
+translation-time computation.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>Use of <code>float_t</code> and <code>double_t</code> objects increases the likelihood of
+translation-time computation.</p>
+</blockquote>
+<p>Annex I #2, bullet 11, change</p>
+<blockquote>
+<p>or an enumeration variable that has the same type</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>or an enumeration object that has the same type</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2006-04-04:</p>
+<h3>Committee Discussion</h3>
+<ol>
+<li>No change needed.</li>
+<li>Sec 6.2.6.1 variable is common usage - no change needed.</li>
+<li>No change needed.</li>
+<li>No change needed.</li>
+<li>Change <em>variable</em> to <em>identifiers</em>.</li>
+<li>No change needed.</li>
+<li>No change needed.</li>
+<li>No change needed.</li>
+<li>No change needed.</li>
+<li>No change needed.</li>
+<li>No change needed.</li>
+<li>No change needed.</li>
+<li>No change needed.</li>
+<li>Agree with suggested change.</li>
+</ol>
+<h3>Technical Corrigendum</h3>
+<p><em>6.8.5.3 #1</em>, change</p>
+<blockquote>
+<p>If clause-1 is a declaration, the scope of any variables it declares is the
+remainder of the declaration and the entire loop, including the other two
+expressions;</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>If clause-1 is a declaration, the scope of any identifiers it declares is the
+remainder of the declaration and the entire loop, including the other two
+expressions;</p>
+</blockquote>
+<p>Annex I #2, bullet 11, change</p>
+<blockquote>
+<p>or an enumeration variable that has the same type</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>or an enumeration object that has the same type</p>
+</blockquote>
+
+</body>
+</html>

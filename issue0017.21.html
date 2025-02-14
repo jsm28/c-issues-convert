@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0017.21: Is translation phase 4 defined unambiguously?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0017.21: Is translation phase 4 defined unambiguously?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Derek M. Jones, WG14<br />
+Date: 1992-12-10<br />
+Reference document: X3J11/90-056<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_017.html">dr_017.html</a></p>
+<p>Self references in translation phase 4</p>
+<p>The following queries arise because of the imprecise way in which phase 4
+interacts with itself. While processing a token within phase 4 it is sometime
+necessary to get the following tokens from the input, i.e. reading the arguments
+to a function-like macro. But when getting these tokens it is not clear how many
+phases operate on them:</p>
+<ol>
+<li>Do the following tokens only get processed by phases 1-3?</li>
+<li>Do the following tokens get processed by phases 1-4?</li>
+</ol>
+<p>When an identifier declared as a function-like macro is encountered, how hard
+should an implementation try to locate the opening/closing parentheses?</p>
+<p>In:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#define lparen (</span>
+<span style="color: #bbbbbb"> </span><span style="color: #9C6500">#define f_m(a) a</span>
+<span style="color: #bbbbbb"> </span>f_m<span style="color: #bbbbbb"> </span>lparen<span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;abc&quot;</span><span style="color: #bbbbbb"> </span>)
+</pre></div>
+
+<p>should the object-like macro be expanded while searching for an opening
+parenthesis? Or does the lack of a readily available left parenthesis indicate
+that the macro should not be expanded?</p>
+<p>Subclause 6.8.3, on page 89, lines 34-35 says “... followed by a <code>(</code> as the next
+preprocessing token ...” This sentence does not help because in translation
+phase 4 all tokens are preprocessing tokens. They don't get converted to “real”
+tokens until phase 7. Thus it cannot be argued that <code>lparen</code> is not correct in
+this situation, because its result is a preprocessing token.</p>
+<p>In:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#define i(x) 3</span>
+<span style="color: #bbbbbb"> </span><span style="color: #9C6500">#define a i(yz</span>
+<span style="color: #bbbbbb"> </span><span style="color: #9C6500">#define b )</span>
+<span style="color: #bbbbbb"> </span>a<span style="color: #bbbbbb"> </span>b<span style="color: #bbbbbb"> </span>)<span style="color: #bbbbbb">   </span><span style="color: #3D7B7B; font-style: italic">/* goes to 3) or 3 */</span>
+</pre></div>
+
+<p>does <code>b</code> get expanded to complete the call <code>i(yz,</code> or does the parenthesis to
+its right get used?</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>Concerning the first example:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#define lparen (</span>
+<span style="color: #bbbbbb"> </span><span style="color: #9C6500">#define f_m(a) a</span>
+<span style="color: #bbbbbb"> </span>f_m<span style="color: #bbbbbb"> </span>lparen<span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;abc&quot;</span><span style="color: #bbbbbb"> </span>)
+</pre></div>
+
+<p>According to subclause 5.1.1.2 <strong>Translation phases</strong>, page 5, lines 25-39, the
+translation phases 1-3 do not cause macros to be expanded. Phase 4 does expand.
+To apply subclause 6.8.3 <strong>Macro replacement</strong> page 89, lines 34-35 to the
+example: Since <code>lparen</code> is not <code>(</code> in “<code>f_m lparen "abc" )</code>,” this construct is
+not recognized as a function-like macro invocation. Therefore the example
+expands to</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>f_m(<span style="color: #BA2121">&quot;abc&quot;</span>)
+</pre></div>
+
+<p>The same principle applies to the second example:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#define i(x) 3</span>
+<span style="color: #bbbbbb"> </span><span style="color: #9C6500">#define a i(yz</span>
+<span style="color: #bbbbbb"> </span><span style="color: #9C6500">#define b )</span>
+<span style="color: #bbbbbb"> </span>a<span style="color: #bbbbbb"> </span>b<span style="color: #bbbbbb"> </span>)<span style="color: #bbbbbb">       </span><span style="color: #3D7B7B; font-style: italic">/* expands via the following stages: */</span>
+
+<span style="color: #bbbbbb"> </span>i(yz<span style="color: #bbbbbb"> </span>b<span style="color: #bbbbbb"> </span>)<span style="color: #bbbbbb">    </span><span style="color: #3D7B7B; font-style: italic">/* ) delimits the argument list before b is expanded  */</span>
+<span style="color: #bbbbbb"> </span>i([yz<span style="color: #bbbbbb"> </span>)<span style="color: #bbbbbb"> </span>])
+<span style="color: #bbbbbb"> </span><span style="color: #666666">3</span>
+</pre></div>
+
+<p>This is how we interpret subclause 6.8.3, page 89, lines 36-38: The sequence of
+preprocessing tokens is terminated by the right-parenthesis preprocessing token.</p>
+
+</body>
+</html>

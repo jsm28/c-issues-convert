@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0038: What happens when macro replacement creates adjacent tokens that can be taken as a single token?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0038: What happens when macro replacement creates adjacent tokens that can be taken as a single token?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Kuo-Wei Lee, WG14<br />
+Date: 1992-12-10<br />
+Reference document: X3J11/91-046<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_038.html">dr_038.html</a></p>
+<p>Under subclause 6.8.3.1 <strong>Argument substitution</strong>, the C Standard states on page
+90, lines 12-14:</p>
+<blockquote>
+<p>Before being substituted, each argument's preprocessing tokens are completely
+macro replaced as if they form the rest of the translation unit; no other
+preprocessing tokens are available.</p>
+</blockquote>
+<p>It is not clear to us what should happen if, after the first replacement, the
+argument is a valid preprocessing number. Consider the following example:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#define X 0x000E</span>
+<span style="color: #bbbbbb"> </span><span style="color: #9C6500">#define Y 0x0100</span>
+<span style="color: #bbbbbb"> </span><span style="color: #9C6500">#define FOO(a) a</span>
+<span style="color: #bbbbbb"> </span>FOO(X<span style="color: #666666">+</span>Y)
+</pre></div>
+
+<p>After <code>X</code> is replaced, <code>FOO(X+Y)</code> becomes <code>FOO(0x000E+Y)</code>. At this point, should
+the macro replacement continue and expand <code>Y</code> to be 0x0100 with the final result
+being <code>FOO(0x000E+0x0100)</code>; or should the expansion stop since <code>0x000E+Y</code> is a
+syntactically valid preprocessing number?</p>
+<p>In other words, should <code>FOO(X+Y)</code> be expanded into <code>FOO(0x000E+0x0100)</code>, or
+should it be <code>FOO(0x000E+Y)</code>?</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>Subclause 5.1.1.2, page 5, lines 32-39 indicate that translation must proceed as
+if all creation of preprocessing tokens completes before any macro expansion
+begins. These are translation phases 3 and 4:</p>
+<blockquote>
+<p>3. The source file is decomposed into preprocessing tokens and sequences of
+white-space characters (including comments)...</p>
+<p>4. Preprocessing directives are executed and macro invocations are expanded.</p>
+</blockquote>
+<p>Therefore, if <code>X+Y</code> were expanded to <code>0x000E+Y</code>, a new preprocessing number
+would not be created. The macro expansion proceeds as follows.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>FOO(X<span style="color: #666666">+</span>Y)<span style="color: #bbbbbb"> </span>(<span style="color: #666666">6</span><span style="color: #bbbbbb"> </span>tokens)<span style="color: #bbbbbb"> </span><span style="color: #666666">--</span>
+<span style="color: #bbbbbb"> </span>FOO(<span style="color: #666666">0x000E+0x0100</span>)<span style="color: #bbbbbb"> </span>(<span style="color: #666666">6</span><span style="color: #bbbbbb"> </span>tokens)<span style="color: #bbbbbb"> </span><span style="color: #666666">--</span>
+<span style="color: #bbbbbb"> </span><span style="color: #666666">0x000E+0x0100</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">3</span><span style="color: #bbbbbb"> </span>tokens)
+</pre></div>
+
+<p>This sequence is required by subclause 6.8.3.1, page 90, lines 10-14:</p>
+<blockquote>
+<p>A parameter in the replacement list ... is replaced by the corresponding
+argument after all macros contained therein have been expanded. Before being
+substituted, each argument's preprocessing tokens are completely macro replaced
+as if they formed the rest of the translation unit...</p>
+</blockquote>
+
+</body>
+</html>

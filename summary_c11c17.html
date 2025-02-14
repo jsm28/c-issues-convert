@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C11 / C17: issue summary</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h1>C11 / C17: issue summary</h1>
+<p><strong>This issue summary has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">Issue</th>
+<th align="left">Summary</th>
+<th align="left">Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><a href="issue0400.html">0400</a></td>
+<td align="left"><code>realloc</code> with size zero problems</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0401.html">0401</a></td>
+<td align="left">"happens before" cannot be cyclic</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0402.html">0402</a></td>
+<td align="left">memory model coherence is not aligned with C++11</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0403.html">0403</a></td>
+<td align="left"><code>malloc()</code> and <code>free()</code> in the memory model</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0404.html">0404</a></td>
+<td align="left">joke fragment remains in a footnote</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0405.html">0405</a></td>
+<td align="left">mutex specification not aligned with C++11 on total order</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0406.html">0406</a></td>
+<td align="left">Visible sequences of side effects are redundant</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0407.html">0407</a></td>
+<td align="left">SC fences do not restrict modification order enough</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0408.html">0408</a></td>
+<td align="left">Should locks provide intra-thread synchronization</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0409.html">0409</a></td>
+<td align="left"><code>f(inf)</code> is <code>inf</code> being a range error</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0410.html">0410</a></td>
+<td align="left"><code>ilogb</code> inconsistent with <code>lrint</code>, <code>lround</code></td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0411.html">0411</a></td>
+<td align="left">Predefined macro values</td>
+<td align="left">Fixed in C11 TC1</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0412.html">0412</a></td>
+<td align="left"><code>#elif</code></td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0413.html">0413</a></td>
+<td align="left">initialization</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0414.html">0414</a></td>
+<td align="left">Typos in 6.27 Threads <code>&lt;threads.h&gt;</code></td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0415.html">0415</a></td>
+<td align="left">Missing divide by zero entry in Annex J.2</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0416.html">0416</a></td>
+<td align="left"><code>tss_t</code> destruction unspecified</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0417.html">0417</a></td>
+<td align="left">Annex J not updated with necessary <code>aligned_alloc</code> entries</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0418.html">0418</a></td>
+<td align="left"><code>fmod(0.,Nan)</code> and <code>fmod(Nan, infinity)</code></td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0419.html">0419</a></td>
+<td align="left">What the heck is a "generic function"?</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0420.html">0420</a></td>
+<td align="left">syntax error in specification of for-statement</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0421.html">0421</a></td>
+<td align="left">initialization of <code>atomic_flag</code></td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0422.html">0422</a></td>
+<td align="left">initialization of atomic types</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0423.html">0423</a></td>
+<td align="left">Defect Report relative to n1570: underspecification for qualified rvalues</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0424.html">0424</a></td>
+<td align="left">underspecification of <code>tss_t</code></td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0425.html">0425</a></td>
+<td align="left">no specification for the access to variables with temporary lifetime</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0426.html">0426</a></td>
+<td align="left">G.5.1: <code>-yv</code> and <code>-x/v</code> are ambiguous</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0427.html">0427</a></td>
+<td align="left">Function Parameter and Return Value Assignments</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0428.html">0428</a></td>
+<td align="left">runtime-constraint issue with sprintf family of routines in Annex K</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0429.html">0429</a></td>
+<td align="left">Should <code>gets_s</code> discard next input line when <code>(s == NULL)</code> ?</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0430.html">0430</a></td>
+<td align="left"><code>getenv_s</code>, <code>maxsize</code> should be allowed to be zero</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0431.html">0431</a></td>
+<td align="left"><code>atomic_compare_exchange</code>: What does it mean to say two structs compare equal?</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0432.html">0432</a></td>
+<td align="left">Is <code>0.0</code> required to be a representable value?</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0433.html">0433</a></td>
+<td align="left">Issue with constraints for wide character function arguments involving <strong>RSIZE_MAX</strong></td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0434.html">0434</a></td>
+<td align="left">Missing constraint w.r.t. Atomic</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0435.html">0435</a></td>
+<td align="left">Missing constraint w.r.t. Imaginary</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0436.html">0436</a></td>
+<td align="left">Request for interpretation of C11 6.8.5#6</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0437.html">0437</a></td>
+<td align="left"><code>clock</code> overflow problems</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0438.html">0438</a></td>
+<td align="left"><code>ungetc / ungetwc</code> and file position after discarding push back problems</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0439.html">0439</a></td>
+<td align="left">Issues with the definition of “full expression”</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0440.html">0440</a></td>
+<td align="left">Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 1</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0441.html">0441</a></td>
+<td align="left">Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 2</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0442.html">0442</a></td>
+<td align="left">Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 3</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0443.html">0443</a></td>
+<td align="left">Floating-point issues in C11 from PDTS 18661-1 UK review, Issue 4</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0444.html">0444</a></td>
+<td align="left">Issues with alignment in C11, part 1</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0445.html">0445</a></td>
+<td align="left">Issues with alignment in C11, part 2</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0446.html">0446</a></td>
+<td align="left">Use byte instead of character for memcmp, memcpy</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0447.html">0447</a></td>
+<td align="left">Boolean from complex</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0448.html">0448</a></td>
+<td align="left">What are the semantics of a <strong># non-directive</strong>?</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0449.html">0449</a></td>
+<td align="left">What is the value of TSS_DTOR_ITERATIONS for implementations with no maximum?</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0450.html">0450</a></td>
+<td align="left"><code>tmpnam_s</code> clears <code>s[0]</code> when <code>maxsize &gt; RSIZE_MAX</code></td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0451.html">0451</a></td>
+<td align="left">Instability of uninitialized automatic variables</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0452.html">0452</a></td>
+<td align="left">Effective Type in Loop Invariant</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0453.html">0453</a></td>
+<td align="left">Atomic flag type and operations</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0454.html">0454</a></td>
+<td align="left">ATOMIC_VAR_INIT (issues 3 and 4)</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0455.html">0455</a></td>
+<td align="left">ATOMIC_VAR_INIT issue 5</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0456.html">0456</a></td>
+<td align="left">Compile time definition of <code>UINT</code><em><code>N</code></em><code>_C(</code><em><code>value</code></em><code>)</code></td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0457.html">0457</a></td>
+<td align="left">The <code>ctime_s</code> function in Annex K defined incorrectly</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0458.html">0458</a></td>
+<td align="left">ATOMIC_XXX_LOCK_FREE macros not constant expressions</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0459.html">0459</a></td>
+<td align="left">atomic_load missing const qualifier</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0460.html">0460</a></td>
+<td align="left"><code>aligned_alloc</code> underspecified</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0461.html">0461</a></td>
+<td align="left">problems with references to objects in signal handlers</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0462.html">0462</a></td>
+<td align="left">Clarifying objects accessed in signal handlers</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0463.html">0463</a></td>
+<td align="left">Left-shifting into the sign bit</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0464.html">0464</a></td>
+<td align="left">Clarifying the Behavior of the <code>#line</code> Directive</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0465.html">0465</a></td>
+<td align="left">Fixing an inconsistency in <code>atomic_is_lock_free</code></td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0466.html">0466</a></td>
+<td align="left">scope of a <code>for</code> loop control declaration</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0467.html">0467</a></td>
+<td align="left">maximum representable finite description vs math</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0468.html">0468</a></td>
+<td align="left"><code>strncpy_s</code> clobbers buffer past <code>null</code></td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0469.html">0469</a></td>
+<td align="left">lock ownership vs. thread termination</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0470.html">0470</a></td>
+<td align="left">mtx_trylock should be allowed to fail spuriously</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0471.html">0471</a></td>
+<td align="left">Complex math functions cacosh and ctanh</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0472.html">0472</a></td>
+<td align="left">Introduction to complex arithmetic in 7.3.1p3 wrong due to CMPLX</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0473.html">0473</a></td>
+<td align="left">"A range error occurs if x is too large." is misleading</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0474.html">0474</a></td>
+<td align="left">NOTE 1 Clarification for <code>atomic_compare_exchange</code></td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0475.html">0475</a></td>
+<td align="left">Misleading Atomic library references to atomic types</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0476.html">0476</a></td>
+<td align="left">volatile semantics for lvalues</td>
+<td align="left">Fixed in C23</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0477.html">0477</a></td>
+<td align="left"><code>nan</code> should take a string argument</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0478.html">0478</a></td>
+<td align="left">valid uses of the <code>main</code> function</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0479.html">0479</a></td>
+<td align="left">unclear specification of <code>mtx_trylock</code> on non-recursive muteness</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0480.html">0480</a></td>
+<td align="left"><code>cnd_wait</code> and <code>cnd_timewait</code> should allow spurious wake-ups</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0481.html">0481</a></td>
+<td align="left">Controlling expression of <code>_Generic</code> primary expression</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0482.html">0482</a></td>
+<td align="left">Macro invocation split over many files</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0483.html">0483</a></td>
+<td align="left"><code>__LINE__</code> and <code>__FILE__</code> in macro replacement list</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0484.html">0484</a></td>
+<td align="left">invalid characters in <code>strcoll()</code></td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0485.html">0485</a></td>
+<td align="left">Problem with the specification of <code>ATOMIC_VAR_INIT</code></td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0486.html">0486</a></td>
+<td align="left">Inconsistent specification for arithmetic on atomic objects</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0487.html">0487</a></td>
+<td align="left"><code>timespec</code> vs. <code>tm</code></td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0488.html">0488</a></td>
+<td align="left"><code>c16rtomb()</code> on wide characters encoded as multiple <code>char16_t</code></td>
+<td align="left">Fixed in C23</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0489.html">0489</a></td>
+<td align="left">Integer Constant Expression</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0490.html">0490</a></td>
+<td align="left">Unwritten Assumptions About if-then</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0491.html">0491</a></td>
+<td align="left">Concern with Keywords that Match Reserved Identifiers</td>
+<td align="left">Fixed in C17</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0492.html">0492</a></td>
+<td align="left">Named Child struct-union with no Member</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0493.html">0493</a></td>
+<td align="left">Mutex Initialization Underspecified</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0494.html">0494</a></td>
+<td align="left">Part 1: Alignment specifier expression evaluation</td>
+<td align="left">Fixed in C23</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0495.html">0495</a></td>
+<td align="left">Part 2: Atomic specifier expression evaluation</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0496.html">0496</a></td>
+<td align="left"><code>offsetof</code> questions</td>
+<td align="left">Fixed in C23</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0497.html">0497</a></td>
+<td align="left">"white-space character" defined in two places</td>
+<td align="left">Fixed in C23</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0498.html">0498</a></td>
+<td align="left"><code>mblen</code>, <code>mbtowc</code>, and <code>wctomb</code> thread-safety</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0499.html">0499</a></td>
+<td align="left">Anonymous structure in union behavior</td>
+<td align="left">Fixed in C23</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0500.html">0500</a></td>
+<td align="left">Ambiguous specification for <strong>FLT_EVAL_METHOD</strong></td>
+<td align="left">Fixed in C23</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0501.html">0501</a></td>
+<td align="left">Can <strong>DECIMAL_DIG</strong> be larger than necessary?</td>
+<td align="left">Fixed in C23</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0502.html">0502</a></td>
+<td align="left">Flexible array member in an anonymous struct</td>
+<td align="left">Closed</td>
+</tr>
+<tr>
+<td align="left"><a href="issue0503.html">0503</a></td>
+<td align="left">Hexadecimal floating-point and <code>strtod</code></td>
+<td align="left">Closed</td>
+</tr>
+</tbody>
+</table>
+
+</body>
+</html>

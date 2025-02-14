@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0450: tmpnam_s clears s[0] when maxsize &gt; RSIZE_MAX</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0450: <code>tmpnam_s</code> clears <code>s[0]</code> when <code>maxsize &gt; RSIZE_MAX</code></h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG 14, Martin Sebor<br />
+Date: 2013-09-02<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1752.htm">N1752</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<blockquote>
+<p>The majority of bounds checking functions are specified to set the first element
+of the destination buffer, <code>s[0]</code>, to the NUL character when a constraint
+violation occurs and the <code>s</code> pointer is non-null and the size of the buffer is
+greater than zero and less than or equal to <code>SIZE_MAX</code>.</p>
+<p>However, the <code>tmpnam_s</code> function sets <code>s[0]</code> to NUL even when <code>maxsize</code> is
+greater than <code>RSIZE_MAX</code>, making its behavior on constraint violation
+inconsistent with the rest.</p>
+</blockquote>
+<h4>Suggested Technical Corrigendum:</h4>
+<blockquote>
+<p>Change paragraph 8 in the Returns section of tmpnam_s to read:</p>
+<ul>
+<li>If no suitable string can be generated, or if there is a runtime-constraint violation and <code>s</code> is not null and <code>maxsize</code> is greater than zero and not greater than <code>RSIZE_MAX</code>, the <code>tmpnam_s</code> function sets <code>s[0]</code> to the null character and returns a nonzero value.</li>
+</ul>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Oct 2013 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The committee agrees with the issue, and requests that the suggested technical
+corrigendum be broken into more parts for both clarity and consistency.</p>
+</blockquote>
+<p>Apr 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The committee did not receive revised words and will again solicit them from the
+author.</p>
+</blockquote>
+<p>Oct 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The paper <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1873.htm">N1873</a>
+was provided and discussed, and after several revisions the following proposal
+were approved.</p>
+</blockquote>
+<h3>Proposed Technical Corrigendum</h3>
+<p>Change K.3.5.1.2 paragraph 8 (the Returns section of <code>tmpnam_s</code>) from:</p>
+<blockquote>
+<p>If no suitable string can be generated, or if there is a runtime-constraint
+violation, the <code>tmpnam_s</code> function writes a null character to <code>s[0]</code> (only if
+<code>s</code> is not null and <code>maxsize</code> is greater than zero) and returns a nonzero value.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>If no suitable string can be generated, or if there is a runtime-constraint
+violation, the <code>tmpnam_s</code> function:</p>
+<ul>
+<li>if <code>s</code> is not null and <code>maxsize</code> is both greater than zero and not greater than <code>RSIZE_MAX</code>, writes a null character to <code>s[0]</code></li>
+<li>returns a nonzero value.</li>
+</ul>
+</blockquote>
+
+</body>
+</html>

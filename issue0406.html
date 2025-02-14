@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0406: Visible sequences of side effects are redundant</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0406: Visible sequences of side effects are redundant</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG 14, Batty<br />
+Date: 2011-10-14<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1584.pdf">N1584</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Cross-references: <a href="issue0402.html">0402</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>It has been mathematically proved that a simplification can be made to the
+memory model as it is specified in the final draft of the C++11 standard.
+Essentially, the restriction defining <em>visible sequence of side effects</em> (vsse)
+is redundant and can be removed with no ill effects. The main motivation for
+doing this is that the current restriction is misleading. 5.1.2.4p22 defines
+vsse's:</p>
+<blockquote>
+<p>The visible sequence of side effects on an atomic object <code>M</code>, with respect to a
+value computation <code>B</code> of <code>M</code>, is a maximal contiguous sub-sequence of side
+effects in the modification order of <code>M</code>, where the first side effect is visible
+with respect to <code>B</code>, and for every subsequent side effect, it is not the case
+that <code>B</code> happens before it. The value of an atomic object <code>M</code>, as determined by
+evaluation B, shall be the value stored by some operation in the visible
+sequence of <code>M</code> with respect to <code>B</code>.</p>
+</blockquote>
+<p>The wording of this paragraph makes it seem as if the vsse identifies the writes
+that an atomic read is allowed to read from, but this is not the case. There can
+be writes in the vsse that cannot be read due to the coherence requirements (to
+be included in C, 1.10p15 through 1.10p18 in C++
+<a href="https://www.open-std.org/jtc1/sc22/wg21/prot/14882fdis/n3291.pdf">N3291</a>).
+Consequently this is even more confusing than it at first appears.</p>
+<p>Also propose changing 5.1.2.4p22 to the following:</p>
+<blockquote>
+<p>The value of an atomic object <code>M</code>, as determined by evaluation <code>B</code>, shall be the
+value stored by some side effect <code>A</code> that modifies <code>M</code>, where <code>B</code> does not
+happen before <code>A</code>.</p>
+</blockquote>
+<p>With a note to remind the reader of the coherence requirements:</p>
+<blockquote>
+<p><em>NOTE:</em> The set of side effects that a given evaluation might take its value
+from is also restricted by the rest of the rules described here, and in
+particular, by the coherence requirements below</p>
+</blockquote>
+<p>If the committee is concerned about allowing a differing text from C++11, then
+a note could be added to assure the reader:</p>
+<blockquote>
+<p><em>NOTE:</em> Although the rules for multi-threaded executions differ here from those
+of C++11, the executions they allow are precisely the same. Visible sequences
+of side effects are a redundant restriction.</p>
+</blockquote>
+<h3>Suggested Technical Corrigendum</h3>
+<p>See above.</p>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Oct 2011 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<ul>
+<li>The changes seem reasonable, there is a concern about having C and C++ differ.</li>
+<li>Should be contingent on <a href="issue0402.html">Defect 402</a>.</li>
+</ul>
+</blockquote>
+<p>Feb 2012 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<ul>
+<li>There was no work done on this defect between meetings.</li>
+<li>Seems more complicated than thought at the last meeting.</li>
+<li>It is not clear if WG 21 has considered these changes.</li>
+<li>Clark Nelson took an action item to liaise with WG 21.</li>
+</ul>
+</blockquote>
+<p>Oct 2012 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>This item has become WG21 Core issue 1466</p>
+</blockquote>
+<p>Apr 2013 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>There has been no discussion or action from WG21.</p>
+</blockquote>
+<p>Oct 2013 meeting</p>
+<h3>Committee Discussion</h3>
+<p>These changes have been proposed for the C++ working draft:</p>
+<ul>
+<li>For C 5.1.2.4 paragraph 2, the following C++ discussion is relevant:
+<blockquote>
+<p>Change 1.10 paragraph 14 as follows:</p>
+<blockquote>
+<p><del>The <em>visible sequence of side effects</em> on an atomic object <em>M</em>, with
+respect to a value computation <em>B</em> of <em>M</em>, is a maximal contiguous sub-sequence
+of side effects in the modification order of M, where the first side effect is
+visible with respect to <em>B</em>, and for every side effect, it is not the case that
+<em>B</em> happens before it.</del> The value of an atomic object <em>M</em>, as determined by
+evaluation <em>B</em>, shall be the value stored by some <del>operation in the visible
+sequence of <em>M</em> with respect to <em>B</em></del> <ins>side effect <em>A</em> that modifies
+<em>M</em>, where <em>B</em> does not happen before <em>A</em></ins>. [<em>Note:</em> <del>It can be shown
+that the visible sequence of side effects of a value computation is unique
+given</del> <ins>The set of side effects that a given evaluation might take its
+value from is also restricted by the rest of the rules described here, and in
+particular, by</ins> the coherence requirements below. —<em>end note</em>]</p>
+</blockquote>
+</blockquote>
+</li>
+<li>For C 5.1.2.4 paragraph 24, the following C++ discussion is relevant:
+<blockquote>
+<p>1.10p20 should be changed as follows:</p>
+<blockquote>
+<p>[ <em>Note:</em> The <del>visible sequence of side effects</del> <ins>value observed
+by a load of an atomic</ins> depends on the "happens before" relation, which
+depends on the values observed by loads of atomics<del>, which we are
+restricting here</del>. The intended reading is that there must exist an
+association of atomic loads with modifications they observe that, together with
+suitably chosen modification orders and the "happens before" relation derived as
+described above, satisfy the resulting constraints as imposed here. —<em>end note</em>
+]</p>
+</blockquote>
+</blockquote>
+</li>
+<li>For C 5.1.2.4 paragraph 27, the following C++ discussion is relevant:
+<blockquote>
+<p>I think 1.10p22 should be changed as follows:</p>
+<blockquote>
+<p>[ <em>Note:</em> Compiler transformations that introduce assignments to a potentially
+shared memory location that would not be modified by the abstract machine are
+generally precluded by this standard, since such an assignment might overwrite
+another assignment by a different thread in cases in which an abstract machine
+execution would not have encountered a data race. This includes implementations
+of data member assignment that overwrite adjacent members in separate memory
+locations. Reordering of atomic loads in cases in which the atomics in question
+may alias is also generally precluded, since this may violate the <del>"visible
+sequence"</del><ins>coherence</ins> rules. —<em>end note</em> ]</p>
+</blockquote>
+</blockquote>
+</li>
+<li>For C 7.17.3 paragraph 6, the following C++ discussion is relevant:
+<blockquote>
+<p>I believe the 29.3p3 wording should change as follows:</p>
+<ul>
+<li>the result of the last modification <em>A</em> of <em>M</em> that precedes <em>B</em> in <em>S</em>, if it exists, or</li>
+<li>if <em>A</em> exists, the result of some modification of <em>M</em> <del>in the visible sequence of side effects with respect to <em>B</em></del> that is not <code>memory_order_seq_cst</code> and that does not happen before <em>A</em>, or</li>
+<li>if <em>A</em> does not exist, the result of some modification of <em>M</em> <del>in the visible sequence of side effects with respect to <em>B</em></del> that is not <code>memory_order_seq_cst</code>.</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<p>Apr 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>WG21 liaison has been asked to ascertain status of this w.r.t. C++14 and to
+provide a suggested TC.</p>
+</blockquote>
+<p>Oct 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>A paper <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1856.htm">N1856</a> was
+provided that discusses the drift between the two Standards and a first cut at
+some possible wording changes, as follows. It was not, however, discussed, but
+does provide insight as to the necessary direction for a resolution to this DR.</p>
+</blockquote>
+<ol>
+<li>
+<p>Change 5.1.2.4 paragraph 22 as follows:</p>
+<blockquote>
+<p><del>The <em>visible sequence of side effects</em> on an atomic object <em>M</em>, with
+respect to a value computation <em>B</em> of <em>M</em>, is a maximal contiguous sub-sequence
+of side effects in the modification order of M, where the first side effect is
+visible with respect to <em>B</em>, and for every side effect, it is not the case that
+<em>B</em> happens before it.</del> The value of an atomic object <em>M</em>, as determined by
+evaluation <em>B</em>, shall be the value stored by some <del>operation in the visible
+sequence of <em>M</em> with respect to <em>B</em></del> <ins>side effect <em>A</em> that modifies
+<em>M</em>, where <em>B</em> does not happen before <em>A</em></ins>. [<em>Note:</em> <del>It can be shown
+that the visible sequence of side effects of a value computation is unique
+given</del> <ins>The set of side effects that a given evaluation might take its
+value from is also restricted by the rest of the rules described here, and in
+particular, by</ins> the coherence requirements below. —<em>end note</em>]</p>
+</blockquote>
+</li>
+<li>
+<p>Change 5.1.2.4 paragraph 24 as follows:</p>
+<blockquote>
+<p>[<em>Note:</em> The <del>visible sequence of side effects</del> <ins>value observed by
+a load of an atomic</ins> depends on the “happens before” relation, which
+depends on the values observed by loads of atomics<del>, which we are
+restricting here</del>. The intended reading is that there must exist an
+association of atomic loads with modifications they observe that, together with
+suitably chosen modification orders and the “happens before” relation derived as
+described above, satisfy the resulting constraints as imposed here. —<em>end
+note</em>]</p>
+</blockquote>
+</li>
+<li>
+<p>Change 5.1.2.4 paragraph 27 as follows:</p>
+<blockquote>
+<p>[<em>Note:</em> Compiler transformations that introduce assignments to a potentially
+shared memory location that would not be modified by the abstract machine are
+generally precluded by this standard, since such an assignment might overwrite
+another assignment by a different thread in cases in which an abstract machine
+execution would not have encountered a data race. This includes implementations
+of data member assignment that overwrite adjacent members in separate memory
+locations. Reordering of atomic loads in cases in which the atomics in question
+may alias is also generally precluded, since this may violate the <del>“visible
+sequence”</del> <ins>coherence</ins> rules. —<em>end note</em>]</p>
+</blockquote>
+</li>
+<li>
+<p>Change 7.17.3 paragraph 6 as follows:</p>
+<blockquote>
+<p>There shall be a single total order <em>S</em> on all <code>memory_order_seq_cst</code>
+operations, consistent with the “happens before” order and modification orders
+for all affected locations, such that each <code>memory_order_seq_cst</code> operation <em>B</em>
+that loads a value from an atomic object <em>M</em> observes one of the following
+values:</p>
+<ul>
+<li>the result of the last modification <em>A</em> of <em>M</em> that precedes <em>B</em> in <em>S</em>, if it
+exists, or</li>
+<li>if <em>A</em> exists, the result of some modification of <em>M</em> <del>in the visible
+sequence of side effects with respect to <em>B</em></del> that is not
+<code>memory_order_seq_cst</code> and that does not happen before <em>A</em>, or</li>
+<li>if <em>A</em> does not exist, the result of some modification of <em>M</em> <del>in the
+visible sequence of side effects with respect to <em>B</em></del> that is not
+<code>memory_order_seq_cst</code>.</li>
+</ul>
+<p>[<em>Note:</em>...</p>
+</blockquote>
+</li>
+</ol>
+<p>Apr 2015 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The provided words were accepted, with slight editorial changes, as the Proposed
+Technical Corrigendum.</p>
+</blockquote>
+<h3>Proposed Technical Corrigendum</h3>
+<p>Change 5.1.2.4 paragraph 22 from:</p>
+<blockquote>
+<p>The <em>visible sequence of side effects</em> on an atomic object <em>M</em>, with respect to
+a value computation <em>B</em> of <em>M</em>, is a maximal contiguous sub-sequence of side
+effects in the modification order of M, where the first side effect is visible
+with respect to <em>B</em>, and for every subsequent side effect, it is not the case
+that <em>B</em> happens before it. The value of an atomic object <em>M</em>, as determined by
+evaluation <em>B</em>, shall be the value stored by some operation in the visible
+sequence of <em>M</em> with respect to <em>B</em>.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>The value of an atomic object <em>M</em>, as determined by evaluation <em>B</em>, shall be the
+value stored by some side effect <em>A</em> that modifies <em>M</em>, where <em>B</em> does not
+happen before <em>A</em>.</p>
+</blockquote>
+<p>After 5.1.2.4 paragraph 22 add:</p>
+<blockquote>
+<p><strong>Note</strong> The set of side effects from which a given evaluation might take its
+value is also restricted by the rest of the rules described here, and in
+particular, by the coherence requirements below.</p>
+</blockquote>
+<p>Change 5.1.2.4 paragraph 24 from:</p>
+<blockquote>
+<p><strong>Note 11:</strong> The visible sequence of side effects depends on the “happens
+before” relation, which in turn depends on the values observed by loads of
+atomics, which we are restricting here. The intended reading is that there must
+exist an association of atomic loads with modifications they observe that,
+together with suitably chosen modification orders and the “happens before”
+relation derived as described above, satisfy the resulting constraints as
+imposed here.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p><strong>Note 11:</strong> The value observed by a load of an atomic depends on the “happens
+before” relation, which in turn depends on the values observed by loads of
+atomics. The intended reading is that there must exist an association of atomic
+loads with modifications they observe that, together with suitably chosen
+modification orders and the “happens before” relation derived as described
+above, satisfy the resulting constraints as imposed here.</p>
+</blockquote>
+<p>Change 5.1.2.4 paragraph 27 from:</p>
+<blockquote>
+<p><strong>Note 13:</strong> Compiler transformations that introduce assignments to a
+potentially shared memory location that would not be modified by the abstract
+machine are generally precluded by this standard, since such an assignment might
+overwrite another assignment by a different thread in cases in which an abstract
+machine execution would not have encountered a data race. This includes
+implementations of data member assignment that overwrite adjacent members in
+separate memory locations. Reordering of atomic loads in cases in which the
+atomics in question may alias is also generally precluded, since this may
+violate the “visible sequence” rules.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p><strong>Note 13:</strong> Compiler transformations that introduce assignments to a
+potentially shared memory location that would not be modified by the abstract
+machine are generally precluded by this standard, since such an assignment might
+overwrite another assignment by a different thread in cases in which an abstract
+machine execution would not have encountered a data race. This includes
+implementations of data member assignment that overwrite adjacent members in
+separate memory locations. Reordering of atomic loads in cases in which the
+atomics in question may alias is also generally precluded, since this may
+violate the coherence requirements.</p>
+</blockquote>
+<p>Change 7.17.3 paragraph 6 from:</p>
+<blockquote>
+<p>There shall be a single total order <em>S</em> on all <code>memory_order_seq_cst</code>
+operations, consistent with the “happens before” order and modification orders
+for all affected locations, such that each <code>memory_order_seq_cst</code> operation <em>B</em>
+that loads a value from an atomic object <em>M</em> observes one of the following
+values:</p>
+<ul>
+<li>the result of the last modification <em>A</em> of <em>M</em> that precedes <em>B</em> in <em>S</em>, if it
+exists, or</li>
+<li>if <em>A</em> exists, the result of some modification of <em>M</em> in the visible sequence of
+side effects with respect to <em>B</em> that is not <code>memory_order_seq_cst</code> and that
+does not happen before <em>A</em>, or</li>
+<li>if <em>A</em> does not exist, the result of some modification of <em>M</em> in the visible
+sequence of side effects with respect to <em>B</em> that is not <code>memory_order_seq_cst</code>.</li>
+</ul>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>There shall be a single total order <em>S</em> on all <code>memory_order_seq_cst</code>
+operations, consistent with the “happens before” order and modification orders
+for all affected locations, such that each <code>memory_order_seq_cst</code> operation <em>B</em>
+that loads a value from an atomic object <em>M</em> observes one of the following
+values:</p>
+<ul>
+<li>the result of the last modification <em>A</em> of <em>M</em> that precedes <em>B</em> in <em>S</em>, if it
+exists, or</li>
+<li>if <em>A</em> exists, the result of some modification of <em>M</em> that is not
+<code>memory_order_seq_cst</code> and that does not happen before <em>A</em>, or</li>
+<li>if <em>A</em> does not exist, the result of some modification of <em>M</em> that is not
+<code>memory_order_seq_cst</code>.</li>
+</ul>
+</blockquote>
+
+</body>
+</html>

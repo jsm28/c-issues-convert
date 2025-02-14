@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0318: (double)0.1f with FLT_EVAL_METHOD being 2</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0318: <code>(double)0.1f</code> with <code>FLT_EVAL_METHOD</code> being 2</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG 14, Fred Tydeman (USA)<br />
+Date: 2004-10-27<br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C99 TC3<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_318.htm">dr_318.htm</a></p>
+<h3>Summary</h3>
+<p>When <code>FLT_EVAL_METHOD</code> is 2, the 0.1f is represented to the precision of <code>long double</code>, while the type remains as <code>float</code>. Then, when the cast to <code>double</code> is
+done, contradictory requirements are specified by the standard. One part of the
+standard requires that when a float is promoted to a double, the value is
+unchanged. While another part of the standard requires that extra precision be
+removed by the cast conversion.</p>
+<h3>Details</h3>
+<p>5.2.4.2.2 Characteristics of floating types &lt;float.h&gt;; Paragraph 7 [after DR
+290]</p>
+<blockquote>
+<p>Except for assignment and cast (which remove all extra range and precision), the
+values of operations with floating operands and values subject to the usual
+arithmetic conversions and of floating constants are evaluated to a format whose
+range and precision may be greater than required by the type. The use of
+evaluation formats is characterized by the implementation-defined value of
+<code>FLT_EVAL_METHOD</code>:<sup>19)</sup></p>
+<p><strong>2</strong> evaluate all operations and constants to the range and precision of <code>long double</code> type.</p>
+</blockquote>
+<p>6.3.1.5 Real floating types; Paragraphs 1 and 2</p>
+<blockquote>
+<p>When a <code>float</code> is promoted to <code>double</code> or <code>long double</code>, or a <code>double</code> is
+promoted to <code>long double</code>, its value is unchanged.</p>
+<p>When a <code>double</code> is demoted to <code>float</code>, a <code>long double</code> is demoted to <code>double</code> or
+<code>float</code>, or a value being represented in greater precision and range than
+required by its semantic type (see 6.3.1.8) is explicitly converted to its
+semantic type, if the value being converted can be represented exactly in the
+new type, it is unchanged. If the value being converted is in the range of
+values that can be represented but cannot be represented exactly, the result is
+either the nearest higher or nearest lower representable value, chosen in an
+implementation-defined manner. If the value being converted is outside the range
+of values that can be represented, the behavior is undefined.</p>
+</blockquote>
+<p>6.3.1.8 Usual arithmetic conversions; Paragraph 2</p>
+<blockquote>
+<p>The values of floating operands and of the results of floating expressions may
+be represented in greater precision and range than that required by the type;
+the types are not changed thereby. <sup>52)</sup></p>
+<p>52) The cast and assignment operators are still required to perform their
+specified conversions as described in 6.3.1.4 and 6.3.1.5.</p>
+</blockquote>
+<p>6.5.4 Cast operators; Paragraph 4</p>
+<blockquote>
+<p>... A cast that specifies no conversion has no effect on the type or value of an
+expression. <sup>86)</sup></p>
+<p>86) If the value of the expression is represented with greater precision or
+range than required by the type named by the cast (6.3.1.8), then the cast
+specifies a conversion even if the type of the expression is the same as the
+named type.</p>
+</blockquote>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Add to 6.3.1.5, the end of paragraph 1: "(if the source value is represented in
+the precision and range of its type)".</p>
+<p>Change in 6.3.1.5, paragraph 2, "explicitly converted to its semantic type" to
+"explicitly converted (including to its own type)".</p>
+<p>Move the text of footnote 86 to normative text in 6.5.4.</p>
+<p>An alternative (not liked by the author) is to add a footnote to 6.3.1.5 along
+the lines of: To force a floating-point value to have no more precision than a
+given type requires two casts to that type, e.g., <code>(double)(double)0.1f</code>
+assuredly has no more precision than <code>(double)</code>. The rightmost cast changes the
+type, but not the representation, while the leftmost cast changes the
+representation (throws away any extra precision or range).</p>
+<hr />
+<p>Comment from WG14 on 2006-03-05:</p>
+<h3>Technical Corrigendum</h3>
+<p>Add to 6.3.1.5, the end of paragraph 1:</p>
+<blockquote>
+<p>"(if the source value is represented in the precision and range of its type)".</p>
+</blockquote>
+<p>Change in 6.3.1.5, paragraph 2,</p>
+<blockquote>
+<p>"explicitly converted to its semantic type" to "explicitly converted (including
+to its own type)".</p>
+</blockquote>
+<p>Move the text of footnote 86 to normative text in 6.5.4.</p>
+
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0460: aligned_alloc underspecified</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0460: <code>aligned_alloc</code> underspecified</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, <a href="mailto:msebor@gmail.com">Martin Sebor</a><br />
+Date: 2014-03-22<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1808.htm">N1808</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>The <code>aligned_alloc</code> function specifies the following constraints on its
+arguments, <code>alignment</code> and <code>size</code>:</p>
+<blockquote>
+<p>The value of <code>alignment</code> shall be a valid alignment supported by the
+implementation and the value of <code>size</code> shall be an integral multiple of
+alignment.</p>
+</blockquote>
+<p>Therefore, the behavior of the function is undefined when either constraint is
+violated.</p>
+<p>According to section 6.2.8, paragraph 1, the greatest alignment a conforming
+implementation is required to support (known as <em>fundamental alignment</em>) is
+<code>_Alignof(max_align_t)</code>. Furthermore, according to paragraph 2 of the same
+section, whether alignments greater than the fundamental alignment (known as
+<em>extended alignments</em>) are supported and in what contexts is
+implementation-defined.</p>
+<p>The standard specifies no mechanism by which programs could determine whether an
+extended alignment is supported by an implementation, or whether the
+<code>aligned_alloc</code> function is among the contexts where an extended alignment is
+supported.</p>
+<p>As a result, there is no way for strictly conforming programs to use the
+<code>aligned_alloc</code> function with an <code>alignment</code> argument greater than the result of
+<code>_Alignof(max_align_t)</code>. Since the <code>malloc</code> function returns objects that meet
+the same alignment requirement, this restriction makes <code>aligned_alloc</code> useless
+in portable programs.</p>
+<p>This restriction is unnecessary since it's possible, and in fact nearly trivial
+given access to the internal details of the memory allocator, to implement an
+efficient <code>aligned_function</code> that fails when its arguments don't meet the
+specified requirements.</p>
+<p>As a data point, the POSIX Advanced Realtime function
+<a href="http://pubs.opengroup.org/onlinepubs/9699919799/functions/posix_memalign.html"><code>posix_memalign</code></a>,
+as well as the historical BSD <code>memalign</code> function, are both required to return a
+null pointer when either of their arguments don't meet the specified
+requirements (in addition to setting <code>errno</code> to <code>EINVAL</code>.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>The proposed corrigendum below changes the standard to require <code>aligned_alloc</code>
+to fail by returning a null pointer when either of its constraints is violated.</p>
+<p>In section 7.22.3.1, modify paragraph 2 as indicated below:</p>
+<blockquote>
+<p>The <code>aligned_alloc</code> function allocates space for an object whose alignment is
+specified by <code>alignment</code>, whose size is specified by <code>size</code>, and whose value is
+indeterminate. <del>T</del><ins>If t</ins>he value of <code>alignment</code> <del>shall
+be</del> <ins>is not</ins> a valid alignment supported by the implementation
+<del>and</del><ins>or</ins> the value of <code>size</code> <del>shall be</del><ins>is
+not</ins> an integral multiple of <code>alignment</code> <ins>the function shall fail by
+returning a null pointer</ins>.</p>
+</blockquote>
+<p>In addition, in section <strong>J.2 Undefined behavior</strong>, remove the following bullet:</p>
+<blockquote>
+<p><del>— The alignment requested of the aligned_alloc function is not valid or
+not supported by the implementation, or the size requested is not an integral
+multiple of the alignment (7.22.3.1).</del></p>
+</blockquote>
+<p>If the proposal above isn't acceptable, then an alternative solution to consider
+that would allow <code>aligned_alloc</code> to be used even in strictly conforming programs
+is to add a new function to determine whether a given alignment is supported by
+an implementation. For example:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">_Bool</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">alignment_is_valid</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">size_t</span><span style="color: #bbbbbb"> </span>alignment);
+</pre></div>
+
+<p><strong>Returns</strong></p>
+<p>The <code>alignment_is_valid</code> function returns non-zero if the value specified by
+<code>alignment</code> is a valid alignment argument to the <code>aligned_alloc</code> function, and
+zero otherwise.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Apr 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The committee agrees that the first proposal in the suggested technical
+corrigendum should be adopted.</p>
+</blockquote>
+<p>Oct 2016 meeting</p>
+<h3>Committee Discussion</h3>
+<ul>
+<li>The paper <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2072.htm">N2072</a> was presented which made the point that non-integral multiples of <code>alignment</code> are useful for allocating on, say, page size boundaries.</li>
+<li>The behavior on a value of zero has been left to the implementation to either support or reject, and this flexibility must be preserved.</li>
+<li>After discussion, the Suggested Technical Corrigendum from <a href="https://www.open-std.org/jtc1/sc22/wg14/14473">(SC22WG14.14473) updated DR460 wording based on N2072</a> was adopted.</li>
+</ul>
+<h3>Proposed Technical Corrigendum</h3>
+<p>In section 7.22.3.1, change paragraph 2 from:</p>
+<blockquote>
+<p>The <code>aligned_alloc</code> function allocates space for an object whose alignment is
+specified by <code>alignment</code>, whose size is specified by <code>size</code>, and whose value is
+indeterminate. The value of <code>alignment</code> shall be a valid alignment supported by
+the implementation and the value of <code>size</code> shall be an integral multiple of
+<code>alignment</code>.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>The <code>aligned_alloc</code> function allocates space for an object whose alignment is
+specified by <code>alignment</code>, whose size is specified by <code>size</code>, and whose value is
+indeterminate. If the value of <code>alignment</code> is not a valid alignment supported by
+the implementation the function shall fail by returning a null pointer.</p>
+</blockquote>
+<p>In addition, in section <strong>J.2 Undefined behavior</strong>, remove the following bullet:</p>
+<blockquote>
+<p>— The alignment requested of the aligned_alloc function is not valid or not
+supported by the implementation, or the size requested is not an integral
+multiple of the alignment (7.22.3.1).</p>
+</blockquote>
+
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0074: Can the alignment of an object that is a member of a structure be different from the alignment of an object of the same type that is not a member of a structure?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0074: Can the alignment of an object that is a member of a structure be different from the alignment of an object of the same type that is not a member of a structure?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Clive Feather, WG14<br />
+Date: 1993-12-03<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_074.html">dr_074.html</a></p>
+<p>Item 11 - alignment and structure padding</p>
+<p>The existence of structure padding (subclause 6.5.2.1) can be detected by a
+strictly conforming program by use of the <code>sizeof</code> operator and the <code>offsetof</code>
+macro.</p>
+<p>a. If a structure has a field of type <code>t</code>, can the alignment requirements of the
+field be different from the alignment requirements of objects of the same type
+that are not members of structures?</p>
+<p>If the answer to (a) is “yes,” then where applicable the remaining questions
+should be assumed to have been asked for both objects within structures and
+objects outside structures.</p>
+<p>b. If an array has a component type of <code>t</code>, can the alignment requirements of
+the elements of the array be different from those of independent variables of
+type <code>t</code>?</p>
+<p>The alignment requirement of a type is that addresses of objects of that type
+must be multiples of some constant (subclause 3.1); for some type <code>t</code>, this is
+written <code>A(t)</code> in this Defect Report.</p>
+<p>c. For any type <code>t</code>, can the expression <code>sizeof (t) % A(t)</code> be non-zero (in
+other words, can <code>A(t)</code> be a value other than 1, <code>sizeof (t)</code>, or a factor of
+<code>sizeof (t)</code>)? It would appear not, because otherwise adjacent elements of an
+array of objects of type <code>t</code> would either not be correctly aligned, or else
+would not be contiguously allocated.</p>
+<p>d. Can <code>A(struct foo)</code> be greater than the least common multiple of <code>A(type_1)</code>,
+<code>A(type_2)</code>, ..., <code>A(type_n)</code>, where <code>type_1</code> to <code>type_n</code> are the types of the
+elements of <code>struct foo</code>? In particular, if a structure holds exactly one
+element, can <code>A(structure type)</code> be different from <code>A(element type)</code>? (In each
+case, if the answer to (a) is “yes,” <code>A(type)</code> should be interpreted
+appropriately.)</p>
+<p>e. If, at any point in a structure or union (obviously excluding the start),
+there is more than one size of padding that can satisfy all alignment
+requirements, can any size be used, or must the smallest (possibly zero) padding
+be used because that is all that is “necessary to achieve the appropriate
+alignment?”</p>
+<p>f. If a structure type has trailing padding to ensure that its use as an array
+element would be correctly aligned, must objects of that type which are not
+array elements also have the padding? If not, what is the effect of using
+<code>memcpy</code> to copy the value of one such object to another thus?</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">fred</span><span style="color: #bbbbbb"> </span>a,<span style="color: #bbbbbb"> </span>b;
+<span style="color: #bbbbbb">        </span><span style="color: #3D7B7B; font-style: italic">/* ... /*</span>
+<span style="color: #3D7B7B; font-style: italic">        memcpy(&amp;a, &amp;b, sizeof (struct fred));</span>
+</pre></div>
+
+<p>It appears from subclause 6.3.3.4 (“the size is determined from the type of the
+operand”) that <code>sizeof a</code> must equal <code>sizeof (struct fred)</code>. Is this correct?</p>
+<p>g. When an element of a structure is in turn a structure, can trailing padding
+of the inner structure be reused to hold other elements of the enclosing
+structure? For example, in:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">outer</span>
+<span style="color: #bbbbbb">        </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">inner</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">long</span><span style="color: #bbbbbb"> </span>a;<span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>b;<span style="color: #bbbbbb"> </span>}<span style="color: #bbbbbb"> </span>inner;
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>c;
+<span style="color: #bbbbbb">        </span>};
+</pre></div>
+
+<p>is it permitted for <code>offsetof (struct outer, c)</code> to be less than <code>sizeof (struct inner)</code>?</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>Subclause 6.1.2.5 says, “... pointers to qualified or unqualified versions of
+compatible types shall have the same representation and alignment requirements.”</p>
+<p>Subclause 6.5.2.1 says, “Each non-bit-field member of a structure or union
+object is aligned in an implementation-defined manner appropriate to its type.”
+And later, “There may therefore be unnamed padding within a structure object,
+... as necessary to achieve the appropriate alignment.”</p>
+<p>a) It is possible for an implementation to state generalized requirements to
+satisfy subclause 6.1.2.5. These requirements may be further strengthened using
+the implementation-defined behavior made available in subclause 6.5.2.1. Yes,
+the alignment requirements can be different.</p>
+<p>b) In several places the C Standard states that a single object may be treated
+as an array of one element. Nowhere does it give permission for array element
+types to have different alignment requirements from isolated object types.</p>
+<p>c) <code>sizeof (t)</code> must indeed be a multiple of <code>A(t)</code>.</p>
+<p>d) Yes. A structure object can have an alignment that is greater than the least
+common multiple of the alignments of its members.</p>
+<p>e) The phrase “necessary to achieve the appropriate alignment” is not considered
+to mean the use of the minimum padding possible. The Committee does not see any
+advantage to changing this phrase.</p>
+<p>f) Yes. See answer to question (b). <code>sizeof (struct fred)</code> must equal <code>sizeof a</code>.</p>
+<p>g) Such sharing of storage by objects would cause the requirements of subclause
+6.3 to be violated and is not allowed.</p>
+
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0486: Inconsistent specification for arithmetic on atomic objects</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0486: Inconsistent specification for arithmetic on atomic objects</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Jens Gustedt<br />
+Date: 2015-08-07<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1955.htm">N1955</a><br />
+Submitted against: C11 / C17<br />
+Status: Closed<br />
+Cross-references: <a href="issue0495.html">0495</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>Whereas its intent is clear, the text in the C standard that concerns atomics
+has several consistency problems. There are contradictions and the standard
+vocabulary is not always applied correctly.</p>
+<p><strong>Problem discussion</strong></p>
+<p><em>— Memory order of operators —</em></p>
+<p>The following sections on arithmetic operators, all specify that if they are
+applied to an atomic object as an operand of <strong>any</strong> arithmetic base type, the
+memory order sematic is <code>memory_order_seq_cst</code>:</p>
+<ul>
+<li>6.2.6.1 Loads and stores of objects with atomic types are done with <code>memory_order_seq_cst</code> semantics.</li>
+<li>6.5.2.4 (postfix <code>++</code> and <code>--</code>)</li>
+<li>6.5.16.2 Compound assignment. No constraints formulated concerning traps for integer types. In contrast to that, no floating exceptions for floating types are allowed. Also, this defines atomic operations for <strong>all</strong> arithmetic operands, including some that don't have library calls (<code>*=</code>, <code>/=</code>, <code>%=</code>, <code>&lt;&lt;=</code>, <code>&gt;&gt;=</code>)</li>
+</ul>
+<p>No such mention is made for</p>
+<ul>
+<li>6.5.3.1 (prefix <code>++</code> and <code>--</code>), although it explicitly states that these operators are defined to be equivalent to <code>+= 1</code> and <code>-= 1</code>, respectively.</li>
+<li>6.5.16.1 Simple assignment, although the paragraph about store says that such a store should be <code>memory_order_seq_cst</code>.</li>
+</ul>
+<p><em>— Integer representations and erroneous operations —</em></p>
+<p>Concerning the generic library calls, they state in 7.17.7.5</p>
+<blockquote>
+<p>For signed integer types, arithmetic is defined to use two’s complement
+representation with silent wrap-around on overflow; there are no undefined
+results.</p>
+</blockquote>
+<p>and</p>
+<blockquote>
+<p>For address types, the result may be an undefined address, but the operations
+otherwise have no undefined behavior.</p>
+</blockquote>
+<p>Can the sign representation depend on the operation that we apply to an object?<br />
+Are these operations supposed to be consistent between operator and function
+notation?<br />
+What is an <em>address type</em>?<br />
+What is "<em>no undefined behavior</em>"? How is the behavior then defined, when we are
+not told about it?</p>
+<p><em>— Operators versus generic functions —</em></p>
+<p>Then a <strong>Note</strong> (7.17.7.5 p 5) states</p>
+<blockquote>
+<p>The operation of the atomic_fetch and modify generic functions are nearly
+equivalent to the operation of the corresponding <code>op=</code> compound assignment
+operators. The only differences are that the <strong>compound assignment operators are
+not guaranteed to operate atomically</strong>, ...</p>
+</blockquote>
+<p>Although there are obviously also operators that act on atomic objects, 5.1.2.4
+p 4 gives the completely false impression that atomic operations would only be a
+matter of the C library:</p>
+<blockquote>
+<p>The library defines a number of atomic operations (7.17) ...</p>
+</blockquote>
+<p><em>— Pointer types are missing for <code>atomic_fetch_OP</code> —</em></p>
+<p>In the general introduction (7.17.1 p4) there is explicitly an extension of the
+notations to atomic pointer types:</p>
+<blockquote>
+<p>For atomic pointer types, <code>M</code> is <code>ptrdiff_t</code>.</p>
+</blockquote>
+<p>Whereas the only section where this notation is relevant (7.17.7.5
+<code>atomic_fetch_OP</code>) is restricted to <em>atomic integer types</em>, but then later talks
+about the result of such operations on <em>address types</em>.</p>
+<p><em>— Vocabulary —</em></p>
+<p>For the vocabulary, there is a mixture of the use of the verb combinations
+between <em>load/store</em>, <em>read/write</em> and <em>fetch/assign</em>. What is the difference?
+Is there any?</p>
+<p><em>— Over all —</em></p>
+<p>This is</p>
+<ul>
+<li>contradictory (the Note is not normative, but still wrong),</li>
+<li>confusing (<code>=</code> is handled different from <code>op=</code>, operators are not mentioned where they should),</li>
+<li>weird (the sign representation is described as the result of an operation, not as the value representation of a data type; what is "no undefined behavior" of a address operation?)</li>
+<li>inconsistent (operators may result in any sign representation ?, and can trap, generic functions are safe)</li>
+<li>incomplete (the set of operators and generic functions are distinct)</li>
+</ul>
+<p><strong>Conclusion</strong></p>
+<p>Combining all these texts, a number of constraints emerge for arithmetic types
+on platforms that support the atomics extension. They would better be stated as
+such.</p>
+<ol>
+<li>Since sign representation is a property of a type and not an operation. To comply to the atomics extension all signed integer types must have two's representation for negative values.</li>
+<li>Pointer arithmetic must have a variant that always has defined behavior, only that the stored address may be invalid, if the addition or subtraction passed beyond the boundaries of the object. But that behavior is <strong>not</strong> defined by the standard, the negation of undefined doesn't give a definition.</li>
+<li>Binary integer operations <code>+</code>, <code>-</code>, <code>&amp;</code>, <code>|</code> and <code>^</code> must have versions that do not trap.</li>
+<li>All floating point operations must have versions that don't raise signals.</li>
+</ol>
+<p>The distinction in operations on atomics that are realized by operators (all
+arithmetic) and only by generic functions is arbitrary. As soon as a type has a
+lock-free <code>atomic_compare_exchange</code> operation, all <code>fetch_op</code> or <code>op_fetch</code>
+generic functions can be synthesized almost trivially.</p>
+<ul>
+<li>Why are atomic operations on pointer types and floating point types restricted to applying the operator, and don't allow for the generic function?</li>
+</ul>
+<p><strong>Current practice</strong></p>
+<p>Both gcc and clang permit <code>atomic_fetch_add</code> and <code>atomic_fetch_sub</code> on atomic
+pointer types.</p>
+<p>Both disallow floating point types for the functions but allow them for the
+operators.</p>
+<p>Gcc extends the infrastructure that it provides of atomics to <code>op_fetch</code> generic
+fuctions and adds a new operator <code>nand</code>.</p>
+<p><strong>Suggested strategy for improvement</strong></p>
+<p>I suggest to first do some minimal changes to the text with a TC to avoid its
+contradictions and to centralize its requirements. Then, in a feature request
+for a new version of the standard we could discuss to add some more features
+that would make the approach internally consistent.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Change the beginning of 5.1.2.4 p5:</p>
+<p><del>The library defines a number of atomic operations (7.17) and operations on
+mutexes (7.26.4) that are specially identified as synchronization
+operations.</del></p>
+<p>to</p>
+<p><ins>There are a number of operations that are specially identified as
+synchronization operations: if the implementation supports the atomics extension
+these are operators and generic functions that act on atomic objects (6.5 and
+7.17); if the implementation supports the thread extension these are operations
+on mutexes (7.26.4).</ins></p>
+<p>Replace paragraph 6.2.6.1 p9</p>
+<p><del>Loads and stores of objects with atomic types are done with
+memory_order_seq_cst semantics.</del></p>
+<p>by the following</p>
+<p><ins>All operations that act on atomic objects that do not specify otherwise
+have <code>memory_order_seq_cst</code> memory consistency. If the operation with identical
+values on the unqualified type is erroneous it results in an unspecific object
+representation, that may or may not be an invalid value for the type, such as an
+invalid address or a floating point NaN. Thereby no such operation may by itself
+raise a signal, a trap, a floating point exception or result otherwise in an
+interruption of the control flow.FOOTNOTE</ins></p>
+<p><ins>FOOTNOTE Whether or not an atomic operation may be interrupted by a signal
+depends on the lock-free property of the underlying type.</ins></p>
+<p>Insert a new paragraph after 6.2.6.2 p2</p>
+<p><ins>Implementations that support the atomics extension, represent all signed
+integers with two's complement such that the object representation with sign bit
+1 and all value bits zero is a normal value.</ins></p>
+<p>Insert a new paragraph after 6.5 p3</p>
+<p><ins>An operation on an lvalue with an atomic type, that consists of the
+evaluation of the object, an optional arithmetic operation and a side effect for
+updating the stored value forms a single read-modify-write operation.</ins></p>
+<p>Remove the following phrase in 6.5.2.4 p2:</p>
+<p><del>Postfix <code>++</code> on an object with atomic type is a read-modify-write operation
+with memory_order_seq_cst memory order semantics.</del></p>
+<p>Remove the following phrase in 6.5.16.2 p3:</p>
+<p><del>If <strong>E1</strong> has an atomic type, compound assignment is a read-modify-write
+operation with memory_order_seq_cst memory order semantic</del></p>
+<p>Replace 7.17.7 p1</p>
+<p><del>There are only a few kinds of operations on atomic types, though there are
+many instances of those kinds. This subclause specifies each general kind.</del></p>
+<p>by</p>
+<p><ins>In addition to the operations on atomic objects that are described by
+operators, there are a few kinds of operations that are specified as generic
+functions. This subclause specifies each generic function. After evaluation of
+its arguments, each of these generic functions forms a single read, write or
+read-modify-write operation with same general properties as described in 6.2.6.1
+p9.</ins></p>
+<p>Assuming that the intent of 7.17.7.5 has been to allow operations on atomic
+pointer types, in p1, change:</p>
+<p><del>... to an object of any atomic integer type. None of these operations is
+applicable to <code>atomic_bool</code></del></p>
+<p>to</p>
+<p><ins>... to an object of any atomic integer or pointer type, as long as the
+unqualified type is valid as left operand of the corresponding operator
+<code>op=</code>.FOOTNOTE</p>
+<p>FOOTNOTE: Thus these operations are not permitted for pointers to atomic
+<code>_Bool</code>, and only "add" and "sub" variants are permitted for atomic pointer
+types.</ins></p>
+<p>Since this topic is then covered already by a more general section, remove this
+sentence from p3:</p>
+<p><del>For address types, the result may be an undefined address, but the
+operations otherwise have no undefined behavior.</del></p>
+<p>In 7.17.7.5 p 5 replace:</p>
+<p><del>... the compound assignment operators are not guaranteed to operate
+atomically, and ...</del></p>
+<p>by</p>
+<p><ins>... the <code>order</code> parameter may make the memory consistency less strict than
+<code>memory_order_seq_cst</code>, and that ...</ins></p>
+<p><strong>Future Directions</strong></p>
+<p>An editorial revision of the C standard should clarify the vocabulary for the
+use of the terms <em>load</em>, <em>store</em>, <em>read</em>, <em>write</em>, <em>modify</em>, <em>fetch</em> and
+<em>assign</em>.</p>
+<p>A feature revision of the standard should:</p>
+<ul>
+<li>Add generic interfaces for all arithmetic operations. That is, it should add function-like interfaces for the missing operators <code>*=</code>, <code>/=</code>, <code>%=</code>, <code>&lt;&lt;=</code>, <code>&gt;&gt;=</code></li>
+<li>Add atomic pointer types (if not by the TC above) and atomic floating point types to the permitted types of the function-like arithmetic operations, such that they are uniformly defined for all types where the corresponding operator applies.</li>
+<li>Add generic interfaces <code>atomic_OP_fetch</code> for all <code>atomic_fetch_OP</code>.</li>
+<li>Reduce 7.17.6 "Atomic integer types" to just a definition of <code>typedef</code> as indicated in the table.</li>
+</ul>
+<hr />
+<p>Comment from WG14 on 2018-10-18:</p>
+<p>Oct 2015 meeting</p>
+<h3>Committee Discussion</h3>
+<ul>
+<li>The committee agrees that there are small inconsistencies remaining in the standard but that they are largely editorial in nature, and yet of potentially of such a sweeping scope that is difficult to assess as a defect. In particular, the various uses of <em>load/store</em>, <em>read/write</em>, and <em>fetch/assign</em> should be clarified and made consistent where possible. It may be advantageous to use ISO standardized vocabulary for this and perhaps other new terms introduced in C11.</li>
+<li>Additional related issues were raised in <a href="https://www.open-std.org/jtc1/sc22/wg14/13844">(SC22WG14.13844) atomic_fetch and modify generic functions</a>.</li>
+<li>The committee does not feel that this DR is “actionable” and should, in this form, result in a Proposed Committee Response. The author is encouraged to extract and provide in a new paper a simpler list of inconsistencies that can be addressed in a DR. The author is also solicited to address the broader issues as a proposal in a new paper for consideration in a new revision of the standard.</li>
+</ul>
+<p>Oct 2015 meeting</p>
+<h3>Committee Discussion</h3>
+<p>The proposed changes to §6.2.6.1 paragraph 9 are superfluous and unnecessary.</p>
+<p>The other changes require a comprehensive review of the standard and as such
+will be addressed in a future revision of the standard.</p>
+<p>Apr 2018 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The committee solicited the author for a combined resolution for this issue with
+that raised in <a href="issue0495.html">DR 495</a>.</p>
+</blockquote>
+<p>Oct 2018 meeting</p>
+<h3>Committee Response</h3>
+<blockquote>
+<p>The "C17" edition of the standard has been published as IS 9899:2018.</p>
+<p>This issue was not resolved in that publication.</p>
+<p>The committee is now considering changes for the next revision of the standard,
+and asks that this proposed change and that from <a href="issue0495.html">CR 495</a> be
+combined in a new paper to completely resolve this issue.</p>
+</blockquote>
+
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0216: Source character encodings</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0216: Source character encodings</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Clive Feather (UK)<br />
+Date: 2000-04-04<br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C99 TC1<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_216.htm">dr_216.htm</a></p>
+<h3>Summary</h3>
+<p>The Standard is clear that the basic source character set need not have the same
+encoding as the basic execution character set, and that while the latter must be
+all positive, there is no such requirement on the former:</p>
+<p>6.2.5:</p>
+<blockquote>
+<p>[#3] [...] If a member of the basic execution character set is stored in a
+char object, its value is guaranteed to be positive.</p>
+</blockquote>
+<p>6.10.1:</p>
+<blockquote>
+<p>[#3] [...] Whether the numeric value for these character constants matches
+the value obtained when an identical character constant occurs in an expression
+(other than within a <code>#if</code> or <code>#elif</code> directive) is
+implementation-defined.<sup>141)</sup> Also, whether a single-character
+character constant may have a negative value is implementation-defined.</p>
+</blockquote>
+<p>However, there are two problems with this. Firstly, the cited wording in 6.2.5
+conflicts with the definition of the basic execution character set:</p>
+<p>5.2.1:</p>
+<blockquote>
+<p>[#2] [...] A byte with all bits set to 0, called the <em>null character</em>, shall
+exist in the basic execution character set; it is used to terminate a character
+string.</p>
+</blockquote>
+<p>in that zero is not positive. Secondly, it is not clear whether a source
+character constant can have the value zero; in other words, can:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">  </span><span style="color: #9C6500">#if !&#39;A&#39;</span>
+<span style="color: #bbbbbb">    </span><span style="color: #9C6500">#error Character A is zero</span>
+<span style="color: #bbbbbb">    </span><span style="color: #9C6500">#endif</span>
+</pre></div>
+
+<p>reach the <code>#error</code> directive ?</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Change the cited wording in 6.2.5 to:</p>
+<blockquote>
+<p>#3] [...] If a member of the basic execution character set (other than the
+null character) is stored in a char object, its value is guaranteed to be
+positive.</p>
+</blockquote>
+<p>and the last part of the cited wording in 6.10.1 to:</p>
+<blockquote>
+<p>[#3] [...] Also, whether a single-character character constant may have a
+negative value is implementation-defined (nevertheless, it may not be zero).</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2000-11-02:</p>
+<h3>Committee Response</h3>
+<p>Regarding the <code>#error</code> directive, 6.10.1 paragraph 3 states:</p>
+<blockquote>
+<p>The resulting tokens compose the controlling constant expression which is
+evaluated according to the rules of 6.6, except that all signed integer types
+and all unsigned integer types act as if they have the same representation as,
+respectively, the types <code>intmax_t</code> and <code>uintmax_t</code> defined in the header
+<code>&lt;stdint.h&gt;</code>. This includes interpreting character constants, which may involve
+converting escape sequences into execution character set members. Whether the
+numeric value for these character constants matches the value obtained when an
+identical character constant occurs in an expression (other than within a <code>#if</code>
+or <code>#elif</code> directive) is implementation-defined.</p>
+</blockquote>
+<p>The evaluation of the controlling constant expression according to the rules of
+6.6 implies that character constants are converted into an execution character
+set (translation phase 5) just as it also implies that preprocessor tokens
+representing integer constants are translated into integer constants
+(translation phase 7).</p>
+<p>Thus, all character constants operated upon by <code>#if</code> have been translated to
+<em>some</em> execution character set. The liberty given by 6.10.1 paragraph 3 that
+allows the value of character constants to differ in preprocessor versus
+non-preprocessor expressions exists to allow cross-compilers to use a standalone
+"native" preprocessor that is unaware of the cross-compiled target and its
+execution character set.</p>
+<p>Thus, in your example, the <code>#error</code> directive can never be reached on a
+conforming implementation.</p>
+<h3>Technical Corrigendum</h3>
+<p>Change the cited wording in 6.2.5 to:</p>
+<blockquote>
+<p>[#3] [...] If a member of the basic execution character set is stored in a
+char object, its value is guaranteed to be non-negative.</p>
+</blockquote>
+
+</body>
+</html>

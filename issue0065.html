@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0065: Can strictly conforming programs contain locales other that the &#x27;C&#x27; locale?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0065: Can strictly conforming programs contain locales other that the 'C' locale?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Clive Feather, WG14<br />
+Date: 1993-12-03<br />
+Submitted against: C90<br />
+Status: Fixed<br />
+Fixed in: C90 TC2<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_065.html">dr_065.html</a></p>
+<p>Item 2 - locales</p>
+<p>Consider the program:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;stdio.h&gt;</span>
+<span style="color: #bbbbbb"> </span><span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;stdlib.h&gt;</span>
+<span style="color: #bbbbbb"> </span><span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;locale.h&gt;</span>
+
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">main</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">void</span>)
+<span style="color: #bbbbbb">        </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>i;
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>loc<span style="color: #bbbbbb"> </span>[]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;English&quot;</span>,<span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;En_UK&quot;</span>,<span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;Loglan&quot;</span>,<span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;&quot;</span><span style="color: #bbbbbb"> </span>};
+
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">for</span><span style="color: #bbbbbb"> </span>(i<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;<span style="color: #bbbbbb"> </span>;<span style="color: #bbbbbb"> </span>i<span style="color: #666666">++</span>)
+<span style="color: #bbbbbb">                </span><span style="color: #008000; font-weight: bold">if</span><span style="color: #bbbbbb"> </span>(setlocale<span style="color: #bbbbbb"> </span>(LC_ALL,<span style="color: #bbbbbb"> </span>loc<span style="color: #bbbbbb"> </span>[i])<span style="color: #bbbbbb"> </span><span style="color: #666666">!=</span><span style="color: #bbbbbb"> </span><span style="color: #008000">NULL</span>)
+<span style="color: #bbbbbb">                        </span>{
+<span style="color: #bbbbbb">                        </span><span style="color: #3D7B7B; font-style: italic">/*</span>
+<span style="color: #3D7B7B; font-style: italic">                         *  We must eventually get here,</span>
+<span style="color: #3D7B7B; font-style: italic">                         *  because setlocale(&quot;&quot;) can&#39;t yield NULL.</span>
+<span style="color: #3D7B7B; font-style: italic">                         /*</span>
+<span style="color: #3D7B7B; font-style: italic">                        printf (&quot;Decimal point = &#39;%s&#39;\n&quot;,</span>
+<span style="color: #3D7B7B; font-style: italic">                        localeconv ()-&gt;decimal_point);</span>
+<span style="color: #3D7B7B; font-style: italic">                        exit (0);</span>
+<span style="color: #3D7B7B; font-style: italic">                        }</span>
+<span style="color: #3D7B7B; font-style: italic">        }</span>
+</pre></div>
+
+<p>The valid locales are implementation-defined (subclause 7.4.1.1). Nevertheless,
+the output produced depends only on the locale, not any other
+implementation-defined behavior. Is the program strictly conforming?</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>The Committee affirms that the intent of this wording is that a program such as
+that above, whose output varies only according to the locale selected and does
+not rely on the presence of a specific locale other than the <code>"C"</code> locale or
+that selected by <code>""</code>, was always intended to be strictly conforming.
+Nevertheless, it is agreed that the cited extract from subclause 7.4.1.1 could
+be read strictly as making such programs depend on implementation-defined
+behavior.</p>
+<p>The Committee reaffirms that programs that depend on the identity of the
+available locales, as opposed to their contents, are not strictly conforming.</p>
+<p>The Committee believes that the first occurrence of the term “implementation
+defined” in subclause 7.4.1.1 was intended in the sense of
+“implementation-documented.” However, the Committee is reluctant to introduce a
+new term, with possibly new conformance requirements, in a Technical
+Corrigendum. The Committee notes that the term “locale-specific,” while making
+the sentence read somewhat awkwardly, carries the necessary requirements (the
+implementation must document the relevant details).</p>
+<p>The Committee decided that, though the question only addresses one issue to do
+with locales, the above discussion applies to all instances where the behavior
+of an implementation depends on the locale. For this reason, the Committee
+decided to address all such issues at this time.</p>
+<p>The Committee should revisit this issue during the revision of the C Standard.</p>
+<h3>Correction</h3>
+<p><em><strong>In subclause 5.2.1.2, page 11, change the third bullet item:</strong></em></p>
+<p>wherein each sequence of multibyte characters begins in an <em>initial shift state</em>
+and enters other implementation-defined <em>shift states</em></p>
+<p><em><strong>to:</strong></em></p>
+<p>wherein each sequence of multibyte characters begins in an <em>initial shift state</em>
+and enters other locale-specific <em>shift states</em></p>
+<p><em><strong>In subclause 7.3, page 102, second paragraph, change:</strong></em></p>
+<p>Those functions that have implementation-defined aspects only when not in the
+<code>"C"</code> locale are noted below.</p>
+<p>The term <em>printing character</em> refers to a member of an implementation-defined
+set of characters, each of which occupies one printing position on a display
+device; the term <em>control character</em> refers to a member of an
+implementation-defined set of characters that are not printing characters.</p>
+<p><em><strong>to:</strong></em></p>
+<p>Those functions that have locale-specific aspects only when not in the <code>"C"</code>
+locale are noted below.</p>
+<p>The term <em>printing character</em> refers to a member of a locale-specific set of
+characters, each of which occupies one printing position on a display device;
+the term <em>control character</em> refers to a member of a locale-specific set of
+characters that are not printing characters.</p>
+<p><em><strong>In subclause 7.3.1.2, page 102, subclause 7.3.1.6, page 103, subclause
+7.3.1.9, page 104, and subclause 7.3.1.10, page 104, change:</strong></em></p>
+<p>is one of an implementation-defined set of characters</p>
+<p><em><strong>to:</strong></em></p>
+<p>is one of a locale-specific set of characters</p>
+<p><em><strong>In subclause 7.4.1.1, page 107, second paragraph of Description, change:</strong></em></p>
+<p>a value of <code>""</code> for <code>locale</code> specifies the implementation-defined native
+environment.</p>
+<p><em><strong>to:</strong></em></p>
+<p>a value of <code>""</code> for <code>locale</code> specifies the locale-specific native environment.</p>
+<p><em><strong>In subclause 7.10.1.4, page 151, subclause 7.10.1.5, page 152, and 7.10.1.6,
+page 152, change:</strong></em></p>
+<p>In other than the <code>"C"</code> locale, additional implementation-defined subject
+sequence forms may be accepted.</p>
+<p><em><strong>to:</strong></em></p>
+<p>In other than the <code>"C"</code> locale, additional locale-specific subject sequence
+forms may be accepted.</p>
+<p><em><strong>Change Footnote 131, page 159, from:</strong></em></p>
+<p>If the implementation employs special bytes to change the shift state, these
+bytes do not produce separate wide character codes, but are grouped with an
+adjacent multibyte character.</p>
+<p><em><strong>to:</strong></em></p>
+<p>If the locale employs special bytes to change the shift state, these bytes do
+not produce separate wide character codes, but are grouped with an adjacent
+multibyte character.</p>
+<p><em><strong>In subclause 7.11.6.2, page 168, change:</strong></em></p>
+<p>The <code>strerror</code> function returns a pointer to the string, the contents of which
+are implementation-defined.</p>
+<p><em><strong>to:</strong></em></p>
+<p>The <code>strerror</code> function returns a pointer to the string, the contents of which
+are locale-specific.</p>
+<p><em><strong>In Annex G, pages 204-207, move the following bullet items under subclause
+G.3 to subclause G.4:</strong></em></p>
+<blockquote>
+<p>G.3.4, page 204, item 2 (“The shift states used for the encoding ...”)</p>
+<p>G.3.14, page 206, item 3 (“The sets of characters tested for ...”)</p>
+<p>G.3.14, page 207, item 33 (“The contents of the error message strings ...”)</p>
+</blockquote>
+<p><em><strong>In Annex G.4 page 207, Locale-specific behavior, change:</strong></em></p>
+<p>The following characteristics of a hosted environment are locale-specific:</p>
+<p><em><strong>to:</strong></em></p>
+<p>The following characteristics of a hosted environment are locale-specific and
+must be documented by the implementation:</p>
+
+</body>
+</html>

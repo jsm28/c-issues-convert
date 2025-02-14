@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0282: flexible array members &amp; struct padding</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0282: flexible array members &amp; struct padding</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: J11, Douglas Walls (US)<br />
+Date: 2002-06-11<br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C99 TC2<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_282.htm">dr_282.htm</a></p>
+<h3>Summary</h3>
+<p>6.7.2.1 Structure and union specifiers, paragraphs 15 and 16 require that any
+padding for<br />
+alignment of a structure containing a flexible array member must preceed the
+flexible<br />
+array member.  This contradicts existing implementations.  We do not believe
+this was the intent of the C99 specification.</p>
+<h3>Details</h3>
+<p>If a struct contains a flexible array member and also requires padding for
+alignment, then the current C99 specification requires the implementation to put
+this padding <strong>before</strong> the flexible array member.  However, existing
+implementations, including at least GNU C, Compaq C, and Sun C, put the padding
+<strong>after</strong> the flexible array member.</p>
+<p>The layout used by existing implementations can be more efficient. Furthermore,
+requiring these existing implementations to change their layout would break
+binary backwards compatibility with previous versions.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Change the wording such that it is implementation defined as to whether the
+padding is before or after the flexible array member.</p>
+<hr />
+<p>Comment from WG14 on 2004-03-06:</p>
+<h3>Technical Corrigendum</h3>
+<p>In 6.7.2.1 paragraph 16, replace the second and third sentences ("With two ...
+106)" with the following text:.</p>
+<blockquote>
+<p>In most situations, the flexible array member is ignored. In particular, the
+size of the structure is as if the flexible array member were omitted except
+that it may have more trailing padding than the omission would imply.</p>
+<p>replace "Second" with "However" at the start of the following sentence, and
+delete footnote 106.</p>
+<p>Replace the examples (paragraphs 17 to 20) with:</p>
+<p>[#17] EXAMPLE After the declaration:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">            </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>n;<span style="color: #bbbbbb"> </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>d[];<span style="color: #bbbbbb"> </span>};
+</pre></div>
+
+<p>the structure <code>struct s</code> has a flexible array member <code>d</code>. A typical way to use
+this is:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">           </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>m<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">/* some value */</span>;
+<span style="color: #bbbbbb">            </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>p<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>malloc<span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span>)<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>[m]));
+</pre></div>
+
+<p>and assuming that the call to <code>malloc</code> succeeds, the object pointed to by <code>p</code>
+behaves, for most purposes, as if <code>p</code> had been declared as:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">            </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>n;<span style="color: #bbbbbb"> </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>d[m];<span style="color: #bbbbbb"> </span>}<span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>s1;
+</pre></div>
+
+<p>(there are circumstances in which this equivalence is broken; in particular, the
+offsets of member <code>d</code> might not be the same).</p>
+<p>[#18] Following the above declaration:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">            </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span><span style="color: #bbbbbb"> </span>t1<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #666666">0</span><span style="color: #bbbbbb"> </span>};<span style="color: #bbbbbb">           </span><span style="color: #3D7B7B; font-style: italic">// valid</span>
+<span style="color: #bbbbbb">            </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span><span style="color: #bbbbbb"> </span>t2<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #666666">1</span>,<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #666666">4.2</span><span style="color: #bbbbbb"> </span>}};<span style="color: #bbbbbb">   </span><span style="color: #3D7B7B; font-style: italic">// invalid</span>
+<span style="color: #bbbbbb">            </span>t1.n<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">4</span>;<span style="color: #bbbbbb">                      </span><span style="color: #3D7B7B; font-style: italic">// valid</span>
+<span style="color: #bbbbbb">            </span>t1.d[<span style="color: #666666">0</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">4.2</span>;<span style="color: #bbbbbb">                 </span><span style="color: #3D7B7B; font-style: italic">// might be undefined behavior</span>
+</pre></div>
+
+<p>The initialization of <code>t2</code> is invalid (and violates a constraint) because
+<code>struct s</code> is treated as if it does not contain member <code>d</code>. The assigment to
+<code>t1.d[0]</code> is probably undefined behaviour, but it is possible that</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">            </span><span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span>)<span style="color: #bbbbbb"> </span><span style="color: #666666">&gt;=</span><span style="color: #bbbbbb"> </span>offsetof<span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span>,<span style="color: #bbbbbb"> </span>d)<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">double</span>)
+</pre></div>
+
+<p>in which case the assignment would be legitimate. Nevertheless it cannot appear
+in strictly conforming code.</p>
+<p>[#19] After the further declaration:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">            </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">ss</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>n;<span style="color: #bbbbbb"> </span>};
+</pre></div>
+
+<p>the expressions:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">            </span><span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span>)<span style="color: #bbbbbb"> </span><span style="color: #666666">&gt;=</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">ss</span>)
+<span style="color: #bbbbbb">            </span><span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span>)<span style="color: #bbbbbb"> </span><span style="color: #666666">&gt;=</span><span style="color: #bbbbbb"> </span>offsetof<span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span>,<span style="color: #bbbbbb"> </span>d)
+</pre></div>
+
+<p>are always equal to 1.</p>
+<p>[#20] If <code>sizeof (double)</code> is 8, then after the following code is executed:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">            </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>s1;
+<span style="color: #bbbbbb">            </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>s2;
+<span style="color: #bbbbbb">            </span>s1<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>malloc(<span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span>)<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span><span style="color: #666666">64</span>);
+<span style="color: #bbbbbb">            </span>s2<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>malloc(<span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span>)<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span><span style="color: #666666">46</span>);
+</pre></div>
+
+<p>and assuming that the calls to malloc succeed, the objects pointed to by <code>s1</code>
+and <code>s2</code> behave, for most purposes, as if the identifiers had been declared as:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">            </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>n;<span style="color: #bbbbbb"> </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>d[<span style="color: #666666">8</span>];<span style="color: #bbbbbb"> </span>}<span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>s1;
+<span style="color: #bbbbbb">            </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>n;<span style="color: #bbbbbb"> </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>d[<span style="color: #666666">5</span>];<span style="color: #bbbbbb"> </span>}<span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>s2;
+</pre></div>
+
+<p>[#21] Following the further successful assignments:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">            </span>s1<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>malloc(<span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span>)<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span><span style="color: #666666">10</span>);
+<span style="color: #bbbbbb">            </span>s2<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>malloc(<span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">s</span>)<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb">  </span><span style="color: #666666">6</span>);
+</pre></div>
+
+<p>they then behave as if the declarations were:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">            </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>n;<span style="color: #bbbbbb"> </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>d[<span style="color: #666666">1</span>];<span style="color: #bbbbbb"> </span>}<span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>s1,<span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>s2;
+</pre></div>
+
+<p>and:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">            </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>dp;
+<span style="color: #bbbbbb">            </span>dp<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;</span>(s1<span style="color: #666666">-&gt;</span>d[<span style="color: #666666">0</span>]);<span style="color: #bbbbbb">       </span><span style="color: #3D7B7B; font-style: italic">// valid</span>
+<span style="color: #bbbbbb">            </span><span style="color: #666666">*</span>dp<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">42</span>;<span style="color: #bbbbbb">               </span><span style="color: #3D7B7B; font-style: italic">// valid</span>
+<span style="color: #bbbbbb">            </span>dp<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;</span>(s2<span style="color: #666666">-&gt;</span>d[<span style="color: #666666">0</span>]);<span style="color: #bbbbbb">       </span><span style="color: #3D7B7B; font-style: italic">// valid</span>
+<span style="color: #bbbbbb">            </span><span style="color: #666666">*</span>dp<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">42</span>;<span style="color: #bbbbbb">               </span><span style="color: #3D7B7B; font-style: italic">// undefined behavior</span>
+</pre></div>
+
+<p>[#22] The assignment:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">            </span><span style="color: #666666">*</span>s1<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>s2;
+</pre></div>
+
+<p>only copies the member <code>n</code>; if any of the array elements are within the first
+<code>sizeof (struct s)</code> bytes of the structure, these might be copied or simply
+overwritten with indeterminate values.</p>
+</blockquote>
+
+</body>
+</html>

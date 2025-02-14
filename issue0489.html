@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0489: Integer Constant Expression</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0489: Integer Constant Expression</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Fred J. Tydeman<br />
+Date: 2016-01-18<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1994.htm">N1994</a><br />
+Submitted against: C11 / C17<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>In an integer constant expression (ICE) in 6.6p6, if an operand is NOT
+evaluated, must it follow the constraints and semantics of 6.6?</p>
+<p>WG14 messages 14092 to 14102 (with subject of: Fixed size array or VLA?) discuss
+this issue.</p>
+<p>Places where expressions are not evaluated:</p>
+<ul>
+<li><code>0 &amp;&amp; funny</code></li>
+<li><code>1 || funny</code></li>
+<li><code>0 ? funny : other</code></li>
+<li><code>1 ? other : funny</code></li>
+<li><code>_Generic(funny,...)</code></li>
+<li><code>sizeof(funny)</code></li>
+<li><code>_Alignof(funny)</code></li>
+</ul>
+<p>Examples of 'funny' code (that are allowed in expressions that are not
+evaluated):</p>
+<ul>
+<li><code>assignment = operator</code></li>
+<li><code>inc++ and ++inc</code></li>
+<li><code>dec-- and --dec</code></li>
+<li><code>func_call()</code></li>
+<li><code>(comma,operator)</code></li>
+<li><code>3.0</code></li>
+<li><code>0/0</code></li>
+<li><code>1.0/0.0</code></li>
+</ul>
+<p>Places where ICEs are used:</p>
+<ul>
+<li>size of bit-fields, eg, <code>struct s1{ int bit : ICE; }s2;</code></li>
+<li>enum constant, eg, <code>enum e1{a=ICE}e2;</code></li>
+<li>size of non-VLA arrays, eg, <code>static int ary[ICE];</code></li>
+<li>conditional inclusion, eg, <code>#if ICE</code></li>
+<li>null pointer constant, eg, <code>#define NULL ICE</code></li>
+<li>alignment specifier, eg, <code>_Alignas(ICE)</code></li>
+<li>initialization, eg, <code>{[ICE] = value}</code></li>
+<li>static assertions, eg, <code>_Static_assert(ICE,"string");</code></li>
+<li><strong>case</strong> labels, eg, <code>case ICE:</code></li>
+<li>some object-like macros, eg, <code>#define EDOM ICE</code></li>
+</ul>
+<p>Several people expressed an opinion that just parsing the expression (syntax)
+without depending upon any values (semantics) is a good thing. However,
+<strong>sizeof</strong>(var) depends upon var being a fixed size array versus VLA to
+determine if it is a valid ICE. So, some semantic checking must be done.</p>
+<p>Some parts of the C standard that might help answer the question follow.</p>
+<p>Footnote 118 in 6.6p11 shows the use of 'funny' code:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #008000; font-weight: bold">static</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>i<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">2</span><span style="color: #bbbbbb"> </span><span style="color: #666666">||</span><span style="color: #bbbbbb"> </span><span style="color: #666666">1</span><span style="color: #bbbbbb"> </span><span style="color: #666666">/</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;
+</pre></div>
+
+</blockquote>
+<p>6.6p2:</p>
+<blockquote>
+<p>A constant expression can be evaluated during translation rather than runtime,
+and accordingly may be used in any place that a constant may be.</p>
+</blockquote>
+<p>6.4.6p2 has:</p>
+<blockquote>
+<p>An operand is an entity on which an operator acts.</p>
+</blockquote>
+<p>Seems to me that if an operand is not evaluated, then nothing is being acted
+upon, so is not an operand.</p>
+<p>By 6.6p10</p>
+<blockquote>
+<p>An implementation may accept other forms of constant expressions.</p>
+</blockquote>
+<p>any implementation may accept these unevaluated expressions; but that does not
+mean that all implementations must accept them. And, by the committee discussion
+in DR 312 against C99, these "other forms" cannot be an ICE (those words are not
+in C99 or C11).</p>
+<p>3.1 <strong>access</strong> note 3:</p>
+<blockquote>
+<p>Expressions that are not evaluated do not access objects.</p>
+</blockquote>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Add (something along the lines of) either</p>
+<ul>
+<li>(that are evaluated)</li>
+<li>(even if not evaluated)</li>
+</ul>
+<p>after "operands" in the first line of 6.6p6 and second line in 6.6p8.</p>
+<p>Perhaps, add a footnote giving an example to the phrase being added.</p>
+<p>Add to the end of 6.6p10:</p>
+<blockquote>
+<p>however, they are not integer constant expressions.</p>
+</blockquote>
+<p>Also, update J.2 items on ICE and arithmetic constant expression.</p>
+<hr />
+<p>Comment from WG14 on 2017-04-07:</p>
+<p>Apr 2016 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The committee does not consider this a defect.</p>
+</blockquote>
+<p>Oct 2016 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The paper <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2085.htm">N2085</a>
+offered a suggested improvement to the Proposed Committee Response below, but
+the suggestion was not viewed as an improvement by the committee.</p>
+</blockquote>
+<h3>Proposed Committee Response</h3>
+<blockquote>
+<p>Extending integer constant expressions could be considered for the next revision
+of the standard.</p>
+<p>To the question, unevaluated operands of integer constant expressions must
+adhere to the constraints of §6.6.</p>
+</blockquote>
+
+</body>
+</html>

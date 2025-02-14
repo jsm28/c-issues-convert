@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0131: What is the meaning of const-qualification?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0131: What is the meaning of <em>const-qualification</em>?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Douglas Gwyn, WG14<br />
+Date: 1993-12-03<br />
+Submitted against: C90<br />
+Status: Fixed<br />
+Fixed in: C90 TC2<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_131.html">dr_131.html</a></p>
+<p>I've discovered an apparent bug in the C Standard. The code snippet:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span>{<span style="color: #008000; font-weight: bold">const</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>a[<span style="color: #666666">5</span>];<span style="color: #bbbbbb"> </span>}<span style="color: #bbbbbb"> </span>s1,<span style="color: #bbbbbb"> </span>s2;
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f</span>(<span style="color: #B00040">void</span>)<span style="color: #bbbbbb"> </span>{s1<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>s2;<span style="color: #bbbbbb"> </span>}
+</pre></div>
+
+<p>can be contained in a strictly conforming program, which runs counter to my
+understanding of the meaning of “const-qualification.” That occurs because,
+according to subclause 6.5.3, the member <code>s1.a</code> is <em>not</em> const-qualified and
+thus slips past the modifiable-lvalue definition in subclause 6.2.2.1. Subclause
+6.5.3 says that the <em>elements</em> of the array <code>s1.a</code> are const-qualified, not the
+array itself, and I can find no reasonable way to construe <code>s1.a[3]</code>, for
+example, as a “member” of <code>s1</code>; its only member is <code>s1.a</code>, as I see it.
+Apparently, the C Standard does not define the term “member,” except implicitly
+through its use in subclause 6.3.2.3 <strong>Semantics</strong>, which says that <code>s1.a</code> is
+the member (on which the subscripting operator can operate to extract an
+element, but the element is not a member of the structure.)</p>
+<p>What I think is desirable would be a required diagnostic for this example, as it
+<em>should</em> be considered to violate the constraint in subclause 6.3.16 that
+requires the left operand of an assignment operator to be a modifiable lvalue.</p>
+<p>Relevant citations:</p>
+<p>Subclause 6.2.2.1 <strong>Lvalues and function designators</strong>:</p>
+<blockquote>
+<p>A <em>modifiable lvalue</em> is an lvalue that does not have array type, does not have
+an incomplete type, does not have a const-qualified type, and if it is a
+structure or union, does not have any member (including, recursively, any member
+of all contained structures or unions) with a const-qualified type.</p>
+</blockquote>
+<p>Subclause 6.3.16 <strong>Assignment operators</strong>:</p>
+<blockquote>
+<p><strong>Constraints</strong>:</p>
+<p>An assignment operator shall have a modifiable lvalue as its left operand.</p>
+</blockquote>
+<p>Subclause 6.5.3 <strong>Type qualifiers</strong>:</p>
+<blockquote>
+<p>If the specification of an array type includes any type qualifiers, the element
+type is so-qualified, not the array type. If the specification of a function
+type includes any type qualifiers, the behavior is undefined.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>The example code is <em>not</em> strictly conforming, because some objects (the
+elements of the array <code>s1.a</code>) are being modified through use of an lvalue (<code>s1</code>)
+with non-const-qualified type, which according to subclause 6.5.3 results in
+undefined behavior.</p>
+<p>However, a diagnostic is indeed desired here.</p>
+<h3>Correction</h3>
+<p><em><strong>In subclause 6.2.2.1, page 36, change the parenthetic remark in the final
+sentence of the first paragraph:</strong></em></p>
+<p>(including, recursively, any member of all contained structures or unions)</p>
+<p><em><strong>to:</strong></em></p>
+<p>(including, recursively, any member or element of all contained aggregates or
+unions)</p>
+
+</body>
+</html>

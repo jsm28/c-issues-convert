@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0298: Validity of constant in unsigned long long range</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0298: Validity of constant in <code>unsigned long long</code> range</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Convener, J. Stephen Adamczyk<br />
+Date: 2004-03-31<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1046.txt">N1046</a><br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C99 TC3<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_298.htm">dr_298.htm</a></p>
+<h3>Summary</h3>
+<p>Consider a constant 9223372036854775808 in a C99 implementation that has 64-bit
+two's complement <code>long long</code>, and no extended integer types.</p>
+<p>6.4.4.1 says that an unsuffixed decimal constant has the first of the types on
+the following list into which its value will fit: <code>int</code>, <code>long int</code>, <code>long long int</code>. In this case, the value does not fit into any of those types, and there
+are no extended integer types to try. (The value would fit into unsigned long
+long, but that's not on the list.)</p>
+<p>So I conclude that this constant is invalid, just as a grossly too-large
+constant (say, one consisting of a 1 followed by 1,000 zeroes) would be invalid.
+(And I think that's a good thing, because otherwise this constant could be
+unsigned on some implementations and signed on others that have larger extended
+integer types.)</p>
+<p>However, I'm not sure 6.4.4.1 (or 6.4.4) says anything that requires an error,
+or even gives meaning to this constant. It doesn't say what happens if the
+constant doesn't fit in any type on its list and there are no extended integer
+types.</p>
+<p>Is this a defect, or was this intentionally worded vaguely to allow latitude to
+implementations?</p>
+<p>A related issue comes up with <code>UINT64_C(9223372036854775808)</code>. One plausible
+implementation for the macro <code>UINT64_C</code> would seem to be to cast the constant to
+the proper type. However, that does not work in this particular case, because
+the constant before casting is the same invalid constant discussed above.
+Another plausible implementation (and suggested by 7.18.4.1p2) is to concatenate
+a suffix to the constant, e.g., a "U" in this case. Sounds good, but 7.18.4p2
+doesn't say that the argument to the macro must be an unsuffixed constant;
+indeed it says that the syntax must match 6.4.4.1, which implies that a suffix
+is allowed.</p>
+<p>So if 9223372036854775808 is an invalid constant, it seems that an
+implementation must rely on compiler magic to get <code>UINT64_C</code> right; the tricks
+available with standard macros don't work.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<hr />
+<p>Comment from WG14 on 2007-09-06:</p>
+<h3>Committee Discussion</h3>
+<p>The Committee believes that the Constraint in 6.4.4 applies, and that a constant
+must have a type. If a type cannot be assigned, the program is invalid and
+violates the Constraint.</p>
+<p>The second part involves <code>uint64_c</code>. The macros were not intended to be very
+smart. It is permissible for them to use compiler magic.</p>
+<h3>Technical Corrigendum</h3>
+<p>Change the constraint in 6.4.4 to read:</p>
+<blockquote>
+<p>Each constant shall have a type and the value of a constant shall be in the
+range of representable values for its type.</p>
+</blockquote>
+<p>Add the following sentence as last sentence of the paragraph after the list in
+6.4.4.1:</p>
+<blockquote>
+<p>If an integer constant cannot be represented by any type in its list and has no
+extended integer type, then the integer constant has no type.</p>
+</blockquote>
+<p>7.18.4, paragraph 2 - change</p>
+<blockquote>
+<p>"a decimal, octal, or hexadecimal constant"</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>"an unsuffixed integer constant".</p>
+</blockquote>
+
+</body>
+</html>

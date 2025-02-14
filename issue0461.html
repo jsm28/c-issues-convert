@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0461: problems with references to objects in signal handlers</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0461: problems with references to objects in signal handlers</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, <a href="mailto:msebor@gmail.com">Martin Sebor</a><br />
+Date: 2014-03-25<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1812.htm">N1812</a><br />
+Submitted against: C11 / C17<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>We believe there are two problems in section <strong>7.14.1.1 The signal function</strong>,
+paragraph 5, which specifies the constraints under which signal handlers can
+access objects declared in other scopes. The problems are summarized in the
+following two subsections. The section titled Suggested Technical Corrigendum
+then proposes a correction to both.</p>
+<p>Section <strong>7.14.1.1 The signal function</strong>, paragraph 5, specifies the following
+constraints. Note, in particular, to use of the word "refers," and the reference
+to objects with "static or thread storage duration" underscored in the text
+below.</p>
+<blockquote>
+<p>If the signal occurs other than as the result of calling the <code>abort</code> or <code>raise</code>
+function, the behavior is undefined if the signal handler <ins>refers</ins> to
+any object with <ins>static or thread storage duration</ins> that is not a
+lock-free atomic object other than by assigning a value to an object declared as
+<code>volatile sig_atomic_t</code>, or the signal handler calls any function in the
+standard library other than the abort function, the <code>_Exit</code> function, the
+<code>quick_exit</code> function, or the <code>signal</code> function with the first argument equal to
+the signal number corresponding to the signal that caused the invocation of the
+handler.</p>
+</blockquote>
+<p><strong>Underspecification of referring to objects</strong></p>
+<p>The standard doesn't formally define the term <em>refer</em> but its uses in the text
+suggest that it denotes any use of an object, including one that doesn't involve
+accessing it. The term <em>access</em> is defined in 3.1 to mean an &lt;execution-time
+action&gt; <em>to read or modify the value of an object.</em></p>
+<p>Preventing signal handlers from accessing objects is necessary in order to avoid
+data races between accesses (reads and writes) to the same object in the rest of
+the program that are in progress but not completed at the time the signal is
+delivered.</p>
+<p>However, by making use of the word "refers," the sentence in 7.14.1.1 quoted
+above implies that even mentioning the name of an object in an unevaluated
+context such as the <code>sizeof</code> expression, or taking its address is undefined in a
+signal handler. This restriction is unnecessary, since such references are safe
+because they cannot introduce any sort of a data race between the signal handler
+and the rest of the program. Thus, referring to such objects without accessing
+them should be permitted in conforming programs.</p>
+<p>Furthermore, accessing a <code>const</code> object to read (but not modify) its value also
+cannot introduce a data race and is safe as well. Thus, the restriction can be
+relaxed even further to allow signal handlers to read constant objects. Note
+that <code>const</code> objects are those that are declared <code>const</code>. In particular,
+accessing an object that was not declared const via a pointer to a
+<code>const</code>-qualified type does not change the fact that the object itself is not
+<code>const</code>. This distinction is important to understand that relaxing this
+constraint cannot introduce the potential for a data race when such a
+non-<code>const</code> object is modied in the program while it's accessed via a
+<code>const</code>-qualified pointer in a signal handler.</p>
+<p>The comments in the following example should make this distinction clear:</p>
+<blockquote>
+<p><code>const int safe = (1 &lt;&lt; SIGINT) | (1 &lt;&lt; SIGQUIT);</code><br />
+<code>int unsafe = (1 &lt;&lt; SIGHUP) | (1 &lt;&lt; SIGTERM);</code></p>
+<p><code>volatile sig_atomic_t sigcount [2];</code></p>
+<p><code>void handler (int signo) {</code></p>
+<p><code>const int *pmask;   // pointer to</code> <ins><code>const</code></ins> <code>int</code></p>
+<p><code>// taking the address of any object is safe and should be allowed</code><br />
+<code>pmask = &amp;safe;</code></p>
+<p><code>// access to safe should be allowed since it's a</code> <ins><code>const object</code></ins><br />
+<code>if ((1 &lt;&lt; signo) &amp; *pmask)</code><br />
+<code>++sigcount [0];</code></p>
+<p><code>// safe and should be allowed</code><br />
+<code>pmask = &amp;unsafe;</code></p>
+<p><code>// access to unsafe remains undefined since it's</code> <ins><code>not a const object</code></ins><br />
+<code>if ((1 &lt;&lt; signo) &amp; *pmask)</code><br />
+<code>++sigcount [1];</code><br />
+<code>}</code></p>
+</blockquote>
+<p><strong>Missing restriction to access other functions' local objects</strong></p>
+<p>The sentence from paragraph 5 quoted above specifically singles out objects with
+static or thread storage duration, but permits signal handlers to access objects
+with automatic storage duration without a similar restriction. However, a signal
+handler that has access to a local variable defined in another function whose
+execution is interrupted by the delivery of a signal resulting in the invocation
+of the signal handler contains the same potential data race as if the two
+functions both accessed the same object with static storage duration.</p>
+<p>To make clear how this condition could arise, consider the following program
+which, when <code>atomic_intptr_t</code> is a lock-free type, is strictly conforming
+according to the letter of the standard despite the data race.</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">atomic_intptr_t</span><span style="color: #bbbbbb"> </span>p;<span style="color: #bbbbbb">   </span><span style="color: #3D7B7B; font-style: italic">// assume atomic_intptr_t is lock-free</span>
+
+<span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">handler</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>signo)<span style="color: #bbbbbb"> </span>{
+<span style="color: #bbbbbb">    </span><span style="color: #3D7B7B; font-style: italic">// the following write access should be undefined since it modifies</span>
+<span style="color: #bbbbbb">    </span><span style="color: #3D7B7B; font-style: italic">// an object with automatic storage duration declared in f</span>
+<span style="color: #bbbbbb">    </span><span style="color: #666666">++*</span>(<span style="color: #B00040">int</span><span style="color: #666666">*</span>)p;
+}
+
+<span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">void</span>)<span style="color: #bbbbbb"> </span>{
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>i<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;
+<span style="color: #bbbbbb">    </span>p<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">atomic_intptr_t</span>)<span style="color: #666666">&amp;</span>i;
+
+<span style="color: #bbbbbb">    </span>signal<span style="color: #bbbbbb"> </span>(SIGINT,<span style="color: #bbbbbb"> </span>handler);
+
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">while</span><span style="color: #bbbbbb"> </span>(i<span style="color: #bbbbbb"> </span><span style="color: #666666">&lt;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">7</span>)
+<span style="color: #bbbbbb">        </span>printf<span style="color: #bbbbbb"> </span>(<span style="color: #BA2121">&quot;%i</span><span style="color: #AA5D1F; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>,<span style="color: #bbbbbb"> </span>i);
+}
+</pre></div>
+
+</blockquote>
+<h3>Suggested Technical Corrigendum</h3>
+<p>The proposed corrigendum below changes the standard to remove the unnecessary
+constraints discussed above, and to add the missing restriction to prevent
+accessing local variables defined elsewhere in the program. The reference to the
+lifetime of auto objects makes sure that accesses to local variables defined in
+signal handlers themselves as well as in functions called from them remain well
+defined.</p>
+<p>In section 7.14.1.1, modify the first sentence of paragraph 5 as indicated
+below:</p>
+<blockquote>
+<p>If the signal occurs other than as the result of calling the <code>abort</code> or <code>raise</code>
+function, the behavior is undefined if the signal handler <del>refers
+to</del><ins>accesses</ins> any <ins>non-<code>const</code></ins> object with static or
+thread storage duration<ins>, or any non-<code>const</code> object with automatic storage
+duration whose lifetime started before the signal handler has been
+entered,</ins> that is not a lock-free atomic object other than by...</p>
+</blockquote>
+<p>In addition, make the corresponding change to section <strong>J.2 Undefined
+behavior</strong>.</p>
+<hr />
+<p>Comment from WG14 on 2015-10-29:</p>
+<p>Apr 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<ul>
+<li>The committee agrees that clarifying "refers" would be beneficial.</li>
+<li>Allowing access to <code>const</code> qualified objects would be a feature and cannot be accomplished by the mechanism of a defect report. Such a feature can be proposed in a separate paper.</li>
+<li>Access to objects of allocated storage duration should also be addressed.</li>
+<li>It is suggested that automatic storage duration objects should also be addressed.</li>
+<li>Further revisions have been solicited from the author.</li>
+</ul>
+<p>Oct 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The paper <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1874.htm">N1874</a>
+was submitted and discussed, again, as a defect, rather than as a new proposal,
+and the suggested changes to allow new behavior were again rejected. It was
+noted that a <code>const volatile</code> object implemented in hardware, such as random
+number generator, might not provide a consistent value if accessed from a signal
+handler, and so there was general agreement that any changes in this area
+warrant very careful consideration.</p>
+</blockquote>
+<h3>Proposed Committee Response</h3>
+<blockquote>
+<p>Extending the behavior as requested is a feature and appropriate as input to the
+next revision of this Standard. It was noted that a <code>const volatile</code> object that
+might seem acceptable to reference from a signal handler might not be if it were
+implemented in hardware (e.g. a hardware random number generator).</p>
+</blockquote>
+
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0473: &quot;A range error occurs if x is too large.&quot; is misleading</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0473: "A range error occurs if x is too large." is misleading</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Fred J. Tydeman<br />
+Date: 2015-01-07<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1903.htm">N1903</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>"A range error occurs if <strong>x</strong> is too large." is misleading (or ambiguous) for
+expm1 (7.12.6.3p2), erfc (7.12.8.2p2), and lgamma (7.12.8.3p2).</p>
+<p>"too large" could mean either +/-large value (in which case "too small" means
++/-near zero) or just +large value (in which case "too small" means -large
+value).</p>
+<p>7.12.6.3p2: expm1(-DBL_MAX) is -1, which is not a range error.</p>
+<p>7.12.8.2p2: erfc(-DBL_MAX) is 2, which is not a range error.</p>
+<p>7.12.8.3p2: lgamma(-DBL_MAX) is a pole error, which is not a range error.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Add the word "positive" before <strong>x</strong> in those three cases so that they are:</p>
+<blockquote>
+<p>A range error occurs if positive <strong>x</strong> is too large.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Apr 2015 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The Suggested Technical Corrigendum was accepted.</p>
+</blockquote>
+<p>Oct 2015 meeting</p>
+<h3>Committee Discussion</h3>
+<ul>
+<li>A new paper <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1941.htm">N1941</a> was submitted and discussed as well as the refinement proposed in <a href="https://www.open-std.org/jtc1/sc22/wg14/13872">(SC22WG14.13872) DR 473, 409</a> .</li>
+<li>The “only if” refinement from <a href="https://www.open-std.org/jtc1/sc22/wg14/13872">(SC22WG14.13872) DR 473, 409</a> met approval from the committee and is adopted in the revised Proposed Technical Corrigendum below.</li>
+<li>This Proposed Technical Corrigendum will, however, invalid practice in one set of compilers where “range error” is used for other purposes. No changes, however, were proposed or accepted to resolve this issue in what remains as The Proposed Technical Corrigendum.</li>
+<li>The implication of this change affects all functions in this section and the committee expressed concern that this impact is unknown and hard to assess.</li>
+</ul>
+<p>Apr 2016 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The committee agreed to change “only occurs if” to “occurs if and only if” in
+three places, and these changes have been made in The Proposed Technical
+Corrigendum below.</p>
+</blockquote>
+<h3>Proposed Technical Corrigendum</h3>
+<p>Change 7.12.1p2 first sentence from:</p>
+<blockquote>
+<p>For all functions, a <em>domain error</em> occurs if . . .</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>For all functions, a <em>domain error</em> occurs if and only if . . .</p>
+</blockquote>
+<p>Change 7.12.1p3 first sentence from:</p>
+<blockquote>
+<p>Similarly, a <em>pole error</em> (also known as a singularity or infinitary) occurs if</p>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>Similarly, a <em>pole error</em> (also known as a singularity or infinitary) occurs if
+and only if . . .</p>
+</blockquote>
+<p>Change 7.12.1p4 from:</p>
+<blockquote>
+<p>Likewise, a <em>range error</em> occurs if the mathematical result of the function
+cannot be represented in an object of the specified type, due to extreme
+magnitude.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>Likewise, a <em>range error</em> occurs if and only if the mathematical result of the
+function cannot be represented in an object of the specified type, due to
+extreme magnitude. The description of each function lists any required range
+errors; an implementation may define additional range errors, provided that such
+errors are consistent with the mathematical definition of the function and are
+the result of either overflow or underflow.</p>
+</blockquote>
+<p>In 7.12.6.3 The expm1 function p2 change</p>
+<blockquote>
+<p>A range error occurs if <strong>x</strong> is too large.<sup>237</sup></p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>A range error occurs if positive <strong>x</strong> is too large.<sup>237</sup></p>
+</blockquote>
+<p>In 7.12.8.2 The erfc function p2 change</p>
+<blockquote>
+<p>A range error occurs if <strong>x</strong> is too large.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>A range error occurs if positive <strong>x</strong> is too large.</p>
+</blockquote>
+<p>In 7.12.8.3 The lgamma functions p2 change</p>
+<blockquote>
+<p>A range error occurs if <strong>x</strong> is too large.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>A range error occurs if positive <strong>x</strong> is too large.</p>
+</blockquote>
+
+</body>
+</html>

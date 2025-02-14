@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0255: non-prototyped function calls and argument mismatches</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0255: non-prototyped function calls and argument mismatches</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Clive D.W. Feather &lt;clive@demon.net&gt;, UK C Panel<br />
+Date: 2001-09-07<br />
+Submitted against: C99<br />
+Status: Closed<br />
+Cross-references: <a href="issue0316.html">0316</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_255.htm">dr_255.htm</a></p>
+<h3>Problem</h3>
+<p>Consider the code:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">   </span><span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;stdio.h&gt;</span>
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f</span><span style="color: #bbbbbb"> </span>();
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">main</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">void</span>)
+<span style="color: #bbbbbb">    </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span>f<span style="color: #bbbbbb"> </span>(<span style="color: #666666">0</span>);
+<span style="color: #bbbbbb">    </span>}
+<span style="color: #bbbbbb">    </span><span style="color: #9C6500">#ifdef PROTO</span>
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">unsigned</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>x)
+<span style="color: #bbbbbb">    </span><span style="color: #9C6500">#else</span>
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>f<span style="color: #bbbbbb"> </span>(x)<span style="color: #bbbbbb"> </span><span style="color: #B00040">unsigned</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>x;
+<span style="color: #bbbbbb">    </span><span style="color: #9C6500">#endif</span>
+<span style="color: #bbbbbb">    </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span>printf<span style="color: #bbbbbb"> </span>(<span style="color: #BA2121">&quot;%u</span><span style="color: #AA5D1F; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>,<span style="color: #bbbbbb"> </span>x);
+<span style="color: #bbbbbb">    </span>}
+</pre></div>
+
+<p>Now, 6.5.2.2#6 reads:</p>
+<blockquote>
+<p>[#6] If the expression that denotes the called function has a type that does
+not include a prototype, the integer promotions are performed on each argument,
+and arguments that have type float are promoted to double. These are called the
+default argument promotions.<br />
+[...]<br />
+If the function is defined with a type that includes a prototype, and either the
+prototype ends with an ellipsis (, ...) or the types of the arguments after
+promotion are not compatible with the types of the parameters, the behavior is
+undefined. If the function is defined with a type that does not include a
+prototype, and the types of the arguments after promotion are not compatible
+with those of the parameters after promotion, the behavior is undefined, except
+for the following cases:</p>
+<ul>
+<li>one promoted type is a signed integer type, the other promoted type is the corresponding unsigned integer type, and the value is representable in both types;</li>
+<li>both types are pointers to qualified or unqualified versions of a character type or <code>void</code>.</li>
+</ul>
+</blockquote>
+<p>So the above code is undefined if <code>PROTO</code> is defined, but is legitimate if it is
+not. This seems inconsistent.</p>
+<p>Traditionally, when a function is called and no prototype is in scope, the
+implementation applies the default argument promotions to the argument value and
+then assumes that is the parameter type. If it isn't, this can cause all kinds
+of problems, which is why the undefined behaviour. However, if it is known that
+the argument value will be correctly handled by the parameter type, there is no
+problem; this is the rationale behind the exceptions.</p>
+<p>The exceptions should apply to both cases, no matter how the function is
+eventually defined.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Change the part of 6.5.2.2#6 after the omission to:</p>
+<blockquote>
+<p>If the types of the arguments after promotion are not compatible with those of
+the parameters after promotion 78A), the behavior is undefined, except for the
+following cases:</p>
+<ul>
+<li>one promoted type is a signed integer type, the other promoted type is the corresponding unsigned integer type, and the value is representable in both types;</li>
+<li>both types are pointers to qualified or unqualified versions of a character type or <code>void</code>.</li>
+</ul>
+<p>If the function is defined with a type that includes a prototype, and either any
+parameter has a type which is altered by the default argument promotions or the
+prototype ends with an ellipsis (, ...), the behavior is undefined.</p>
+<p>78A) Because of the rule later in this paragraph, it is only necessary to check
+whether the parameter type undergoes promotion when the function is not defined
+using a prototype.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2002-05-15:</p>
+<h3>Committee Response</h3>
+<p>The Committee does not wish to further refine the behavior of calls not in the
+scope of prototypes. In practice, this will not be a problem, and the Committee
+does not wish to define the behavior.</p>
+
+</body>
+</html>

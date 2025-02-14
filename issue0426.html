@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0426: G.5.1: -yv and -x/v are ambiguous</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0426: G.5.1: <code>-yv</code> and <code>-x/v</code> are ambiguous</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG 14, Fred J. Tydeman<br />
+Date: 2013-01-07<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1670.htm">N1670</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>The tables in G.5.1 have the mathematical formulas -yv and -x/v. I believe that
+they are ambiguous as they could have two meanings:</p>
+<ul>
+<li>(-y)/v and (-x)/v</li>
+<li>-(y/v) and -(x/v)</li>
+</ul>
+<p>I believe it matters for at least these cases:</p>
+<ol>
+<li>The two operands are different NaNs, negate flips the sign of a NaN, and the result of * and / depends upon the sign and value of the NaN.</li>
+<li>The result is a NaN from non-NaN operands, negate does not flip the sign of a NaN, while both * and / set the sign of the result as the XOR of the signs of the operands.</li>
+<li>All operands are non-NaN, the result is inexact and non-NaN, and a rounding that is not symmetric about zero is in effect.</li>
+</ol>
+<h3>Suggested Technical Corrigendum</h3>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Apr 2013 meeting</p>
+<h3>Committee Discussion</h3>
+<ul>
+<li>The committee sees the mathematical formulae as unambiguous since the regroupings presented in the paper are mathematically equivalent, and should not be construed as C expressions. As such, there was considerable skepticism expressed that this was indeed a defect.</li>
+<li>The author promised to provide a supplemental paper that would substantiate his concern about this as a defect.</li>
+</ul>
+<p>Oct 2013 meeting</p>
+<h3>Committee Discussion</h3>
+<ul>
+<li><a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1738.htm">N1738</a> clarifies a typo in the original document.</li>
+<li>A very long discussion ensued, starting with the fact that C11 notation was used in the clarifying example rather than mathematical notation.</li>
+<li>The concerns raised about <code>NaNs</code> were deemed moot by the fact that multiply and divide are not required by either C11 or IEEE-754 to honor the sign of <code>NaNs</code>.</li>
+<li>The intended mathematical result seems obvious to most on the committee, and the arguments about mathematical notations were not persuasive.</li>
+<li>The third case, however, has modest merit if one considers an implementation that transcribes the provided notation into C11 directly, in which case when asymmetric rounding mode is selected an incorrect result will be formed if negation is applied after the division (or multiplication). More exactly, in the third case, all operands are non-Nan, the result is inexact and non-NaN, and a rounding that is not symmetric about zero is in effect.</li>
+<li>As such, the committee, with great reluctance, narrowly formed a consensus for change, and is concerned that this issue is almost certainly not significant enough to warrant the effort already expended, let alone further discussion, lest the entire matter be returned with no changes proposed as a Record of Response.</li>
+</ul>
+<h3>Proposed Technical Corrigendum</h3>
+<blockquote>
+<p>In the table in G.5.1 #2, change</p>
+<blockquote>
+<p>-yv</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>(-y)v</p>
+</blockquote>
+<p>in three places.</p>
+<p>In the table in G.5.1 #3, change</p>
+<blockquote>
+<p>-x/v</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>(-x)/v</p>
+</blockquote>
+<p>in two places.</p>
+</blockquote>
+
+</body>
+</html>

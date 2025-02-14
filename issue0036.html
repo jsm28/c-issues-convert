@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0036: May a floating-point constant be represented with more precision than implied by its type?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0036: May a floating-point constant be represented with more precision than implied by its type?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Fred Tydeman, WG14<br />
+Date: 1992-12-10<br />
+Reference document: X3J11/91-040<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_036.html">dr_036.html</a></p>
+<p>May floating-point constants be represented with more precision than implied by
+its type? Consider the following code fragment:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">float</span><span style="color: #bbbbbb"> </span>f;
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>d;
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">long</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>ld;
+<span style="color: #bbbbbb"> </span>ld<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>ld<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0.1</span>;<span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">/* add a long double and a double */</span>
+<span style="color: #bbbbbb"> </span>ld<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>ld<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span><span style="color: #666666">1.0</span><span style="color: #bbbbbb"> </span><span style="color: #666666">/</span><span style="color: #bbbbbb"> </span><span style="color: #666666">10.0</span>;<span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">/* expression with &quot;same&quot; value */</span>
+<span style="color: #bbbbbb"> </span>d<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>f<span style="color: #bbbbbb"> </span><span style="color: #666666">+</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0.1f</span>;<span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">/* &quot;+&quot; is allowed to be double precision */</span>
+</pre></div>
+
+<p>In the above example, the decimal number <code>0.1</code>, when converted to binary, is a
+non-terminating repeating binary number; so the more bits used to represent the
+number, the closer it will be to its true value. Hence, if <code>double</code>s are 64 bits
+and <code>long double</code>s are 80 bits, the <code>long double</code> will be more accurate. So in
+essence, may <code>0.1</code> (a <code>double</code>) be represented with more precision, e.g. as
+<code>0.1L</code> (a <code>long double</code>)?</p>
+<p>Parts of the C Standard that may help answer the question follow.</p>
+<p>Subclause 5.1.2.3 <strong>Program execution</strong>, page 7, line 36:</p>
+<blockquote>
+<p>In the abstract machine, all expressions are evaluated as specified by the
+semantics.</p>
+</blockquote>
+<p>I believe that this is the “as if” rule that applies to this case.</p>
+<p>Subclause 5.1.2.3 <strong>Program execution</strong>, page 8, lines 44-45:</p>
+<blockquote>
+<p>Alternatively, an operation involving only <code>int</code>s or <code>float</code>s may be executed
+using double-precision operations if neither range nor precision is lost
+thereby.</p>
+</blockquote>
+<p>Clearly, <code>d = f + 0.1F</code> may be done using a double-precision add. But may <code>0.1f</code>
+be represented as the <code>double 0.1</code>?</p>
+<p>Subclause 6.1.3.1 <strong>Floating constants</strong>, page 26, lines 32-35:</p>
+<blockquote>
+<p>If the scaled value is in the range of representable values (for its type) the
+result is either the nearest representable value, or the larger or smaller
+representable value immediately adjacent to the nearest representable value,
+chosen in an implementation-defined manner.</p>
+</blockquote>
+<p>I believe that the above does not require that the result be the nearest
+representable value (for its type).</p>
+<p>Subclause 6.2.1.5 <strong>Usual arithmetic conversions</strong>, page 35, lines 38-39:</p>
+<blockquote>
+<p>The values of floating operands and of the results of floating expressions may
+be represented in greater precision and range than that required by the type;
+the types are not changed thereby.</p>
+</blockquote>
+<p>I believe that a floating constant is a floating operand, so is allowed greater
+precision. Clearly, the expression <code>1.0 / 10.0</code> is allowed greater precision
+than just <code>double</code>, so it would make sense to allow an equivalent constant
+(<code>0.1</code>) to have greater precision.</p>
+<p>Subclause 6.4 <strong>Constant expressions</strong>, page 55, lines 14-16:</p>
+<blockquote>
+<p>If a floating expression is evaluated in the translation environment, the
+arithmetic precision and range shall be at least as great as if the expression
+were being evaluated in the execution environment.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>The Committee concurs with all the arguments presented - a floating constant
+may be represented in more precision than implied by its type.</p>
+
+</body>
+</html>

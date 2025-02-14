@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0172: Does the description for the relational and equality operators contain defects?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0172: Does the description for the relational and equality operators contain defects?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Clive D.W. Feather, BSI<br />
+Date: 1995-10-16<br />
+Submitted against: C90<br />
+Status: Fixed<br />
+Fixed in: C99<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_172.html">dr_172.html</a></p>
+<p><em>Submitted to BSI by Clive D.W. Feather clive@sco.com .</em></p>
+<p><em>In this Defect Report, identifiers lexically identical to those declared in
+standard headers refer to the identifiers declared in those standard headers,
+whether or not the header is explicitly mentioned.</em></p>
+<p><em>This Defect Report has been prepared with considerable help from Mark Brader,
+Jutta Degener, Ronald Guilmette, and a person whose employment conditions
+require anonymity. However, except where stated, opinions expressed or implied
+should not be assumed to be those of any person other than myself.</em></p>
+<p>Defect Report UK 020: Relational and equality operators</p>
+<p>The descriptions of these operators with pointer operands contain several
+defects.</p>
+<p><strong>Part 1</strong></p>
+<p>Consider the following code:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>s<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;a string&quot;</span>;
+<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">if</span><span style="color: #bbbbbb"> </span>(s<span style="color: #bbbbbb">  </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #008000">NULL</span>)
+<span style="color: #bbbbbb">        </span><span style="color: #3D7B7B; font-style: italic">/* ... */</span>
+</pre></div>
+
+<p>Subclause 6.3.8, Semantics reads in part:</p>
+<p>If the objects pointed to are not members of the same aggregate or union object,
+the result is undefined</p>
+<p>This implies that the comparison causes undefined behavior.</p>
+<p>Subclause 6.2.2.1 reads in part:</p>
+<p>Such a pointer, called a null pointer, is guaranteed to compare unequal to a
+pointer to any object or function.</p>
+<p>This implies that the comparison is guaranteed to yield <em>false.</em></p>
+<p>This is a direct contradiction.</p>
+<p><strong>Part 2</strong></p>
+<p>Subclause 6.3.9, Semantics reads in part:</p>
+<p>Where the operands have types and values suitable for the relational operators,
+the semantics detailed in subclause 6.3.8 apply.</p>
+<p>This can reasonably be read as meaning that, whenever the constraints of
+subclause 6.3.8 apply, its definitions should be used, even if that would result
+in undefined behavior. (The phrase <em>and values</em> can reasonably be read as
+requiring only that the pointers both be to objects; it does not necessarily
+mean that the result of the comparison must be defined.)</p>
+<p>It further reads:</p>
+<p>If two pointers to object or incomplete types are both null pointers, they
+compare equal. If two pointers to object or incomplete types compare equal, they
+both are null pointers, or both point to the same object, or both point one past
+the last element of the same array object.</p>
+<p>This says nothing about the comparison of any other pointers. Now, subclause
+3.16 reads in part:</p>
+<p>Undefined behavior is otherwise indicated ... by the omission of any explicit
+definition of behavior.</p>
+<p>Thus, in:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>a,<span style="color: #bbbbbb"> </span>b;
+<span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;</span>a<span style="color: #bbbbbb"> </span><span style="color: #666666">==</span><span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;</span>b
+</pre></div>
+
+<p>the comparison causes undefined behavior!</p>
+<p><strong>Part 3</strong></p>
+<p>The above citation does not allow for the case where one pointer is to an
+object, and the other is one past the last element of an array object. If an
+implementation places two independent objects in adjacent memory locations, a
+pointer to one would equal a pointer to just past the other on many common
+implementations.</p>
+<p>If these pointers are not to be viewed as identical, then the wording is
+defective.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>In subclause 6.2.2.1, replace the cited text by:</p>
+<p>Such a pointer is called a null pointer.</p>
+<p>In subclause 6.3.9, replace the first paragraph of the semantics by:</p>
+<p>The operators <code>==</code> (equal to) and <code>!=</code> (not equal to) shall yield 1 if the
+specified relation is true and 0 if it is false. If the operands have types
+suitable for those of a relational operator and values that would not cause
+undefined behavior if used with a relational operator, then the result of the
+comparison, either greater than or less than (both implying not equal to) or
+equal to, is the same as with a relational operator.</p>
+<p>Insert at the start of the second paragraph:</p>
+<p>Otherwise the operands are pointers, and they shall compare either equal or not
+equal.</p>
+<p>If part 3 is viewed as an issue, then in the same paragraph change:</p>
+<p>or both point one past the last element of the same array object.</p>
+<p>to:</p>
+<p>both point one past the last element of the same array object, or one points one
+past the last element of some array object and the other points to the first
+element of a different array object.</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>This is a work in progress item.</p>
+<p>Summary of Part 1:</p>
+<p>The standard does not currently state what happens with relational operators
+when you compare the address of an object with a null pointer.</p>
+<p>We know from the citation from subclause 6.2.2.3 that a null pointer is
+guaranteed to yield false when compared with a pointer to an object.</p>
+<p>It is explicitly undefined behaviour to use relational operators on two pointer
+that are not members of the same aggregate or union object. However it is
+unstated whether a null pointer compares greater or less than the address of an
+object and hence is implicitly undefined behaviour.</p>
+<p>Is this the desired behaviour?</p>
+<p>Note: the current C++ clause has the following wording:</p>
+<blockquote>
+<p>If two pointers of the same type point to different objects or functions, or
+only one of them is null, they compare unequal.</p>
+</blockquote>
+<p>This wording gives the possibility for C and C++ to give different results.</p>
+<p>Summary of Part 2:</p>
+<p>Discussion from Nashua is as follows:</p>
+<p>The intent is that pointers to distinct object will compare unequal, The C
+Standard will be fixed in a future revision.</p>
+
+</body>
+</html>

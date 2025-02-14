@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0500: Ambiguous specification for FLT_EVAL_METHOD</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0500: Ambiguous specification for <strong>FLT_EVAL_METHOD</strong></h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Jim Thomas<br />
+Date: 2016-09-10<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2077.pdf">N2077</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C23<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>5.2.4.2.2#9:</p>
+<blockquote>
+<p>Except for assignment and cast (which remove all extra range and precision), the
+values yielded by operators with floating operands and values subject to the
+usual arithmetic conversions and of floating constants are evaluated to a format
+whose range and precision may be greater than required by the type. The use of
+evaluation formats is characterized by the implementation-defined value
+of <code>FLT_EVAL_METHOD</code>:</p>
+<p><code>-1</code> indeterminable;</p>
+<p><code>0</code> evaluate all operations and constants just to the range and precision of the
+type;</p>
+<p><code>1</code> evaluate operations and constants of type <code>float</code> and <code>double</code> to the range
+and precision of the <code>double</code> type, evaluate <code>long double</code> operations and
+constants to the range and precision of the <code>long double</code> type;</p>
+<p><code>2</code> evaluate all operations and constants to the range and precision of the
+<code>long double</code> type.</p>
+<p>All other negative values for <code>FLT_EVAL_METHOD</code> characterize
+implementation-defined behavior</p>
+</blockquote>
+<p>Do the words:</p>
+<blockquote>
+<p>the values yielded by operators with floating operands and values subject to the
+usual arithmetic conversions</p>
+</blockquote>
+<p>in the first sentence mean the same as:</p>
+<blockquote>
+<p>Interpretation 1: the values yielded by operators with: (a) floating operands
+and (b) values subject to the usual arithmetic conversions</p>
+</blockquote>
+<p>or:</p>
+<blockquote>
+<p>Interpretation 2: (a) the values yielded by operators with floating operands and
+(b) the values subject to the usual arithmetic conversions?</p>
+</blockquote>
+<p>Interpretation 2 is problematic because the evaluation methods pertain only to
+operators that return a value of floating type, not to, for example, the
+relational operators with floating operands. Nor do they apply to all values
+subject to the usual arithmetic conversions, and so (b) doesn’t add anything.
+Thus, reasonableness suggests Interpretation 1. However, the mention of
+assignment and cast (which are not subject to the usual arithmetic conversions)
+suggests Interpretation 2.</p>
+<p>Interpretation 2, unlike Interpretation 1, implies that values yielded by unary
+operators are widened to the evaluation format. In some cases whether a unary
+operator is widened matters. Widening a signaling NaN operand raises the
+“invalid” floating-point exception. Widening an operand with a non-canonical
+encoding canonicalizes the encoding.</p>
+<p>The IEC 60559 <em>copy</em> and <em>negate</em> operations are bit manipulation operations
+that affect at most the sign. C operations bound to these IEC 60559 operations
+are expected to behave accordingly, but won’t if they entail widening.</p>
+<p>Widening unary operators would introduce conversions that might affect
+performance but which have no benefit.</p>
+<p>According to personal notes, this issue came up at the WG14 meeting in Chicago
+in 2013, but was not resolved and did not result in an action item.</p>
+<p>Recently, this issue came up again as underlying the issue raised by Joseph
+Myers in email SC22WG14.14278:</p>
+<blockquote>
+<p>Suppose that with an implementation of C11 + TS 18661-1, that defines</p>
+<p><code>FLT_EVAL_METHOD</code> to <code>2</code>, you have:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #008000; font-weight: bold">static</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">volatile</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>x<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>SNAN;
+
+(<span style="color: #B00040">void</span>)<span style="color: #bbbbbb"> </span>x;
+</pre></div>
+
+</blockquote>
+<p>Suppose also that the implementation defines the "<code>(void) x;</code>" statement to</p>
+<p>constitute an access to volatile-qualified <code>x</code>.</p>
+<p>May the implementation define that access to convert <code>x</code> from the format of</p>
+<p><code>double</code> to the format of <code>long double</code>, with greater range and precision,</p>
+<p>that format being used to represent <code>double</code> operands in accordance with the</p>
+<p>setting of <code>FLT_EVAL_METHOD</code>, and thereby to raise the "invalid" exception?</p>
+<p>That is, may a convertFormat operation be applied as part of</p>
+<p>lvalue-to-rvalue conversion where <code>FLT_EVAL_METHOD</code> implies that a wider</p>
+<p>evaluation format is in use?</p>
+<p>Even without signaling NaNs, the issue can apply to the case of exact</p>
+<p>underflow, which can be detected using pragmas from TS 18661-5, if the</p>
+<p>wider format has extra precision but not extra range and so exact underflow
+occurs on converting a subnormal value to the wider format.</p>
+</blockquote>
+<p>The following suggested Technical Corrigendum is intended to clarify the wording
+in favor of Interpretation 1, which excludes widening unary operators to the
+evaluation format.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>In 5.2.4.2.2#9, replace:</p>
+<blockquote>
+<p>Except for assignment and cast (which remove all extra range and precision), the
+values yielded by operators with floating operands and values subject to the
+usual arithmetic conversions and of floating constants are evaluated to a format
+whose range and precision may be greater than required by the type.</p>
+</blockquote>
+<p>with:</p>
+<blockquote>
+<p>The values of floating type yielded by operators subject to the usual
+arithmetic conversions and the values of floating constants are evaluated to a
+format whose range and precision may be greater than required by the type. In
+all cases, assignment and cast remove all extra range and precision.</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2018-10-18:</p>
+<p>Oct 2016 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The current text is ambiguous. It might be read to imply that unary operators
+must widen, which is not the intent since it would be incompatible with IEEE
+60559. Widening can cause signaling NaNs to be triggered and representations to
+be canonicalized.</p>
+</blockquote>
+<h3>Proposed Change</h3>
+<p>In 5.2.4.2.2#9, replace:</p>
+<blockquote>
+<p>Except for assignment and cast (which remove all extra range and precision), the
+values yielded by operators with floating operands and values subject to the
+usual arithmetic conversions and of floating constants are evaluated to a format
+whose range and precision may be greater than required by the type.</p>
+</blockquote>
+<p>with:</p>
+<blockquote>
+<p>The values of floating type yielded by operators subject to the usual
+arithmetic conversions and the values of floating constants are evaluated to a
+format whose range and precision may be greater than required by the type. In
+all cases, assignment and cast remove all extra range and precision.</p>
+</blockquote>
+
+</body>
+</html>

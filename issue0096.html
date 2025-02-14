@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0096: Can the element type in an array declarator be a non-object type?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0096: Can the element type in an array declarator be a non-object type?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Ron Guilmette, WG14<br />
+Date: 1993-12-03<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_096.html">dr_096.html</a></p>
+<p>ANSI/ISO C Defect report #rfg3:</p>
+<p>Subclause 6.5.4.2 <strong>Array declarators</strong> fails to contain any constraint which
+would prohibit the element type in an array declarator from being a type which
+is not an object type. (Note that subclause 6.1.2.5 seems to suggest that such
+usage is prohibited by saying that “An <em>array type</em> describes a contiguously
+allocated nonempty set of objects ...” But this still leaves the matter rather
+unclear.)</p>
+<p>I believe that some new constraint prohibiting the element type in an array
+declarator from being a non-object type (at least in some obvious cases) is
+clearly needed.</p>
+<p>Please consider the case of an array declarator, occurring at some point within
+a given translation unit, and indicating an element type <code>T</code>, where <code>T</code> is one
+of the following:</p>
+<ol>
+<li>A function type.</li>
+<li>A void type.</li>
+<li>An incomplete struct or union type which is <em>never</em> completed within the given translation unit.</li>
+<li>An incomplete struct or union type which <em>is</em> completed later within the given translation unit.</li>
+<li>An incomplete array type which is <em>never</em> completed within the given translation unit.</li>
+<li>An incomplete array type which <em>is</em> completed later within the given translation unit.</li>
+</ol>
+<p>I believe that it should be abundantly clear that the C Standard should contain
+a constraint prohibiting array declarators where the specified element type is
+either (1) or (2). Essentially all existing implementations already issue
+diagnostics for such usage.</p>
+<p>Also, in cases where an array declarator uses either a (3) or a (5) as the
+element type, it seems eminently reasonable to require diagnostics - and
+indeed, many existing implementations already do issue diagnostics for such
+usage - but this is perhaps debatable.</p>
+<p>Cases (4) and (6) from the above list are <em>entirely</em> debatable. Existing
+practice among so-called “conforming” C compilers varies with respect to these
+cases (in which an element type is completed at some point <em>after</em> use of the
+type, as an element type, in an array declarator). Here are two examples:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">S</span><span style="color: #bbbbbb"> </span>array[<span style="color: #666666">10</span>];<span style="color: #bbbbbb">                     </span><span style="color: #3D7B7B; font-style: italic">/* ok? */</span>
+<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">S</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>member;<span style="color: #bbbbbb"> </span>};<span style="color: #bbbbbb">      </span><span style="color: #3D7B7B; font-style: italic">/* type completed now */</span>
+
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>array_of_array[][];<span style="color: #bbbbbb">                </span><span style="color: #3D7B7B; font-style: italic">/* ok? */</span>
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>array_of_array[<span style="color: #666666">5</span>][<span style="color: #666666">5</span>];<span style="color: #bbbbbb">      </span><span style="color: #3D7B7B; font-style: italic">/* type completed now */</span>
+</pre></div>
+
+<p>As I say, I believe that the very least the Committee should do is to add a
+constraint requiring diagnostics for array declarators whose element types fall
+into categories (1) or (2). The Committee may wish to provide an even more
+stringent interpretation of subclause 6.1.2.5 and also require diagnostics for
+element types falling into categories (3) and/or (5). The Committee may even
+wish to take the simplest approach to this entire problem, and simply require
+diagnostics for <em>any</em> case in which an array declarator specifies an element
+type which is not (already) an object type.</p>
+<p>Regardless of which choice is made, I feel strongly that it is important for
+subclause 6.5.4.2 <strong>Array declarators</strong> to be revised to fully reflect both
+common sense and (to the extent possible) the intent of subclause 6.1.2.5.</p>
+<p>Footnote: Note that while is it <em>always</em> possible for a given incomplete struct
+or union type to be completed somewhere later within the same scope and same
+translation unit where it is used, and while it is <em>often</em> possible to complete
+a given incomplete array type later within the same scope and same translation
+unit where it is used (as illustrated by the above examples) it can sometimes be
+<em>impossible</em> to <em>ever</em> complete a given array type later within its scope and
+translation unit. This will certainly be the case whenever the array type in
+question is <em>not</em> used to declare an entity having <em>some</em> linkage (either
+internal or external).</p>
+<p>Examples:</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb"> </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">example</span><span style="color: #bbbbbb"> </span>()
+<span style="color: #bbbbbb">        </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>vp<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">*</span>)[][])<span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;<span style="color: #bbbbbb">     </span><span style="color: #3D7B7B; font-style: italic">/* abstract declarator</span>
+<span style="color: #3D7B7B; font-style: italic">                declares no  object - type can&#39;t be completed */</span>
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>array[][];<span style="color: #bbbbbb">  </span><span style="color: #3D7B7B; font-style: italic">/* no linkage - type can&#39;t ever be</span>
+<span style="color: #3D7B7B; font-style: italic">                        completed */</span>
+<span style="color: #bbbbbb">        </span>}
+</pre></div>
+
+</blockquote>
+<p>I mention these cases only because they may potentially have some small bearing
+upon the Committee's deliberations of the central issues of this Defect Report.</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>Subclause 6.1.2.5 does clearly state, “An <em>array type</em> describes a contiguously
+allocated nonempty set of objects with a particular member object type, called
+the *element type.*<strong>17</strong>” Footnote 17 and the first paragraph of subclause
+6.1.2.5 both state that object types do not include incomplete types. Nor do
+object types include function types. Thus, the array element type must not be
+any of the items you have listed. A diagnostic is not required. The Committee
+believes that whether or not a diagnostic is produced is an issue of quality of
+implementation.</p>
+
+</body>
+</html>

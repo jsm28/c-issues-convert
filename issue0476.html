@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0476: volatile semantics for lvalues</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0476: volatile semantics for lvalues</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Martin Sebor<br />
+Date: 2015-08-26<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1956.htm">N1956</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C23<br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>The following sections discuss the C semantics of the <code>volatile</code> keyword and
+show that they neither support existing practice nor, we believe, reflect the
+intent of the committee when they were crafted. The Suggested Technical
+Corrigendum then details changes to the C specification required to bring it
+into harmony with both, as well as with C++.</p>
+<h4>Motivation For Volatile</h4>
+<p>The use case that motivated the introduction of the <code>volatile</code> keyword into C
+was a variant of the following snippet copied from early UNIX sources [1]:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">    </span><span style="color: #9C6500">#define KL 0177560</span>
+
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>lobyte,<span style="color: #bbbbbb"> </span>hibyte;<span style="color: #bbbbbb"> </span>};
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>ks,<span style="color: #bbbbbb"> </span>kb,<span style="color: #bbbbbb"> </span>ps,<span style="color: #bbbbbb"> </span>pb;<span style="color: #bbbbbb"> </span>};
+
+<span style="color: #bbbbbb">    </span>getchar()<span style="color: #bbbbbb"> </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">register</span><span style="color: #bbbbbb"> </span>rc;
+<span style="color: #bbbbbb">        </span>...
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">while</span><span style="color: #bbbbbb"> </span>(KL<span style="color: #666666">-&gt;</span>ks.lobyte<span style="color: #bbbbbb"> </span><span style="color: #666666">&gt;=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>);
+<span style="color: #bbbbbb">        </span>rc<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>KL<span style="color: #666666">-&gt;</span>kb<span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0177</span>;
+<span style="color: #bbbbbb">        </span>...
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span>rc;
+<span style="color: #bbbbbb">    </span>}
+</pre></div>
+
+<p>The desired effect of the <code>while</code> loop in the <code>getchar()</code> function is to iterate
+until the most significant (sign) bit of the keyboard status register mapped to
+an address in memory represented by the <code>KL</code> macro (the address of the
+memory-mapped <code>KBD_STAT</code> I/O register on the PDP-11) has become non-zero,
+indicating that a key has been pressed, and then return the character value
+extracted from the low 7 bits corresponding to the pressed key. In order for the
+function to behave as expected, the compiler must emit an instruction to read a
+value from the I/O register on each iteration of the loop. In particular, the
+compiler must avoid caching the read value in a CPU register and substituting it
+in subsequent accesses.</p>
+<p>On the other hand, in situations where the memory location doesn't correspond to
+a special memory-mapped register, it's more efficient to avoid reading the value
+from memory if it happens to already have been read into a CPU register, and
+instead use the value cached in the CPU register.</p>
+<p>The problem is that without some sort of notation (in K&amp;R C there was none)
+there would be no way for a compiler to distinguish between these two cases. The
+following paragraph quoted from <em>The C Programming Language, Second Edition</em>, by
+Kernighan and Ritchie, explains the solution that was introduced into standard C
+to deal with this problem: the <code>volatile</code> keyword.</p>
+<blockquote>
+<p>The purpose of <code>volatile</code> is to force an implementation to suppress optimization
+that could otherwise occur. For example, for a machine with memory-mapped
+input/output, a pointer to a device register might be declared as a pointer to
+<code>volatile</code>, in order to prevent the compiler from removing apparently redundant
+references through the pointer.</p>
+</blockquote>
+<p>Using the <code>volatile</code> keyword, it should then be possible to rewrite the loop in
+the snippet above as follows:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">while</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">*</span>(<span style="color: #008000; font-weight: bold">volatile</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #666666">*</span>)<span style="color: #666666">&amp;</span>KL<span style="color: #666666">-&gt;</span>ks.lobyte<span style="color: #bbbbbb"> </span><span style="color: #666666">&gt;=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>);
+</pre></div>
+
+<p>or equivalently:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">volatile</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>lobyte<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">&amp;</span>KL<span style="color: #666666">-&gt;</span>ks.lobyte;
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">while</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">*</span>lobyte<span style="color: #bbbbbb"> </span><span style="color: #666666">&gt;=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>);
+</pre></div>
+
+<p>and prevent the compiler from caching the value of the keyboard status register,
+thus guaranteeing that the register will be read once in each iteration.</p>
+<p>The difference between the two forms of the rewritten loop is of historical
+interest: Early C compilers are said to have recognized the first pattern
+(without the <code>volatile</code> keyword) where the address used to access the register
+was a constant, and avoided the undesirable optimization for such accesses
+[11]. However, they did not have the same ability when the access was through
+pointer variable in which the address had been stored, especially not when the
+use of such a variable was far removed from the last assignment to it. The
+<code>volatile</code> keyword was intended to allow both forms of the loop to work as
+expected.</p>
+<p>The use case exemplified by the loop above has since become idiomatic and is
+being extensively relied on in today's software even beyond reading I/O
+registers.</p>
+<p>As a representative example, consider the Linux kernel which relies on
+<code>volatile</code> in its implementation of synchronization primitives such as spin
+locks, or for performance counters. The variables that are operated on by these
+primitives are typically declared to be of unqualified (i.e., non-volatile)
+scalar types and allocated in ordinary memory. In serial code, for maximum
+efficiency, each such variable is read and written just like any other variable,
+with its value cached in a CPU register as compiler optimizations permit. At
+well-defined points in the code where such a variable may be accessed by more
+than one CPU at a time, the caching must be prevented and the variable must be
+accessed using the special volatile semantics. To achieve that, the kernel
+defines two macros: <code>READ_ONCE</code>, and <code>WRITE_ONCE</code>, in whose terms the primitives
+are implemented. Each of the macros prevents the compiler optimization by
+casting the address of its argument to a <code>volatile T*</code> and accessing the
+variable via an lvalue of the <code>volatile</code>-qualified type <code>T</code> (where <code>T</code> is one of
+the standard scalar types). Other primitives gurantee memory synchronization and
+visibility but those are orthogonal to the subject of this paper. See [3].</p>
+<p>Similar examples can be found in other system or embedded programs as well as in
+many other pre-C11 and pre-C++11 code bases that don't rely on the Atomic
+types and operations newly inroduced in those standards. They are often cited in
+programming books [4] and in online articles [5, 6, 7, 8].</p>
+<h4>The Trouble With Volatile</h4>
+<p>In light of the motivation for the keyword and the wide-spread practice of
+relying on its expected effect it might then come as a surprise that the C
+standard lacks the necessary guarantees to support this popular idiom. In the
+text of the C standard, volatile semantics are specified to apply to objects
+explicitly declared with the qualifier. Quoting from §5.1.2.3, Program
+execution, p2:</p>
+<blockquote>
+<p>Accessing a volatile object, modifying an object, ... are all <em>side effects</em>,
+which are changes in the state of the execution environment.</p>
+</blockquote>
+<p>and p6:</p>
+<blockquote>
+<p>Accesses to volatile objects are evaluated strictly according to the rules of
+the abstract machine.</p>
+</blockquote>
+<p>Note in particular that the text refers to <ins>volatile objects</ins>, which
+are defined as regions of storage storing the representation of their values.
+Objects are distinct from expressions used to designate and access them. Such
+expressions are referred to as <em>lvalues</em>, and may but don't need to mention the
+name of the accessed object. However, since the words in the paragraphs above
+don't mention lvalues the special volatile semantics don't apply to such
+accessess. As a result, since the expression <code>*(volatile int*)&amp;KL-&gt;ks.lobyte</code> is
+not an object but an lvalue of type <code>volatile int</code> that designates an object of
+an otherwise unknown/unspecified type (the <code>KL</code> pointer doesn't point at an
+object in the C sense), the volatile semantics do not apply to it. Consequently,
+and due to §6.8.5, Iteration statements, p6</p>
+<blockquote>
+<p>An iteration statement whose controlling expression is not a constant
+expression, that ... does not access volatile objects ... may be assumed ... to
+terminate.</p>
+</blockquote>
+<p>the controlling expression of the <code>while</code> loop is not required to be evaluated
+with the special volatile semantics, allowing a C compiler to read the value of
+the keyboard status register just once, and to return its value from the
+function even if it's zero. (No known compiler has been observed to take
+advantage of this permission.) This would obviously cause the <code>getchar</code> function
+to behave in an unexpected way.</p>
+<p>Although the problem with the C specification of volatile isn't well known, it
+isn't new. It was pointed out in the past, for example in <em>The trouble with
+volatile</em> [9], Jonathan Corbet quotes Linus Torvalds, the author and
+maintainer of the Linux kernel, as saying:</p>
+<blockquote>
+<p>Also, more importantly, "<code>volatile</code>" is on the wrong <ins>part</ins> of the
+whole system. In C, it's "data" that is volatile, but that is insane. Data isn't
+volatile — <ins>accesses</ins> are volatile. So it may make sense to say "make
+this particular <ins>access</ins> be careful", but not "make all accesses to
+this data use some random strategy".</p>
+</blockquote>
+<h4>Volatile In C++</h4>
+<p>This problem is unique to the C standard. Unlike C, the text in the C++
+standard avoids referring to volatile objects and instead refers to volatile
+<em>glvalues</em>. (A <em>glvalue</em> is a C++ generalization of the C concept of
+<em>lvalue</em>.) The C++ text that corresponds to the quote from §5.1.2.3 Program
+execution, p2 of C11 above, in §1.9 Program execution, p12, reads:</p>
+<blockquote>
+<p>Accessing an object designated by a volatile <em>glvalue</em>, modifying an object, ...
+are all side effects, which are changes in the state of the execution
+environment.</p>
+</blockquote>
+<p>It might be tempting to chalk up this differenc to a deliberate or accidental
+diveregence of the C++ guarantees from C. But the C++ standard contains an
+informative note in §7.1.6.1, The <em>cv-qualifiers</em>, p7, making it clear that:</p>
+<blockquote>
+<p>In general, the semantics of volatile are intended to be the same in C++ as
+they are in C.</p>
+</blockquote>
+<p>This note which appears in the latest revision of C++ from 2014 dates back to
+the first revision of the standard from 1998.</p>
+<h4>Intended Semantics</h4>
+<p>Besides the evidence above that the words in the C standard do not reflect
+existing practice, there is also indication beyond the informative note in the
+C++ standard that the words most likely do not reflect the original intent of
+the committee at the time they were crafted.</p>
+<p>The C99 Rationale [10], in §6.7.3 makes it clear that the committee's intent
+when introducing <code>volatile</code> was to specify semantics that apply to accesses to
+non-volatile objects via volatile-qualified lvalues and not just to accesses to
+objects explicitly declared with the qualifier:</p>
+<blockquote>
+<p>The C89 Committee added to C two type qualifiers, <code>const</code> and <code>volatile</code>; ....
+Individually and in combination they specify the assumptions a compiler can and
+must make when accessing an object through an lvalue.</p>
+<p>.... <code>volatile</code> and <code>restrict</code> are inventions of the Committee; and both follow
+the syntactic model of <code>const</code>.</p>
+</blockquote>
+<p>(Note: The syntactic model of <code>const</code> is to apply constness to accesses through
+lvalues, regardless of whether or not the object being accessed has been
+declared with a const-qualified type.)</p>
+<p>The same section then further clarifies that:</p>
+<blockquote>
+<p>If it is necessary to access a non-<code>volatile</code> object using <code>volatile</code> semantics,
+the technique is to cast the address of the object to the appropriate
+pointer-to-qualified type, then dereference that pointer.</p>
+</blockquote>
+<h3>Suggested Technical Corrigendum</h3>
+<p>The suggested technical corrigendum that follows brings the volatile
+specification into alignment with existing practice, with their original intent,
+and also with the C++ specification.</p>
+<p>In §5.1.2.3, Program execution, p2:</p>
+<blockquote>
+<p>Accessing a<ins>n object through the use of an lvalue of volatile-qualified
+type</ins><del>volatile object</del>, modifying a file, or calling a function
+that does any of those operations are all side effects...</p>
+</blockquote>
+<p>In §5.1.2.3, Program execution, p4:</p>
+<blockquote>
+<p>An actual implementation need not evaluate part of an expression if it can
+deduce that its value is not used and that no needed side effects are produced
+(including any caused by calling a function or accessing a<ins>n object through
+the use of an lvalue of volatile-qualified type</ins><del>volatile
+object</del>).</p>
+</blockquote>
+<p>In §5.1.2.3, Program execution, p6, bullet 1:</p>
+<blockquote>
+<p>Accesses to <ins>objects through the use of lvalues of volatile-qualified
+types</ins><del>volatile objects</del> are evaluated strictly according to the
+rules of the abstract machine.</p>
+</blockquote>
+<p>In §6.7.3, Type qualifiers, p7:</p>
+<blockquote>
+<p>What constitutes an access to an object <ins>through the use of an lvalue
+of</ins><del>that has</del> volatile-qualified type is implementation-defined.</p>
+</blockquote>
+<p>In §6.8.5, Iteration statements, p6:</p>
+<blockquote>
+<p>An iteration statement whose controlling expression is not a constant
+expression,<sup>156)</sup> that performs no input/output operations, does not
+access <ins>objects through the use of lvalues of volatile-qualified types</ins>
+<del>volatile objects</del>, ... may be assumed by the implementation to
+terminate.</p>
+</blockquote>
+<p>In §J.3.10, Qualifiers, p1:</p>
+<blockquote>
+<p>What constitutes an access to an object <ins>through the use of an lvalue
+of</ins><del>that has</del> volatile-qualified type (6.7.3).</p>
+</blockquote>
+<p>In §L.2.1, p1:</p>
+<blockquote>
+<p>out-of-bounds store</p>
+<p>an (attempted) access (3.1) that, at run time, for a given computational state,
+would modify (or, for an <del>object declared</del><ins>lvalue of</ins>
+volatile<ins>-qualified type</ins>, fetch) one or more bytes that lie outside
+the bounds permitted by this Standard.</p>
+</blockquote>
+<h3>References</h3>
+<ol>
+<li><a href="http://minnie.tuhs.org/cgi-bin/utree.pl?file=SysIII/usr/src/stand/pdp11/iload/console.c"><code>/usr/src/stand/pdp11/iload/console.c</code></a>, AT&amp;T UNIX System III, 1982</li>
+<li><a href="https://hassanolity.files.wordpress.com/2013/11/the_c_programming_language_2.pdf">The C Programming Language, Second Edition</a>, Brian W. Kernighan, Dennis M. Ritchie</li>
+<li>ISO/IEC SC22/WG21 document <a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2015/n4444.html">N4444</a>: Linux-Kernel Memory Model, Paul E. McKenney</li>
+<li><a href="http://publications.gbdirect.co.uk/c_book/chapter8/const_and_volatile.html">§8.4. Const and volatile</a>, The C Book, Second Edition, Mike Banahan and Declan Brady, GBdirect</li>
+<li><a href="http://www.embedded.com/electronics-blogs/beginner-s-corner/4023801/Introduction-to-the-Volatile-Keyword">Introduction to the volatile keyword</a> an embedded.com article by Nigel Jones, July 2, 2001</li>
+<li><a href="http://stackoverflow.com/questions/72552/why-does-volatile-exist">Why does volatile exist?</a>, a stackoverflow.com article, September 16, 2008</li>
+<li><a href="http://stackoverflow.com/questions/246127/why-is-volatile-needed-in-c">Why is volatile needed in c?</a>, a stackoverflow.com article, October 29, 2008</li>
+<li><a href="https://en.wikipedia.org/wiki/Volatile_%28computer_programming%29">volatile (computer programming)</a>, a Wikipedia article</li>
+<li><a href="https://lwn.net/Articles/233479">The trouble with volatile</a>, an LWN article, Jonathan Corbet, May 9 2007</li>
+<li><a href="https://www.open-std.org/jtc1/sc22/wg14/www/C99RationaleV5.10.pdf">Rationale for International Standard — Programming Languages — C</a>, Revision 5.10, April 2003</li>
+<li><a href="https://groups.google.com/forum/#%21msg/comp.std.c/tHvQhiKFtD4/zfIgJhbkCXcJ">A question on volatile accesses</a> — A response to comp.std.c question by Doug Gwyn, November 1990</li>
+</ol>
+<hr />
+<p>Comment from WG14 on 2018-10-18:</p>
+<p>Oct 2015 meeting</p>
+<h3>Committee Discussion</h3>
+<ul>
+<li>The premise of this DR is essentially that the original specification of <code>volatile</code> did not accurately reflect the intent at the time of its formulation and that ongoing practice has in fact implemented the intent. On the basis that the intent was clearly established and that practice corroborates it, the committee accepted this as a defect and moreover concluded that it is in substantial agreement.</li>
+<li>Although asked, the committee did not spend any time answering the question as to why such a defect had never before been reported. All implementors represented on the committee were polled and all confirmed that indeed, the intent, not the standard, is implemented. In addition to the linux experience documented in the paper, at least two committee members described discussions with systems engineers where this difference between the standard vs the implementation was discussed because the systems engineers clearly depended on the implementation of actual intent. The sense was that this was simply a well known discrepency.</li>
+<li>Specifically, the intent is reflected in the implementations of the gcc, Intel, clang, sparc, and IBM compilers. Although far from a complete enumeration of C compilers, these were broad enough to accept that all known compilers that the committee could speak to that are used for systems implementation in fact implement the intent, not the standard.</li>
+<li>The committee also believes that C++ “got this (nearly) right” and that there will likely be a liaison issue on this topic.</li>
+<li>The committee feels that the changes proposed to 5.1.2.3p6 bullet 1 are the “heart of the matter”. There was a suggestion that editorially, it might be worthwhile to define a new term <em>volatile access</em> at that point and use it consistently in the other parts of the standard rather than as proposed in the suggested technical corrigendum. This suggestion and other comments can also be found in <a href="https://www.open-std.org/jtc1/sc22/wg14/13870">(SC22WG14.13870) N1956 volatile semantics</a>. This rephrasing of the proposed changes could eliminate potential confusion when introduced elsewhere.</li>
+<li>The author was asked to revise his wordings through soliciting input either directly from committee members or indirectly through the use of the WG14 reflector and to formulate and submit a new paper on this topic.</li>
+</ul>
+<p>Apr 2016 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>Further correspondence with the author led to a small paper containing a revised
+Suggested Technical Corrigendum incorporating the suggestion from the last
+meeting. The following proposed changes were considered appropriate.</p>
+<p>Change §5.1.2.3p2 from:</p>
+<blockquote>
+<p>Accessing a volatile object, modifying an object, modifying a file, or calling a
+function that does any of those operations are all side effects ...</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>An access to an object through the use of an lvalue of volatile-qualified type
+is a <em>volatile access</em>. A volatile access to an object, modifying a file, or
+calling a function that does any of those operations are all side effects ...</p>
+</blockquote>
+<p>Change §5.1.2.3p4 from:</p>
+<blockquote>
+<p>An actual implementation need not evaluate part of an expression if it can
+deduce that its value is not used and that no needed side effects are produced
+(including any caused by calling a function or accessing a volatile object.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>An actual implementation need not evaluate part of an expression if it can
+deduce that its value is not used and that no needed side effects are produced
+(including any caused by calling a function or through volatile access to an
+object.</p>
+</blockquote>
+<p>Change §5.1.2.3p6 bullet 1 from:</p>
+<blockquote>
+<p>Accesses to volatile objects are evaluated strictly according to the rules of
+the abstract machine.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>Volatile accesses to objects are evaluated strictly according to the rules of
+the abstract machine.</p>
+</blockquote>
+<p>There was a suggestion that <em>volatile access</em> be reconciled with the definition
+of <em>lvalue</em> in §6.3.2.1 and that further wording is solicited.</p>
+</blockquote>
+<p>Apr 2017 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The committee agreed to adopt the wording worked out in prior meetings, and to
+leave the definition of <em>lvalue</em> unchanged at this time.</p>
+</blockquote>
+<h3>Proposed Change</h3>
+<p>Change §5.1.2.3p2 from:</p>
+<blockquote>
+<p>Accessing a volatile object, modifying an object, modifying a file, or calling a
+function that does any of those operations are all side effects ...</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>An access to an object through the use of an lvalue of volatile-qualified type
+is a <em>volatile access</em>. A volatile access to an object, modifying a file, or
+calling a function that does any of those operations are all side effects ...</p>
+</blockquote>
+<p>Change §5.1.2.3p4 from:</p>
+<blockquote>
+<p>An actual implementation need not evaluate part of an expression if it can
+deduce that its value is not used and that no needed side effects are produced
+(including any caused by calling a function or accessing a volatile object.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>An actual implementation need not evaluate part of an expression if it can
+deduce that its value is not used and that no needed side effects are produced
+(including any caused by calling a function or through volatile access to an
+object.</p>
+</blockquote>
+<p>Change §5.1.2.3p6 bullet 1 from:</p>
+<blockquote>
+<p>Accesses to volatile objects are evaluated strictly according to the rules of
+the abstract machine.</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>Volatile accesses to objects are evaluated strictly according to the rules of
+the abstract machine.</p>
+</blockquote>
+
+</body>
+</html>
