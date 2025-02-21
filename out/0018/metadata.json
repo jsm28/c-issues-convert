@@ -1,5 +1,8 @@
 {
-    "author-md": "Yasushi Nakahara",
+    "authors-md": [
+        "Yasushi Nakahara",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -16,8 +19,9 @@
     "reference-doc-md": "X3J11/90-066",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "Does `fscanf` recognize literal multibyte characters properly?",
+    "x-author-md": "Yasushi Nakahara",
     "x-orig-summary-md": "Does `fscanf` recognize literal multibyte characters properly?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Yasushi Nakahara"
 }

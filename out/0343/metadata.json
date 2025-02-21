@@ -1,5 +1,8 @@
 {
-    "author-md": "Joseph Myers \\<joseph@codesourcery.com\\>",
+    "authors-md": [
+        "Joseph Myers \\<joseph@codesourcery.com\\>",
+        "Joseph Myers (UK)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -19,12 +22,13 @@
     "reference-doc-md": "[ISO/IEC WG14 N1224](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1224.htm)",
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Joseph Myers (UK)",
     "summary-md": "Initializing qualified wchar\\_t arrays",
+    "x-author-md": "Joseph Myers \\<joseph@codesourcery.com\\>",
     "x-dr-version": "1.1",
     "x-dr-version-date": "2007-09-07",
     "x-index-summary-md": "Q1: Initializing qualified wchar\\_t arrays",
     "x-orig-status-class": "closed",
     "x-status-date": "2007-10-10",
+    "x-submitter-md": "Joseph Myers (UK)",
     "x-summary-author-md": "Myers (UK)"
 }

@@ -1,5 +1,7 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14"
+    ],
     "comments": [],
     "conversion-src": [
         "n1087.pdf",
@@ -12,5 +14,6 @@
     ],
     "status": "fixed",
     "submitted-against": "embc2004",
-    "summary-md": "\\[Embedded C 2004 DR#15\\]"
+    "summary-md": "\\[Embedded C 2004 DR#15\\]",
+    "x-author-md": "WG14"
 }

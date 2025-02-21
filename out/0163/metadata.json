@@ -1,5 +1,8 @@
 {
-    "author-md": "Clive D.W. Feather",
+    "authors-md": [
+        "Clive D.W. Feather",
+        "BSI"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -15,8 +18,9 @@
     "date": "1995-10-16",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "BSI",
     "summary-md": "Is it clear whether the use of an undeclared identifier as a primary expression requires a diagnostic message to be issued?",
+    "x-author-md": "Clive D.W. Feather",
     "x-orig-summary-md": "Is it clear whether the use of an undeclared identifier as a primary expression requires a diagnostic message to be issued?",
+    "x-submitter-md": "BSI",
     "x-summary-author-md": "Clive Feather"
 }

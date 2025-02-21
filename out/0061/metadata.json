@@ -1,5 +1,8 @@
 {
-    "author-md": "Ed Bendickson",
+    "authors-md": [
+        "Ed Bendickson",
+        "X3 Secretariat (USA)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -15,8 +18,9 @@
     "date": "1993-08-19",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "X3 Secretariat (USA)",
     "summary-md": "Interpretation of white space in the format string of a scan statement",
+    "x-author-md": "Ed Bendickson",
     "x-orig-summary-md": "Interpretation of white space in the format string of a scan statement.",
+    "x-submitter-md": "X3 Secretariat (USA)",
     "x-summary-author-md": "Ed Bendickson"
 }

@@ -1,5 +1,8 @@
 {
-    "author-md": "WG 14",
+    "authors-md": [
+        "WG 14",
+        "Fred Tydeman (USA)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -21,11 +24,12 @@
     "reference-doc-md": "[ISO/IEC WG14 C90 DR 087](issue:0087)",
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Fred Tydeman (USA)",
     "summary-md": "Floating-point status flags and sequence points",
+    "x-author-md": "WG 14",
     "x-dr-version": "1.3",
     "x-dr-version-date": "2006-03-29",
     "x-index-summary-md": "Q1: Floating-point status flags and sequence points",
     "x-orig-status-class": "published",
+    "x-submitter-md": "Fred Tydeman (USA)",
     "x-summary-author-md": "Tydeman (US)"
 }

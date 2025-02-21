@@ -1,5 +1,8 @@
 {
-    "author-md": "The Open Group",
+    "authors-md": [
+        "The Open Group",
+        "Andrew Josey via Fred Tydeman"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -19,11 +22,12 @@
     "reference-doc-md": "[Open Group aardvark 117](http://www.opengroup.org/austin/aardvark/finaltext/xshbug.txt)",
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Andrew Josey via Fred Tydeman",
     "summary-md": "Function prototype with \\[restrict\\]",
+    "x-author-md": "The Open Group",
     "x-dr-version": "1.2",
     "x-dr-version-date": "2004-03-03",
     "x-index-summary-md": "Q1: Function prototype with \\[restrict\\]",
     "x-orig-status-class": "published",
+    "x-submitter-md": "Andrew Josey via Fred Tydeman",
     "x-summary-author-md": "The Open Group"
 }

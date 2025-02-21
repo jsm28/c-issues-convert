@@ -1,5 +1,8 @@
 {
-    "author-md": "WG 14",
+    "authors-md": [
+        "WG 14",
+        "Joseph Myers"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,10 +21,11 @@
     "reference-doc-md": "[N1731](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1731.pdf)",
     "status": "fixed",
     "submitted-against": "c11c17",
-    "submitter-md": "Joseph Myers",
     "summary-md": "Issues with alignment in C11, part 2",
+    "x-author-md": "WG 14",
     "x-dr-summary-md": "Issues with alignment in C11, part 2",
     "x-dr-version-date": "10/2017",
     "x-orig-status-class": "c17",
+    "x-submitter-md": "Joseph Myers",
     "x-table-summary-md": "Issues with alignment in C11, part 2"
 }

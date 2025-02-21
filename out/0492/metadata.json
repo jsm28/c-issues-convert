@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "Clive H. Pygott"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -15,10 +18,11 @@
     "reference-doc-md": "[N2007](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2007.pdf)",
     "status": "closed",
     "submitted-against": "c11c17",
-    "submitter-md": "Clive H. Pygott",
     "summary-md": "Named Child struct-union with no Member",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "Named Child struct-union with no Member",
     "x-dr-version-date": "04/2017",
     "x-orig-status-class": "closed",
+    "x-submitter-md": "Clive H. Pygott",
     "x-table-summary-md": "Named Child struct-union with no Member"
 }

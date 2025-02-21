@@ -1,5 +1,8 @@
 {
-    "author-md": "Derek M. Jones",
+    "authors-md": [
+        "Derek M. Jones",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,8 +21,9 @@
     "reference-doc-md": "X3J11/91-062",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "Should the response to [Defect Report #017, Q27](issue:0017.27) be reconsidered?",
+    "x-author-md": "Derek M. Jones",
     "x-orig-summary-md": "Should the response to [Defect Report #017, Q27](issue:0017.27) be reconsidered?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Derek M. Jones"
 }

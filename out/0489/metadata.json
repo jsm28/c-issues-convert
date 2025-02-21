@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "Fred J. Tydeman"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -15,10 +18,11 @@
     "reference-doc-md": "[N1994](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1994.htm)",
     "status": "closed",
     "submitted-against": "c11c17",
-    "submitter-md": "Fred J. Tydeman",
     "summary-md": "Integer Constant Expression",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "Integer Constant Expression",
     "x-dr-version-date": "04/2017",
     "x-orig-status-class": "closed",
+    "x-submitter-md": "Fred J. Tydeman",
     "x-table-summary-md": "Integer Constant Expression"
 }

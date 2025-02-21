@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "John Benito"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,10 +21,11 @@
     "reference-doc-md": "[N1628](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1628.htm)",
     "status": "fixed",
     "submitted-against": "c11c17",
-    "submitter-md": "John Benito",
     "summary-md": "Annex J not updated with necessary `aligned_alloc` entries",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "Annex J not updated with necessary `aligned_alloc` entries",
     "x-dr-version-date": "10/2017",
     "x-orig-status-class": "c17",
+    "x-submitter-md": "John Benito",
     "x-table-summary-md": "Missing entries in Annex J"
 }

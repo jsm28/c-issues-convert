@@ -1,5 +1,8 @@
 {
-    "author-md": "Clive D.W. Feather",
+    "authors-md": [
+        "Clive D.W. Feather",
+        "BSI"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -20,8 +23,9 @@
     ],
     "status": "fixed",
     "submitted-against": "c90",
-    "submitter-md": "BSI",
     "summary-md": "Is the word *unique* in subclause 7.10.3 ambiguous?",
+    "x-author-md": "Clive D.W. Feather",
     "x-orig-summary-md": "Is the word *unique* in subclause 7.10.3 ambiguous? See also [Defect Report #158](issue:0158).",
+    "x-submitter-md": "BSI",
     "x-summary-author-md": "Clive Feather"
 }

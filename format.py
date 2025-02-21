@@ -121,12 +121,7 @@ def format_issue(num, data, for_single):
                         'the original issue lists and some formatting may '
                         'not have been preserved.**\n\n')
     meta_list = []
-    authors = []
-    if 'author-md' in data:
-        authors.append(data['author-md'])
-    if 'submitter-md' in data:
-        authors.append(data['submitter-md'])
-    meta_list.append('Authors: %s' % ', '.join(authors))
+    meta_list.append('Authors: %s' % ', '.join(data['authors-md']))
     meta_list.append('Date: %s' % data['date'])
     if 'reference-doc-md' in data:
         meta_list.append('Reference document: %s' % data['reference-doc-md'])

@@ -1,5 +1,8 @@
 {
-    "author-md": "Clive D.W. Feather",
+    "authors-md": [
+        "Clive D.W. Feather",
+        "BSI"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -20,8 +23,9 @@
     ],
     "status": "fixed",
     "submitted-against": "c90",
-    "submitter-md": "BSI",
     "summary-md": "Are the semantics for the explicit conversion of null pointer constants defined?",
+    "x-author-md": "Clive D.W. Feather",
     "x-orig-summary-md": "Are the semantics for the explicit conversion of null pointer constants defined?",
+    "x-submitter-md": "BSI",
     "x-summary-author-md": "Clive Feather"
 }

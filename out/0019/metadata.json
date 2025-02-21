@@ -1,5 +1,8 @@
 {
-    "author-md": "Richard Wiersma",
+    "authors-md": [
+        "Richard Wiersma",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,8 +21,9 @@
     "reference-doc-md": "X3J11/91-014",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "Are printing characters implementation defined?",
+    "x-author-md": "Richard Wiersma",
     "x-orig-summary-md": "Are printing characters implementation defined?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Richard Wiersma"
 }

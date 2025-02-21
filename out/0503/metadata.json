@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "Clark Nelson"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -15,10 +18,11 @@
     "reference-doc-md": "[N2082](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2082.htm)",
     "status": "closed",
     "submitted-against": "c11c17",
-    "submitter-md": "Clark Nelson",
     "summary-md": "Hexadecimal floating-point and `strtod`",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "Hexadecimal floating-point and `strtod`",
     "x-dr-version-date": "10/2017",
     "x-orig-status-class": "closed",
+    "x-submitter-md": "Clark Nelson",
     "x-table-summary-md": "Hexadecimal floating-point and `strtod`"
 }

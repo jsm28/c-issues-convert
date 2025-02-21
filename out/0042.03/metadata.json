@@ -1,5 +1,8 @@
 {
-    "author-md": "Tom MacDonald",
+    "authors-md": [
+        "Tom MacDonald",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -16,8 +19,9 @@
     "reference-doc-md": "X3J11/92-001",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "How big is a string object defined by the `str*` functions?",
+    "x-author-md": "Tom MacDonald",
     "x-orig-summary-md": "How big is a string object defined by the `str*` functions?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Tom MacDonald"
 }

@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "Fred Tydeman"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,10 +21,11 @@
     "reference-doc-md": "[N1886](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1886.htm)",
     "status": "fixed",
     "submitted-against": "c11c17",
-    "submitter-md": "Fred Tydeman",
     "summary-md": "Complex math functions cacosh and ctanh",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "Complex math functions cacosh and ctanh",
     "x-dr-version-date": "10/2017",
     "x-orig-status-class": "c17",
+    "x-submitter-md": "Fred Tydeman",
     "x-table-summary-md": "Complex math functions cacosh and ctanh"
 }

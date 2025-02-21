@@ -1,5 +1,8 @@
 {
-    "author-md": "Terence David Carroll",
+    "authors-md": [
+        "Terence David Carroll",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -16,8 +19,9 @@
     "reference-doc-md": "X3J11/90-010",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "Should `\\` be escaped within macro actual parameters?",
+    "x-author-md": "Terence David Carroll",
     "x-orig-summary-md": "Should `\\` be escaped within macro actual parameters?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Terence David Carroll"
 }

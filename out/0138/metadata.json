@@ -1,5 +1,8 @@
 {
-    "author-md": "John Max Skaller",
+    "authors-md": [
+        "John Max Skaller",
+        "Project Editor (P.J. Plauger)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,8 +21,9 @@
     ],
     "status": "fixed",
     "submitted-against": "c90",
-    "submitter-md": "Project Editor (P.J. Plauger)",
     "summary-md": "What are the storage durations?",
+    "x-author-md": "John Max Skaller",
     "x-orig-summary-md": "What are the storage durations?",
+    "x-submitter-md": "Project Editor (P.J. Plauger)",
     "x-summary-author-md": "John Max Skaller"
 }

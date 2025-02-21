@@ -1,5 +1,8 @@
 {
-    "author-md": "NCITS J11",
+    "authors-md": [
+        "NCITS J11",
+        "Fred Tydeman (US)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -23,12 +26,13 @@
     ],
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Fred Tydeman (US)",
     "summary-md": "Accuracy of decimal string to/from \"binary\" (non-decimal) floating-point conversions",
+    "x-author-md": "NCITS J11",
     "x-dr-version": "1.4",
     "x-dr-version-date": "2001-09-18 14:47:22",
     "x-index-summary-md": "Q1:Accuracy of decimal string to/from \"binary\" (non-decimal) floating-point conversions.",
     "x-orig-status-class": "published",
+    "x-submitter-md": "Fred Tydeman (US)",
     "x-summary-author-md": "Tydeman (US)",
     "x-summary-date": "1999-10-19"
 }

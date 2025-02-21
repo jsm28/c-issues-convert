@@ -1,5 +1,8 @@
 {
-    "author-md": "Jutta Degener",
+    "authors-md": [
+        "Jutta Degener",
+        "DIN"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,8 +21,9 @@
     ],
     "status": "fixed",
     "submitted-against": "c90",
-    "submitter-md": "DIN",
     "summary-md": "Are programs containing `char array[] = \"Hello, World\";` strictly conforming?",
+    "x-author-md": "Jutta Degener",
     "x-orig-summary-md": "Are programs containing `char array[] = \"Hello, World\";` strictly conforming?",
+    "x-submitter-md": "DIN",
     "x-summary-author-md": "Jutta Degener"
 }

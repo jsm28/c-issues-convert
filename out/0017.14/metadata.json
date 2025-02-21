@@ -1,5 +1,8 @@
 {
-    "author-md": "Derek M. Jones",
+    "authors-md": [
+        "Derek M. Jones",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -21,8 +24,9 @@
     "reference-doc-md": "X3J11/90-056",
     "status": "fixed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "`const void` type as a parameter",
+    "x-author-md": "Derek M. Jones",
     "x-orig-summary-md": "`const void` type as a parameter",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Derek M. Jones"
 }

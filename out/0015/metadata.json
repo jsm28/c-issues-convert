@@ -1,5 +1,8 @@
 {
-    "author-md": "Craig Blitz",
+    "authors-md": [
+        "Craig Blitz",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,8 +21,9 @@
     "reference-doc-md": "X3J11/90-051",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "How does an unsigned plain bitfield promote?",
+    "x-author-md": "Craig Blitz",
     "x-orig-summary-md": "How does an unsigned plain bitfield promote?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Craig Blitz"
 }

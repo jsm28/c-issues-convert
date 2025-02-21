@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "Fred J. Tydeman"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -15,10 +18,11 @@
     "reference-doc-md": "[N1943](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1943.htm)",
     "status": "closed",
     "submitted-against": "c11c17",
-    "submitter-md": "Fred J. Tydeman",
     "summary-md": "`__LINE__` and `__FILE__` in macro replacement list",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "`__LINE__` and `__FILE__` in macro replacement list",
     "x-dr-version-date": "10/2016",
     "x-orig-status-class": "closed",
+    "x-submitter-md": "Fred J. Tydeman",
     "x-table-summary-md": "`__LINE__` and `__FILE__` in macro replacement list"
 }

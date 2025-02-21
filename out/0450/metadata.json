@@ -1,5 +1,8 @@
 {
-    "author-md": "WG 14",
+    "authors-md": [
+        "WG 14",
+        "Martin Sebor"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,10 +21,11 @@
     "reference-doc-md": "[N1752](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1752.htm)",
     "status": "fixed",
     "submitted-against": "c11c17",
-    "submitter-md": "Martin Sebor",
     "summary-md": "`tmpnam_s` clears `s[0]` when `maxsize > RSIZE_MAX`",
+    "x-author-md": "WG 14",
     "x-dr-summary-md": "`tmpnam_s` clears `s[0]` when `maxsize > RSIZE_MAX`",
     "x-dr-version-date": "10/2017",
     "x-orig-status-class": "c17",
+    "x-submitter-md": "Martin Sebor",
     "x-table-summary-md": "`tmpnam_s` clears `s[0]`"
 }

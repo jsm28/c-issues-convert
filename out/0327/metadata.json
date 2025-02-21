@@ -1,5 +1,8 @@
 {
-    "author-md": "Rich Peterson \\<Rich.Peterson@hp.com\\>",
+    "authors-md": [
+        "Rich Peterson \\<Rich.Peterson@hp.com\\>",
+        "J11"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,12 +21,13 @@
     ],
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "J11",
     "summary-md": "Italicize definition of variable length array type, add forward references",
+    "x-author-md": "Rich Peterson \\<Rich.Peterson@hp.com\\>",
     "x-dr-version": "1.4",
     "x-dr-version-date": "2007-09-06",
     "x-index-summary-md": "Q1: Italicize definition of variable length array type.",
     "x-orig-status-class": "closed",
     "x-status-date": "2007-04-25",
+    "x-submitter-md": "J11",
     "x-summary-author-md": "Peterson (US)"
 }

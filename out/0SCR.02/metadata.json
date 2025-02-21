@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "Clive Pygott"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,10 +21,11 @@
     "reference-doc-md": "[N2006](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2006.htm)",
     "status": "fixed",
     "submitted-against": "cscr2013",
-    "submitter-md": "Clive Pygott",
     "summary-md": "Missing formatted input/output functions in Rule 5.40",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "Missing formatted input/output functions in Rule 5.40",
     "x-dr-version-date": "04/2017",
     "x-orig-status-class": "closed",
+    "x-submitter-md": "Clive Pygott",
     "x-table-summary-md": "Missing formatted input/output functions in Rule 5.40"
 }

@@ -1,5 +1,8 @@
 {
-    "author-md": "David Metsky",
+    "authors-md": [
+        "David Metsky",
+        "Project Editor (P.J. Plauger)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -15,8 +18,9 @@
     "date": "1993-01-10",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "Project Editor (P.J. Plauger)",
     "summary-md": "Can `strxfrm` produce a longer translation string?",
+    "x-author-md": "David Metsky",
     "x-orig-summary-md": "Can `strxfrm` produce a longer translation string?",
+    "x-submitter-md": "Project Editor (P.J. Plauger)",
     "x-summary-author-md": "David Metsky"
 }

@@ -1,5 +1,8 @@
 {
-    "author-md": "Sam Kendall",
+    "authors-md": [
+        "Sam Kendall",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -22,8 +25,9 @@
     "reference-doc-md": "X3J11/90-047",
     "status": "fixed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "When is the `sizeof` an enumeration type known?",
+    "x-author-md": "Sam Kendall",
     "x-orig-summary-md": "When is the `sizeof` an enumeration type known?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Sam Kendall"
 }

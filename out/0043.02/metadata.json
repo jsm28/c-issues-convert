@@ -1,5 +1,8 @@
 {
-    "author-md": "Robert Paul Corbett",
+    "authors-md": [
+        "Robert Paul Corbett",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -16,8 +19,9 @@
     "reference-doc-md": "X3J11/92-004",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "Can an identifier that starts with an underscore be defined as a macro in a source file that includes at least one standard header?",
+    "x-author-md": "Robert Paul Corbett",
     "x-orig-summary-md": "Can an identifier that starts with an underscore be defined as a macro in a source file that includes at least one standard header?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Robert Paul Corbett"
 }

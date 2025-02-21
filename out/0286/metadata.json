@@ -1,5 +1,8 @@
 {
-    "author-md": "WG 14",
+    "authors-md": [
+        "WG 14",
+        "Fred Tydeman (USA)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,11 +21,12 @@
     ],
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Fred Tydeman (USA)",
     "summary-md": "Correctly rounded and rounding direction/mode",
+    "x-author-md": "WG 14",
     "x-dr-version": "1.1",
     "x-dr-version-date": "2004-09-28",
     "x-index-summary-md": "Q1: Correctly rounded and rounding direction/mode",
     "x-orig-status-class": "published",
+    "x-submitter-md": "Fred Tydeman (USA)",
     "x-summary-author-md": "Tydeman (US)"
 }

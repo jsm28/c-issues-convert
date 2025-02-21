@@ -1,5 +1,8 @@
 {
-    "author-md": "Randall Meyers",
+    "authors-md": [
+        "Randall Meyers",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -16,8 +19,9 @@
     "reference-doc-md": "X3J11/91-007",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "Can one use other than the basic C character set in a strictly conforming program?",
+    "x-author-md": "Randall Meyers",
     "x-orig-summary-md": "Can one use other than the basic C character set in a strictly conforming program?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Randall Meyers"
 }

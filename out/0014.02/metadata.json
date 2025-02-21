@@ -1,5 +1,8 @@
 {
-    "author-md": "Max K. Goff",
+    "authors-md": [
+        "Max K. Goff",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -21,8 +24,9 @@
     "reference-doc-md": "X3J11/90-049",
     "status": "fixed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "How does `fscanf(\"%n\")` behave on end-of-file?",
+    "x-author-md": "Max K. Goff",
     "x-orig-summary-md": "How does `fscanf(\"%n\")` behave on end-of-file?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Max K. Goff"
 }

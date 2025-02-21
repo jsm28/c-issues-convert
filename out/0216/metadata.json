@@ -1,4 +1,7 @@
 {
+    "authors-md": [
+        "Clive Feather (UK)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -17,12 +20,12 @@
     ],
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Clive Feather (UK)",
     "summary-md": "Source character encodings",
     "x-dr-version": "1.4",
     "x-dr-version-date": "2000-11-02 13:50:26",
     "x-index-summary-md": "Q1: Source character encoding.",
     "x-orig-status-class": "published",
+    "x-submitter-md": "Clive Feather (UK)",
     "x-summary-author-md": "Feather (UK)",
     "x-summary-date": "2000-04-04"
 }

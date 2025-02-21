@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "Torvald Riegel, Martin Sebor"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,10 +21,11 @@
     "reference-doc-md": "[N1963](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1963.htm)",
     "status": "closed",
     "submitted-against": "c11c17",
-    "submitter-md": "Torvald Riegel, Martin Sebor",
     "summary-md": "unclear specification of `mtx_trylock` on non-recursive muteness",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "unclear specification of `mtx_trylock` on non-recursive muteness",
     "x-dr-version-date": "10/2018",
     "x-orig-status-class": "closed",
+    "x-submitter-md": "Torvald Riegel, Martin Sebor",
     "x-table-summary-md": "unclear specification of `mtx_trylock` on non-recursive muteness"
 }

@@ -1,5 +1,8 @@
 {
-    "author-md": "Michael S. Ball",
+    "authors-md": [
+        "Michael S. Ball",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -16,8 +19,9 @@
     "reference-doc-md": "X3J11/90-044",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "Is the typedef to an incomplete type valid?",
+    "x-author-md": "Michael S. Ball",
     "x-orig-summary-md": "Is the typedef to an incomplete type valid?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Michael S. Ball"
 }

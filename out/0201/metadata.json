@@ -1,4 +1,7 @@
 {
+    "authors-md": [
+        "Clive Feather (UK)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -15,13 +18,13 @@
     "reference-doc-md": "[ISO/IEC WG14 N883](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n883.htm)",
     "status": "closed",
     "submitted-against": "c99",
-    "submitter-md": "Clive Feather (UK)",
     "summary-md": "Integer types longer than `long`",
     "x-dr-version": "1.9",
     "x-dr-version-date": "2007-09-06",
     "x-index-summary-md": "Q1: Integer types longer than `long`.",
     "x-orig-status-class": "closed",
     "x-status-date": "2001-09-25",
+    "x-submitter-md": "Clive Feather (UK)",
     "x-summary-author-md": "Feather (UK)",
     "x-summary-date": "1999-06-22"
 }

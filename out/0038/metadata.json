@@ -1,5 +1,8 @@
 {
-    "author-md": "Kuo-Wei Lee",
+    "authors-md": [
+        "Kuo-Wei Lee",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -16,8 +19,9 @@
     "reference-doc-md": "X3J11/91-046",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "What happens when macro replacement creates adjacent tokens that can be taken as a single token?",
+    "x-author-md": "Kuo-Wei Lee",
     "x-orig-summary-md": "What happens when macro replacement creates adjacent tokens that can be taken as a single token?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Kuo-Wei Lee"
 }

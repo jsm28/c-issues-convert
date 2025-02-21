@@ -1,5 +1,8 @@
 {
-    "author-md": "Convener",
+    "authors-md": [
+        "Convener",
+        "J. Benito (convener)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -19,11 +22,12 @@
     "reference-doc-md": "[ISO/IEC WG14 N1025](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1025.htm)",
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "J. Benito (convener)",
     "summary-md": "Use of the word *variable*",
+    "x-author-md": "Convener",
     "x-dr-version": "1.3",
     "x-dr-version-date": "2006-04-04",
     "x-index-summary-md": "Q1: Use of the word *variable*.",
     "x-orig-status-class": "published",
+    "x-submitter-md": "J. Benito (convener)",
     "x-summary-author-md": "Convener"
 }

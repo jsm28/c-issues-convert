@@ -1,5 +1,8 @@
 {
-    "author-md": "Vania Joloboff",
+    "authors-md": [
+        "Vania Joloboff",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -16,8 +19,9 @@
     "reference-doc-md": "X3J11/91-061",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "Should `setlocale(LC_ALL, NULL)` return `\"C\"` in the `\"C\"` locale?",
+    "x-author-md": "Vania Joloboff",
     "x-orig-summary-md": "Should `setlocale(LC_ALL, NULL)` return `\"C\"` in the `\"C\"` locale?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Vania Joloboff"
 }

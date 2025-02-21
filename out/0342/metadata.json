@@ -1,5 +1,8 @@
 {
-    "author-md": "Joseph Myers \\<joseph@codesourcery.com\\>",
+    "authors-md": [
+        "Joseph Myers \\<joseph@codesourcery.com\\>",
+        "Joseph Myers (UK)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -21,12 +24,13 @@
     "reference-doc-md": "[ISO/IEC WG14 N1223](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1223.htm)",
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Joseph Myers (UK)",
     "summary-md": "VLAs and conditional expressions",
+    "x-author-md": "Joseph Myers \\<joseph@codesourcery.com\\>",
     "x-dr-version": "1.4",
     "x-dr-version-date": "2008-09-10",
     "x-index-summary-md": "Q1: VLAs and conditional expressions",
     "x-orig-status-class": "review",
     "x-status-date": "2008-09-10",
+    "x-submitter-md": "Joseph Myers (UK)",
     "x-summary-author-md": "Myers (UK)"
 }

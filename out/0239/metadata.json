@@ -1,4 +1,7 @@
 {
+    "authors-md": [
+        "Fred Tydeman (US)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,12 +21,12 @@
     "reference-doc-md": "[ISO/IEC WG14 N943](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n943.txt)",
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Fred Tydeman (US)",
     "summary-md": "Annex F `nexttoward` description is inconsistent with 7.12.11.4. and F.9.8.3",
     "x-dr-version": "1.1",
     "x-dr-version-date": "2001-10-16 09:48:00",
     "x-index-summary-md": "Q1: Annex F `nexttoward` description is inconsistent with 7.12.11.4.",
     "x-orig-status-class": "published",
+    "x-submitter-md": "Fred Tydeman (US)",
     "x-summary-author-md": "Tydeman (US)",
     "x-summary-date": "2001-04-25"
 }

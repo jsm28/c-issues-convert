@@ -1,5 +1,7 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -20,5 +22,6 @@
     "reference-doc-md": "Embedded-c email list [208](https://www.open-std.org/jtc1/sc22/wg14/embedded-c/208)",
     "status": "fixed",
     "submitted-against": "embc2004",
-    "summary-md": "Error in 7.18.a.6.3"
+    "summary-md": "Error in 7.18.a.6.3",
+    "x-author-md": "WG14"
 }

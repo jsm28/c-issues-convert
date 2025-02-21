@@ -1,5 +1,8 @@
 {
-    "author-md": "J11",
+    "authors-md": [
+        "J11",
+        "Clark Nelson"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -20,11 +23,12 @@
     ],
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Clark Nelson",
     "summary-md": "Accessing a non-current union member (\"type punning\")",
+    "x-author-md": "J11",
     "x-dr-version": "1.2",
     "x-dr-version-date": "2004-09-28",
     "x-index-summary-md": "Q1: Accessing a non-current union member, *type punning*.",
     "x-orig-status-class": "published",
+    "x-submitter-md": "Clark Nelson",
     "x-summary-author-md": "Nelson (US)"
 }

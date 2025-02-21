@@ -1,5 +1,8 @@
 {
-    "author-md": "Joseph Myers \\<joseph@codesourcery.com\\>",
+    "authors-md": [
+        "Joseph Myers \\<joseph@codesourcery.com\\>",
+        "UK C Panel"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -19,11 +22,12 @@
     "reference-doc-md": "[ISO/IEC WG14 N1099](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1099.htm)",
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "UK C Panel",
     "summary-md": "Definition of variably modified types",
+    "x-author-md": "Joseph Myers \\<joseph@codesourcery.com\\>",
     "x-dr-version": "1.6",
     "x-dr-version-date": "2007-09-06",
     "x-index-summary-md": "Q1: Definition of variably modified types",
     "x-orig-status-class": "published",
+    "x-submitter-md": "UK C Panel",
     "x-summary-author-md": "Myers (UK)"
 }

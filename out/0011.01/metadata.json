@@ -1,5 +1,8 @@
 {
-    "author-md": "Rich Peterson",
+    "authors-md": [
+        "Rich Peterson",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -21,8 +24,9 @@
     "reference-doc-md": "X3J11/90-008",
     "status": "fixed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "When do the types of multiple external declarations get formed into a composite type?",
+    "x-author-md": "Rich Peterson",
     "x-orig-summary-md": "When do the types of multiple external declarations get formed into a composite type?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Rich Peterson"
 }

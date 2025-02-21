@@ -1,5 +1,8 @@
 {
-    "author-md": "Fred Tydeman",
+    "authors-md": [
+        "Fred Tydeman",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,8 +21,9 @@
     "reference-doc-md": "X3J11/91-003",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "If 99,999 is larger than `DBL_MAX_10_EXP`, what is the result of `strtod(\"0.0e99999\", &ptr)`?",
+    "x-author-md": "Fred Tydeman",
     "x-orig-summary-md": "If 99,999 is larger than `DBL_MAX_10_EXP`, what is the result of `strtod(\"0.0e99999\", &ptr)`?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Fred Tydeman"
 }

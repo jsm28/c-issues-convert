@@ -1,5 +1,8 @@
 {
-    "author-md": "WG 14",
+    "authors-md": [
+        "WG 14",
+        "P.J. Plauger"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -19,11 +22,12 @@
     "reference-doc-md": "[ISO/IEC WG14 N1024](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1024.txt)",
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "P.J. Plauger",
     "summary-md": "corrections to requirements on inexact floating-point exceptions",
+    "x-author-md": "WG 14",
     "x-dr-version": "1.2",
     "x-dr-version-date": "2004-09-28",
     "x-index-summary-md": "Q1: corrections to requirements on inexact",
     "x-orig-status-class": "published",
+    "x-submitter-md": "P.J. Plauger",
     "x-summary-author-md": "P. J. Plauger (US)"
 }

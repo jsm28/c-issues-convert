@@ -1,5 +1,8 @@
 {
-    "author-md": "WG21",
+    "authors-md": [
+        "WG21",
+        "Clark Nelson"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,12 +21,13 @@
     ],
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Clark Nelson",
     "summary-md": "Casts in preprocessor conditional expressions",
+    "x-author-md": "WG21",
     "x-dr-version": "1.2",
     "x-dr-version-date": "2007-07-21",
     "x-index-summary-md": "Q1: Casts in preprocessor conditional expressions",
     "x-orig-status-class": "closed",
     "x-status-date": "2008-04-16",
+    "x-submitter-md": "Clark Nelson",
     "x-summary-author-md": "Nelson (US)"
 }

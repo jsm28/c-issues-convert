@@ -1,5 +1,8 @@
 {
-    "author-md": "Steve M. Hoxey",
+    "authors-md": [
+        "Steve M. Hoxey",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -16,8 +19,9 @@
     "reference-doc-md": "X3J11/92-010",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "Must the expansion of a standard header be a strictly conforming program?",
+    "x-author-md": "Steve M. Hoxey",
     "x-orig-summary-md": "Must the expansion of a standard header be a strictly conforming program?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Steve M. Hoxey"
 }

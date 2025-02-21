@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "David Keaton (suggested by Jens Gustedt)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,10 +21,11 @@
     "reference-doc-md": "[N1802](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1802.htm)",
     "status": "fixed",
     "submitted-against": "c11c17",
-    "submitter-md": "David Keaton (suggested by Jens Gustedt)",
     "summary-md": "The `ctime_s` function in Annex K defined incorrectly",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "The `ctime_s` function in Annex K defined incorrectly",
     "x-dr-version-date": "10/2017",
     "x-orig-status-class": "c17",
+    "x-submitter-md": "David Keaton (suggested by Jens Gustedt)",
     "x-table-summary-md": "The `ctime_s` function in Annex K defined incorrectly"
 }

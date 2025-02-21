@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "Martin Sebor"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -15,10 +18,11 @@
     "reference-doc-md": "[N1865](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1865.htm)",
     "status": "closed",
     "submitted-against": "c11c17",
-    "submitter-md": "Martin Sebor",
     "summary-md": "scope of a `for` loop control declaration",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "scope of a `for` loop control declaration",
     "x-dr-version-date": "10/2015",
     "x-orig-status-class": "closed",
+    "x-submitter-md": "Martin Sebor",
     "x-table-summary-md": "scope of a `for` loop control declaration"
 }

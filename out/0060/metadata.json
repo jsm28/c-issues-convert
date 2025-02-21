@@ -1,5 +1,8 @@
 {
-    "author-md": "Larry Jones",
+    "authors-md": [
+        "Larry Jones",
+        "Project Editor (P.J. Plauger)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -20,8 +23,9 @@
     ],
     "status": "fixed",
     "submitted-against": "c90",
-    "submitter-md": "Project Editor (P.J. Plauger)",
     "summary-md": "When an array of `char` (or `wchar_t`) is initialized with a string literal that contains fewer characters than the array, are the remaining elements of the array initialized?",
+    "x-author-md": "Larry Jones",
     "x-orig-summary-md": "When an array of `char` (or `wchar_t`) is initialized with a string literal that contains fewer characters than the array, are the remaining elements of the array initialized?",
+    "x-submitter-md": "Project Editor (P.J. Plauger)",
     "x-summary-author-md": "Larry Jones"
 }

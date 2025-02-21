@@ -1,5 +1,8 @@
 {
-    "author-md": "Rich Peterson",
+    "authors-md": [
+        "Rich Peterson",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -16,8 +19,9 @@
     "reference-doc-md": "X3J11/90-008",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "Are implicit initializers for tentative array definitions syntactically valid?",
+    "x-author-md": "Rich Peterson",
     "x-orig-summary-md": "Are implicit initializers for tentative array definitions syntactically valid?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Rich Peterson"
 }

@@ -1,5 +1,8 @@
 {
-    "author-md": "Otto R. Newman",
+    "authors-md": [
+        "Otto R. Newman",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -16,8 +19,9 @@
     "reference-doc-md": "X3J11/90-021",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "Should volatile functions be added?",
+    "x-author-md": "Otto R. Newman",
     "x-orig-summary-md": "Should volatile functions be added?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Otto R. Newman"
 }

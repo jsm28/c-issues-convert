@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "[Robert Seacord](mailto:rcs@cert.org)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,10 +21,11 @@
     "reference-doc-md": "[N1813](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1813.htm)",
     "status": "fixed",
     "submitted-against": "c11c17",
-    "submitter-md": "[Robert Seacord](mailto:rcs@cert.org)",
     "summary-md": "Clarifying objects accessed in signal handlers",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "Clarifying objects accessed in signal handlers",
     "x-dr-version-date": "10/2017",
     "x-orig-status-class": "c17",
+    "x-submitter-md": "[Robert Seacord](mailto:rcs@cert.org)",
     "x-table-summary-md": "Clarifying objects accessed in signal handlers"
 }

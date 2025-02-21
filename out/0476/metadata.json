@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "Martin Sebor"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,10 +21,11 @@
     "reference-doc-md": "[N1956](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1956.htm)",
     "status": "fixed",
     "submitted-against": "c11c17",
-    "submitter-md": "Martin Sebor",
     "summary-md": "volatile semantics for lvalues",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "volatile semantics for lvalues",
     "x-dr-version-date": "10/2018",
     "x-orig-status-class": "c2x",
+    "x-submitter-md": "Martin Sebor",
     "x-table-summary-md": "volatile semantics for lvalues"
 }

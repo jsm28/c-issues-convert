@@ -1,5 +1,8 @@
 {
-    "author-md": "WG 14",
+    "authors-md": [
+        "WG 14",
+        "Fred Tydeman (USA)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,11 +21,12 @@
     ],
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Fred Tydeman (USA)",
     "summary-md": "`(double)0.1f` with `FLT_EVAL_METHOD` being 2",
+    "x-author-md": "WG 14",
     "x-dr-version": "1.2",
     "x-dr-version-date": "2006-03-05",
     "x-index-summary-md": "Q1: `(double)0.1f` with `FLT_EVAL_METHOD` being 2",
     "x-orig-status-class": "published",
+    "x-submitter-md": "Fred Tydeman (USA)",
     "x-summary-author-md": "Tydeman (US)"
 }

@@ -1,5 +1,8 @@
 {
-    "author-md": "Steve M. Hoxey",
+    "authors-md": [
+        "Steve M. Hoxey",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,8 +21,9 @@
     "reference-doc-md": "X3J11/92-010",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "What does it mean to say that the type of `offsetof` is `size_t`?",
+    "x-author-md": "Steve M. Hoxey",
     "x-orig-summary-md": "What does it mean to say that the type of `offsetof` is `size_t`?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Steve M. Hoxey"
 }

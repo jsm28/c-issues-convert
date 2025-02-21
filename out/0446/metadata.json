@@ -1,5 +1,8 @@
 {
-    "author-md": "WG 14",
+    "authors-md": [
+        "WG 14",
+        "Blaine Garst"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -15,10 +18,11 @@
     "reference-doc-md": "[N1736](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1736.htm)",
     "status": "closed",
     "submitted-against": "c11c17",
-    "submitter-md": "Blaine Garst",
     "summary-md": "Use byte instead of character for memcmp, memcpy",
+    "x-author-md": "WG 14",
     "x-dr-summary-md": "Use byte instead of character for memcmp, memcpy",
     "x-dr-version-date": "10/2014",
     "x-orig-status-class": "closed",
+    "x-submitter-md": "Blaine Garst",
     "x-table-summary-md": "Use byte instead of character for memcmp, memcpy"
 }

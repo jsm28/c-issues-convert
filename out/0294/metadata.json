@@ -1,5 +1,8 @@
 {
-    "author-md": "INCITS",
+    "authors-md": [
+        "INCITS",
+        "Greg Davis, Green Hills Software"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -15,12 +18,13 @@
     "date": "2003-08-14",
     "status": "closed",
     "submitted-against": "c99",
-    "submitter-md": "Greg Davis, Green Hills Software",
     "summary-md": "Technical question on C99 `restrict` keyword",
+    "x-author-md": "INCITS",
     "x-dr-version": "1.1",
     "x-dr-version-date": "2004-09-28",
     "x-index-summary-md": "Q1: Technical question on C99, on the formal model for `restrict`.",
     "x-orig-status-class": "closed",
     "x-status-date": "2004-10-28",
+    "x-submitter-md": "Greg Davis, Green Hills Software",
     "x-summary-author-md": "INCITS (US)"
 }

@@ -1,5 +1,8 @@
 {
-    "author-md": "Austin Group",
+    "authors-md": [
+        "Austin Group",
+        "Nick Stoughton (US)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,10 +21,11 @@
     "reference-doc-md": "[N1719](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1719.htm)",
     "status": "fixed",
     "submitted-against": "c11c17",
-    "submitter-md": "Nick Stoughton (US)",
     "summary-md": "`clock` overflow problems",
+    "x-author-md": "Austin Group",
     "x-dr-summary-md": "`clock` overflow problems",
     "x-dr-version-date": "10/2017",
     "x-orig-status-class": "c17",
+    "x-submitter-md": "Nick Stoughton (US)",
     "x-table-summary-md": "`clock` overflow"
 }

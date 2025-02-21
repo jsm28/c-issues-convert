@@ -3318,6 +3318,19 @@ def process_issue(issue_num, issue_content):
         k_md = k[:-len('-html')] + '-md'
         issue_content[k_md] = convert_to_md(issue_content[k])
         del issue_content[k]
+    # A single author list is more meaningful for use in a tracker for
+    # future issues than separate author and submitter, so convert
+    # that data here.
+    authors = []
+    if 'author-md' in issue_content:
+        authors.append(issue_content['author-md'])
+        issue_content['x-author-md'] = issue_content['author-md']
+        del issue_content['author-md']
+    if 'submitter-md' in issue_content:
+        authors.append(issue_content['submitter-md'])
+        issue_content['x-submitter-md'] = issue_content['submitter-md']
+        del issue_content['submitter-md']
+    issue_content['authors-md'] = authors
     for c in issue_content['comments']:
         html_keys = [k for k in c if k.endswith('-html')]
         for k in html_keys:

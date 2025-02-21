@@ -1,5 +1,8 @@
 {
-    "author-md": "Austin Group",
+    "authors-md": [
+        "Austin Group",
+        "Nick Stoughton (US)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -21,11 +24,12 @@
     "reference-doc-md": "[DR\\_321](issue:0321),",
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Nick Stoughton (US)",
     "summary-md": "Missing Predefined Macro Name",
+    "x-author-md": "Austin Group",
     "x-dr-version": "1.4",
     "x-dr-version-date": "2007-09-06",
     "x-index-summary-md": "Q1: Missing Predefined Macro Name",
     "x-orig-status-class": "published",
+    "x-submitter-md": "Nick Stoughton (US)",
     "x-summary-author-md": "Stoughton (US)"
 }

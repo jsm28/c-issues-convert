@@ -1,5 +1,8 @@
 {
-    "author-md": "Loren Schall",
+    "authors-md": [
+        "Loren Schall",
+        "Project Editor (P.J. Plauger)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,8 +21,9 @@
     ],
     "status": "fixed",
     "submitted-against": "c90",
-    "submitter-md": "Project Editor (P.J. Plauger)",
     "summary-md": "Must the `SIG*` macros have distinct values?",
+    "x-author-md": "Loren Schall",
     "x-orig-summary-md": "Must the `SIG*` macros have distinct values?",
+    "x-submitter-md": "Project Editor (P.J. Plauger)",
     "x-summary-author-md": "Loren Schall"
 }

@@ -1,5 +1,8 @@
 {
-    "author-md": "WG 14",
+    "authors-md": [
+        "WG 14",
+        "Fred J. Tydeman (USA)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,10 +21,11 @@
     "reference-doc-md": "N1660 [N1660](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1660.htm)",
     "status": "fixed",
     "submitted-against": "c11c17",
-    "submitter-md": "Fred J. Tydeman (USA)",
     "summary-md": "Missing constraint w.r.t. Atomic",
+    "x-author-md": "WG 14",
     "x-dr-summary-md": "Possible defect report: Missing constraint w.r.t. Atomic",
     "x-dr-version-date": "10/2017",
     "x-orig-status-class": "c17",
+    "x-submitter-md": "Fred J. Tydeman (USA)",
     "x-table-summary-md": "Missing constraint w.r.t. Atomic"
 }

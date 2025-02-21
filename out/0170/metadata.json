@@ -1,5 +1,8 @@
 {
-    "author-md": "Clive D.W. Feather",
+    "authors-md": [
+        "Clive D.W. Feather",
+        "BSI"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,8 +21,9 @@
     ],
     "status": "fixed",
     "submitted-against": "c90",
-    "submitter-md": "BSI",
     "summary-md": "Are the description of operators and punctuators is confusing, and are the constraints contradictory?",
+    "x-author-md": "Clive D.W. Feather",
     "x-orig-summary-md": "Are the description of operators and punctuators is confusing, and are the constraints contradictory?",
+    "x-submitter-md": "BSI",
     "x-summary-author-md": "Clive Feather"
 }

@@ -1,5 +1,8 @@
 {
-    "author-md": "Joseph Myers \\<joseph@codesourcery.com\\>",
+    "authors-md": [
+        "Joseph Myers \\<joseph@codesourcery.com\\>",
+        "UK C Panel"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -16,12 +19,13 @@
     "reference-doc-md": "[ISO/IEC WG14 N1102](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1102.htm)",
     "status": "closed",
     "submitted-against": "c99",
-    "submitter-md": "UK C Panel",
     "summary-md": "Cross-translation-unit tagged type compatibility",
+    "x-author-md": "Joseph Myers \\<joseph@codesourcery.com\\>",
     "x-dr-version": "1.5",
     "x-dr-version-date": "2008-09-12",
     "x-index-summary-md": "Q1: Cross-translation-unit tagged type compatibility",
     "x-orig-status-class": "review",
     "x-status-date": "2008-09-10",
+    "x-submitter-md": "UK C Panel",
     "x-summary-author-md": "Myers (UK)"
 }

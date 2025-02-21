@@ -1,5 +1,8 @@
 {
-    "author-md": "Paul Eggert",
+    "authors-md": [
+        "Paul Eggert",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -16,8 +19,9 @@
     "reference-doc-md": "X3J11/90-043",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "Are declarations of the form `struct` *`tag`* permitted after *`tag`* has already been declared?",
+    "x-author-md": "Paul Eggert",
     "x-orig-summary-md": "Are declarations of the form `struct` *`tag`* permitted after *`tag`* has already been declared?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Paul Eggert"
 }

@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "[Martin Sebor](mailto:msebor@gmail.com)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -15,10 +18,11 @@
     "reference-doc-md": "[N1812](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1812.htm)",
     "status": "closed",
     "submitted-against": "c11c17",
-    "submitter-md": "[Martin Sebor](mailto:msebor@gmail.com)",
     "summary-md": "problems with references to objects in signal handlers",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "problems with references to objects in signal handlers",
     "x-dr-version-date": "10/2015",
     "x-orig-status-class": "closed",
+    "x-submitter-md": "[Martin Sebor](mailto:msebor@gmail.com)",
     "x-table-summary-md": "problems with references to objects in signal handlers"
 }

@@ -1,5 +1,8 @@
 {
-    "author-md": "WG15",
+    "authors-md": [
+        "WG15",
+        "Project Editor (Larry Jones)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -19,12 +22,13 @@
     "reference-doc-md": "[ISO/IEC WG14 N888](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n888.htm)",
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Project Editor (Larry Jones)",
     "summary-md": "C locale conflict with ISO/IEC 9945-2",
+    "x-author-md": "WG15",
     "x-dr-version": "1.1",
     "x-dr-version-date": "2000-04-18 02:08:50",
     "x-index-summary-md": "Q1: C locale conflict with ISO/IEC 9945-2.",
     "x-orig-status-class": "published",
+    "x-submitter-md": "Project Editor (Larry Jones)",
     "x-summary-author-md": "Jones (US)",
     "x-summary-date": "1999-08-18"
 }

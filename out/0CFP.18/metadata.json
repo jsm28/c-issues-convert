@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "C Floating Point Group"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -19,10 +22,11 @@
     "reference-doc-md": "[N2204](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2204.pdf)",
     "status": "fixed",
     "submitted-against": "cfp-c11",
-    "submitter-md": "C Floating Point Group",
     "summary-md": "P4: missing specification of preferred quantum exponents",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "P4: missing specification of preferred quantum exponents",
     "x-dr-version-date": "10/2018",
     "x-orig-status-class": "closed",
+    "x-submitter-md": "C Floating Point Group",
     "x-table-summary-md": "P4: missing specification of preferred quantum exponents"
 }

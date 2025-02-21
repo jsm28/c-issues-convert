@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "C Floating Point Group"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,10 +21,11 @@
     "reference-doc-md": "[N2272](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2272.pdf)",
     "status": "fixed",
     "submitted-against": "cfp-c11",
-    "submitter-md": "C Floating Point Group",
     "summary-md": "P1 remainder NaN case",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "P1 remainder NaN case",
     "x-dr-version-date": "04/2019",
     "x-orig-status-class": "c2x",
+    "x-submitter-md": "C Floating Point Group",
     "x-table-summary-md": "P1 remainder NaN case"
 }

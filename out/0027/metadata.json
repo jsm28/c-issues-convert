@@ -1,5 +1,8 @@
 {
-    "author-md": "Randall Meyers",
+    "authors-md": [
+        "Randall Meyers",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -19,8 +22,9 @@
     "reference-doc-md": "X3J11/91-008",
     "status": "fixed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "May a standard conforming implementation add identifier characters?",
+    "x-author-md": "Randall Meyers",
     "x-orig-summary-md": "May a standard conforming implementation add identifier characters?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Randall Meyers"
 }

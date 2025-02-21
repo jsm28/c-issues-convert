@@ -1,5 +1,8 @@
 {
-    "author-md": "Bruce Blodgett",
+    "authors-md": [
+        "Bruce Blodgett",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -21,8 +24,9 @@
     "reference-doc-md": "X3J11/90-023",
     "status": "fixed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "Are typedef names sometimes ambiguous in parameter declarations?",
+    "x-author-md": "Bruce Blodgett",
     "x-orig-summary-md": "Are typedef names sometimes ambiguous in parameter declarations?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Bruce Blodgett"
 }

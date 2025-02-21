@@ -1,5 +1,8 @@
 {
-    "author-md": "Walter J. Murray",
+    "authors-md": [
+        "Walter J. Murray",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -16,8 +19,9 @@
     "reference-doc-md": "X3J11/90-020",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "How does `strtoul` behave when presented with a subject sequence that begins with a minus sign?",
+    "x-author-md": "Walter J. Murray",
     "x-orig-summary-md": "How does `strtoul` behave when presented with a subject sequence that begins with a minus sign?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Walter J. Murray"
 }

@@ -1,5 +1,8 @@
 {
-    "author-md": "Joseph Myers \\<joseph@codesourcery.com\\>",
+    "authors-md": [
+        "Joseph Myers \\<joseph@codesourcery.com\\>",
+        "Joseph Myers (UK)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -19,12 +22,13 @@
     "reference-doc-md": "[ISO/IEC WG14 N1222](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1222.htm)",
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Joseph Myers (UK)",
     "summary-md": "`[*]` in abstract declarators",
+    "x-author-md": "Joseph Myers \\<joseph@codesourcery.com\\>",
     "x-dr-version": "1.4",
     "x-dr-version-date": "2008-07-21",
     "x-index-summary-md": "Q1: `[*]` in abstract declarators",
     "x-orig-status-class": "closed",
     "x-status-date": "2008-04-16",
+    "x-submitter-md": "Joseph Myers (UK)",
     "x-summary-author-md": "Myers (UK)"
 }

@@ -1,5 +1,8 @@
 {
-    "author-md": "Fred J. Tydeman",
+    "authors-md": [
+        "Fred J. Tydeman",
+        "J11"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -19,12 +22,13 @@
     "reference-doc-md": "[N1183](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1183.htm)",
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "J11",
     "summary-md": "Externally visible exceptional conditions",
+    "x-author-md": "Fred J. Tydeman",
     "x-dr-version": "1.3",
     "x-dr-version-date": "2007-10-30",
     "x-index-summary-md": "Q1: Externally visible exceptional conditions.",
     "x-orig-status-class": "closed",
     "x-status-date": "2007-10-10",
+    "x-submitter-md": "J11",
     "x-summary-author-md": "Tydeman (US)"
 }

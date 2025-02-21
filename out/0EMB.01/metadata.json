@@ -1,5 +1,7 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -20,5 +22,6 @@
     "reference-doc-md": "Embedded-c email list [188](https://www.open-std.org/jtc1/sc22/wg14/embedded-c/188), [189](https://www.open-std.org/jtc1/sc22/wg14/embedded-c/189), [190](https://www.open-std.org/jtc1/sc22/wg14/embedded-c/190), [191](https://www.open-std.org/jtc1/sc22/wg14/embedded-c/191), [192](https://www.open-std.org/jtc1/sc22/wg14/embedded-c/192), [194](https://www.open-std.org/jtc1/sc22/wg14/embedded-c/194), [196](https://www.open-std.org/jtc1/sc22/wg14/embedded-c/196), [198](https://www.open-std.org/jtc1/sc22/wg14/embedded-c/198), [200](https://www.open-std.org/jtc1/sc22/wg14/embedded-c/200), [201](https://www.open-std.org/jtc1/sc22/wg14/embedded-c/201), [203](https://www.open-std.org/jtc1/sc22/wg14/embedded-c/203), [204](https://www.open-std.org/jtc1/sc22/wg14/embedded-c/204), [207](https://www.open-std.org/jtc1/sc22/wg14/embedded-c/207)",
     "status": "fixed",
     "submitted-against": "embc2004",
-    "summary-md": "Name conflict for strtok"
+    "summary-md": "Name conflict for strtok",
+    "x-author-md": "WG14"
 }

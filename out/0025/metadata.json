@@ -1,5 +1,8 @@
 {
-    "author-md": "Fred Tydeman",
+    "authors-md": [
+        "Fred Tydeman",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,8 +21,9 @@
     "reference-doc-md": "X3J11/91-005",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "What is meant by *representable floating-point value?*",
+    "x-author-md": "Fred Tydeman",
     "x-orig-summary-md": "What is meant by *representable floating-point value?*",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Fred Tydeman"
 }

@@ -1,5 +1,8 @@
 {
-    "author-md": "Derek M. Jones",
+    "authors-md": [
+        "Derek M. Jones",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -19,8 +22,9 @@
     "reference-doc-md": "X3J11/91-062",
     "status": "fixed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "Is an implementation that fails to equal the value of an environmental limit conforming?",
+    "x-author-md": "Derek M. Jones",
     "x-orig-summary-md": "Is an implementation that fails to equal the value of an environmental limit conforming?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Derek M. Jones"
 }

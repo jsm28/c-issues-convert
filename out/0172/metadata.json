@@ -1,5 +1,8 @@
 {
-    "author-md": "Clive D.W. Feather",
+    "authors-md": [
+        "Clive D.W. Feather",
+        "BSI"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,8 +21,9 @@
     ],
     "status": "fixed",
     "submitted-against": "c90",
-    "submitter-md": "BSI",
     "summary-md": "Does the description for the relational and equality operators contain defects?",
+    "x-author-md": "Clive D.W. Feather",
     "x-orig-summary-md": "Does the description for the relational and equality operators contain defects?",
+    "x-submitter-md": "BSI",
     "x-summary-author-md": "Clive Feather"
 }

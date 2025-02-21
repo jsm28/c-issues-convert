@@ -1,5 +1,8 @@
 {
-    "author-md": "Randall Meyers",
+    "authors-md": [
+        "Randall Meyers",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -16,8 +19,9 @@
     "reference-doc-md": "X3J11/91-009",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "What are the aliasing rules for dynamically allocated objects?",
+    "x-author-md": "Randall Meyers",
     "x-orig-summary-md": "What are the aliasing rules for dynamically allocated objects?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Randall Meyers"
 }

@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "C Floating Point Group"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,10 +21,11 @@
     "reference-doc-md": "[N2203](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2203.pdf)",
     "status": "fixed",
     "submitted-against": "cfp-c11",
-    "submitter-md": "C Floating Point Group",
     "summary-md": "P3: incommensurate arguments for comparison macros",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "P3: incommensurate arguments for comparison macros",
     "x-dr-version-date": "10/2018",
     "x-orig-status-class": "c2x",
+    "x-submitter-md": "C Floating Point Group",
     "x-table-summary-md": "P3: incommensurate arguments for comparison macros"
 }

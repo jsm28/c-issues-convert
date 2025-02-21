@@ -1,5 +1,8 @@
 {
-    "author-md": "Clive D.W. Feather \\<clive@demon.net\\>",
+    "authors-md": [
+        "Clive D.W. Feather \\<clive@demon.net\\>",
+        "UK C Panel"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -20,11 +23,12 @@
     ],
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "UK C Panel",
     "summary-md": "maximum size of bit fields",
+    "x-author-md": "Clive D.W. Feather \\<clive@demon.net\\>",
     "x-dr-version": "1.1",
     "x-dr-version-date": "2002-03-07",
     "x-index-summary-md": "Q1: Maximum size of bit fields.",
     "x-orig-status-class": "published",
+    "x-submitter-md": "UK C Panel",
     "x-summary-author-md": "UK C Panel"
 }

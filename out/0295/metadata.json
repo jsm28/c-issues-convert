@@ -1,5 +1,8 @@
 {
-    "author-md": "Neil Booth",
+    "authors-md": [
+        "Neil Booth",
+        "Project Editor (Larry Jones)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,11 +21,12 @@
     ],
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Project Editor (Larry Jones)",
     "summary-md": "Incomplete types for function parameters",
+    "x-author-md": "Neil Booth",
     "x-dr-version": "1.1",
     "x-dr-version-date": "2004-09-28",
     "x-index-summary-md": "Q1: Is a function parameter permitted to have an incomplete type?",
     "x-orig-status-class": "published",
+    "x-submitter-md": "Project Editor (Larry Jones)",
     "x-summary-author-md": "INCITS (US)"
 }

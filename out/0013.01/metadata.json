@@ -1,5 +1,8 @@
 {
-    "author-md": "Sam Kendall",
+    "authors-md": [
+        "Sam Kendall",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -23,8 +26,9 @@
     "reference-doc-md": "X3J11/90-047",
     "status": "fixed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "How does one form the composite type of mixed array and pointer parameter types?",
+    "x-author-md": "Sam Kendall",
     "x-orig-summary-md": "How does one form the composite type of mixed array and pointer parameter types?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Sam Kendall"
 }

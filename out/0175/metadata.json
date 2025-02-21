@@ -1,5 +1,8 @@
 {
-    "author-md": "Clive D.W. Feather",
+    "authors-md": [
+        "Clive D.W. Feather",
+        "BSI"
+    ],
     "comments": [],
     "conversion-src": [
         "dr.htm",
@@ -12,8 +15,9 @@
     ],
     "status": "fixed",
     "submitted-against": "c90",
-    "submitter-md": "BSI",
     "summary-md": "Is the `sscanf` example added by TC1 wrong?",
+    "x-author-md": "Clive D.W. Feather",
     "x-orig-summary-md": "Is the `sscanf` example added by TC1 wrong?",
+    "x-submitter-md": "BSI",
     "x-summary-author-md": "Clive Feather"
 }

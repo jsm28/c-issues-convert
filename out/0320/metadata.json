@@ -1,4 +1,7 @@
 {
+    "authors-md": [
+        "Willem Wakker"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -17,11 +20,11 @@
     ],
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Willem Wakker",
     "summary-md": "Scope of variably modified type",
     "x-dr-version": "1.2",
     "x-dr-version-date": "2006-04-04",
     "x-index-summary-md": "Q1: Scope of variably modified type.",
     "x-orig-status-class": "published",
+    "x-submitter-md": "Willem Wakker",
     "x-summary-author-md": "Wakker (NL)"
 }

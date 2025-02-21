@@ -1,5 +1,8 @@
 {
-    "author-md": "Douglas Gwyn",
+    "authors-md": [
+        "Douglas Gwyn",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,8 +21,9 @@
     ],
     "status": "fixed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "What is the meaning of *const-qualification*?",
+    "x-author-md": "Douglas Gwyn",
     "x-orig-summary-md": "What is the meaning of *const-qualification*?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Douglas Gwyn"
 }

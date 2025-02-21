@@ -1,5 +1,8 @@
 {
-    "author-md": "Clive D.W. Feather",
+    "authors-md": [
+        "Clive D.W. Feather",
+        "BSI"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -20,8 +23,9 @@
     ],
     "status": "fixed",
     "submitted-against": "c90",
-    "submitter-md": "BSI",
     "summary-md": "Is it possible to create implementations with unreasonable arrangements of integral types?",
+    "x-author-md": "Clive D.W. Feather",
     "x-orig-summary-md": "Is it possible to create implementations with unreasonable arrangements of integral types?",
+    "x-submitter-md": "BSI",
     "x-summary-author-md": "Clive Feather"
 }

@@ -1,5 +1,8 @@
 {
-    "author-md": "Walter J. Murray",
+    "authors-md": [
+        "Walter J. Murray",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -16,8 +19,9 @@
     "reference-doc-md": "X3J11/90-020",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "May a conforming implementation define and recognize a pragma which would change the semantics of the language?",
+    "x-author-md": "Walter J. Murray",
     "x-orig-summary-md": "May a conforming implementation define and recognize a pragma which would change the semantics of the language?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Walter J. Murray"
 }

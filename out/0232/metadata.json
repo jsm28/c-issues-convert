@@ -1,4 +1,7 @@
 {
+    "authors-md": [
+        "Makoto Noda (Japan)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -17,12 +20,12 @@
     ],
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Makoto Noda (Japan)",
     "summary-md": "Typo in Annex I",
     "x-dr-version": "1.4",
     "x-dr-version-date": "2000-11-02 13:51:51",
     "x-index-summary-md": "Q1: Typo in Annex I.",
     "x-orig-status-class": "published",
+    "x-submitter-md": "Makoto Noda (Japan)",
     "x-summary-author-md": "Noda (Japan)",
     "x-summary-date": "2000-04-14"
 }

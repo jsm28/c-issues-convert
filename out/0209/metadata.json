@@ -1,4 +1,7 @@
 {
+    "authors-md": [
+        "Douglas A. Gwyn (J11)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,12 +21,12 @@
     "reference-doc-md": "[ISO/IEC WG14 N896](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n896.htm)",
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Douglas A. Gwyn (J11)",
     "summary-md": "Problem implementing `INT`*N*`_C` macros",
     "x-dr-version": "1.2",
     "x-dr-version-date": "2000-11-02 13:46:31",
     "x-index-summary-md": "Q1: Problem implementing `INT`*N*`_C` macros.",
     "x-orig-status-class": "published",
+    "x-submitter-md": "Douglas A. Gwyn (J11)",
     "x-summary-author-md": "Gwyn (US)",
     "x-summary-date": "1999-10-19"
 }

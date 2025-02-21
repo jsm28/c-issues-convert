@@ -1,5 +1,8 @@
 {
-    "author-md": "Clive D.W. Feather \\<clive@demon.net\\>",
+    "authors-md": [
+        "Clive D.W. Feather \\<clive@demon.net\\>",
+        "UK C Panel"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,11 +21,12 @@
     ],
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "UK C Panel",
     "summary-md": "are values a form of behaviour ?",
+    "x-author-md": "Clive D.W. Feather \\<clive@demon.net\\>",
     "x-dr-version": "1.1",
     "x-dr-version-date": "2002-03-06",
     "x-index-summary-md": "Q1: Are values a form of behaviour?",
     "x-orig-status-class": "published",
+    "x-submitter-md": "UK C Panel",
     "x-summary-author-md": "UK C Panel"
 }

@@ -1,5 +1,8 @@
 {
-    "author-md": "Stephen D. Clamage",
+    "authors-md": [
+        "Stephen D. Clamage",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -16,8 +19,9 @@
     "reference-doc-md": "X3J11/91-036",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "Can an implementation permit a comma operator in a constant expression?",
+    "x-author-md": "Stephen D. Clamage",
     "x-orig-summary-md": "Can an implementation permit a comma operator in a constant expression?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Stephen D. Clamage"
 }

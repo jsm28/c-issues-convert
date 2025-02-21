@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "Jens Gustedt"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -15,10 +18,11 @@
     "reference-doc-md": "[N1647](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1647.htm)",
     "status": "closed",
     "submitted-against": "c11c17",
-    "submitter-md": "Jens Gustedt",
     "summary-md": "syntax error in specification of for-statement",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "sytax error in specification of for-statement",
     "x-dr-version-date": "04/2013",
     "x-orig-status-class": "closed",
+    "x-submitter-md": "Jens Gustedt",
     "x-table-summary-md": "syntax error in specification of for-statement"
 }

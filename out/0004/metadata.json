@@ -1,5 +1,8 @@
 {
-    "author-md": "Paul Eggert",
+    "authors-md": [
+        "Paul Eggert",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -19,8 +22,9 @@
     "reference-doc-md": "X3J11/90-012",
     "status": "fixed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "Are multiple definitions of unused identifiers with external linkage permitted?",
+    "x-author-md": "Paul Eggert",
     "x-orig-summary-md": "Are multiple definitions of unused identifiers with external linkage permitted?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Paul Eggert"
 }

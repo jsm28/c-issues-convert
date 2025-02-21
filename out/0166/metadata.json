@@ -1,5 +1,8 @@
 {
-    "author-md": "Clive D.W. Feather",
+    "authors-md": [
+        "Clive D.W. Feather",
+        "BSI"
+    ],
     "comments": [],
     "conversion-src": [
         "dr.htm",
@@ -14,8 +17,9 @@
     ],
     "status": "fixed",
     "submitted-against": "c90",
-    "submitter-md": "BSI",
     "summary-md": "Do constraints that require something to be an lvalue place an unacceptable burden on the implementation?",
+    "x-author-md": "Clive D.W. Feather",
     "x-orig-summary-md": "Do constraints that require something to be an lvalue place an unacceptable burden on the implementation?",
+    "x-submitter-md": "BSI",
     "x-summary-author-md": "Clive Feather"
 }

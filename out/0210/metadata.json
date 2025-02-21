@@ -1,5 +1,8 @@
 {
-    "author-md": "WG 14",
+    "authors-md": [
+        "WG 14",
+        "Fred Tydeman (US)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,12 +21,13 @@
     ],
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Fred Tydeman (US)",
     "summary-md": "`fprintf %a` and `%A` conversions recommended practice",
+    "x-author-md": "WG 14",
     "x-dr-version": "1.2",
     "x-dr-version-date": "2001-01-22 03:49:35",
     "x-index-summary-md": "Q1: `fprintf %a` and `%A` conversions recommended practice.  \n Q2: Hexadecimal conversion using the `strtod` family.",
     "x-orig-status-class": "published",
+    "x-submitter-md": "Fred Tydeman (US)",
     "x-summary-author-md": "Tydeman (US)",
     "x-summary-date": "1999-10-19"
 }

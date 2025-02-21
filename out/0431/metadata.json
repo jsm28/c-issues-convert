@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "Douglas Walls"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -21,10 +24,11 @@
     "reference-doc-md": "[N1675](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1675.htm)",
     "status": "fixed",
     "submitted-against": "c11c17",
-    "submitter-md": "Douglas Walls",
     "summary-md": "`atomic_compare_exchange`: What does it mean to say two structs compare equal?",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "atomic\\_compare\\_exchange: What does it mean to say two structs compare equal?",
     "x-dr-version-date": "10/2017",
     "x-orig-status-class": "c17",
+    "x-submitter-md": "Douglas Walls",
     "x-table-summary-md": "`atomic_compare_exchange`: What does it mean to say two structs compare equal?"
 }

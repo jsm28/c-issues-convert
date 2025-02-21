@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "Jim Thomas et al."
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,10 +21,11 @@
     "reference-doc-md": "[N2029](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2029.pdf)",
     "status": "fixed",
     "submitted-against": "cfp-c11",
-    "submitter-md": "Jim Thomas et al.",
     "summary-md": "Part 1: Functions that round result to narrower type don't always",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "Part 1: Functions that round result to narrower type don't always",
     "x-dr-version-date": "10/2018",
     "x-orig-status-class": "c2x",
+    "x-submitter-md": "Jim Thomas et al.",
     "x-table-summary-md": "P1: Functions that round result to narrower type don't always"
 }

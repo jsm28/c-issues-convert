@@ -1,5 +1,8 @@
 {
-    "author-md": "WG 14",
+    "authors-md": [
+        "WG 14",
+        "Freek Wiedijk and Robbert Krebbers (Radboud University Nijmegen, The Netherlands)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -17,10 +20,11 @@
     "reference-doc-md": "[N1747](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1747.htm)",
     "status": "closed",
     "submitted-against": "c11c17",
-    "submitter-md": "Freek Wiedijk and Robbert Krebbers (Radboud University Nijmegen, The Netherlands)",
     "summary-md": "Instability of uninitialized automatic variables",
+    "x-author-md": "WG 14",
     "x-dr-summary-md": "Instability of uninitialized automatic variables",
     "x-dr-version-date": "04/2015",
     "x-orig-status-class": "closed",
+    "x-submitter-md": "Freek Wiedijk and Robbert Krebbers (Radboud University Nijmegen, The Netherlands)",
     "x-table-summary-md": "Instability of uninitialized automatic variables"
 }

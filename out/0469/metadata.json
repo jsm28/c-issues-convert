@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "Torvald Riegel"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -20,10 +23,11 @@
     "reference-doc-md": "[N1881](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1881.htm)",
     "status": "closed",
     "submitted-against": "c11c17",
-    "submitter-md": "Torvald Riegel",
     "summary-md": "lock ownership vs. thread termination",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "lock ownership vs. thread termination",
     "x-dr-version-date": "10/2018",
     "x-orig-status-class": "closed",
+    "x-submitter-md": "Torvald Riegel",
     "x-table-summary-md": "lock ownership vs. thread termination"
 }

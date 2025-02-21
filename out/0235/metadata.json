@@ -1,4 +1,7 @@
 {
+    "authors-md": [
+        "AFNOR (Antoine Leca)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -14,13 +17,13 @@
     "date": "2000-10-18",
     "status": "closed",
     "submitted-against": "c99",
-    "submitter-md": "AFNOR (Antoine Leca)",
     "summary-md": "\"`C`\" locale collating behaviour not defined",
     "x-dr-version": "1.2",
     "x-dr-version-date": "2002-03-03 01:30:00",
     "x-index-summary-md": "Q1: \"C\" locale collating behaviour not defined.",
     "x-orig-status-class": "closed",
     "x-status-date": "2002-04-18",
+    "x-submitter-md": "AFNOR (Antoine Leca)",
     "x-summary-author-md": "Leca",
     "x-summary-date": "2000-10-18"
 }

@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "Clark Nelson"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -17,10 +20,11 @@
     "reference-doc-md": "[N2027](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2025.htm)",
     "status": "closed",
     "submitted-against": "c11c17",
-    "submitter-md": "Clark Nelson",
     "summary-md": "Part 2: Atomic specifier expression evaluation",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "Part 2: Atomic specifier expression evaluation",
     "x-dr-version-date": "10/2018",
     "x-orig-status-class": "closed",
+    "x-submitter-md": "Clark Nelson",
     "x-table-summary-md": "Part 2: Atomic specifier expression evaluation"
 }

@@ -1,5 +1,8 @@
 {
-    "author-md": "Andrew Josey",
+    "authors-md": [
+        "Andrew Josey",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -16,8 +19,9 @@
     "reference-doc-md": "X3J11/91-076",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "Are `'A'` through `'Z'` always `isupper` in all locales?",
+    "x-author-md": "Andrew Josey",
     "x-orig-summary-md": "Are `'A'` through `'Z'` always `isupper` in all locales?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Andrew Josey"
 }

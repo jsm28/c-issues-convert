@@ -1,4 +1,7 @@
 {
+    "authors-md": [
+        "WG14 Convener"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -20,11 +23,11 @@
     "reference-doc-md": "[ISO/IEC WG14 N1002](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1002.htm)",
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "WG14 Convener",
     "summary-md": "Conversion of an `imaginary` type to `_Bool`",
     "x-dr-version": "1.2",
     "x-dr-version-date": "2004-03-17",
     "x-index-summary-md": "Q1: Conversion of an `imaginary` type to `_Bool`",
     "x-orig-status-class": "published",
+    "x-submitter-md": "WG14 Convener",
     "x-summary-author-md": "Convener (US)"
 }

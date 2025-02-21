@@ -1,5 +1,8 @@
 {
-    "author-md": "Andrew R. Koenig",
+    "authors-md": [
+        "Andrew R. Koenig",
+        "Project Editor (P.J. Plauger)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,8 +21,9 @@
     "date": "1993-03-08",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "Project Editor (P.J. Plauger)",
     "summary-md": "Can one index beyond the declared end of an array if space is allocated for the extra elements?",
+    "x-author-md": "Andrew R. Koenig",
     "x-orig-summary-md": "Can one index beyond the declared end of an array if space is allocated for the extra elements?",
+    "x-submitter-md": "Project Editor (P.J. Plauger)",
     "x-summary-author-md": "Andrew R. Koenig"
 }

@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "Clive Pygott"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,10 +21,11 @@
     "reference-doc-md": "[N1801](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1801.htm)",
     "status": "fixed",
     "submitted-against": "cscr2013",
-    "submitter-md": "Clive Pygott",
     "summary-md": "error in 5.21 example",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "error in 5.21 example",
     "x-dr-version-date": "10/2016",
     "x-orig-status-class": "published",
+    "x-submitter-md": "Clive Pygott",
     "x-table-summary-md": "error in 5.21 example"
 }

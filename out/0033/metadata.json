@@ -1,5 +1,8 @@
 {
-    "author-md": "Mike Vermeulen",
+    "authors-md": [
+        "Mike Vermeulen",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -16,8 +19,9 @@
     "reference-doc-md": "X3J11/91-037",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "Must a conforming implementation diagnose *shall* violations outside **Constraints**?",
+    "x-author-md": "Mike Vermeulen",
     "x-orig-summary-md": "Must a conforming implementation diagnose *shall* violations outside **Constraints**?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Mike Vermeulen"
 }

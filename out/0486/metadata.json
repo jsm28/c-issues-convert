@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "Jens Gustedt"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -17,10 +20,11 @@
     "reference-doc-md": "[N1955](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1955.htm)",
     "status": "closed",
     "submitted-against": "c11c17",
-    "submitter-md": "Jens Gustedt",
     "summary-md": "Inconsistent specification for arithmetic on atomic objects",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "Inconsistent specification for arithmetic on atomic objects",
     "x-dr-version-date": "10/2018",
     "x-orig-status-class": "closed",
+    "x-submitter-md": "Jens Gustedt",
     "x-table-summary-md": "Inconsistent specification for arithmetic on atomic objects"
 }

@@ -1,5 +1,8 @@
 {
-    "author-md": "Joseph Myers \\<joseph@codesourcery.com\\>",
+    "authors-md": [
+        "Joseph Myers \\<joseph@codesourcery.com\\>",
+        "UK C Panel"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -16,12 +19,13 @@
     "reference-doc-md": "[ISO/IEC WG14 N1105](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1105.htm)",
     "status": "closed",
     "submitted-against": "c99",
-    "submitter-md": "UK C Panel",
     "summary-md": "Function definitions with empty parentheses",
+    "x-author-md": "Joseph Myers \\<joseph@codesourcery.com\\>",
     "x-dr-version": "1.3",
     "x-dr-version-date": "2006-04-04",
     "x-index-summary-md": "Q1: Function definitions with empty parentheses",
     "x-orig-status-class": "closed",
     "x-status-date": "2006-03-30",
+    "x-submitter-md": "UK C Panel",
     "x-summary-author-md": "Myers (UK)"
 }

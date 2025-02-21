@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "Torvald Riegel, Martin Sebor"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,10 +21,11 @@
     "reference-doc-md": "[N1964](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1964.htm)",
     "status": "fixed",
     "submitted-against": "c11c17",
-    "submitter-md": "Torvald Riegel, Martin Sebor",
     "summary-md": "`cnd_wait` and `cnd_timewait` should allow spurious wake-ups",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "`cnd_wait` and `cnd_timewait` should allow spurious wake-ups",
     "x-dr-version-date": "10/2017",
     "x-orig-status-class": "c17",
+    "x-submitter-md": "Torvald Riegel, Martin Sebor",
     "x-table-summary-md": "`cnd_wait` and `cnd_timewait` should allow spurious wake-ups"
 }

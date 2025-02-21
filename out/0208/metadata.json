@@ -1,4 +1,7 @@
 {
+    "authors-md": [
+        "Clive Feather (UK)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,12 +21,12 @@
     "reference-doc-md": "[ISO/IEC WG14 N892](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n892.htm)",
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Clive Feather (UK)",
     "summary-md": "Ambiguity in initialization",
     "x-dr-version": "1.2",
     "x-dr-version-date": "2000-11-02 13:46:02",
     "x-index-summary-md": "Q1: Ambiguity in initialization.",
     "x-orig-status-class": "published",
+    "x-submitter-md": "Clive Feather (UK)",
     "x-summary-author-md": "Feather (UK)",
     "x-summary-date": "1999-09-13"
 }

@@ -1,5 +1,8 @@
 {
-    "author-md": "Sam Kendall",
+    "authors-md": [
+        "Sam Kendall",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -16,8 +19,9 @@
     "reference-doc-md": "X3J11/90-052",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "Can a tentative definition have an incomplete type initially?",
+    "x-author-md": "Sam Kendall",
     "x-orig-summary-md": "Can a tentative definition have an incomplete type initially?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Sam Kendall"
 }

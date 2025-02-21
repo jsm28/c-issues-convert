@@ -1,4 +1,7 @@
 {
+    "authors-md": [
+        "Project Editor (Larry Jones)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -17,12 +20,12 @@
     ],
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Project Editor (Larry Jones)",
     "summary-md": "`localeconv() *_sep_by_space` table entries issues",
     "x-dr-version": "1.4",
     "x-dr-version-date": "2001-09-18 16:19:49",
     "x-index-summary-md": "Q1: `localeconv() *_sep_by_space` table entries issues.",
     "x-orig-status-class": "published",
+    "x-submitter-md": "Project Editor (Larry Jones)",
     "x-summary-author-md": "Jones (US)",
     "x-summary-date": "2000-04-10"
 }

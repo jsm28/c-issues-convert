@@ -1,5 +1,8 @@
 {
-    "author-md": "Ron Guilmette",
+    "authors-md": [
+        "Ron Guilmette",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,8 +21,9 @@
     ],
     "status": "fixed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "Are mismatched qualifiers allowed?",
+    "x-author-md": "Ron Guilmette",
     "x-orig-summary-md": "Are mismatched qualifiers allowed?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Ron Gulmette"
 }

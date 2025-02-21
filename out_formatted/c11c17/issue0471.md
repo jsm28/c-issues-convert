@@ -29,7 +29,6 @@ Reason for above two: Since ctanh(x\+I\*y) \= (sinh(2x) \+ I\*sin(2y)) /
 (cosh(2x) \+ cos(2y)), for any rational number y, cos(2y) cannot be exactly -1,
 so no 0/(1\+(-1)),so no 0/0, so no NaN for the real component of the result
 
-
 ### Suggested Technical Corrigendum
 
 Add to G.6.2.1 cacosh before 4th bullet: cacosh(0.0\+I\*NaN) returns NaN \+

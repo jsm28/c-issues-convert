@@ -1,5 +1,8 @@
 {
-    "author-md": "C. Breeus",
+    "authors-md": [
+        "C. Breeus",
+        "Project Editor (P.J. Plauger)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -17,8 +20,9 @@
     "date": "1993-02-24",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "Project Editor (P.J. Plauger)",
     "summary-md": "Does a proper definition of `wchar_t` need to be in scope to write a wide-character literal?",
+    "x-author-md": "C. Breeus",
     "x-orig-summary-md": "Does a proper definition of `wchar_t` need to be in scope to write a wide-character literal?",
+    "x-submitter-md": "Project Editor (P.J. Plauger)",
     "x-summary-author-md": "C. Breeus"
 }

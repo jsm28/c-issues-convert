@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "Douglas Walls"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,10 +21,11 @@
     "reference-doc-md": "[N2000](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2000.htm)",
     "status": "fixed",
     "submitted-against": "c11c17",
-    "submitter-md": "Douglas Walls",
     "summary-md": "Concern with Keywords that Match Reserved Identifiers",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "Concern with Keywords that Match Reserved Identifiers",
     "x-dr-version-date": "10/2017",
     "x-orig-status-class": "c17",
+    "x-submitter-md": "Douglas Walls",
     "x-table-summary-md": "Concern with Keywords that Match Reserved Identifiers"
 }

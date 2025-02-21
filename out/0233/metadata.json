@@ -1,5 +1,8 @@
 {
-    "author-md": "Chris Torek",
+    "authors-md": [
+        "Chris Torek",
+        "Project Editor (Larry Jones)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -23,12 +26,13 @@
     ],
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Project Editor (Larry Jones)",
     "summary-md": "`%g`, `%G` precision specification",
+    "x-author-md": "Chris Torek",
     "x-dr-version": "1.5",
     "x-dr-version-date": "2007-09-07",
     "x-index-summary-md": "Q1: `%g`, `%G` precision specification.",
     "x-orig-status-class": "published",
+    "x-submitter-md": "Project Editor (Larry Jones)",
     "x-summary-author-md": "Jones (US)",
     "x-summary-date": "2000-04-14"
 }

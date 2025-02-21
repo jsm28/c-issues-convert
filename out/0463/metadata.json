@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "Aaron Ballman"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -15,10 +18,11 @@
     "reference-doc-md": "[N1817](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1817.pdf)",
     "status": "closed",
     "submitted-against": "c11c17",
-    "submitter-md": "Aaron Ballman",
     "summary-md": "Left-shifting into the sign bit",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "Left-shifting into the sign bit",
     "x-dr-version-date": "04/2015",
     "x-orig-status-class": "closed",
+    "x-submitter-md": "Aaron Ballman",
     "x-table-summary-md": "Left-shifting into the sign bit"
 }

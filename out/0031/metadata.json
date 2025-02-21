@@ -1,5 +1,8 @@
 {
-    "author-md": "Pawel Molenda",
+    "authors-md": [
+        "Pawel Molenda",
+        "WG14"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -16,8 +19,9 @@
     "reference-doc-md": "X3J11/91-018",
     "status": "closed",
     "submitted-against": "c90",
-    "submitter-md": "WG14",
     "summary-md": "How are exceptions handled in constant expressions?",
+    "x-author-md": "Pawel Molenda",
     "x-orig-summary-md": "How are exceptions handled in constant expressions?",
+    "x-submitter-md": "WG14",
     "x-summary-author-md": "Pawel Molenda"
 }

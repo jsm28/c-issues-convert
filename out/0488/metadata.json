@@ -1,5 +1,8 @@
 {
-    "author-md": "WG14",
+    "authors-md": [
+        "WG14",
+        "Philipp Klaus Krause"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,10 +21,11 @@
     "reference-doc-md": "[N1991](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1991.htm)",
     "status": "fixed",
     "submitted-against": "c11c17",
-    "submitter-md": "Philipp Klaus Krause",
     "summary-md": "`c16rtomb()` on wide characters encoded as multiple `char16_t`",
+    "x-author-md": "WG14",
     "x-dr-summary-md": "`c16rtomb()` on wide characters encoded as multiple `char16_t`",
     "x-dr-version-date": "10/2018",
     "x-orig-status-class": "c2x",
+    "x-submitter-md": "Philipp Klaus Krause",
     "x-table-summary-md": "`c16rtomb()` on wide characters encoded as multiple `char16_t`"
 }

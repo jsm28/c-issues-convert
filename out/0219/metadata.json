@@ -1,4 +1,7 @@
 {
+    "authors-md": [
+        "Clive Feather (UK)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -14,13 +17,13 @@
     "date": "2000-04-04",
     "status": "closed",
     "submitted-against": "c99",
-    "submitter-md": "Clive Feather (UK)",
     "summary-md": "Effective types",
     "x-dr-version": "1.4",
     "x-dr-version-date": "2006-04-04",
     "x-index-summary-md": "Q1: Effective types.",
     "x-orig-status-class": "closed",
     "x-status-date": "2006-03-30",
+    "x-submitter-md": "Clive Feather (UK)",
     "x-summary-author-md": "Feather (UK)",
     "x-summary-date": "2000-04-04"
 }

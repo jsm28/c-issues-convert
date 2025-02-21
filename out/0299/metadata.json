@@ -1,5 +1,8 @@
 {
-    "author-md": "WG 14",
+    "authors-md": [
+        "WG 14",
+        "Fred Tydeman (USA)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,11 +21,12 @@
     ],
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Fred Tydeman (USA)",
     "summary-md": "Is `cabs()` a type-generic macro?",
+    "x-author-md": "WG 14",
     "x-dr-version": "1.2",
     "x-dr-version-date": "2006-04-04",
     "x-index-summary-md": "Q1: Is `cabs()` a type-generic macro?",
     "x-orig-status-class": "published",
+    "x-submitter-md": "Fred Tydeman (USA)",
     "x-summary-author-md": "Fred Tydeman (US)"
 }

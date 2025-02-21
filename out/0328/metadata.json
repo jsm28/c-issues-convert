@@ -1,5 +1,8 @@
 {
-    "author-md": "\\<whyglinux@gmail.com\\>",
+    "authors-md": [
+        "\\<whyglinux@gmail.com\\>",
+        "Project Editor (Larry Jones)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -20,12 +23,13 @@
     ],
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Project Editor (Larry Jones)",
     "summary-md": "String literals in compound literal initialization",
+    "x-author-md": "\\<whyglinux@gmail.com\\>",
     "x-dr-version": "1.2",
     "x-dr-version-date": "2007-10-10",
     "x-index-summary-md": "Q1: String literals in compound literal initialization.",
     "x-orig-status-class": "closed",
     "x-status-date": "2007-10-10",
+    "x-submitter-md": "Project Editor (Larry Jones)",
     "x-summary-author-md": "Jones (Project Editor)"
 }

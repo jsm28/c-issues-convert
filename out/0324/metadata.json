@@ -1,4 +1,7 @@
 {
+    "authors-md": [
+        "Ivan A. Kosarev (Unicals Group, RU)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,11 +21,11 @@
     "reference-doc-md": "[N1123](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1123.htm)",
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Ivan A. Kosarev (Unicals Group, RU)",
     "summary-md": "Tokenization obscurities",
     "x-dr-version": "1.3",
     "x-dr-version-date": "2006-10-25",
     "x-index-summary-md": "Q1: Tokenization obscurities",
     "x-orig-status-class": "published",
+    "x-submitter-md": "Ivan A. Kosarev (Unicals Group, RU)",
     "x-summary-author-md": "Kosarev (RU)"
 }

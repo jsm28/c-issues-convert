@@ -1,4 +1,7 @@
 {
+    "authors-md": [
+        "Tydeman (US)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -17,11 +20,11 @@
     ],
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Tydeman (US)",
     "summary-md": "Typo in Standard \\- `double complex` instead of `complex` in an example",
     "x-dr-version": "1.0",
     "x-dr-version-date": "2004-03-01",
     "x-index-summary-md": "Q1: Typo in Standard \\- `double complex` instead of `complex` in an example.",
     "x-orig-status-class": "published",
+    "x-submitter-md": "Tydeman (US)",
     "x-summary-author-md": "UK C Panel"
 }

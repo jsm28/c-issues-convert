@@ -1,4 +1,7 @@
 {
+    "authors-md": [
+        "Derek Jones (UK)"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -17,12 +20,12 @@
     ],
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "Derek Jones (UK)",
     "summary-md": "Enumerated type rank",
     "x-dr-version": "1.2",
     "x-dr-version-date": "2001-01-29 01:00:05",
     "x-index-summary-md": "Q1: Enumerated type rank.",
     "x-orig-status-class": "published",
+    "x-submitter-md": "Derek Jones (UK)",
     "x-summary-author-md": "Jones (UK)",
     "x-summary-date": "2000-04-11"
 }

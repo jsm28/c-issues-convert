@@ -1,5 +1,8 @@
 {
-    "author-md": "Clive D.W. Feather \\<clive@demon.net\\>",
+    "authors-md": [
+        "Clive D.W. Feather \\<clive@demon.net\\>",
+        "UK C Panel"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -17,12 +20,13 @@
     "date": "2001-09-07",
     "status": "closed",
     "submitted-against": "c99",
-    "submitter-md": "UK C Panel",
     "summary-md": "indeterminate values and identical representations",
+    "x-author-md": "Clive D.W. Feather \\<clive@demon.net\\>",
     "x-dr-version": "1.1",
     "x-dr-version-date": "2004-09-28",
     "x-index-summary-md": "Q1: Indeterminate values and identical representations.",
     "x-orig-status-class": "closed",
     "x-status-date": "2004-10-28",
+    "x-submitter-md": "UK C Panel",
     "x-summary-author-md": "UK C Panel"
 }

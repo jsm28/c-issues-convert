@@ -1,5 +1,8 @@
 {
-    "author-md": "Clive D.W. Feather \\<clive@demon.net\\>",
+    "authors-md": [
+        "Clive D.W. Feather \\<clive@demon.net\\>",
+        "UK C Panel"
+    ],
     "comments": [
         {
             "author-md": "WG14",
@@ -18,11 +21,12 @@
     ],
     "status": "fixed",
     "submitted-against": "c99",
-    "submitter-md": "UK C Panel",
     "summary-md": "jumps into iteration statements",
+    "x-author-md": "Clive D.W. Feather \\<clive@demon.net\\>",
     "x-dr-version": "1.4",
     "x-dr-version-date": "2006-03-29",
     "x-index-summary-md": "Q1: Jumps into iteration statements.",
     "x-orig-status-class": "published",
+    "x-submitter-md": "UK C Panel",
     "x-summary-author-md": "UK C Panel"
 }
