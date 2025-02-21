@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0253: &quot;overriding&quot; in designated initializers</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0253: "overriding" in designated initializers</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Clive D.W. Feather &lt;clive@demon.net&gt;, UK C Panel<br />
+Date: 2001-09-07<br />
+Submitted against: C99<br />
+Status: Closed<br />
+Cross-references: <a href="../c11c17/issue0413.html">0413</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_253.htm">dr_253.htm</a></p>
+<h3>Problem</h3>
+<p>Consider the code:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">   </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">fred</span>
+<span style="color: #bbbbbb">    </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>s<span style="color: #bbbbbb"> </span>[<span style="color: #666666">6</span>];
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>n;
+<span style="color: #bbbbbb">    </span>};
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">fred</span><span style="color: #bbbbbb"> </span>x<span style="color: #bbbbbb"> </span>[]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;abc&quot;</span><span style="color: #bbbbbb"> </span>},<span style="color: #bbbbbb"> </span><span style="color: #666666">1</span><span style="color: #bbbbbb"> </span>},<span style="color: #bbbbbb"> </span>[<span style="color: #666666">0</span>].s[<span style="color: #666666">0</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&#39;q&#39;</span><span style="color: #bbbbbb">        </span>};
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">fred</span><span style="color: #bbbbbb"> </span>y<span style="color: #bbbbbb"> </span>[]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;abc&quot;</span><span style="color: #bbbbbb"> </span>},<span style="color: #bbbbbb"> </span><span style="color: #666666">1</span><span style="color: #bbbbbb"> </span>},<span style="color: #bbbbbb"> </span>[<span style="color: #666666">0</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>.s[<span style="color: #666666">0</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&#39;q&#39;</span><span style="color: #bbbbbb"> </span>}<span style="color: #bbbbbb"> </span>};
+</pre></div>
+
+<p>Both <code>x</code> and <code>y</code> will contain one element of type <code>struct fred</code>, which will be
+initialized by the initializer <code>{ { "abc" }, 1 }</code> and then modified in some way.
+The question is exactly how it is modified.</p>
+<p>6.7.8#19 reads:</p>
+<blockquote>
+<p>[#19] The initialization shall occur in initializer list order, each
+initializer provided for a particular subobject overriding any previously listed
+initializer for the same subobject; all subobjects that are not initialized
+explicitly shall be initialized implicitly the same as objects that have static
+storage duration.</p>
+</blockquote>
+<p>In the case of <code>x</code>, it is fairly clear that the first initializer sets:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">   </span>x<span style="color: #bbbbbb"> </span>[<span style="color: #666666">0</span>].s<span style="color: #bbbbbb"> </span>[<span style="color: #666666">0</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&#39;a&#39;</span>
+<span style="color: #bbbbbb">    </span>x<span style="color: #bbbbbb"> </span>[<span style="color: #666666">0</span>].s<span style="color: #bbbbbb"> </span>[<span style="color: #666666">1</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&#39;b&#39;</span>
+<span style="color: #bbbbbb">    </span>x<span style="color: #bbbbbb"> </span>[<span style="color: #666666">0</span>].s<span style="color: #bbbbbb"> </span>[<span style="color: #666666">2</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&#39;c&#39;</span>
+<span style="color: #bbbbbb">    </span>x<span style="color: #bbbbbb"> </span>[<span style="color: #666666">0</span>].s<span style="color: #bbbbbb"> </span>[<span style="color: #666666">3</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&#39;\0&#39;</span>
+<span style="color: #bbbbbb">    </span>x<span style="color: #bbbbbb"> </span>[<span style="color: #666666">0</span>].n<span style="color: #bbbbbb">     </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">1</span>
+</pre></div>
+
+<p>and the second one sets:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">   </span>x<span style="color: #bbbbbb"> </span>[<span style="color: #666666">0</span>].s<span style="color: #bbbbbb"> </span>[<span style="color: #666666">0</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&#39;q&#39;</span>
+</pre></div>
+
+<p>Finally, the remaining subobjects are initialized implicitly:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">   </span>x<span style="color: #bbbbbb"> </span>[<span style="color: #666666">0</span>].s<span style="color: #bbbbbb"> </span>[<span style="color: #666666">4</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>
+<span style="color: #bbbbbb">    </span>x<span style="color: #bbbbbb"> </span>[<span style="color: #666666">0</span>].s<span style="color: #bbbbbb"> </span>[<span style="color: #666666">5</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>
+</pre></div>
+
+<p>Now consider the second initializer for <code>y</code>. One point of view says that this
+behaves the same as for <code>x</code>: it specifies a value for <code>y [0].s [0]</code>, after which
+the two remaining elements of <code>y [0].s</code> are still uninitialized and so are set
+to zero. The other point of view says that this sets:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">   </span>y<span style="color: #bbbbbb"> </span>[<span style="color: #666666">0</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">fred</span>)<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>.s[<span style="color: #666666">0</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&#39;q&#39;</span><span style="color: #bbbbbb"> </span>}
+</pre></div>
+
+<p>and that the rule concerning "all subobjects that are not initialized
+explicitly" applies recursively. If so, the effect is to set:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">   </span>x<span style="color: #bbbbbb"> </span>[<span style="color: #666666">0</span>].s<span style="color: #bbbbbb"> </span>[<span style="color: #666666">0</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&#39;q&#39;</span>
+<span style="color: #bbbbbb">    </span>x<span style="color: #bbbbbb"> </span>[<span style="color: #666666">0</span>].s<span style="color: #bbbbbb"> </span>[<span style="color: #666666">1</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>
+<span style="color: #bbbbbb">    </span>x<span style="color: #bbbbbb"> </span>[<span style="color: #666666">0</span>].s<span style="color: #bbbbbb"> </span>[<span style="color: #666666">2</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>
+<span style="color: #bbbbbb">    </span>x<span style="color: #bbbbbb"> </span>[<span style="color: #666666">0</span>].s<span style="color: #bbbbbb"> </span>[<span style="color: #666666">3</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>
+<span style="color: #bbbbbb">    </span>x<span style="color: #bbbbbb"> </span>[<span style="color: #666666">0</span>].s<span style="color: #bbbbbb"> </span>[<span style="color: #666666">4</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>
+<span style="color: #bbbbbb">    </span>x<span style="color: #bbbbbb"> </span>[<span style="color: #666666">0</span>].s<span style="color: #bbbbbb"> </span>[<span style="color: #666666">5</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>
+<span style="color: #bbbbbb">    </span>x<span style="color: #bbbbbb"> </span>[<span style="color: #666666">0</span>].n<span style="color: #bbbbbb">     </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>
+</pre></div>
+
+<p>Which of these is correct ?</p>
+<h3>Suggested Technical Corrigendum 1</h3>
+<p>If <code>x</code> and <code>y</code> are supposed to have the same effect, change 6.7.8#19 to:</p>
+<blockquote>
+<p>[#19] The initialization shall occur in initializer list order, each
+initializer provided for a particular subobject overriding any previously listed
+initializer for the same subobject. When all initializers have been applied, any
+subobjects of the overall object being initialized that have not been
+initialized explicitly shall be initialized implicitly the same as objects that
+have static storage duration.</p>
+</blockquote>
+<p>and add a new paragraph at the end:</p>
+<blockquote>
+<p>[#39] To illustrate the rules for implicit initialization, in:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">       </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">fred</span>
+<span style="color: #bbbbbb">        </span>{
+<span style="color: #bbbbbb">            </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>s<span style="color: #bbbbbb"> </span>[<span style="color: #666666">6</span>];
+<span style="color: #bbbbbb">            </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>n;
+<span style="color: #bbbbbb">        </span>};
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">fred</span><span style="color: #bbbbbb"> </span>x<span style="color: #bbbbbb"> </span>[]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;abc&quot;</span><span style="color: #bbbbbb"> </span>},<span style="color: #bbbbbb"> </span><span style="color: #666666">1</span><span style="color: #bbbbbb"> </span>},<span style="color: #bbbbbb"> </span>[<span style="color: #666666">0</span>].s[<span style="color: #666666">0</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&#39;q&#39;</span><span style="color: #bbbbbb">        </span>};
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">fred</span><span style="color: #bbbbbb"> </span>y<span style="color: #bbbbbb"> </span>[]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;abc&quot;</span><span style="color: #bbbbbb"> </span>},<span style="color: #bbbbbb"> </span><span style="color: #666666">1</span><span style="color: #bbbbbb"> </span>},<span style="color: #bbbbbb"> </span>[<span style="color: #666666">0</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>.s[<span style="color: #666666">0</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&#39;q&#39;</span><span style="color: #bbbbbb"> </span>}<span style="color: #bbbbbb"> </span>};
+</pre></div>
+
+<p>the definitions of <code>x</code> and <code>y</code> result in identical objects. Each will be an
+array with one element; within that element, the members <code>s[4]</code> and <code>s[5]</code> are
+implicitly initialized to zero.</p>
+</blockquote>
+<h3>Suggested Technical Corrigendum 2</h3>
+<p>If <code>x</code> and <code>y</code> are supposed to be different, change 6.7.8#19 to:</p>
+<blockquote>
+<p>[#19] The initialization shall occur in initializer list order, each
+initializer provided for a particular subobject overriding any previously listed
+initializer for the same subobject; for each brace-enclosed list, all subobjects
+within the object that that list initializes that are not initialized explicitly
+shall be initialized implicitly the same as objects that have static storage
+duration.</p>
+</blockquote>
+<p>and add a new paragraph at the end:</p>
+<blockquote>
+<p>[#39] To illustrate the rules for implicit initialization, in:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">       </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">fred</span>
+<span style="color: #bbbbbb">        </span>{
+<span style="color: #bbbbbb">            </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>s<span style="color: #bbbbbb"> </span>[<span style="color: #666666">6</span>];
+<span style="color: #bbbbbb">            </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>n;
+<span style="color: #bbbbbb">        </span>};
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">fred</span><span style="color: #bbbbbb"> </span>x<span style="color: #bbbbbb"> </span>[]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;abc&quot;</span><span style="color: #bbbbbb"> </span>},<span style="color: #bbbbbb"> </span><span style="color: #666666">1</span><span style="color: #bbbbbb"> </span>},<span style="color: #bbbbbb"> </span>[<span style="color: #666666">0</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>.s[<span style="color: #666666">0</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&#39;q&#39;</span><span style="color: #bbbbbb"> </span>}<span style="color: #bbbbbb"> </span>};
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">fred</span><span style="color: #bbbbbb"> </span>y<span style="color: #bbbbbb"> </span>[]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>.s[<span style="color: #666666">0</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&#39;q&#39;</span><span style="color: #bbbbbb"> </span>}<span style="color: #bbbbbb"> </span>};
+</pre></div>
+
+<p>the definitions of <code>x</code> and <code>y</code> result in identical objects. Each will be an
+array with one element; within that element, all the members are implicitly
+initialized to zero except for <code>s[0]</code>. In the definition of <code>x</code> the first
+initializer has no effect, since the second one initializes the same subobject
+(<code>x[0]</code>).</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2002-05-15:</p>
+<h3>Committee Response</h3>
+<p>Given the example</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">   </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">fred</span>
+<span style="color: #bbbbbb">    </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>s<span style="color: #bbbbbb"> </span>[<span style="color: #666666">6</span>];
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>n;
+<span style="color: #bbbbbb">    </span>};
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">fred</span><span style="color: #bbbbbb"> </span>y<span style="color: #bbbbbb"> </span>[]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #BA2121">&quot;abc&quot;</span><span style="color: #bbbbbb"> </span>},<span style="color: #bbbbbb"> </span><span style="color: #666666">1</span><span style="color: #bbbbbb"> </span>},<span style="color: #bbbbbb"> </span>[<span style="color: #666666">0</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>.s[<span style="color: #666666">0</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #BA2121">&#39;q&#39;</span><span style="color: #bbbbbb"> </span>}<span style="color: #bbbbbb"> </span>};
+</pre></div>
+
+<p>6.7.8#21 makes it clear already that <code>{ .s[0] = 'q' }</code> initializes a whole
+object of type "struct fred" whose members (other than <code>s[0]</code>) are initialized
+as though they were static storage, so this initialization of <code>y[0]</code> overrides
+the previous one. Thus, all subobjects of <code>y[0]</code> other than <code>s[0]</code> are zeroed.
+Paragraph #21 of 6.7.8 also makes it clear that the initializations for <code>x</code> and
+<code>y</code> are different.</p>
+<h3>Committee Discussion</h3>
+<p>The tem "designated initializer" is never mentioned in the Standard though it
+appears in the index and new features section (the Standard uses the term
+"designation initializer" in the text).</p>
+
+</body>
+</html>

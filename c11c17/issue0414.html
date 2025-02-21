@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0414: Typos in 6.27 Threads &lt;threads.h&gt;</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0414: Typos in 6.27 Threads <code>&lt;threads.h&gt;</code></h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Tom Plum<br />
+Date: 2012-03-20<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1614.htm">N1614</a><br />
+Submitted against: C11 / C17<br />
+Status: Fixed<br />
+Fixed in: C17<br />
+Cross-references: <a href="../c11c17/issue0469.html">0469</a>, <a href="../c11c17/issue0493.html">0493</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>In 7.26.1 paragraph 5</p>
+<blockquote>
+<p>The enumeration constants are</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>mtx_plain
+</pre></div>
+
+</blockquote>
+<p>which is passed to <code>mtx_init</code> to create a mutex object that supports neither
+timeout nor test and return;</p>
+</blockquote>
+<p>the "test and return" is referring to <code>try_lock</code>, <code>try_lock</code> is not optional,
+therefore the "test and return" should be removed.</p>
+<p>In 7.26.4.2 paragraph 2</p>
+<blockquote>
+<p>The <code>mtx_init</code> function creates a mutex object with properties indicated by
+<code>type</code>,<br />
+which must have one of the six values:<br />
+<code>mtx_plain</code> for a simple non-recursive mutex,<br />
+<code>mtx_timed</code> for a non-recursive mutex that supports timeout,<br />
+<code>mtx_plain | mtx_recursive</code> for a simple recursive mutex, or<br />
+<code>mtx_timed | mtx_recursive</code> for a recursive mutex that supports timeout.</p>
+</blockquote>
+<p>There are not <strong>six</strong> values listed, "six" should be changed to "these".</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Change 7.26.1 paragraph 5 to</p>
+<blockquote>
+<p>The enumeration constants are</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>mtx_plain
+</pre></div>
+
+</blockquote>
+<p>which is passed to <code>mtx_init</code> to create a mutex object that does not support
+timeout;</p>
+</blockquote>
+<p>Change 7.26.4.2 paragraph 2 to</p>
+<blockquote>
+<p>The <code>mtx_init</code> function creates a mutex object with properties indicated by
+<code>type</code>,<br />
+which must have one of these values:</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2017-11-03:</p>
+<p>Oct 2012 meeting</p>
+<h3>Committee Discussion</h3>
+<p>Adopt the Suggested Technical Corregendum as proposed.</p>
+<h3>Proposed Technical Corrigendum</h3>
+<p>Change 7.26.1 paragraph 5 to</p>
+<blockquote>
+<p>The enumeration constants are</p>
+<blockquote>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>mtx_plain
+</pre></div>
+
+</blockquote>
+<p>which is passed to <code>mtx_init</code> to create a mutex object that does not support
+timeout;</p>
+</blockquote>
+<p>Change 7.26.4.2 paragraph 2 to</p>
+<blockquote>
+<p>The <code>mtx_init</code> function creates a mutex object with properties indicated by
+<code>type</code>,<br />
+which must have one of the these values:</p>
+</blockquote>
+
+</body>
+</html>

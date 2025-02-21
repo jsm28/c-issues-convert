@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0069: What is the meaning of pure binary numeration system?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0069: What is the meaning of <em>pure binary numeration system</em>?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Clive Feather, WG14<br />
+Date: 1993-12-03<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Cross-references: <a href="../c90/issue0171.html">0171</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_069.html">dr_069.html</a></p>
+<p>Item 6 - representation of integral types</p>
+<p>Subclause 6.1.2.5 refers to the representation of a value in an integral type
+being in a “pure binary numeration system,” and defines this further in Footnote
+18. On the other hand, the wording of ISO 2382 is:</p>
+<blockquote>
+<p>05.03.15</p>
+<p><strong>binary (numeration) system</strong></p>
+<p>The <em>fixed radix numeration system</em> that uses the <em>bits</em> 0 and 1 and the <em>radix</em>
+two.</p>
+<p>Example: In this <em>numeration system,</em> the numeral 110,01 represents the number
+"6,25"; that is 1 x 2-2 + 1 x 2-1 + 1 x 2-2.</p>
+<p>05.03.11</p>
+<p><strong>fixed radix (numeration) system</strong></p>
+<p><strong>fixed radix notation</strong></p>
+<p>A <em>radix numeration system</em> in which all the <em>digit places,</em> except perhaps the
+one with the highest <em>weight,</em> have the same <em>radix.</em></p>
+<p>NOTES</p>
+<p>1. The weights of successive digit places are successive integral powers of a
+single radix, each multiplied by the same factor. Negative integral powers of
+the radix are used in the representation of factors.</p>
+<p>2. A fixed radix numeration system is a particular case of a <em>mixed radix
+numeration system</em>; see also Note 2 to 05.03.19.</p>
+<p>05.03.08</p>
+<p><strong>radix</strong></p>
+<p><strong>base (deprecated in this sense)</strong></p>
+<p>In a <em>radix numeration system,</em> the positive <em>integer</em> by which the <em>weight</em> of
+any <em>digit place</em> is multiplied to obtain the weight of the digit place with the
+next higher weight.</p>
+<p>Example: In the <em>decimal numeration system</em> the radix of each digit place is
+10.</p>
+<p>NOTE - The term base is deprecated in this sense because of its mathematical
+use (see definition in 05.02.01).</p>
+<p>05.03.07</p>
+<p><strong>radix (numeration) system</strong></p>
+<p>A <em>positional representation system</em> in which the ratio of the <em>weight</em> of any
+one <em>digit place</em> to the weight of the digit place with the next lower weight is
+a positive <em>integer.</em></p>
+<p>NOTE - The permissible values of the <em>character</em> in any digit place range from
+zero to one less than the <em>radix</em> of that digit place.</p>
+<p>05.03.04</p>
+<p><strong>weight</strong></p>
+<p>In a <em>positional representation system,</em> the factor by which the value
+represented by a <em>character</em> in a <em>digit place</em> is multiplied to obtain its
+additive contribution in the representation of a number.</p>
+<p>05.03.03</p>
+<p><strong>digit place</strong></p>
+<p><strong>digit position</strong></p>
+<p>In a <em>positional representation system,</em> each site that may be occupied by a
+<em>character</em> and that may be identified by an ordinal number or by an equivalent
+identifier.</p>
+<p>05.03.01</p>
+<p><strong>positional (representation) system</strong></p>
+<p><strong>positional notation</strong></p>
+<p>Any <em>numeration system</em> in which a number is represented by an <em>ordered</em> set of
+<em>characters</em> in such a way that the value contributed by a character depends
+upon its position as well as upon its value.</p>
+</blockquote>
+<p>a. What is the legal force of the footnote, given that it quotes a definition
+from a document other than ISO 2382 (see 3)?</p>
+<p>b. Is the footnote wording correct, seeing that the ISO 2382 definition does not
+appear to allow any of the common representations (note the word “positive” in
+05.03.07)?</p>
+<p>c. Does the C Standard require that an implementation appear to use only one
+representation for each value of a given type?</p>
+<p>d. Does the C Standard require that all the bits of the value be significant?</p>
+<p>e. Does the C Standard require that all possible bit patterns represent numbers?</p>
+<p>f. Do the answers to questions (c), (d), and (e) depend on whether the type is
+signed or unsigned, and in the former case, on the sign of the value?</p>
+<p>g. If it is permitted for certain bit patterns not to represent values, is
+generation of such a value by an application (using bit operators) undefined
+behavior, or is use of such a value strictly conforming provided that it is not
+used with arithmetic operators?</p>
+<p>In particular, are the following five implementations allowed?</p>
+<p>h. Unsigned values are pure binary. Signed values are represented using
+ones-complement (in other words, positive and negative values with the same
+absolute value differ in all bits, and zero has two representations). Positive
+numbers have a sign bit of 0, and negative numbers a sign bit of 1. In both
+cases, all bits are significant.</p>
+<p>i. Unsigned values are pure binary. Signed values are represented using
+sign-and-magnitude with a pure binary magnitude (note that the top bit is not
+“additive”). Positive numbers have a sign bit of 0, and negative numbers a sign
+bit of 1. In both cases, all bits are significant.</p>
+<p>j. Unsigned values are pure binary, with all bits significant. Signed values
+with an MSB (sign bit) of 0 are positive, and the remainder of the bits are
+evaluated in pure binary. Signed values with an MSB of 1 are negative, and the
+remainder of the bits are evaluated in BCD. If ints are 20 bits, then <code>INT_MAX</code>
+is 524,287 and <code>INT_MIN</code> is -79,999.</p>
+<p>k. Signed values are twos-complement using all bits. Unsigned values are pure
+binary, but ignoring the MSB (so each number has two representations). In this
+implementation, <code>SCHAR_MAX == UCHAR_MAX</code>, <code>SHRT_MAX == USHRT_MAX</code>, <code>INT_MAX == UINT_MAX</code>, and <code>LONG_MAX == ULONG_MAX</code>.</p>
+<p>l. Signed values are twos-complement. Unsigned values are pure binary. In both
+cases, the top three bits of the value are ignored (and each number has eight
+representations). For signed values, the sign bit is the fourth bit from the
+top.</p>
+<p>Furthermore:</p>
+<p>m. Does the C Standard require that the values of <code>SCHAR_MAX</code>, <code>SHRT_MAX</code>,
+<code>INT_MAX</code>, and <code>LONG_MAX</code>, defined in <code>&lt;limits.h&gt;</code> (subclause 5.2.4.2.1) all be
+exactly one less than a power of 2?</p>
+<p>n. If the answer to (m) is “yes,” then must the exponent of 2 be exactly one
+less than <code>CHAR_BIT * sizeof (T)</code>, where <code>T</code> is <code>signed char</code>, <code>short</code>, <code>int</code>,
+or <code>long</code>, respectively?</p>
+<p>o. Does the C Standard require that the values of <code>UCHAR_MAX</code>, <code>USHRT_MAX</code>,
+<code>UINT_MAX</code>, and <code>ULONG_MAX</code>, defined in <code>&lt;limits.h&gt;</code> (subclause 5.2.4.2.1) all
+be exactly one less than a power of 2?</p>
+<p>p. If the answer to (p) is “yes,” then must the exponent of 2 be exactly
+<code>CHAR_BIT * sizeof (T)</code>, where <code>T</code> is <code>unsigned char</code>, <code>unsigned short</code>,
+<code>unsigned int</code>, or <code>unsigned long</code> respectively?</p>
+<p>q. Does the C Standard require that the absolute values of <code>SCHAR_MIN</code>,
+<code>SHRT_MIN</code>, <code>INT_MIN</code>, and <code>LONG_MIN</code>, defined in <code>&lt;limits.h&gt;</code> (subclause
+5.2.4.2.1) all be exactly a power of 2 or exactly one less than a power of 2?</p>
+<p>r. If the answer to (r) is “yes,” then must the exponent of 2 be exactly one
+less than <code>CHAR_BIT * sizeof (T)</code>, where <code>T</code> is <code>signed char</code>, <code>short</code>, <code>int</code>,
+or <code>long</code> respectively?</p>
+<p>s. If any of the answers to (m), (p), or (r) is “no,” are there any values for
+each of these expressions that are permitted by subclause 5.2.4.2 but prohibited
+by the C Standard for other reasons, and if so, what are they?</p>
+<p>t. Does the C Standard require that the expressions <code>(SCHAR_MIN + SCHAR_MAX)</code>,
+<code>(SHRT_MIN + SHRT_MAX)</code>, <code>(INT_MIN + INT_MAX)</code>, and <code>(LONG_MIN + LONG_MAX)</code> be
+exactly 0 or -1? If not, does it put any restrictions on these expressions?</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>Before providing detailed answers, we want to provide some clarified
+terminology. For any object type <code>T</code>, the underlying bytes of the object can be
+copied into an array of <code>unsigned char</code>:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#define N sizeof(T)</span>
+<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">union</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">aligned_buf</span><span style="color: #bbbbbb"> </span>{
+<span style="color: #bbbbbb">         </span>T<span style="color: #bbbbbb"> </span>t;
+<span style="color: #bbbbbb">         </span><span style="color: #B00040">unsigned</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>s[N];
+<span style="color: #bbbbbb">         </span>}<span style="color: #bbbbbb"> </span>buf;
+<span style="color: #bbbbbb"> </span>T<span style="color: #bbbbbb"> </span>object;
+<span style="color: #bbbbbb"> </span>.....
+<span style="color: #bbbbbb">         </span>memcpy(buf.s,<span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">const</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>)<span style="color: #666666">&amp;</span>object,<span style="color: #bbbbbb"> </span>N);
+</pre></div>
+
+<p>The <em>object representation</em> of an object consists of the resulting sequence of
+<code>N</code> objects of type <code>unsigned char</code> in the buffer. The object representation
+depends upon several features of the implementation such as byte-ordering
+(“big-endian,” “little-endian,” etc.), “holes” (i.e., bits within a scalar
+object which do not participate in forming the value of the object), and
+“padding” (i.e., bits in a non-scalar object which lie between the component
+scalar objects or after the last scalar object).</p>
+<p>The <em>value representation</em> of an object is a sequence of bits structured in a
+specific conventional way. The scalar components are listed in their declaration
+sequence. Each scalar component is a sequence of bits (the “participating bits”)
+arranged in a conventional ordering. The value representation of floating-point
+and pointer types is implementation-defined. The value representation of an
+integer type is defined as follows: The least-significant bit (the bit which
+represents the integer value 1) is also called the low-order bit or rightmost
+bit; the most-significant bit is also called the high-order bit or leftmost bit.
+The sign bit (if any) is the leftmost bit.</p>
+<p>If all the bits in a scalar object representation participate in the value
+representation (i.e. no holes or padding), then the value representation can be
+referred to simply as the <em>representation.</em> The bits of the value representation
+determine a <em>value,</em> which is one discrete element of an implementation-defined
+set of values. The conventional depiction of an integer value is as a decimal
+integer, optionally signed, such as 128 or -1.</p>
+<p>Here is an example. Consider a (possibly hypothetical) ones-complement
+implementation whose <code>int</code> value representation provides one sign bit and 40
+integer bits.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">    </span><span style="color: #666666">+-+---------------------+</span>
+<span style="color: #bbbbbb">    </span><span style="color: #666666">|</span><span style="color: #bbbbbb"> </span><span style="color: #666666">|</span><span style="color: #bbbbbb">                     </span><span style="color: #666666">|</span>
+<span style="color: #bbbbbb">    </span><span style="color: #666666">+-+---------------------+</span>
+<span style="color: #bbbbbb">     </span><span style="color: #666666">1</span><span style="color: #bbbbbb">         </span><span style="color: #666666">40</span>
+</pre></div>
+
+<p>Its object representation provides one sign bit, a hole containing seven
+non-participating bits, and 40 integer bits (issues of byte ordering are
+irrelevant here):</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">    </span><span style="color: #666666">+-+------+---------------------+</span>
+<span style="color: #bbbbbb">    </span><span style="color: #666666">|</span><span style="color: #bbbbbb"> </span><span style="color: #666666">|</span><span style="color: #bbbbbb">      </span><span style="color: #666666">|</span><span style="color: #bbbbbb">                     </span><span style="color: #666666">|</span>
+<span style="color: #bbbbbb">    </span><span style="color: #666666">+-+------+---------------------+</span>
+<span style="color: #bbbbbb">     </span><span style="color: #666666">1</span><span style="color: #bbbbbb">   </span><span style="color: #666666">7</span><span style="color: #bbbbbb">        </span><span style="color: #666666">40</span>
+</pre></div>
+
+<p>The value representation containing 41 zero bits designates the value 0:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">    </span><span style="color: #666666">+-+---------------------+</span>
+<span style="color: #bbbbbb">    </span><span style="color: #666666">|0|000</span><span style="color: #bbbbbb">     </span>...<span style="color: #bbbbbb">       </span><span style="color: #666666">000|</span>
+<span style="color: #bbbbbb">    </span><span style="color: #666666">+-+---------------------+</span>
+<span style="color: #bbbbbb">     </span><span style="color: #666666">1</span><span style="color: #bbbbbb">         </span><span style="color: #666666">40</span>
+</pre></div>
+
+<p>Depending upon the implementation, the value representation containing 41 one
+bits may designate the same value 0, in which case it is indistinguishable from
+the other value representation; or it may designate a distinguishable value,
+conventionally depicted as -0, which is arithmetically equal to 0 but
+distinguishable by bitwise operations.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">    </span><span style="color: #666666">+-+---------------------+</span>
+<span style="color: #bbbbbb">    </span><span style="color: #666666">|1|111</span><span style="color: #bbbbbb">     </span>...<span style="color: #bbbbbb">       </span><span style="color: #666666">111|</span>
+<span style="color: #bbbbbb">    </span><span style="color: #666666">+-+---------------------+</span>
+<span style="color: #bbbbbb">     </span><span style="color: #666666">1</span><span style="color: #bbbbbb">         </span><span style="color: #666666">40</span>
+</pre></div>
+
+<p>Now for detailed replies:</p>
+<p>a) Footnotes are not normative. The <em>legality</em> of a footnote is beyond the scope
+of WG14/X3J11.</p>
+<p>b) Yes, the footnote is correct.</p>
+<p>c) No, there is no such requirement.</p>
+<p>d) In view of the discussion above, we assume you mean the following question:
+Does the C Standard require that all bits of the object representation
+participate in the value representation? For character types, all bits of the
+object representation do contribute. See subclauses 7.9.2 (re binary streams)
+and 7.11.1 (re string functions) for (indirect) justification. More precisely,
+any bits that do not contribute to the value of a character type must not
+contribute to the value of any other object type. (Parity bits are an obvious
+example.) For other types, the answer is no.</p>
+<p>e) In view of the discussion above, we assume you mean the following question:
+Does the C Standard require that all possible bit patterns of the object
+representation represent numbers? For the type <code>unsigned char</code>, the answer is
+yes. (And if all values of the type <code>char</code> are non-negative, then the answer is
+yes.) Otherwise, the answer is no.</p>
+<p>f) No, except for the character types as mentioned above.</p>
+<p>g) Not applicable, since it is unclear what are the meanings of “bit pattern”
+and “value” in the question; see the answer to part (e).</p>
+<p>h) Yes, provided there is no other violation of the C Standard.</p>
+<p>i) Yes, provided there is no other violation of the C Standard.</p>
+<p>j) No. It is not a pure binary system.</p>
+<p>k) Yes, except for <code>SCHAR_MAX == UCHAR_MAX</code> (which is specifically disallowed),
+provided there is no other violation of the C Standard.</p>
+<p>l) Yes, provided there is no other violation of the C Standard.</p>
+<p>m) Yes, because subclause 6.1.2.5 states that the positive signed integers have
+the same representation as the corresponding unsigned integers, and because
+signed integers use a pure binary numeration system. The Committee intended to
+permit ones complement, twos complement, and signed magnitude implementation.</p>
+<p>n) No. There are architectures on which not all bits can be used.</p>
+<p>p) Yes, because subclause 6.1.2.5 requires unsigned integers to behave as if a
+result “is reduced modulo the number that is one greater than the largest value
+that can represented,” and unsigned integers use a pure binary numeration
+system.</p>
+<p>q) No. The memory occupied by a value of an integer is allowed to exceed the
+number of binary digits used to represent the actual value.</p>
+<p>r) Yes. See the answer to part (m).</p>
+<p>s) No. See the answer to part (q).</p>
+<p>t) Not applicable.</p>
+<p>u) Yes, the expression must evaluate to 0 or -1.</p>
+
+</body>
+</html>

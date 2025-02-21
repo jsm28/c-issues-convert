@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0106: Can one take the address of a void expression?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0106: Can one take the address of a void expression?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Ron Guilmette, WG14<br />
+Date: 1993-12-03<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Cross-references: <a href="../c90/issue0012.html">0012</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_106.html">dr_106.html</a></p>
+<p>ANSI/ISO C Defect report #rfg13:</p>
+<p>Subclause 6.2.2.2 says:</p>
+<blockquote>
+<p>The (nonexistent) value of a <em>void expression</em> (an expression that has type
+<code>void</code>) shall not be used in any way, ...</p>
+</blockquote>
+<p>There are two separate (but related) problems with this rule.</p>
+<p>First, it is not entirely clear what constitutes a “use” of a value (or of an
+expression). In which lines of the following code is a type <code>void</code> value
+actually “used?”</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">example</span>(<span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>pv,<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>i)
+<span style="color: #bbbbbb">        </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #666666">&amp;*</span>pv;<span style="color: #bbbbbb">            </span><span style="color: #3D7B7B; font-style: italic">/* ? */</span>
+<span style="color: #bbbbbb">        </span><span style="color: #666666">*</span>pv;<span style="color: #bbbbbb">             </span><span style="color: #3D7B7B; font-style: italic">/* ? */</span>
+<span style="color: #bbbbbb">        </span>i<span style="color: #bbbbbb"> </span><span style="color: #666666">?</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>pv<span style="color: #bbbbbb"> </span><span style="color: #666666">:</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>pv;<span style="color: #bbbbbb">   </span><span style="color: #3D7B7B; font-style: italic">/* ? */</span>
+<span style="color: #bbbbbb">        </span><span style="color: #666666">*</span>pv,<span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>pv;<span style="color: #bbbbbb">        </span><span style="color: #3D7B7B; font-style: italic">/* ? */</span>
+<span style="color: #bbbbbb">        </span>}
+</pre></div>
+
+<p>(The answer to this question will determine which of the above lines cause
+undefined behavior, and which cause well defined behavior.)</p>
+<p>If one or more of the (questionable) lines from the above example are judged by
+the Committee to result in well defined behavior, then a second (separate) issue
+arises. This second issue requires some explaining.</p>
+<p>Subclause 6.2.2.1 contains the following rules:</p>
+<blockquote>
+<p>An <em>lvalue</em> is an expression (with an object type or an incomplete type other
+than <code>void</code>) ...</p>
+<p>Except when it is the operand of the <code>sizeof</code> operator, the unary <code>&amp;</code> operator,
+the <code>++</code> operator, the <code>--</code> operator, or the left operand of the <code>.</code> operator or
+an assignment operator, an lvalue that does not have array type is converted to
+the value stored in the designated object (and is no longer an lvalue)... If the
+lvalue has an incomplete type and does not have array type, the behavior is
+undefined.</p>
+</blockquote>
+<p>Note that the final rule (specifying a condition under which undefined behavior
+arises) seems, based upon the context, to only apply to those cases in which
+“...an lvalue that does not have an array type is converted to the value...”
+More specifically, it appears that undefined behavior is <em>not</em> necessarily
+produced for non-lvalue expressions (appearing in the indicated contexts).</p>
+<p>Furthermore, it should be noted that the definition of an lvalue (quoted above)
+<em>does not include</em> all void types. Rather, it only includes <em>the</em> <code>void</code> type.</p>
+<p>The result is that the indicated lines in following example would seem to yield
+well defined behavior (or at least they <em>will</em> yield well defined behavior if
+the Committee decides that their unqualified counterparts do), however I suspect
+that this may not have been what the Committee intended.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">example</span>(<span style="color: #008000; font-weight: bold">const</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>pcv,<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">volatile</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>pvv,<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>i)
+<span style="color: #bbbbbb">        </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #666666">&amp;*</span>pcv;<span style="color: #bbbbbb">              </span><span style="color: #3D7B7B; font-style: italic">/* ? */</span>
+<span style="color: #bbbbbb">        </span><span style="color: #666666">*</span>pcv;<span style="color: #bbbbbb">               </span><span style="color: #3D7B7B; font-style: italic">/* ? */</span>
+<span style="color: #bbbbbb">        </span>i<span style="color: #bbbbbb"> </span><span style="color: #666666">?</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>pcv<span style="color: #bbbbbb"> </span><span style="color: #666666">:</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>pcv;<span style="color: #bbbbbb">    </span><span style="color: #3D7B7B; font-style: italic">/* ? */</span>
+<span style="color: #bbbbbb">        </span><span style="color: #666666">*</span>pcv,<span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>pcv;<span style="color: #bbbbbb">         </span><span style="color: #3D7B7B; font-style: italic">/* ? */</span>
+
+<span style="color: #bbbbbb">        </span><span style="color: #666666">&amp;*</span>pvv;<span style="color: #bbbbbb">              </span><span style="color: #3D7B7B; font-style: italic">/* ? */</span>
+<span style="color: #bbbbbb">        </span><span style="color: #666666">*</span>pvv;<span style="color: #bbbbbb">               </span><span style="color: #3D7B7B; font-style: italic">/* ? */</span>
+<span style="color: #bbbbbb">        </span>i<span style="color: #bbbbbb"> </span><span style="color: #666666">?</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>pvv<span style="color: #bbbbbb"> </span><span style="color: #666666">:</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>pvv;<span style="color: #bbbbbb">    </span><span style="color: #3D7B7B; font-style: italic">/* ? */</span>
+<span style="color: #bbbbbb">        </span><span style="color: #666666">*</span>pvv,<span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>pvv;<span style="color: #bbbbbb">         </span><span style="color: #3D7B7B; font-style: italic">/* ? */</span>
+<span style="color: #bbbbbb">        </span>}
+</pre></div>
+
+<p>In summary, I would ask that the Committee comment upon and/or clarify the
+behavior produced by each of the examples shown herein. Separately, I would
+request that the Committee make changes in the existing C Standard in order to
+make the rules applicable to such cases more readily apparent.</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>In the first function called <code>example</code>, the expression statement <code>&amp;*pv</code> is dealt
+with in <a href="../c90/issue0012.html">Defect Report #012</a>. The remaining three statements are
+well formed. See the last sentence of the cited reference and also subclause
+6.6.3.</p>
+<p>In the second function called <code>example</code>, the expression statements <code>&amp;*pcv</code> and
+<code>&amp;*pvv</code> are dealt with in <a href="../c90/issue0012.html">Defect Report #012</a>. The remaining six
+statements are well formed. The restrictions given in subclause 6.5.3 apply to
+object types, not incomplete types.</p>
+
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0451: Instability of uninitialized automatic variables</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0451: Instability of uninitialized automatic variables</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG 14, Freek Wiedijk and Robbert Krebbers (Radboud University Nijmegen, The Netherlands)<br />
+Date: 2013-08-30<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1747.htm">N1747</a><br />
+Submitted against: C11 / C17<br />
+Status: Closed<br />
+Cross-references: <a href="../c99/issue0260.html">0260</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>The standard is unclear about the following questions:</p>
+<ol>
+<li>Can an uninitialized variable with automatic storage duration (of a type that does not have trap values, whose address has been taken so 6.3.2.1p2 does not apply, and which is not volatile) change its value without direct action of the program?</li>
+<li>If the answer to question 1 is "yes", then how far can this kind of "instability" propagate?</li>
+<li>If "unstable" values can propagate through function arguments into a called function, can calling a C standard library function exhibit undefined behavior because of this?</li>
+</ol>
+<p>Specifically, consider:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">unsigned</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>x[<span style="color: #666666">1</span>];<span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">/* intentionally uninitialized */</span>
+printf(<span style="color: #BA2121">&quot;%d</span><span style="color: #AA5D1F; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>,<span style="color: #bbbbbb"> </span>x[<span style="color: #666666">0</span>]);
+printf(<span style="color: #BA2121">&quot;%d</span><span style="color: #AA5D1F; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>,<span style="color: #bbbbbb"> </span>x[<span style="color: #666666">0</span>]);
+</pre></div>
+
+<p>Does the standard allow an implementation to let this code print two different
+values? And if so, if we insert either of the following three statements</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>x[<span style="color: #666666">0</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>x[<span style="color: #666666">0</span>];
+x[<span style="color: #666666">0</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">+=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;
+x[<span style="color: #666666">0</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">*=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;
+</pre></div>
+
+<p>between the declaration and the <code>printf</code> statements, is this behavior still
+allowed? Or alternatively, can these <code>printf</code> statements exhibit undefined
+behavior instead of having to print a reasonable number.</p>
+<h4>Motivation and discussion</h4>
+<p>The standard is unclear about these questions.</p>
+<p>On the one hand the committee response to <a href="../c99/issue0260.html">Defect Report #260</a>
+strongly suggests that the committee decided that the standard implies the
+answer to question 1 to be "yes". (Although Defect Report #260 applies to the
+C99 standard and hence has been superseded by the C11 standard, no modification
+to the standard text was deemed necessary at the time, and all relevant text in
+the C11 standard is identical to that in the C99 standard.) The relevant quote
+from the committee response to Defect Report #260 is:</p>
+<blockquote>
+<p>In the case of an indeterminate value [...] the actual bit-pattern may change
+without direct action of the program.</p>
+</blockquote>
+<p>A subtlety is that Defect Report #260 talks about bit-patterns and not about
+values, but for variables of type <code>unsigned char</code> there is a one-to-one
+correspondence between bit-patterns and values.</p>
+<p>Another argument in favor of "instability" of indeterminate values is that
+values can "become indeterminate" (e.g. 5.1.2.3p5, 6.2.4p2, and 6.2.4p6). In
+these cases the value of an object may also change without an explicit store
+(and can keep changing?)</p>
+<p>On the other hand, 6.7.9p10 states that the kind of uninitialized variables that
+we are discussing get an indeterminate value. From 3.19.2 it follows that if a
+type has no trap values, then indeterminate and unspecified values are the same.
+And in 3.19.3, it is stated explicitly that an unspecified value is <em>chosen</em>.
+Which implies that the value - after having been chosen - cannot change
+anymore.</p>
+<p>Another argument against "instability" is that 6.8p3 states that "the values are
+stored in the objects (including <em>storing</em> an indeterminate value in objects
+without an initializer) each time the declaration is reached in the order of
+execution", and that 6.2.4p2 states that "An object [...] retains its
+last-<em>stored</em> value throughout its lifetime." The only way that one could read
+this in light of Defect Report #260 is if "retaining an indeterminate value" is
+read as meaning that the indeterminateness of the value is retained, without the
+value having a <em>specific</em> value.</p>
+<p>It seems attractive to make a distinction between <em>indeterminate</em> values that
+are allowed to change without direct action of the program in the way that
+Defect Report #260 interpreted the standard, and <em>unspecified</em> values that do
+not have this property. However the current text of 3.19.2 does not allow for
+this interpretation. Also, probably some instances of "indeterminate" and
+"unspecified" would need to be changed for such an interpretation to make sense.
+(For example in 6.2.6.1p6 "the bytes of the object representation that
+correspond to any padding bytes take unspecified values." should probably become
+"... take indeterminate values.")</p>
+<p>The reason for question 3 is that <em>if</em> the kind of "instability" that questions
+1 and 2 ask for is allowed to propagate maximally, then it becomes impossible to
+implement <code>printf</code> in C itself. When converting an indeterminate value to a
+string of output characters, the value can <em>keep</em> changing underneath, and the
+code cannot protect itself against this.</p>
+<p>On the other hand, if library functions exhibit undefined behavior on these
+kinds of "unstable" uninitialized values, then an <code>fwrite</code> of a struct with
+uninitialized padding bytes would also give undefined behavior. The fact that
+one wants to be able to copy uninitialized padding bytes in structs using
+<code>memcpy</code> without undefined behavior is the reason that using the value of an
+uninitialized object is not undefined behavior. This seems to suggest that an
+<code>fwrite</code> of a struct with uninitialized padding bytes should <em>not</em> exhibit
+undefined behavior.</p>
+<h3>Possible Resolutions</h3>
+<p>We see three reasonable sets of answers to these questions:</p>
+<h4>Resolution (a)</h4>
+<ol>
+<li>no</li>
+<li>not applicable</li>
+<li>not applicable</li>
+</ol>
+<h5>Advantage</h5>
+<p>Easy to repair the unclarity in the standard. Just add text that explicitly
+states that indeterminate values cannot change without direct action from the
+program. This will prevent people from invoking the response to Defect Report
+#260 from then on.</p>
+<h5>Disadvantage</h5>
+<p>Restricts the kind of optimizations compilers are allowed to perform.</p>
+<h4>Resolution (b)</h4>
+<ol>
+<li>yes</li>
+<li>any operation performed on indeterminate values will have an indeterminate value as its result</li>
+<li>no</li>
+</ol>
+<p>Specifically, "unstable" values will also propagate through function calls.
+Also, after</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>x[<span style="color: #666666">0</span>]<span style="color: #bbbbbb"> </span><span style="color: #666666">*=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;
+</pre></div>
+
+<p>the value of <code>x[0]</code> <em>still</em> will be "unstable" and hence still can be any byte,
+and will not necessary be <code>0</code>.</p>
+<h5>Advantage</h5>
+<p>Gives compilers more freedom to perform optimizations.</p>
+<p>Is Defect Report #260-compliant (i.e., "the committee did not change its mind").</p>
+<h5>Disadvantage</h5>
+<p>Needs more modifications to the text of the standard. It will then be necessary
+to make an explicit distinction between "indeterminate non-trap value" and
+"unspecified value".</p>
+<h4>Resolution (c)</h4>
+<ol>
+<li>yes</li>
+<li>any operation performed on indeterminate values will have an indeterminate value as its result</li>
+<li>yes, library functions will exhibit undefined behavior when used on indeterminate values (probably functions like <code>memcpy</code> and maybe <code>fwrite</code> should be immune from this)</li>
+</ol>
+<h5>Advantage</h5>
+<p>Restricts program behaviors least, giving compilers even more freedom.</p>
+<h5>Disadvantage</h5>
+<p>Needs even more modification to the text of the standard.</p>
+<p>Needs a decision on what library functions will <em>not</em> have undefined behavior
+when working on indeterminate values.</p>
+<p>This is certainly not compatible with the current version of the standard, as no
+undefined behavior of this kind related to library functions is described there.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<h5>For resolution (a)</h5>
+<p>In 6.2.4p2, change "An object exists, has a constant address, and retains its
+last-stored value throughout its lifetime." to "An object exists and has a
+constant address throughout its lifetime. The value of an object is retained,
+including the object representation, until some other value is stored into it,
+or until the moment when the value becomes indeterminate (at which moment it is
+replaced with an indeterminate value, and after which that value is retained
+again)."</p>
+<h5>For resolution (b)</h5>
+<p>In 3.19.2 change "either an unspecified value or a trap representation" to
+"either an unspecified value or a trap representation, which can change
+arbitrarily without direct action from the program".</p>
+<p>In 6.2.4p2, change "An object exists, has a constant address, and retains its
+last-stored value throughout its lifetime." to "An object exists, has a constant
+address, and retains its last-stored value (provided this value is not
+indeterminate), throughout its lifetime."</p>
+<p>At the end of 6.5p1 add "If at least one of the operands of an operator is
+indeterminate, the result of the operator is also indeterminate."</p>
+<p>Some instances of "indeterminate" and "unspecified" (to be determined) should be
+replaced by respectively "unspecified" and "indeterminate". See for example the
+instance in 6.2.6.1p6 mentioned earlier.</p>
+<h5>For resolution (c)</h5>
+<p>The changes for resolution (b), and also:</p>
+<p>In 7.1.4p1 add: "If a function is called with an indeterminate value, the
+behavior is undefined."</p>
+<p>In a selection (to be determined) of functions from the library, add text that
+counters this general statement added to 7.1.4p1.</p>
+<hr />
+<p>Comment from WG14 on 2015-04-17:</p>
+<p>Oct 2013 meeting</p>
+<h3>Committee Discussion</h3>
+<ul>
+<li>The committee asserts that the answer to the first question is "yes", an uninitialized value under the conditions described can appear to change its value.</li>
+<li>Since question 2 is applicable, the answer is that any operation performed on indeterminate values will have an indeterminate value as its result.</li>
+<li>The answer to the applicable question 3 is that indeed library functions will exhibit undefined behavior when used on indeterminate values.</li>
+<li>The committee notes that the problem applies to all types that do not have trap representations as per the implementation.</li>
+<li>Strong sentiment formed, in part based on prior experience in developing Annex L, that a new category of "wobbly" value is needed. The underlying issue is that modern compilers track value propagation, and uninitialized values synthesized for an initial use of an object may be discarded as inconsequential prior to synthesizing a different value for a subsequent use. To require otherwise defeats important compiler optimizations. All uses of "wobbly" values might be deemed undefined behavior.</li>
+<li>The principle of Resolution C is desired.</li>
+<li>This requires careful thought.</li>
+</ul>
+<p>Apr 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The author provided
+<a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1793.pdf">N1793</a> and an
+accompanying presentation
+<a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1818.pdf">N1818</a> in which his
+position changed to believing that "wobbly" values are not actually defined by
+the standard, and after discussion agreed that the following committee response
+would be an acceptable resolution.</p>
+</blockquote>
+<h3>Proposed Committee Response</h3>
+<ul>
+<li>The answer to question 1 is "yes", an uninitialized value under the conditions described can appear to change its value.</li>
+<li>The answer to question 2 is that any operation performed on indeterminate values will have an indeterminate value as a result.</li>
+<li>The answer to question 3 is that library functions will exhibit undefined behavior when used on indeterminate values.</li>
+<li>These answers are appropriate for all types that do not have trap representations.</li>
+<li>This viewpoint reaffirms the C99 DR260 position.</li>
+<li>The committee agrees that this area would benefit from a new definition of something akin to a "wobbly" value and that this should be considered in any subsequent revision of this standard.</li>
+<li>The committee also notes that padding bytes within structures are possibly a distinct form of "wobbly" representation.</li>
+</ul>
+
+</body>
+</html>

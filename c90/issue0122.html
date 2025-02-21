@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0122: Is the type of a bit-field totally independent from its width?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0122: Is the <em>type</em> of a bit-field totally independent from its <em>width</em>?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Ron Guilmette, WG14<br />
+Date: 1993-12-03<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Cross-references: <a href="../c90/issue0015.html">0015</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_122.html">dr_122.html</a></p>
+<p>ANSI/ISO C Defect Report #rfg29:</p>
+<p>Subject: Conversion/widening of bit-fields.</p>
+<p>Must the following program print <code>1</code> or <code>0</code>?</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;stdio.h&gt;</span>
+
+<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">S</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">unsigned</span><span style="color: #bbbbbb"> </span>bit<span style="color: #666666">:1</span>;<span style="color: #bbbbbb"> </span>}<span style="color: #bbbbbb"> </span>object<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #666666">1</span><span style="color: #bbbbbb"> </span>};
+
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">main</span><span style="color: #bbbbbb"> </span>()
+<span style="color: #bbbbbb">        </span>{
+<span style="color: #bbbbbb">        </span>printf<span style="color: #bbbbbb"> </span>(<span style="color: #BA2121">&quot;%d</span><span style="color: #AA5D1F; font-weight: bold">\n</span><span style="color: #BA2121">&quot;</span>,<span style="color: #bbbbbb"> </span>((object.bit<span style="color: #bbbbbb"> </span><span style="color: #666666">-</span><span style="color: #bbbbbb"> </span><span style="color: #666666">2</span>)<span style="color: #bbbbbb"> </span><span style="color: #666666">&lt;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>));
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>;
+<span style="color: #bbbbbb">        </span>}
+</pre></div>
+
+<p>(At least one existing implementations prints <code>1</code> while another prints <code>0</code>.)</p>
+<p>Background:</p>
+<p>Subclause 6.2.1.1:</p>
+<blockquote>
+<p>A <code>char</code>, a <code>short int</code>, or an <code>int</code> bit-field, or their signed or unsigned
+varieties, or an enumeration type, may be used in an expression wherever an
+<code>int</code> or <code>unsigned int</code> may be used. If an <code>int</code> can represent all values of the
+original type, the value is converted to an <code>int</code>; otherwise it is converted to
+an <code>unsigned int</code>.</p>
+</blockquote>
+<p>The key phrase here is “the original type.”</p>
+<p>In effect, I am asking if the <em>type</em> of a bit-field is totally independent from
+its <em>width</em> for the purposes of the above rule.</p>
+<p>If the answer to that question is “yes,” then the value of <code>object.bit</code> must be
+considered to be an <code>unsigned int</code> (with a value of <code>1U</code>). In that case, the
+value <code>2</code> used in the above example must also be converted to type <code>unsigned int</code> and then the subtraction should be carried out on the two <code>unsigned int</code>
+values. The subtraction should then itself yield a value of type <code>unsigned int</code>
+which is itself (by definition) &gt;= 0, so it would seem that the C Standard
+requires the above program to print <code>0</code>.</p>
+<p>Is that correct? If so, perhaps the wording of the above paragraph needs to be
+improved so as to make the correct interpretation of these rules more apparent
+to implementors.</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>See <a href="../c90/issue0015.html">Defect Report #015</a>. “The original type” applies to both width
+and signedness. <code>object.bit</code> promotes to <code>int</code>, and the program prints <code>1</code>.</p>
+
+</body>
+</html>

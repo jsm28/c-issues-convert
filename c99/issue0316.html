@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0316: Unprototyped function types</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0316: Unprototyped function types</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Joseph Myers &lt;joseph@codesourcery.com&gt;, UK C Panel<br />
+Date: 2005-03-04<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1104.htm">ISO/IEC WG14 N1104</a><br />
+Submitted against: C99<br />
+Status: Closed<br />
+Cross-references: <a href="../c99/issue0255.html">0255</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_316.htm">dr_316.htm</a></p>
+<h3>Summary</h3>
+<p>The rules for compatibility of function types in 6.7.5.3#15 do not define when a
+function type is "specified by a function definition that contains a (possibly
+empty) identifier list", and do not address compatibility between two types with
+that property or what the composite type is in such cases.</p>
+<p>As a first example, consider:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">        </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f</span>(a)<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>a;{}
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span>g(a,b)<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>a,b;{}
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">*</span>h)(<span style="color: #B00040">int</span>,<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span>,<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span>)<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">0</span><span style="color: #bbbbbb"> </span><span style="color: #666666">?</span><span style="color: #bbbbbb"> </span>f<span style="color: #bbbbbb"> </span><span style="color: #666666">:</span><span style="color: #bbbbbb"> </span>g);
+</pre></div>
+
+<p>What is the type of <code>(0 ? f : g)</code>? The types of <code>f</code> and <code>g</code> are compatible. Does
+<code>(0 ? f : g)</code> have a type specified by a function definition? Does <code>(0 ? f : f)</code>?</p>
+<p>Question 1: Is the above translation unit valid?</p>
+<p>Another example is:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">        </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f</span>(a)<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>a;{}
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">*</span>h)(<span style="color: #B00040">int</span>,<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span>,<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span>)<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>f;
+</pre></div>
+
+<p>I believe the intent of the standard is that a type is specified by a function
+definition <em>only</em> for the purposes of checking compatibility of multiple
+declarations of the same function; when as here the name of the function appears
+in an expression, its type is determined by its return type and contains no
+trace of the parameter types. However, implementation interpretations vary.</p>
+<p>Question 2: Is the above translation unit valid?</p>
+<p>It may still be necessary for compatibility of multiple unprototyped function
+types determined by function definitions to be considered, if those definitions
+are in different translation units and all but one are inline. (As an aside,
+while the text of 6.7.4#6 assumes that there is only one definition of a
+function in a translation unit, I can find nothing prohibiting more if <code>inline</code>
+is used, though the presumption would probably mean compile-time undefined
+behavior if there were more than one in a translation unit, with compatible
+types.) By way of example, consider the following three translation units:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">        </span><span style="color: #3D7B7B; font-style: italic">// TU 1:</span>
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">inline</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f</span>(a)<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>a;{}
+
+<span style="color: #bbbbbb">        </span><span style="color: #3D7B7B; font-style: italic">// TU 2:</span>
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">inline</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span>f(a,b)<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>a,b;{}
+
+<span style="color: #bbbbbb">        </span><span style="color: #3D7B7B; font-style: italic">// TU 3:</span>
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span>f(a,b,c)<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>a,b,c;{}
+</pre></div>
+
+<p>The function types seem to be compatible, so 6.2.7#2 does not apply.</p>
+<p>Question 3: Must a program containing these three translation units, which never
+calls the function <code>f</code>, be accepted?</p>
+<p>The function <code>f</code> cannot be called above from TU 1 or TU 2 without undefined
+behavior, but could be called from TU 3, where the inline definitions in TU 1
+and TU 2 cannot be used for a call. (Though a program containing calls in TU 1
+and TU 2 which are conditioned by <code>if (0)</code> would also seem to be valid.) In the
+following case, the types are similar enough that it would seem possible for
+calls to occur in all three translation units without undefined behavior (by
+virtue of the exceptions in 6.5.2.2#6):</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">        </span><span style="color: #3D7B7B; font-style: italic">// TU 1:</span>
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">inline</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f</span>(a,b)<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>a;<span style="color: #B00040">unsigned</span><span style="color: #bbbbbb"> </span>b;{}
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span>g(<span style="color: #B00040">void</span>){f(<span style="color: #666666">0</span>,<span style="color: #666666">0</span>);}
+
+<span style="color: #bbbbbb">        </span><span style="color: #3D7B7B; font-style: italic">// TU 2:</span>
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">inline</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span>f(a,b)<span style="color: #B00040">unsigned</span><span style="color: #bbbbbb"> </span>a;<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>b;{}
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span>h(<span style="color: #B00040">void</span>){f(<span style="color: #666666">0</span>,<span style="color: #666666">0</span>);}
+
+<span style="color: #bbbbbb">        </span><span style="color: #3D7B7B; font-style: italic">// TU 3:</span>
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span>f(a,b)<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>a,b;{}
+<span style="color: #bbbbbb">        </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span>i(<span style="color: #B00040">void</span>){f(<span style="color: #666666">0</span>,<span style="color: #666666">0</span>);}
+</pre></div>
+
+<p>Question 4: Must a program containing these three translation units be accepted?</p>
+<p>It seems undesirable for such variation among the types of functions with inline
+definitions to be permitted. This could be fixed by defining compatibility of
+multiple unprototyped function definitions to require compatibility of the
+parameter types.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<hr />
+<p>Comment from WG14 on 2006-03-05:</p>
+<h3>Committee Discussion (for history only)</h3>
+<p>The Committee believe the answers to Q1 &amp; 2 are yes, and that the Standard is
+unclear with respect to 3 &amp; 4.</p>
+<h3>Committee Response</h3>
+<p>Per the response provided in <a href="../c99/issue0255.html">DR 255</a>:</p>
+<blockquote>
+<p>"The Committee does not wish to further refine the behavior of calls not in the
+scope of prototypes. In practice, this will not be a problem, and the Committee
+does not wish to define the behavior."</p>
+</blockquote>
+<p>We have no intention of <em>fixing</em> the old style rules. However, the observations
+made in this document seem to be generally correct.</p>
+
+</body>
+</html>

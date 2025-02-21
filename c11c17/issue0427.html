@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0427: Function Parameter and Return Value Assignments</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0427: Function Parameter and Return Value Assignments</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG 14, Shao Miller &lt;sha0.miller@gmail.com&gt;<br />
+Date: 2013-01-24<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1671.htm">N1671</a><br />
+Submitted against: C11 / C17<br />
+Status: Closed<br />
+Cross-references: <a href="../c11c17/issue0423.html">0423</a>, <a href="../c11c17/issue0454.html">0454</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>The wording for the the assignments of function arguments to function parameters
+and for the assignment of a <code>return</code> statement's expression to the value of the
+function call can potentially be confused.</p>
+<p>6.5.2.2p2:</p>
+<blockquote>
+<p>If the expression that denotes the called function has a type that includes a
+prototype, the number of arguments shall agree with the number of parameters.
+Each argument shall have a type such that its value may be assigned to an object
+with the unqualified version of the type of its corresponding parameter.</p>
+</blockquote>
+<p>The appearance of "may be assigned" can lead to the question (#1) of whether or
+not the constraints and semantics under both 6.5.16 and 6.5.16.1 might apply.
+The <strong>Forward references</strong> indicate 6.5.16.1, so this question might be
+unwarranted.</p>
+<p>The appearance of "unqualified version of the type of its corresponding
+parameter" does not match 6.9.1p10, which doesn't use "unqualified" (see below).</p>
+<p>6.5.16p2:</p>
+<blockquote>
+<p>An assignment operator shall have a modifiable lvalue as its left operand.</p>
+</blockquote>
+<p>If 6.5.2.2p2's mention of "assigned" implies this constraint as a secondary
+constraint, it is not clear which "modifiable lvalue" or even "lvalue" would
+ever satisfy the constraint. The "modifiable lvalue" does not appear to be the
+parameter, because:</p>
+<ul>
+<li>the mention of "unqualified version" suggests a theoretical object, while the parameter might be <code>const</code>-qualified, or</li>
+<li>the parameter might have an unqualified structure or union type having at least one <code>const</code>-qualified member (possibly via recursion)</li>
+</ul>
+<p>6.7.3p4:</p>
+<blockquote>
+<p>The properties associated with qualified types are meaningful only for
+expressions that are lvalues.132)</p>
+<p>132) The implementation may place a const object that is not volatile in a
+read-only region of storage. Moreover, the implementation need not allocate
+storage for such an object if its address is never used.</p>
+</blockquote>
+<p>This can suggest that 6.5.2.2p2's "an object with the unqualified version of the
+type" implies an lvalue, but (question #2) is it a modifiable lvalue? Question
+#3: If the type is a structure or union type with a <code>const</code>-qualified member
+(possibly via recursion), are the members considered to be unqualified, too? If
+so, this is an important difference from pointer types where the referenced type
+(or its referenced type, recursively) would not be considered unqualified. Also
+worth consideration would be an array object (which is not qualified) having
+elements matching such a structure or union type (possibly via recursion).</p>
+<p>The return type of a function might be <code>const</code>-qualified, or might be a
+structure or union type having such a member (possibly via recursion). Question
+#4: Should the return type of a function be adjusted to be an unqualified
+version of the type? Such an adjustment might have implications for type
+compatibility and composite type and might be better off left alone. (<code>const</code> is
+being used for illustrative purposes, but all type qualifiers can equally be
+considerations.)</p>
+<p>6.8.6.4p3:</p>
+<blockquote>
+<p>If a return statement with an expression is executed, the value of the
+expression is returned to the caller as the value of the function call
+expression. If the expression has a type different from the return type of the
+function in which it appears, the value is converted as if by assignment to an
+object having the return type of the function.160)</p>
+<p>160) The return statement is not an assignment. The overlap restriction of
+subclause 6.5.16.1 does not apply to the case of function return. The
+representation of floating-point values may have wider range or precision than
+implied by the type; a cast may be used to remove this extra range and
+precision.</p>
+</blockquote>
+<p>If the return type of a function is <code>const</code>-qualified, or is a structure or
+union type having such a member (possibly via recursion), then "as if by
+assignment" works for 6.5.16.1, but the constraint of 6.5.16p2 requires a
+"modifiable lvalue".</p>
+<p>The footnote reminds us that a <code>return</code> statement with an expression is not an
+assignment, but it is not clear that only 6.5.16.1 applies for the "as if by
+assignment" case.</p>
+<p>6.9.1p10:</p>
+<blockquote>
+<p>On entry to the function, the size expressions of each variably modified
+parameter are evaluated and the value of each argument expression is converted
+to the type of the corresponding parameter as if by assignment. (Array
+expressions and function designators as arguments were converted to pointers
+before the call.)</p>
+</blockquote>
+<p>6.9.1p11:</p>
+<blockquote>
+<p>After all parameters have been assigned, the compound statement that constitutes
+the body of the function definition is executed.</p>
+</blockquote>
+<p>A <code>const</code>-qualified lvalue cannot normally be assigned-to. An lvalue for an
+object having a structure or union type containing a <code>const</code>-qualified member
+(possible via recursion) cannot normally be assigned-to.</p>
+<p>6.9.1p10 doesn't match the use of "unqualified" in 6.5.2.2p2 (see above).</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p><strong>Sun c99</strong> and <strong>GCC</strong> disagree on the <code>return</code> statement's semantics.</p>
+<p>Change 6.5.2.2p2 to:</p>
+<blockquote>
+<p>If the expression that denotes the called function has a type that includes a
+prototype, the number of arguments shall agree with the number of parameters.
+Each argument shall be such that it satifies the constraints of simple
+assignment when considering the argument to be the right operand and considering
+the left operand to have the unqualified version of the type of the
+corresponding parameter.</p>
+</blockquote>
+<p>(Loosely establishes an example for "as if by simple assignment".)</p>
+<p>Change 6.8.6.4p3 to:</p>
+<blockquote>
+<p>If a return statement with an expression is executed, the value of the
+expression is returned to the caller as the value of the function call
+expression. If the expression has a type different from the return type of the
+function in which it appears, the value is converted as if by simple assignment
+to an object having the unqualified version of the return type of the
+function.160)</p>
+</blockquote>
+<p>Change 6.9.1p10 to:</p>
+<blockquote>
+<p>On entry to the function, the size expressions of each variably modified
+parameter are evaluated in an unspecified order, the value of each argument
+expression is converted to the unqualified version of the type of the
+corresponding parameter as if by simple assignment, then each converted value
+becomes the initial value for the corresponding parameter. (Array expressions
+and function designators as arguments were converted to pointers before the
+call.)</p>
+</blockquote>
+<p>Change 6.9.1p11 to:</p>
+<blockquote>
+<p>After all parameters have initial values, the compound statement that
+constitutes the body of the function definition is executed.</p>
+</blockquote>
+<p>Add bullet to J.1</p>
+<blockquote>
+<p>- The order in which the size expressions of variably modified parameters are
+evaluated upon function entry (6.9.1).</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2016-10-21:</p>
+<p>Apr 2013 meeting</p>
+<h3>Committee Discussion</h3>
+<ul>
+<li>No one on the committee understood the problem that this paper was trying to discuss.</li>
+<li>In particular, the actual difference in behavior referenced between Sun c99 and GCC is not elaborated upon.</li>
+<li>The committee will solicit further input from the author.</li>
+</ul>
+<p>Oct 2013 meeting</p>
+<ul>
+<li>
+<p>As a result of further correspondence with the author, a proposed resolution was made on the WG14 reflector in message 13024 and refined in 13035.</p>
+</li>
+<li>
+<p>The defect is that the initial values of parameters to function calls are specified in the standard in terms of assignment instead of initialization, such that <code>const</code> and aggregates containing <code>const</code> would be excluded since they cannot be the subject of assignments!</p>
+</li>
+<li>
+<p>A Suggested Technical Corrigendum was composed, and follows. It is not yet a Proposed Technical Corrigendum due to the following unresolved discussion points.</p>
+</li>
+<li>
+<p>In 6.5.2.2p2 change:</p>
+<p>If the expression that denotes the called function has a type that includes a
+prototype, the number of arguments shall agree with the number of parameters.
+Each argument shall have a type such that its value may be assigned to an object
+with the unqualified version of the type of its corresponding parameter.</p>
+<p>to</p>
+<p>If the expression that denotes the called function has a type that includes a
+prototype, the number of arguments shall agree with the number of parameters.
+Each argument shall have a type such that its value may be used to initialize an
+object having the type of its corresponding parameter.</p>
+<p>In 6.5.2.2p4 change</p>
+<p>An argument may be an expression of any complete object type. In preparing for
+the call to a function, the arguments are evaluated, and each parameter is
+assigned to the value of the corresponding argument.</p>
+<p>to</p>
+<p>An argument may be an expression of any complete object type. In preparing for
+the call to a function, the arguments are evaluated, and each parameter is
+initialized to the value of the corresponding argument.</p>
+</li>
+<li>
+<p>It is not clear yet whether there are issues around conversions with respect to this change since this is actual practice that we are intending to simply reflect and to not introduce new constraints.</p>
+</li>
+<li>
+<p>This change might be augmented by a new example along the lines of, say, 6.5.16.1 example 3.</p>
+</li>
+</ul>
+<p>Apr 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The issue of conversion has to do with whether there are differing promotions
+and type conversions that would apply when constructing an argument list that
+would not occur if these expressions were used as initializers in a declaration.</p>
+</blockquote>
+<p>Oct 2014 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The committee concluded after a discussion that there were no promotion or type
+conversion issues raised by the proposed wording above, and that the following
+should be adopted as a Proposed Technical Corrigendum.</p>
+</blockquote>
+<h3>Proposed Technical Corrigendum (superceded)</h3>
+<p>In 6.5.2.2p2 change:</p>
+<blockquote>
+<p>If the expression that denotes the called function has a type that includes a
+prototype, the number of arguments shall agree with the number of parameters.
+Each argument shall have a type such that its value may be assigned to an object
+with the unqualified version of the type of its corresponding parameter.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>If the expression that denotes the called function has a type that includes a
+prototype, the number of arguments shall agree with the number of parameters.
+Each argument shall have a type such that its value may be used to initialize an
+object having the type of its corresponding parameter.</p>
+</blockquote>
+<p>In 6.5.2.2p4 change</p>
+<blockquote>
+<p>An argument may be an expression of any complete object type. In preparing for
+the call to a function, the arguments are evaluated, and each parameter is
+assigned the value of the corresponding argument.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>An argument may be an expression of any complete object type. In preparing for
+the call to a function, the arguments are evaluated, and each parameter is
+initialized to the value of the corresponding argument.</p>
+</blockquote>
+<p>Apr 2015 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The goal of preserving conversions as if by assignment is fulfilled by the
+definition of initialization found in <strong>6.7.9 Initialization</strong> paragraph 11.
+Another instance of assignment that should be changed was found in <strong>6.9.1
+Function Definitions</strong> paragraph 11.</p>
+<p>It was noted that implicit conversion is described only in terms of assignment
+(6.5.16.1). There was broad agreement that committee members and implementors
+are unconfused by the intent of the standard here despite the inconsistencies.
+It was also noted that initialization is distinct from assignment and, in the
+case of non-lock free atomic implications, this requires operational differences
+and as such that it is worth further consideration. As such, the following
+should be regarded as a possible direction.</p>
+<p>In 6.5.2.2p2 change:</p>
+<blockquote>
+<p>If the expression that denotes the called function has a type that includes a
+prototype, the number of arguments shall agree with the number of parameters.
+Each argument shall have a type such that its value may be assigned to an object
+with the unqualified version of the type of its corresponding parameter.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>If the expression that denotes the called function has a type that includes a
+prototype, the number of arguments shall agree with the number of parameters.
+Each argument shall have a type such that its value may be used to initialize an
+object having the type of its corresponding parameter.</p>
+</blockquote>
+<p>In 6.5.2.2p4 change</p>
+<blockquote>
+<p>An argument may be an expression of any complete object type. In preparing for
+the call to a function, the arguments are evaluated, and each parameter is
+assigned the value of the corresponding argument.</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>An argument may be an expression of any complete object type. In preparing for
+the call to a function, the arguments are evaluated, and each parameter is
+initialized to the value of the corresponding argument.</p>
+</blockquote>
+<p>In 6.9.1 paragraph 11 change:</p>
+<blockquote>
+<p>After all parameters have been assigned,</p>
+</blockquote>
+<p>to</p>
+<blockquote>
+<p>After all parameters have been initialized,</p>
+</blockquote>
+</blockquote>
+<p>Oct 2015 meeting</p>
+<h3>Committee Discussion</h3>
+<ul>
+<li>The committee no longer believes that any of the issues raised in this report warrant changes to the standard.</li>
+<li>The difference in behavior on return value semantics cited in gcc has been resolved by a bug fix to gcc</li>
+<li>Qualifiers on the return type of a function are superfluous since by resolution to <a href="../c11c17/issue0423.html">DR 423</a> the committee affirms that qualifiers are dropped as part of the evaluation of expressions including function calls.</li>
+<li>The committee does agree that the use of “assignment” to describe the initialization of function parameters can be misleading, but that in fact there is not an implementation that has ever been misled. Careful reading of the Standard notes that initialization is described fundamentally “as if by assignment”, and that it would take a comprehensive review and edit of the Standard to possibly achieve a more consistent treatment of the topics. There is a danger of circularity that must be avoided as well.</li>
+</ul>
+<h3>Proposed Committee Response</h3>
+<blockquote>
+<p>The committee believes that the primary issue of return value semantics was a
+consequence of a mistake in the implementation of <code>gcc</code> which has been
+rectified, and that further the treatment of qualifiers has been clarified in
+the Proposed Technical Corrigendum of <a href="../c11c17/issue0423.html">DR 423</a>. The treatment of
+initialization in the Standard is clear enough that no errors have been observed
+in implementations, and as such further clarification is unwarranted at this
+time.</p>
+</blockquote>
+
+</body>
+</html>

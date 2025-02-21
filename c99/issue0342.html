@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0342: VLAs and conditional expressions</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0342: VLAs and conditional expressions</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Joseph Myers &lt;joseph@codesourcery.com&gt;, Joseph Myers (UK)<br />
+Date: 2007-03-24<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1223.htm">ISO/IEC WG14 N1223</a><br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C11<br />
+Cross-references: <a href="../c99/issue0340.html">0340</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_342.htm">dr_342.htm</a></p>
+<h3>Summary</h3>
+<p>Consider the code:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">    </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>a,<span style="color: #bbbbbb"> </span>b;
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #0000FF">p1</span>(<span style="color: #B00040">void</span>),<span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>p2(<span style="color: #B00040">void</span>);
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">c1</span>(<span style="color: #B00040">void</span>);
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">d1</span>(<span style="color: #B00040">void</span>);
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">z1</span>(<span style="color: #B00040">void</span>),<span style="color: #bbbbbb"> </span>z2(<span style="color: #B00040">void</span>);
+
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">int</span>
+<span style="color: #bbbbbb">    </span><span style="color: #0000FF">h</span>(<span style="color: #B00040">void</span>)
+<span style="color: #bbbbbb">    </span>{
+<span style="color: #bbbbbb">      </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>r<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>(c1()
+<span style="color: #bbbbbb">               </span><span style="color: #666666">?</span><span style="color: #bbbbbb"> </span>(z1(),<span style="color: #bbbbbb"> </span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">*</span>)[d1()])p1())
+<span style="color: #bbbbbb">               </span><span style="color: #666666">:</span><span style="color: #bbbbbb"> </span>(z2(),<span style="color: #bbbbbb"> </span>(<span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>(<span style="color: #666666">*</span>)[])p2()))[a][b];
+<span style="color: #bbbbbb">      </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span>r;
+<span style="color: #bbbbbb">    </span>}
+</pre></div>
+
+<p>The type of the conditional expression involves the size expression <code>d1()</code>
+that's only evaluated in one part of the expression, and this information is
+needed to evaluate the array reference even when <code>c1()</code> returns false.</p>
+<p>For a more complicated example and discussion see reflector messages
+10731-10754. The validity of that more complicated example depends on the
+interpretation of composite type rules as in <a href="../c99/issue0340.html">DR 340</a>, so this
+example has been simplified to avoid that problem.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>6.7.5.2 paragraph 6 at end add "or one of the size specifiers (including the
+case of a single size specifier where the other array type does not include a
+size specifier) is not an integer constant expression and is not evaluated
+during the flow of execution." with a footnote "This case arises where a
+conditional expression involves a cast to variably modified type or a compound
+literal of variably modified type."</p>
+<hr />
+<p>Comment from WG14 on 2008-09-10:</p>
+<h3>Committee Discussion (for history only)</h3>
+<h4>Spring 2008</h4>
+<p>The consensus is that the <em>Note</em> in the previous version of this DR was not
+accurate and should be removed. The DR should be in Review status</p>
+<h4>Fall 2008</h4>
+<p>The consensus at this meeting is that this defect should be linked with defect
+report 340.</p>
+<h3>Proposed Committee Response</h3>
+<p>See <a href="../c99/issue0340.html">defect report 340</a></p>
+
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0279: Wide character code values for members of the basic character set</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0279: Wide character code values for members of the basic character set</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: J11, Raymond Mak (US)<br />
+Date: 2001-10-18<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n956.htm">ISO/IEC WG14 N956</a><br />
+Submitted against: C99<br />
+Status: Fixed<br />
+Fixed in: C99 TC2<br />
+Cross-references: <a href="../c99/issue0321.html">0321</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_279.htm">dr_279.htm</a></p>
+<h3>Summary</h3>
+<p>Standard C requires <code>('x' == L'x')</code> to hold true if <code>x</code> is a member of the basic
+character set. This restricts the implementation's choice of <code>wchar_t</code> encoding.
+The restriction makes it very difficult, if not impossible, for EBCDIC based
+system to use Unicode as the <code>wchar_t</code> encoding.</p>
+<p>Note: For the purpose of this DR, we will call this restriction the <em>wchar_t
+restriction</em>.</p>
+<h3>Details</h3>
+<p>C99 7.17 paragraph 2 specifies in part:</p>
+<blockquote>
+<p>"...</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">   </span><span style="color: #B00040">wchar_t</span>
+</pre></div>
+
+<p>which is an integer type whose range of values can represent distinct codes for
+all members of the largest extended character set specified among the supported
+locales; the null character shall have the code value zero and each member of
+the basic character set shall have a code value equal to its value when used as
+the lone character in an integer character constant."</p>
+</blockquote>
+<p>Since the code value of the basic characters in UCS-2 and UCS-4 are based on
+ASCII, EBCDIC systems cannot conform to the last sentence of the above if the
+encoding of <code>wchar_t</code> is UCS-2 or UCS-4. This makes it unnecessarily difficult
+for EBCDIC systems to use Unicode with the C language.</p>
+<p>A program knows the type of characters (wide or normal) it is processing.
+Therefore the appropriate character literal can always be used in an expression.
+In situations where a program does need to mix normal and wide character code
+values, the <code>btowc</code> and <code>wctob</code> functions should be used (7.24.6.1 and .2).
+Facilitating such mixing were the original reason for imposing the wchar_t
+restriction in C90. With the introduction of these two functions in Amendment 1,
+this restriction can be relaxed with little practical impact to the programmer.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>Suggestion 1</p>
+<p>This change allows an implementation to deviate from the last part of 7.17
+paragraph 2 if the macro <code>__STDC_BTOWC_NEQ_WCTOB__</code> is predefined. This would
+not affect ASCII based systems, but would provide leeway for EBCDIC systems to
+process Unicode using C.</p>
+<p>Change the last part of 7.17 paragraph 2 as follows:</p>
+<blockquote>
+<p>"...</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">   </span><span style="color: #B00040">wchar_t</span>
+</pre></div>
+
+<p>which is an integer type whose range of values can represent distinct codes for
+all members of the largest extended character set specified among the supported
+locales; the null character shall have the code value zero. Each member of the
+basic character set shall have a code value equal to its value when used as the
+lone character in an integer character constant if an implementation does not
+define <code>__STDC_BTOWC_NEQ_WCTOB__</code>."</p>
+</blockquote>
+<p>A program that requires the wchar_t restriction can check for the macro and
+cause the translator to put out a diagnostic if the implementation does not
+support the restriction. This at least would help diagnose porting problems.</p>
+<p>Suggestion 2</p>
+<p>This change removes the restriction altogether.</p>
+<p>Change the last part of 7.17 paragraph 2 as follows:</p>
+<blockquote>
+<p>"...</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">   </span><span style="color: #B00040">wchar_t</span>
+</pre></div>
+
+<p>which is an integer type whose range of values can represent distinct codes for
+all members of the largest extended character set specified among the supported
+locales; the null character shall have the code value zero."</p>
+</blockquote>
+<p>Suggestion 3</p>
+<p>This change reverses the meaning of the macro in suggestion 1 and combine with
+the text in suggestion 2. An implementation can assert conformance to the
+wchar_t restriction by defining the macro <code>__STDC_BTOWC_EQ_WCTOB__</code>.</p>
+<p>Note: Despite what the macro name suggests, <code>btowc</code> and <code>wctob</code> may not be the
+same disregard of the mapping of the basic character set because of
+<code>EOF</code>/<code>WEOF</code>.</p>
+<p>Change the last part of 7.17 paragraph 2 as follows:</p>
+<blockquote>
+<p>"...</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">   </span><span style="color: #B00040">wchar_t</span>
+</pre></div>
+
+<p>which is an integer type whose range of values can represent distinct codesfor
+all members of the largest extended character set specified among thesupported
+locales; the null character shall have the code value zero."</p>
+</blockquote>
+<p>Add the following paragraph to 7.24.1 after #3.</p>
+<blockquote>
+<p>"The macro <code>__STDC_BTOWC_EQ_WCTOB__</code> is defined if the implementation intends to
+assert that for each member of the basic character set the <code>wchar_t</code> encoding
+has a code value equal to its value when used as the lone character in an
+integer character constant."</p>
+</blockquote>
+<hr />
+<p>Comment from WG14 on 2002-05-15:</p>
+<h3>Technical Corrigendum</h3>
+<p>Change the last part of 7.17 paragraph 2 as follows:</p>
+<blockquote>
+<p>"...</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">   </span><span style="color: #B00040">wchar_t</span>
+</pre></div>
+
+<p>which is an integer type whose range of values can represent distinct codes for
+all members of the largest extended character set specified among the supported
+locales; the null character shall have the code value zero."</p>
+</blockquote>
+
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0257: common initial sequences and related issues with unions</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0257: common initial sequences and related issues with unions</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Clive D.W. Feather &lt;clive@demon.net&gt;, UK C Panel<br />
+Date: 2001-09-07<br />
+Submitted against: C99<br />
+Status: Closed<br />
+Cross-references: <a href="../c99/issue0236.html">0236</a>, <a href="../c99/issue0283.html">0283</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/summary-c99.htm">summary-c99.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_257.htm">dr_257.htm</a></p>
+<h3>Problem</h3>
+<p>6.5.2.3#5 reads:</p>
+<blockquote>
+<p>[#5] One special guarantee is made in order to simplify the use of unions: if
+a union contains several structures that share a common initial sequence (see
+below), and if the union object currently contains one of these structures, it
+is permitted to inspect the common initial part of any of them anywhere that a
+declaration of the complete type of the union is visible. Two structures share a
+common initial sequence if corresponding members have compatible types (and, for
+bit-fields, the same widths) for a sequence of one or more initial members.</p>
+</blockquote>
+<p>Two possible reasons have been suggested for this rule.</p>
+<ol>
+<li>
+<p>The implementation may put padding between structure members. This rule is necessary to ensure that the common initial sequence uses the same padding in both places, so that the corresponding members occupy the same location.</p>
+</li>
+<li>
+<p>If we consider part of the second example in 6.5.2.3#8:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">   </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t1</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>m;<span style="color: #bbbbbb"> </span>};
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t2</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>m;<span style="color: #bbbbbb"> </span>};
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f</span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t1</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span>p1,<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t2</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span>p2)
+<span style="color: #bbbbbb">    </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">if</span><span style="color: #bbbbbb"> </span>(p1<span style="color: #666666">-&gt;</span>m<span style="color: #bbbbbb"> </span><span style="color: #666666">&lt;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>)
+<span style="color: #bbbbbb">            </span>p2<span style="color: #666666">-&gt;</span>m<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #666666">-</span>p2<span style="color: #666666">-&gt;</span>m;
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span>p1<span style="color: #666666">-&gt;</span>m;
+<span style="color: #bbbbbb">    </span>}
+</pre></div>
+
+<p>the rule is necessary for an implementation to realize that <code>p1</code> and <code>p2</code> might refer the same location.</p>
+</li>
+</ol>
+<p>If (1) is the reason, then the example is a bad one because the two members are
+both at the start of their respective structures, and therefore are required to
+be at an offset of 0 from the start of the structure (and therefore of the
+union). It should be changed to use a member further along a common initial
+sequence.</p>
+<p>On the other hand, the requirement is not actually very suitable. Consider the
+code:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">   </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t1</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>x;<span style="color: #bbbbbb"> </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>y;<span style="color: #bbbbbb"> </span><span style="color: #B00040">char</span><span style="color: #bbbbbb"> </span>z;<span style="color: #bbbbbb"> </span>}<span style="color: #bbbbbb"> </span>s1;
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t2</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>i;<span style="color: #bbbbbb"> </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>q;<span style="color: #bbbbbb"> </span><span style="color: #B00040">unsigned</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">long</span><span style="color: #bbbbbb"> </span>u;<span style="color: #bbbbbb"> </span>}<span style="color: #bbbbbb"> </span>s2;
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f1</span><span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t1</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>p)<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>p<span style="color: #666666">-&gt;</span>y<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>sqrt<span style="color: #bbbbbb"> </span>((<span style="color: #B00040">double</span>)<span style="color: #bbbbbb"> </span>p<span style="color: #666666">-&gt;</span>x);<span style="color: #bbbbbb"> </span>}
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f2</span><span style="color: #bbbbbb"> </span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t2</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>p)<span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span>p<span style="color: #666666">-&gt;</span>q<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>sqrt<span style="color: #bbbbbb"> </span>((<span style="color: #B00040">double</span>)<span style="color: #bbbbbb"> </span>p<span style="color: #666666">-&gt;</span>i);<span style="color: #bbbbbb"> </span>}
+
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">union</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t1</span><span style="color: #bbbbbb"> </span>t1;<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t2</span><span style="color: #bbbbbb"> </span>t2;<span style="color: #bbbbbb"> </span>}<span style="color: #bbbbbb"> </span>u;
+<span style="color: #bbbbbb">    </span><span style="color: #3D7B7B; font-style: italic">// Followed by code using the common initial sequence property</span>
+</pre></div>
+
+<p>The implementation might wish to use different padding in structures <code>t1</code> and
+<code>t2</code>. It is prevented from doing so by the existence of the union, but a
+one-pass compilation will not become aware of this until after compiling <code>f1</code>
+and <code>f2</code>. Therefore it will have to assume, when deciding the layout of the
+structures, that there might be a union. Therefore the rule about a union type
+being visible is useless.</p>
+<p>If, on the other hand, (2) is the reason, then the wording does not address
+enough cases. For example, consider a version of the example in 6.5.2.3#8 where
+one member is signed and the other is unsigned.</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">   </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t1</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">signed</span><span style="color: #bbbbbb">   </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>m;<span style="color: #bbbbbb"> </span>};
+<span style="color: #bbbbbb">    </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t2</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">unsigned</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>m;<span style="color: #bbbbbb"> </span>};
+<span style="color: #bbbbbb">    </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF">f</span>(<span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t1</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span>p1,<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t2</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span>p2)
+<span style="color: #bbbbbb">    </span>{
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">if</span><span style="color: #bbbbbb"> </span>(p1<span style="color: #666666">-&gt;</span>m<span style="color: #bbbbbb"> </span><span style="color: #666666">&gt;</span><span style="color: #bbbbbb"> </span><span style="color: #666666">0</span>)
+<span style="color: #bbbbbb">            </span>p2<span style="color: #666666">-&gt;</span>m<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>p2<span style="color: #666666">-&gt;</span>m<span style="color: #bbbbbb"> </span><span style="color: #666666">*</span><span style="color: #bbbbbb"> </span><span style="color: #666666">2</span>;
+<span style="color: #bbbbbb">        </span><span style="color: #008000; font-weight: bold">return</span><span style="color: #bbbbbb"> </span>p1<span style="color: #666666">-&gt;</span>m;
+<span style="color: #bbbbbb">    </span>}
+</pre></div>
+
+<p>There is no common initial sequence but nevertheless many of the same issues
+apply. On the other hand, the correct way for a function such as <code>f</code> to protect
+itself against such aliasing is not to rely on the rule in 6.5.2.3#8, but rather
+to use the <code>restrict</code> qualifier.</p>
+<p>I would suggest, therefore, that (2) is not a valid reason for the rule. As
+stated above, a corollary of this discussion is that the "union type must be
+visible" rule is useless.</p>
+<p>Finally, one of the changes from C90 to C99 was to remove any restriction on
+accessing one member of a union when the last store was to a different one. The
+rationale was that the behaviour would then depend on the representations of the
+values. Since this point is often misunderstood, it might well be worth making
+it clear in the Standard.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>To address point (1), in 6.5.2.3#8, second example, change the two structures
+to:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #bbbbbb">           </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t1</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>d;<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>m;<span style="color: #bbbbbb"> </span>};
+<span style="color: #bbbbbb">            </span><span style="color: #008000; font-weight: bold">struct</span><span style="color: #bbbbbb"> </span><span style="color: #0000FF; font-weight: bold">t2</span><span style="color: #bbbbbb"> </span>{<span style="color: #bbbbbb"> </span><span style="color: #B00040">double</span><span style="color: #bbbbbb"> </span>d;<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>m;<span style="color: #bbbbbb"> </span>};
+</pre></div>
+
+<p>To address the wider point about visibility, change the first part of 6.5.2.3#5
+to read:</p>
+<blockquote>
+<p>[#5] One special guarantee is made in order to simplify the use of unions: if
+several structure types share a common initial sequence (see below), then
+corresponding members are required to lie at the same offset from the start of
+the union. Therefore if a union contains two or more such structures, the common
+initial part may be inspected using any of them, no matter which one was used to
+store the value.</p>
+</blockquote>
+<p>To address issues about "similar" types raised in point (2) above, change the
+second part of #5 to read:</p>
+<blockquote>
+<p>Two structures share a common initial sequence if corresponding members have
+matching types for a sequence of one or more initial members. Two types, in
+turn, are matching if they are</p>
+<ul>
+<li>compatible types (and, for bit-fields, the same widths)</li>
+<li>signed and unsigned versions of the same integer type</li>
+<li>qualified or unqualified versions of matching types, or</li>
+<li>pointers to matching types.</li>
+</ul>
+</blockquote>
+<p>To address the issue about "type punning", attach a new footnote 78a to the
+words "named member" in 6.5.2.3#3:</p>
+<blockquote>
+<p>78a If the member used to access the contents of a union object is not the same
+as the member last used to store a value in the object, the appropriate part of
+the object representation of the value is reinterpreted as an object
+representation in the new type as described in 6.2.6 (a process sometimes called
+"type punning"). This might be a trap representation.</p>
+</blockquote>
+<p>Note: all the above changes are independent of one another, depending on the
+committee's view of the issues.</p>
+<hr />
+<p>Comment from WG14 on 2002-10-17:</p>
+<h3>Committee Response</h3>
+<p>The current rules are the result of extensive previous deliberations. The
+Committee does not see a defect here.</p>
+<h3>Committee Discussion</h3>
+<ol>
+<li>The Committee agrees, but does not believe that this is a defect in the Standard (or a substantive problem). There is some support for changing the example.</li>
+<li>This takes away the "visibility rule" and the Committee does not want to do that; this is related to <a href="../c99/issue0236.html">DR 236</a>.</li>
+<li>The Committee agrees, but does not believe a change is warranted at this time. This should be considered for a future revision of the Standard.</li>
+<li>The Committee believes this is a separate issue, and should be a defect report (and possibly a new footnote). The defect report generated is <a href="../c99/issue0283.html">DR 283</a>, also see <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n980.htm">N980</a>.</li>
+</ol>
+
+</body>
+</html>

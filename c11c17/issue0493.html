@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0493: Mutex Initialization Underspecified</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0493: Mutex Initialization Underspecified</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: WG14, Martin Sebor<br />
+Date: 2016-01-21<br />
+Reference document: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2025.htm">N2025</a><br />
+Submitted against: C11 / C17<br />
+Status: Closed<br />
+Cross-references: <a href="../c11c17/issue0414.html">0414</a>, <a href="../c11c17/issue0469.html">0469</a>, <a href="../c11c17/issue0479.html">0479</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2396.htm">n2396.htm</a></p>
+<h3>Summary</h3>
+<p>The C11 threads library defines a mutex type, <code>mtx_t</code>, and a number of functions
+that operate objects of the type. The <code>mtx_t</code> is fully described in <strong>§7.26.1,
+Introduction</strong> (to the <strong>Threads</strong> section) as follows:</p>
+<blockquote>
+<p>a complete object type that holds an identifier for a mutex;</p>
+</blockquote>
+<p>No other description of the type appears elsewhere in the text.</p>
+<p>Among the functions provided by the C11 threads library that operate on objects
+of the <code>mtx_t</code> type are <code>mtx_init()</code> and <code>mtx_destroy()</code>.</p>
+<p>The <code>mtx_init(mtx_t *mtx, int type)</code> function is described in <strong>§7.26.4.2</strong> as
+follows:</p>
+<blockquote>
+<p>-2- The <code>mtx_init</code> function creates a mutex object with properties indicated by
+<code>type</code>, which must have one of the six values:</p>
+<ul>
+<li><code>mtx_plain</code> for a simple non-recursive mutex,</li>
+<li><code>mtx_timed</code> for a non-recursive mutex that supports timeout,</li>
+<li><code>mtx_plain | mtx_recursive</code> for a simple recursive mutex, or</li>
+<li><code>mtx_timed | mtx_recursive</code> for a recursive mutex that supports timeout.</li>
+</ul>
+<p>-3- If the <code>mtx_init</code> function succeeds, it sets the mutex pointed to by <code>mtx</code>
+to a value that uniquely identifies the newly created mutex.</p>
+<p><strong>Returns</strong><br />
+-4- The mtx_init function returns <code>thrd_success</code> on success, or <code>thrd_error</code> if
+the request could not be honored.</p>
+</blockquote>
+<p>The <code>mtx_destroy(mtx_t *mtx)</code> function is then described in <strong>§7.26.4.1</strong> like
+so:</p>
+<blockquote>
+<p>The <code>mtx_destroy</code> function releases any resources used by the mutex pointed to
+by <code>mtx</code>. No threads can be blocked waiting for the mutex pointed to by <code>mtx</code>.</p>
+</blockquote>
+<h4>Problems With <code>mtx_t</code></h4>
+<p>Since <code>mtx_t</code> is a complete object type, what are the semantics of copying
+objects of the type (either by assignment or by passing them by value between
+functions) and passing pointers to distinct copies of the same mutex object as
+arguments to the C11 threads functions?</p>
+<h4>Problems With <code>mtx_init()</code></h4>
+<p>The specification of <code>mtx_init()</code> raises the following questions to which the
+standard doesn't provide clear answers.</p>
+<ol>
+<li>What is the behavior of <code>mtx_init()</code> when called with a pointer to an object initialized to all zeros (such as a mutex object with static storage duration)? Are such calls valid, or if not, must the function fail by returning <code>thrd_error</code>, or is its behavior unspecified, or perhaps undefined? (If it is the same as calling it on an uninitialized object then how does one statically initialize a mutex?)</li>
+<li>Similarly, what is the function's behavior when called with a pointer to an uninitialized mutex object (one whose value is indeterminate)? (Presumably, it should be to initialize the object to a valid state and not require the object to have been initialized to all zeros, but this is not specified.)</li>
+<li>What is the function's behavior when called with the same pointer more than once (without a call to <code>mtx_destroy()</code> in between)?</li>
+<li>What is the function's behavior when called with a pointer to a locked mutex object?</li>
+<li>The function description specifies that the <code>type</code> argument must have one of six values but lists only four. What are the remaining two values of the <code>type</code> argument? (Note: this problem is the subject of DR <a href="../c11c17/issue0479.html">479</a>.)</li>
+<li>What is the function's behavior when <code>type</code> argument does not have one of the listed values? (Note that since the argument is a plain <code>int</code>, choosing not to define the behavior will make the function more dangerous to use than alternatives such as POSIX threads. Choosing to require the function to detect invalid arguments and reject them with an error exposes a problem due to its binary return value's inability to indicate different kinds of errors.)</li>
+<li>If the function is required to fail when the <code>type</code> argument isn't valid, what is its required behavior in this case when the <code>mtx</code> argument is null?</li>
+</ol>
+<h4>Problems With <code>mtx_destroy()</code></h4>
+<p>The specification of <code>mtx_destroy()</code> raises the following questions:</p>
+<ol>
+<li>What is the behavior of <code>mtx_destroy()</code> when called with a pointer to an object initialized to all zeros (such as a mutex object with static storage duration) that has not been passed to <code>mtx_init()</code>? (This is important because it might mean that programs need to associate an external flag with each mutex object indicating whether or not it has been initialized in a way that requires <code>mtx_destroy()</code> to be called on it.)</li>
+<li>What is the behavior of the function when called with the same pointer more than once? Is it required to have no effect or is it undefined?</li>
+<li>What is the behavior of the function when threads are blocked waiting for the mutex it's called on? (The text is lax with the wording here, and assuming the function's behavior is undefined in this case, the text should phrase the requirement using the word "<em>shall</em>" rather than "<em>can</em>" and preferably make the undefined behavior explicit, for example similarly to how POSIX specifies the similar requirement in its API.)</li>
+<li>What state is a mutex object in after <code>mtx_destroy()</code> has been called with it as an argument? Can such an object be subsequently passed as argument to any of the other mutex functions? For example, can such a mutex object be safely passed to <code>mtx_init()</code>? To any of the other mutex functions such as <code>mtx_lock()</code> and, if so, with what effects? (Undefined or error?)</li>
+</ol>
+<h4>Other Problems Due to the Underspecification Of Mutex Initialization</h4>
+<p>Neither <code>mtx_init()</code> nor <code>mtx_destroy()</code> discussed above, nor any of the other
+functions that operate on <code>mtx_t</code> objects specifies what state the object is
+required to be in when the function is called. In particular, none of the
+functions specfies whether the object is required to be initialized or how.</p>
+<p>That gives rise to the following general questions to which the standard fails
+to provide clear answers:</p>
+<ol>
+<li>Is an uninitialized mutex object (i.e., one with an indeterminate value) a valid argument to any of the other mutex functions besides those discussed above? If it isn't a valid argument (as is the most likely answer), are the mutex functions expected to detect the condition and fail by returning <code>thrd_error</code> or is the behavior unspecified, or perhaps undefined?</li>
+<li>Similarly, is a statically initialized mutex object (one declared with static storage duration and initialized to all zeros) a valid argument to any of the the other mutex functions? For instance, is such a mutex a valid argument to <code>mtx_lock()</code> and if so, what is the "type" of such a mutex (is it plain, recurisive, or timed), and what state is it in? (Put another way, what are the effects of calling <code>mtx_lock()</code> on such a mutex?)</li>
+<li>Assuming a statically initialized mutex object is a valid argument to only <code>mtx_init()</code> but not any of the mutex functions, what mechanism are C11 programs expected to use to statically initialize mutex objects to make them valid arguments to functions such as <code>mtx_lock()</code> (the equivalent of the POSIX threads <code>PTHREAD_MUTEX_INITIALIZER</code>)? Note that while some systems do not provide an API to statically initialize a native mutex object the functionality can be emulated by storing a flag in the C11 <code>mtx_t</code> object and checking that flag in every mutex function, lazily initializing the object as necessary. It is unclear whether C11 intends to require implementations to provide this functionality.</li>
+<li>Is there any limit on the the number of times <code>mtx_init()</code> cam be called with a distinct object as an argument without an intervening call to <code>mtx_destroy()</code>? (In other words, must calls to <code>mtx_init()</code> and <code>mtx_destroy()</code> with the same mutex object be paired?) If it is intended to allow implementations to impose such a limit (as some do) how do programs distinguish the usually transient nature of exceeding such a limit from permanent mutex initialization errorss (such as invalid type arguments)?</li>
+</ol>
+<p>One might be able to guess what some of the answers to the questions above might
+be intended to be if one assumes that the library is meant to be implemented on
+top of an existing threads library such as POSIX threads, but that is not
+reflected in the specification in any way. Other reasonable guesses include that
+C11 threads library is intended to provide a simpler though no less safe
+interface to the underlying threads library on the system (i.e., with no
+instances of undefined behavior the underlying threads library isn't already
+subject to), but the lack of even the most basic requirements raises doubt about
+this intent. Another possible guess is that the C11 threads library is intended
+to be (or should be possible to be) independent of the underlying threads
+implementation and provide its own distinct guarantees and impose its own
+requirements (even though it in many cases fails to articulate them). In the
+absence of answers to these questions the C11 threads library is essentially
+unusable as a specification either for the development of implementations
+facilitating portable code, or for writing portable code.</p>
+<h3>Suggested Technical Corrigendum</h3>
+<p>The C11 threads specification should be amended to clearly answer the questions
+above. Any new requirements should consider the goal of implementing the
+specification in terms of an existings threads implementation such as the POSIX
+threads library.</p>
+<hr />
+<p>Comment from WG14 on 2018-10-18:</p>
+<p>Apr 2016 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>This DR records the committee’s understanding of the intent of the standard. The
+resolution to <a href="../c11c17/issue0469.html">DR 469</a> must include a Proposed Technical Corrigendum
+consistent with the answers provided below.</p>
+<p>As one example required to be resolved in <a href="../c11c17/issue0469.html">DR 469</a>,</p>
+<blockquote>
+<p>change ‘creates’ to ‘initializes’ in <code>mtx_init</code> and <code>mtx_destroy</code>,</p>
+</blockquote>
+</blockquote>
+<p>Oct 2017 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>After extensive discussion, the committee response for the return value for
+<code>mtx_init</code> when passed a null pointer was changed.</p>
+</blockquote>
+<p>Apr 2018 meeting</p>
+<h3>Committee Discussion</h3>
+<blockquote>
+<p>The papers <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2190.htm">N2190</a>,
+<a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2191.htm">N2191</a>,
+<a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2192.htm">N2192</a>, and
+<a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2193.htm">N12193</a> were
+discussed as directions for a future revision of the standard.</p>
+<p>There are similar and potentially interrelated issues with respect to <code>cnd_t</code>.</p>
+<p>The committee solicited a combined comprehensive resolution for these issues
+with those raised in <a href="../c11c17/issue0469.html">DR 469</a> and <a href="../c11c17/issue0479.html">DR 479</a>.</p>
+</blockquote>
+<h3>Proposed Committee Response</h3>
+<blockquote>
+<p>This document asks quite a number of questions, and they are answered according
+to the section title in which they were asked. These answers rely on changes
+made in <a href="../c11c17/issue0469.html">DR 469</a>.</p>
+<p><strong>Problems with <code>mtx_t</code></strong></p>
+<p>The semantics of copying a <code>mtx_t</code> are not specified, much like <code>FILE</code>
+§7.21.3p6.</p>
+<p><strong>Problems with <code>mtx_init()</code></strong></p>
+<ol>
+<li><code>mtx_init</code> will attempt to initialize whatever memory is referenced by the pointer passed in, so it will initialize static memory preset to zero. Such calls are valid.</li>
+<li><code>mtx_init</code> will attempt to initialize whatever memory is referenced by the pointer passed in, so it will initialize memory that has previously been used as a <code>mtx_t</code>.</li>
+<li>It is undefined behavior to call <code>mtx_init()</code> on memory without an intervening <code>mtx_destroy</code>.</li>
+<li>It is undefined behavior to call <code>mtx_init()</code> on memory without an intervening <code>mtx_destroy</code> regardless of the lock condition.</li>
+<li>See <a href="../c11c17/issue0414.html">DR 414</a> for the resolution to the miscounted variations of <code>mtx_init()</code> options.</li>
+<li>Undefined behavior is the result of passing values other than those specified in the standard. The wording in the Standard shall change from ‘must’ to ‘shall’ in §7.26.4.2p2.</li>
+<li>The value returned by <code>mtx_init()</code> when passed a NULL pointer shall be unspecified.</li>
+</ol>
+<p><strong>Problems with <code>mtx_destroy()</code></strong></p>
+<ol>
+<li>It is undefined behavior to call <code>mtx_destroy()</code> with a pointer to an object that has not been initialized by a call to <code>mtx_init()</code>. In §7.26.4.1p2 the editor should consider changing ‘can’ to ‘shall’.</li>
+<li>It is undefined behavior to call <code>mtx_destroy()</code> with a pointer to an object that has not been initialized by a call to <code>mtx_init()</code>, so calling it twice without an intervening <code>mtx_init</code> results in undefined behavior.</li>
+<li>Calling <code>mtx_destroy()</code> while it is locked is intended to be undefined and will be resolved by <a href="../c11c17/issue0469.html">DR 469</a>.</li>
+<li>The memory that had been used as an <code>mtx_t</code> object has indeterminate value. Undefined behavior results if it is subsequently used as an argument to other <code>mtx</code> functions other than <code>mtx_init</code>.</li>
+</ol>
+<p><strong>Other Problems</strong></p>
+<ol>
+<li>Memory with indeterminate value is appropriate to be used only with <code>mtx_init</code> as described above. All other uses result in undefined behavior.</li>
+<li>Static memory preset to zeros is appropriate to be used only with <code>mtx_init</code> as described above. All other uses result in undefined behavior.</li>
+<li>The C Standard provides no mechanism to statically initialize a <code>mtx_t</code>.</li>
+<li>There is the limit of 1 call to <code>mtx_init()</code> without an intervening call to <code>mtx_destroy()</code>.</li>
+</ol>
+</blockquote>
+<p>Oct 2018 meeting</p>
+<h3>Committee Response</h3>
+<blockquote>
+<p>The "C17" edition of the standard has been published as IS 9899:2018.</p>
+<p>These issues were not resolved in that publication.</p>
+<p>The committee is now considering changes for the next revision of the standard,
+and asks that issues from <a href="../c11c17/issue0469.html">CR 469</a>, <a href="../c11c17/issue0479.html">CR 479</a>, and <a href="../c11c17/issue0493.html">CR
+493</a>, as well as potentially other small issues be combined in a new
+paper to completely resolve this issue for the next revision of the standard.</p>
+</blockquote>
+
+</body>
+</html>

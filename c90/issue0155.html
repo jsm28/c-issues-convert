@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0155: Is the word unique in subclause 7.10.3 ambiguous?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0155: Is the word <em>unique</em> in subclause 7.10.3 ambiguous?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Clive D.W. Feather, BSI<br />
+Date: 1995-10-16<br />
+Submitted against: C90<br />
+Status: Fixed<br />
+Fixed in: C99<br />
+Cross-references: <a href="../c90/issue0158.html">0158</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_155.html">dr_155.html</a></p>
+<p><em>Submitted to BSI by Clive D.W. Feather clive@sco.com.</em></p>
+<p><em>In this Defect Report, identifiers lexically identical to those declared in
+standard headers refer to the identifiers declared in those standard headers,
+whether or not the header is explicitly mentioned.</em></p>
+<p><em>This Defect Report has been prepared with considerable help from Mark Brader,
+Jutta Degener, Ronald Guilmette, and a person whose employment conditions
+require anonymity. However, except where stated, opinions expressed or implied
+should not be assumed to be those of any person other than myself.</em></p>
+<p>Defect Report UK 003: Zero-sized allocations</p>
+<p>The use of the word "unique" in subclause 7.10.3 is ambiguous, and the handling
+of zero size allocations is incomplete.</p>
+<p><strong>Part 1</strong></p>
+<p>Subclause 7.10.3 reads</p>
+<p>If the size of the space requested is zero, the behavior is
+implementation-defined; the value returned shall be either a null pointer or a
+unique pointer.</p>
+<p>Does the term "unique" mean "different every time," or does it mean "there is a
+single pointer returned by all calls with size zero" (as might be presumed from
+the ordinary dictionary definition of "unique") ?</p>
+<p>In other words, if <code>malloc(0)</code> does not return a null pointer, is the following
+expression:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>malloc(<span style="color: #666666">0</span>)<span style="color: #bbbbbb"> </span><span style="color: #666666">==</span><span style="color: #bbbbbb"> </span>malloc(<span style="color: #666666">0</span>)
+</pre></div>
+
+<p>always zero, always non-zero, or implementation-defined ?</p>
+<p><strong>Part 2</strong></p>
+<p>If unique means "there is a single pointer," what is the result of attempting to
+free that pointer? How does the wording of 7.10.3 apply:</p>
+<p>The value of a pointer that refers to freed space is indeterminate.</p>
+<p>Possibly nothing happens, because the pointer does not really point to a block
+of memory. In that case, is the following code strictly conforming?</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #9C6500">#include</span><span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">&lt;stdlib.h&gt;</span>
+<span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">/* ..... */</span>
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">void</span><span style="color: #bbbbbb"> </span><span style="color: #666666">*</span>p<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span>malloc(<span style="color: #666666">0</span>);
+<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">if</span><span style="color: #bbbbbb"> </span>(p<span style="color: #bbbbbb"> </span><span style="color: #666666">!=</span><span style="color: #bbbbbb"> </span><span style="color: #008000">NULL</span>)
+<span style="color: #bbbbbb"> </span>{
+<span style="color: #bbbbbb"> </span>free<span style="color: #bbbbbb"> </span>(p);<span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">/* Line A */</span>
+free<span style="color: #bbbbbb"> </span>(p);<span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">/* Line B */</span>
+}
+</pre></div>
+
+<p>What is the behavior if each of lines A and B are reached?</p>
+<p><strong>Part 3</strong></p>
+<p>If "unique" means "different every time," then each such call still consumes
+address space, even though no storage actually needs to be allocated, and
+therefore the call can fail due to exhaustion of memory. Thus <code>malloc(0)</code> can
+return a null pointer, while the C Standard seems to suggest that an
+implementation can return either null pointers or unique pointers, but not both.
+This is a defect in the existing wording.</p>
+<h3>Suggested Technical Corrigendum:</h3>
+<p>If "unique" means "there is a single pointer," then change the penultimate
+sentence of 7.10.3 from:</p>
+<p>If the size of the space requested is zero, the behavior is
+implementation-defined; the value returned shall be either a null pointer or a
+unique pointer.</p>
+<p>to:</p>
+<p>If the size of the space requested is zero, the behavior is
+implementation-defined; the value returned shall be either a null pointer or a
+unique pointer. The values returned by two zero-length allocations shall compare
+equal. Freeing the value returned by a zero-length allocation shall have no
+effect. If that value is used as an operand of the unary <code>*</code> operator, or of a
+<code>+</code> or <code>-</code> operator except one whose other operand has integral type and value
+zero, the behavior is undefined.</p>
+<p>If "unique" means "different every time," then change it to:</p>
+<p>If the size of the space requested is zero, the behavior is
+implementation-defined; either a null pointer is always returned, or the
+behavior is as if the size were some unspecified non-zero value. In the latter
+case, if the returned pointer is not a null pointer and is used as an operand of
+the unary <code>*</code> operator, or of a <code>+</code> or <code>-</code> operator except one whose other
+operand has integral type and value zero, the behavior is undefined.</p>
+<p>[See also <a href="../c90/issue0158.html">Defect Report #158</a>.]</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<p>Technical Corrigendum</p>
+<p>In subclause 7.10.3, change the next to last sentence to read:</p>
+<p>If the size of the space requested is zero, the behavior is implementation
+defined: either a null pointer is returned, or the behavior is as if the size
+were some unspecified nonzero value, except that the returned pointer shall not
+be used to access an object.</p>
+
+</body>
+</html>

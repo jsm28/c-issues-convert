@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0011.01: When do the types of multiple external declarations get formed into a composite type?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0011.01: When do the types of multiple external declarations get formed into a composite type?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Rich Peterson, WG14<br />
+Date: 1992-12-10<br />
+Reference document: X3J11/90-008<br />
+Submitted against: C90<br />
+Status: Fixed<br />
+Fixed in: C90 TC1<br />
+Cross-references: <a href="../c90/issue0034.01.html">0034.01</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_011.html">dr_011.html</a></p>
+<p>Merging of declarations for linked identifier</p>
+<p>When more than one declaration is present in a program for an externally-linked
+identifier, exactly when do the declared types get formed into a composite type?</p>
+<p>Certainly, if two declarations have file scope, then after the second, the
+effective type for semantic analysis is the composite type of the two
+declarations (subclause 6.1.2.6, page 25, lines 19-20). However, if one
+declaration is in an inner scope and one is in an outer scope, are their types
+formed into a composite type?</p>
+<p>In particular, consider the code:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>{
+<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">extern</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>i[];
+<span style="color: #bbbbbb"> </span>{
+<span style="color: #bbbbbb">     </span><span style="color: #3D7B7B; font-style: italic">/* a different declaration of the same object */</span>
+<span style="color: #bbbbbb">     </span><span style="color: #008000; font-weight: bold">extern</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>i[<span style="color: #666666">10</span>];
+<span style="color: #bbbbbb"> </span>}
+<span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">/* Is the following legal?</span>
+<span style="color: #3D7B7B; font-style: italic">    That is, does the outer declaration</span>
+<span style="color: #3D7B7B; font-style: italic">    inherit any information from the inner one?  */</span>
+<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(i);
+<span style="color: #bbbbbb"> </span>}
+</pre></div>
+
+<p>Similar situations can be constructed with internally linked identifiers. For
+instance:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #3D7B7B; font-style: italic">/* File scope */</span>
+<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">static</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>i[];
+
+<span style="color: #bbbbbb"> </span>main()
+<span style="color: #bbbbbb"> </span>{
+<span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">/* a different declaration of the same object */</span>
+<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">extern</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>i[<span style="color: #666666">10</span>];
+<span style="color: #bbbbbb"> </span>}
+
+<span style="color: #bbbbbb"> </span><span style="color: #3D7B7B; font-style: italic">/* Is the following legal?</span>
+<span style="color: #3D7B7B; font-style: italic">    That is, does the outer declaration</span>
+<span style="color: #3D7B7B; font-style: italic">    inherit any information from the inner one?*/</span>
+<span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>j<span style="color: #bbbbbb"> </span><span style="color: #666666">=</span><span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(i);
+</pre></div>
+
+<p>Further variants of this question can be asked:</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span>{
+<span style="color: #bbbbbb"> </span><span style="color: #008000; font-weight: bold">extern</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>i[<span style="color: #666666">10</span>];
+<span style="color: #bbbbbb"> </span>{
+<span style="color: #bbbbbb">     </span><span style="color: #3D7B7B; font-style: italic">/* a different declaration of the same object */</span>
+<span style="color: #bbbbbb">     </span><span style="color: #008000; font-weight: bold">extern</span><span style="color: #bbbbbb"> </span><span style="color: #B00040">int</span><span style="color: #bbbbbb"> </span>i[];
+
+<span style="color: #bbbbbb">     </span><span style="color: #3D7B7B; font-style: italic">/* Is the following legal?</span>
+<span style="color: #3D7B7B; font-style: italic">        That is, does the inner declaration</span>
+<span style="color: #3D7B7B; font-style: italic">        inherit any information from the outer one? */</span>
+<span style="color: #bbbbbb">      </span><span style="color: #008000; font-weight: bold">sizeof</span><span style="color: #bbbbbb"> </span>(i);
+<span style="color: #bbbbbb"> </span>}
+<span style="color: #bbbbbb"> </span>}
+</pre></div>
+
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Correction</h3>
+<p><em><strong>In subclause 6.1.2.6, page 25, lines 19-20, change:</strong></em></p>
+<p>For an identifier with external or internal linkage declared in the same scope
+as another declaration for that identifier, the type of the identifier becomes
+the composite type.</p>
+<p><em><strong>to:</strong></em></p>
+<p>For an identifier with internal or external linkage declared in a scope in which
+a prior declaration of that identifier is visible*****, if the prior
+declaration specifies internal or external linkage, the type of the identifier
+at the latter declaration becomes the composite type.</p>
+<p>[Footnote *: As specified in 6.1.2.1, the latter declaration might hide the
+prior declaration.]</p>
+
+</body>
+</html>

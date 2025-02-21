@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>C issue 0017.07: What is the scope and uniqueness of size_t?</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.hll { background-color: #ffffcc }
+.c { color: #3D7B7B; font-style: italic } /* Comment */
+.err { border: 1px solid #FF0000 } /* Error */
+.k { color: #008000; font-weight: bold } /* Keyword */
+.o { color: #666666 } /* Operator */
+.ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.cp { color: #9C6500 } /* Comment.Preproc */
+.cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.gd { color: #A00000 } /* Generic.Deleted */
+.ge { font-style: italic } /* Generic.Emph */
+.ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.gr { color: #E40000 } /* Generic.Error */
+.gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.gi { color: #008400 } /* Generic.Inserted */
+.go { color: #717171 } /* Generic.Output */
+.gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.gs { font-weight: bold } /* Generic.Strong */
+.gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.gt { color: #0044DD } /* Generic.Traceback */
+.kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.kp { color: #008000 } /* Keyword.Pseudo */
+.kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.kt { color: #B00040 } /* Keyword.Type */
+.m { color: #666666 } /* Literal.Number */
+.s { color: #BA2121 } /* Literal.String */
+.na { color: #687822 } /* Name.Attribute */
+.nb { color: #008000 } /* Name.Builtin */
+.nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.no { color: #880000 } /* Name.Constant */
+.nd { color: #AA22FF } /* Name.Decorator */
+.ni { color: #717171; font-weight: bold } /* Name.Entity */
+.ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.nf { color: #0000FF } /* Name.Function */
+.nl { color: #767600 } /* Name.Label */
+.nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.nt { color: #008000; font-weight: bold } /* Name.Tag */
+.nv { color: #19177C } /* Name.Variable */
+.ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.w { color: #bbbbbb } /* Text.Whitespace */
+.mb { color: #666666 } /* Literal.Number.Bin */
+.mf { color: #666666 } /* Literal.Number.Float */
+.mh { color: #666666 } /* Literal.Number.Hex */
+.mi { color: #666666 } /* Literal.Number.Integer */
+.mo { color: #666666 } /* Literal.Number.Oct */
+.sa { color: #BA2121 } /* Literal.String.Affix */
+.sb { color: #BA2121 } /* Literal.String.Backtick */
+.sc { color: #BA2121 } /* Literal.String.Char */
+.dl { color: #BA2121 } /* Literal.String.Delimiter */
+.sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.s2 { color: #BA2121 } /* Literal.String.Double */
+.se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.sh { color: #BA2121 } /* Literal.String.Heredoc */
+.si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.sx { color: #008000 } /* Literal.String.Other */
+.sr { color: #A45A77 } /* Literal.String.Regex */
+.s1 { color: #BA2121 } /* Literal.String.Single */
+.ss { color: #19177C } /* Literal.String.Symbol */
+.bp { color: #008000 } /* Name.Builtin.Pseudo */
+.fm { color: #0000FF } /* Name.Function.Magic */
+.vc { color: #19177C } /* Name.Variable.Class */
+.vg { color: #19177C } /* Name.Variable.Global */
+.vi { color: #19177C } /* Name.Variable.Instance */
+.vm { color: #19177C } /* Name.Variable.Magic */
+.il { color: #666666 } /* Literal.Number.Integer.Long */
+</style>
+</head>
+<body>
+<h2>Issue 0017.07: What is the scope and uniqueness of <code>size_t</code>?</h2>
+<p><strong>This issue has been automatically converted from the original issue lists and some formatting may not have been preserved.</strong></p>
+<p>Authors: Derek M. Jones, WG14<br />
+Date: 1992-12-10<br />
+Reference document: X3J11/90-056<br />
+Submitted against: C90<br />
+Status: Closed<br />
+Cross-references: <a href="../c90/issue0047.html">0047</a>, <a href="../c90/issue0050.html">0050</a><br />
+Converted from: <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr.htm">dr.htm</a>, <a href="https://www.open-std.org/jtc1/sc22/wg14/www/docs/dr_017.html">dr_017.html</a></p>
+<p>Scope and uniqueness of <code>size_t</code></p>
+<p>Subclause 6.3.3.4 on page 45, lines 1-2 says: “... and its type (...) is
+<code>size_t</code> defined in the <code>&lt;stddef.h&gt;</code> header.” This line could be read as either
+of the following:</p>
+<ol>
+<li>“... and its type is <code>size_t</code> which happens to be defined in <code>stddef.h</code>.”</li>
+<li>“... and its type is the <code>size_t</code> defined in <code>stddef.h</code>.”</li>
+</ol>
+<p>(It was probably intended as a helpful piece of information only.) So what does
+the compiler do?</p>
+<p>In (1) the compiler has to define a <code>size_t</code> in some outer scope. This
+definition does not make <code>size_t</code> visible, but gives a type to the return value
+of <code>sizeof</code>. Now if the programmer defines a typedef making <code>size_t</code> synonymous
+with <code>float</code> (say) then the compiler now has to use this new type. This
+interpretation does not require the programmer to include <code>&lt;stddef.h&gt;</code> in order
+to use <code>sizeof</code>.</p>
+<p>In (2) the compiler picks up the type <code>size_t</code> from <code>&lt;stddef.h&gt;</code> (assuming that
+the user included this header). Should the compiler give a diagnostic if this
+header was not included and <code>sizeof</code> was used? A subsequent typedef for <code>size_t</code>
+does not affect the type of the result of <code>sizeof</code>.</p>
+<p>These problems do not arise with <code>int</code>, et al. because they are keywords. Thus
+“<code>typedef float int</code>” would give a syntax error and need not be considered
+semantically.</p>
+<p>According to subclause 6.3.3.4, page 45, <code>sizeof</code> has type <code>size_t</code>. What
+happens if the type of <code>size_t</code> does not match what the compiler thinks is the
+type of <code>sizeof</code>?</p>
+<hr />
+<p>Comment from WG14 on 1997-09-23:</p>
+<h3>Response</h3>
+<p>The relevant citations are subclause 6.3.3.4</p>
+<blockquote>
+<p>The value of the result is implementation-defined, and its type (an unsigned
+integral type) is <code>size_t</code> defined in the <code>&lt;stddef.h&gt;</code> header.</p>
+</blockquote>
+<p>and subclause 7.1.6</p>
+<blockquote>
+<p>The types are ...</p>
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%;"><span></span><span style="color: #B00040">size_t</span>
+</pre></div>
+
+<p>which is the unsigned integral type of the result of the <code>sizeof</code> operator; ...</p>
+</blockquote>
+<p>These sections, both separately and together, define the relationship between
+the result type of <code>sizeof</code> and the type <code>size_t</code> defined in <code>stddef.h</code>. The
+result type of <code>sizeof</code> and the type <code>size_t</code> defined in <code>stddef.h</code> are an
+unsigned integral type, and <code>size_t</code> defined in <code>&lt;stddef.h&gt;</code> is identical to the
+result type of <code>sizeof</code>. To restate, in a conforming implementation, the result
+type of <code>sizeof</code> will be the same as the type of <code>size_t</code> defined in
+<code>&lt;stddef.h&gt;</code>.</p>
+<p>Since these two types are the same, there need be no mechanism for a compiler to
+discover the type of <code>size_t</code> defined in <code>&lt;stddef.h&gt;</code>. A compiler's private
+knowledge of the result type of <code>sizeof</code> is as good as <code>stddef.h</code>'s private
+knowledge of the type of <code>size_t</code>.</p>
+<p>Note that the result of <code>sizeof</code> has the same type as not just any <code>size_t,</code> but
+the <code>size_t</code> defined in <code>&lt;stddef.h&gt;</code>.</p>
+
+</body>
+</html>
