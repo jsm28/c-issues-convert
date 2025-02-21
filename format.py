@@ -166,12 +166,16 @@ def subst_md(content, for_single, link_suffix, issue_data):
     """Substitute for issue: links in Markdown."""
     if for_single:
         content = re.sub(r'\(issue:([0-9][.A-Z0-9]*)\)',
-                         r'(issue\1%s)' % link_suffix,
+                         lambda m: (
+                             '(../%s/issue%s%s)'
+                             % (issue_data[m.group(1)]['submitted-against'],
+                                m.group(1),
+                                link_suffix)),
                          content)
     else:
         content = re.sub(r'\(issue:([0-9][.A-Z0-9]*)\)',
                          lambda m: (
-                             '(log_%s%s#issue%s)'
+                             '(../%s/log%s#issue%s)'
                              % (issue_data[m.group(1)]['submitted-against'],
                                 link_suffix,
                                 m.group(1))),
@@ -213,9 +217,10 @@ def write_md(filename, content, title, for_single, for_html, issue_data):
             '</body>\n'
             '</html>\n'
             % (title, css, content))
-    os.makedirs(out_dir, exist_ok=True)
     filename += suffix
-    with open(os.path.join(out_dir, filename), 'w', encoding='utf-8') as f:
+    filename = os.path.join(out_dir, filename)
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    with open(filename, 'w', encoding='utf-8') as f:
         f.write(content)
 
 
@@ -232,7 +237,8 @@ def action_format(for_html):
             by_submitted_against_converted[data['submitted-against']] = True
         format_issue(num, data, False)
         format_issue(num, data, True)
-        write_md('issue%s' % num, data['formatted-single-md'],
+        write_md('%s/issue%s' % (data['submitted-against'], num),
+                 data['formatted-single-md'],
                  'C issue %s: %s' % (num, data['summary-md']), True,
                  for_html, issues_data)
     index_out_list = ['# C standard issues lists\n\n']
@@ -306,8 +312,8 @@ def action_format(for_html):
             index_out_list.append('No issues recorded.\n\n')
             continue
         index_out_list.append(
-            '* [Summary (one page per issue)](summary_%s%s)\n'
-            '* [Full issue log (all issues on one page)](log_%s%s)\n\n'
+            '* [Summary (one page per issue)](%s/summary%s)\n'
+            '* [Full issue log (all issues on one page)](%s/log%s)\n\n'
             % (std, suffix, std, suffix))
         nums = sorted(by_submitted_against[std])
         was_converted = by_submitted_against_converted[std]
@@ -336,10 +342,10 @@ def action_format(for_html):
                 % (num, num, data['summary-md'], status))
         table.append('\n')
         issues = [issues_data[n]['formatted-list-md'] for n in nums]
-        write_md('summary_%s' % std, ''.join(summary_head + table),
+        write_md('%s/summary' % std, ''.join(summary_head + table),
                  '%s: issue summary' % desc,
                  True, for_html, issues_data)
-        write_md('log_%s' % std, ''.join(log_head + table + issues),
+        write_md('%s/log' % std, ''.join(log_head + table + issues),
                  '%s: issue log' % desc,
                  False, for_html, issues_data)
     write_md('index', ''.join(index_out_list), 'C standard issues lists',

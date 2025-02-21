@@ -67,18 +67,18 @@ principles apply to issue handling.
 
 ## C90
 
-* [Summary (one page per issue)](summary_c90.md)
-* [Full issue log (all issues on one page)](log_c90.md)
+* [Summary (one page per issue)](c90/summary.md)
+* [Full issue log (all issues on one page)](c90/log.md)
 
 ## C99
 
-* [Summary (one page per issue)](summary_c99.md)
-* [Full issue log (all issues on one page)](log_c99.md)
+* [Summary (one page per issue)](c99/summary.md)
+* [Full issue log (all issues on one page)](c99/log.md)
 
 ## C11 / C17
 
-* [Summary (one page per issue)](summary_c11c17.md)
-* [Full issue log (all issues on one page)](log_c11c17.md)
+* [Summary (one page per issue)](c11c17/summary.md)
+* [Full issue log (all issues on one page)](c11c17/log.md)
 
 ## C23
 
@@ -86,8 +86,8 @@ No issues recorded.
 
 ## Floating-point TS 18661 (C11 version, 2014-2016)
 
-* [Summary (one page per issue)](summary_cfp-c11.md)
-* [Full issue log (all issues on one page)](log_cfp-c11.md)
+* [Summary (one page per issue)](cfp-c11/summary.md)
+* [Full issue log (all issues on one page)](cfp-c11/log.md)
 
 ## Floating-point TS 18661 (C23 version, 2025)
 
@@ -95,13 +95,13 @@ No issues recorded.
 
 ## C Secure Coding Rules TS 17961:2013
 
-* [Summary (one page per issue)](summary_cscr2013.md)
-* [Full issue log (all issues on one page)](log_cscr2013.md)
+* [Summary (one page per issue)](cscr2013/summary.md)
+* [Full issue log (all issues on one page)](cscr2013/log.md)
 
 ## Embedded C TR 18037:2004
 
-* [Summary (one page per issue)](summary_embc2004.md)
-* [Full issue log (all issues on one page)](log_embc2004.md)
+* [Summary (one page per issue)](embc2004/summary.md)
+* [Full issue log (all issues on one page)](embc2004/log.md)
 
 ## Embedded C TR 18037:2008
 
